@@ -61,7 +61,7 @@ require_once('normalizer.php');
 									printf(ngettext('%u album','%u albums', $anumber), $anumber);
 								}
 							}
-							echo ')</em><br/>';
+							echo ')</em><br />';
 						}
 						$text = getAlbumDesc();
 						if(strlen($text) > 50) {

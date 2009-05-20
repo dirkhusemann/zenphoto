@@ -280,7 +280,10 @@ class PersistentObject {
  	* true if successful, false if not.
  	*/
 	function save() {
-		if (!$this->unique_set) return; // If we don't have a unique set, then this is incorrect. Don't attempt to save.
+		if (!$this->unique_set) { // If we don't have a unique set, then this is incorrect. Don't attempt to save.
+			zp_error('empty $this->unique set');		
+			return;
+		}
 		if ($this->transient) return; // If this object isn't supposed to be persisted, don't save it.
 		if ($this->id == null) {
 			$this->setDefaults();

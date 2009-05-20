@@ -618,8 +618,8 @@ if (!$checked) {
 						$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
 					}
 					checkMark($err, gettext("PHP graphics image support"), '', $imgmissing.
-	                    "<br/>".gettext("The unsupported image types will not be viewable in your albums.").
-	                    "<br/>".$mandate);
+	                    "<br />".gettext("The unsupported image types will not be viewable in your albums.").
+	                    "<br />".$mandate);
 				}
 			}
 		} else {
@@ -659,7 +659,7 @@ if (!$checked) {
 	}
 	$good = checkMark($cfg, gettext("<em>zp-config.php</em> file"), gettext("<em>zp-config.php</em> file [does not exist]"),
  							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
- 							"<br/><br/>".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
+ 							"<br /><br />".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
  	if ($cfg) {
  		if ($chmod == 0777 || !$chmod_defined) {
 	 		checkMark(-1, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is not in effect]'),
@@ -826,9 +826,9 @@ if ($debug) {
 		$i = strrpos($neededlist, ',');
 		$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
 		if ($result) {
-			$report = "<br/><br/><em>".gettext("Grants found:")."</em> ";
+			$report = "<br /><br /><em>".gettext("Grants found:")."</em> ";
 			foreach ($MySQL_results as $row) {
-				$row_report = "<br/><br/>".$row;
+				$row_report = "<br /><br />".$row;
 				$r = str_replace(',', '', $row);
 				$i = strpos($r, "ON");
 				$j = strpos($r, "TO", $i);
@@ -854,7 +854,7 @@ if ($debug) {
 				}
 			}
 		} else {
-			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
+			$report = "<br /><br />".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
 		checkMark($access, gettext("MySQL <code>access rights</code>"), sprintf(gettext("MySQL <code>access rights</code> [%s]"),$rightsfound),
  											sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
@@ -878,7 +878,7 @@ if ($debug) {
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
 		checkMark($result, $msg, gettext("MySQL <em>show tables</em> [Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
- 											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
+ 											"<br />".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 		if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
 			if (!empty($tableslist)) {
@@ -989,7 +989,7 @@ if ($debug) {
 			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
 			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.")
 			.gettext("Just change the one line indicated to make it work.").' ' .
-						"<br/><br/>".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
+						"<br /><br />".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
 		} else {
 			$ch = -2;
 			$err = '';
@@ -1060,7 +1060,7 @@ if ($debug) {
 		}
 		$good = checkMark($base, $b, $err,
 											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
-											"<br/>".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
+											"<br />".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
 
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
@@ -1171,7 +1171,7 @@ if (file_exists("zp-config.php")) {
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
 			if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
 				if (!empty($mod)) $mod = '?'.substr($mod, 1);
-				if ($_zp_loggedin) { echo "<br /><br/>".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
+				if ($_zp_loggedin) { echo "<br /><br />".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
 				printLoginForm("/" . ZENFOLDER . "/setup.php$mod", false);
 				echo "\n</div>";
 				printAdminFooter();

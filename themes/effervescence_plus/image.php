@@ -168,10 +168,10 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 									<?php printCommentErrors(); ?>
 									<input type="text" name="name" id="name" class="textinput" value="<?php echo $stored['name'];?>" size="22" tabindex="1" /><label for="name"><small> <?php echo gettext('Name');?></small></label>
 									(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
-									<br/><input type="text" name="email" id="email" class="textinput" value="<?php echo $stored['email'];?>" size="22" tabindex="2" /><label for="email"><small> <?php echo gettext('Email');?></small></label>
-												<br/><input type="text" name="website" id="website" class="textinput" value="<?php echo $stored['website'];?>" size="22" tabindex="3" /><label for="website"><small> <?php echo gettext('Website');?></small></label>
-												<?php printCaptcha('<br/>', '', ' <small>'.gettext("Enter Captcha").'</small>', 8); ?>
-									<br/><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?>
+									<br /><input type="text" name="email" id="email" class="textinput" value="<?php echo $stored['email'];?>" size="22" tabindex="2" /><label for="email"><small> <?php echo gettext('Email');?></small></label>
+												<br /><input type="text" name="website" id="website" class="textinput" value="<?php echo $stored['website'];?>" size="22" tabindex="3" /><label for="website"><small> <?php echo gettext('Website');?></small></label>
+												<?php printCaptcha('<br />', '', ' <small>'.gettext("Enter Captcha").'</small>', 8); ?>
+									<br /><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?>
 									<textarea name="comment" id="comment" rows="5" cols="100%" tabindex="4"><?php echo $stored['comment']; ?></textarea>
 									<input type="submit" value="<?php echo gettext('Submit');?>" class="pushbutton" />
 								</div>

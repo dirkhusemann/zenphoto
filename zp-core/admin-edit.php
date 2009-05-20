@@ -282,7 +282,7 @@ if (isset($_GET['album'])) {
 					} else {
 						$prefix = '';
 					}
-					$folder = sanitize_path($_POST[$prefix.'folder']);
+					$folder = sanitize_path(trim($_POST[$prefix.'folder']));
 					$album = new Album($gallery, $folder);
 					$rslt = processAlbumEdit($i, $album);
 					if (!empty($rslt)) { $notify = $rslt; }

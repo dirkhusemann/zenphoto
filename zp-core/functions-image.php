@@ -45,7 +45,7 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
  */
 function imageDebug($album, $image, $args, $imgfile) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-	echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
+	echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br /><br />";
 	if (file_exists($imgfile)) {
 		echo "Image filesize: ".filesize($imgfile);
 	} else {

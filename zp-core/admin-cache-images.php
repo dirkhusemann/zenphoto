@@ -36,7 +36,7 @@ function loadAlbum($album) {
 			}
 				$count++;
 		}
-		echo "}<br/>\n";
+		echo "}<br />\n";
 	}
 	return $count;
 }
@@ -98,7 +98,7 @@ if ($alb) {
 		$count = $count + loadAlbum($album);
 	}
 }
-echo "\n" . "<br/>".sprintf(gettext("Finished: Total of %u images."), $count);
+echo "\n" . "<br />".sprintf(gettext("Finished: Total of %u images."), $count);
 
 if (isset($_REQUEST['return'])) {
 	$ret = sanitize_path($_REQUEST['return']);

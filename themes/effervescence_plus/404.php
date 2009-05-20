@@ -62,7 +62,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 	<div class="footlinks">
 		<small><?php printThemeInfo(); ?></small>
 		<?php printZenphotoLink(); ?>
-		<br/>
+		<br />
 	</div>
 	
 <?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>

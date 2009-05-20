@@ -1183,7 +1183,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 	$text = apply_filter($context.'_'.$field, $text, $object, $context, $field);
 	if ($convertBR) {
 		$text = str_replace("\r\n", "\n", $text);
-		$text = str_replace("\n", "<br/>", $text);
+		$text = str_replace("\n", "<br />", $text);
 	}
 	
 	if (empty($text)) {
@@ -1998,7 +1998,7 @@ function getImageCountry() {
 
 /**
  * Returns the raw description of the current image.
- * new lines are replaced with <br/> tags
+ * new lines are replaced with <br /> tags
  *
  * @return string
  */
@@ -2064,7 +2064,7 @@ function getImageCustomData() {
 function printImageCustomData() {
 	$data = getImageCustomData();
 	$data = str_replace("\r\n", "\n", $data);
-	$data = str_replace("\n", "<br/>", $data);
+	$data = str_replace("\n", "<br/ >", $data);
 	echo $data;
 }
 
@@ -4328,7 +4328,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect
 	if ($_zp_password_form_printed) { return; }
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
-		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br/>".gettext("Check your user and password and try again.")."</div>";
+		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br />".gettext("Check your user and password and try again.")."</div>";
 	}
 	switch($_zp_gallery_page) {
 		case 'index.php':

@@ -231,7 +231,7 @@ function editInPlace_handle_request($context = '', $field = '', $value = '', $or
 		default:
 			$level = 3;
 	}
-	$value = str_replace("\n", '<br/>', sanitize($value, $level)); // note: not using nl2br() here because it adds an extra "\n"
+	$value = str_replace("\n", '<br />', sanitize($value, $level)); // note: not using nl2br() here because it adds an extra "\n"
 
 	// Write new value
 	if ($field == '_update_tags') {

@@ -57,6 +57,7 @@ class Album extends PersistentObject {
 			return NULL;
 		}
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder8));
+		
 		if (hasDyanmicAlbumSuffix($folder8)) {
 			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
 				$data = file_get_contents($this->localpath);

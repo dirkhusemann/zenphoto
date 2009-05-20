@@ -62,7 +62,7 @@ require_once('normalizer.php');
 							} else if ($anumber == 1 && $inumber > 1) {
 								printf(gettext('1 album,&nbsp;%u photos'), $inumber);
 							}
-							echo ')</em><br/>';
+							echo ')</em><br />';
 						}
 												$text = getAlbumDesc();
 							if(strlen($text) > 50) {

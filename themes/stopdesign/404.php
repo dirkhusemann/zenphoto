@@ -24,7 +24,7 @@
 
 	<div class="galleryinfo">
 		<?php
-		echo gettext("The Zenphoto object you are requesting cannot be found.").'<br/>';
+		echo gettext("The Zenphoto object you are requesting cannot be found.").'<br />';
 		if (isset($album)) {
 			echo '<br />'.sprintf(gettext('Album: %s'),sanitize($album));
 		}

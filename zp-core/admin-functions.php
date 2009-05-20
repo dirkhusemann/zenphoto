@@ -1013,7 +1013,7 @@ function printAlbumEditForm($index, $album) {
 		echo "<p><em><strong>" . $album->name . "</strong></em></p>";
 	}
  ?>
-	<input type="hidden" name="<?php echo $prefix; ?>folder" value=" <?php echo $album->name; ?>" />
+	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
 	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value=0 />
 	<table>
@@ -1075,7 +1075,7 @@ function printAlbumEditForm($index, $album) {
 			}
 		  ?>
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" />
-			<br/>
+			<br />
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
 			</p>
 			<p>
