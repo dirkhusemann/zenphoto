@@ -834,9 +834,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</div>
 						<span class="imageextrainfo" style="display: none">
 						<h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
-							<div class="edit-box">
+						<div class="box-edit-unpadded">
 							<?php	tagSelector($image, 'tags_'.$currentimage.'-', false, $tagsort);	?>
-							</div>
+						</div>
 						</span>
 						</td>
 					</tr>
@@ -940,7 +940,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4">
+						<td colspan="2">
 						<span style="display: block" class="imageextrashow">
 						<a href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', true);"><?php echo gettext('show more fields');?></a></span>
 						<span style="display: none" class="imageextrahide">
