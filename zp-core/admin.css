@@ -141,7 +141,7 @@ p {
 	_padding: 0 0 0 30px;
 	margin: 0 0 0 30px;
 	height: 30px;
-	width: 95%;
+	width: 80em; /* changed from 95% to prevent linebreaks of the tabs if using languages with longer text on smaller screens */
 }
 
 .nav li {
@@ -230,7 +230,7 @@ p {
 	_padding: 0 0 0 30px;
 	margin: 0 0 0 30px;
 	height: 30px;
-	width: 95%;
+width: 80em; /* changed from 95% to prevent linebreaks of the tabs if using languages with longer text on smaller screens */	width: 80em;
 }
 
 .subnav li {
@@ -1404,7 +1404,7 @@ span.tagMatches span {
 	margin-bottom: 0;
 }
 .box-albums-unpadded {
-	width: 20.1em;
+	width: 20.15em;
 	margin: 0 0 10px 0;
 	padding: 0px 0px 0px 0px;
 	background-color: white;

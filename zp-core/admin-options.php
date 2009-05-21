@@ -669,7 +669,7 @@ if (empty($alterrights)) {
 					</a>
 				</span>
 			</td>
-			<td width="320em" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<td width="320" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 			<?php 
 				if (empty($userid)) {
 					?>
@@ -691,7 +691,7 @@ if (empty($alterrights)) {
 				}
 	 			?>
  			</td>
-			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" >
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 				<?php 
 				if(!empty($userid) && count($admins) > 2) { 
 					$msg = gettext('Are you sure you want to delete this user?');
@@ -786,7 +786,7 @@ if (empty($alterrights)) {
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
 		</td>
-		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
+		<td  width="320" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
 				value="<?php echo $user['name'];?>" />
 			<br />
