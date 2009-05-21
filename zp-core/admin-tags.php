@@ -164,7 +164,6 @@ printLogoAndLinks();
 								?>
 								<li>
 									<label for="<?php echo $listitem; ?>"><?php echo $item; ?></label>
-									<br />
 									<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="text" size='33' />
 								</li>
 								<?php
