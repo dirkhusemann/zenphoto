@@ -803,12 +803,12 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 						$display = str_replace(' ', '&nbsp;', $display);
 						?>
 						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
-						<label for="<?php echo $checkbox; ?>" style="padding-right: .5em">
-							<span style="white-space:nowrap"> 
-								<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
-								<?php echo($display); ?>
-							</span>
-						</label>
+						
+						<span style="white-space:nowrap"> 
+							<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
+							<label for="<?php echo $checkbox; ?>" style="padding-right: .5em"><?php echo($display); ?></label>
+						</span>
+						
 						<?php
 					}
 					echo "</td>\n";
@@ -922,14 +922,22 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 	$cv = array_flip($currentValue);
 	foreach($list as $key=>$item) {
 		$listitem = postIndexEncode($prefix.$item);
-		echo '<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="checkbox"';
-		if (isset($cv[$item])) {
-			echo ' checked="checked" ';
+		if ($localize) {
+			$display = $key;
+		} else {
+			$display = $item;
 		}
-		echo ' value="'.$item.'" ';
-		if ($localize) $display = $key; else $display = $item;
-		echo $alterrights.' /> ' . $display . "</label></li>"."\n";
-	}
+		?>
+		<li>
+		<span style="white-space:nowrap">
+			<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
+				<?php if (isset($cv[$item])) {echo 'checked="checked"';	} ?> value="<?php echo $item; ?>"
+				<?php echo $alterrights; ?> style="float:left" />
+			<label for="<?php echo $listitem; ?>" style="margin-left: 15px"><?php echo $display; ?></label>
+		</span>
+		</li>
+		<?php
+		}
 }
 
 /**
@@ -1472,7 +1480,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				if ($tc > 0) {
 					$hc = $tv/$tc;
 					printf(gettext('Rating: <strong>%u</strong>'), $hc);
-					echo "<label for=\"".$prefix."reset_rating\"><input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1> ".gettext("Reset")."</label> ";
+					?>
+					<input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1>
+					<label for="<?php echo $prefix; ?>reset_rating\"><?php echo gettext("Reset"); ?></label>
+					<?php
 				} else {
 					echo gettext("Rating: Unrated");
 				}
@@ -1482,27 +1493,25 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<!-- **************** Move/Copy/Rename ****************** -->
 		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 		<div class="box-edit">
-			<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
-				<span style="white-space:nowrap">
-					<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
-						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-					<?php echo gettext("Move");?>
-				</span>
-			</label>
-			<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
-				<span style="white-space:nowrap">
-					<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
-						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-					<?php echo gettext("Copy");?>
-				</span>
-			</label>
-			<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
-				<span style="white-space:nowrap">
-					<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
-						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
-					<?php echo gettext("Rename Folder");?>
-				</span>
-			</label>
+			
+			<span style="white-space:nowrap">
+				<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
+					onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+				<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em"><?php echo gettext("Move");?></label>
+			</span>
+			
+			<span style="white-space:nowrap">
+				<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
+					onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+				<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em"><?php echo gettext("Copy");?></label>
+			</span>
+			
+			<span style="white-space:nowrap">
+				<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
+					onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
+				<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em"><?php echo gettext("Rename Folder");?></label>
+			</span>
+			
 		
 		
 			<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
@@ -2026,14 +2035,18 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 				if (!empty($string)) {
 					unset($emptylang[$key]);
 					$empty = false;
-					echo '<li><label for="'.$name.'_'.$key.'">';
-					echo $lang;
-					if ($textbox) {
-						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
-					} else {
-						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
-					}
-					echo "</label></li>\n";
+					?>
+					<li>
+						<label for="<?php echo $name; ?>_'.$key.'"><?php echo $lang; ?></label>
+						<?php
+						if ($textbox) {
+							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
+						} else {
+							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+						}
+						?>
+					</li>
+					<?php
 				}
 			}
 		}
@@ -2043,14 +2056,14 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$emptylang = array_merge(array($locale=>$element), $emptylang);
 		}
 		foreach ($emptylang as $key=>$lang) {
-			echo '<li><label for="'.$name.'_'.$key.'">';
+			echo '<li><label for="'.$name.'_'.$key.'"></label>';
 			echo $lang;
 			if ($textbox) {
 				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6"></textarea>';
 			} else {
 				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 			}
-			echo "</label></li>\n";
+			echo "</li>\n";
 
 		}
 		echo "</ul>\n";

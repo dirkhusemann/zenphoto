@@ -678,9 +678,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 						
 						<p>
-							<label for="<?php echo $currentimage; ?>-thumb">
-								<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" /> <?php echo ' '.gettext("Select as album thumbnail."); ?>
-							</label>
+							<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" />
+							<label for="<?php echo $currentimage; ?>-thumb"><?php echo ' '.gettext("Select as album thumbnail."); ?></label>
 						</p>
 						</td>
 						<td align="left" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
@@ -689,20 +688,17 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<td style="padding-left: 1em; text-align: left;" rowspan="14" valign="top">
 						<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
      				<div class="box-edit">
-						<label for="<?php echo $currentimage; ?>-allowcomments">
-						<input type="checkbox"
-							id="<?php echo $currentimage; ?>-allowcomments"
-							name="<?php echo $currentimage; ?>-allowcomments" value="1"
+						
+						<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments" name="<?php echo $currentimage; ?>-allowcomments" value="1"
 							<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
-						<?php echo gettext("Allow Comments"); ?></label> &nbsp; &nbsp; <label
-							for="<?php echo $currentimage; ?>-Visible"> <input type="checkbox"
-							id="<?php echo $currentimage; ?>-Visible"
-							name="<?php echo $currentimage; ?>-Visible" value="1"
+						<label for="<?php echo $currentimage; ?>-allowcomments"><?php echo gettext("Allow Comments"); ?></label>
+						&nbsp;&nbsp;<input type="checkbox" id="<?php echo $currentimage; ?>-Visible" name="<?php echo $currentimage; ?>-Visible" value="1"
 							<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
-						<?php echo gettext("Visible"); ?></label>
+						<label for="<?php echo $currentimage; ?>-Visible"><?php echo gettext("Visible"); ?></label>
 						<p style="margin-top: 0; margin-bottom: 1em;"><?php
 									$hc = $image->get('hitcounter');
 									if (empty($hc)) { $hc = '0'; }
+									
 									printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
 									$tv = $image->get('total_value');
 									$tc = $image->get('total_votes');

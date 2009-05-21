@@ -1390,3 +1390,24 @@ span.tagMatches span {
 	width: 22em;
 	padding-right: 2em;
 }
+
+.h2_bordered_albums {
+	width: 18.9em;
+	font-weight: bold;
+	padding: 5px 8px 5px 8px;
+	border-bottom: 2px solid #cccccc;
+	border-left: 1px solid  #cccccc;
+	border-right: 1px solid  #cccccc;
+	border-top: 1px solid  #cccccc;
+	background-image: url(images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
+	margin-bottom: 0;
+}
+.box-albums-unpadded {
+	width: 20.1em;
+	margin: 0 0 10px 0;
+	padding: 0px 0px 0px 0px;
+	background-color: white;
+	border: 1px solid #cccccc;
+	border-bottom-width: 5px;
+}

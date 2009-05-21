@@ -644,7 +644,7 @@ if (empty($alterrights)) {
 		<td colspan="2" style="margin: 0pt; padding: 0pt;">
 		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'> <!-- individual admin table -->
 		<tr>
-			<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
 				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 				<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
 					<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
@@ -809,16 +809,20 @@ if (empty($alterrights)) {
 						$rest = array_diff($albumlist, $cv);
 						$prefix = 'managed_albums_'.$id.'_';
 						?>
+						<h2 class="h2_bordered_albums">
 						<a href="javascript:toggle('<?php echo $id ?>managed_albums');"><?php echo gettext("Managed albums:"); ?></a>
-						<div id="<?php echo $id ?>managed_albums" style="display:none" >
-							<ul class="albumchecklist">
-								<?php
-								generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
-								if (empty($alterrights)) {
-									generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
-								}
-								?>
-							</ul>
+						</h2>
+						<div class="box-albums-unpadded">
+							<div id="<?php echo $id ?>managed_albums" style="display:none" >
+								<ul class="albumchecklist">
+									<?php
+									generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
+									if (empty($alterrights)) {
+										generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
+									}
+									?>
+								</ul>
+							</div>
 						</div>
 						<?php
 					} else {
@@ -1815,11 +1819,11 @@ if (empty($alterrights)) {
 			<ul class="searchchecklist">
 			<?php
 			foreach ($_zp_exifvars as $key=>$item) {
-				echo '<li><label for="'.$key.'"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
+				echo '<li><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
 				if ($item[3]) {
 					echo ' checked="checked" ';
 				}
-				echo ' value="1"  /> ' . $item[2] . "</label></li>"."\n";
+				echo ' value="1"  /> <label for="'.$key.'">' . $item[2] . "</label></li>"."\n";
 			}
 			?>
 			</ul>
