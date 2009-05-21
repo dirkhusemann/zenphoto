@@ -2177,7 +2177,7 @@ if (empty($alterrights)) {
 	<?php
 	if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 		$_zp_plugin_count = 0;
-	?>
+		?>
 		<div id="tab_plugin" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savepluginoptions" value="yes" />
@@ -2191,7 +2191,9 @@ if (empty($alterrights)) {
 		<tr>
 		<td style="padding: 0;margin:0" colspan="3">
 		<?php
-		foreach (getEnabledPlugins() as $extension=>$loadtype) {
+		$plugins = array_keys(getEnabledPlugins());
+		natsort($plugins);
+		foreach ($plugins as $extension) {
 			$ext = substr($extension, 0, strlen($extension)-4);
 			$option_interface = NULL;
 			if (array_key_exists($extension, $class_optionInterface)) {
