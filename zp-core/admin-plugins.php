@@ -158,24 +158,29 @@ foreach ($filelist as $extension) {
 			}
 		}
 	}
-	echo "<tr>";
-	echo '<td width="30%">';
-	echo '<input type="checkbox" name="'.$opt.'" value="'.$loadtype.'"';
-	if ($parserr || $plugin_disable) {
-		echo 'DISABLED';
-	} else {
-		if (getOption($opt)) {
-			echo 'CHECKED="CHECKED"';
-		}
-	}
-	echo ' /> ';
-	echo '<strong>'.$ext.'</strong>';
-
+	?>
+	<tr>
+	<td width="30%">
+	<label>
+		<input type="checkbox" name="<?php echo $opt; ?>" value="<?php echo $loadtype; ?>"
+			<?php
+			if ($parserr || $plugin_disable) {
+				echo 'DISABLED';
+			} else {
+				if (getOption($opt)) {
+					echo 'CHECKED="CHECKED"';
+				}
+			} ?> />
+		<strong><?php echo $ext; ?></strong>
+	</label>
+	<?php
 	if (!empty($plugin_version)) {
 		echo ' v'.$plugin_version;
 	}
-	echo '</td>';
-	echo '<td>';
+	?>
+	</td>
+	<td>
+	<?php
 	echo $plugin_description;
 	if (!empty($plugin_URL)) {
 		if ($parserr & 8) {

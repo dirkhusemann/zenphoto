@@ -804,9 +804,11 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 						?>
 						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
 						
-						<span style="white-space:nowrap"> 
-							<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
-							<label for="<?php echo $checkbox; ?>" style="padding-right: .5em"><?php echo($display); ?></label>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
+								<?php echo($display); ?>
+							</label>
 						</span>
 						
 						<?php
@@ -891,7 +893,7 @@ function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
 			$checked = "checked='checked' "; //the checked() function uses quotes the other way round...
 		}
 		?>
-		<label for="<?php echo $value."-".$option; ?>" style="padding-right: .5em">
+		<label>
 			<span style="white-space:nowrap">
 				<input type="radio" name="<?php echo $option; ?>" id="<?php echo $value.'-'.$option; ?>" value="<?php echo $value; ?>"<?php echo $checked; ?> />
 				<?php echo $text; ?>
@@ -930,10 +932,12 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 		?>
 		<li>
 		<span style="white-space:nowrap">
-			<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
-				<?php if (isset($cv[$item])) {echo 'checked="checked"';	} ?> value="<?php echo $item; ?>"
-				<?php echo $alterrights; ?> style="float:left" />
-			<label for="<?php echo $listitem; ?>" style="margin-left: 15px"><?php echo $display; ?></label>
+			<label>
+				<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
+					<?php if (isset($cv[$item])) {echo 'checked="checked"';	} ?> value="<?php echo $item; ?>"
+					<?php echo $alterrights; ?> />
+				<?php echo $display; ?>
+			</label>
 		</span>
 		</li>
 		<?php
@@ -1174,8 +1178,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	}
 	?>
 	<span id="<?php echo $javaprefix; ?>album_direction_div" style="display:<?php echo $dsp; ?>">
-	&nbsp;<?php echo gettext("Descending"); ?> 
-	<input type="checkbox" name="<?php echo $prefix; ?>album_sortdirection" value="1" <?php if ($album->getSortDirection('album')) {	echo "CHECKED";	}; ?>>
+		<label>
+			<?php echo gettext("Descending"); ?> 
+			<input type="checkbox" name="<?php echo $prefix; ?>album_sortdirection" value="1" <?php if ($album->getSortDirection('album')) {	echo "CHECKED";	}; ?>>
+		</label>
 	</span>
 	<?php
 	$flip = array_flip($sort);
@@ -1241,13 +1247,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	}
 	?>
 	<span id="<?php echo $javaprefix;?>image_direction_div" style="display:<?php echo $dsp; ?>">
-	&nbsp;<?php echo gettext("Descending"); ?> <input type="checkbox" name="<?php echo $prefix; ?>image_sortdirection" value="1"
-	<?php
-	if ($album->getSortDirection('image')) {
-		echo "CHECKED";
-	}
-	?>
-	>
+		<label>
+			<?php echo gettext("Descending"); ?>
+			<input type="checkbox" name="<?php echo $prefix; ?>image_sortdirection" value="1"
+				<?php if ($album->getSortDirection('image')) { echo "CHECKED"; }?> >
+		</label>
 	</span>
 	<?php
 	$flip = array_flip($sort);
@@ -1454,23 +1458,30 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<div class="box-edit">
 			<?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
 			<p>
-				<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />	
-				<?php echo gettext("Published");?>
+				<label>
+					<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />	
+					<?php echo gettext("Published");?>
+				</label>
 			</p>
 		</div>
 		
 		<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
 		<div class="box-edit">
 			<p>
-				<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo "CHECKED"; } ?> />
-				<?php echo gettext("Allow Comments"); ?>
+				<label>
+					<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo "CHECKED"; } ?> />
+					<?php echo gettext("Allow Comments"); ?>
+				</label>
 			</p>
 			<p>
 				<?php
 				$hc = $album->get('hitcounter');
 				if (empty($hc)) { $hc = '0'; }
 				?>
-				<input type="checkbox" name="reset_hitcounter"> <?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?> 
+				<label>
+					<input type="checkbox" name="reset_hitcounter">
+					<?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?> 
+				</label>
 			</p>
 			<p>
 				<?php
@@ -1481,8 +1492,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					$hc = $tv/$tc;
 					printf(gettext('Rating: <strong>%u</strong>'), $hc);
 					?>
-					<input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1>
-					<label for="<?php echo $prefix; ?>reset_rating\"><?php echo gettext("Reset"); ?></label>
+					<label>
+						<input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1>
+						<?php echo gettext("Reset"); ?>
+					</label>
 					<?php
 				} else {
 					echo gettext("Rating: Unrated");
@@ -1495,15 +1508,19 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<div class="box-edit">
 			
 			<span style="white-space:nowrap">
-				<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
-					onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-				<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em"><?php echo gettext("Move");?></label>
+				<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
+					<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
+						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+					<?php echo gettext("Move");?>
+				</label>
 			</span>
 			
 			<span style="white-space:nowrap">
-				<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
-					onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-				<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em"><?php echo gettext("Copy");?></label>
+				<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
+					<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
+						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+					<?php echo gettext("Copy");?>
+				</label>
 			</span>
 			
 			<span style="white-space:nowrap">

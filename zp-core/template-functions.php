@@ -4047,7 +4047,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 		<ul style="display:none;" id="searchextrashow">
 		<?php
 		foreach ($fields as $key=>$item) {
-			echo '<li><label for="_SEARCH_'.$item.'"><input id="_SEARCH_'.$item.'" name="_SEARCH_'.$item.'" type="checkbox"';		
+			echo '<li><label><input id="_SEARCH_'.$item.'" name="_SEARCH_'.$item.'" type="checkbox"';		
 			if ($item & $query_fields) {
 				echo ' checked="checked" ';
 			}

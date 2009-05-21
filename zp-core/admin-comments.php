@@ -125,28 +125,23 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 	<tr>
 		<td width="100"><?php echo gettext("Author:"); ?></td>
-		<td><input type="text" size="40" name="name"
-			value="<?php echo $name; ?>" /></td>
+		<td><input type="text" size="40" name="name" value="<?php echo $name; ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Web Site:"); ?></td>
-		<td><input type="text" size="40" name="website"
-			value="<?php echo $website; ?>" /></td>
+		<td><input type="text" size="40" name="website" value="<?php echo $website; ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("E-Mail:"); ?></td>
-		<td><input type="text" size="40" name="email"
-			value="<?php echo $email; ?>" /></td>
+		<td><input type="text" size="40" name="email" value="<?php echo $email; ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Date/Time:"); ?></td>
-		<td><input type="text" size="18" name="date"
-			value="<?php echo $date; ?>" /></td>
+		<td><input type="text" size="18" name="date" value="<?php echo $date; ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("IP:"); ?></td>
-		<td><input type="text" disabled="disabled" size="18" name="date"
-			value="<?php echo $IP; ?>" /></td>
+		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo $IP; ?>" /></td>
 	</tr>
 	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
@@ -395,9 +390,12 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	</tr>
 	<?php } ?>
 	<tr>
-		<td colspan="11" class="subhead"><label><input type="checkbox"
-			name="allbox" onClick="checkAll(this.form, 'ids[]', this.checked);" />
-		<?php echo gettext("Check All"); ?></label></td>
+		<td colspan="11" class="subhead">
+			<label for "allbox">
+				<input type="checkbox" name="allbox" id="allbox" onClick="checkAll(this.form, 'ids[]', this.checked);" />
+				<?php echo gettext("Check All"); ?>
+			</label>
+		</td>
 	</tr>
 
 

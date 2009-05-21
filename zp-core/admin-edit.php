@@ -678,8 +678,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 						
 						<p>
-							<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" />
-							<label for="<?php echo $currentimage; ?>-thumb"><?php echo ' '.gettext("Select as album thumbnail."); ?></label>
+							<label>
+								<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" />
+								<?php echo ' '.gettext("Select as album thumbnail."); ?>
+							</label>
 						</p>
 						</td>
 						<td align="left" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
@@ -688,13 +690,17 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<td style="padding-left: 1em; text-align: left;" rowspan="14" valign="top">
 						<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
      				<div class="box-edit">
-						
-						<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments" name="<?php echo $currentimage; ?>-allowcomments" value="1"
-							<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
-						<label for="<?php echo $currentimage; ?>-allowcomments"><?php echo gettext("Allow Comments"); ?></label>
-						&nbsp;&nbsp;<input type="checkbox" id="<?php echo $currentimage; ?>-Visible" name="<?php echo $currentimage; ?>-Visible" value="1"
-							<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
-						<label for="<?php echo $currentimage; ?>-Visible"><?php echo gettext("Visible"); ?></label>
+						<label>
+							<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments" name="<?php echo $currentimage; ?>-allowcomments" value="1"
+								<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
+							<?php echo gettext("Allow Comments"); ?>
+						</label>
+						&nbsp;&nbsp;
+						<label>
+							<input type="checkbox" id="<?php echo $currentimage; ?>-Visible" name="<?php echo $currentimage; ?>-Visible" value="1"
+								<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
+							<?php echo gettext("Visible"); ?>
+						</label>
 						<p style="margin-top: 0; margin-bottom: 1em;"><?php
 									$hc = $image->get('hitcounter');
 									if (empty($hc)) { $hc = '0'; }
@@ -790,25 +796,25 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
 							?>
 							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
-							<label for="<?php echo $currentimage; ?>-rotation_none" style="padding-right: .5em">
+							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
 									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('none'); ?>
 								</span>
 							</label>
-							<label for="<?php echo $currentimage; ?>-rotation_90" style="padding-right: .5em">
+							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
 									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('90 degrees'); ?>
 								</span>
 							</label>
-							<label for="<?php echo $currentimage; ?>-rotation_180" style="padding-right: .5em">
+							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
 									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('180 degrees'); ?>
 								</span>
 							</label>
-							<label for="<?php echo $currentimage; ?>-rotation_270" style="padding-right: .5em">
+							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
 									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('270 degrees'); ?>

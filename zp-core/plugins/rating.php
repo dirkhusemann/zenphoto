@@ -305,7 +305,7 @@ function optionVoteStatus($before, $object, $prefix) {
 		} else {
 			$checked = '';
 		} 
-		$output .= "<label for='".$value."-".$prefix."rating_status' style='padding-right: .5em'><span style='white-space:nowrap'>\n<input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/> ".$text."</span>\n</label>"."\n";
+		$output .= "<label style='padding-right: .5em'><span style='white-space:nowrap'>\n<input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/> ".$text."</span>\n</label>"."\n";
 	}
 	$output = $before.'<hr />'."\n".$output;
 	return $output;

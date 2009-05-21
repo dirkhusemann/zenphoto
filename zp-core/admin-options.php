@@ -610,8 +610,11 @@ if (empty($alterrights)) {
 <table class="bordered"> <!-- main table -->
 	<tr>
 		<th>
-			<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
-		| <a href="javascript:toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a></span>
+			<span style="font-weight: normal">
+			<a href="javascript:toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
+			| 
+			<a href="javascript:toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a>
+			</span>
 		</th>
 	</tr>
 	<?php
@@ -710,13 +713,17 @@ if (empty($alterrights)) {
 			</tr>
 	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
 		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?>
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+		</td>
 		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
-				value="<?php echo $x; ?>" /><br />
+				value="<?php echo $x; ?>" />
+			<br />
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
-				value="<?php echo $x; ?>" /></td>
+				value="<?php echo $x; ?>" />
+		</td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 			<table class="checkboxes" > <!-- checkbox table -->
 				<tr>
@@ -726,55 +733,122 @@ if (empty($alterrights)) {
 				</tr>
 				<tr>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-admin_rights"
-						value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("User admin"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-admin_rights" id="<?php echo $id ?>-admin_rights"
+									value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("User admin"); ?>
+							</label>
+						</span>
+					</td>
 						
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-options_rights"
-						value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("Options"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-options_rights" id="<?php echo $id ?>-options_rights"
+									value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("Options"); ?>
+							</label>
+						</span>
+					</td>
 						
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-zenpage_rights"
-						<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($user['rights'] & ZENPAGE_RIGHTS)) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-zenpage_rights" id="<?php echo $id ?>-zenpage_rights"
+									<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($user['rights'] & ZENPAGE_RIGHTS)) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("Zenpage"); ?>
+							</label>
+						</span>
+					</td>
 				</tr>
 				<tr>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-tags_rights"
-						value=<?php echo TAGS_RIGHTS; if ($user['rights'] & TAGS_RIGHTS) echo ' checked';
-						echo $alterrights; ?>> <?php echo gettext("Tags"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+							<input type="checkbox" name="<?php echo $id ?>-tags_rights" id="<?php echo $id ?>-tags_rights"
+								value=<?php echo TAGS_RIGHTS; if ($user['rights'] & TAGS_RIGHTS) echo ' checked';
+								echo $alterrights; ?>>
+							<?php echo gettext("Tags"); ?>
+							</label>
+						</span>
+					</td>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-themes_rights"
-						value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';
-						echo $alterrights; ?>> <?php echo gettext("Themes"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-themes_rights" id="<?php echo $id ?>-themes_rights"
+									value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';
+									echo $alterrights; ?>>
+								<?php echo gettext("Themes"); ?>
+							</label>
+						</span>
+					</td>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-all_album_rights"
-						value=<?php echo ALL_ALBUMS_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-all_album_rights" id="<?php echo $id ?>-all_album_rights"
+									value=<?php echo ALL_ALBUMS_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("Manage all albums"); ?>
+							</label>
+						</span>
+					</td>
 				</tr>
 				<tr>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-edit_rights"
-						value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("Edit"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-edit_rights" id="<?php echo $id ?>-edit_rights"
+									value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("Edit"); ?>
+							</label>
+						</span>
+					</td>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-comment_rights"
-						value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("Comment"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-comment_rights" id="<?php echo $id ?>-comment_rights"
+									value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("Comment"); ?>
+							</label>
+						</span>
+					</td>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-upload_rights"
-						value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("Upload"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-upload_rights" id="<?php echo $id ?>-upload_rights"
+									value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("Upload"); ?>
+							</label>
+						</span>
+					</td>
 				</tr>
 				<tr>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<input type="checkbox" name="<?php echo $id ?>-view_rights"
-						value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
-						echo $alterrights; ?>> <?php echo gettext("View all"); ?></td>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
-						value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-view_rights" id="<?php echo $id ?>-view_rights"
+									value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
+									echo $alterrights; ?>>
+								<?php echo gettext("View all"); ?>
+							</label>
+						</span>
+					</td>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+						<span style="white-space:nowrap">
+							<label>
+								<input type="checkbox" name="<?php echo $id ?>-main_rights" id="<?php echo $id ?>-main_rights"
+									value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>>
+								<?php echo gettext("Overview"); ?>
+							</label>
+						</span>
+					</td>
 				</tr>
 			</table> <!-- end checkbox table -->
 
@@ -938,8 +1012,18 @@ if (empty($alterrights)) {
 				<tr>
 					<td><?php echo gettext("URL options:"); ?></td>
 					<td>
-						<p><input type="checkbox" name="mod_rewrite" value="1"<?php echo checked('1', getOption('mod_rewrite')); ?> /> <?php echo gettext('mod rewrite'); ?></p>
-						<p><input type="checkbox" name="UTF8_image_URI" value="1"<?php echo checked('1', getOption('UTF8_image_URI')); ?> /> <?php echo gettext('UTF8 image URIs'); ?></p>
+						<p>
+							<label>
+								<input type="checkbox" name="mod_rewrite" value="1"<?php echo checked('1', getOption('mod_rewrite')); ?> />
+								<?php echo gettext('mod rewrite'); ?>
+							</label>
+						</p>
+						<p>
+							<label>
+								<input type="checkbox" name="UTF8_image_URI" value="1"<?php echo checked('1', getOption('UTF8_image_URI')); ?> />
+								<?php echo gettext('UTF8 image URIs'); ?>
+							</label>
+						</p>
 						<p><?php echo gettext("mod_rewrite suffix:"); ?> <input type="text" size="10" name="mod_rewrite_image_suffix" value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></p>
 					</td>
 					<td>
@@ -1045,7 +1129,12 @@ if (empty($alterrights)) {
 					<td><?php echo gettext("Allowed tags:"); ?></td>
 					<td>
 						<p><textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea></p>
-						<p><input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restore default allowed tags'); ?></p>
+						<p>
+							<label>
+								<input type="checkbox" name="allowed_tags_reset" value="1" />
+								<?php echo gettext('restore default allowed tags'); ?>
+							</label>
+						</p>
 					</td>
 					<td>
 					<p><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?></p>
@@ -1195,7 +1284,10 @@ if (empty($alterrights)) {
 								</td>
 								<td>
 									<span id="gallery_sortdirection" style="display:<?php echo $dspd; ?>">
-									<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />&nbsp;<?php echo gettext("Descending"); ?>
+										<label>
+											<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />
+											<?php echo gettext("Descending"); ?>
+										</label>
 									</span>
 									</td>
 								</tr>
@@ -1218,11 +1310,51 @@ if (empty($alterrights)) {
 				<tr>
 					<td><?php echo gettext("Gallery behavior:"); ?></td>
 					<td>
-					<p><input type="checkbox" name="album_use_new_image_date" value="1" <?php echo checked('1', getOption('album_use_new_image_date')); ?> /> <?php echo gettext("use latest image date as album date"); ?></p>
-					<p><input type="checkbox" name="login_user_field" value="1" <?php echo checked('1', getOption('login_user_field')); ?> /> <?php echo gettext("enable user name login field"); ?></p>
-					<p><input type="checkbox" name="thumb_select_images" value="1" <?php echo checked('1', getOption('thumb_select_images')); ?> /> <?php echo gettext("visual thumb selection"); ?></p>
-					<p><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /> <?php echo gettext("enable persistent archives"); ?></p>
-					<p><input type="checkbox" name="album_session" value="1" <?php echo checked('1', getOption('album_session')); ?> /> <?php echo gettext("enable gallery sessions"); ?></p>					
+						<p>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="album_use_new_image_date" id="album_use_new_image_date"
+											value="1" <?php echo checked('1', getOption('album_use_new_image_date')); ?> />
+									<?php echo gettext("use latest image date as album date"); ?>
+								</label>
+							</span>
+						</p>
+						<p>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="login_user_field" id="login_user_field"
+											value="1" <?php echo checked('1', getOption('login_user_field')); ?> />
+									<?php echo gettext("enable user name login field"); ?>
+								</label>
+							</span>
+						</p>
+						<p>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="thumb_select_images" id="thumb_select_images"
+											value="1" <?php echo checked('1', getOption('thumb_select_images')); ?> />
+									<?php echo gettext("visual thumb selection"); ?>
+								</label>
+							</span>
+						</p>
+						<p>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="persistent_archive" id="persistent_archive"
+											value="1" <?php echo checked('1', getOption('persistent_archive')); ?> />
+									<?php echo gettext("enable persistent archives"); ?>
+								</label>
+							</span>
+						</p>
+						<p>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="album_session" id="album_session"
+											value="1" <?php echo checked('1', getOption('album_session')); ?> />
+									<?php echo gettext("enable gallery sessions"); ?>
+								</label>
+							</span>
+						</p>					
 					</td>
 					<td>
 						<p><?php  echo gettext("<a href=\"javascript: toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>" ); ?></p>
@@ -1361,8 +1493,18 @@ if (empty($alterrights)) {
 								?>
 							</ul>
 					</p>
-					<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
-					<p><input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> /> <?php echo gettext('Do not return <em>album</em> matches') ?></p>
+					<p>
+						<label>
+							<input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> />
+							<?php echo gettext('Treat spaces as <em>OR</em>') ?>
+						</label>
+					</p>
+					<p>
+						<label>
+							<input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> />
+							<?php echo gettext('Do not return <em>album</em> matches') ?>
+						</label>
+					</p>
 					</td>
 					<td>
 						<p><?php echo gettext('Search behavior settings.') ?></p>
@@ -1515,9 +1657,10 @@ if (empty($alterrights)) {
 				generateListFromArray(array($cv), $sort, false, true);
 				?>
 				</select>
-				<input type="checkbox" name="image_sortdirection" value="1"
-				<?php echo checked('1', getOption('image_sortdirection')); ?> />
-				<?php echo gettext("Descending"); ?>
+				<label>
+					<input type="checkbox" name="image_sortdirection" value="1" <?php echo checked('1', getOption('image_sortdirection')); ?> />
+					<?php echo gettext("Descending"); ?>
+				</label>
 				<div id="customTextBox3" class="customText" style="display:<?php echo $dsp; ?>">
 				<?php echo gettext('custom fields:') ?>
 				<input id="customimagesort" name="customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
@@ -1608,8 +1751,14 @@ if (empty($alterrights)) {
 		<tr>
 			<td><?php echo gettext("Sharpen:"); ?></td>
 			<td>
-					<input type="checkbox" name="image_sharpen" value="1" <?php echo checked('1', getOption('image_sharpen')); ?> /> Images
-					<input type="checkbox" name="thumb_sharpen" value="1" <?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
+				<label>
+					<input type="checkbox" name="image_sharpen" value="1" <?php echo checked('1', getOption('image_sharpen')); ?> />
+					<?php echo gettext('Images'); ?>
+				</label>
+				<label>
+					<input type="checkbox" name="thumb_sharpen" value="1" <?php echo checked('1', getOption('thumb_sharpen')); ?> />
+					<?php echo gettext('Thumbs'); ?>
+				</label>
 				<br />
 				<?php echo gettext('Amount'); ?>&nbsp;<input type="text" id="sharpenamount" name="sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
 				<script type="text/javascript">
@@ -1662,8 +1811,13 @@ if (empty($alterrights)) {
 			<?php echo gettext('cover').' '; ?>
 			<input type="text" size="2" name="watermark_scale"
 					value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
-			<input type="checkbox" name="watermark_allow_upscale" value="1"
-			<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />&nbsp;<?php echo gettext("allow upscale"); ?>
+			<span style="white-space:nowrap">
+				<label>
+					<input type="checkbox" name="watermark_allow_upscale" value="1"
+					<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />
+					<?php echo gettext("allow upscale"); ?>
+				</label>
+			</span>
 			<br />
 			<?php echo gettext("offset h"); ?>
 			<input type="text" size="2" name="watermark_h_offset"
@@ -1724,15 +1878,15 @@ if (empty($alterrights)) {
 				?>
 				</p>
 				<p>
-				<?php
-				echo '<input type="checkbox" name="hotlink_protection" value="1"';
-				echo checked('1', getOption('hotlink_protection')). ' /> '.gettext('Disable hotlinking');
-				?>
-				<br />
-				<?php
-				echo '<input type="checkbox" name="cache_full_image" value="1"';
-				echo checked('1', getOption('cache_full_image')). ' /> '.gettext('cache the full image');
-				?>
+					<label>
+						<input type="checkbox" name="hotlink_protection" value="1" <?php echo checked('1', getOption('hotlink_protection')); ?> />
+						<?php echo gettext('Disable hotlinking'); ?>
+					</label>
+					<br />
+					<label>
+						<input type="checkbox" name="cache_full_image" value="1" <?php echo checked('1', getOption('cache_full_image')); ?> />
+						<?php echo gettext('cache the full image'); ?>
+					</label>
 				</p>
 				<p>
 				<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
@@ -1819,11 +1973,11 @@ if (empty($alterrights)) {
 			<ul class="searchchecklist">
 			<?php
 			foreach ($_zp_exifvars as $key=>$item) {
-				echo '<li><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
+				echo '<li><label"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
 				if ($item[3]) {
 					echo ' checked="checked" ';
 				}
-				echo ' value="1"  /> <label for="'.$key.'">' . $item[2] . "</label></li>"."\n";
+				echo ' value="1"  /> ' . $item[2] . "</label></li>"."\n";
 			}
 			?>
 			</ul>
@@ -1893,20 +2047,49 @@ if (empty($alterrights)) {
 			<td>
 				<table class="checkboxes">
 					<tr>
-						<td><input type="checkbox" name="comment_name_required" value=1
-						<?php checked('1', getOption('comment_name_required')); ?>>&nbsp;<?php echo gettext("Name"); ?></td>
+						<td>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="comment_name_required" id="comment_name_required"
+											value=1 <?php checked('1', getOption('comment_name_required')); ?>>
+									<?php echo gettext("Name"); ?>
+								</label>
+							</span>
+						</td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" name="comment_email_required" value=1
-						<?php checked('1', getOption('comment_email_required')); ?>>&nbsp;<?php echo gettext("Email"); ?></td>
+						<td>
+							<span style="white-space:nowrap">
+								<label>
+								<input type="checkbox" name="comment_email_required" id="comment_email_required"
+										value=1 <?php checked('1', getOption('comment_email_required')); ?>>
+								<?php echo gettext("Email"); ?>
+								</label>
+							</span>
+						</td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" name="comment_web_required" value=1
-						<?php checked('1', getOption('comment_web_required')); ?>>&nbsp;<?php echo gettext("Website"); ?></td>
+						<td>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="comment_web_required" id="comment_web_required"
+											value=1 <?php checked('1', getOption('comment_web_required')); ?>>
+									<?php echo gettext("Website"); ?>
+								</label>
+							</span>
+						</td>
+						</
 					</tr>
 					<tr>
-						<td><input type="checkbox" name="Use_Captcha" value=1
-						<?php checked('1', getOption('Use_Captcha')); ?>>&nbsp;<?php echo gettext("Captcha"); ?></td>
+						<td>
+							<span style="white-space:nowrap">
+								<label>
+									<input type="checkbox" name="Use_Captcha" id="Use_Captcha"
+											value=1 <?php checked('1', getOption('Use_Captcha')); ?>>
+									<?php echo gettext("Captcha"); ?>
+								</label>
+							</span>
+						</td>
 					</tr>
 				</table>
 			</td>
@@ -2028,12 +2211,22 @@ if (empty($alterrights)) {
 			<tr>
 				<td><?php echo gettext("Crop thumbnails:"); ?></td>
 				<td>
-					<input type="checkbox" name="thumb_crop" value="1"
-						<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> />
-					Crop width <input type="text" size="3" name="thumb_crop_width"
-						value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" />
-					Crop height <input type="text" size="3" name="thumb_crop_height"
-						value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" />
+					<input type="checkbox" name="thumb_crop" value="1" <?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> />
+					&nbsp;&nbsp;
+					<span style="white-space:nowrap">
+						<label for "thumb_crop">
+							<?php echo gettext('Crop width'); ?>
+							<input type="text" size="3" name="thumb_crop_width" id="thumb_crop_width"
+									value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" />
+						</label>
+					</span>
+					<span style="white-space:nowrap">
+						<label for "thumb_crop_width">
+							<?php echo gettext('Crop height'); ?>
+							<input type="text" size="3" name="thumb_crop_height" id="thumb_crop_height"
+									value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" />
+						</label>
+					</span>
 				</td>
 				<td>
 					<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
@@ -2044,8 +2237,20 @@ if (empty($alterrights)) {
 			<tr>
 				<td><?php echo gettext("Grayscale conversion:"); ?></td>
 				<td>
-				<?php echo gettext('image') ?><input type="Checkbox" size="3" name="image_gray" value="1" <?php echo checked('1', getThemeOption($album, 'image_gray')); ?>/>
-				<?php echo gettext('thumbnail') ?><input type="Checkbox" size="3" name="thumb_gray" value="1" <?php echo checked('1', getThemeOption($album, 'thumb_gray')); ?>/>
+				<span style="white-space:nowrap">
+					<label>
+						<?php echo gettext('image') ?>
+						<input type="Checkbox" size="3" name="image_gray" id="image_gray"
+								value="1" <?php echo checked('1', getThemeOption($album, 'image_gray')); ?>/>
+					</label>
+				</span>
+				<span style="white-space:nowrap">
+					<label>
+						<?php echo gettext('thumbnail') ?>
+						<input type="Checkbox" size="3" name="thumb_gray" id="thumb_gray"
+								value="1" <?php echo checked('1', getThemeOption($album, 'thumb_gray')); ?>/>
+					</label>
+				</span>
 				</td>
 				<td><?php echo gettext("If checked, images/thumbnails will be created in grayscale."); ?></td>
 			</tr>
@@ -2059,14 +2264,30 @@ if (empty($alterrights)) {
 								<input type="text" size="3" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
 							</td>
 							<td style="margin:0; padding:0">
-							<input type="radio" id="image_use_side" name="image_use_side" value="height" <?php if ($side=='height') echo " CHECKED"?> /> <?php echo gettext('height') ?>
-							<input type="radio" id="image_use_side" name="image_use_side" value="width" <?php if ($side=='width') echo " CHECKED"?> /> <?php echo gettext('width') ?>
+								<label>
+									<input type="radio" id="image_use_side1" name="image_use_side" id="image_use_side"
+											value="height" <?php if ($side=='height') echo " CHECKED"?> />
+										<?php echo gettext('height') ?>
+								</label>
+								<label>
+									<input type="radio" id="image_use_side2" name="image_use_side" id="image_use_side"
+												value="width" <?php if ($side=='width') echo " CHECKED"?> />
+									<?php echo gettext('width') ?>
+								</label>
 							</td>
 						</tr>
 						<tr>
 							<td style="margin:0; padding:0">
-							<input type="radio" id="image_use_side" name="image_use_side" value="shortest" <?php if ($side=='shortest') echo " CHECKED"?> /> <?php echo gettext('shortest side') ?>
-							<input type="radio" id="image_use_side" name="image_use_side" value="longest" <?php if ($side=='longest') echo " CHECKED"?> /> <?php echo gettext('longest side') ?>
+								<label>
+									<input type="radio" id="image_use_side3" name="image_use_side" id="image_use_side"
+											value="shortest" <?php if ($side=='shortest') echo " CHECKED"?> />
+									<?php echo gettext('shortest side') ?>
+								</label>
+								<label>
+									<input type="radio" id="image_use_side4" name="image_use_side" id="image_use_side"
+											value="longest" <?php if ($side=='longest') echo " CHECKED"?> />
+									<?php echo gettext('longest side') ?>
+								</label>
 							</td>
 						</tr>
 					</table>
