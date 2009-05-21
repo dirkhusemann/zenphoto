@@ -721,25 +721,25 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
      				<div class="box-edit">
 						<!-- Move/Copy/Rename this image -->
-						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
+						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
 								<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Move");?>
 							</span>
 						</label>
-						<label for="<?php echo $currentimage; ?>-copy" style="padding-right: .5em">
+						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
 								<input type="radio" id="<?php echo $currentimage; ?>-copy" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Copy");?>
 							</span>
 						</label>
-						<label for="<?php echo $currentimage; ?>-rename" style="padding-right: .5em">
+						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
 								<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" style="display:inline" /> <?php echo gettext("Rename File");?>
 							</span>
 						</label>
-						<label for="<?php echo $currentimage; ?>-Delete" style="padding-right: .5em">
+						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
 								<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
 									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image.") ?>

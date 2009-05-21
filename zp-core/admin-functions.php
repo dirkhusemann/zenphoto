@@ -1508,7 +1508,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<div class="box-edit">
 			
 			<span style="white-space:nowrap">
-				<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
+				<label style="padding-right: .5em">
 					<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
 						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 					<?php echo gettext("Move");?>
@@ -1516,7 +1516,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</span>
 			
 			<span style="white-space:nowrap">
-				<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
+				<label style="padding-right: .5em">
 					<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
 						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 					<?php echo gettext("Copy");?>
@@ -1524,9 +1524,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</span>
 			
 			<span style="white-space:nowrap">
-				<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
-					onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
-				<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em"><?php echo gettext("Rename Folder");?></label>
+				<label style="padding-right: .5em">
+					<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
+						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
+					<?php echo gettext("Rename Folder");?>
+				</label>
 			</span>
 			
 		

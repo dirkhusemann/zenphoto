@@ -391,7 +391,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	<?php } ?>
 	<tr>
 		<td colspan="11" class="subhead">
-			<label for "allbox">
+			<label>
 				<input type="checkbox" name="allbox" id="allbox" onClick="checkAll(this.form, 'ids[]', this.checked);" />
 				<?php echo gettext("Check All"); ?>
 			</label>

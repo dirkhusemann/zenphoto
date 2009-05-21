@@ -2214,18 +2214,14 @@ if (empty($alterrights)) {
 					<input type="checkbox" name="thumb_crop" value="1" <?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> />
 					&nbsp;&nbsp;
 					<span style="white-space:nowrap">
-						<label for "thumb_crop">
-							<?php echo gettext('Crop width'); ?>
-							<input type="text" size="3" name="thumb_crop_width" id="thumb_crop_width"
-									value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" />
-						</label>
+						<?php echo gettext('Crop width'); ?>
+						<input type="text" size="3" name="thumb_crop_width" id="thumb_crop_width"
+								value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" />
 					</span>
 					<span style="white-space:nowrap">
-						<label for "thumb_crop_width">
-							<?php echo gettext('Crop height'); ?>
-							<input type="text" size="3" name="thumb_crop_height" id="thumb_crop_height"
-									value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" />
-						</label>
+						<?php echo gettext('Crop height'); ?>
+						<input type="text" size="3" name="thumb_crop_height" id="thumb_crop_height"
+								value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" />
 					</span>
 				</td>
 				<td>
