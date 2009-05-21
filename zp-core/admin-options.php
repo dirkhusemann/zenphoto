@@ -669,7 +669,7 @@ if (empty($alterrights)) {
 					</a>
 				</span>
 			</td>
-			<td width="35%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<td width="320em" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 			<?php 
 				if (empty($userid)) {
 					?>
@@ -712,7 +712,7 @@ if (empty($alterrights)) {
 		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
-		<td width="35%" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 				value="<?php echo $x; ?>" /><br />
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
@@ -786,7 +786,7 @@ if (empty($alterrights)) {
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
 		</td>
-		<td width="35%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
 				value="<?php echo $user['name'];?>" /> <br />
 			<br />
@@ -794,9 +794,7 @@ if (empty($alterrights)) {
 				value="<?php echo $user['email'];?>" />
 		</td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		<table> <!-- album rights table -->
-			<tr>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?> >
+			<p>
 				<?php
 					if (!($user['rights'] & ALL_ALBUMS_RIGHTS) && !$current) {
 						$cv = array();
@@ -809,21 +807,27 @@ if (empty($alterrights)) {
 						}
 						$rest = array_diff($albumlist, $cv);
 						$prefix = 'managed_albums_'.$id.'_';
-						echo gettext("Managed albums:");
-						echo '<ul class="albumchecklist">'."\n";
-						generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
-						if (empty($alterrights)) {
-							generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
-						}
-						echo '</ul>';
+						?>
+						<a href="javascript:toggle('<?php echo $id ?>managed_albums');"><?php echo gettext("Managed albums:"); ?></a>
+						<div id="<?php echo $id ?>managed_albums" style="display:none" >
+							<ul class="albumchecklist">
+								<?php
+								generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
+								if (empty($alterrights)) {
+									generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
+								}
+								?>
+							</ul>
+						</div>
+						<?php
 					} else {
 						if ($ismaster) {
 							echo gettext("This account's username and email are used as contact data in the RSS feeds.");
 						}
 					}
 				?>
-				</td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+			</p>
+			<p>
 				<?php
 					if (!($user['rights'] & ALL_ALBUMS_RIGHTS) && !$current) {
 						if (!empty($alterrights)) {
@@ -834,11 +838,9 @@ if (empty($alterrights)) {
 						}
 					}
 				?>
-			</td>
-			</tr>
-		</table> <!-- album rights table -->
+			</p>
 		</td>
-		</tr>
+	</tr>
 
 </table> <!-- end individual admin table -->
 </td>
