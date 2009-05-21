@@ -781,14 +781,15 @@ if (empty($alterrights)) {
 		</td>
 	</tr>
 	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?> valign="top">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
 		</td>
-		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
-				value="<?php echo $user['name'];?>" /> <br />
+				value="<?php echo $user['name'];?>" />
+			<br />
 			<br />
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
 				value="<?php echo $user['email'];?>" />
