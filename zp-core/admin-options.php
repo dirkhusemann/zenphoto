@@ -1002,8 +1002,7 @@ if (empty($alterrights)) {
 							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset);?>" />
 						</td>
 						<td>
-						<p><?php printf(gettext('Your server reports its timezone as: <code>%s</code>.'), $_zp_server_timezone); ?></p>
-							<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
 						<?php
 					}
 					?>

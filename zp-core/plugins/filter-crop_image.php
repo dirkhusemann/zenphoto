@@ -35,7 +35,8 @@ function toolbox_crop_image($albumname, $imagename) {
 }
 
 function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
-	$albumname = $image->getAlbum()->name;
+	$album = $image->getAlbum();
+	$albumname = $album->name;
 	$imagename = $image->filename;
 	if (isImagePhoto($image)) {
 		$output .= 
