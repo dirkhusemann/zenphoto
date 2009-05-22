@@ -780,6 +780,7 @@ if ($debug) {
 		$result = @mysql_query('SET SESSION sql_mode="";', $mysql_connection);
 		if ($result) {
 			$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+			$msg = gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.');
 			if ($result) {
 				$row = @mysql_fetch_row($result);
 				$mode = $row[0];
@@ -794,10 +795,10 @@ if ($debug) {
 					checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
 				}
 			} else {
-				checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), gettext('You may need to set  <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
+				checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), $msg);
 			}
 		} else {
-			checkMark(-1, '', gettext('MySQL <code>SQL mode</code> [SET SESSION failed]'), gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
+			checkMark(-1, '', gettext('MySQL <code>SQL mode</code> [SET SESSION failed]'), $msg);
 		}
 		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 		if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
