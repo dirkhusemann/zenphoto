@@ -261,7 +261,7 @@ if (ini_get('safe_mode')) { ?>
 						<?php
 						$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/'.getOption('locale').'/select_files_button.png';
 						if(!file_exists($uploadbutton)) {
-							$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/en_US/select_files_button.png';
+							$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/images/select_files_button.png';
 						}
 						$discard = NULL;
 						$info = imageGetInfo($uploadbutton, $discard);
