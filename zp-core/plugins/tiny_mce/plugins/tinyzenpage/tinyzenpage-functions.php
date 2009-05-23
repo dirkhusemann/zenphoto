@@ -119,12 +119,11 @@ function printImageslist($number) {
 					break;
 				}
 				if($albumobj->isDynamic()) {
-					$dynamicalbumobj = new Album($galleryobj,$images[$nr]['folder']);
-					$imageobj = newImage($dynamicalbumobj,$images[$nr]['filename']);	
-					$linkalbumobj = $dynamicalbumobj;
+					$linkalbumobj = new Album($galleryobj,$images[$nr]['folder']);
+					$imageobj = newImage($linkalbumobj,$images[$nr]['filename']);	
 				} else {
-					$imageobj = newImage($albumobj,$images[$nr]);
 					$linkalbumobj = $albumobj;
+					$imageobj = newImage($albumobj,$images[$nr]);
 				}
 				$imgurl = $host.WEBPATH."/zp-core/i.php?a=".urlencode(urlencode($linkalbumobj->name))."&amp;i=".urlencode(urlencode($imageobj->filename));
 				$imgsizeurl = $imageobj->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
