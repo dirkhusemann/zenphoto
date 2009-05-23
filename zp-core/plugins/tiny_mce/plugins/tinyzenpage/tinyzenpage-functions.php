@@ -118,12 +118,19 @@ function printImageslist($number) {
 				if ($nr === $imagecount){
 					break;
 				}
-				$imageobj = newImage($albumobj,$images[$nr]);
-				$imgurl = $host.WEBPATH."/zp-core/i.php?a=".urlencode(urlencode($albumobj->name))."&amp;i=".urlencode(urlencode($imageobj->filename));
+				if($albumobj->isDynamic()) {
+					$dynamicalbumobj = new Album($galleryobj,$images[$nr]['folder']);
+					$imageobj = newImage($dynamicalbumobj,$images[$nr]['filename']);	
+					$linkalbumobj = $dynamicalbumobj;
+				} else {
+					$imageobj = newImage($albumobj,$images[$nr]);
+					$linkalbumobj = $albumobj;
+				}
+				$imgurl = $host.WEBPATH."/zp-core/i.php?a=".urlencode(urlencode($linkalbumobj->name))."&amp;i=".urlencode(urlencode($imageobj->filename));
 				$imgsizeurl = $imageobj->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 				echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>\n";
-				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode(urlencode($imageobj->filename))."','".urlencode(urlencode($imageobj->getTitle()))."','".urlencode(urlencode($albumobj->getTitle()))."','zenphoto');\" title='".$imageobj->getTitle()." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
-				echo "<a href='zoom.php?keepThis=true&amp;image=".urlencode($imageobj->filename)."&amp;album=".urlencode($albumobj->name)."&amp;&TB_iframe=true&amp;height=450&amp;width=450' title='Zoom' class='thickbox' style='outline: none;'><img src='img/magnify.png' alt='' style='border: 0' /></a> ".shortentitle($imageobj->getTitle(),8).unpublishedZenphotoItemCheck($imageobj,false);
+				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode(urlencode($imageobj->filename))."','".urlencode(urlencode($imageobj->getTitle()))."','".urlencode(urlencode($linkalbumobj->getTitle()))."','zenphoto');\" title='".$imageobj->getTitle()." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
+				echo "<a href='zoom.php?keepThis=true&amp;image=".urlencode($imageobj->filename)."&amp;album=".urlencode($linkalbumobj->name)."&amp;&TB_iframe=true&amp;height=450&amp;width=450' title='Zoom' class='thickbox' style='outline: none;'><img src='img/magnify.png' alt='' style='border: 0' /></a> ".shortentitle($imageobj->getTitle(),8).unpublishedZenphotoItemCheck($imageobj,false);
 				echo "</div>\n";
 				if ($nr === $endimage[$currentpage]){
 					break;
