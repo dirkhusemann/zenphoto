@@ -3,12 +3,12 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.6.1
+ * @version 1.0.6.2
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.6.1';
+$plugin_version = '1.0.6.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -72,8 +72,10 @@ class pagedthumbsOptions {
  * @param int $width The thumbnail crop width, if set to NULL the general admin setting is used. If cropping is FALSE this is the maxwidth of the thumb
  * @param int $height The thumbnail crop height, if set to NULL the general admin setting is used. If cropping is FALSE this is the maxwheight of the thumb
  * @param bool $crop Enter 'true' or 'false' to override the admin plugin option setting, enter NULL to use the admin plugin option (default) 
+ * @param bool $placeholders Enter 'true' or 'false' if you want to use placeholder for layout reasons if teh the number of thumbs does not match $imagesperpage. Recommended only for cropped thumbs. This is printed as an empty <span></span> whose width and height are set via inline css. The remaining needs to be style via the css file and can be adressed via  "#pagedthumbsimages span".
+ * 
  */
-function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL) {
+function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL,$placeholders=NULL) {
 	global $_zp_current_album, $_zp_current_image, $_zp_current_search;
 	// in case someone wants to override the options by parameter
 	if(is_null($crop)) { 
@@ -193,6 +195,15 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		echo "</a>\n";
 		if ($number == $endimg[$currentpage]) {
 			break;
+		}
+	}
+	// hidden feature currently
+	if($placeholders) {
+		if($nr != $imagesperpage) {
+			$placeholdernr = $imagesperpage - ($nr-1);
+			for ($nr2 = 1;$nr2 <= $placeholdernr; $nr2++) {
+				echo "<span class=\"placeholder\" style=\"width:".$width."px;height:".$height."px\"></span>";
+			}
 		}
 	}
  echo "</div>";
