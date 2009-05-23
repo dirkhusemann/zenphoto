@@ -6,14 +6,14 @@
  * Note on splash images: Flowplayer will try to use the first frame of a movie as a splash image or a videothumb if existing.
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.2
+ * @version 1.0.3
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2';
+$plugin_version = '1.0.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer3();
@@ -112,7 +112,9 @@ class flowplayer3 {
 	/**
 	 * Print the JS configuration of flowplayer
 	 *
-	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
+	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums)
+	 * the zenphoto function getUnprotectedImageURL() is used
+	 * 
 	 * @param string $imagetitle the title of the movie
 	 * 	 */
 	function getPlayerConfig($moviepath='', $imagetitle,$count='') {
@@ -137,7 +139,7 @@ class flowplayer3 {
 			$filename = $_zp_current_image->filename;
 			$videoThumb = checkObjectsThumb(getAlbumFolder().$albumfolder, $filename);
 			if (!empty($videoThumb)) {
-				$videoThumb = getAlbumFolder(WEBPATH).$albumfolder.'/'.$videoThumb;
+				$videoThumb = getAlbumFolder(WEBPATH).pathurlencode($albumfolder.'/'.$videoThumb);
 			}
 		}
 		if(getOption("flow_player3_autoplay") == 1) {
