@@ -403,7 +403,8 @@ zp-core/lib-pclzip.php
 zp-core/lib-utf8.php
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.mo
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.po
-zp-core/locale/en_US/place_holder.txt
+zp-core/locale/de_DE/select_files_button.png
+zp-core/locale/en_US/select_files_button.png
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.mo

@@ -258,7 +258,18 @@ if (ini_get('safe_mode')) { ?>
 						'scriptData': {'auth': '<?php echo md5(serialize($_zp_current_admin)); ?>'},
 						'folder': '/',
 						'multi': true,
-						'buttonText': '<?php echo gettext("Select files"); ?>',
+						<?php
+						$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/'.getOption('locale').'/select_files_button.png';
+						if(!file_exists($uploadbutton)) {
+							$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/en_US/select_files_button.png';
+						}
+						$discard = NULL;
+						$info = imageGetInfo($uploadbutton, $discard);
+						$uploadbutton = str_replace(SERVERPATH, WEBPATH, $uploadbutton);
+						?>
+						'buttonImg': '<?php echo $uploadbutton; ?>',
+						'height': '<?php echo $info[1] ?>',
+						'width': '<?php echo $info[0] ?>',
 						'checkScript': 'admin-uploadify/check.php',
 						'displayData': 'speed',
 						'simUploadLimit': 3,
