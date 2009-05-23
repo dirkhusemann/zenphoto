@@ -122,31 +122,32 @@ function setDefault($option, $default) {
 	setOptionDefault('feed_enclosure', '0');
 	setOptionDefault('feed_mediarss', '0');
 	setOptionDefault('search_fields', 32767);
-	$a =							"a => (href =>() title =>() target=>())\n" .
-	 									"abbr =>(title =>())\n" .
-	 									"acronym =>(title =>())\n" .
-	 									"b => ()\n" .
-	 									"blockquote =>(cite =>())\n" .
-										"br => ()\n" .
-										"code => ()\n" .
-	 									"em => ()\n" .
-	 									"i => () \n" .
-	 									"strike => ()\n" .
-	 									"strong => ()\n" .
-	 									"ul => ()\n" .
-	 									"ol => ()\n" .
-	 									"li => ()\n" .
-										"p => (style=>())\n" .
-										"h1=>(style=>())\n" .
-										"h2=>(style=>())\n" .
-										"h3=>(style=>())\n" .
-										"h4=>(style=>())\n" .
-										"h5=>(style=>())\n" .
-										"h6=>(style=>())\n" .
-										"pre=>(style=>())\n" .
-										"address=>(style=>())\n" .
-										"span=>(style=>())\n".
-										"img=>(style=>() src=>() title=>() alt=>() width=>() height=>())\n"
+	$a =							"a => (href =>() title =>() target=>() class=>() id=>())\n" .
+	 									"abbr =>(class=>() id=>() title =>())\n" .
+	 									"acronym =>(class=>() id=>() title =>())\n" .
+	 									"b => (class=>() id=>() )\n" .
+	 									"blockquote =>(class=>() id=>() cite =>())\n" .
+										"br => (class=>() id=>() )\n" .
+										"code => (class=>() id=>() )\n" .
+	 									"em => (class=>() id=>() )\n" .
+	 									"i => (class=>() id=>() ) \n" .
+	 									"strike => (class=>() id=>() )\n" .
+	 									"strong => (class=>() id=>() )\n" .
+	 									"ul => (class=>() id=>())\n" .
+	 									"ol => (class=>() id=>())\n" .
+	 									"li => (class=>() id=>())\n" .
+										"p => (class=>() id=>() style=>())\n" .
+										"h1=>(class=>() id=>() style=>())\n" .
+										"h2=>(class=>() id=>() style=>())\n" .
+										"h3=>(class=>() id=>() style=>())\n" .
+										"h4=>(class=>() id=>() style=>())\n" .
+										"h5=>(class=>() id=>() style=>())\n" .
+										"h6=>(class=>() id=>() style=>())\n" .
+										"pre=>(class=>() id=>() style=>())\n" .
+										"address=>(class=>() id=>() style=>())\n" .
+										"span=>(class=>() id=>() style=>())\n".
+										"div=>(class=>() id=>() style=>())\n".
+										"img=>(class=>() id=>() style=>() src=>() title=>() alt=>() width=>() height=>())\n"
 										;
 	setOption('allowed_tags_default', $a); 
 	setOptionDefault('allowed_tags', $a);
