@@ -22,11 +22,15 @@ if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 }
 
 // Set error reporting.
-$v = explode('.',PHP_VERSION);
-if ($v[0]>4) {
-	error_reporting(E_ALL | E_STRICT);
+if (defined("RELEASE")) {
+	error_reporting(E_ALL ^E_NOTICE);
 } else {
-	error_reporting(E_ALL);
+	$v = explode('.',PHP_VERSION);
+	if ($v[0]>4) {
+		error_reporting(E_ALL | E_STRICT);
+	} else {
+		error_reporting(E_ALL);
+	}
 }
 $_zp_error = false;
 
