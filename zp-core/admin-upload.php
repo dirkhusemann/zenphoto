@@ -265,11 +265,18 @@ if (ini_get('safe_mode')) { ?>
 						}
 						$discard = NULL;
 						$info = imageGetInfo($uploadbutton, $discard);
+						if ($info[1]>60) {
+							$info[1] = round($info[1]/3);
+							$rollover = "'rollover': true,";
+						} else {
+							$rollover = "";
+						}
 						$uploadbutton = str_replace(SERVERPATH, WEBPATH, $uploadbutton);
 						?>
 						'buttonImg': '<?php echo $uploadbutton; ?>',
 						'height': '<?php echo $info[1] ?>',
 						'width': '<?php echo $info[0] ?>',
+						<?php echo $rollover; ?>
 						'checkScript': 'admin-uploadify/check.php',
 						'displayData': 'speed',
 						'simUploadLimit': 3,
