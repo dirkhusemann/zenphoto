@@ -661,6 +661,7 @@ if (!$checked) {
  							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
  							"<br /><br />".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
  	if ($cfg) {
+ 		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.');
  		if ($chmod == 0777 || !$chmod_defined) {
 	 		checkMark(-1, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is not in effect]'),
 	 							gettext('When this option is not in effect, file and folder permissions are relaxed. '.
@@ -668,18 +669,16 @@ if (!$checked) {
 	 							'<em>Strict Permissions</em>. However, on some servers Zenphoto does not function correctly '.
 	 							'with strict file/folder permissions. If you enable this option and Zenphoto has permission errors, '.
 	 							'run setup again and disable the option.').'<br /><br />'.
-	 							gettext('Click <a href="?strict_chmod=1">here</a> to use strict file/folder permissions.').
-	 							'<br /><br />'.
-	 							gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.')
+	 							(zp_loggedin() ? gettext('Click <a href="?strict_chmod=1">here</a> to use strict file/folder permissions.').'<br /><br />':'').
+	 							$msg
 	 							);
 	 	} else {
 	 		checkMark(-2, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is in effect]'),
 	 							gettext('On some servers Zenphoto does not function correctly '.
 	 							'with strict file/folder permissions. If you are getting permission errors run setup again and '.
 	 							'disable the option.').'<br /><br />'.
-	 							gettext('Click <a href="?strict_chmod=0">here</a> to enable relaxed file/folder permissions.').
-	 							'<br /><br />'.
-	 							gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.')
+	 							(zp_loggedin() ? gettext('Click <a href="?strict_chmod=0">here</a> to enable relaxed file/folder permissions.').'<br /><br />':'').
+	 							$msg
 	 							);
 	 	}
  	}
