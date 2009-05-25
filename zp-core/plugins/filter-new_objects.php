@@ -1,6 +1,9 @@
 <?php
 /**
  * Adds data to newly created images and albums.
+ * This plugin, while functional, is intended primarily as an example of the 
+ * use of the new_album and new_image filters.
+ * 
  * @package plugins
  */
 $plugin_is_filter = 5;
