@@ -11,7 +11,7 @@ div.rating-cancel,div.star-rating {
 }
 
 div.rating-cancel,div.rating-cancel a {
-	background: url(delete.png) no-repeat 0 -25px
+	background: url(clear.png) no-repeat 0 -25px
 }
 
 div.star-rating,div.star-rating a {

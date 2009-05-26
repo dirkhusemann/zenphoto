@@ -469,7 +469,7 @@ zp-core/plugins/image_album_statistics.php
 zp-core/plugins/paged_thumbs_nav.php
 zp-core/plugins/print_album_menu.php
 zp-core/plugins/rating/alt_star.png
-zp-core/plugins/rating/delete.png
+zp-core/plugins/rating/clear.png
 zp-core/plugins/rating/functions-rating.php
 zp-core/plugins/rating/jquery.MetaData.js
 zp-core/plugins/rating/jquery.rating.css
