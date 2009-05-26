@@ -45,15 +45,14 @@ div.star-rating {
 	overflow: hidden !important
 }
 
-#submit_button {
-	padding-top: 4px;
-	}
-	
-#submit_button input, #submit_button input:hover {
+.rating input {
 	display: block;
-	border: 1px solid darkgray;
-	background-color: #bababa;
+	border: 1px solid #bebebe;
+	background-color: #e5e5e5;
 	padding: 2px;
+	position:relative;
+	top: 3px;
+	left: 5px;
 	cursor: default !important;
 	}
 /* END jQuery.Rating Plugin CSS */
