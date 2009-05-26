@@ -189,4 +189,8 @@ function generateListFromArray($currentValue, $list, $descending, $localize) {
 	}
 }
 
+function zp_loggedin() {
+	return false;
+}
+
 ?>
