@@ -412,6 +412,9 @@ zp-core/locale/it_IT/LC_MESSAGES/zenphoto.mo
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.po
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.mo
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.po
+zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.mo
+zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.po
+zp-core/locale/pl_PL/select_files_button.png
 zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.mo
 zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
 zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
