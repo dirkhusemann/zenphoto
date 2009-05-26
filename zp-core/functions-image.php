@@ -144,16 +144,16 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
 	}
 	$rotate = false;
-	if (imageCanRotate() && getOption('auto_rotate'))  {
+	if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 		$rotate = getImageRotation($imgfile);
 	}
 
-	if ($im = imageGet($imgfile)) {
+	if ($im = zp_imageGet($imgfile)) {
 		if ($rotate) {
-			$im = rotateImage($im, $rotate);
+			$im = zp_rotateImage($im, $rotate);
 		}
-		$w = imageWidth($im);
-		$h = imageHeight($im);
+		$w = zp_imageWidth($im);
+		$h = zp_imageHeight($im);
 		// Give the sizing dimension to $dim
 		$ratio_in = '';
 		$ratio_out = '';
@@ -290,8 +290,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$cy = 0;
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
-			$newim = createImage($neww, $newh);
-			resampleImage($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
+			$newim = zp_createImage($neww, $newh);
+			zp_resampleImage($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
 			if ($allowscale) {
 				$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
@@ -299,16 +299,16 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
-			$newim = createImage($neww, $newh);
-			resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
+			$newim = zp_createImage($neww, $newh);
+			zp_resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
 		
 		if ($grayscale) {
-			imageGray($newim);
+			zp_imageGray($newim);
 		}
 			
 		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
-			imageUnsharpMask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
+			zp_imageUnsharpMask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
 		}
 		$watermark_image = false;
 		if ($thumbWM) {
@@ -328,11 +328,11 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if ($watermark_image) {
 			$offset_h = getOption('watermark_h_offset') / 100;
 			$offset_w = getOption('watermark_w_offset') / 100;
-			$watermark = imageGet($watermark_image);
-			$watermark_width = imageWidth($watermark);
-			$watermark_height = imageHeight($watermark);
-			$imw = imageWidth($newim);
-			$imh = imageHeight($newim);
+			$watermark = zp_imageGet($watermark_image);
+			$watermark_width = zp_imageWidth($watermark);
+			$watermark_height = zp_imageHeight($watermark);
+			$imw = zp_imageWidth($newim);
+			$imh = zp_imageHeight($newim);
 			$percent = getOption('watermark_scale')/100;
 			$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
 			if (!getOption('watermark_allow_upscale')) {
@@ -341,26 +341,26 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$nw = round($watermark_width * $r);
 			$nh = round($watermark_height * $r);
 			if (($nw != $watermark_width) || ($nh != $watermark_height)) {
-				$watermark = imageResizeAlpha($watermark, $nw, $nh);
+				$watermark = zp_imageResizeAlpha($watermark, $nw, $nh);
 			}
 			// Position Overlay in Bottom Right
 			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
 			if (DEBUG_IMAGE) debugLog("Watermark:".basename($imgfile).": \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imw=$imw, \$imh=$imh, \$percent=$percent, \$r=$r, \$nw=$nw, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
-			copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
-			imageKill($watermark);
+			zp_copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
+			zp_imageKill($watermark);
 		}
 
 		// Create the cached file (with lots of compatibility)...
 		mkdir_recursive(dirname($newfile));
-		if (imageOutput($newim, getSuffix($newfile), $newfile, $quality)) {
+		if (zp_imageOutput($newim, getSuffix($newfile), $newfile, $quality)) {
 			if (DEBUG_IMAGE) debugLog('Finished:'.basename($imgfile));
 		} else {
 			if (DEBUG_IMAGE) debugLog('cacheImage: failed to create '.$newfile);
 		}
 		@chmod($newfile, 0666 & CHMOD_VALUE);
-		imageKill($newim);
-		imageKill($im);
+		zp_imageKill($newim);
+		zp_imageKill($im);
 	}
 }
 

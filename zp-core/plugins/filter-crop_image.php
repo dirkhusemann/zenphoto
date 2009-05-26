@@ -77,7 +77,7 @@ $imageobj = newImage($albumobj,$imagename);
 if (isImagePhoto($imageobj)) {
 	$imgpath = $imageobj->localpath;
 	$imagepart = basename($imgpath);
-	$timg = imageGet($imgpath);
+	$timg = zp_imageGet($imgpath);
 	$width = $imageobj->getWidth();
 	$height = $imageobj->getHeight();
 } else {
@@ -146,26 +146,26 @@ if (isset($_REQUEST['crop'])) {
 	//create a new image with the set cropping
 	$quality = getOption('full_image_quality');
 	$rotate = false;
-	if (imageCanRotate() && getOption('auto_rotate'))  {
+	if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 		$rotate = getImageRotation($imgpath);
 	}
 	if (DEBUG_IMAGE) debugLog("image_crop: crop ".basename($imgpath).":\$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy \$rotate=$rotate");
 	
 	if ($rotate) {
-		$timg = rotateImage($timg, $rotate);
+		$timg = zp_rotateImage($timg, $rotate);
 	}
 	
-	$newim = createImage($cw, $ch);
-	resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch);
+	$newim = zp_createImage($cw, $ch);
+	zp_resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch);
 	@unlink($imgpath);
-	if (imageOutput($newim, getSuffix($imgpath), $imgpath, $quality)) {
+	if (zp_imageOutput($newim, getSuffix($imgpath), $imgpath, $quality)) {
 		if (DEBUG_IMAGE) debugLog('image_crop Finished:'.basename($imgpath));
 	} else {
 		if (DEBUG_IMAGE) debugLog('image_crop: failed to create '.$imgpath);
 	}
 	@chmod($imgpath, 0666 & CHMOD_VALUE);
-	imageKill($newim);
-	imageKill($timg);
+	zp_imageKill($newim);
+	zp_imageKill($timg);
 	$gallery->clearCache(SERVERCACHE . '/' . $albumname);
 	// update the image data
 	$imageobj->set('EXIFOrientation', 0);

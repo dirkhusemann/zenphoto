@@ -2437,22 +2437,22 @@ $theme_description["desc"] = "%s";
 	else $themeimage = false;
 	if ($themeimage) {
 		require_once(dirname(__FILE__).'/functions-image.php');
-		if ($im = imageGet($themeimage)) {
-			$x = imageWidth($im)/2 - 45;
-			$y = imageHeight($im)/2 - 10;
+		if ($im = zp_imageGet($themeimage)) {
+			$x = zp_imageWidth($im)/2 - 45;
+			$y = zp_imageHeight($im)/2 - 10;
 			$text = "CUSTOM COPY";
 
 			// create a blueish overlay
-			$overlay = createImage(imageWidth($im), imageHeight($im));
+			$overlay = zp_createImage(zp_imageWidth($im), zp_imageHeight($im));
 			imagefill ($overlay, 0, 0, 0x0606090);
 			// Merge theme image and overlay
-			imageMerge($im, $overlay, 0, 0, 0, 0, imageWidth($im), imageHeight($im), 45);
+			zp_imageMerge($im, $overlay, 0, 0, 0, 0, zp_imageWidth($im), zp_imageHeight($im), 45);
 			// Add text
 			imagestring ( $im,  5,  $x-1,  $y-1, $text,  0x0ffffff );
 			imagestring ( $im,  5,  $x+1,  $y+1, $text,  0x0ffffff );
 			imagestring ( $im,  5,  $x,  $y,   $text,  0x0ff0000 );
 			// Save new theme image
-			imageOutput($im, 'png', $themeimage);
+			zp_imageOutput($im, 'png', $themeimage);
 		}	
 	}
 

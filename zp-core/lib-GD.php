@@ -18,7 +18,7 @@
  * @return image the loaded GD image object.
  *
  */
-function imageGet($imgfile) {
+function zp_imageGet($imgfile) {
 	$ext = getSuffix($imgfile);
 	switch ($ext) {
 		case 'png':
@@ -42,7 +42,7 @@ function imageGet($imgfile) {
  * @param string $filename
  * @param int $qual
  */
-function imageOutput($im, $type, $filename=NULL, $qual=75) {
+function zp_imageOutput($im, $type, $filename=NULL, $qual=75) {
 	$qual = max(min($qual, 100),0);
 	switch ($type) {
 		case 'png':
@@ -70,7 +70,7 @@ function imageOutput($im, $type, $filename=NULL, $qual=75) {
  * @param int $h the height of the image
  * @return image
  */
-function createImage($w, $h) {
+function zp_createImage($w, $h) {
 	return imagecreatetruecolor($w, $h);
 }
 
@@ -86,7 +86,7 @@ function createImage($w, $h) {
  * @param int $w width
  * @param int $h height
  */
-function copyCanvas($imgCanvas, $img, $dest_x, $dest_y, $src_x, $src_y, $w, $h) {
+function zp_copyCanvas($imgCanvas, $img, $dest_x, $dest_y, $src_x, $src_y, $w, $h) {
 	return imageCopy($imgCanvas, $img, $dest_x, $dest_y, $src_x, $src_y, $w, $h);
 }
 
@@ -105,7 +105,7 @@ function copyCanvas($imgCanvas, $img, $dest_x, $dest_y, $src_x, $src_y, $w, $h) 
  * @param int $src_h
  * @return bool
  */
-function  resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
+function zp_resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
 	return imagecopyresampled($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
 }
 
@@ -148,7 +148,7 @@ function  resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, 
  *   sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges.
  * @return image the input image with the specified sharpening applied.
  */
-function imageUnsharpMask($img, $amount, $radius, $threshold) {
+function zp_imageUnsharpMask($img, $amount, $radius, $threshold) {
 	/*
 	 Unsharp Mask for PHP - version 2.0
 	 Unsharp mask algorithm by Torstein Hønsi 2003-06.
@@ -273,7 +273,7 @@ function imageUnsharpMask($img, $amount, $radius, $threshold) {
  * @param int $h
  * @return image
  */
-function imageResizeAlpha(&$src, $w, $h) {
+function zp_imageResizeAlpha(&$src, $w, $h) {
 	/* create a new image with the new width and height */
 	$temp = imagecreatetruecolor($w, $h);
 
@@ -341,7 +341,7 @@ if (!function_exists('imagerotate')) {
  *
  * @return bool
  */
-function imageCanRotate() {
+function zp_imageCanRotate() {
 	return function_exists('imagerotate');
 }
 
@@ -353,7 +353,7 @@ function imageCanRotate() {
  * @param int $rotate
  * @return resource
  */
-function rotateImage($im, $rotate) {
+function zp_rotateImage($im, $rotate) {
 	$newim_rot = imagerotate($im, $rotate, 0);
 	imagedestroy($im);
 	return $newim_rot;
@@ -366,7 +366,7 @@ function rotateImage($im, $rotate) {
  * @param array $imageinfo
  * @return array
  */
-function imageGetInfo($filename, &$imageinfo) {
+function zp_imageGetInfo($filename, &$imageinfo) {
 	return getimagesize($filename, $imageinfo);
 }
 
@@ -376,7 +376,7 @@ function imageGetInfo($filename, &$imageinfo) {
  * @param resource $im
  * @return int
  */
-function imageWidth($im) {
+function zp_imageWidth($im) {
 	return imagesx($im);
 }
 
@@ -386,7 +386,7 @@ function imageWidth($im) {
  * @param resource $im
  * @return int
  */
-function imageHeight($im) {
+function zp_imageHeight($im) {
 	return imagesy($im);
 }
 
@@ -404,7 +404,7 @@ function imageHeight($im) {
  * @param int $pct
  * @return resource
  */
-function imageMerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
+function zp_imageMerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
 	return imagecopymerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct);
 }
 
@@ -414,7 +414,7 @@ function imageMerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $s
  * @param resource $image
  * @return resource
  */
-function imageGray($image) {
+function zp_imageGray($image) {
 	$img_height = imagesy($image);
 	$img_width = imagesx($image);
 	for ($y = 0; $y <$img_height; $y++) {
@@ -444,7 +444,7 @@ function imageGray($image) {
  * @param resource $im
  * @return bool
  */
-function imageKill($im)  {
+function zp_imageKill($im)  {
 	return imagedestroy($im);
 }
 
@@ -457,7 +457,7 @@ function imageKill($im)  {
  * @param int $blue
  * @return int
  */
-function colorAllocate($image, $red, $green, $blue) {
+function zp_colorAllocate($image, $red, $green, $blue) {
 	return imagecolorallocate($image, $red, $green, $blue);
 }
 
@@ -472,7 +472,7 @@ function colorAllocate($image, $red, $green, $blue) {
  * @param int $color
  * @return bool
  */
-function writeString($image, $font, $x, $y, $string, $color) {
+function zp_writeString($image, $font, $x, $y, $string, $color) {
 	return imagestring($image, $font, $x, $y, $string, $color);
 }
 
@@ -487,7 +487,7 @@ function writeString($image, $font, $x, $y, $string, $color) {
  * @param int $color
  * @return bool
  */
-function drawRectangle($image, $x1, $y1, $x2, $y2 , $color) {
+function zp_drawRectangle($image, $x1, $y1, $x2, $y2 , $color) {
 	return imagerectangle($image, $x1, $y1, $x2, $y2 , $color);
 }
 
@@ -496,7 +496,7 @@ function drawRectangle($image, $x1, $y1, $x2, $y2 , $color) {
  *
  * @return array
  */
-function graphicsLibInfo() {
+function zp_graphicsLibInfo() {
 	$lib = array ();
 	if (extension_loaded('gd')) {
 		$info = gd_info();

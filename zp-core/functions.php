@@ -70,7 +70,7 @@ $_zp_exifvars = array(
 	'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
 	);
 
-$_zp_supported_images = graphicsLibInfo();
+$_zp_supported_images = zp_graphicsLibInfo();
 unset($_zp_supported_images['Library']);
 foreach ($_zp_supported_images as $key=>$type) {
 	unset($_zp_supported_images[$key]);
@@ -740,7 +740,7 @@ function getImageMetadata($imageName) {
 	global $iptc;
 
 	$result = array();
-	imageGetInfo($imageName, $imageInfo);
+	zp_imageGetInfo($imageName, $imageInfo);
 	if (is_array($imageInfo)) {
 		$exifraw = read_exif_data_protected($imageName);
 		if (isset($exifraw['SubIFD'])) {

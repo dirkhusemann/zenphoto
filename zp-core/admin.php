@@ -246,7 +246,7 @@ if (defined('RELEASE')) {
 	} else {
 		$official = gettext('SVN');
 	}
-	$graphics_lib = graphicsLibInfo();
+	$graphics_lib = zp_graphicsLibInfo();
 	?>
 	<li><?php printf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
 	<li><?php printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$gallery->getCurrentTheme()); ?></li> 

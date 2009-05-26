@@ -38,9 +38,9 @@ if (isImagePhoto($imageobj)) {
 	} else {
 		$imagepart = basename($imgpath);
 	}
-	$timg = imageGet($imgpath);
-	$width = imageWidth($timg);
-	$height = imageHeight($timg);
+	$timg = zp_imageGet($imgpath);
+	$width = zp_imageWidth($timg);
+	$height = zp_imageHeight($timg);
 }
 if (getOption('thumb_crop')) {
 	$thumbcropwidth = $cropwidth;
@@ -56,8 +56,8 @@ if (getOption('thumb_crop')) {
 		} else {
 			$imagepart = basename($imgpath);
 		}
-		$thumbcropwidth = imageWidth($timg);
-		$thumbcropheight = imageHeight($timg);
+		$thumbcropwidth = zp_imageWidth($timg);
+		$thumbcropheight = zp_imageHeight($timg);
 	}
 	$tsize = getOption('thumb_size');
 	$max = max($thumbcropwidth, $thumbcropheight);

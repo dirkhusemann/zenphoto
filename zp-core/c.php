@@ -15,23 +15,23 @@ $cypher = preg_replace('/[^0-9a-f]/', '', $_GET['i']);
 $key = getOption('zenphoto_captcha_key');
 $string = rc4($key, pack("H*", $cypher));
 
-$image = createImage(65, 20);
-$background = imageGet(SERVERPATH.'/'.ZENFOLDER.'/images/captcha_background.png');
-copyCanvas($image, $background, 0, 0, rand(0,10), rand(0,10), 65, 20);
+$image = zp_createImage(65, 20);
+$background = zp_imageGet(SERVERPATH.'/'.ZENFOLDER.'/images/captcha_background.png');
+zp_copyCanvas($image, $background, 0, 0, rand(0,10), rand(0,10), 65, 20);
 
-$lettre = colorAllocate($image,5,5,5);
+$lettre = zp_colorAllocate($image,5,5,5);
 $len = strlen($string);
 $sz = floor(55/$len);
 $start = rand(2,55-$sz*$len);
 for ($i=0; $i<$len; $i++) {
 	$l = $start+$i*($sz)+rand(2,4);
-	writeString($image,5,$l,rand(0,3),substr($string, $i, 1),$lettre);
+	zp_writeString($image,5,$l,rand(0,3),substr($string, $i, 1),$lettre);
 }
 
-$rectangle = colorAllocate($image,48,57,85);
-drawRectangle($image,0,0,64,19,$rectangle);
+$rectangle = zp_colorAllocate($image,48,57,85);
+zp_drawRectangle($image,0,0,64,19,$rectangle);
 
-imageOutput($image, 'png', NULL);
+zp_imageOutput($image, 'png', NULL);
 
 ?>
 

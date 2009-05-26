@@ -264,7 +264,7 @@ if (ini_get('safe_mode')) { ?>
 							$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/images/select_files_button.png';
 						}
 						$discard = NULL;
-						$info = imageGetInfo($uploadbutton, $discard);
+						$info = zp_imageGetInfo($uploadbutton, $discard);
 						if ($info[1]>60) {
 							$info[1] = round($info[1]/3);
 							$rollover = "'rollover': true,";

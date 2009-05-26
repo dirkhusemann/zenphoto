@@ -76,7 +76,7 @@ if (!getOption('fullimage_watermark')) { // no processing needed
 }
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header("content-type: image/$suffix");
-$newim = imageGet($image_path);
+$newim = zp_imageGet($image_path);
 
 if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
@@ -89,11 +89,11 @@ if (getOption('fullimage_watermark')) {
 	}
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;
-	$watermark = imageGet($watermark_image);
-	$watermark_width = imageWidth($watermark);
-	$watermark_height = imageHeight($watermark);
-	$imw = imageWidth($newim);
-	$imh = imageHeight($newim);
+	$watermark = zp_imageGet($watermark_image);
+	$watermark_width = zp_imageWidth($watermark);
+	$watermark_height = zp_imageHeight($watermark);
+	$imw = zp_imageWidth($newim);
+	$imh = zp_imageHeight($newim);
 	$percent = getOption('watermark_scale')/100;
 	$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
 	if (!getOption('watermark_allow_upscale')) {
@@ -102,16 +102,16 @@ if (getOption('fullimage_watermark')) {
 	$nw = round($watermark_width * $r);
 	$nh = round($watermark_height * $r);
 	if (($nw != $watermark_width) || ($nh != $watermark_height)) {
-		$watermark = imageResizeAlpha($watermark, $nw, $nh);
+		$watermark = zp_imageResizeAlpha($watermark, $nw, $nh);
 	}
 	// Position Overlay in Bottom Right
 	$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 	$dest_y = max(0, floor(($imh - $nh) * $offset_h));
-	copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
-	imageKill($watermark);
+	zp_copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
+	zp_imageKill($watermark);
 }
 $quality = getOption('full_image_quality');
-imageOutput($newim, $suffix, $cache_path, $quality);
+zp_imageOutput($newim, $suffix, $cache_path, $quality);
 
 if (!is_null($cache_path)) {
 	@touch($cache_path);

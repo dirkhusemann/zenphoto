@@ -50,7 +50,7 @@ class jquery_rating {
 		setOptionDefault('rating_recast', 1);
 		setOptionDefault('rating_status', 3);
 		setOptionDefault('rating_image_individual_control', 0);
-		$this->ratingstate = array('open' => 3, gettext('members &amp; guests') => 2, gettext('members only') => 1, gettext('closed') => 0);
+		$this->ratingstate = array(gettext('open') => 3, gettext('members &amp; guests') => 2, gettext('members only') => 1, gettext('closed') => 0);
 	}
 
 
