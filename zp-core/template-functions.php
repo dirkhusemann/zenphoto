@@ -209,7 +209,7 @@ function printAdminToolbox($id='admin') {
 			}
 			// set return to this image page
 			apply_filter('admin_toolbox_image', $albumname, $imagename);
-			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=urlencode($imagename)";
+			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=".urlencode($imagename);
 			
 		} else if (($_zp_gallery_page === 'search.php') && !empty($_zp_current_search->words)) {
 		// script is search.php with a search string
@@ -4339,6 +4339,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect
 			break;
 		case 'image.php':
 			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename);
+			break;
 		case 'full-image.php':
 			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename).'&amp;z&amp;p=full-image';
 			break;
