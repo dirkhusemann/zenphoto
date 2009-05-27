@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 15:10+0100\n"
-"PO-Revision-Date: 2009-05-26 15:10+0100\n"
+"PO-Revision-Date: 2009-05-27 18:51+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -2201,7 +2201,7 @@ msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder in dies
 #: zp-trunk/zp-core/admin-refresh-metadata.php:42
 #: zp-trunk/zp-core/admin.php:385
 msgid "Refresh Metadata"
-msgstr "Metadaten aktualisieren."
+msgstr "Metadaten aktualisieren"
 
 #: zp-trunk/zp-core/admin-functions.php:1666
 msgid "Resets all hitcounters in the album."
@@ -3542,7 +3542,7 @@ msgstr "Wenn die entsprechende Plugin-Checkbox aktiviert ist, wird es geladen un
 
 #: zp-trunk/zp-core/admin-plugins.php:79
 msgid "<strong>Note</strong>: Not all themes are setup with support for all plugins! You may need to add the plugin theme functions of some of them yourself."
-msgstr "<strong>Anmerkung</strong>: Nicht alle Themes sind mit Unterstützung für alle Plugins ausgestattet! Sie müssne möglicherweise die Pluginfunktion(en) selbst für einige hinzufügen."
+msgstr "<strong>Anmerkung</strong>: Nicht alle Themes sind mit Unterstützung für alle Plugins ausgestattet! Sie müssen möglicherweise die Funktion(en) selbst auf Ihren Theme-Seiten hinzufügen."
 
 #: zp-trunk/zp-core/admin-plugins.php:92
 msgid "Available Plugins"
@@ -3940,12 +3940,12 @@ msgstr "Das webbasierten Hochladen akzeptiert folgende Formate: %s, %s und %s."
 
 #: zp-trunk/zp-core/admin-upload.php:149
 msgid " If using the <em>http-browser single file upload</em> you can also upload a <strong>ZIP</strong> archive containing any of those file types."
-msgstr " Wenn Sie den <em>http-browser-Einzeldateiupload</em> verwenden, können Sie auch eine<strong>ZIP</strong>-Datei mit diesen Dateitypen hochladen. "
+msgstr " Wenn Sie den <em>http-browser-Einzeldateiupload</em> verwenden, können Sie auch eine <strong>ZIP</strong>-Datei mit diesen Dateitypen hochladen. "
 
 #: zp-trunk/zp-core/admin-upload.php:152
 #, php-format
 msgid "The maximum size for any one file is <strong>%sB</strong>."
-msgstr "Die maximale Grösse für Dateien ist <strong>%sB</strong>."
+msgstr "Die maximale Größe für Dateien ist <strong>%sB</strong>."
 
 #: zp-trunk/zp-core/admin-upload.php:153
 msgid " Don't forget, you can also use <acronym title=\"File Transfer Protocol\">FTP</acronym> to upload folders of images into the albums directory!"
@@ -4169,7 +4169,7 @@ msgstr "PHP-Version: <strong>%1$s</strong>"
 #: zp-trunk/zp-core/admin.php:254
 #, php-format
 msgid "Graphics support: <strong>%s</strong>"
-msgstr "Grafikunterstützung: <code>%s</code>"
+msgstr "Grafikunterstützung: <strong>%s</strong>"
 
 #: zp-trunk/zp-core/admin.php:255
 #, php-format
@@ -6211,7 +6211,7 @@ msgstr "Galerie sortieren"
 #: zp-trunk/zp-core/template-functions.php:157
 #: zp-trunk/zp-core/template-functions.php:176
 msgid "Manual sorting"
-msgstr "Manualles Sortieren"
+msgstr "Manuelles Sortieren"
 
 #: zp-trunk/zp-core/template-functions.php:163
 msgid "New album"
@@ -9782,7 +9782,7 @@ msgstr "Wenn Sie einen Artikel sperren, kann nur der sperrende Autor/Benutzer od
 
 #: zp-trunk/zp-core/plugins/zenpage/admin-edit.php:182
 msgid "<em>Custom article shortening:</em> You can set a custom article shorten length for the news loop excerpts by using the standard TinyMCE <em>page break</em> plugin button. This will override the general shorten length set on the plugin option then."
-msgstr "<em>Benutzerdefinierte Artikelkürzungen:</em> Sie können benutzerdefinierte Artikelkürzungen für die Haupt-Neuigkeitenseiten mit dem TinyMCE <em>page break</em>-Plugin-Schalter erstellen. Dies wird die Kürzungslänge der allgemeinen Plugineinstellung übergehen."
+msgstr "<em>Benutzerdefinierte Artikelkürzungen:</em> Sie können benutzerdefinierte Artikelkürzungen für die Haupt-Neuigkeitenseiten mit dem TinyMCE <em>Seitenumbruch</em>-Plugin-Schalter erstellen. Dies wird die Kürzungslänge der allgemeinen Plugineinstellung übergehen."
 
 #: zp-trunk/zp-core/plugins/zenpage/admin-edit.php:184
 msgid "<em>Scheduled publishing:</em> To automatically publish a page/news article in the future set it to 'unpublished' and enter a future date in the date field manually.Note this works on server time!"
@@ -10491,7 +10491,7 @@ msgstr "Zurück nach oben"
 
 #: zp-trunk/zp-core/utilities/reset_albumthumbs.php:17
 msgid "Reset thumbs"
-msgstr "Thumbnails zurücksetzen."
+msgstr "Thumbnails zurücksetzen"
 
 #: zp-trunk/zp-core/utilities/reset_albumthumbs.php:18
 msgid "Reset album thumbnails."
