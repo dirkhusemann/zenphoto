@@ -70,7 +70,7 @@ $(document).ready(function() {
 	if(is_AdminEditPage("newsarticle")) {
 		checkRights("articles"); 
 		if (!empty($page)) {
-			$newstabs['articles'] .= $page;
+			$newstabs[gettext('articles')] .= $page;
 		}
 		printSubtabs($newstabs);
 		?>

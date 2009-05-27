@@ -169,7 +169,8 @@ if (OFFSET_PATH) {
 	natsort($flipped);
 	$optiontabs = array_flip($flipped);
 	
-	$newstabs = array(gettext('articles')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-news-articles.php?tab=articles', 'categories'=>substr(PLUGIN_FOLDER,1).'zenpage/admin-categories.php?tab=categories');
+	$newstabs = array(gettext('articles')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-news-articles.php?tab=articles', 
+										gettext('categories')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-categories.php?tab=categories');
 }
 
 /**
