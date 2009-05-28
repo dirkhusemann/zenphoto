@@ -296,7 +296,6 @@ function parseHttpAcceptLanguage($str=NULL) {
 	if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) return array();
 	// getting http instruction if not provided
 	$str=$str?$str:$_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	// exploding accepted languages
 	$langs=explode(',',$str);
 	// creating output list
 	$accepted=array();
@@ -360,6 +359,10 @@ function getUserLocale() {
 					}
 				}
 				if ($locale) break;
+			}
+		} else {
+			if (empty($locale)) {
+				$locale = $localeOption;
 			}
 		}
 	}
