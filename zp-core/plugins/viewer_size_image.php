@@ -122,8 +122,7 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 		function switchimage(obj){
 			var url = $(obj).attr('url');
 			$('#image img').attr('src',url);
-			document.cookie='viewer_size_image_saved='+$(obj).attr('value')+'; expires=<?php echo time()+COOKIE_PESISTENCE ?>; path=<?php echo $cookiepath ?>;';
-			console.log(document.cookie);
+			document.cookie='viewer_size_image_saved='+$(obj).attr('value')+'; expires=<?php echo date('Y-m-d H:i:s', time()+COOKIE_PESISTENCE); ?>; path=<?php echo $cookiepath ?>';
 		}
 	</script>
 	<div>
