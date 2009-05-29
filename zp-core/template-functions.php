@@ -742,35 +742,37 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	if ($navlen == 0)
 		$navlen = $total;
 	$len = intval($navlen / 2);
-	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
+	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
 	$current = getCurrentPage();
 	
-	echo "\n<ul class=\"$class\">";
+	echo "<ul class=\"$class\">\n";
 	if ($nextprev) {
-		echo "\n  <li class=\"prev\">";
+		echo "<li class=\"prev\">";
 		printPrevPageLink($prevtext, gettext("Previous Page"));
-		echo "</li>";
+		echo "</li>\n";
 	}
 	if ($firstlast && $current-$len > 1) {
-		echo "\n  <li class=\"first\">";
+		echo "<li class=\"first\">";
 		printLink(getPageURL(1, $total), NavStep(1, $step), "Page 1");
-		echo "</li>";
+		echo "</li>\n";
 	}
-	$j=max(1, min($current-$len, $total-2*$len));
-	if ($j != 1) {
-		echo "\n <li>";
-		printLink(getPageURL($k=max($j-$len-1,1), $total), '...', "Page $k");
-		echo '</li>';
+	$j = max(1, min($current-$len, $total-2*$len));
+	$k = round(($j-2)/2)+1;
+	if ($j>1 && $k<$j) {
+		echo "<li>";
+		printLink(getPageURL($k, $total), ($j-1>2)?'...':$k, "Page $k");
+		echo "</li>\n";
 	}
 	for ($i=$j; $i <= min($total, $j+2*$len); $i++) {
-		echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
+		echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
 		printLink(getPageURL($i, $total), NavStep($i, $step), "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
-		echo "</li>";
+		echo "</li>\n";
 	}
-	if ($i <= $total) {
-		echo "\n <li>";
-		printLink(getPageURL($k=min($j+3*$len+1,$total), $total), '...', "Page $k");
-		echo '</li>';
+	$k = $total-round(($total-$i)/2);
+	if ($i < $total) {
+		echo "<li>";
+		printLink(getPageURL($k, $total), ($total-$i>1)?'...':$k, "Page $k");
+		echo "</li>\n";
 	}
 	if ($firstlast && $current+$len < $total) {
 		echo "\n  <li class=\"last\">";
@@ -778,12 +780,12 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		echo "</li>";
 	}
 	if ($nextprev) {
-		echo "\n  <li class=\"next\">";
+		echo "<li class=\"next\">";
 		printNextPageLink($nexttext, gettext("Next Page"));
-		echo "</li>";
+		echo "</li>\n";
 	}
-	echo "\n</ul>";
-	echo "\n</div>\n";
+	echo "</ul>\n";
+	echo "</div>\n";
 }
 
 //*** Album Context ************************
@@ -3121,7 +3123,7 @@ function printCommentErrors($class = 'error') {
 function printAlbumZip(){
 	global $_zp_current_album;
 	if (!is_null($_zp_current_album) && !$_zp_current_album->isDynamic()) {
-		echo'<a href="' . WEBPATH . '/' . ZENFOLDER . "/album-zip.php?album=" . urlencode($_zp_current_album->name) .
+		echo'<a href="' . WEBPATH . '/' . ZENFOLDER . "/album-zip.php?album=" . pathurlencode($_zp_current_album->name) .
 			'" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
 	}
 }
