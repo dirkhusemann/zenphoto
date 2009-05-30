@@ -758,7 +758,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	$j = max(1, min($current-$len, $total-2*$len));
 	$k = round(($j-2)/2)+1;
-	if ($j>1 && $k<$j) {
+	if ($j>2 && $k<$j) {
 		echo "<li>";
 		printLink(getPageURL($k, $total), ($j-1>2)?'...':$k, "Page $k");
 		echo "</li>\n";
