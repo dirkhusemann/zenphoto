@@ -730,18 +730,19 @@ function NavStep($page, $step)
  * @param string $class Insert here the CSS-class name you want to style the link with (default is "pagelist")
  * @param string $id Insert here the CSS-ID name if you want to style the link with this
  * @param bool $firstlast Add links to the first and last pages of you gallery
- * @param int $navlen Number of navigation links to show (0 for all pages)
+ * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
  * @param int $step Instead of displaying pages show image numbers (=$page*$step) in the form "%d-%d"
  */
 
-function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=6, $step=1) {
+function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=9, $step=1) {
 	$total = getTotalPages($oneImagePage);
 	if ($total < 2) {
 		$class .= ' disabled_nav';
 	}
 	if ($navlen == 0)
 		$navlen = $total;
-	$len = intval($navlen / 2);
+	$len = floor(($navlen-2) / 2);
+	if ($len & 1) $len--;
 	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
 	$current = getCurrentPage();
 	
@@ -756,25 +757,28 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		printLink(getPageURL(1, $total), NavStep(1, $step), "Page 1");
 		echo "</li>\n";
 	}
-	$j = max(1, min($current-$len, $total-2*$len));
-	$k = round(($j-2)/2)+1;
-	if ($j>2 && $k<$j) {
+	$j = max(1, min($current-$len, $total-2*$len-1));
+	$k1 = round(($j-2)/2)+1;
+	$ilim = min($total, max($j, 2)+2*$len+1);
+	if ($j>2) $ilim--;
+	if ($ilim>=$total-1) $j--;
+	$k2 = $total-round(($total-$ilim)/2);
+	if ($j>2) {
 		echo "<li>";
-		printLink(getPageURL($k, $total), ($j-1>2)?'...':$k, "Page $k");
+		printLink(getPageURL($k1, $total), ($j-1>2)?'...':$k1, "Page $k1");
 		echo "</li>\n";
 	}
-	for ($i=$j; $i <= min($total, $j+2*$len); $i++) {
+	for ($i=$j; $i <= $ilim; $i++) {
 		echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
 		printLink(getPageURL($i, $total), NavStep($i, $step), "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
 		echo "</li>\n";
 	}
-	$k = $total-round(($total-$i)/2);
 	if ($i < $total) {
 		echo "<li>";
-		printLink(getPageURL($k, $total), ($total-$i>1)?'...':$k, "Page $k");
+		printLink(getPageURL($k2, $total), ($total-$i>1)?'...':$k2, "Page $k2");
 		echo "</li>\n";
 	}
-	if ($firstlast && $current+$len < $total) {
+	if ($firstlast && $i <= $total) {
 		echo "\n  <li class=\"last\">";
 		printLink(getPageURL($total, $total), NavStep($total, $step), "Page {$total}");
 		echo "</li>";
