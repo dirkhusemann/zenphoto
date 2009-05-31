@@ -3390,7 +3390,7 @@ function getRandomImages($daily = false) {
  *
  * @return object
  */
-function getRandomImagesAlbum($rootAlbum=null) {
+function getRandomImagesAlbum($rootAlbum=null,$showunpublished=false) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
 	if (empty($rootAlbum)) {
 		$album = $_zp_current_album;
@@ -3411,7 +3411,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
 		}
 	} else {
 		$albumfolder = $album->getFolder();
-		if (isMyAlbum($albumfolder, ALL_RIGHTS)) {
+		if (isMyAlbum($albumfolder, ALL_RIGHTS) OR $showunpublished == TRUE) {
 			$imageWhere = '';
 			$albumNotWhere = '';
 			$albumInWhere = '';
