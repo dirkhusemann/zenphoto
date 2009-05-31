@@ -225,8 +225,7 @@ function datepickerJS($path) {
 	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<?php
 	$lang = str_replace('_', '-',getOption('locale'));
-	if (file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
-	} else {
+	if (!file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
 		$lang = substr($lang, 0, 2);
 		if (!file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
 			$lang = '';
@@ -234,7 +233,7 @@ function datepickerJS($path) {
 	}
 	if (!empty($lang)) {
 		?>
-		<script src="<?php echo $path;?>js/i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
+		<script src="<?php echo $path;?>js/jqueryui/i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
 		<?php
 	}
 	?>
