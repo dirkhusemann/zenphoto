@@ -271,7 +271,7 @@ function printAdminHeader($path='') {
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/thickbox.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="<?php echo $path; ?>js/thickbox.css" type="text/css" />
-	<script type="text/javascript">
+	<script language="javascript" type="text/javascript">
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 			$("#fade-message2").fadeTo(5000, 1).fadeOut(1000);
@@ -1697,7 +1697,8 @@ function printAlbumEditRow($album) {
 	<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album:%s'), $album->name); ?>">
 	<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
 	</td>
-	<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
+	<td  style="text-align: left;font-size:110%;" width="300">
+		<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
 	</td>
 	<?php
 	if ($album->isDynamic()) {
@@ -1884,11 +1885,7 @@ function processAlbumEdit($index, $album) {
 		}
 	}
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));
-	if (isset($_POST['album_custom_data'])) {
-		$custom = process_language_string_save($prefix.'album_custom_data', 1);
-	} else {
-		$custom = '';
-	}
+	$custom = process_language_string_save($prefix.'album_custom_data', 1);
 	$album->setCustomData(apply_filter('save_album_custom_data', $custom, $prefix));
 	apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
