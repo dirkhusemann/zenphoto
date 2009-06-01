@@ -742,9 +742,11 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	if ($navlen == 0)
 		$navlen = $total;
-	$len = floor(($navlen-4) / 2);
-	$j = max(1, min($current-$len, $total-$navlen+3));
-	$ilim = min($total, max($navlen-2, $current+floor($len)));
+	$extralinks = 2;
+	if ($firstlast) $extralinks = $extralinks + 2;
+	$len = floor(($navlen-$extralinks) / 2);
+	$j = max(round($extralinks/2), min($current-$len-(2-round($extralinks/2)), $total-$navlen+$extralinks-1));
+	$ilim = min($total, max($navlen-round($extralinks/2), $current+floor($len)));
 	$k1 = round(($j-2)/2)+1;
 	$k2 = $total-round(($total-$ilim)/2);
 	
@@ -755,15 +757,15 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		printPrevPageLink($prevtext, gettext("Previous Page"));
 		echo "</li>\n";
 	}
-	if ($firstlast && $current-$len > 1) {
+	if ($firstlast) {
 		echo "<li class=\"first\">";
 		printLink(getPageURL(1, $total), NavStep(1, $step), "Page 1");
 		echo "</li>\n";
-	}
-	if ($j>2) {
-		echo "<li>";
-		printLink(getPageURL($k1, $total), ($j-1>2)?'...':$k1, "Page $k1");
-		echo "</li>\n";
+		if ($j>2) {
+			echo "<li>";
+			printLink(getPageURL($k1, $total), ($j-1>2)?'...':$k1, "Page $k1");
+			echo "</li>\n";
+		}
 	}
 	for ($i=$j; $i <= $ilim; $i++) {
 		echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
