@@ -706,21 +706,6 @@ function printPageList($class='pagelist', $id=NULL) {
 }
 
 /**
- * Helper function for printPageListWithNav
- *
- * @param int $page
- * @param int $step
- * @return string
- */
-function NavStep($page, $step)
-{
-	if ($step == 1)
-		return $page;
-	else
-		return sprintf("%d-%d", ($page-1) * $step+1, $page*$step);
-}
-
-/**
  * Prints a full page navigation including previous and next page links with a list of all pages in between.
  *
  * @param string $prevtext Insert here the linktext like 'previous page'
@@ -731,10 +716,9 @@ function NavStep($page, $step)
  * @param string $id Insert here the CSS-ID name if you want to style the link with this
  * @param bool $firstlast Add links to the first and last pages of you gallery
  * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
- * @param int $step Instead of displaying pages show image numbers (=$page*$step) in the form "%d-%d"
  */
 
-function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=7, $step=1) {
+function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=7) {
 	$total = getTotalPages($oneImagePage);
 	$current = getCurrentPage();
 	if ($total < 2) {
@@ -759,7 +743,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	if ($firstlast) {
 		echo "<li class=\"first\">";
-		printLink(getPageURL(1, $total), NavStep(1, $step), "Page 1");
+		printLink(getPageURL(1, $total), 1, "Page 1");
 		echo "</li>\n";
 		if ($j>2) {
 			echo "<li>";
@@ -769,7 +753,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	for ($i=$j; $i <= $ilim; $i++) {
 		echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-		printLink(getPageURL($i, $total), NavStep($i, $step), "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
+		printLink(getPageURL($i, $total), $i, "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
 		echo "</li>\n";
 	}
 	if ($i < $total) {
@@ -779,7 +763,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	if ($firstlast && $i <= $total) {
 		echo "\n  <li class=\"last\">";
-		printLink(getPageURL($total, $total), NavStep($total, $step), "Page {$total}");
+		printLink(getPageURL($total, $total), $total, "Page {$total}");
 		echo "</li>";
 	}
 	if ($nextprev) {
