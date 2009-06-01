@@ -402,12 +402,16 @@ zp-core/lib-gettext/gettext.inc
 zp-core/lib-htmlawed.php
 zp-core/lib-pclzip.php
 zp-core/lib-utf8.php
+zp-core/locale/da_DK/LC_MESSAGES/zenphoto.mo
+zp-core/locale/da_DK/LC_MESSAGES/zenphoto.po
+zp-core/locale/da_DK/select_files_button.png
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.mo
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.po
 zp-core/locale/de_DE/select_files_button.png
 zp-core/locale/en_US/select_files_button.png
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
+zp-core/locale/fr_FR/select_files_button.png
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.mo
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.po
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.mo
@@ -415,10 +419,6 @@ zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.po
 zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.mo
 zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.po
 zp-core/locale/pl_PL/select_files_button.png
-zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.mo
-zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
-zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
-zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
 zp-core/plugins/captcha/zenphoto.php
 zp-core/plugins/class-textobject/textDefault.png
 zp-core/plugins/class-textobject.php
