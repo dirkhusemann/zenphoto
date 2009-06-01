@@ -744,7 +744,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		$navlen = $total;
 	$len = floor(($navlen-4) / 2);
 	$j = max(1, min($current-$len, $total-$navlen+3));
-	$ilim = max($navlen-2, min($total, $current+floor($len)));
+	$ilim = min($total, max($navlen-2, $current+floor($len)));
 	$k1 = round(($j-2)/2)+1;
 	$k2 = $total-round(($total-$ilim)/2);
 	
