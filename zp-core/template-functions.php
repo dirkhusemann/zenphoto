@@ -718,7 +718,7 @@ function printPageList($class='pagelist', $id=NULL) {
  * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
  */
 
-function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=7) {
+function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
 	$total = getTotalPages($oneImagePage);
 	$current = getCurrentPage();
 	if ($total < 2) {
