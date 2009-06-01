@@ -937,7 +937,7 @@ if ($debug) {
 	$highset = $cum_mean + $hours;
 
 	$package = file_get_contents(SERVERPATH.'/Zenphoto.package');
-	$installed_files = explode("\n", $package);
+	$installed_files = explode("\n", trim($package));
 	foreach ($installed_files as $key=>$value) {
 		$component = SERVERPATH.'/'.$value;
 		if (file_exists($component)) {
