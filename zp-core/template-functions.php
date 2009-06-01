@@ -734,18 +734,21 @@ function NavStep($page, $step)
  * @param int $step Instead of displaying pages show image numbers (=$page*$step) in the form "%d-%d"
  */
 
-function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=9, $step=1) {
+function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=7, $step=1) {
 	$total = getTotalPages($oneImagePage);
+	$current = getCurrentPage();
 	if ($total < 2) {
 		$class .= ' disabled_nav';
 	}
 	if ($navlen == 0)
 		$navlen = $total;
-	$len = floor(($navlen-2) / 2);
-	if ($len & 1) $len--;
-	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
-	$current = getCurrentPage();
+	$len = floor(($navlen-4) / 2);
+	$j = max(1, min($current-$len, $total-$navlen+3));
+	$ilim = max($navlen-2, min($total, $current+floor($len)));
+	$k1 = round(($j-2)/2)+1;
+	$k2 = $total-round(($total-$ilim)/2);
 	
+	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
 	echo "<ul class=\"$class\">\n";
 	if ($nextprev) {
 		echo "<li class=\"prev\">";
@@ -757,12 +760,6 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		printLink(getPageURL(1, $total), NavStep(1, $step), "Page 1");
 		echo "</li>\n";
 	}
-	$j = max(1, min($current-$len, $total-2*$len-1));
-	$k1 = round(($j-2)/2)+1;
-	$ilim = min($total, max($j, 2)+2*$len+1);
-	if ($j>2) $ilim--;
-	if ($ilim>=$total-1) $j--;
-	$k2 = $total-round(($total-$ilim)/2);
 	if ($j>2) {
 		echo "<li>";
 		printLink(getPageURL($k1, $total), ($j-1>2)?'...':$k1, "Page $k1");
@@ -3411,7 +3408,7 @@ function getRandomImagesAlbum($rootAlbum=null,$showunpublished=false) {
 		}
 	} else {
 		$albumfolder = $album->getFolder();
-		if (isMyAlbum($albumfolder, ALL_RIGHTS) OR $showunpublished == TRUE) {
+		if (isMyAlbum($albumfolder, ALL_RIGHTS) || $showunpublished) {
 			$imageWhere = '';
 			$albumNotWhere = '';
 			$albumInWhere = '';
