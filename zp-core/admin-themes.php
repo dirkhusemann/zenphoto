@@ -110,7 +110,7 @@ echo "\n" . '<div id="content">';
 			if ($key != $alb) {
 				$key .= " ($alb)";
 			}
-			$themelist[$key] = urlencode($alb);
+			$themelist[$key] = $alb;
 		}
 	}
 	if (!empty($_REQUEST['themealbum'])) {
@@ -190,11 +190,11 @@ echo "\n" . '<div id="content">';
 	<?php
 $themes = $gallery->getThemes();
 $current_theme_style = "background-color: #ECF1F2;";
-foreach($themes as $theme => $themeinfo):
+foreach($themes as $theme => $themeinfo) {
 	$style = ($theme == $current_theme) ? " style=\"$current_theme_style\"" : "";
 	$themedir = SERVERPATH . '/themes/'.internalToFilesystem($theme);
 	$themeweb = WEBPATH . "/themes/$theme";
-?>
+	?>
 	<tr>
 		<td style="margin: 0px; padding: 0px;"><?php
 		if (file_exists("$themedir/theme.png")) $themeimage = "$themeweb/theme.png";
@@ -267,7 +267,9 @@ foreach($themes as $theme => $themeinfo):
 		</td>
 	</tr>
 
-	<?php endforeach; ?>
+	<?php
+	}
+	?>
 	</tbody>
 </table>
 
