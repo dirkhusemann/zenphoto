@@ -17,12 +17,15 @@ $_zp_extra_filetypes = array(); // contains file extensions and the handler clas
  */
 function newImage(&$album, $filename) {
 	global $_zp_extra_filetypes;
+	if (!is_object($album) || strtoLower(get_class($album)) != 'album' || !$album->exists) return NULL;
 	if ($ext = is_valid_other_type($filename)) {
 		$object = $_zp_extra_filetypes[$ext];
-		return new $object($album, $filename);
+		$result = new $object($album, $filename);
 	} else {
-		return New _Image($album, $filename);
+		$result = New _Image($album, $filename);
 	}
+	if ($result->exists) return $result;
+	return NULL;
 }
 
 /**

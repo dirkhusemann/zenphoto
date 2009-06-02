@@ -6,6 +6,22 @@
 
 // force UTF-8 Ø
 
+/**
+ * Instantiates an album. Use this function rather than new Album(...) to provide for proper
+ * error checking
+ * 
+ * @param object &$gallery The parent gallery
+ * @param string $folder folder name (UTF8) of the album
+ * @param bool $cache load from cache if present
+ * @return Album
+ * 
+ */
+function newAlbum(&$gallery, $folder, $cache=true) {
+	$result = new Album($gallery, $folder, $cache);
+	if ($result->exists) return $result;
+	return NULL;
+}
+
 class Album extends PersistentObject {
 
 	var $name;             // Folder name of the album (full path from the albums folder)
@@ -34,6 +50,10 @@ class Album extends PersistentObject {
 	 * @return Album
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
+		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
+			$this->exists = false;
+			return NULL;
+		}
 		$folder8 = sanitize_path($folder8);
 		$folderFS = internalToFilesystem($folder8);
 		$this->name = $folder8;

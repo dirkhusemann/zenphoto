@@ -275,67 +275,81 @@ if (defined('RELEASE')) {
 	<li><?php printf(gettext('Captcha generator: <strong>%s</strong>'), getOption('captcha')) ?></li>
 	</ul>
 
-	<h3><?php echo gettext("Active plugins:"); ?></h3>
-	<ul class="plugins">
 	<?php
 	$plugins = array_keys(getEnabledPlugins());
-	if (count($plugins) > 0) {
-		natsort($plugins);
-		foreach ($plugins as $extension) {
-			$ext = substr($extension, 0, strlen($extension)-4);
-			$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . $extension);
-			$str =  $pluginStream;
-			$i = strpos($str, '$plugin_version');
-			if ($i !== false) {
-				$str = substr($str, $i);
-				//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
-				$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
-				$str = substr($str, 0, $j+1);
-				eval($str);
-				$version = ' v'.$plugin_version;
-			} else {
-				$version = '';
-			}
-			echo "<li>".$ext.$version."</li>";
-		}
-	} else {
-		echo '<li>'.gettext('<em>none</em>').'</li>';
-	}
+	$c = count($plugins);
 	?>
-	</ul>
+	<h3><a href="javascript:toggle('plugins_hide');toggle('plugins_show');" ><?php printf(ngettext("%u active plugin:", "%u active plugins:", $c), $c); ?></a></h3>
+	<div id="plugins_hide" style="display:none">
+		<ul class="plugins">
+		<?php
+		if ($c > 0) {
+			natsort($plugins);
+			foreach ($plugins as $extension) {
+				$ext = substr($extension, 0, strlen($extension)-4);
+				$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . $extension);
+				$str =  $pluginStream;
+				$i = strpos($str, '$plugin_version');
+				if ($i !== false) {
+					$str = substr($str, $i);
+					//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
+					$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
+					$str = substr($str, 0, $j+1);
+					eval($str);
+					$version = ' v'.$plugin_version;
+				} else {
+					$version = '';
+				}
+				echo "<li>".$ext.$version."</li>";
+			}
+		} else {
+			echo '<li>'.gettext('<em>none</em>').'</li>';
+		}
+		?>
+		</ul>
+	</div>
+	<div id="plugins_show">
+		<br />
+	</div>
 	<?php
 	$filters = $_zp_filters;
 	ksort($filters);
+	$c = count($filters);
 	?>
-	<h3><?php echo gettext("Active filters:"); ?></h3>
-	<ul class="plugins">
-	<?php
-	if (count($filters) > 0) {
-		foreach ($filters as $filter=>$array_of_priority) {
-			foreach ($array_of_priority as $priority=>$array_of_filters) {
-				?>
-				<li>
-					<em><?php echo $filter; ?></em>
-					<ul class="filters">
-					<?php
-					foreach ($array_of_filters as $data) {
-						?>
-						<li><em><?php echo $priority; ?></em>: <?php echo $data['script'] ?> =&gt; <?php echo $data['function'] ?></li>
-						<?php
-					}
-					?>
-					</ul>
-				</li>
-				<?php
-			}
-		}
-	} else {
-		?>
-		<li><?php echo gettext('<em>none</em>'); ?></li>
+	<h3><a href="javascript:toggle('filters_hide');toggle('filters_show');" ><?php printf(ngettext("%u active filter:","%u active filters:", $c), $c); ?></a></h3>
+	<div id="filters_hide" style="display:none">
+		<ul class="plugins">
 		<?php
-	}
-	?>
-	</ul>
+		if ($c > 0) {
+			foreach ($filters as $filter=>$array_of_priority) {
+				foreach ($array_of_priority as $priority=>$array_of_filters) {
+					?>
+					<li>
+						<em><?php echo $filter; ?></em>
+						<ul class="filters">
+						<?php
+						foreach ($array_of_filters as $data) {
+							?>
+							<li><em><?php echo $priority; ?></em>: <?php echo $data['script'] ?> =&gt; <?php echo $data['function'] ?></li>
+							<?php
+						}
+						?>
+						</ul>
+					</li>
+					<?php
+				}
+			}
+		} else {
+			?>
+			<li><?php echo gettext('<em>none</em>'); ?></li>
+			<?php
+		}
+		?>
+		</ul>
+	</div>
+	<div id="filters_show">
+		<br />
+	</div>
 </div>
 <br clear="all" />
 

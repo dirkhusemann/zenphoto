@@ -1411,3 +1411,13 @@ span.tagMatches span {
 	border: 1px solid #cccccc;
 	border-bottom-width: 5px;
 }
+
+/* drop-down menus */
+#jsddm li ul
+{	margin: 0;
+	padding: 0;
+	position: absolute;
+	visibility: hidden;
+}		
+			
+			
