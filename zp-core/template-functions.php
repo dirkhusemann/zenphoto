@@ -742,7 +742,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		echo "</li>\n";
 	}
 	if ($firstlast) {
-		echo "<li class=\"first\">";
+		echo '<li class="'.($current==1?'current':'first').'">';
 		printLink(getPageURL(1, $total), 1, "Page 1");
 		echo "</li>\n";
 		if ($j>2) {

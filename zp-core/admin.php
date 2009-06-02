@@ -197,7 +197,7 @@ $c = $t - $gallery->getNumComments(false);
 if ($c > 0) {
 	printf(ngettext('<strong>%1$u</strong> Comment (<strong>%2$u</strong> in moderation)','<strong>%1$u</strong> Comments (<strong>%2$u</strong> in moderation)', $t), $t, $c);
 } else {
-	printf(ngettext('<strong>%u</strong> Comments','<strong>%u</strong> Comments', $t), $t);
+	printf(ngettext('<strong>%u</strong> Comment','<strong>%u</strong> Comments', $t), $t);
 }
 ?>
 </li>
@@ -209,7 +209,7 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		if (empty($unpub)) {
 			printf(ngettext('<strong>%1$u</strong> Page','<strong>%1$u</strong> Pages',$total),$total,$type);
 		} else {
-			printf(ngettext('<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)','<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> Page (<strong>%2$u</strong> unpublished)','<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)',$total),$total,$unpub);
 		}
 		?>
 	</li>

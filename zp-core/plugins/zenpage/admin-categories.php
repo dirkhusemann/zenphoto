@@ -97,14 +97,14 @@ printLogoAndLinks();
 				     	?>
 				      <td class="topalign-padding"><?php echo $cattitlemessage; ?></td>
 				      <td><?php if(isset($_GET['edit'])) { print_language_string_list_zenpage($result['cat_name'],"category",false) ; } else { print_language_string_list_zenpage("","category",false) ;} ?>
-				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo "checked='checked'"; } ?> /> <?php echo gettext("Enable permaTitellink"); ?>
+				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo "checked='checked'"; } ?> /> <?php echo gettext("Enable permaTitleLink"); ?>
 				      </td>
 				    </tr>
 						<?php
 						if(isset($_GET['edit'])) {
 							?>
 					    <tr> 
-					      <td class="topalign-padding"><?php echo gettext("Category Titellink:"); ?></td>
+					      <td class="topalign-padding"><?php echo gettext("Category TitleLink:"); ?></td>
 					      <td><input name="catlink" type="text" size="85" id="catlink" value="<?php echo $result['cat_link']; ?>" />
 					      <input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext("Edit TitleLink"); ?>
 					      </td>

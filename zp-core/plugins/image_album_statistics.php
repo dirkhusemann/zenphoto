@@ -179,7 +179,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 			if($votes != 0) {
 				$rating =  round($value/$votes, 1);
 			}
-			echo "<p>".sprintf(gettext('Rating: %1$u (Votes: %2$u )'),$rating,$tempalbum->get("total_votes"))."</p>";
+			echo "<p>".sprintf(gettext('Rating: %1$u (Votes: %2$u)'),$rating,$tempalbum->get("total_votes"))."</p>";
 		}
 		if($showstatistic === "hitcounter" OR $showstatistic === "rating+hitcounter") {
 			$hitcounter = $tempalbum->get("hitcounter");

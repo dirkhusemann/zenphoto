@@ -11,7 +11,7 @@
  * @package plugins
  */
 
-$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br />Version 1.1. now incorporates the flv_playlist plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player.<strong>Note:</strong>Currently supports only FLV player version 3.<br> <strong>NOTE: You need to buy a licence from the player's developer LongTail Video if you intend to use this plugin for commercial purposes.</strong> Please see <a href='http://www.longtailvideo.com/players/jw-flv-player/'>LongTail Video - JW players</a> for more info about the player and its licence.");
+$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br />Version 1.1. now incorporates the flv_playlist plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player.<br /><strong>Note:</strong><br />Currently supports only FLV player version 3.<br /><strong>You need to buy a licence from the player's developer LongTail Video if you intend to use this plugin for commercial purposes.</strong> Please see <a href='http://www.longtailvideo.com/players/jw-flv-player/'>LongTail Video - JW players</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flvplayer.php.html";
@@ -279,7 +279,7 @@ function flvPlaylist($option='') {
 
 		case "players":
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-				echo "<div id=\"flvplaylist-".$imagetitle."\">".gettext("The flv player is not installed. Please install or activate the flv player plugin..")."</div>";
+				echo "<div id=\"flvplaylist-".$imagetitle."\">".gettext("The flv player is not installed. Please install or activate the flv player plugin.")."</div>";
 					
 				// check if an image/videothumb is available - this shouldn't be hardcoded...
 				$album = $_zp_current_image->getAlbum();

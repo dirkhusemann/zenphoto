@@ -358,8 +358,7 @@ if (ini_get('safe_mode')) { ?>
 				<?php
 		}
 	} else {
-		//TODO: change text after 1.2.5 release to be clear that there are no albums you are managing so you have nowhere to upload to.
-		echo gettext("There are no albums for you to edit.");		
+		echo gettext("There are no albums to which you can upload.");		
 	}
 	?>
 	</div>

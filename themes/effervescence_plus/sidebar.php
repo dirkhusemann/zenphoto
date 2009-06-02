@@ -37,7 +37,7 @@ if(function_exists("printAllNewsCategories")) {
 	<ul>
 	<?php
 	  if($_zp_gallery_page == "archive.php") {
-	  	echo "<li class='menu-active'>".gettext("Gallery And News")."</li>";
+	  	echo "<li class='menu-active'>".gettext("Gallery and News")."</li>";
  	 	} else {
 			echo "<li>"; printCustomPageURL(gettext("Gallery and News"),"archive")."</li>";
 		} 

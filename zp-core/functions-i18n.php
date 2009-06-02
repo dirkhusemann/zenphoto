@@ -87,7 +87,7 @@ function setupLanguageArray() {
 		'mn_MN' => gettext('Mongolian'),
 		'ms_MY' => gettext('Malay'),
 		'mg_MG' => gettext('Malagasy'),
-		'nb_NO' => gettext('Norwegian (Bokml)'),
+		'nb_NO' => gettext('Norwegian (Bokmål)'),
 		'no_NO' => gettext('Norwegian'),
 		'ni_ID' => gettext('Nias'),
 		'fa_IR' => gettext('Persian'),

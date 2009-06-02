@@ -65,7 +65,7 @@ class flowplayer3 {
 										'desc' => gettext("The color of the player background.")),
 		gettext('Player background color gradient') => array('key' => 'flow_player3_backgroundcolorgradient', 'type' => 5,
 										'selections' => array(gettext('none')=>"none",gettext('low')=>"low", gettext('medium')=>"medium", gettext('high')=>"high"),
-										'desc' => gettext("Gradient setting for playler background color.")),
+										'desc' => gettext("Gradient setting for player background color.")),
 		gettext('Controls background color') => array('key' => 'flow_player3_controlsbackgroundcolor', 'type' => 8,
 										'desc' => gettext("Background color of the controls.")),
 		gettext('Controls background color gradient') => array('key' => 'flow_player3_controlsbackgroundcolorgradient', 'type' => 5,
@@ -105,7 +105,7 @@ class flowplayer3 {
 										'desc' => gettext("Button color when the mouse is positioned over them.")),
 		gettext('Splash image scale') => array('key' => 'flow_player3_splashimagescale', 'type' => 5,
 										'selections' => array(gettext('fit')=>"fit",gettext('half')=>"half", gettext('orig')=>"orig", gettext('scale')=>"scale"),
-										'desc' => gettext("Setting which defines how video is scaled on the video screen. Available options are:: <br /><em>fit</em> : Fit to window by preserving the aspect ratio encoded in the file's metadata.<br /><em>half</em>: Half-size (preserves aspect ratio)<br /><em>orig</em>: Use the dimensions encoded in the file. If the video is too big for the available space, the video is scaled using the 'fit' option.<br /><em>scale</em>: Scale the video to fill all available space. This is the default setting."))
+										'desc' => gettext("Setting which defines how video is scaled on the video screen. Available options are:<br /><em>fit</em>: Fit to window by preserving the aspect ratio encoded in the file's metadata.<br /><em>half</em>: Half-size (preserves aspect ratio)<br /><em>orig</em>: Use the dimensions encoded in the file. If the video is too big for the available space, the video is scaled using the 'fit' option.<br /><em>scale</em>: Scale the video to fill all available space. This is the default setting."))
 		);
 	}
 

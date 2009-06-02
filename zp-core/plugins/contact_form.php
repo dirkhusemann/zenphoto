@@ -17,7 +17,7 @@
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1.3.2';
+$plugin_version = '1.1.3.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---contact_form.php.html";
 $option_interface = new contactformOptions();
 
@@ -55,7 +55,7 @@ class contactformOptions {
 
 	function getOptionsSupported() {
 		$list = array(gettext("required") => "required",gettext("show") => "show",gettext("omitted") => "omitted");
-		$mailfieldinstruction = gettext(" Set if the field should be required, just shown or omitted");
+		$mailfieldinstruction = gettext("Set if the <code>%s</code> field should be required, just shown or omitted");
 		return array(	gettext('Intro text') => array('key' => 'contactform_introtext', 'type' => 3,
 										'desc' => gettext("The intro text for your contact form")),
 									gettext('Confirm text') => array('key' => 'contactform_confirmtext', 'type' => 3,
@@ -65,29 +65,29 @@ class contactformOptions {
 									gettext('Mail address') => array('key' => 'contactform_mailaddress', 'type' => 0,
 										'desc' => gettext("The e-mail address the messages should be sent to.")),
 									gettext('01. Title field') => array('key' => 'contactform_title', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Title field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Title field."))),
 									gettext('02. Name field') => array('key' => 'contactform_name', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Name field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Name field."))),
 									gettext('03. Company field') => array('key' => 'contactform_company', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Country field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Company field."))),
 									gettext('04. Street field') => array('key' => 'contactform_street', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Street field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Street field."))),
 									gettext('05. City field') => array('key' => 'contactform_city', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("City field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("City field."))),
 									gettext('06. Country field') => array('key' => 'contactform_country', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Country field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Country field."))),
 									gettext('07. E-mail field') => array('key' => 'contactform_email', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("E-mail field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("E-mail field."))),
 									gettext('08. Website field') => array('key' => 'contactform_website', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Website field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Website field."))),
 									gettext('09. Captcha field') => array('key' => 'contactform_captcha', 'type' => 1,
 										'desc' => gettext("If Captcha should be required.")),
 									gettext('10. Phone field') => array('key' => 'contactform_phone', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Phone number field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Phone number field."))),
 									gettext('11. Subject field') => array('key' => 'contactform_subject', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Subject field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Subject field."))),
 									gettext('12. Message field') => array('key' => 'contactform_message', 'type' => 4, 'buttons' => $list,
-										'desc' => gettext("Message field.").$mailfieldinstruction),
+										'desc' => sprintf($mailfieldinstruction,gettext("Message field.")))
 		);
 	}
 }

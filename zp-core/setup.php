@@ -589,7 +589,7 @@ if (!$checked) {
 	} else {
 		$magic_quotes_disabled = true;
 	}
-	checkMark($magic_quotes_disabled, gettext("PHP <code>magic_quotes_gpc</code>"), gettext("PHP <code>magic_quotes_gpc</code> [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
+	checkMark($magic_quotes_disabled, gettext("PHP <code>magic_quotes_gpc</code>"), gettext("PHP <code>magic_quotes_gpc</code> [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information See #25 of the Zenphoto troubleshooting guide."));
 
 	if ($environ) {
 		/* Check for graphic library and image type support. */
@@ -662,6 +662,7 @@ if (!$checked) {
  							"<br /><br />".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
  	if ($cfg) {
  		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.');
+ 		$msg2 = gettext('You must be logged in to change this.');
  		if ($chmod == 0777 || !$chmod_defined) {
 	 		checkMark(-1, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is not in effect]'),
 	 							gettext('When this option is not in effect, file and folder permissions are relaxed. '.
@@ -669,7 +670,7 @@ if (!$checked) {
 	 							'<em>Strict Permissions</em>. However, on some servers Zenphoto does not function correctly '.
 	 							'with strict file/folder permissions. If you enable this option and Zenphoto has permission errors, '.
 	 							'run setup again and disable the option.').'<br /><br />'.
-	 							(zp_loggedin() ? gettext('Click <a href="?strict_chmod=1">here</a> to use strict file/folder permissions.').'<br /><br />':'').
+	 							(zp_loggedin() ? gettext('Click <a href="?strict_chmod=1">here</a> to use strict file/folder permissions.'): $msg2).'<br /><br />'.
 	 							$msg
 	 							);
 	 	} else {
@@ -677,7 +678,7 @@ if (!$checked) {
 	 							gettext('On some servers Zenphoto does not function correctly '.
 	 							'with strict file/folder permissions. If you are getting permission errors run setup again and '.
 	 							'disable the option.').'<br /><br />'.
-	 							(zp_loggedin() ? gettext('Click <a href="?strict_chmod=0">here</a> to enable relaxed file/folder permissions.').'<br /><br />':'').
+	 							(zp_loggedin() ? gettext('Click <a href="?strict_chmod=0">here</a> to enable relaxed file/folder permissions.'):$msg2).'<br /><br />'.
 	 							$msg
 	 							);
 	 	}
@@ -924,7 +925,7 @@ if ($debug) {
 						$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
 						break;
 				}
-				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code>'));
+				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>'));
 			}
 		} else {
 			checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
@@ -951,7 +952,7 @@ if ($debug) {
 	$filelist = implode("<br />", $installed_files);
 	if (count($installed_files) > 0) {
 		if (!defined("RELEASE")) {
-			$msg1 = gettext("Zenphoto core files [This is not an official build, Some files are missing or their <em>filemtimes</em> seem out of variance]");
+			$msg1 = gettext("Zenphoto core files [This is not an official build. Some files are missing or their <em>filemtimes</em> seem out of variance]");
 		} else {
 			$msg1 = gettext("Zenphoto core files [Some files are missing or their <em>filemtimes</em> seem out of variance]");
 		}
@@ -987,8 +988,8 @@ if ($debug) {
 		if ($Apache) {
 			$ch = -1;
 			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
-			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.")
-			.gettext("Just change the one line indicated to make it work.").' ' .
+			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.").' ' .
+						gettext("Just change the one line indicated to make it work.").
 						"<br /><br />".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
 		} else {
 			$ch = -2;
@@ -1064,7 +1065,7 @@ if ($debug) {
 	}
 
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
-		checkmark(-1, 'albums', gettext("albums [<code>\$conf['external_album_folder']</code> is deprecated["), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
+		checkmark(-1, 'albums', gettext("albums [<code>\$conf['external_album_folder']</code> is deprecated]"), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 		$_zp_conf_vars['album_folder_class'] = 'external';
 		$albumfolder = $_zp_conf_vars['external_album_folder'];
 	}
