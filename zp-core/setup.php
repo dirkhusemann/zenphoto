@@ -1095,9 +1095,7 @@ if ($debug) {
 
 	$good = checkmark(file_exists($en_US), gettext('<em>locale</em> folders'), gettext('<em>locale</em> folders [Are not complete]'), gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
 
-	if (getOption('zp_plugin_zenpage')) {
-		$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
-	}
+	$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	
 	if ($connection) { @mysql_close($connection); }
 	if ($good) {
@@ -1157,11 +1155,9 @@ if (file_exists("zp-config.php")) {
 			$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
 			$_zp_conf_vars['mysql_prefix'].'captcha');
 		
-		if (getOption('zp_plugin_zenpage')) {
-			$expected_tables = array_merge($expected_tables, array($_zp_conf_vars['mysql_prefix'].'zenpage_pages',
-				$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
-				$_zp_conf_vars['mysql_prefix'].'zenpage_news'));
-		}
+		$expected_tables = array_merge($expected_tables, array($_zp_conf_vars['mysql_prefix'].'zenpage_pages',
+			$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
+			$_zp_conf_vars['mysql_prefix'].'zenpage_news'));
 		
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {

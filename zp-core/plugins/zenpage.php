@@ -70,10 +70,7 @@ class zenpagecms {
 	}
 }
 
-
-if(empty($message)) {
-	require_once("zenpage/zenpage-functions.php");
-	require_once("zenpage/zenpage-template-functions.php");
-}
+require_once("zenpage/zenpage-functions.php");
+require_once("zenpage/zenpage-template-functions.php");
 
 ?>

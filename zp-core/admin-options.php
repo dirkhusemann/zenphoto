@@ -544,7 +544,12 @@ if ($subtab == 'admin') {
 			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
 		} else {
 			$admins = getAdministrators();
-			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'custom_data' => NULL);
+			if (empty($admins)) {
+				$rights = ALL_RIGHTS;
+			} else {
+				$rights = ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS;
+			}
+			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => $rights, 'custom_data' => NULL);
 			$alterrights = '';
 		}
 	} else {
@@ -631,6 +636,7 @@ if (empty($alterrights)) {
 	foreach($admins as $user) {
 		$userid = $user['user'];
 		$userobj = new Administrator($userid);
+		if (empty($userid)) $userobj->setRights($user['rights']);	
 		if ($userobj->getRights() == 0) {
 			$master = '(<em>'.gettext('pending verification').'</em>)';
 		} else {
@@ -641,7 +647,6 @@ if (empty($alterrights)) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
 				$master = "(<em>".gettext("Master")."</em>)";
 				$userobj->setRights($userobj->getRights() | ADMIN_RIGHTS);
-				if ($_zp_null_account) $userobj->setRights($userobj->getRights() | ALL_ALBUMS_RIGHTS);
 				$ismaster = true;
 			}
 		}
@@ -768,7 +773,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-zenpage_rights" id="<?php echo $id ?>-zenpage_rights"
-									<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($userobj->getRights() & ZENPAGE_RIGHTS)) echo ' checked'; 
+									value=<?php echo ZENPAGE_RIGHTS; if ($userobj->getRights() & ZENPAGE_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Zenpage"); ?>
 							</label>
