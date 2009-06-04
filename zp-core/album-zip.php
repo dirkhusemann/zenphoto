@@ -14,8 +14,9 @@ if(isset($_GET['album']) && is_dir(realpath(getAlbumFolder() . internalToFilesys
  * @param string $base the directory of the base album
  * @param string $offset the from $base to the subalbum
  * @param string $subalbum the subalbum file name
+ * @param object $zip zipfile object to store the albums
  */
-function zipAddSubalbum($base, $offset, $subalbum) {
+function zipAddSubalbum($base, $offset, $subalbum, $zip) {
 	global $_zp_zip_list;
 	$leadin = str_replace(getAlbumFolder(), '', $base);
 	if (checkAlbumPassword($leadin.$offset.$subalbum, $hint)) {
@@ -53,7 +54,7 @@ function createAlbumZip($album){
 	$rp = realpath(getAlbumFolder() . $album) . '/';
 	$p = $album . '/';
 	include_once('archive.php');
-	$dest = realpath(getAlbumFolder()) . '/' . urlencode($album) . ".zip";
+	$dest = realpath(getAlbumFolder()) . '/' . $album . ".zip";
 	$persist = getOption('persistent_archive');
 	if (!$persist  || !file_exists($dest)) {
 		if (file_exists($dest)) unlink($dest);
@@ -62,13 +63,12 @@ function createAlbumZip($album){
 		if ($dh = opendir($rp)) {
 			$_zp_zip_list[] = '*.*';
 
-			while (($file = readdir($dh)) !== false) {
-				if($file != '.' && $file != '..'){
-					if (is_dir($rp.$file)) {
-						$base_a = explode("/", $album);
-						unset($base_a[count($base_a)-1]);
-						$base = implode('/', $base_a);
-						zipAddSubalbum($rp, $base, $file, $z);
+			while (($subalbum = readdir($dh)) !== false) {
+				if($subalbum != '.' && $subalbum != '..'){
+					if (is_dir($rp.$subalbum)) {
+						$offset = dirname($album);
+						if ($offset=='/' || $offset=='.') $offset = '';
+						zipAddSubalbum($rp, $offset, $subalbum, $z);
 					}
 				}
 			}
