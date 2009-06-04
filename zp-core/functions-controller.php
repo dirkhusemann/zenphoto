@@ -298,14 +298,18 @@ function zp_handle_password() {
 		$post_pass = $_POST['pass'];
 		$auth = md5($post_user . $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
-		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {	// allow Admin user login
+		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
+		if ($_zp_loggedin) $_zp_loggedin = apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
+		if ($_zp_loggedin) {	// allow Admin user login
 			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
 				header("Location: " . FULLWEBPATH . "/" . sanitize($_POST['redirect'], 3));
 				exit();
 			}
 		} else {
-			if (($auth == $check_auth) && $post_user == $check_user) {
+			$success = ($auth == $check_auth) && $post_user == $check_user;
+			$success = apply_filter('guest_login_attempt', $success, $post_user, $post_pass);;
+			if ($success) {
 				// Correct auth info. Set the cookie.
 				if (DEBUG_LOGIN) debugLog("zp_handle_password: valid credentials");
 				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);

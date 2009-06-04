@@ -13,7 +13,11 @@
  * The global $_zp_current_admin is referenced throuought Zenphoto, so the 
  * elements of the array need to be present in any alternate implementation.
  * in particular, there should be array elements for:
- * 		'id' (unique), 'user' (unique),	'password',	'name', 'email', and 'rights'
+ * 		'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', and 'custom_data'
+ * 
+ * Admin and the filters 'save_admin_custom_data' and 'edit_admin_custom_data' use the Administrator object 
+ * defined below. Slowly other uses of the array may be changed over to use the object but this will probably
+ * change the functions below as well.
  * 
  * So long as all these indices are populated it should not matter when and where
  * the data is stored.
@@ -63,9 +67,10 @@ $_zp_admin_users = null;
  * @param string $name The display name of the admin
  * @param string $email The email address of the admin
  * @param bit $rights The administrating rites for the admin
+ * @param string $custom custom data for the administrator
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
-function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
+function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom) {
 
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums)"); }
 
@@ -76,7 +81,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		if (is_null($pass)) {
 			$password = '';
 		} else {
-			$password = "' ,`password`='" . escape($pass);
+			$password = "' ,`pass`='" . escape($pass);
 		}
 		if (is_null($rights)) {
 			$rightsset = '';
@@ -84,15 +89,15 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 			$rightsset = "', `rights`='" . escape($rights);
 		}
 		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .
- 					"', `email`='" . escape($email) . $rightsset . "' WHERE `id`='" . $id ."'";
+ 					"', `email`='" . escape($email) . $rightsset . "', `custom_data`='".escape($custom)."' WHERE `id`='" . $id ."'";
 		$result = query($sql);
 
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
 
 	} else {
 		if (is_null($pass)) $pass = passwordHash($user, $pass);
-		$sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
-		escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "')";
+		$sql = "INSERT INTO " . prefix('administrators') . " (user, pass, name, email, rights, custom_data) VALUES ('" .
+		escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "', '".escape($custom)."')";
 		$result = query($sql);
 		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 		$result = query_single_row($sql);
@@ -125,7 +130,7 @@ function getAdministrators() {
 	global $_zp_admin_users;
 	if (is_null($_zp_admin_users)) {
 		$_zp_admin_users = array();
-		$sql = "SELECT `user`, `password`, `name`, `email`, `rights`, `id` FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
+		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 		$admins = query_full_array($sql, true);
 		if ($admins !== false) {
 			foreach($admins as $user) {
@@ -152,9 +157,11 @@ function getAdministrators() {
 						$user['rights'] = $newrights;
 					}
 				}
-				$_zp_admin_users[$user['id']] = array('user' => $user['user'], 'pass' => $user['password'],
- 												'name' => $user['name'], 'email' => $user['email'], 'rights' => $user['rights'],
- 												'id' => $user['id']);
+				if (array_key_exists('password', $user)) { // transition code!
+					$user['pass'] = $user['password'];
+					unset($user['password']);
+				}
+				$_zp_admin_users[$user['id']] = $user;
 			}
 		}
 	}
@@ -215,19 +222,22 @@ function checkAuthorization($authCode) {
  *
  * @param string $user
  * @param string $pass
+ * @param bool $admin_login will be true if the login for the backend. If false, it is a guest login beging checked for admin credentials
  * @return bool
  */
-function checkLogon($user, $pass) {
+function checkLogon($user, $pass, $admin_login) {
 	$admins = getAdministrators();
+	$success = false;
 	foreach ($admins as $admin) {
 		if ($admin['user'] == $user) {
 			$md5 = passwordHash($user, $pass);
 			if ($admin['pass'] == $md5) {
-				return checkAuthorization($md5);
+				$success = checkAuthorization($md5);
+				break;
 			}
 		}
 	}
-	return false;
+	return $success;
 }
 
 /**
@@ -249,6 +259,68 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
 		}
 	}
 	return $emails;
+}
+
+class Administrator extends PersistentObject {
+	
+	/**
+	 * This is a simple class so that we have a convienient "handle" for manipulating Administrators.
+	 *
+	 * @return Administrator
+	 */
+	
+	/**
+	 * Constructor for an Administrator
+	 *
+	 * @param string $userid.
+	 * @return Comment
+	 */
+	function Administrator($userid) {
+		parent::PersistentObject('administrators',  array('user' => $userid), 'user', true, empty($userid));
+	}
+	
+	function setPass($pwd) {
+		$this->set('pass', $pwd);
+	}
+	function getPass() {
+		return $this->get('pass');
+	}
+	
+	function setName($admin_n) {
+		$this->set('name', $admin_n);
+	}
+	function getName() {
+		return $this->get('name');
+	}
+	
+	function setEmail($admin_e) {
+		$this->set('email', $admin_e);
+	}
+	function getEmail() {
+		return $this->get('email');
+	}
+	
+	function setRights($rights) {
+		$this->set('rights', $rights);
+	}
+	function getRights() {
+		return $this->get('rights');
+	}
+	
+	function setAlbums($albums) {
+		$this->set('albums', $albums);
+	}
+	function getAlbums() {
+		return $this->get('albums');
+	}
+	
+	function setCustomData($custom_data) {
+		$this->set('custom_data', $custom_data);
+	}
+	function getCustomData() {
+		return $this->get('custom_data');
+	}
+	
 }
 
 ?>

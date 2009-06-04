@@ -1257,7 +1257,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_administrators (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`user` varchar(64) NOT NULL,
-		`password` text,
+		`pass` text,
 		`name` text,
 		`email` text,
 		`rights` int,
@@ -1608,6 +1608,10 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `used_ips` longtext;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
+	//v1.2.6
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `custom_data` TEXT;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `password` `pass` varchar(64)';
+	
 	
 	
 	

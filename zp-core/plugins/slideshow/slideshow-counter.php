@@ -5,7 +5,7 @@
  * @package plugins 
  */
 
-require_once("../../class-load.php");
+require_once("../../functions.php");
 
 $album_name = $_GET["album"];
 $img_name = $_GET["img"];

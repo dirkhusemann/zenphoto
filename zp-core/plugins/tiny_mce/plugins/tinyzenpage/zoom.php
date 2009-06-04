@@ -8,7 +8,6 @@ define('OFFSET_PATH', 5);
 $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
 $host = "http://".htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 require_once("../../../../functions.php"); 
-require_once("../../../../class-load.php");
 ?>
 <script type="text/javascript" src="../../../../js/jquery.js"></script>
 <script type="text/javascript" src="../../../flowplayer/flashembed-0.34.pack.js"></script>

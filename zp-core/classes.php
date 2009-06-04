@@ -8,9 +8,6 @@
 
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
-// Load the authentication functions and UTF-8 Library.
-require_once(dirname(__FILE__).'/auth_zp.php');
-
 /*******************************************************************************
  *******************************************************************************
  * Persistent Object Class *****************************************************

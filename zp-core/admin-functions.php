@@ -15,7 +15,6 @@ define('TEXTAREA_COLUMNS', 50);
 define('TEXT_INPUT_SIZE', 48);
 define('TEXTAREA_COLUMNS_SHORT', 32);
 define('TEXT_INPUT_SIZE_SHORT', 30);
-require_once(dirname(__FILE__).'/class-load.php');
 require_once(dirname(__FILE__).'/functions.php');
 
 
@@ -25,127 +24,7 @@ $sortby = array(gettext('Filename') => 'filename',
 								gettext('ID') => 'id',
 								gettext('Filemtime') => 'mtime'
 								);
-$charsets = array("ASMO-708" => "Arabic",
-									"BIG5" => "Chinese Traditional",
-									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
-									"cp866" => "Cyrillic (DOS)",
-									"CP870" => "IBM EBCDIC (Multilingual Latin-2)",
-									"CISO2022JP" => "Japanese (JIS-Allow 1 byte Kana)",
-									"DOS-720" => "Arabic (DOS)",
-									"DOS-862" => "Hebrew (DOS)",
-									"EBCDIC-CP-US" => "IBM EBCDIC (US-Canada)",
-									"EUC-CN" => "Chinese Simplified (EUC)",
-									"EUC-JP" => "Japanese (EUC)",
-									"EUC-KR" => "Korean (EUC)",
-									"GB2312" => "Chinese Simplified (GB2312)",
-									"HZ-GB-2312" => "Chinese Simplified (HZ)",
-									"IBM437" => "OEM United States",
-									"IBM737" => "Greek (DOS)",
-									"IBM775" => "Baltic (DOS)",
-									"IBM850" => "Western European (DOS)",
-									"IBM852" => "Central European (DOS)",
-									"IBM857" => "Turkish (DOS)",
-									"IBM861" => "Icelandic (DOS)",
-									"IBM869" => "Greek, Modern (DOS)",
-									"ISO-2022-JP" => "Japanese (JIS)",
-									"ISO-2022-JP" => "Japanese (JIS-Allow 1 byte Kana - SO/SI)",
-									"ISO-2022-KR" => "Korean (ISO)",
-									"ISO-8859-1" => "Western European (ISO)",
-									"ISO-8859-15" => "Latin 9 (ISO)",
-									"ISO-8859-2" => "Central European (ISO)",
-									"ISO-8859-3" => "Latin 3 (ISO)",
-									"ISO-8859-4" => "Baltic (ISO)",
-									"ISO-8859-5" => "Cyrillic (ISO)",
-									"ISO-8859-6" => "Arabic (ISO)",
-									"ISO-8859-7" => "Greek (ISO)",
-									"ISO-8859-8" => "Hebrew (ISO-Visual)",
-									"ISO-8859-8-i" => "Hebrew (ISO-Logical)",
-									"ISO-8859-9" => "Turkish (ISO)",
-									"JOHAB" => "Korean (Johab)",
-									"KOi8-R" => "Cyrillic (KOI8-R)",
-									"KOi8-U" => "Cyrillic (KOI8-U)",
-									"KS_C_5601-1987" => "Korean",
-									"MACINTOSH" => "Western European (MAC)",
-									"SHIFT_JIS" => "Japanese (Shift-JIS)",
-									"UNICODE" => "Unicode",
-									"UNICODEFFFE" => "Unicode (Big-Endian)",
-									"US-ASCII" => "US-ASCII",
-									"UTF-7" => "Unicode (UTF-7)",
-									"UTF-8" => "Unicode (UTF-8)",
-									"WINDOWS-1250" => "Central European (Windows)",
-									"WINDOWS-1251" => "Cyrillic (Windows)",
-									"WINDOWS-1252" => "Western European (Windows)",
-									"WINDOWS-1253" => "Greek (Windows)",
-									"WINDOWS-1254" => "Turkish (Windows)",
-									"WINDOWS-1255" => "Hebrew (Windows)",
-									"WINDOWS-1256" => "Arabic (Windows)",
-									"WINDOWS-1257" => "Baltic (Windows)",
-									"WINDOWS-1258" => "Vietnamese (Windows)",
-									"WINDOWS-874" => "Thai (Windows)",
-									"X-CHINESE-CNS" => "Chinese Traditional (CNS)",
-									"X-CHINESE-ETEN" => "Chinese Traditional (Eten)",
-									"X-EBCDIC-Arabic" => "IBM EBCDIC (Arabic)",
-									"X-EBCDIC-CP-US-EURO" => "IBM EBCDIC (US-Canada-Euro)",
-									"X-EBCDIC-CYRILLICRUSSIAN" => "IBM EBCDIC (Cyrillic Russian)",
-									"X-EBCDIC-CYRILLICSERBIANBULGARIAN" => "IBM EBCDIC (Cyrillic Serbian-Bulgarian)",
-									"X-EBCDIC-DENMARKNORWAY" => "IBM EBCDIC (Denmark-Norway)",
-									"X-EBCDIC-DENMARKNORWAY-euro" => "IBM EBCDIC (Denmark-Norway-Euro)",
-									"X-EBCDIC-FINLANDSWEDEN" => "IBM EBCDIC (Finland-Sweden)",
-									"X-EBCDIC-FINLANDSWEDEN-EURO" => "IBM EBCDIC (Finland-Sweden-Euro)",
-									"X-EBCDIC-FINLANDSWEDEN-EURO" => "IBM EBCDIC (Finland-Sweden-Euro)",
-									"X-EBCDIC-FRANCE-EURO" => "IBM EBCDIC (France-Euro)",
-									"X-EBCDIC-GERMANY" => "IBM EBCDIC (Germany)",
-									"X-EBCDIC-GERMANY-EURO" => "IBM EBCDIC (Germany-Euro)",
-									"X-EBCDIC-GREEK" => "IBM EBCDIC (Greek)",
-									"X-EBCDIC-GREEKMODERN" => "IBM EBCDIC (Greek Modern)",
-									"X-EBCDIC-HEBREW" => "IBM EBCDIC (Hebrew)",
-									"X-EBCDIC-ICELANDIC" => "IBM EBCDIC (Icelandic)",
-									"X-EBCDIC-ICELANDIC-EURO" => "IBM EBCDIC (Icelandic-Euro)",
-									"X-EBCDIC-INTERNATIONAL-EURO" => "IBM EBCDIC (International-Euro)",
-									"X-EBCDIC-ITALY" => "IBM EBCDIC (Italy)",
-									"X-EBCDIC-ITALY-EURO" => "IBM EBCDIC (Italy-Euro)",
-									"X-EBCDIC-JAPANESEANDJAPANESELATIN" => "IBM EBCDIC (Japanese and Japanese-Latin)",
-									"X-EBCDIC-JAPANESEANDKANA" => "IBM EBCDIC (Japanese and Japanese Katakana)",
-									"X-EBCDIC-JAPANESEANDUSCANADA" => "IBM EBCDIC (Japanese and US-Canada)",
-									"X-EBCDIC-JAPANESEKATAKANA" => "IBM EBCDIC (Japanese katakana)",
-									"X-EBCDIC-KOREANANDKOREANEXTENDED" => "IBM EBCDIC (Korean and Korean EXtended)",
-									"X-EBCDIC-KOREANEXTENDED" => "IBM EBCDIC (Korean EXtended)",
-									"X-EBCDIC-SIMPLIFIEDCHINESE" => "IBM EBCDIC (Simplified Chinese)",
-									"X-EBCDIC-SPAIN" => "IBM EBCDIC (Spain)",
-									"X-ebcdic-SPAIN-EURO" => "IBM EBCDIC (Spain-Euro)",
-									"X-EBCDIC-THAI" => "IBM EBCDIC (Thai)",
-									"X-EBCDIC-TRADITIONALCHINESE" => "IBM EBCDIC (Traditional Chinese)",
-									"X-EBCDIC-TURKISH" => "IBM EBCDIC (Turkish)",
-									"X-EBCDIC-UK" => "IBM EBCDIC (UK)",
-									"X-EBCDIC-UK-EURO" => "IBM EBCDIC (UK-Euro)",
-									"X-EUROPA" => "Europa",
-									"X-IA5" => "Western European (IA5)",
-									"X-IA5-GERMAN" => "German (IA5)",
-									"X-IA5-NORWEGIAN" => "Norwegian (IA5)",
-									"X-IA5-SWEDISH" => "Swedish (IA5)",
-									"X-ISCII-AS" => "ISCII Assamese",
-									"X-ISCII-BE" => "ISCII Bengali",
-									"X-ISCII-DE" => "ISCII Devanagari",
-									"X-ISCII-GU" => "ISCII Gujarathi",
-									"X-ISCII-KA" => "ISCII Kannada",
-									"X-ISCII-MA" => "ISCII Malayalam",
-									"X-ISCII-OR" => "ISCII Oriya",
-									"X-ISCII-PA" => "ISCII Panjabi",
-									"X-ISCII-TA" => "ISCII Tamil",
-									"X-ISCII-TE" => "ISCII Telugu",
-									"X-MAC-ARABIC" => "Arabic (Mac)",
-									"X-MAC-CE" => "Central European (Mac)",
-									"X-MAC-CHINESESIMP" => "Chinese Simplified (Mac)",
-									"X-MAC-CHINESETRAD" => "Chinese Traditional (Mac)",
-									"X-MAC-CYRILLIC" => "Cyrillic (Mac)",
-									"X-MAC-GREEK" => "Greek (Mac)",
-									"X-MAC-HEBREW" => "Hebrew (Mac)",
-									"X-MAC-ICELANDIC" => "Icelandic (Mac)",
-									"X-MAC-JAPANESE" => "Japanese (Mac)",
-									"X-MAC-KOREAN" => "Korean (Mac)",
-									"X-MAC-TURKISH" => "Turkish (Mac)"
-									);
-
+									
 if (OFFSET_PATH) {									
 	// setup sub-tab arrays for use in dropdown
 	$optiontabs = array(gettext("admin")=>'admin-options.php?tab=admin');
@@ -279,6 +158,33 @@ function printAdminHeader($path='') {
 				left: -80
 			});
 			});
+	</script>
+	<script type="text/javascript">
+	var timeout         = 500;
+	var closetimer		= 0;
+	var ddmenuitem      = 0;
+	
+	function jsddm_open()
+	{	jsddm_canceltimer();
+		jsddm_close();
+		ddmenuitem = $(this).find('ul').eq(0).css('visibility', 'visible');}
+	
+	function jsddm_close()
+	{	if(ddmenuitem) ddmenuitem.css('visibility', 'hidden');}
+	
+	function jsddm_timer()
+	{	closetimer = window.setTimeout(jsddm_close, timeout);}
+	
+	function jsddm_canceltimer()
+	{	if(closetimer)
+		{	window.clearTimeout(closetimer);
+			closetimer = null;}}
+	
+	$(document).ready(function()
+	{	$('#jsddm > li').bind('mouseover', jsddm_open);
+		$('#jsddm > li').bind('mouseout',  jsddm_timer);});
+	
+	document.onclick = jsddm_close;
 	</script>
 	<?php
 	if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
@@ -476,9 +382,9 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs($currenttab) {
-	global $_zp_loggedin;
-	?>
-	<ul class="nav">
+	global $_zp_loggedin, $optiontabs, $newstabs;
+	?>	
+	<ul class="nav" id="jsddm">
 	<?php
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
 		?>
@@ -518,13 +424,30 @@ function printTabs($currenttab) {
 	}
 	?>
 	<li <?php if($currenttab == "options") echo 'class="current"' ?>>
-	<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-options.php'; ?>"><?php echo gettext("options"); ?></a>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-options.php'; ?>"><?php echo gettext("options"); ?></a>
+		<?php
+/*
+		if ($currenttab !== 'options') {
+			?>
+			<ul id="subdropdownnav">
+			<?php
+			foreach ($optiontabs as $tab=>$tablink) {
+				?>
+				<li><a href="<?php echo $tablink; ?>"><?php echo $tab; ?></a></li>
+				<?php
+			}
+			?>
+			</ul>
+		 	<?php		 	
+		}
+*/
+		?>
 	</li>
- 	<?php
+	<?php
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
 		?>
 		<li <?php if($currenttab == "themes") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-themes.php'; ?>"><?php echo gettext("themes"); ?></a>
+			<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-themes.php'; ?>"><?php echo gettext("themes"); ?></a>
 		</li>
  		<?php
 	}
@@ -543,7 +466,24 @@ function printTabs($currenttab) {
  		<?php
 		?>
 		<li <?php if($currenttab == "articles") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-news-articles.php'; ?>"><?php echo gettext("news"); ?></a>
+			<a href="<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-news-articles.php'; ?>"><?php echo gettext("news"); ?></a>
+		<?php
+/*
+		if ($currenttab !== 'articles') {
+			?>			
+			<ul id="subdropdownnav">
+			<?php
+			foreach ($newstabs as $tab=>$tablink) {
+				?>
+				<li><a href="<?php echo $tablink; ?>"><?php echo $tab; ?></a></li>
+				<?php
+			}
+			?>
+			</ul>
+		 	<?php
+		}
+*/		
+		?>
 		</li>
  		<?php
 	}
@@ -1682,20 +1622,20 @@ function printAlbumEditRow($album) {
 	<tr>
 	<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album <?php echo $album->name; ?>" /></td>
 	<td style="text-align: left;" width="80">
-	<?php
-	$thumb = $album->getAlbumThumb();
-	if (strpos($thumb, '_%7B') !== false) { // it is the default image
-		$thumb = 'images/imageDefault.png';
-	}
-	if (getOption('thumb_crop')) {
-		$w = round(getOption('thumb_crop_width')/2);
-		$h = round(getOption('thumb_crop_height')/2);
-	} else {
-		$w = $h = round(getOption('thumb_size')/2);
-	}
-	?>
-	<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album:%s'), $album->name); ?>">
-	<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
+		<?php
+		$thumb = $album->getAlbumThumb();
+		if (strpos($thumb, '_%7B') !== false) { // it is the default image
+			$thumb = 'images/imageDefault.png';
+		}
+		if (getOption('thumb_crop')) {
+			$w = round(getOption('thumb_crop_width')/2);
+			$h = round(getOption('thumb_crop_height')/2);
+		} else {
+			$w = $h = round(getOption('thumb_size')/2);
+		}
+		?>
+		<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
+		<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
 	</td>
 	<td  style="text-align: left;font-size:110%;" width="300">
 		<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>

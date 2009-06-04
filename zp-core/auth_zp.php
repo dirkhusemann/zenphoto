@@ -6,7 +6,11 @@
 
 // force UTF-8 Ø
 
-require_once(dirname(__FILE__).'/functions.php');
+if (file_exists(dirname(__FILE__).'/lib-auth_custom.php')) { // load a custom authroization package if it is present
+	debugLog('Loading '.dirname(__FILE__).'/lib-auth_custom.php');
+} else {
+	require_once(dirname(__FILE__).'/lib-auth.php');
+}
 
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = false;
@@ -48,7 +52,9 @@ if (!isset($_POST['login'])) {
 		$post_user = sanitize($_POST['user'],3);
 		$post_pass = sanitize($_POST['pass'],3);
 		$redirect = sanitize_path($_POST['redirect']);
-		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {
+		$_zp_loggedin = checkLogon($post_user, $post_pass, true);
+		$_zp_loggedin = apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
+		if ($_zp_loggedin) {
 			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath);
 			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . '/'. $redirect); }
 		} else {

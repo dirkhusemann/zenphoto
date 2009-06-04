@@ -7,10 +7,7 @@
 
 // force UTF-8 Ø
 
-/**
- * Load the classes
- */
-require_once(dirname(__FILE__).'/class-load.php');
+require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/functions-image.php');
 
 /**

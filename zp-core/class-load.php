@@ -3,7 +3,6 @@
 * Load the base classes (Image, Album, Gallery, etc.)                          *
 *******************************************************************************/
 
-require_once(dirname(__FILE__).'/functions-basic.php');
 require_once(dirname(__FILE__).'/classes.php');
 require_once(dirname(__FILE__).'/class-image.php');
 require_once(dirname(__FILE__).'/class-album.php');

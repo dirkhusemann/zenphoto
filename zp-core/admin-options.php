@@ -99,7 +99,14 @@ if (isset($_GET['action'])) {
 						} else {
 							$pwd = passwordHash($_POST[$i.'-adminuser'], $pass);
 						}
-						saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, $albums);
+						$userobj = new Administrator($user);
+						$userobj->setPass($pwd);
+						$userobj->setName($admin_n);
+						$userobj->setEmail($admin_e);
+						$userobj->setRights($rights);
+						$userobj->setAlbums($albums);
+						apply_filter('save_admin_custom_data', '', $userobj, $i);
+						saveAdmin($user, $userobj->getPass(), $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData());
 						if ($i == 0) {
 							setOption('admin_reset_date', '1');
 						}
@@ -141,6 +148,7 @@ if (isset($_GET['action'])) {
 			setOption('time_offset', $offset);
 			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
 			setOption('charset', sanitize($_POST['charset']),3);
+			
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
 			if ($newloc != $oldloc) {
@@ -536,7 +544,7 @@ if ($subtab == 'admin') {
 			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
 		} else {
 			$admins = getAdministrators();
-			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS);
+			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'custom_data' => NULL);
 			$alterrights = '';
 		}
 	} else {
@@ -622,7 +630,8 @@ if (empty($alterrights)) {
 	$albumlist = $gallery->getAlbums();
 	foreach($admins as $user) {
 		$userid = $user['user'];
-		if ($user['rights'] == 0) {
+		$userobj = new Administrator($userid);
+		if ($userobj->getRights() == 0) {
 			$master = '(<em>'.gettext('pending verification').'</em>)';
 		} else {
 			$master = '&nbsp;';
@@ -631,8 +640,8 @@ if (empty($alterrights)) {
 		if ($id == 0 && !$_zp_null_account) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
 				$master = "(<em>".gettext("Master")."</em>)";
-				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
-				if ($_zp_null_account) $user['rights'] = $user['rights'] | ALL_ALBUMS_RIGHTS;
+				$userobj->setRights($userobj->getRights() | ADMIN_RIGHTS);
+				if ($_zp_null_account) $userobj->setRights($userobj->getRights() | ALL_ALBUMS_RIGHTS);
 				$ismaster = true;
 			}
 		}
@@ -642,6 +651,7 @@ if (empty($alterrights)) {
 		} else {
 			$background = '';
 		}
+		$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 		?>
 	<tr>
 		<td colspan="2" style="margin: 0pt; padding: 0pt;">
@@ -681,7 +691,7 @@ if (empty($alterrights)) {
 					<?php
 				} else {
 					echo $master;
-					if (!$user['rights']) {
+					if (!$userobj->getRights()) {
 					?>
 						<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
 						<?php echo gettext("Authenticate user"); ?>
@@ -717,7 +727,7 @@ if (empty($alterrights)) {
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 		</td>
-		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 				value="<?php echo $x; ?>" />
 			<br />
@@ -736,7 +746,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-admin_rights" id="<?php echo $id ?>-admin_rights"
-									value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; 
+									value=<?php echo ADMIN_RIGHTS; if ($userobj->getRights() & ADMIN_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("User admin"); ?>
 							</label>
@@ -747,7 +757,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-options_rights" id="<?php echo $id ?>-options_rights"
-									value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; 
+									value=<?php echo OPTIONS_RIGHTS; if ($userobj->getRights() & OPTIONS_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Options"); ?>
 							</label>
@@ -758,7 +768,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-zenpage_rights" id="<?php echo $id ?>-zenpage_rights"
-									<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($user['rights'] & ZENPAGE_RIGHTS)) echo ' checked'; 
+									<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($userobj->getRights() & ZENPAGE_RIGHTS)) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Zenpage"); ?>
 							</label>
@@ -770,7 +780,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 							<input type="checkbox" name="<?php echo $id ?>-tags_rights" id="<?php echo $id ?>-tags_rights"
-								value=<?php echo TAGS_RIGHTS; if ($user['rights'] & TAGS_RIGHTS) echo ' checked';
+								value=<?php echo TAGS_RIGHTS; if ($userobj->getRights() & TAGS_RIGHTS) echo ' checked';
 								echo $alterrights; ?>>
 							<?php echo gettext("Tags"); ?>
 							</label>
@@ -780,7 +790,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-themes_rights" id="<?php echo $id ?>-themes_rights"
-									value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';
+									value=<?php echo THEMES_RIGHTS; if ($userobj->getRights() & THEMES_RIGHTS) echo ' checked';
 									echo $alterrights; ?>>
 								<?php echo gettext("Themes"); ?>
 							</label>
@@ -790,7 +800,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-all_album_rights" id="<?php echo $id ?>-all_album_rights"
-									value=<?php echo ALL_ALBUMS_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked'; 
+									value=<?php echo ALL_ALBUMS_RIGHTS; if ($userobj->getRights() & ALL_ALBUMS_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Manage all albums"); ?>
 							</label>
@@ -802,7 +812,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-edit_rights" id="<?php echo $id ?>-edit_rights"
-									value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; 
+									value=<?php echo EDIT_RIGHTS; if ($userobj->getRights() & EDIT_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Edit"); ?>
 							</label>
@@ -812,7 +822,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-comment_rights" id="<?php echo $id ?>-comment_rights"
-									value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; 
+									value=<?php echo COMMENT_RIGHTS; if ($userobj->getRights() & COMMENT_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Comment"); ?>
 							</label>
@@ -822,7 +832,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-upload_rights" id="<?php echo $id ?>-upload_rights"
-									value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; 
+									value=<?php echo UPLOAD_RIGHTS; if ($userobj->getRights() & UPLOAD_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("Upload"); ?>
 							</label>
@@ -834,7 +844,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-view_rights" id="<?php echo $id ?>-view_rights"
-									value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
+									value=<?php echo VIEWALL_RIGHTS; if ($userobj->getRights() & VIEWALL_RIGHTS) echo ' checked'; 
 									echo $alterrights; ?>>
 								<?php echo gettext("View all"); ?>
 							</label>
@@ -844,7 +854,7 @@ if (empty($alterrights)) {
 						<span style="white-space:nowrap">
 							<label>
 								<input type="checkbox" name="<?php echo $id ?>-main_rights" id="<?php echo $id ?>-main_rights"
-									value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>>
+									value=<?php echo MAIN_RIGHTS; if ($userobj->getRights() & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>>
 								<?php echo gettext("Overview"); ?>
 							</label>
 						</span>
@@ -862,16 +872,16 @@ if (empty($alterrights)) {
 		</td>
 		<td  width="320" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
-				value="<?php echo $user['name'];?>" />
+				value="<?php echo $userobj->getName();?>" />
 			<br />
 			<br />
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
-				value="<?php echo $user['email'];?>" />
+				value="<?php echo $userobj->getEmail();?>" />
 		</td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 			<p>
 				<?php
-					if (!($user['rights'] & ALL_ALBUMS_RIGHTS) && !$current) {
+					if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
 						$cv = array();
 						$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
 						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
@@ -908,7 +918,7 @@ if (empty($alterrights)) {
 			</p>
 			<p>
 				<?php
-					if (!($user['rights'] & ALL_ALBUMS_RIGHTS) && !$current) {
+					if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
 						if (!empty($alterrights)) {
 							echo gettext("You may manage these albums subject to the above rights.");
 						} else {
@@ -920,6 +930,7 @@ if (empty($alterrights)) {
 			</p>
 		</td>
 	</tr>
+	<?php echo $custom_row; ?>
 
 </table> <!-- end individual admin table -->
 </td>
@@ -1105,14 +1116,27 @@ if (empty($alterrights)) {
 						value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
 						</div>
 						</td>
-					<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><code>strftime()</code></a> format string in the text box.'); ?></td>
+					<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><span style="white-space:nowrap"><code>strftime()</code></span></a> format string in the text box.'); ?></td>
 				</tr>
 				<tr>
 					<td><?php echo gettext("Charset:"); ?></td>
-					<td><select id="charset" name="charset">
-						<?php generateListFromArray(array(getOption('charset')), array_flip($charsets), false, true) ?>
-					</select></td>
-					<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
+					<td>
+						<select id="charset" name="charset">
+						<?php
+						$sets = array_merge($_zp_UTF8->iconv_sets, $_zp_UTF8->mb_sets);
+						$totalsets = $_zp_UTF8->charsets;
+						asort($totalsets);
+						foreach ($totalsets as $key=>$char) {
+							?>
+							<option value="<?php echo  $key; ?>" <?php if ($key == getOption('charset')) echo 'selected="SELECTED"'; if (!array_key_exists($key,$sets)) echo 'style="color: gray"'; ?>><?php echo $char; ?></option>
+							<?php
+						}
+						?>
+						</select>
+					</td>
+					<td>
+					<?php echo gettext('The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you are unsure. Character sets <span style="color:gray">shown in gray</span> have no character translation support.'); ?>
+					</td>
 				</tr>
 				<tr>
 					<td><?php echo gettext('Captcha generator:'); ?></td>
@@ -1983,15 +2007,23 @@ if (empty($alterrights)) {
 			</td>
 			<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?>
 		</tr>
-		<tr>
-			<td><?php echo gettext("IPTC encoding:"); ?></td>
-			<td>
-				<select id="IPTC_encoding" name="IPTC_encoding">
-					<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($charsets), false, true) ?>
-				</select>
-			</td>
-			<td><?php echo gettext("The default character encoding of image IPTC metadata."); ?></td>
-		</tr>
+		<?php
+		$sets = array_merge($_zp_UTF8->iconv_sets, $_zp_UTF8->mb_sets);
+		ksort($sets);
+		if (!empty($sets)) {
+			?>
+			<tr>
+				<td><?php echo gettext("IPTC encoding:"); ?></td>
+				<td>
+					<select id="IPTC_encoding" name="IPTC_encoding">
+						<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($sets), false, true) ?>
+					</select>
+				</td>
+				<td><?php echo gettext("The default character encoding of image IPTC metadata."); ?></td>
+			</tr>
+			<?php
+		}
+		?>
 		<tr>
 			<td></td>
 			<td>

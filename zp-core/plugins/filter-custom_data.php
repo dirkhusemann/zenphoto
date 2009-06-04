@@ -7,7 +7,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Example filter for custom data.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-custom_data.php.html";
 
 register_filter('save_image_custom_data', 'save_image', 2);
@@ -16,6 +16,8 @@ register_filter('save_album_custom_data', 'save_album', 2);
 register_filter('edit_album_custom_data', 'edit_album', 3);
 register_filter('save_comment_custom_data', 'save_comment');
 register_filter('edit_comment_custom_data', 'edit_comment', 2);
+register_filter('save_admin_custom_data', 'save_admin', 3);
+register_filter('edit_admin_custom_data', 'edit_admin', 5);
 
 /**
  * Returns a processed custom data item
@@ -95,6 +97,68 @@ function edit_comment($discard, $raw) {
 		'<tr>
 			<td align="left" valign="top">'.gettext("Extra information:").'</td>
 			<td><textarea name="comment_custom_data" cols="60"	rows="6">'.htmlentities($raw,ENT_COMPAT,getOption("charset")).'</textarea></td>
+		</tr>';
+}
+
+/**
+ * Saves admin custom data
+ * Called when an admin is saved
+ *
+ * @param string $discard always empty
+ * @param object $userobj admin user object
+ * @param string $i prefix for the admin
+ * @return string
+ */
+function save_admin($discard, $userobj, $i) {
+	$custom = array('street'=>sanitize($_POST[$i.'-admin_custom_street'], 1),
+									'city'=>sanitize($_POST[$i.'-admin_custom_city'], 1),
+									'state'=>sanitize($_POST[$i.'-admin_custom_state'], 1),
+									'country'=>sanitize($_POST[$i.'-admin_custom_country'], 1),
+									'postal'=>sanitize($_POST[$i.'-admin_custom_postal'], 1)
+									);
+	
+	$userobj->setCustomData(serialize($custom));
+}
+
+/**
+ * Returns table row(s) for edit of an admin user's custom data
+ *
+ * @param string $discard always empty
+ * @param $userobj Admin user object
+ * @param string $i prefix for the admin
+ * @param string $background background color for the admin row
+ * @param bool $current true if this admin row is the logged in admin
+ * @return string
+ */
+function edit_admin($discard, $userobj, $i, $background, $current) {
+	$raw = $userobj->getCustomData();
+	if (!preg_match('/^a:[0-9]+:{/', $raw)) {
+		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+	} else {
+		$address = unserialize($userobj->getCustomData());
+	}
+	
+	return
+		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Street:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-admin_custom_street" cols="50"	rows="6" value="'.$address['street'].'"></td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" rowspan="5">'.gettext('Address information. (Provided for you by the <code>filter-custom_data</code> <em>admin custom data</em> filters.)').'</td>
+		</tr>'.
+		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("City:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-admin_custom_city" cols="50"	rows="6" value="'.$address['city'].'"></td>
+		</tr>'.
+		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("State:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-admin_custom_state" cols="50"	rows="6" value="'.$address['state'].'"></td>
+		</tr>'.
+		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Country:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-admin_custom_country" cols="50"	rows="6" value="'.$address['country'].'"></td>
+		</tr>'.
+		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Postal code:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-admin_custom_postal" cols="50"	rows="6" value="'.$address['postal'].'"></td>
 		</tr>';
 }
 

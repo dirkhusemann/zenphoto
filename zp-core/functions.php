@@ -8,18 +8,19 @@
 
 // force UTF-8 Ø
 
-require_once(dirname(__FILE__).'/functions-basic.php');
-if (file_exists(dirname(__FILE__).'/lib-auth_custom.php')) { // load a custom authroization package if it is present
-	require_once(dirname(__FILE__).'/lib-auth_custom.php');
-} else {
-	require_once(dirname(__FILE__).'/lib-auth.php');
-}
-require_once(dirname(__FILE__).'/functions-filter.php');
+$_zp_plugin_scripts = array();
+$_zp_loaded_plugins = array();
+$_zp_flash_player = NULL;
+$_zp_HTML_cache = NULL;
 
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
+
+require_once(dirname(__FILE__).'/functions-basic.php');
+require_once(dirname(__FILE__).'/functions-filter.php');
+require_once(dirname(__FILE__).'/class-load.php');
 
 if (getOption('album_session') && OFFSET_PATH==0) {
 	session_start();
@@ -31,13 +32,11 @@ require_once(dirname(__FILE__). PLUGIN_FOLDER . 'captcha/'.$_zp_captcha.'.php');
 $_zp_captcha = new Captcha();
 
 require_once(dirname(__FILE__).'/functions-i18n.php');
+require_once(dirname(__FILE__).'/auth_zp.php');
+
 
 $_zp_setupCurrentLocale_result = setMainDomain();
 
-$_zp_plugin_scripts = array();
-$_zp_loaded_plugins = array();
-$_zp_flash_player = NULL;
-$_zp_HTML_cache = NULL;
 
 // Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
 //   run or the new data won't be stored (but existing fields will still work; nothing breaks).
@@ -547,7 +546,7 @@ function checkAlbumPassword($albumname, &$hint) {
 	if (isset($_zp_pre_authorization[$albumname])) {
 		return true;
 	}
-	$album = new album($_zp_gallery, $albumname);
+	$album = new Album($_zp_gallery, $albumname);
 	$hash = $album->getPassword();
 	if (empty($hash)) {
 		$album = $album->getParent();

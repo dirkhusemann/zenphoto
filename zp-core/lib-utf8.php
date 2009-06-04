@@ -36,33 +36,199 @@ $_zp_UTF8 = new utf8();
 
 class utf8 {
 	/**
-	 * Enter description here...
+	 * Character set translation support
 	 *
 	 * @return utf8
 	 */
+	
+	var $charsets;
+	var $validsets;
+	var $mb_sets;
+	var $iconv_sets;
+	
 	function utf8() {
+		$this->charsets = array(	"ASMO-708" => "Arabic",
+															"BIG5" => "Chinese Traditional",
+															"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
+															"cp866" => "Cyrillic (DOS)",
+															"CP870" => "IBM EBCDIC (Multilingual Latin-2)",
+															"CISO2022JP" => "Japanese (JIS-Allow 1 byte Kana)",
+															"DOS-720" => "Arabic (DOS)",
+															"DOS-862" => "Hebrew (DOS)",
+															"EBCDIC-CP-US" => "IBM EBCDIC (US-Canada)",
+															"EUC-CN" => "Chinese Simplified (EUC)",
+															"EUC-JP" => "Japanese (EUC)",
+															"EUC-KR" => "Korean (EUC)",
+															"GB2312" => "Chinese Simplified (GB2312)",
+															"HZ-GB-2312" => "Chinese Simplified (HZ)",
+															"IBM437" => "OEM United States",
+															"IBM737" => "Greek (DOS)",
+															"IBM775" => "Baltic (DOS)",
+															"IBM850" => "Western European (DOS)",
+															"IBM852" => "Central European (DOS)",
+															"IBM857" => "Turkish (DOS)",
+															"IBM861" => "Icelandic (DOS)",
+															"IBM869" => "Greek, Modern (DOS)",
+															"ISO-2022-JP" => "Japanese (JIS)",
+															"ISO-2022-JP" => "Japanese (JIS-Allow 1 byte Kana - SO/SI)",
+															"ISO-2022-KR" => "Korean (ISO)",
+															"ISO-8859-1" => "Western European (ISO)",
+															"ISO-8859-15" => "Latin 9 (ISO)",
+															"ISO-8859-2" => "Central European (ISO)",
+															"ISO-8859-3" => "Latin 3 (ISO)",
+															"ISO-8859-4" => "Baltic (ISO)",
+															"ISO-8859-5" => "Cyrillic (ISO)",
+															"ISO-8859-6" => "Arabic (ISO)",
+															"ISO-8859-7" => "Greek (ISO)",
+															"ISO-8859-8" => "Hebrew (ISO-Visual)",
+															"ISO-8859-8-i" => "Hebrew (ISO-Logical)",
+															"ISO-8859-9" => "Turkish (ISO)",
+															"JOHAB" => "Korean (Johab)",
+															"KOi8-R" => "Cyrillic (KOI8-R)",
+															"KOi8-U" => "Cyrillic (KOI8-U)",
+															"KS_C_5601-1987" => "Korean",
+															"MACINTOSH" => "Western European (MAC)",
+															"SHIFT_JIS" => "Japanese (Shift-JIS)",
+															"UNICODE" => "Unicode",
+															"UNICODEFFFE" => "Unicode (Big-Endian)",
+															"US-ASCII" => "US-ASCII",
+															"UTF-7" => "Unicode (UTF-7)",
+															"UTF-8" => "Unicode (UTF-8)",
+															"WINDOWS-1250" => "Central European (Windows)",
+															"WINDOWS-1251" => "Cyrillic (Windows)",
+															"WINDOWS-1252" => "Western European (Windows)",
+															"WINDOWS-1253" => "Greek (Windows)",
+															"WINDOWS-1254" => "Turkish (Windows)",
+															"WINDOWS-1255" => "Hebrew (Windows)",
+															"WINDOWS-1256" => "Arabic (Windows)",
+															"WINDOWS-1257" => "Baltic (Windows)",
+															"WINDOWS-1258" => "Vietnamese (Windows)",
+															"WINDOWS-874" => "Thai (Windows)",
+															"X-CHINESE-CNS" => "Chinese Traditional (CNS)",
+															"X-CHINESE-ETEN" => "Chinese Traditional (Eten)",
+															"X-EBCDIC-Arabic" => "IBM EBCDIC (Arabic)",
+															"X-EBCDIC-CP-US-EURO" => "IBM EBCDIC (US-Canada-Euro)",
+															"X-EBCDIC-CYRILLICRUSSIAN" => "IBM EBCDIC (Cyrillic Russian)",
+															"X-EBCDIC-CYRILLICSERBIANBULGARIAN" => "IBM EBCDIC (Cyrillic Serbian-Bulgarian)",
+															"X-EBCDIC-DENMARKNORWAY" => "IBM EBCDIC (Denmark-Norway)",
+															"X-EBCDIC-DENMARKNORWAY-euro" => "IBM EBCDIC (Denmark-Norway-Euro)",
+															"X-EBCDIC-FINLANDSWEDEN" => "IBM EBCDIC (Finland-Sweden)",
+															"X-EBCDIC-FINLANDSWEDEN-EURO" => "IBM EBCDIC (Finland-Sweden-Euro)",
+															"X-EBCDIC-FINLANDSWEDEN-EURO" => "IBM EBCDIC (Finland-Sweden-Euro)",
+															"X-EBCDIC-FRANCE-EURO" => "IBM EBCDIC (France-Euro)",
+															"X-EBCDIC-GERMANY" => "IBM EBCDIC (Germany)",
+															"X-EBCDIC-GERMANY-EURO" => "IBM EBCDIC (Germany-Euro)",
+															"X-EBCDIC-GREEK" => "IBM EBCDIC (Greek)",
+															"X-EBCDIC-GREEKMODERN" => "IBM EBCDIC (Greek Modern)",
+															"X-EBCDIC-HEBREW" => "IBM EBCDIC (Hebrew)",
+															"X-EBCDIC-ICELANDIC" => "IBM EBCDIC (Icelandic)",
+															"X-EBCDIC-ICELANDIC-EURO" => "IBM EBCDIC (Icelandic-Euro)",
+															"X-EBCDIC-INTERNATIONAL-EURO" => "IBM EBCDIC (International-Euro)",
+															"X-EBCDIC-ITALY" => "IBM EBCDIC (Italy)",
+															"X-EBCDIC-ITALY-EURO" => "IBM EBCDIC (Italy-Euro)",
+															"X-EBCDIC-JAPANESEANDJAPANESELATIN" => "IBM EBCDIC (Japanese and Japanese-Latin)",
+															"X-EBCDIC-JAPANESEANDKANA" => "IBM EBCDIC (Japanese and Japanese Katakana)",
+															"X-EBCDIC-JAPANESEANDUSCANADA" => "IBM EBCDIC (Japanese and US-Canada)",
+															"X-EBCDIC-JAPANESEKATAKANA" => "IBM EBCDIC (Japanese katakana)",
+															"X-EBCDIC-KOREANANDKOREANEXTENDED" => "IBM EBCDIC (Korean and Korean EXtended)",
+															"X-EBCDIC-KOREANEXTENDED" => "IBM EBCDIC (Korean EXtended)",
+															"X-EBCDIC-SIMPLIFIEDCHINESE" => "IBM EBCDIC (Simplified Chinese)",
+															"X-EBCDIC-SPAIN" => "IBM EBCDIC (Spain)",
+															"X-ebcdic-SPAIN-EURO" => "IBM EBCDIC (Spain-Euro)",
+															"X-EBCDIC-THAI" => "IBM EBCDIC (Thai)",
+															"X-EBCDIC-TRADITIONALCHINESE" => "IBM EBCDIC (Traditional Chinese)",
+															"X-EBCDIC-TURKISH" => "IBM EBCDIC (Turkish)",
+															"X-EBCDIC-UK" => "IBM EBCDIC (UK)",
+															"X-EBCDIC-UK-EURO" => "IBM EBCDIC (UK-Euro)",
+															"X-EUROPA" => "Europa",
+															"X-IA5" => "Western European (IA5)",
+															"X-IA5-GERMAN" => "German (IA5)",
+															"X-IA5-NORWEGIAN" => "Norwegian (IA5)",
+															"X-IA5-SWEDISH" => "Swedish (IA5)",
+															"X-ISCII-AS" => "ISCII Assamese",
+															"X-ISCII-BE" => "ISCII Bengali",
+															"X-ISCII-DE" => "ISCII Devanagari",
+															"X-ISCII-GU" => "ISCII Gujarathi",
+															"X-ISCII-KA" => "ISCII Kannada",
+															"X-ISCII-MA" => "ISCII Malayalam",
+															"X-ISCII-OR" => "ISCII Oriya",
+															"X-ISCII-PA" => "ISCII Panjabi",
+															"X-ISCII-TA" => "ISCII Tamil",
+															"X-ISCII-TE" => "ISCII Telugu",
+															"X-MAC-ARABIC" => "Arabic (Mac)",
+															"X-MAC-CE" => "Central European (Mac)",
+															"X-MAC-CHINESESIMP" => "Chinese Simplified (Mac)",
+															"X-MAC-CHINESETRAD" => "Chinese Traditional (Mac)",
+															"X-MAC-CYRILLIC" => "Cyrillic (Mac)",
+															"X-MAC-GREEK" => "Greek (Mac)",
+															"X-MAC-HEBREW" => "Hebrew (Mac)",
+															"X-MAC-ICELANDIC" => "Icelandic (Mac)",
+															"X-MAC-JAPANESE" => "Japanese (Mac)",
+															"X-MAC-KOREAN" => "Korean (Mac)",
+															"X-MAC-TURKISH" => "Turkish (Mac)"
+															);
+		// prune the list to supported character sets
+		if (function_exists('mb_convert_encoding')) {
+			$list = mb_list_encodings();
+			foreach ($this->charsets as $key=>$encoding) {
+				if (in_array($key, $list)) {
+					$this->mb_sets[$key] = $encoding;
+				}
+			}
+		}
+		if (function_exists('iconv')) {
+			foreach ($this->charsets as $key=>$encoding) {
+				if (@iconv("UTF-8", $key, " ")!==false) {
+					$this->iconv_sets[$key] = $encoding;
+				}
+			}
+		}
+		$this->validsets = array_merge($this->mb_sets, $this->iconv_sets);
 	}
+
 	/**
 	 * Convert a foreign charset encoding from or to UTF-8
 	 */
 	function convert($string, $encoding = '', $destination = 'UTF-8') {
-		if ($encoding == '')
-			$encoding = utf8::detect($string);
-
-		if (function_exists('mb_convert_encoding')) {
+		if ($encoding == '') $encoding = utf8::detect($string);
+		if ($encoding == $destination) return $string; 
+		
+		$encode_mb = array_key_exists($encoding, $this->mb_sets);
+		$encode_iconv = array_key_exists($encoding, $this->iconv_sets);
+		$dest_mb = array_key_exists($destination, $this->mb_sets);
+		$dest_iconv = array_key_exists($destination, $this->iconv_sets);
+		
+		if ($encode_mb && $dest_mb) {
 			@mb_substitute_character('none');
 			return @mb_convert_encoding($string, $destination, $encoding );
 		}
-		if (function_exists('iconv')) {
+		if ($encode_iconv && $dest_iconv) {
 			return @iconv($encoding, $destination . '//IGNORE', $string);
 		}
-		return $string;
+		// must use mixed conversion
+		@mb_substitute_character('none');
+		if ($encode_mb) {
+			$instring = @mb_convert_encoding($string, 'UTF-8', $encoding);
+		} else if ($encode_iconv) {
+			$instring = @iconv($encoding, 'UTF-8' . '//IGNORE', $string);
+		} else  {
+			$instring = $string;
+		}
+		if ($dest_mb) {
+			$outstring = @mb_convert_encoding($string, $destination, 'UTF-8');
+		} else if ($dest_iconv) {
+			$outstring = @iconv('UTF-8', $destination . '//IGNORE', $string);
+		} else {
+			$outstring = $string;
+		}
+		return $outstring;
 	}
 
 	/**
 	 * Detect the encoding of the string
 	 */
 	function detect($string) {
+		if (function_exists('mb_detect_encoding')) return mb_detect_encoding($string);
 		if (!ereg("[\x80-\xFF]", $string) && !ereg("\x1B", $string))
 			return 'US-ASCII';
 

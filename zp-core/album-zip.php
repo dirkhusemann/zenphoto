@@ -1,9 +1,6 @@
 <?php
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/functions.php');
-require_once(dirname(__FILE__).'/class-load.php');
-require_once(dirname(__FILE__).'/auth_zp.php');
-
 if(isset($_GET['album']) && is_dir(realpath(getAlbumFolder() . internalToFilesystem($_GET['album'])))){
 	createAlbumZip(sanitize_path($_GET['album']));
 }
