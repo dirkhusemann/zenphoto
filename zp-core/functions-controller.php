@@ -385,7 +385,7 @@ function zp_load_search() {
 function zp_load_album($folder, $force_nocache=false) {
 	global $_zp_current_album, $_zp_gallery, $_zp_dynamic_album;
 	$_zp_current_album = new Album($_zp_gallery, $folder, !$force_nocache);
-	if (!$_zp_current_album->exists) return false;
+	if (is_null($_zp_current_album) || !$_zp_current_album->exists) return false;
 	if ($_zp_current_album->isDynamic()) {
 		$_zp_dynamic_album = $_zp_current_album;
 	} else {
@@ -404,14 +404,14 @@ function zp_load_album($folder, $force_nocache=false) {
  */
 function zp_load_image($folder, $filename) {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_search;
-	if ($_zp_current_album == NULL || $_zp_current_album->name != $folder) {
+	if (is_null($_zp_current_album) || $_zp_current_album->name != $folder) {
 		$album = zp_load_album($folder);
 	} else {
 		$album = $_zp_current_album;
 	}
-	if (!$_zp_current_album->exists) return false;
+	if (is_null($album) || !$album->exists) return false;
 	$_zp_current_image = newImage($album, $filename);
-	if (!$_zp_current_image->exists) return false;
+	if (is_null($_zp_current_image) || !$_zp_current_image->exists) return false;
 	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
 	return $_zp_current_image;
 }

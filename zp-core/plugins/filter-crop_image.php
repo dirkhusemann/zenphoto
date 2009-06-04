@@ -22,7 +22,7 @@ if (!isset($_REQUEST['performcrop'])) {
 
 function toolbox_crop_image($albumname, $imagename) {
 	if (isMyALbum($albumname, EDIT_RIGHTS)) {
-		$image = newimage(New Album(New Gallery(), $albumname),$imagename);
+		$image = newimage(new Album(New Gallery(), $albumname),$imagename);
 		if (isImagePhoto($image)) {
 			?>
 			<li>
