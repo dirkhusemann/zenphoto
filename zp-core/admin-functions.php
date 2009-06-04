@@ -1953,6 +1953,7 @@ function checkForUpdate() {
 	global $_zp_WEB_Version;
 	if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
 	$c = ZENPHOTO_VERSION;
+	$candidate = strpos($c, 'RC');
 	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
 	if (empty($v)) {
 		$_zp_WEB_Version = 'X';
@@ -1968,7 +1969,7 @@ function checkForUpdate() {
 		foreach ($cv as $i => $d) {
 			$cvd = $cvd + $d * $pot[$i];
 		}
-		if ($wvd > $cvd) {
+		if ($wvd > $cvd || ($wvd == $cvd && $candidate)) {
 			$_zp_WEB_Version = $v;
 		} else {
 			$_zp_WEB_Version = '';

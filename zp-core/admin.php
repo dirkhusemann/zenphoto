@@ -43,24 +43,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		}		
 	}
 	
-		/** check for update ***********************************************************/
-		/********************************************************************************/
-	if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
-		$v = checkForUpdate();
-		if (!empty($v)) {
-			echo '<div class="errorbox" id="fade-message">';
-			if ($v == 'X') {
-				echo  "<h2>".gettext("Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</h2>";
-			} else {
-				echo  "<h2><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></h2>";
-			}
-			echo '</div>';
-		} else {
-			$msg = gettext("You are running the latest zenphoto version.");
-		}
-	}
-
-
 /************************************************************************************/
 /** End Action Handling *************************************************************/
 /************************************************************************************/
@@ -157,6 +139,23 @@ if (!zp_loggedin()) {
 
 $page = "home"; ?>
 <?php
+/** check for update ***********************************************************/
+/********************************************************************************/
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
+	$v = checkForUpdate();
+	if (!empty($v)) {
+		echo '<div class="errorbox" id="fade-message">';
+		if ($v == 'X') {
+			echo  "<h2>".gettext("Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</h2>";
+		} else {
+			echo  "<h2><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></h2>";
+		}
+		echo '</div>';
+	} else {
+		$msg = gettext("You are running the latest zenphoto version.");
+	}
+}
+
 if (!empty($msg)) {
 	echo '<div class="messagebox" id="fade-message">';
 	echo  "<h2>$msg</h2>";
