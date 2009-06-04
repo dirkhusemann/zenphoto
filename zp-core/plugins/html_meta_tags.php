@@ -7,13 +7,13 @@
  * You can choose on the plugin's admin option what tags you want to be printed.
  *   
  * @author Malte Müller (acrylian)
- * @version 1.0.1.1
+ * @version 1.0.1.2
  * @package plugins 
  */
 
 $plugin_description = gettext("A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.1.1';
+$plugin_version = '1.0.1.2';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
 
@@ -118,7 +118,7 @@ class htmlmetatags {
  *
  */
 function getHTMLMetaData() {	
-	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
+	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category;
 	$url = sanitize("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 	// Convert locale shorttag to allowed html meta format
@@ -145,7 +145,7 @@ function getHTMLMetaData() {
 				$date = getNewsDate();
 				$desc = strip_tags(getNewsContent());
 			} else 	if(is_NewsCategory()) {
-				$pagetitle = getCategoryTitle()." - ";
+				$pagetitle = getCategoryTitle($_zp_current_category)." - ";
 				$date = strftime(getOption("date_format"));
 				$desc = "";
 			} else if(is_Pages()) {
