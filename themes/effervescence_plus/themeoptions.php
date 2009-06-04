@@ -16,6 +16,7 @@ class ThemeOptions {
 		setOptionDefault('Allow_comments', true);
 		setOptionDefault('zenpage_comments_allowed', false); 
 		setOptionDefault('Allow_search', true);
+		setOptionDefault('enable_album_zipfile', false);
 		setOptionDefault('Slideshow', true);
 		setOptionDefault('Graphic_logo', 'logo');
 		setOptionDefault('Watermark_head_image', true);
@@ -28,6 +29,7 @@ class ThemeOptions {
 									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
 									gettext('Allow page & news comments') => array('key' => 'zenpage_comments_allowed', 'type' => 1, 'desc' => gettext("Set to enable comment section for news and pages.")),
 									gettext('Watermark head image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
+									gettext('Zipfile download') => array('key' => 'enable_album_zipfile', 'type' => 1, 'desc' => gettext('Check to enable album zipfile download link.')),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
 									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => 1, 'desc' => gettext('Check to enable slideshow for the <em>Smoothgallery</em> personality.')),
 									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => 2, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),

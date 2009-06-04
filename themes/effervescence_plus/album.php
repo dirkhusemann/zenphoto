@@ -270,8 +270,12 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									echo "<p align=\"center\">";
  									printSlideShowLink(gettext('View Slideshow'));
  									echo "</p>";
+ 								}	
+ 								if (getOption('enable_album_zipfile')) {
+									echo "<p align=\"center\">";
+ 									printAlbumZip();
+ 									echo "</p>";
  								}
-
 						}
 						?>
  					</div> <!-- images -->
