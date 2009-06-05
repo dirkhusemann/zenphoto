@@ -21,6 +21,8 @@ if (isset($_GET['withimages'])) {
 	$option = "withimages";
 }
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
+$uri = htmlentities($_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"], ENT_QUOTES, 'UTF-8');
+
 $s = getOption('feed_imagesize'); // uncropped image size
 
 if(isset($_GET['lang'])) {
@@ -38,7 +40,7 @@ $validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 <channel>
 <title><?php echo get_language_string(getOption('gallery_title'), $locale)." - News "; ?><?php if(!empty($cattitle)) { echo $cattitle ; } ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss-news.php" rel="self" type="application/rss+xml" />
+<atom:link href="http://<?php echo $uri; ?>" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -103,10 +105,12 @@ foreach($latest as $item) {
 		$content = $item['content'];
 		$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$item['thumb']."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
 		$filename = $item['filename'];
+	
 		$type = "image";
 		$ext = strtolower(strrchr($filename, "."));
 		$album = $item['category']->getFolder();
 		$fullimagelink = $host.WEBPATH."/albums/".$item['category']->getFolder()."/".$item['filename'];
+		$imagefile = "albums/".$item['category']->getFolder()."/".$item['filename'];
 		switch($ext) {
 			case  ".flv":
 				$mimetype = "video/x-flv";
@@ -158,7 +162,7 @@ foreach($latest as $item) {
 	?>
 </description>
 <?php if(getOption("feed_enclosure") AND !empty($item['thumb'])) { ?>
-	<enclosure url="<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" />
+	<enclosure url="http://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile); ?>" />
 <?php } ?>
     <category><?php echo $categories; ?>
     </category>

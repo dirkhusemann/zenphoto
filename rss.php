@@ -31,6 +31,7 @@ if(isset($_GET['lang'])) {
 
 $validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
+$uri = htmlentities($_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"], ENT_QUOTES, 'UTF-8');
 
 if(isset($_GET['albumtitle'])) {
 	$albumname = " (".sanitize(urldecode($_GET['albumtitle'])).")";
@@ -45,7 +46,7 @@ if(getOption('mod_rewrite')) {
 	$modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else  {
 	$albumpath = "/index.php?album=";
-	$imagepath = "&amp;image=";
+	$imagepath = "&image=";
 	$modrewritesuffix = ""; }
 
 	if(isset($_GET['size'])) {
@@ -69,7 +70,7 @@ if(getOption('mod_rewrite')) {
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).' '.strip_tags($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self"	type="application/rss+xml" />
+<atom:link href="http://<?php echo $uri; ?>" rel="self"	type="application/rss+xml" />
 <description><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -96,6 +97,7 @@ if(getOption('mod_rewrite')) {
 			$albumobj = $item->getAlbum();
 			$itemlink = $host.WEBPATH.$albumpath.urlencode($albumobj->name).$imagepath.urlencode($item->filename).$modrewritesuffix;
 			$fullimagelink = $host.WEBPATH."/albums/".$albumobj->name."/".$item->filename;
+			$imagefile = "albums/".$albumobj->name."/".$item->filename;
 			$thumburl = '<img border="0" src="http://'.$host.$item->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($item->get("title"),$locale) .'" />';
 			$itemcontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.get_language_string($albumobj->get("title"),$locale).'" href="http://'.$itemlink.'">'.$thumburl.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
 			$videocontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.$albumobj->getTitle().'" href="http://'.$itemlink.'">'. $item->filename.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
@@ -189,7 +191,7 @@ if ((($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp
 </description>
 <?php // enables download of embeded content like images or movies in some rss clients. just for testing, shall become a real option
 if(getOption("feed_enclosure") AND $rssmode != "albums") { ?>
-<enclosure url="<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" />
+<enclosure url="http://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile);?>" />
 <?php  } ?>
 <category>
 	<?php
@@ -200,8 +202,8 @@ if(getOption("feed_enclosure") AND $rssmode != "albums") { ?>
 	} ?>
 </category>
 <?php if(getOption("feed_mediarss") AND $rssmode != "albums") { ?>
-<media:content url="<?php echo $fullimagelink; ?>" type="image/jpeg" />
-<media:thumbnail url="<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>"	height="<?php echo $size; ?>" />
+<media:content url="http://<?php echo $fullimagelink; ?>" type="image/jpeg" />
+<media:thumbnail url="http://<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>"	height="<?php echo $size; ?>" />
 <?php } ?>
 <guid><?php echo '<![CDATA[http://'.$itemlink.']]>';?></guid>
 <pubDate>
