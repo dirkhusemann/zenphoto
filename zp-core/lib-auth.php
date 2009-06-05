@@ -13,7 +13,7 @@
  * The global $_zp_current_admin is referenced throuought Zenphoto, so the 
  * elements of the array need to be present in any alternate implementation.
  * in particular, there should be array elements for:
- * 		'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', and 'custom_data'
+ * 		'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', 'valid', 'group', and 'custom_data'
  * 
  * Admin and the filters 'save_admin_custom_data' and 'edit_admin_custom_data' use the Administrator object 
  * defined below. Slowly other uses of the array may be changed over to use the object but this will probably
@@ -70,10 +70,9 @@ $_zp_admin_users = null;
  * @param string $custom custom data for the administrator
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
-function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom) {
+function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group='', $valid=1) {
 
-	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums)"); }
-
+	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 	$result = query_single_row($sql);
 	if ($result) {
@@ -89,15 +88,21 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom) {
 			$rightsset = "', `rights`='" . escape($rights);
 		}
 		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .
- 					"', `email`='" . escape($email) . $rightsset . "', `custom_data`='".escape($custom)."' WHERE `id`='" . $id ."'";
+ 					"', `email`='" . mysql_real_escape_string($email) . $rightsset . "', `custom_data`='".mysql_real_escape_string($custom)."', `valid`=".$valid.", `group`='".
+					mysql_real_escape_string($group)."' WHERE `id`='" . $id ."'";
 		$result = query($sql);
 
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
-
 	} else {
-		if (is_null($pass)) $pass = passwordHash($user, $pass);
-		$sql = "INSERT INTO " . prefix('administrators') . " (user, pass, name, email, rights, custom_data) VALUES ('" .
-		escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "', '".escape($custom)."')";
+		$passupdate = 'NULL';
+		if (is_null($pass)) {
+		} else {
+			$passupdate = "'".mysql_real_escape_string(passwordHash($user, $pass))."'";
+		}
+		$sql = "INSERT INTO " . prefix('administrators') . " (user, pass, name, email, rights, custom_data, valid, group) VALUES ('" .
+				mysql_real_escape_string($user) . "'," . $passupdate . ",'" . mysql_real_escape_string($name) . "','" . 
+				mysql_real_escape_string($email) . "','" . $rights . "', '".mysql_real_escape_string($custom)."', ".$valid.", '".
+				mysql_real_escape_string($group).")";
 		$result = query($sql);
 		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 		$result = query_single_row($sql);
@@ -319,6 +324,27 @@ class Administrator extends PersistentObject {
 	}
 	function getCustomData() {
 		return $this->get('custom_data');
+	}
+	
+	function setValid($valid) {
+		$this->set('valid', $valid);
+	}
+	function getValid() {
+		return $this->get('valid');
+	}
+	
+	function setGroup($group) {
+		$this->set('group', $group);
+	}
+	function getGroup() {
+		return $this->get('group');
+	}
+
+	function setUser($user) {
+		$this->set('user', $user);
+	}
+	function getUser() {
+		return $this->get('user');
 	}
 	
 }

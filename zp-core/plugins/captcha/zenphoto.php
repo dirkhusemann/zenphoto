@@ -15,7 +15,7 @@ class captcha {
 	 */
 	function captcha() {
 		setOptionDefault('zenphoto_captcha_length', 5);
-		setOptionDefault('zenphoto_captcha_key', md5($_SERVER['HTTP_HOST'].'a9606420399a77387af2a4b541414ee5'.$_SERVER['HTTP_ACCEPT_LANGUAGE']));
+		setOptionDefault('zenphoto_captcha_key', md5($_SERVER['HTTP_HOST'].'a9606420399a77387af2a4b541414ee5'.$_SERVER['REMOTE_ADDR']));
 		setOptionDefault('zenphoto_captcha_string', 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ'); 
 	}
 

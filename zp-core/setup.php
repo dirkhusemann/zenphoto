@@ -1612,6 +1612,19 @@ if (file_exists("zp-config.php")) {
 	//v1.2.6
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `custom_data` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `password` `pass` varchar(64)';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `valid` int(1) default 1;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `group` varchar(64);';
+	$sql = 'SHOW INDEX FROM '.$tbl_administrators;
+	$result = mysql_query($sql, $mysql_connection);
+	if ($result) {
+		while ($row = mysql_fetch_row($result)) {
+			if ($row[2] == 'user') {
+				$sql_statements[] = "ALTER TABLE $tbl_administrators DROP INDEX `user`";
+				$sql_statements[] = "ALTER TABLE $tbl_administrators ADD UNIQUE (`valid`, `user`)";
+				break;
+			}
+		}
+	}
 	
 	
 	

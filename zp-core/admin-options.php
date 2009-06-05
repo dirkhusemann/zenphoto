@@ -60,38 +60,11 @@ if (isset($_GET['action'])) {
 					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 						$admin_n = trim($_POST[$i.'-admin_name']);
 						$admin_e = trim($_POST[$i.'-admin_email']);
-						$rights = 0;
-						if (isset($_POST[$i.'-confirmed'])) $rights = $rights | NO_RIGHTS;
-						if (isset($_POST[$i.'-main_rights'])) $rights = $rights | MAIN_RIGHTS;
-						if (isset($_POST[$i.'-view_rights'])) $rights = $rights | VIEWALL_RIGHTS;
-						if (isset($_POST[$i.'-upload_rights'])) $rights = $rights | UPLOAD_RIGHTS;
-						if (isset($_POST[$i.'-comment_rights'])) $rights = $rights | COMMENT_RIGHTS;
-						if (isset($_POST[$i.'-edit_rights'])) $rights = $rights | EDIT_RIGHTS;
-						if (isset($_POST[$i.'-all_album_rights'])) $rights = $rights | ALL_ALBUMS_RIGHTS;
-						if (isset($_POST[$i.'-themes_rights'])) $rights = $rights | THEMES_RIGHTS;
-						if (isset($_POST[$i.'-tags_rights'])) $rights = $rights | TAGS_RIGHTS;
-						if (isset($_POST[$i.'-options_rights'])) $rights = $rights | OPTIONS_RIGHTS;
-						if (isset($_POST[$i.'-zenpage_rights'])) $rights = $rights | ZENPAGE_RIGHTS;
-						if (isset($_POST[$i.'-admin_rights'])) $rights = $rights | ADMIN_RIGHTS;
+						$rights = processRights($i);
 						if (isset($_POST['alter_enabled'])) {
-							if ($rights & ALL_ALBUMS_RIGHTS) $rights = $rights | EDIT_RIGHTS;
-							$managedalbums = array();
-							$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
-							foreach ($_POST as $key => $value) {
-								$key = postIndexDecode($key);
-								if (substr($key, 0, $l) == $albumsprefix) {
-									if ($value) {
-										$managedalbums[] = substr($key, $l);
-									}
-								}
-							}
-							if (count($managedalbums > 0)) {
-								$albums = array_unique($managedalbums);
-							} else {
-								$albums = NULL;
-							}
+							$albums = processManagedAlbums($i);
 						} else {
-							$rights = null;
+							$rights = NULL;
 							$albums = NULL;
 						}
 						if (empty($pass)) {
@@ -106,7 +79,7 @@ if (isset($_GET['action'])) {
 						$userobj->setRights($rights);
 						$userobj->setAlbums($albums);
 						apply_filter('save_admin_custom_data', '', $userobj, $i);
-						saveAdmin($user, $userobj->getPass(), $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData());
+						saveAdmin($user, $userobj->getPass(), $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 						if ($i == 0) {
 							setOption('admin_reset_date', '1');
 						}
@@ -478,7 +451,7 @@ printAdminHeader();
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
 <?php
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
-$subtab = getSubtabs($optiontabs);
+$subtab = getSubtabs($subtabs['optiontabs']);
 if ($subtab == 'gallery' || $subtab == 'image') {
 	$sql = 'SHOW COLUMNS FROM ';
 	if ($subtab == 'image') {
@@ -532,7 +505,7 @@ if ($_zp_null_account) {
 	}
 ?>
 <?php
-printSubtabs($optiontabs);
+printSubtabs($subtabs['optiontabs']);
 if ($subtab == 'admin') {
 ?>
 <div id="tab_admin" class="tabbox">
@@ -612,7 +585,6 @@ if ($subtab == 'admin') {
 ?> 
 <form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&ticket='.$_zp_ticket.'&user='.$post_user; ?>" method="post" AUTOCOMPLETE=OFF>
 <input type="hidden" name="saveadminoptions" value="yes" /> 
-<input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
 <?php			
 if (empty($alterrights)) {
 	?>
@@ -636,7 +608,10 @@ if (empty($alterrights)) {
 	foreach($admins as $user) {
 		$userid = $user['user'];
 		$userobj = new Administrator($userid);
-		if (empty($userid)) $userobj->setRights($user['rights']);	
+		if (empty($userid)) {
+			$userobj->setRights($user['rights']);
+			$userobj->setValid(1);
+		}
 		if ($userobj->getRights() == 0) {
 			$master = '(<em>'.gettext('pending verification').'</em>)';
 		} else {
@@ -657,294 +632,147 @@ if (empty($alterrights)) {
 			$background = '';
 		}
 		$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
-		?>
-	<tr>
-		<td colspan="2" style="margin: 0pt; padding: 0pt;">
-		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'> <!-- individual admin table -->
-		<tr>
-			<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
-				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
-				<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
-					<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
-						<?php
+		if ($userobj->getValid()) {
+			?>
+			<tr>
+				<td colspan="2" style="margin: 0pt; padding: 0pt;">
+				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'> <!-- individual admin table -->
+				<tr>
+					<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
+						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
+							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
+								<?php
+								if (empty($userid)) {
+									echo gettext("Add New Admin");
+								} else {
+									?>
+									<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
+									<?php
+									echo $userid; 
+								}
+								?>
+							</a>
+						</span>
+						<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
+							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
+								<?php 
+								if (empty($userid)) {
+									echo gettext("Add New Admin");
+								} else {
+									echo $userid;
+								}
+								?>
+							</a>
+						</span>
+					</td>
+					<td width="320" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
+					<?php 
 						if (empty($userid)) {
-							echo gettext("Add New Admin");
+							?>
+							<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
+								onClick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
+							<?php
 						} else {
-							echo $userid; 
+							echo $master;
+							if (!$userobj->getRights()) {
+							?>
+								<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
+								<?php echo gettext("Authenticate user"); ?>
+								<?php
+							} else {
+								?>
+								<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
+								<?php 
+							}
+						}
+			 			?>
+		 			</td>
+					<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
+						<?php 
+						if(!empty($userid) && count($admins) > 2) { 
+							$msg = gettext('Are you sure you want to delete this user?');
+							if ($id == 0) {
+								$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
+							}
+						?>
+						<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+							title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
+							src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
+						<?php
 						}
 						?>
-					</a>
-				</span>
-				<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
-					<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
-						<?php 
-						if (empty($userid)) {
-							echo gettext("Add New Admin");
-						} else {
-							echo $userid;
-						}
-						?>
-					</a>
-				</span>
-			</td>
-			<td width="320" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
-			<?php 
-				if (empty($userid)) {
-					?>
-					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
-						onClick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
-					<?php
-				} else {
-					echo $master;
-					if (!$userobj->getRights()) {
-					?>
-						<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
-						<?php echo gettext("Authenticate user"); ?>
-						<?php
-					} else {
-						?>
-						<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
-						<?php 
-					}
-				}
-	 			?>
- 			</td>
-			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
-				<?php 
-				if(!empty($userid) && count($admins) > 2) { 
-					$msg = gettext('Are you sure you want to delete this user?');
-					if ($id == 0) {
-						$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
-					}
-				?>
-				<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
-					title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
-					src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
-				<?php
-				}
-				?>
-				&nbsp;
+						&nbsp;
+						</td>
+					</tr>
+			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
+				<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?>
+					<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+				</td>
+				<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
+					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
+						value="<?php echo $x; ?>" />
+					<br />
+					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
+						value="<?php echo $x; ?>" />
+				</td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<?php printAdminRightsTable($id, $background, $alterrights, $userobj->getRights()); ?>	
 				</td>
 			</tr>
-	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?>
-			<br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
-		</td>
-		<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
-				value="<?php echo $x; ?>" />
-			<br />
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
-				value="<?php echo $x; ?>" />
-		</td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-			<table class="checkboxes" > <!-- checkbox table -->
-				<tr>
-					<td style="padding-bottom: 3px;<?php echo $background; ?>" colspan="5">
-					<strong><?php echo gettext("Rights"); ?></strong>:
-					</td>
-				</tr>
-				<tr>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-admin_rights" id="<?php echo $id ?>-admin_rights"
-									value=<?php echo ADMIN_RIGHTS; if ($userobj->getRights() & ADMIN_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("User admin"); ?>
-							</label>
-						</span>
-					</td>
-						
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-options_rights" id="<?php echo $id ?>-options_rights"
-									value=<?php echo OPTIONS_RIGHTS; if ($userobj->getRights() & OPTIONS_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("Options"); ?>
-							</label>
-						</span>
-					</td>
-						
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-zenpage_rights" id="<?php echo $id ?>-zenpage_rights"
-									value=<?php echo ZENPAGE_RIGHTS; if ($userobj->getRights() & ZENPAGE_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("Zenpage"); ?>
-							</label>
-						</span>
-					</td>
-				</tr>
-				<tr>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-							<input type="checkbox" name="<?php echo $id ?>-tags_rights" id="<?php echo $id ?>-tags_rights"
-								value=<?php echo TAGS_RIGHTS; if ($userobj->getRights() & TAGS_RIGHTS) echo ' checked';
-								echo $alterrights; ?>>
-							<?php echo gettext("Tags"); ?>
-							</label>
-						</span>
-					</td>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-themes_rights" id="<?php echo $id ?>-themes_rights"
-									value=<?php echo THEMES_RIGHTS; if ($userobj->getRights() & THEMES_RIGHTS) echo ' checked';
-									echo $alterrights; ?>>
-								<?php echo gettext("Themes"); ?>
-							</label>
-						</span>
-					</td>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-all_album_rights" id="<?php echo $id ?>-all_album_rights"
-									value=<?php echo ALL_ALBUMS_RIGHTS; if ($userobj->getRights() & ALL_ALBUMS_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("Manage all albums"); ?>
-							</label>
-						</span>
-					</td>
-				</tr>
-				<tr>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-edit_rights" id="<?php echo $id ?>-edit_rights"
-									value=<?php echo EDIT_RIGHTS; if ($userobj->getRights() & EDIT_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("Edit"); ?>
-							</label>
-						</span>
-					</td>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-comment_rights" id="<?php echo $id ?>-comment_rights"
-									value=<?php echo COMMENT_RIGHTS; if ($userobj->getRights() & COMMENT_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("Comment"); ?>
-							</label>
-						</span>
-					</td>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-upload_rights" id="<?php echo $id ?>-upload_rights"
-									value=<?php echo UPLOAD_RIGHTS; if ($userobj->getRights() & UPLOAD_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("Upload"); ?>
-							</label>
-						</span>
-					</td>
-				</tr>
-				<tr>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-view_rights" id="<?php echo $id ?>-view_rights"
-									value=<?php echo VIEWALL_RIGHTS; if ($userobj->getRights() & VIEWALL_RIGHTS) echo ' checked'; 
-									echo $alterrights; ?>>
-								<?php echo gettext("View all"); ?>
-							</label>
-						</span>
-					</td>
-					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $id ?>-main_rights" id="<?php echo $id ?>-main_rights"
-									value=<?php echo MAIN_RIGHTS; if ($userobj->getRights() & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>>
-								<?php echo gettext("Overview"); ?>
-							</label>
-						</span>
-					</td>
-				</tr>
-			</table> <!-- end checkbox table -->
-
-		</td>
-	</tr>
-	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?> valign="top">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
-			<br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
-		</td>
-		<td  width="320" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
-			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
-				value="<?php echo $userobj->getName();?>" />
-			<br />
-			<br />
-			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
-				value="<?php echo $userobj->getEmail();?>" />
-		</td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-			<p>
-				<?php
-					if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
-						$cv = array();
-						$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-						$user['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
-						$currentvalues = query_full_array($sql);
-						foreach($currentvalues as $albumitem) {
-							$cv[] = $albumitem['folder'];
-						}
-						$rest = array_diff($albumlist, $cv);
-						$prefix = 'managed_albums_'.$id.'_';
-						?>
-						<h2 class="h2_bordered_albums">
-						<a href="javascript:toggle('<?php echo $id ?>managed_albums');"><?php echo gettext("Managed albums:"); ?></a>
-						</h2>
-						<div class="box-albums-unpadded">
-							<div id="<?php echo $id ?>managed_albums" style="display:none" >
-								<ul class="albumchecklist">
-									<?php
-									generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
-									if (empty($alterrights)) {
-										generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
-									}
-									?>
-								</ul>
-							</div>
-						</div>
+			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
+				<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?> valign="top">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
+					<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
+				</td>
+				<td  width="320" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
+					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
+						value="<?php echo $userobj->getName();?>" />
+					<br />
+					<br />
+					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
+						value="<?php echo $userobj->getEmail();?>" />
+				</td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<p>
 						<?php
-					} else {
-						if ($ismaster) {
-							echo gettext("This account's username and email are used as contact data in the RSS feeds.");
-						}
-					}
-				?>
-			</p>
-			<p>
-				<?php
-					if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
-						if (!empty($alterrights)) {
-							echo gettext("You may manage these albums subject to the above rights.");
-						} else {
-							echo gettext("Select one or more albums for the administrator to manage.").' ';
-							echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
-						}
-					}
-				?>
-			</p>
+							if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
+								printManagedAlbums($albumlist, $alterrights, $user['id'], $id);
+							} else {
+								if ($ismaster) {
+									echo gettext("This account's username and email are used as contact data in the RSS feeds.");
+								}
+							}
+						?>
+					</p>
+					<p>
+						<?php
+							if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
+								if (!empty($alterrights)) {
+									echo gettext("You may manage these albums subject to the above rights.");
+								} else {
+									echo gettext("Select one or more albums for the administrator to manage.").' ';
+									echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
+								}
+							}
+						?>
+					</p>
+				</td>
+			</tr>
+			<?php echo $custom_row; ?>
+		
+		</table> <!-- end individual admin table -->
 		</td>
-	</tr>
-	<?php echo $custom_row; ?>
-
-</table> <!-- end individual admin table -->
-</td>
-</tr>
-<?php
-	$id++;
+		</tr>
+		<?php
+		$id++;
+	}
 }
 ?>
 </table> <!-- main admin table end -->
+<input type="hidden" name="totaladmins" value="<?php echo $id; ?>" />
 <br />
 <p class="buttons">
 <button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
@@ -1140,7 +968,12 @@ if (empty($alterrights)) {
 						</select>
 					</td>
 					<td>
-					<?php echo gettext('The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you are unsure. Character sets <span style="color:gray">shown in gray</span> have no character translation support.'); ?>
+					<?php
+					echo gettext('The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you are unsure.');
+					if (!function_exists('mb_list_encodings')) {
+						echo ' '.gettext('Character sets <span style="color:gray">shown in gray</span> have no character translation support.');
+					}
+					?>
 					</td>
 				</tr>
 				<tr>

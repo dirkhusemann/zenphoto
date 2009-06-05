@@ -27,29 +27,58 @@ $sortby = array(gettext('Filename') => 'filename',
 									
 if (OFFSET_PATH) {									
 	// setup sub-tab arrays for use in dropdown
-	$optiontabs = array(gettext("admin")=>'admin-options.php?tab=admin');
+	$subtabs = array('optiontabs' => array(gettext("admin")=>'admin-options.php?tab=admin'));
 	if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-			$optiontabs[gettext("gallery")] = 'admin-options.php?tab=gallery';
-			$optiontabs[gettext("general")] = 'admin-options.php?tab=general';
-			$optiontabs[gettext("search")] = 'admin-options.php?tab=search';
-			$optiontabs[gettext("rss")] = 'admin-options.php?tab=rss';
-			$optiontabs[gettext("image")] = 'admin-options.php?tab=image';
-			$optiontabs[gettext("comment")] = 'admin-options.php?tab=comments';
+			$subtabs['optiontabs'][gettext("gallery")] = 'admin-options.php?tab=gallery';
+			$subtabs['optiontabs'][gettext("general")] = 'admin-options.php?tab=general';
+			$subtabs['optiontabs'][gettext("search")] = 'admin-options.php?tab=search';
+			$subtabs['optiontabs'][gettext("rss")] = 'admin-options.php?tab=rss';
+			$subtabs['optiontabs'][gettext("image")] = 'admin-options.php?tab=image';
+			$subtabs['optiontabs'][gettext("comment")] = 'admin-options.php?tab=comments';
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-			$optiontabs[gettext("theme")] = 'admin-options.php?tab=theme';
+			$subtabs['optiontabs'][gettext("theme")] = 'admin-options.php?tab=theme';
 		}
 		if ($_zp_loggedin & ADMIN_RIGHTS) {
-			$optiontabs[gettext("plugin")] = 'admin-options.php?tab=plugin';
+			$subtabs['optiontabs'][gettext("plugin")] = 'admin-options.php?tab=plugin';
 		}
 	}
-	$flipped = array_flip($optiontabs);
+	$flipped = array_flip($subtabs ['optiontabs']);
 	natsort($flipped);
-	$optiontabs = array_flip($flipped);
+	$subtabs['optiontabs'] = array_flip($flipped);
 	
-	$newstabs = array(gettext('articles')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-news-articles.php?tab=articles', 
+	$subtabs['newstabs'] = array(gettext('articles')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-news-articles.php?tab=articles', 
 										gettext('categories')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-categories.php?tab=categories');
+										
+	$zenphoto_tabs = array();										
+	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
+		$zenphoto_tabs['home'] = array('text'=>gettext("overview"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin.php', 'subtabs'=>NULL);
+	}
+	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
+		$zenphoto_tabs['comments'] = array('text'=>gettext("comments"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-comments.php', 'subtabs'=>NULL);
+	}
+	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
+		$zenphoto_tabs['upload'] = array('text'=>gettext("upload"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php', 'subtabs'=>NULL);
+	}
+
+	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
+		$zenphoto_tabs['edit'] = array('text'=>gettext("edit"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-edit.php', 'subtabs'=>NULL);
+	}
+	if (($_zp_loggedin & (TAGS_RIGHTS | ADMIN_RIGHTS))) {
+		$zenphoto_tabs['tags'] = array('text'=>gettext("tags"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-tags.php', 'subtabs'=>NULL);
+ 	}
+	$zenphoto_tabs['options'] = array('text'=>gettext("options"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php', 'subtabs'=>$subtabs['optiontabs']);
+	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
+		$zenphoto_tabs['themes'] = array('text'=>gettext("themes"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-themes.php', 'subtabs'=>NULL);
+	}
+	if (($_zp_loggedin & ADMIN_RIGHTS)) {
+		$zenphoto_tabs['plugins'] = array('text'=>gettext("plugins"), 'link'=>WEBPATH."/".ZENFOLDER.'/admin-plugins.php', 'subtabs'=>NULL);
+	}
+	if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+		$zenphoto_tabs['pages'] = array('text'=>gettext("pages"), 'link'=>WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-pages.php', 'subtabs'=>NULL);
+		$zenphoto_tabs['articles'] = array('text'=>gettext("news"), 'link'=>WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-news-articles.php', 'subtabs'=>$subtabs['newstabs']);
+	}
 }
 
 /**
@@ -382,108 +411,33 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs($currenttab) {
-	global $_zp_loggedin, $optiontabs, $newstabs;
-	?>	
+	global $_zp_loggedin, $subtabs, $zenphoto_tabs;
+	$subtabs = apply_filter('admin_subtabs', $subtabs, $currenttab);
+	$pagetabs = apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
+	?>
 	<ul class="nav" id="jsddm">
 	<?php
-	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
+	foreach ($pagetabs as $key=>$atab) {
 		?>
-		<li <?php if($currenttab == "home") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin.php'; ?>"><?php echo gettext("overview"); ?></a>
-		</li>
- 		<?php
-	}
-	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
-		?>
-		<li <?php if($currenttab == "comments") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-comments.php'; ?>"><?php echo gettext("comments"); ?></a>
-		</li>
- 		<?php
-	}
-	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
-		?>
-		<li <?php if($currenttab == "upload") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-upload.php'; ?>"><?php echo gettext("upload"); ?></a>
-		</li>
- 		<?php
-	}
-
-	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
-		?>
-		<li <?php if($currenttab == "edit") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-edit.php?page=edit'; ?>"><?php echo gettext("edit"); ?></a>
-		</li>
- 		<?php
-	}
-	if (($_zp_loggedin & (TAGS_RIGHTS | ADMIN_RIGHTS))) {
-		?>
-		<li <?php if($currenttab == "tags") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-tags.php'; ?>"><?php echo gettext("tags"); ?></a>
-		</li>
- 		<?php
-	}
-	?>
-	<li <?php if($currenttab == "options") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-options.php'; ?>"><?php echo gettext("options"); ?></a>
-		<?php
-/*
-		if ($currenttab !== 'options') {
-			?>
-			<ul id="subdropdownnav">
+		<li <?php if($currenttab == $key) echo 'class="current"' ?>>
+			<a href="<?php echo $atab['link']; ?>"><?php echo $atab['text']; ?></a>
 			<?php
-			foreach ($optiontabs as $tab=>$tablink) {
-				?>
-				<li><a href="<?php echo $tablink; ?>"><?php echo $tab; ?></a></li>
-				<?php
-			}
-			?>
-			</ul>
-		 	<?php		 	
-		}
-*/
-		?>
-	</li>
-	<?php
-	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
-		?>
-		<li <?php if($currenttab == "themes") echo 'class="current"' ?>>
-			<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-themes.php'; ?>"><?php echo gettext("themes"); ?></a>
-		</li>
- 		<?php
-	}
-	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		?>
-		<li <?php if($currenttab == "plugins") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-plugins.php'; ?>"><?php echo gettext("plugins"); ?></a>
-		</li>
- 		<?php
-	}
-	if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
-		?>
-		<li <?php if($currenttab == "pages") echo 'class="current"' ?>>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-pages.php'; ?>"><?php echo gettext("pages"); ?></a>
-		</li>
- 		<?php
-		?>
-		<li <?php if($currenttab == "articles") echo 'class="current"' ?>>
-			<a href="<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-news-articles.php'; ?>"><?php echo gettext("news"); ?></a>
-		<?php
 /*
-		if ($currenttab !== 'articles') {
-			?>			
-			<ul id="subdropdownnav">
-			<?php
-			foreach ($newstabs as $tab=>$tablink) {
+			if (is_array($atab['subtabs']) && $currenttab !== $key) {
 				?>
-				<li><a href="<?php echo $tablink; ?>"><?php echo $tab; ?></a></li>
+				<ul id="subdropdownnav">
 				<?php
+				foreach ($atab['subtabs'] as $subtab=>$tablink) {
+					?>
+					<li><a href="<?php echo $tablink; ?>"><?php echo $subtab; ?></a></li>
+					<?php
+				}
+				?>
+				</ul>
+			 	<?php		 	
 			}
+*/			
 			?>
-			</ul>
-		 	<?php
-		}
-*/		
-		?>
 		</li>
  		<?php
 	}
@@ -523,6 +477,7 @@ function printSubtabs($tabs) {
 	<?php
 	return $current;
 }
+
 function checked($checked, $current) {
 	if ( $checked == $current)
 	echo ' checked="checked"';
@@ -2484,6 +2439,238 @@ function removeParentAlbumNames($album) {
 		$albumname = $album->name;
 	}
 	return $albumname;
+}
+
+/**
+ * Outputs the rights checkbox table for admin
+ *
+ * @param $id int record id for the save
+ * @param string $background background color
+ * @param string $alterrights are the items changable
+ * @param bit $rights rights of the admin
+ */
+function printAdminRightsTable($id, $background, $alterrights, $rights) {
+	?>
+	<table class="checkboxes" > <!-- checkbox table -->
+		<tr>
+			<td style="padding-bottom: 3px;<?php echo $background; ?>" colspan="5">
+			<strong><?php echo gettext("Rights"); ?></strong>:
+			</td>
+		</tr>
+		<tr>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-admin_rights" id="<?php echo $id ?>-admin_rights"
+							value=<?php echo ADMIN_RIGHTS; if ($rights & ADMIN_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("User admin"); ?>
+					</label>
+				</span>
+			</td>
+				
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-options_rights" id="<?php echo $id ?>-options_rights"
+							value=<?php echo OPTIONS_RIGHTS; if ($rights & OPTIONS_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("Options"); ?>
+					</label>
+				</span>
+			</td>
+				
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-zenpage_rights" id="<?php echo $id ?>-zenpage_rights"
+							value=<?php echo ZENPAGE_RIGHTS; if ($rights & ZENPAGE_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("Zenpage"); ?>
+					</label>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+					<input type="checkbox" name="<?php echo $id ?>-tags_rights" id="<?php echo $id ?>-tags_rights"
+						value=<?php echo TAGS_RIGHTS; if ($rights & TAGS_RIGHTS) echo ' checked';
+						echo $alterrights; ?>>
+					<?php echo gettext("Tags"); ?>
+					</label>
+				</span>
+			</td>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-themes_rights" id="<?php echo $id ?>-themes_rights"
+							value=<?php echo THEMES_RIGHTS; if ($rights & THEMES_RIGHTS) echo ' checked';
+							echo $alterrights; ?>>
+						<?php echo gettext("Themes"); ?>
+					</label>
+				</span>
+			</td>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-all_album_rights" id="<?php echo $id ?>-all_album_rights"
+							value=<?php echo ALL_ALBUMS_RIGHTS; if ($rights & ALL_ALBUMS_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("Manage all albums"); ?>
+					</label>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-edit_rights" id="<?php echo $id ?>-edit_rights"
+							value=<?php echo EDIT_RIGHTS; if ($rights & EDIT_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("Edit"); ?>
+					</label>
+				</span>
+			</td>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-comment_rights" id="<?php echo $id ?>-comment_rights"
+							value=<?php echo COMMENT_RIGHTS; if ($rights & COMMENT_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("Comment"); ?>
+					</label>
+				</span>
+			</td>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-upload_rights" id="<?php echo $id ?>-upload_rights"
+							value=<?php echo UPLOAD_RIGHTS; if ($rights & UPLOAD_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("Upload"); ?>
+					</label>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-view_rights" id="<?php echo $id ?>-view_rights"
+							value=<?php echo VIEWALL_RIGHTS; if ($rights & VIEWALL_RIGHTS) echo ' checked'; 
+							echo $alterrights; ?>>
+						<?php echo gettext("View all"); ?>
+					</label>
+				</span>
+			</td>
+			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="<?php echo $id ?>-main_rights" id="<?php echo $id ?>-main_rights"
+							value=<?php echo MAIN_RIGHTS; if ($rights & MAIN_RIGHTS) echo ' checked';
+							echo $alterrights; ?>>
+						<?php echo gettext("Overview"); ?>
+					</label>
+				</span>
+			</td>
+		</tr>
+	</table> <!-- end checkbox table -->
+	<?php
+}
+
+/**
+ * Returns a list of album names managed by $id
+ *
+ * @param int $id admin ID
+ * @return array
+ */
+function populateManagedAlbumList($id) {
+	$cv = array();
+	$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+					prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+					$id." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+	$currentvalues = query_full_array($sql);
+	foreach($currentvalues as $albumitem) {
+		$cv[] = $albumitem['folder'];
+	}
+	return $cv;
+}
+
+/**
+ * Creates the managed album table for Admin
+ *
+ * @param array $albumlist list of admin
+ * @param string $alterrights are the items changable
+ * @param int $adminid ID of the admin
+ * @param int $prefix the admin row
+ */
+function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
+	$cv = populateManagedAlbumList($adminid);
+	$rest = array_diff($albumlist, $cv);
+	$prefix = 'managed_albums_'.$prefix.'_';
+	?>
+	<h2 class="h2_bordered_albums">
+	<a href="javascript:toggle('<?php echo $prefix ?>managed_albums');"><?php echo gettext("Managed albums:"); ?></a>
+	</h2>
+	<div class="box-albums-unpadded">
+		<div id="<?php echo $prefix ?>managed_albums" style="display:none" >
+			<ul class="albumchecklist">
+				<?php
+				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
+				if (empty($alterrights)) {
+					generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
+				}
+				?>
+			</ul>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * processes the post of administrator rights
+ *
+ * @param int $i the admin row number
+ * @return bit
+ */
+function processRights($i) {
+	$rights = 0;
+	if (isset($_POST[$i.'-confirmed'])) $rights = $rights | NO_RIGHTS;
+	if (isset($_POST[$i.'-main_rights'])) $rights = $rights | MAIN_RIGHTS;
+	if (isset($_POST[$i.'-view_rights'])) $rights = $rights | VIEWALL_RIGHTS;
+	if (isset($_POST[$i.'-upload_rights'])) $rights = $rights | UPLOAD_RIGHTS;
+	if (isset($_POST[$i.'-comment_rights'])) $rights = $rights | COMMENT_RIGHTS;
+	if (isset($_POST[$i.'-edit_rights'])) $rights = $rights | EDIT_RIGHTS;
+	if (isset($_POST[$i.'-all_album_rights'])) $rights = $rights | ALL_ALBUMS_RIGHTS;
+	if (isset($_POST[$i.'-themes_rights'])) $rights = $rights | THEMES_RIGHTS;
+	if (isset($_POST[$i.'-tags_rights'])) $rights = $rights | TAGS_RIGHTS;
+	if (isset($_POST[$i.'-options_rights'])) $rights = $rights | OPTIONS_RIGHTS;
+	if (isset($_POST[$i.'-zenpage_rights'])) $rights = $rights | ZENPAGE_RIGHTS;
+	if (isset($_POST[$i.'-admin_rights'])) $rights = $rights | ADMIN_RIGHTS;
+	if ($rights & ALL_ALBUMS_RIGHTS) $rights = $rights | EDIT_RIGHTS;
+	return $rights;
+}
+
+function processManagedAlbums($i) {
+	$managedalbums = array();
+	$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
+	foreach ($_POST as $key => $value) {
+		$key = postIndexDecode($key);
+		if (substr($key, 0, $l) == $albumsprefix) {
+			if ($value) {
+				$managedalbums[] = substr($key, $l);
+			}
+		}
+	}
+	if (count($managedalbums > 0)) {
+		$albums = array_unique($managedalbums);
+	} else {
+		$albums = NULL;
+	}
+	return $albums;
 }
 
 ?>

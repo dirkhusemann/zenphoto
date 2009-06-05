@@ -70,9 +70,9 @@ $(document).ready(function() {
 	if(is_AdminEditPage("newsarticle")) {
 		checkRights("articles"); 
 		if (!empty($page)) {
-			$newstabs[gettext('articles')] .= $page;
+			$subtabs['newstabs'][gettext('articles')] .= $page;
 		}
-		printSubtabs($newstabs);
+		printSubtabs($subtabs['newstabs']);
 		?>
 		<div id="tab_articles" class="tabbox">
 		<?php
