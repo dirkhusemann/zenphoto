@@ -168,17 +168,86 @@ class utf8 {
 															"X-MAC-TURKISH" => "Turkish (Mac)"
 															);
 		// prune the list to supported character sets
+		$this->iconv_sets = array();
+		$this->mb_sets = array();
 		if (function_exists('mb_convert_encoding')) {
-			$list = mb_list_encodings();
+			if (function_exists('mb_list_encodings')) {
+				$list = mb_list_encodings();
+			} else {
+				$list = array("pass",  // from my PHP 5 mb_list_encodings list....
+											"auto",
+											"byte2be",
+											"byte2le",
+											"byte4be",
+											"byte4le",
+											"BASE64",
+											"UUENCODE",
+											"HTML-ENTITIES",
+											"Quoted-Printable",
+											"7bit",
+											"8bit",
+											"UCS-4",
+											"UCS-4BE",
+											"UCS-4LE",
+											"UCS-2",
+											"UCS-2BE",
+											"UCS-2LE",
+											"UTF-32",
+											"UTF-32BE",
+											"UTF-32LE",
+											"UTF-16",
+											"UTF-16BE",
+											"UTF-16LE",
+											"UTF-8",
+											"UTF-7",
+											"UTF7-IMAP",
+											"ASCII",
+											"EUC-JP",
+											"SJIS",
+											"eucJP-win",
+											"SJIS-win",
+											"CP51932",
+											"JIS",
+											"ISO-2022-JP",
+											"ISO-2022-JP-MS",
+											"Windows-1252",
+											"ISO-8859-1",
+											"ISO-8859-2",
+											"ISO-8859-3",
+											"ISO-8859-4",
+											"ISO-8859-5",
+											"ISO-8859-6",
+											"ISO-8859-7",
+											"ISO-8859-8",
+											"ISO-8859-9",
+											"ISO-8859-10",
+											"ISO-8859-13",
+											"ISO-8859-14",
+											"ISO-8859-15",
+											"ISO-8859-16",
+											"EUC-CN",
+											"CP936",
+											"HZ",
+											"EUC-TW",
+											"BIG-5",
+											"EUC-KR",
+											"UHC",
+											"ISO-2022-KR",
+											"Windows-1251",
+											"CP866",
+											"KOI8-R",
+											"ArmSCII-8");
+			}
 			foreach ($this->charsets as $key=>$encoding) {
 				if (in_array($key, $list)) {
 					$this->mb_sets[$key] = $encoding;
 				}
 			}
+
 		}
 		if (function_exists('iconv')) {
 			foreach ($this->charsets as $key=>$encoding) {
-				if (@iconv("UTF-8", $key, " ")!==false) {
+				if (@iconv("UTF-8", $key, "UTF-8")!==false) {
 					$this->iconv_sets[$key] = $encoding;
 				}
 			}
@@ -200,7 +269,7 @@ class utf8 {
 		
 		if ($encode_mb && $dest_mb) {
 			@mb_substitute_character('none');
-			return @mb_convert_encoding($string, $destination, $encoding );
+			return mb_convert_encoding($string, $destination, $encoding);
 		}
 		if ($encode_iconv && $dest_iconv) {
 			return @iconv($encoding, $destination . '//IGNORE', $string);
@@ -208,14 +277,14 @@ class utf8 {
 		// must use mixed conversion
 		@mb_substitute_character('none');
 		if ($encode_mb) {
-			$instring = @mb_convert_encoding($string, 'UTF-8', $encoding);
+			$instring = mb_convert_encoding($string, 'UTF-8', $encoding);
 		} else if ($encode_iconv) {
 			$instring = @iconv($encoding, 'UTF-8' . '//IGNORE', $string);
 		} else  {
 			$instring = $string;
 		}
 		if ($dest_mb) {
-			$outstring = @mb_convert_encoding($string, $destination, 'UTF-8');
+			$outstring = mb_convert_encoding($string, $destination, 'UTF-8');
 		} else if ($dest_iconv) {
 			$outstring = @iconv('UTF-8', $destination . '//IGNORE', $string);
 		} else {

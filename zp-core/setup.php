@@ -573,10 +573,15 @@ if (!$checked) {
 
 	$good = true;
 
-	$required = '4.1.0';
-	$desired = '4.1.0';
-	$good = checkMark(versionCheck($required, $desired, PHP_VERSION), sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required.'),$required)) && $good;
-
+	$required = '4.1';
+	$desired = '5';
+	$err = versionCheck($required, $desired, PHP_VERSION);
+	if ($err < 0) {
+		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is strongly recommended.'),$desired)) && $good;
+	} else {
+		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required. Version %2$s or greater is strongly recommended.'),$required, $desired)) && $good;
+	}
+	
 	if (ini_get('safe_mode')) {
 		$safe = -1;
 	} else {
