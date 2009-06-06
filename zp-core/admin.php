@@ -66,12 +66,16 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		case 'themes':
 			if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) $page = '';
 			break;
-		case 'plugins':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | ADMIN_RIGHTS))) $page = '';
+		case 'pages':
+		case 'articles':
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) $page = '';
+			break;
+			case 'plugins':
+			if (!($_zp_loggedin & (ADMIN_RIGHTS))) $page = '';
 			break;
 		case 'home':
 			if (!($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) {
-				$page='options';
+				$page='users';
 			}
 			break;
 	}
@@ -101,6 +105,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php".$q);
 			exit();
 		case 'options':
+		case 'users':
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php".$q);
 			exit();
 		default:

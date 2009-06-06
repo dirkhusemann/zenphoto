@@ -1436,4 +1436,34 @@ span.tagMatches span {
 	visibility: hidden;
 }		
 			
-			
+/* short checklist */
+.shortchecklist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 10em;
+	width: 19.5em;
+	overflow: auto;
+	background-color: white;
+}
+
+.shortchecklist,.shortchecklist li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #BAC9CF;
+}
+
+.shortchecklist label {
+	display: block;
+	padding: 0 0.2em 0 25px;
+	text-indent: -25px;
+}
+
+.shortchecklist label:hover,.shortchecklist label.hover {
+	background: #F1F2F3;
+	color: #333;
+}
+
+* html .shortchecklist label {
+	height: 1%;
+}
+

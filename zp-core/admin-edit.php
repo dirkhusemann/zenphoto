@@ -499,10 +499,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo '</div>';
 	}
 	$albumlink = '?page=edit&album='.urlencode($album->name);
-	$tabs = array(gettext('Album')=>'admin-edit.php'.$albumlink.'&tab=albuminfo');
-	if (count($subalbums) > 0) $tabs[gettext('Subalbums')] = 'admin-edit.php'.$albumlink.'&tab=subalbuminfo';
-	if ($allimagecount) $tabs[gettext('Images')] = 'admin-edit.php'.$albumlink.'&tab=imageinfo';
-	$subtab = printSubtabs($tabs);
+	$tabs = array(gettext('Album')=>'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo');
+	if (count($subalbums) > 0) $tabs[gettext('Subalbums')] = 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo';
+	if ($allimagecount) $tabs[gettext('Images')] = 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo';
+	$zenphoto_tabs['edit']['subtabs'] = $tabs;
+	$subtab = printSubtabs('edit', 'albuminfo');
 	?>
 	<?php
 	if ($subtab == 'albuminfo') {
@@ -550,9 +551,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			</tr>
 			<tr>
 				<td style="padding: 0px 0px;" colspan="8">
-				<div id="albumList" class="albumList"><?php
+				<div id="albumList" class="albumList">
+				<?php
 				foreach ($subalbums as $folder) {
-					$subalbum = new Album($album, $folder);
+					$subalbum = new Album($gallery, $folder);
 					printAlbumEditRow($subalbum);
 				}
 				?></div>

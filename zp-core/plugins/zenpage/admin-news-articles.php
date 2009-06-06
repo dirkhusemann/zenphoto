@@ -25,7 +25,7 @@ printLogoAndLinks();
 	<div id="content">
 		<?php
 		checkRights("articles"); 
-		printSubtabs($subtabs['newstabs']);
+		printSubtabs('articles');
 		?>
 		<div id="tab_articles" class="tabbox">
 			<?php	

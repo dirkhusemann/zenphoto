@@ -21,7 +21,14 @@ if (!is_null(getOption('admin_reset_date'))) {
 }
 
 $gallery = new Gallery();
-$_GET['page'] = 'options';
+if (!isset($_GET['page'])) {
+	if (array_key_exists('options', $zenphoto_tabs)) {
+		$_GET['page'] = 'options';
+	} else {
+		$_GET['page'] = 'users'; // must be a user with no options rights
+	}
+}
+$_current_tab = sanitize($_GET['page'],3);
 
 /* handle posts */
 if (isset($_GET['action'])) {
@@ -91,7 +98,7 @@ if (isset($_GET['action'])) {
 			if ($nouser) {
 				$notify = '?mismatch=nothing';
 			}
-			$returntab = "&tab=admin";
+			$returntab = "&page=users&tab=users";
 		}
 		
 		/*** General options ***/
@@ -451,7 +458,7 @@ printAdminHeader();
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
 <?php
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
-$subtab = getSubtabs($subtabs['optiontabs']);
+$subtab = getSubtabs($_current_tab, 'users');
 if ($subtab == 'gallery' || $subtab == 'image') {
 	$sql = 'SHOW COLUMNS FROM ';
 	if ($subtab == 'image') {
@@ -485,7 +492,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs('options');
+printTabs($_current_tab);
 echo "\n" . '<div id="content">';
 if ($_zp_null_account) {
 	echo "<div class=\"errorbox space\">";
@@ -505,8 +512,8 @@ if ($_zp_null_account) {
 	}
 ?>
 <?php
-printSubtabs($subtabs['optiontabs']);
-if ($subtab == 'admin') {
+printSubtabs($_current_tab, 'users');
+if ($subtab == 'users') {
 ?>
 <div id="tab_admin" class="tabbox">
 <?php
@@ -631,6 +638,7 @@ if (empty($alterrights)) {
 		} else {
 			$background = '';
 		}
+		$alterrights = apply_filter('admin_alterrights', $alterrights, $userobj);
 		$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 		if ($userobj->getValid()) {
 			?>

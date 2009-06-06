@@ -52,6 +52,17 @@ if (isset($_GET['action'])) {
 						saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
 					}
 				}
+				//user assignments: first clear out existing ones
+				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `group`="'.$groupname.'"';
+				query($sql);
+				//then add the ones marked
+				$target = 'user_'.$i.'-';
+				foreach ($_POST as $item=>$username) {
+					if (strpos($item, $target)!==false) {
+						$user = new Administrator($username);
+						saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+					}
+				}
 			}
 		}
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=groups&saved');
@@ -59,11 +70,12 @@ if (isset($_GET['action'])) {
 	} else if ($action == 'saveauserassignments') {
 		for ($i = 0; $i < $_POST['totalusers']; $i++) {
 			$username = trim(sanitize($_POST[$i.'-user'],3));
-			$group = trim(sanitize($_POST[$i.'-group'],3));
 			$user = new Administrator($username);
-			saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $user->getRights(), $user->getAlbums(), $user->getCustomData(), $group);
+			$groupname = trim(sanitize($_POST[$i.'-group'],3));
+			$group = new Administrator($groupname);
+			saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
 		}
-		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=users&saved');
+		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=assignments&saved');
 		exit();
 	}
 }
@@ -89,15 +101,21 @@ echo '</head>'."\n";
 				echo  "<h2>Saved</h2>";
 				echo '</div>';
 			}
-			$subtab = printSubtabs($subtabs['usertabs']);
+			$subtab = printSubtabs('users');
 			?>
 			<div id="tab_users" class="tabbox">
 				<?php
 				switch ($subtab) {
 					case 'groups':
+						$adminlist = $adminordered;
+						$users = array();
+						foreach ($adminlist as $user) {
+							if ($user['valid']) {
+								$users[] = $user['user'];
+							}
+						}
 						$gallery = new Gallery();
 						$albumlist = $gallery->getAlbums();
-						
 						$adminordered [''] = array('id' => -1,  'user' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0);
 						?>
 						<form action="?action=savegroups&tab=groups" method="post" AUTOCOMPLETE=OFF>
@@ -115,11 +133,11 @@ echo '</head>'."\n";
 										$userid = $user['user'];
 										?>
 										<tr>
-											<td width="20%" style="border-top: 4px solid #D1DBDF;" valign="top">
+											<td width="15%" style="border-top: 4px solid #D1DBDF;" valign="top">
 												<?php
 												if (empty($user['user'])) {
 													?>
-													<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-group" value="" />
+													<input type="text" size="<?php echo 35; ?>" name="<?php echo $id ?>-group" value="" />
 													<?php
 												} else {
 													echo $userid;
@@ -145,6 +163,24 @@ echo '</head>'."\n";
 													?>
 												</p>
 											</td>
+											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+												<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
+													<div class="box-tags-unpadded">
+													<?php
+													$members = array();
+													if (!empty($userid)) {
+														foreach ($adminlist as $user) {
+															if ($user['valid'] && $user['group']==$userid) {
+																$members[] = $user['user'];
+															}
+														}
+													}
+													?>
+													<ul class="shortchecklist">
+													<?php generateUnorderedListFromArray($members, $users, 'user_'.$id.'-', false, true, false); ?>
+													</ul>
+												</div>
+											</td>
 										</tr>
 										<?php
 										$id++;
@@ -167,7 +203,7 @@ echo '</head>'."\n";
 						</p>
 						<?php
 						break;
-					case 'users':
+					case 'assignments':
 						$groups = array('');
 						foreach ($adminordered as $user) {
 							if (!$user['valid']) {

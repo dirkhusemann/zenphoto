@@ -11,7 +11,7 @@ $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-user_groups.php.html";
 
 register_filter('admin_tabs', 'admin_tabs', 2);
-register_filter('admin_subtabs', 'admin_subtabs', 2);
+register_filter('admin_alterrights', 'admin_alterrights', 2);
 register_filter('save_admin_custom_data', 'save_admin', 3);
 register_filter('edit_admin_custom_data', 'edit_admin', 5);
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
@@ -57,8 +57,14 @@ function edit_admin($discard, $userobj, $i, $background, $current) {
 		$grouppart = '<select name="'.$i.'group" >'."\n";
 		$grouppart .= '<option></option>'."\n";
 		$admins = getAdministrators();
-		ksort($admins);
-		foreach ($admins as $user) {
+		$ordered = array();
+		foreach ($admins as $key=>$admin) {
+			$ordered[$key] = $admin['user'];
+		}
+		asort($ordered);
+		$adminordered = array();
+		foreach ($ordered as $key=>$user) $adminordered[] = $admins[$key];
+		foreach ($adminordered as $user) {
 			if (!$user['valid']) {
 				if ($group == $user['user']) {
 					$selected = ' SELECTED="SELECTED"';
@@ -84,16 +90,22 @@ function edit_admin($discard, $userobj, $i, $background, $current) {
 }
 
 function admin_tabs($tabs, $current) {
-	global $subtabs;
+	$subtabs = array(	gettext('users')=>'admin-options.php?page=users&tab=users',
+										gettext('assignments')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=assignments',
+										gettext('groups')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=groups');
 	if ((zp_loggedin(ADMIN_RIGHTS))) {
-		$tabs['users'] = array('text'=>gettext("group management"), 'link'=>WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users', 'subtabs'=>$subtabs['usertabs']);
+		$tabs['users'] = array(	'text'=>gettext("admin"),
+														'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=users&tab=users',
+														'subtabs'=>$subtabs,
+														'default'=>'users');
 	}
 	return $tabs;
 }
 
-function admin_subtabs($subtabs, $current) {
-	$subtabs['usertabs'] = array(gettext('users')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=users', gettext('groups')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=groups');
-	return $subtabs;
+function admin_alterrights($alterrights, $userobj) {
+	$group = $userobj->getGroup();
+	if (empty($group)) return $alterrights;
+	return ' DISABLED';
 }
 
 ?>

@@ -1794,7 +1794,7 @@ if (file_exists("zp-config.php")) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
-					echo "<p>".gettext("You may <a href=\"admin-options.php\">set your admin user and password</a> or <a href=\"".substr(UTILITIES_FOLDER,1)."backup_restore.php\">run backup-restore</a>")."</p>";
+					echo "<p>".gettext("You may <a href=\"admin-options.php?page=users&amp;tab=users\">set your admin user and password</a> or <a href=\"".substr(UTILITIES_FOLDER,1)."backup_restore.php\">run backup-restore</a>")."</p>";
 				} else {
 					echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
 				}				
