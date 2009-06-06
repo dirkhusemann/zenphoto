@@ -27,7 +27,6 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
  */
 function save_admin($discard, $userobj, $i) {
 	$administrators = getAdministrators();
-	$userid = $userobj->getUser();
 	$groupname = sanitize($_POST[$i.'group']);
 	$userobj->setGroup($groupname);
 	foreach ($administrators as $group) {
@@ -53,26 +52,31 @@ function save_admin($discard, $userobj, $i) {
  */
 function edit_admin($discard, $userobj, $i, $background, $current) {
 	$group = $userobj->getGroup();
+	$admins = getAdministrators();
+	$ordered = array();
+	$groups = array();
+	foreach ($admins as $key=>$admin) {
+		$ordered[$key] = $admin['user'];
+	}
+	asort($ordered);
+	$adminordered = array();
+	foreach ($ordered as $key=>$user) {
+		$adminordered[] = $admins[$key];
+		if (!$user['valid']) {
+			$groups[] = $admins[$key];
+		}
+	}
+	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$grouppart = '<select name="'.$i.'group" >'."\n";
 		$grouppart .= '<option></option>'."\n";
-		$admins = getAdministrators();
-		$ordered = array();
-		foreach ($admins as $key=>$admin) {
-			$ordered[$key] = $admin['user'];
-		}
-		asort($ordered);
-		$adminordered = array();
-		foreach ($ordered as $key=>$user) $adminordered[] = $admins[$key];
-		foreach ($adminordered as $user) {
-			if (!$user['valid']) {
-				if ($group == $user['user']) {
-					$selected = ' SELECTED="SELECTED"';
-				} else {
-					$selected = '';
-				}
-				$grouppart .= '<option'.$selected.'>'.$user['user'].'</option>'."\n";
+		foreach ($groups as $user) {
+			if ($group == $user['user']) {
+				$selected = ' SELECTED="SELECTED"';
+			} else {
+				$selected = '';
 			}
+			$grouppart .= '<option'.$selected.'>'.$user['user'].'</option>'."\n";
 		}
 		$grouppart .= '</select>'."\n";
 	} else {

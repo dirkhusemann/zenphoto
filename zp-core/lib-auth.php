@@ -99,14 +99,12 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $grou
 		} else {
 			$passupdate = "'".mysql_real_escape_string(passwordHash($user, $pass))."'";
 		}
-		$sql = "INSERT INTO " . prefix('administrators') . " (user, pass, name, email, rights, custom_data, valid, group) VALUES ('" .
+		$sql = "INSERT INTO " . prefix('administrators') . " (`user`, `pass`, `name`, `email`, `rights`, `custom_data`, `valid`, `group`) VALUES ('" .
 				mysql_real_escape_string($user) . "'," . $passupdate . ",'" . mysql_real_escape_string($name) . "','" . 
-				mysql_real_escape_string($email) . "','" . $rights . "', '".mysql_real_escape_string($custom)."', ".$valid.", '".
-				mysql_real_escape_string($group).")";
+				mysql_real_escape_string($email) . "'," . $rights . ", '".mysql_real_escape_string($custom)."', ".$valid.", '".
+				mysql_real_escape_string($group)."')";
 		$result = query($sql);
-		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
-		$result = query_single_row($sql);
-		$id = $result['id'];
+		$id = mysql_insert_id();
 
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: inserting[$id]:$result"); }
 

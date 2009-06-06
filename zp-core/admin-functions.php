@@ -34,10 +34,6 @@ if (OFFSET_PATH) {
 							'subtabs'=>NULL);
 	}
 	
- 	$zenphoto_tabs['users'] = array('text'=>gettext("admin"),
- 							'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=users&tab=users',
- 							'subtabs'=>NULL);
- 	
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php',
@@ -75,7 +71,11 @@ if (OFFSET_PATH) {
 								'subtabs'=>NULL);
 	}
 	
- 	$subtabs = array();
+ 	$zenphoto_tabs['users'] = array('text'=>gettext("admin"),
+ 							'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=users&tab=users',
+ 							'subtabs'=>NULL);
+ 	
+	$subtabs = array();
 	if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			$subtabs[gettext("general")] = 'admin-options.php?page=options&tab=general';

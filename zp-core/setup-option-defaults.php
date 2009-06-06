@@ -257,4 +257,13 @@ function setDefault($option, $default) {
 	}
 	if (getOption('zp_plugin_rating') == 1) setOption('zp_plugin_rating', 5);
 	
+	// default groups
+	$sql = 'SELECT * FROM '.prefix('administrators').' WHERE `valid`=0';
+	$result = query_full_array($sql);
+	if (!is_array($result) || empty($result)) { // setup default groups
+		saveAdmin('administrator', NULL, NULL, NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL,  0);
+		saveAdmin('viewers', NULL, NULL, NULL, NO_RIGHTS | VIEWALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL,  0);
+		saveAdmin('bozos', NULL, NULL, NULL, NO_RIGHTS, array(), gettext('Banned users'),NULL,  0);
+	}
+	
 	?>

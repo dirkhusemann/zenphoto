@@ -27,14 +27,10 @@ if (isset($_GET['action'])) {
 		query($sql);
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
-		// remover user group association
+		//first clear out existing user assignments
 		$groupname = sanitize($_GET['group'],3);
-		foreach ($admins as $admin) {
-			if ($admin['valid'] && $admin['group']===$groupname) {
-				$user = new Administrator($groupname);
-				saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $user->getRights(), $user->getAlbums(), $user->getCustomData(), NULL);
-			}
-		}
+		$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `valid`=1 AND `group`="'.$groupname.'"';
+		query($sql);
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=groups&deleted');
 		exit();
 	} else if ($action == 'savegroups') {
@@ -44,7 +40,8 @@ if (isset($_GET['action'])) {
 				$group = new Administrator($groupname);
 				$group->setRights(processRights($i));
 				$group->setAlbums(processManagedAlbums($i));
-				saveAdmin($groupname, NULL, NULL, NULL, $group->getRights(), $group->getAlbums(), NULL, NULL, 0);
+				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
+				saveAdmin($groupname, NULL, NULL, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
 				//have to update any users who have this group designate.
 				foreach ($admins as $admin) {
 					if ($admin['valid'] && $admin['group']===$groupname) {
@@ -53,7 +50,7 @@ if (isset($_GET['action'])) {
 					}
 				}
 				//user assignments: first clear out existing ones
-				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `group`="'.$groupname.'"';
+				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `valid`=1 AND `group`="'.$groupname.'"';
 				query($sql);
 				//then add the ones marked
 				$target = 'user_'.$i.'-';
@@ -116,7 +113,7 @@ echo '</head>'."\n";
 						}
 						$gallery = new Gallery();
 						$albumlist = $gallery->getAlbums();
-						$adminordered [''] = array('id' => -1,  'user' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0);
+						$adminordered [''] = array('id' => -1,  'user' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0, 'custom_data'=>'');
 						?>
 						<form action="?action=savegroups&tab=groups" method="post" AUTOCOMPLETE=OFF>
 							<p class="buttons">
@@ -128,24 +125,29 @@ echo '</head>'."\n";
 							<table class="bordered">
 								<?php
 								$id = 0;
-								foreach($adminordered as $user) {
+								foreach($adminordered as $key=>$user) {
 									if (!$user['valid']) { // then it is a group
-										$userid = $user['user'];
+										$groupname = $user['user'];
+										$groupid = $user['id'];
 										?>
 										<tr>
-											<td width="15%" style="border-top: 4px solid #D1DBDF;" valign="top">
+											<td style="border-top: 4px solid #D1DBDF;" valign="top">
 												<?php
 												if (empty($user['user'])) {
 													?>
-													<input type="text" size="<?php echo 35; ?>" name="<?php echo $id ?>-group" value="" />
+													<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
 													<?php
 												} else {
-													echo $userid;
+													echo $groupname;
 													?>
-													<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $userid ?>" />
+													<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $groupname ?>" />
 													<?php
 												}
 												?>
+												<br /><br /><br />
+												<?php echo gettext('description:'); ?>
+												<br />
+												<textarea name="<?php echo $id; ?>-desc" cols="40" rows="4"><?php echo htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")); ?></textarea>
 											</td>
 											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 												<?php												
@@ -162,9 +164,9 @@ echo '</head>'."\n";
 												<div class="box-tags-unpadded">
 													<?php											
 													$members = array();
-													if (!empty($userid)) {
+													if (!empty($groupname)) {
 														foreach ($adminlist as $user) {
-															if ($user['valid'] && $user['group']==$userid) {
+															if ($user['valid'] && $user['group']==$groupname) {
 																$members[] = $user['user'];
 															}
 														}
@@ -178,10 +180,10 @@ echo '</head>'."\n";
 											</td>
 											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 											<?php
-											if (!empty($userid)) {
+											if (!empty($groupname)) {
 												$msg = gettext('Are you sure you want to delete this group?');
 												?>
-												<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $user['id']; ?>&group=<?php echo $userid; ?>'; }"
+												<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo $groupname; ?>'; }"
 																	title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
 													<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
 												</a> 
