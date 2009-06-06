@@ -198,6 +198,8 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 		$albumid = sanitize_numeric($_POST['albumid']);
 	} elseif(is_object($albumobj)) {
 		$albumid = $albumobj->id;
+	} else {
+		$albumid = -1;
 	}
 	
 	// setting the image size
