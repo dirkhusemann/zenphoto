@@ -141,32 +141,26 @@ echo '</head>'."\n";
 													<?php
 												} else {
 													echo $userid;
-													$msg = gettext('Are you sure you want to delete this group?');
 													?>
-													&nbsp;&nbsp;
-													<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $user['id']; ?>&group=<?php echo $userid; ?>'; }"
-														title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;"> <img
-														src="../../images/fail.png" style="border: 0px;" alt="Delete" /></a> 
-	
 													<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $userid ?>" />
 													<?php
 												}
 												?>
 											</td>
 											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-												<?php
+												<?php												
 												printAdminRightsTable($id, '', '', $user['rights']);
 												?>
 												<p>
-													<?php
+													<?php												
 													printManagedAlbums($albumlist, '', $user['id'], $id);
 													?>
 												</p>
 											</td>
 											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 												<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
-													<div class="box-tags-unpadded">
-													<?php
+												<div class="box-tags-unpadded">
+													<?php											
 													$members = array();
 													if (!empty($userid)) {
 														foreach ($adminlist as $user) {
@@ -175,11 +169,25 @@ echo '</head>'."\n";
 															}
 														}
 													}
+
 													?>
 													<ul class="shortchecklist">
 													<?php generateUnorderedListFromArray($members, $users, 'user_'.$id.'-', false, true, false); ?>
 													</ul>
 												</div>
+											</td>
+											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+											<?php
+											if (!empty($userid)) {
+												$msg = gettext('Are you sure you want to delete this group?');
+												?>
+												<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $user['id']; ?>&group=<?php echo $userid; ?>'; }"
+																	title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
+													<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
+												</a> 
+												<?php
+											}
+											?>	
 											</td>
 										</tr>
 										<?php
