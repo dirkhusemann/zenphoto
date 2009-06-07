@@ -37,10 +37,10 @@ if (isset($_GET['action'])) {
 		for ($i = 0; $i < $_POST['totalgroups']; $i++) {
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
 			if (!empty($groupname)) {
-				$group = new Administrator($groupname);
-				if (isset($_POST[$i.'-initgroup'])) {
+				$group = new Administrator($groupname, 0);
+				if (isset($_POST[$i.'-initgroup']) && !empty($_POST[$i.'-initgroup'])) {
 					$initgroupname = trim(sanitize($_POST[$i.'-initgroup'],3));
-					$initgroup = new Administrator($initgroupname);
+					$initgroup = new Administrator($initgroupname, 0);
 					$group->setRights($initgroup->getRights());
 					$group->setAlbums(populateManagedAlbumList($initgroup->get('id')));
 				} else {
@@ -48,23 +48,27 @@ if (isset($_GET['action'])) {
 					$group->setAlbums(processManagedAlbums($i));
 				}
 				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
-				saveAdmin($groupname, NULL, NULL, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
-				//have to update any users who have this group designate.
-				foreach ($admins as $admin) {
-					if ($admin['valid'] && $admin['group']===$groupname) {
-						$user = new Administrator($admin['user']);
-						saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+				$grouptype = trim(sanitize($_POST[$i.'-type'], 3));
+								
+				saveAdmin($groupname, NULL, $grouptype, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
+				if ($group->getName()=='group') {
+					//have to update any users who have this group designate.
+					foreach ($admins as $admin) {
+						if ($admin['valid'] && $admin['group']===$groupname) {
+							$user = new Administrator($admin['user'], 1);
+							saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+						}
 					}
-				}
-				//user assignments: first clear out existing ones
-				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `valid`=1 AND `group`="'.$groupname.'"';
-				query($sql);
-				//then add the ones marked
-				$target = 'user_'.$i.'-';
-				foreach ($_POST as $item=>$username) {
-					if (strpos($item, $target)!==false) {
-						$user = new Administrator($username);
-						saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+					//user assignments: first clear out existing ones
+					$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `valid`=1 AND `group`="'.$groupname.'"';
+					query($sql);
+					//then add the ones marked
+					$target = 'user_'.$i.'-';
+					foreach ($_POST as $item=>$username) {
+						if (strpos($item, $target)!==false) {
+							$user = new Administrator($username, 1);
+							saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+						}
 					}
 				}
 			}
@@ -74,9 +78,9 @@ if (isset($_GET['action'])) {
 	} else if ($action == 'saveauserassignments') {
 		for ($i = 0; $i < $_POST['totalusers']; $i++) {
 			$username = trim(sanitize($_POST[$i.'-user'],3));
-			$user = new Administrator($username);
+			$user = new Administrator($username, 1);
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
-			$group = new Administrator($groupname);
+			$group = new Administrator($groupname, 1);
 			if (empty($groupname)) {
 				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `id`='.$user->get('id');
 			} else {
@@ -144,23 +148,33 @@ echo '</head>'."\n";
 								<?php
 								$id = 0;
 								$groupselector = $groups;
-								$groupselector[''] = array('id' => -1,  'user' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0, 'custom_data'=>'');
+								$groupselector[''] = array('id' => -1,  'user' => '', 'name'=>'group', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0, 'custom_data'=>'');
 								foreach($groupselector as $key=>$user) {
 									$groupname = $user['user'];
 									$groupid = $user['id'];
 									$rights = $user['rights'];
+									$grouptype = $user['name'];
 									?>
 									<tr>
 										<td style="border-top: 4px solid #D1DBDF;" valign="top" style="width:20em;">
 											<?php
 											if (empty($groupname)) {
 												?>
+												<em>
+													<label><input type="radio" name="<?php echo $id; ?>-type" value="group" CHECKED="CHECKED" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('group'); ?></label>
+													<label><input type="radio" name="<?php echo $id; ?>-type" value="template" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('template'); ?></label>
+												</em>
 												<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
 												<?php
 											} else {
+												?>
+												<em><?php if ($grouptype == 'group') echo gettext('group'); else echo gettext('template'); ?></em>
+												<br />
+												<?php
 												echo $groupname;
 												?>
 												<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $groupname ?>" />
+												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo $grouptype ?>" />
 												<?php
 											}
 											?>
@@ -206,22 +220,23 @@ echo '</head>'."\n";
 											</p>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-											<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
-											<div class="box-tags-unpadded">
-												<?php											
-												$members = array();
-												if (!empty($groupname)) {
-													foreach ($adminlist as $user) {
-														if ($user['valid'] && $user['group']==$groupname) {
-															$members[] = $user['user'];
+											<div id="users<?php echo $id; ?>" <?php if ($grouptype=='template') echo ' style="display:none"' ?>>
+												<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
+												<div class="box-tags-unpadded">
+													<?php											
+													$members = array();
+													if (!empty($groupname)) {
+														foreach ($adminlist as $user) {
+															if ($user['valid'] && $user['group']==$groupname) {
+																$members[] = $user['user'];
+															}
 														}
 													}
-												}
-
-												?>
-												<ul class="shortchecklist">
-												<?php generateUnorderedListFromArray($members, $users, 'user_'.$id.'-', false, true, false); ?>
-												</ul>
+													?>
+													<ul class="shortchecklist">
+													<?php generateUnorderedListFromArray($members, $users, 'user_'.$id.'-', false, true, false); ?>
+													</ul>
+												</div>
 											</div>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
@@ -256,7 +271,7 @@ echo '</head>'."\n";
 					case 'assignments':
 						$groups = array();
 						foreach ($adminordered as $user) {
-							if (!$user['valid']) {
+							if (!$user['valid'] && $user['name'] == 'group') {
 								$groups[] = $user;
 							}
 						}

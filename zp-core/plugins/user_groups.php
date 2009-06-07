@@ -10,10 +10,10 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-user_groups.php.html";
 
-register_filter('admin_tabs', 'admin_tabs', 2);
-register_filter('admin_alterrights', 'admin_alterrights', 2);
-register_filter('save_admin_custom_data', 'save_admin', 3);
-register_filter('edit_admin_custom_data', 'edit_admin', 5);
+register_filter('admin_tabs', 'user_groups_admin_tabs', 2);
+register_filter('admin_alterrights', 'user_groups_admin_alterrights', 2);
+register_filter('save_admin_custom_data', 'user_groups_save_admin', 3);
+register_filter('edit_admin_custom_data', 'user_groups_edit_admin', 5, 2);
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
 /**
@@ -25,17 +25,18 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
  * @param string $i prefix for the admin
  * @return string
  */
-function save_admin($discard, $userobj, $i) {
+function user_groups_save_admin($discard, $userobj, $i) {
 	$administrators = getAdministrators();
 	$groupname = sanitize($_POST[$i.'group']);
 	if (empty($groupname)) {
 		$oldgroup = $userobj->getGroup();
-		$group = new Administrator($oldgroup);
+		$group = new Administrator($oldgroup, 0);
 		$userobj->setRights($group->getRights());
 	} else {
-		$group = new Administrator($groupname);
+		$group = new Administrator($groupname, 0);
 		$userobj->setRights($group->getRights());
 		$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
+		if ($group->getName() == 'template') $groupname = '';
 	}
 	$userobj->setGroup($groupname);
 }
@@ -43,14 +44,14 @@ function save_admin($discard, $userobj, $i) {
 /**
  * Returns table row(s) for edit of an admin user's custom data
  *
- * @param string $discard always empty
+ * @param string $html always empty
  * @param $userobj Admin user object
  * @param string $i prefix for the admin
  * @param string $background background color for the admin row
  * @param bool $current true if this admin row is the logged in admin
  * @return string
  */
-function edit_admin($discard, $userobj, $i, $background, $current) {
+function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	$group = $userobj->getGroup();
 	$admins = getAdministrators();
 	$ordered = array();
@@ -72,7 +73,12 @@ function edit_admin($discard, $userobj, $i, $background, $current) {
 		$grouppart .= '<option title="'.gettext('no group affiliation').'"></option>'."\n";
 		$selected_hint = gettext('no group affiliation');
 		foreach ($groups as $user) {
-			$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
+			if ($user['name']=='template') {
+				$type = '<strong>'.gettext('Template:').'</strong> ';
+			} else {
+				$type = '';
+			}
+			$hint = $type.'<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
 			if ($group == $user['user']) {
 				$selected = ' SELECTED="SELECTED"';
 				$selected_hint = $hint;
@@ -89,15 +95,15 @@ function edit_admin($discard, $userobj, $i, $background, $current) {
 	$result = 
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Group:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="325">'.
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
 				$grouppart.
 			'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" rowspan="5">'.gettext('User group membership.<br /><strong>NOTE:</strong> Rights and albums are determined by the group!').'</td>
-		</tr>';
-	return $result;
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">'.gettext('User group membership.<br /><strong>NOTE:</strong> Rights and albums are determined by the group!').'</td>
+		</tr>'."\n";
+	return $html.$result;
 }
 
-function admin_tabs($tabs, $current) {
+function user_groups_admin_tabs($tabs, $current) {
 	$subtabs = array(	gettext('users')=>'admin-options.php?page=users&tab=users',
 										gettext('assignments')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=assignments',
 										gettext('groups')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=groups');
@@ -110,9 +116,12 @@ function admin_tabs($tabs, $current) {
 	return $tabs;
 }
 
-function admin_alterrights($alterrights, $userobj) {
+function user_groups_admin_alterrights($alterrights, $userobj) {
 	$group = $userobj->getGroup();
 	if (empty($group)) return $alterrights;
+	
+echo "<br/>$group:$alterrights";	
+	
 	return ' DISABLED';
 }
 

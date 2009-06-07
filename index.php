@@ -121,7 +121,7 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 		$theme = setupTheme();
 	}
 	$errpage = THEMEFOLDER.'/'.internalToFilesystem($theme).'/404.php';
-	if (DEBUG_404) debugLog("404 error: album=$album; image=$image; theme=$theme");
+	if (DEBUG_404) debugLogArray("404 error: album=$album; image=$image; theme=$theme", $_SERVER);
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {

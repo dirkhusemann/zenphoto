@@ -1539,7 +1539,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 <br / clear:all>
 <p class="buttons">
-<button type="submit" title="<?php echo gettext("Save Album"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save Album"); ?></strong></button>
+<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 <button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 </p>
 <br clear: all />

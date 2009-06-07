@@ -626,7 +626,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<tr>
 				<td colspan="4">
 			<p class="buttons">
-				<button type="submit" title="<?php echo gettext("Save changes"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save changes"); ?></strong></button>
+				<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 				<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 		 </p>
 			
@@ -961,7 +961,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<td colspan="4">
 				
 				<p class="buttons">
-				<button type="submit" title="<?php echo gettext("Save changes"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save changes"); ?></strong></button>
+				<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 				<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 		 		</p>
 					

@@ -10,14 +10,14 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-custom_data.php.html";
 
-register_filter('save_image_custom_data', 'save_image', 2);
-register_filter('edit_image_custom_data', 'edit_image', 3);
-register_filter('save_album_custom_data', 'save_album', 2);
-register_filter('edit_album_custom_data', 'edit_album', 3);
-register_filter('save_comment_custom_data', 'save_comment');
-register_filter('edit_comment_custom_data', 'edit_comment', 2);
-register_filter('save_admin_custom_data', 'save_admin', 3);
-register_filter('edit_admin_custom_data', 'edit_admin', 5);
+register_filter('save_image_custom_data', 'custom_data_save_image', 2);
+register_filter('edit_image_custom_data', 'custom_data_edit_image', 3);
+register_filter('save_album_custom_data', 'custom_data_save_album', 2);
+register_filter('edit_album_custom_data', 'custom_data_edit_album', 3);
+register_filter('save_comment_custom_data', 'custom_data_save_comment');
+register_filter('edit_comment_custom_data', 'custom_data_edit_comment', 2);
+register_filter('save_admin_custom_data', 'custom_data_save_admin', 3);
+register_filter('edit_admin_custom_data', 'custom_data_edit_admin', 5);
 
 /**
  * Returns a processed custom data item
@@ -27,7 +27,7 @@ register_filter('edit_admin_custom_data', 'edit_admin', 5);
  * @param int $i prefix for the image being saved
  * @return string
  */
-function save_image($discard, $i) {
+function custom_data_save_image($discard, $i) {
 	return sanitize($_POST[$i.'-custom_data'], 1);
 }
 
@@ -39,7 +39,7 @@ function save_image($discard, $i) {
  * @param object $image the image object
  * @return string
  */
-function edit_image($discard, $image, $currentimage) {
+function custom_data_edit_image($discard, $image, $currentimage) {
 	return 
 		'<tr>
 			<td valign="top">'.gettext("Special data:").'</td>
@@ -55,7 +55,7 @@ function edit_image($discard, $image, $currentimage) {
  * @param int $prefix the prefix for the album being saved
  * @return string
  */
-function save_album($discard, $prefix) {
+function custom_data_save_album($discard, $prefix) {
 	return sanitize($_POST[$prefix.'x_album_custom_data'], 1);
 }
 
@@ -67,7 +67,7 @@ function save_album($discard, $prefix) {
  * @param object $album the album object
  * @return string
  */
-function edit_album($discard, $album, $prefix) {
+function custom_data_edit_album($discard, $album, $prefix) {
 	return
 		'<tr>
 			<td align="left" valign="top">'.gettext("Special data:").'</td>
@@ -82,7 +82,7 @@ function edit_album($discard, $album, $prefix) {
  * @param string $discard always empty
  * @return string
  */
-function save_comment($discard) {
+function custom_data_save_comment($discard) {
 	return sanitize($_POST['comment_custom_data'], 1);
 }
 
@@ -92,7 +92,7 @@ function save_comment($discard) {
  * @param string $discard always empty
  * @return string
  */
-function edit_comment($discard, $raw) {
+function custom_data_edit_comment($discard, $raw) {
 	return
 		'<tr>
 			<td align="left" valign="top">'.gettext("Extra information:").'</td>
@@ -109,7 +109,7 @@ function edit_comment($discard, $raw) {
  * @param string $i prefix for the admin
  * @return string
  */
-function save_admin($discard, $userobj, $i) {
+function custom_data_save_admin($discard, $userobj, $i) {
 	$custom = array('street'=>sanitize($_POST[$i.'-admin_custom_street'], 1),
 									'city'=>sanitize($_POST[$i.'-admin_custom_city'], 1),
 									'state'=>sanitize($_POST[$i.'-admin_custom_state'], 1),
@@ -123,14 +123,14 @@ function save_admin($discard, $userobj, $i) {
 /**
  * Returns table row(s) for edit of an admin user's custom data
  *
- * @param string $discard always empty
+ * @param string $html always empty
  * @param $userobj Admin user object
  * @param string $i prefix for the admin
  * @param string $background background color for the admin row
  * @param bool $current true if this admin row is the logged in admin
  * @return string
  */
-function edit_admin($discard, $userobj, $i, $background, $current) {
+function custom_data_edit_admin($html, $userobj, $i, $background, $current) {
 	$raw = $userobj->getCustomData();
 	if (!preg_match('/^a:[0-9]+:{/', $raw)) {
 		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
@@ -138,7 +138,7 @@ function edit_admin($discard, $userobj, $i, $background, $current) {
 		$address = unserialize($userobj->getCustomData());
 	}
 	
-	return
+	return $html.
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Street:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-admin_custom_street" cols="50"	rows="6" value="'.$address['street'].'"></td>

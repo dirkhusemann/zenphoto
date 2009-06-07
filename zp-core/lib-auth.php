@@ -30,6 +30,7 @@
  * "most privileged" Admin to ADMIN_RIGHTS
  * 
  */
+define('LIBAUTH_VERSION', 1);
 define('NO_RIGHTS', 2);
 define('MAIN_RIGHTS', 4);
 define('VIEWALL_RIGHTS', 8);
@@ -75,7 +76,7 @@ $_zp_admin_users = null;
 function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group='', $valid=1) {
 
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
-	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
+	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user' AND `valid`=$valid";
 	$result = query_single_row($sql);
 	if ($result) {
 		$id = $result['id'];
@@ -139,29 +140,6 @@ function getAdministrators() {
 		$admins = query_full_array($sql, true);
 		if ($admins !== false) {
 			foreach($admins as $user) {
-				if (NO_RIGHTS == 2) {
-					if (($rights = $user['rights']) & 1) { // old compressed rights
-						$newrights = MAIN_RIGHTS;
-						if ($rights & 2) $newrights = $newrights | UPLOAD_RIGHTS;
-						if ($rights & 4) $newrights = $newrights | COMMENT_RIGHTS;
-						if ($rights & 8) $newrights = $newrights | EDIT_RIGHTS;
-						if ($rights & 16) $newrights = $newrights | THEMES_RIGHTS;
-						if ($rights & 32) $newrights = $newrights | OPTIONS_RIGHTS;
-						if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
-						$user['rights'] = $newrights;
-					}
-				} else {
-					if (!(($rights = $user['rights']) & 1)) { // new expanded rights
-						$newrights = MAIN_RIGHTS;
-						if ($rights & 16) $newrights = $newrights | UPLOAD_RIGHTS;
-						if ($rights & 64) $newrights = $newrights | COMMENT_RIGHTS;
-						if ($rights & 256) $newrights = $newrights | EDIT_RIGHTS;
-						if ($rights & 1024) $newrights = $newrights | THEMES_RIGHTS;
-						if ($rights & 8192) $newrights = $newrights | OPTIONS_RIGHTS;
-						if ($rights & 65536) $newrights = $newrights | ADMIN_RIGHTS;
-						$user['rights'] = $newrights;
-					}
-				}
 				if (array_key_exists('password', $user)) { // transition code!
 					$user['pass'] = $user['password'];
 					unset($user['password']);
@@ -266,6 +244,53 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
 	return $emails;
 }
 
+/**
+ * Migrates credentials
+ *
+ * @param int $oldversion
+ */
+function migrateAuth($oldversion) {
+	if ($oldversion < LIBAUTH_VERSION) {
+		$_zp_admin_users = array();
+		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
+		$admins = query_full_array($sql, true);
+		if ($admins !== false) {
+			foreach($admins as $user) {
+				$update = false;
+				if (NO_RIGHTS == 2) {
+					if (($rights = $user['rights']) & 1) { // old compressed rights
+						$newrights = MAIN_RIGHTS;
+						if ($rights & 2) $newrights = $newrights | UPLOAD_RIGHTS;
+						if ($rights & 4) $newrights = $newrights | COMMENT_RIGHTS;
+						if ($rights & 8) $newrights = $newrights | EDIT_RIGHTS;
+						if ($rights & 16) $newrights = $newrights | THEMES_RIGHTS;
+						if ($rights & 32) $newrights = $newrights | OPTIONS_RIGHTS;
+						if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
+						$user['rights'] = $newrights;
+						$update = true;
+					}
+				} else {
+					if (!(($rights = $user['rights']) & 1)) { // new expanded rights
+						$newrights = MAIN_RIGHTS;
+						if ($rights & 16) $newrights = $newrights | UPLOAD_RIGHTS;
+						if ($rights & 64) $newrights = $newrights | COMMENT_RIGHTS;
+						if ($rights & 256) $newrights = $newrights | EDIT_RIGHTS;
+						if ($rights & 1024) $newrights = $newrights | THEMES_RIGHTS;
+						if ($rights & 8192) $newrights = $newrights | OPTIONS_RIGHTS;
+						if ($rights & 65536) $newrights = $newrights | ADMIN_RIGHTS;
+						$user['rights'] = $newrights;
+						$update = true;
+					}
+				}
+				if ($update) {
+					$sql = 'UPDATE '.prefix('administrators').' SET `rights`='.$user['rights'].' WHERE `id`='.$user['id'];
+					query($sql);
+				}
+			}
+		}
+	}
+}
+
 class Administrator extends PersistentObject {
 	
 	/**
@@ -280,8 +305,8 @@ class Administrator extends PersistentObject {
 	 * @param string $userid.
 	 * @return Comment
 	 */
-	function Administrator($userid) {
-		parent::PersistentObject('administrators',  array('user' => $userid), 'user', true, empty($userid));
+	function Administrator($userid, $valid=1) {
+		parent::PersistentObject('administrators',  array('user' => $userid, 'valid'=>$valid), 'user', true, empty($userid));
 	}
 	
 	function setPass($pwd) {

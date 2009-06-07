@@ -529,7 +529,7 @@ if ($subtab == 'users') {
 			} else {
 				$rights = ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS;
 			}
-			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => $rights, 'custom_data' => NULL);
+			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => $rights, 'custom_data' => NULL, 'valid'=>1);
 			$alterrights = '';
 		}
 	} else {
@@ -613,34 +613,36 @@ if (empty($alterrights)) {
 	$id = 0;
 	$albumlist = $gallery->getAlbums();
 	foreach($admins as $user) {
-		$userid = $user['user'];
-		$userobj = new Administrator($userid);
-		if (empty($userid)) {
-			$userobj->setRights($user['rights']);
-			$userobj->setValid(1);
-		}
-		if ($userobj->getRights() == 0) {
-			$master = '(<em>'.gettext('pending verification').'</em>)';
-		} else {
-			$master = '&nbsp;';
-		}
-		$ismaster = false;
-		if ($id == 0 && !$_zp_null_account) {
-			if ($_zp_loggedin & ADMIN_RIGHTS) {
-				$master = "(<em>".gettext("Master")."</em>)";
-				$userobj->setRights($userobj->getRights() | ADMIN_RIGHTS);
-				$ismaster = true;
+		if ($user['valid']) {
+			$userid = $user['user'];
+			$userobj = new Administrator($userid);
+			if (empty($userid)) {
+				$userobj->setRights($user['rights']);
+				$userobj->setValid(1);
 			}
-		}
-		$current = ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
-		if (count($admins) > 1) {
-			$background = ($current) ? " background-color: #ECF1F2;" : "";
-		} else {
-			$background = '';
-		}
-		$local_alterrights = apply_filter('admin_alterrights', $alterrights, $userobj);
-		$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
-		if ($userobj->getValid()) {
+			if ($userobj->getRights() == 0) {
+				$master = '(<em>'.gettext('pending verification').'</em>)';
+			} else {
+				$master = '&nbsp;';
+			}
+			$ismaster = false;
+			if ($id == 0 && !$_zp_null_account) {
+				if ($_zp_loggedin & ADMIN_RIGHTS) {
+					$master = "(<em>".gettext("Master")."</em>)";
+					$userobj->setRights($userobj->getRights() | ADMIN_RIGHTS);
+					$ismaster = true;
+				}
+			}
+			$current = ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
+			if (count($admins) > 1) {
+				$background = ($current) ? " background-color: #ECF1F2;" : "";
+			} else {
+				$background = '';
+			}
+			
+			
+			$local_alterrights = apply_filter('admin_alterrights', $alterrights, $userobj);
+			$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 			?>
 			<tr>
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
@@ -673,7 +675,7 @@ if (empty($alterrights)) {
 							</a>
 						</span>
 					</td>
-					<td width="320" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
+					<td width="345" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 					<?php 
 						if (empty($userid)) {
 							?>

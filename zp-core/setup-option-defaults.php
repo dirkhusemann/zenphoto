@@ -257,6 +257,13 @@ function setDefault($option, $default) {
 	}
 	if (getOption('zp_plugin_rating') == 1) setOption('zp_plugin_rating', 5);
 	
+	if (defined('LIBAUTH_VERSION')) {
+		if (LIBAUTH_VERSION != getOption('libauth_version')) {
+			migrateAuth(getOption('libauth_version'));
+			setOption('libauth_version',LIBAUTH_VERSION);
+		}
+	}
+	
 	// default groups
 	$sql = 'SELECT * FROM '.prefix('administrators').' WHERE `valid`=0';
 	$result = query_full_array($sql);
@@ -269,17 +276,17 @@ function setDefault($option, $default) {
 		}
 	}
 	if (in_array('administrators',$list)) {
-		saveAdmin('administrators', NULL, NULL, NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
+		saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
 	}
 	if (in_array('viewers',$list)) {
-		saveAdmin('viewers', NULL, NULL, NULL, NO_RIGHTS | VIEWALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
+		saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | VIEWALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
 	}
 	if (in_array('bozos',$list)) {
-		saveAdmin('bozos', NULL, NULL, NULL, NO_RIGHTS, array(), gettext('Banned users'),NULL, 0);
+		saveAdmin('bozos', NULL, 'group', NULL, NO_RIGHTS, array(), gettext('Banned users'),NULL, 0);
 	}
 	if (in_array('album managers',$list)) {
-		saveAdmin('album managers', NULL, NULL, NULL, NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
-										EDIT_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums. Assign a uses to this group to set this rights, then unassign the group in order to individually set managed albums.'),NULL, 0);
+		saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
+										EDIT_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
 	}
 	
 	?>
