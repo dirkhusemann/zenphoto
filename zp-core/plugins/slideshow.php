@@ -16,13 +16,13 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.7
+ * @version 1.0.7.1
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.7';
+$plugin_version = '1.0.7.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -229,7 +229,8 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 		if (empty($_POST['imagenumber'])) {
 			$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".abs($albumid));
 			$album = new Album($gallery, $albumq['folder']);
-			$returnpath = rewrite_path('/'.pathurlencode($album->name).'/page/'.$pagenumber,'/index.php?album='.urlencode($album->name).'&page='.$pagenumber);
+			$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+			//$returnpath = rewrite_path('/'.pathurlencode($album->name).'/page/'.$pagenumber,'/index.php?album='.urlencode($album->name).'&page='.$pagenumber);
 		} else {
 			$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 		}
