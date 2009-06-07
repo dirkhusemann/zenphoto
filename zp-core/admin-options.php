@@ -638,7 +638,7 @@ if (empty($alterrights)) {
 		} else {
 			$background = '';
 		}
-		$alterrights = apply_filter('admin_alterrights', $alterrights, $userobj);
+		$local_alterrights = apply_filter('admin_alterrights', $alterrights, $userobj);
 		$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 		if ($userobj->getValid()) {
 			?>
@@ -684,7 +684,7 @@ if (empty($alterrights)) {
 							echo $master;
 							if (!$userobj->getRights()) {
 							?>
-								<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
+								<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $local_alterrights; ?>>
 								<?php echo gettext("Authenticate user"); ?>
 								<?php
 							} else {
@@ -726,7 +726,7 @@ if (empty($alterrights)) {
 						value="<?php echo $x; ?>" />
 				</td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<?php printAdminRightsTable($id, $background, $alterrights, $userobj->getRights()); ?>	
+					<?php printAdminRightsTable($id, $background, $local_alterrights, $userobj->getRights()); ?>	
 				</td>
 			</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
@@ -747,7 +747,7 @@ if (empty($alterrights)) {
 					<p>
 						<?php
 							if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
-								printManagedAlbums($albumlist, $alterrights, $user['id'], $id);
+								printManagedAlbums($albumlist, $local_alterrights, $user['id'], $id);
 							} else {
 								if ($ismaster) {
 									echo gettext("This account's username and email are used as contact data in the RSS feeds.");
@@ -758,7 +758,7 @@ if (empty($alterrights)) {
 					<p>
 						<?php
 							if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
-								if (!empty($alterrights)) {
+								if (!empty($local_alterrights)) {
 									echo gettext("You may manage these albums subject to the above rights.");
 								} else {
 									echo gettext("Select one or more albums for the administrator to manage.").' ';

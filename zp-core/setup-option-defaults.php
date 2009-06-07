@@ -260,10 +260,26 @@ function setDefault($option, $default) {
 	// default groups
 	$sql = 'SELECT * FROM '.prefix('administrators').' WHERE `valid`=0';
 	$result = query_full_array($sql);
-	if (!is_array($result) || empty($result)) { // setup default groups
-		saveAdmin('administrator', NULL, NULL, NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL,  0);
-		saveAdmin('viewers', NULL, NULL, NULL, NO_RIGHTS | VIEWALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL,  0);
-		saveAdmin('bozos', NULL, NULL, NULL, NO_RIGHTS, array(), gettext('Banned users'),NULL,  0);
+	if (!is_array($result)|| empty($result)) {
+		$list = array('administrators','user'=>'viewers','user'=>'bozos','album managers');
+	} else {
+		$list = array();
+		foreach ($result as $group) {
+			$list[] = $group['user'];
+		}
+	}
+	if (in_array('administrators',$list)) {
+		saveAdmin('administrators', NULL, NULL, NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
+	}
+	if (in_array('viewers',$list)) {
+		saveAdmin('viewers', NULL, NULL, NULL, NO_RIGHTS | VIEWALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
+	}
+	if (in_array('bozos',$list)) {
+		saveAdmin('bozos', NULL, NULL, NULL, NO_RIGHTS, array(), gettext('Banned users'),NULL, 0);
+	}
+	if (in_array('album managers',$list)) {
+		saveAdmin('album managers', NULL, NULL, NULL, NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
+										EDIT_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums. Assign a uses to this group to set this rights, then unassign the group in order to individually set managed albums.'),NULL, 0);
 	}
 	
 	?>

@@ -38,8 +38,15 @@ if (isset($_GET['action'])) {
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
 			if (!empty($groupname)) {
 				$group = new Administrator($groupname);
-				$group->setRights(processRights($i));
-				$group->setAlbums(processManagedAlbums($i));
+				if (isset($_POST[$i.'-initgroup'])) {
+					$initgroupname = trim(sanitize($_POST[$i.'-initgroup'],3));
+					$initgroup = new Administrator($initgroupname);
+					$group->setRights($initgroup->getRights());
+					$group->setAlbums(populateManagedAlbumList($initgroup->get('id')));
+				} else {
+					$group->setRights(processRights($i));
+					$group->setAlbums(processManagedAlbums($i));
+				}
 				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
 				saveAdmin($groupname, NULL, NULL, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
 				//have to update any users who have this group designate.
@@ -70,7 +77,11 @@ if (isset($_GET['action'])) {
 			$user = new Administrator($username);
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
 			$group = new Administrator($groupname);
-			saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
+			if (empty($groupname)) {
+				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `id`='.$user->get('id');
+			} else {
+				saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
+			}
 		}
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=assignments&saved');
 		exit();
@@ -106,15 +117,22 @@ echo '</head>'."\n";
 					case 'groups':
 						$adminlist = $adminordered;
 						$users = array();
+						$groups = array();
 						foreach ($adminlist as $user) {
 							if ($user['valid']) {
 								$users[] = $user['user'];
+							} else {
+								$groups[] = $user;
 							}
 						}
 						$gallery = new Gallery();
 						$albumlist = $gallery->getAlbums();
-						$adminordered [''] = array('id' => -1,  'user' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0, 'custom_data'=>'');
 						?>
+						<p>
+							<?php
+							echo gettext("Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
+							?>
+						</p>
 						<form action="?action=savegroups&tab=groups" method="post" AUTOCOMPLETE=OFF>
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
@@ -125,76 +143,103 @@ echo '</head>'."\n";
 							<table class="bordered">
 								<?php
 								$id = 0;
-								foreach($adminordered as $key=>$user) {
-									if (!$user['valid']) { // then it is a group
-										$groupname = $user['user'];
-										$groupid = $user['id'];
-										?>
-										<tr>
-											<td style="border-top: 4px solid #D1DBDF;" valign="top">
-												<?php
-												if (empty($user['user'])) {
-													?>
-													<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
-													<?php
-												} else {
-													echo $groupname;
-													?>
-													<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $groupname ?>" />
-													<?php
-												}
-												?>
-												<br /><br /><br />
-												<?php echo gettext('description:'); ?>
-												<br />
-												<textarea name="<?php echo $id; ?>-desc" cols="40" rows="4"><?php echo htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")); ?></textarea>
-											</td>
-											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-												<?php												
-												printAdminRightsTable($id, '', '', $user['rights']);
-												?>
-												<p>
-													<?php												
-													printManagedAlbums($albumlist, '', $user['id'], $id);
-													?>
-												</p>
-											</td>
-											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-												<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
-												<div class="box-tags-unpadded">
-													<?php											
-													$members = array();
-													if (!empty($groupname)) {
-														foreach ($adminlist as $user) {
-															if ($user['valid'] && $user['group']==$groupname) {
-																$members[] = $user['user'];
-															}
-														}
-													}
-
-													?>
-													<ul class="shortchecklist">
-													<?php generateUnorderedListFromArray($members, $users, 'user_'.$id.'-', false, true, false); ?>
-													</ul>
-												</div>
-											</td>
-											<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+								$groupselector = $groups;
+								$groupselector[''] = array('id' => -1,  'user' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0, 'custom_data'=>'');
+								foreach($groupselector as $key=>$user) {
+									$groupname = $user['user'];
+									$groupid = $user['id'];
+									$rights = $user['rights'];
+									?>
+									<tr>
+										<td style="border-top: 4px solid #D1DBDF;" valign="top" style="width:20em;">
 											<?php
-											if (!empty($groupname)) {
-												$msg = gettext('Are you sure you want to delete this group?');
+											if (empty($groupname)) {
 												?>
-												<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo $groupname; ?>'; }"
-																	title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
-													<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
-												</a> 
+												<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
+												<?php
+											} else {
+												echo $groupname;
+												?>
+												<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $groupname ?>" />
 												<?php
 											}
-											?>	
-											</td>
-										</tr>
+											?>
+											<br /><br />
+											<?php echo gettext('description:'); ?>
+											<br />
+											<textarea name="<?php echo $id; ?>-desc" cols="40" rows="4"><?php echo htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")); ?></textarea>
+											<?php
+											if (empty($groupname) && !empty($groups)) {
+												?>
+												<br />
+												<?php echo gettext('initialize from:'); ?>
+												<br />
+												<select name="<?php echo $id; ?>-initgroup" onchange="javascript: $('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
+													<option title=""></option>
+													<?php
+													foreach ($groups as $user) {
+														$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
+														if ($groupname == $user['user']) {
+															$selected = ' SELECTED="SELECTED"';
+															} else {
+															$selected = '';
+														}
+														?>
+														<option<?php echo $selected; ?> title="<?php echo $hint; ?>"><?php echo $user['user']; ?></option>
+														<?php
+													}
+													?>
+												</select>
+												<span class="hint<?php echo $id; ?>" id="hint<?php echo $id; ?>"></span>
+												<?php
+											}
+											?>
+										</td>
+										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+											<?php				
+											printAdminRightsTable($id, '', '', $rights);
+											?>
+											<p>
+												<?php												
+												printManagedAlbums($albumlist, '', $groupid, $id);
+												?>
+											</p>
+										</td>
+										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+											<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
+											<div class="box-tags-unpadded">
+												<?php											
+												$members = array();
+												if (!empty($groupname)) {
+													foreach ($adminlist as $user) {
+														if ($user['valid'] && $user['group']==$groupname) {
+															$members[] = $user['user'];
+														}
+													}
+												}
+
+												?>
+												<ul class="shortchecklist">
+												<?php generateUnorderedListFromArray($members, $users, 'user_'.$id.'-', false, true, false); ?>
+												</ul>
+											</div>
+										</td>
+										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 										<?php
-										$id++;
-									}
+										if (!empty($groupname)) {
+											$msg = gettext('Are you sure you want to delete this group?');
+											?>
+											<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo $groupname; ?>'; }"
+																title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
+												<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
+											</a> 
+											<?php
+										}
+										?>	
+										</td>
+									</tr>
+									<?php
+									$id++;
 								}
 								?>
 							</table>
@@ -206,21 +251,21 @@ echo '</head>'."\n";
 							<input type="hidden" name="totalgroups" value="<?php echo $id; ?>" />
 						</form>
 						<br clear="all" /><br />
-						<p>
-							<?php
-							echo gettext("Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
-							?>
-						</p>
 						<?php
 						break;
 					case 'assignments':
-						$groups = array('');
+						$groups = array();
 						foreach ($adminordered as $user) {
 							if (!$user['valid']) {
-								$groups[] = $user['user'];
+								$groups[] = $user;
 							}
 						}
 						?>
+						<p>
+							<?php
+							echo gettext("Assign users to groups.");
+							?>
+						</p>
 						<form action="?action=saveauserassignments&tab=users" method="post" AUTOCOMPLETE=OFF>
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
@@ -233,16 +278,33 @@ echo '</head>'."\n";
 								$id = 0;
 								foreach ($adminordered as $user) {
 									if ($user['valid']) {
+										$group = $user['group'];
 										?>
 										<input type="hidden" name="<?php echo $id; ?>-user" value="<?php echo $user['user']; ?>" />
 										<tr>
 											<td width="20%" style="border-top: 1px solid #D1DBDF;" valign="top">
 												<?php echo $user['user']; ?>
 											</td>
-											<td style="border-top: 1px solid #D1DBDF;" valign="top">
-												<select name="<?php echo $id; ?>-group" >
-													<?php generateListFromArray(array($user['group']), $groups,false, false); ?>
+											<td style="border-top: 1px solid #D1DBDF;" valign="top" >
+												<select name="<?php echo $id; ?>-group" onchange="javascript: $('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
+													<option title="<?php echo gettext('no group affiliation'); ?>"></option>
+													<?php
+													$selected_hint = gettext('no group affiliation');
+													foreach ($groups as $user) {
+														$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
+														if ($group == $user['user']) {
+															$selected = ' SELECTED="SELECTED"';
+															$selected_hint = $hint;
+															} else {
+															$selected = '';
+														}
+														?>
+														<option<?php echo $selected; ?> title="<?php echo $hint; ?>"><?php echo $user['user']; ?></option>
+														<?php
+													}
+													?>
 												</select>
+												<span class="hint<?php echo $id; ?>" id="hint<?php echo $id; ?>" style="width:15em;"><?php echo $selected_hint; ?></span>
 											</td>
 										</tr>
 										<?php
@@ -259,11 +321,6 @@ echo '</head>'."\n";
 						<input type="hidden" name="totalusers" value="<?php echo $id; ?>" />
 						</form>
 						<br clear="all" /><br />
-						<p>
-							<?php
-							echo gettext("Assign users to groups.");
-							?>
-						</p>
 						<?php
 						break;
 				}

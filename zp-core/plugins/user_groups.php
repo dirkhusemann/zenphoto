@@ -28,16 +28,16 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 function save_admin($discard, $userobj, $i) {
 	$administrators = getAdministrators();
 	$groupname = sanitize($_POST[$i.'group']);
+	if (empty($groupname)) {
+		$oldgroup = $userobj->getGroup();
+		$group = new Administrator($oldgroup);
+		$userobj->setRights($group->getRights());
+	} else {
+		$group = new Administrator($groupname);
+		$userobj->setRights($group->getRights());
+		$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
+	}
 	$userobj->setGroup($groupname);
-	foreach ($administrators as $group) {
-		if (!$group['valid']) {
-			if ($group['user'] == $groupname) { // matches up with group
-				$userobj->setRights($group['rights']);
-				$userobj->setAlbums(populateManagedAlbumList($group['id']));
-				break;
-			}
-		}
-	}	
 }
 
 /**
@@ -55,37 +55,41 @@ function edit_admin($discard, $userobj, $i, $background, $current) {
 	$admins = getAdministrators();
 	$ordered = array();
 	$groups = array();
+	$adminordered = array();
 	foreach ($admins as $key=>$admin) {
 		$ordered[$key] = $admin['user'];
 	}
 	asort($ordered);
-	$adminordered = array();
 	foreach ($ordered as $key=>$user) {
 		$adminordered[] = $admins[$key];
-		if (!$user['valid']) {
+		if (!$admins[$key]['valid']) {
 			$groups[] = $admins[$key];
 		}
 	}
 	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
-		$grouppart = '<select name="'.$i.'group" >'."\n";
-		$grouppart .= '<option></option>'."\n";
+		$grouppart = '<select name="'.$i.'group" onchange="javascript: $(\'#hint'.$i.'\').html(this.options[this.selectedIndex].title);">'."\n";
+		$grouppart .= '<option title="'.gettext('no group affiliation').'"></option>'."\n";
+		$selected_hint = gettext('no group affiliation');
 		foreach ($groups as $user) {
+			$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
 			if ($group == $user['user']) {
 				$selected = ' SELECTED="SELECTED"';
-			} else {
+				$selected_hint = $hint;
+				} else {
 				$selected = '';
 			}
-			$grouppart .= '<option'.$selected.'>'.$user['user'].'</option>'."\n";
+			$grouppart .= '<option'.$selected.' title="'.$hint.'">'.$user['user'].'</option>'."\n";
 		}
 		$grouppart .= '</select>'."\n";
+		$grouppart .= '<span class="hint'.$i.'" id="hint'.$i.'" style="width:15em;">'.$selected_hint."</span>\n";
 	} else {
 		$grouppart = $group.'<input type="hidden" name="'.$i.'group" value="'.$group.'" />'."\n";
 	}
 	$result = 
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Group:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">'.
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="325">'.
 				$grouppart.
 			'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" rowspan="5">'.gettext('User group membership.<br /><strong>NOTE:</strong> Rights and albums are determined by the group!').'</td>
