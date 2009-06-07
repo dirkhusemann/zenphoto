@@ -891,7 +891,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	} else {
 		$them = $_zp_admin_ordered_taglist;
 	}
-
+	
 	if (is_null($that)) {
 		$tags = array();
 	} else {
@@ -916,10 +916,10 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 		$displaylist = $them;
 	}
 	if (count($tags) > 0) {
-		generateUnorderedListFromArray($tags, $tags, $postit, false, true, false);
+		generateUnorderedListFromArray($tags, $tags, $postit, false, !$mostused, false);
 		echo '<hr />';
 	}
-	generateUnorderedListFromArray(array(), $displaylist, $postit, false, true, false);
+	generateUnorderedListFromArray(array(), $displaylist, $postit, false, !$mostused, false);
 	echo '</ul>';
 }
 
@@ -2474,6 +2474,18 @@ function removeParentAlbumNames($album) {
  * @param bit $rights rights of the admin
  */
 function printAdminRightsTable($id, $background, $alterrights, $rights) {
+	$rightslist = array();
+	$rightslist[gettext("User admin")] = array('key'=>'admin_rights', 'value'=>ADMIN_RIGHTS);
+	$rightslist[gettext("Options")] = array('key'=>'options_rights', 'value'=>OPTIONS_RIGHTS);
+	$rightslist[gettext("Zenpage")] = array('key'=>'zenpage_rights', 'value'=>ZENPAGE_RIGHTS);
+	$rightslist[gettext("Tags")] = array('key'=>'tags_rights', 'value'=>TAGS_RIGHTS);
+	$rightslist[gettext("Themes")] = array('key'=>'themes_rights', 'value'=>THEMES_RIGHTS);
+	$rightslist[gettext("Manage all albums")] = array('key'=>'all_album_rights', 'value'=>ALL_ALBUMS_RIGHTS);
+	$rightslist[gettext("Albums")] = array('key'=>'edit_rights', 'value'=>EDIT_RIGHTS);
+	$rightslist[gettext("Comment")] = array('key'=>'comment_rights', 'value'=>COMMENT_RIGHTS);
+	$rightslist[gettext("Upload")] = array('key'=>'upload_rights', 'value'=>UPLOAD_RIGHTS);
+	$rightslist[gettext("View all")] = array('key'=>'view_rights', 'value'=>VIEWALL_RIGHTS);
+	$rightslist[gettext("Overview")] = array('key'=>'main_rights', 'value'=>MAIN_RIGHTS);
 	?>
 	<table class="checkboxes" > <!-- checkbox table -->
 		<tr>
@@ -2481,126 +2493,35 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 			<strong><?php echo gettext("Rights"); ?></strong>:
 			</td>
 		</tr>
-		<tr>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-admin_rights" id="<?php echo $id ?>-admin_rights"
-							value=<?php echo ADMIN_RIGHTS; if ($rights & ADMIN_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("User admin"); ?>
-					</label>
-				</span>
-			</td>
-				
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-options_rights" id="<?php echo $id ?>-options_rights"
-							value=<?php echo OPTIONS_RIGHTS; if ($rights & OPTIONS_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("Options"); ?>
-					</label>
-				</span>
-			</td>
-				
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-zenpage_rights" id="<?php echo $id ?>-zenpage_rights"
-							value=<?php echo ZENPAGE_RIGHTS; if ($rights & ZENPAGE_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("Zenpage"); ?>
-					</label>
-				</span>
-			</td>
-		</tr>
-		<tr>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-					<input type="checkbox" name="<?php echo $id ?>-tags_rights" id="<?php echo $id ?>-tags_rights"
-						value=<?php echo TAGS_RIGHTS; if ($rights & TAGS_RIGHTS) echo ' checked';
-						echo $alterrights; ?>>
-					<?php echo gettext("Tags"); ?>
-					</label>
-				</span>
-			</td>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-themes_rights" id="<?php echo $id ?>-themes_rights"
-							value=<?php echo THEMES_RIGHTS; if ($rights & THEMES_RIGHTS) echo ' checked';
-							echo $alterrights; ?>>
-						<?php echo gettext("Themes"); ?>
-					</label>
-				</span>
-			</td>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-all_album_rights" id="<?php echo $id ?>-all_album_rights"
-							value=<?php echo ALL_ALBUMS_RIGHTS; if ($rights & ALL_ALBUMS_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("Manage all albums"); ?>
-					</label>
-				</span>
-			</td>
-		</tr>
-		<tr>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-edit_rights" id="<?php echo $id ?>-edit_rights"
-							value=<?php echo EDIT_RIGHTS; if ($rights & EDIT_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("Edit"); ?>
-					</label>
-				</span>
-			</td>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-comment_rights" id="<?php echo $id ?>-comment_rights"
-							value=<?php echo COMMENT_RIGHTS; if ($rights & COMMENT_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("Comment"); ?>
-					</label>
-				</span>
-			</td>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-upload_rights" id="<?php echo $id ?>-upload_rights"
-							value=<?php echo UPLOAD_RIGHTS; if ($rights & UPLOAD_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("Upload"); ?>
-					</label>
-				</span>
-			</td>
-		</tr>
-		<tr>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-view_rights" id="<?php echo $id ?>-view_rights"
-							value=<?php echo VIEWALL_RIGHTS; if ($rights & VIEWALL_RIGHTS) echo ' checked'; 
-							echo $alterrights; ?>>
-						<?php echo gettext("View all"); ?>
-					</label>
-				</span>
-			</td>
-			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="<?php echo $id ?>-main_rights" id="<?php echo $id ?>-main_rights"
-							value=<?php echo MAIN_RIGHTS; if ($rights & MAIN_RIGHTS) echo ' checked';
-							echo $alterrights; ?>>
-						<?php echo gettext("Overview"); ?>
-					</label>
-				</span>
-			</td>
-		</tr>
+		<?php
+		$element = 3;
+		foreach ($rightslist as $rightstext=>$rightselement) {
+			if ($element>2) {
+				$element = 0;
+				?>
+				<tr>
+				<?php
+			}
+			?>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<span style="white-space:nowrap">
+						<label>
+							<input type="checkbox" name="<?php echo $id.'-'.$rightselement['key']; ?>" id="<?php echo $id.'-'.$rightselement['key']; ?>"
+								value=<?php echo $rightselement['value']; if ($rights & $rightselement['value']) echo ' checked'; 
+								echo $alterrights; ?>>
+							<?php echo $rightstext; ?>
+						</label>
+					</span>
+				</td>
+			<?php
+			$element++;
+			if ($element>2) {
+				?>
+				</tr>
+				<?php
+			}
+		}
+		?>
 	</table> <!-- end checkbox table -->
 	<?php
 }
