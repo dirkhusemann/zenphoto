@@ -910,7 +910,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	if ($showCounts) {
 		$displaylist = array();
 		foreach ($them as $tag) {
-			$displaylist[$tag.' ['.$counts[$tag].']'] = $tag;
+			$displaylist[$tag.' ['.$counts[$tag].']'] = $tag.' ('.$counts[$tag].')';
 		}
 	} else {
 		$displaylist = $them;
