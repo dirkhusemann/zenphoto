@@ -3,12 +3,12 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.6.2
+ * @version 1.0.6.3
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.6.2';
+$plugin_version = '1.0.6.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -76,7 +76,7 @@ class pagedthumbsOptions {
  * 
  */
 function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL,$placeholders=NULL) {
-	global $_zp_current_album, $_zp_current_image, $_zp_current_search;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
 	// in case someone wants to override the options by parameter
 	if(is_null($crop)) { 
 		$crop = getOption("pagedthumbs_crop");
