@@ -21,7 +21,7 @@ if (!isset($_REQUEST['performcrop'])) {
 }
 
 function toolbox_crop_image($albumname, $imagename) {
-	if (isMyALbum($albumname, EDIT_RIGHTS)) {
+	if (isMyALbum($albumname, ALBUM_RIGHTS)) {
 		$image = newimage(new Album(New Gallery(), $albumname),$imagename);
 		if (isImagePhoto($image)) {
 			?>
@@ -62,7 +62,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
 
-if (!isMyALbum($albumname, EDIT_RIGHTS)) { // prevent nefarious access to this page.
+if (!isMyALbum($albumname, ALBUM_RIGHTS)) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }

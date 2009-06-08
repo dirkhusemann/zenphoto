@@ -38,7 +38,7 @@ if (!zp_loggedin()) {
 $search = new SearchEngine();
 if (isset($_POST['savealbum'])) {
 	$albumname = $_POST['album'];
-	if (!isMyAlbum($albumname, EDIT_RIGHTS)) {
+	if (!isMyAlbum($albumname, ALBUM_RIGHTS)) {
 		die(gettext("You do not have edit rights on this album."));
 	}
 	$album = $_POST['albumselect'];

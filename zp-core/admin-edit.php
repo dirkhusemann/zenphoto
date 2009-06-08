@@ -13,7 +13,7 @@ require_once(dirname(__FILE__).'/class-sortable.php');
 $_zp_sortable_list = new jQuerySortable('js');
 // $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
+if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
 	exit();
 }
@@ -1026,7 +1026,7 @@ if (isset($_GET['saved'])) {
 	$albumdir = "";
 	if (isset($_GET['album'])) {
 		$folder = sanitize_path($_GET['album']);
-		if (isMyAlbum($folder, EDIT_RIGHTS)) {
+		if (isMyAlbum($folder, ALBUM_RIGHTS)) {
 			$album = new Album($gallery, $folder);
 			$albums = $album->getSubAlbums();
 			$pieces = explode('/', $folder);
@@ -1038,7 +1038,7 @@ if (isset($_GET['saved'])) {
 		$albumsprime = $gallery->getAlbums();
 		$albums = array();
 		foreach ($albumsprime as $album) { // check for rights
-			if (isMyAlbum($album, EDIT_RIGHTS)) {
+			if (isMyAlbum($album, ALBUM_RIGHTS)) {
 				$albums[] = $album;
 			}
 		}
@@ -1100,7 +1100,7 @@ if (isset($_GET['saved'])) {
 	$albumsprime = $gallery->getAlbums();
 	$albums = array();
 	foreach ($albumsprime as $album) { // check for rights
-		if (isMyAlbum($album, EDIT_RIGHTS)) {
+		if (isMyAlbum($album, ALBUM_RIGHTS)) {
 			$albums[] = $album;
 		}
 	}
@@ -1153,7 +1153,7 @@ if (isset($_GET['saved'])) {
 		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 		</ul>
 <?php
-  if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) {
+  if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		zenSortablesSaveButton($_zp_sortable_list, "?page=edit&saved", gettext("Save Order"));
   }
 	?>

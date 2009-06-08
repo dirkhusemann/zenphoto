@@ -42,7 +42,7 @@ if (isset($_GET['action'])) {
 					$group->setRights($initgroup->getRights());
 					$group->setAlbums(populateManagedAlbumList($initgroup->get('id')));
 				} else {
-					$group->setRights(processRights($i));
+					$group->setRights(processRights($i) | NO_RIGHTS);
 					$group->setAlbums(processManagedAlbums($i));
 				}
 				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
@@ -145,7 +145,7 @@ echo '</head>'."\n";
 								<?php
 								$id = 0;
 								$groupselector = $groups;
-								$groupselector[''] = array('id' => -1,  'user' => '', 'name'=>'group', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS, 'valid' => 0, 'custom_data'=>'');
+								$groupselector[''] = array('id' => -1,  'user' => '', 'name'=>'group', 'rights' => ALL_RIGHTS ^ MANAGE_ALL_ALBUM_RIGHTS, 'valid' => 0, 'custom_data'=>'');
 								foreach($groupselector as $key=>$user) {
 									$groupname = $user['user'];
 									$groupid = $user['id'];
@@ -208,6 +208,7 @@ echo '</head>'."\n";
 											?>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+											<input type="checkbox" name="<?php echo $id ?>-confirmed" value=1>
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
 											?>

@@ -61,7 +61,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			if (!($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS))) $page = '';
 			break;
 		case 'edit':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) $page = '';
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) $page = '';
 			break;
 		case 'themes':
 			if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) $page = '';

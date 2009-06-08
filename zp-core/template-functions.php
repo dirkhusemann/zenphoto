@@ -86,9 +86,9 @@ function zenJavascript() {
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/zenphoto.js.php\"></script>\n";
 
-	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
+	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
 		if (in_context(ZP_ALBUM)) {
-			$grant = isMyAlbum($_zp_current_album->name, EDIT_RIGHTS);
+			$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
 		} else {
 			$grant = $rights & ADMIN_RIGHTS;
 		}
@@ -148,7 +148,7 @@ function printAdminToolbox($id='admin') {
 		}
 		if ($_zp_gallery_page === $gal) { 
 		// script is either index.php or the gallery index page
-			if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
+			if ($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
 				// admin has edit rights so he can sort the gallery (at least those albums he is assigned)
 				echo "<li>";
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
@@ -164,7 +164,7 @@ function printAdminToolbox($id='admin') {
 		} else if ($_zp_gallery_page === 'album.php') { 
 		// script is album.php
 			$albumname = $_zp_current_album->name;
-			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
+			if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
 				// admin is empowered to edit this album--show an edit link
 				echo "<li>";
 				printSubalbumAdmin(gettext('Edit album'), '', "</li>\n");
@@ -196,7 +196,7 @@ function printAdminToolbox($id='admin') {
 		// script is image.php
 			$albumname = $_zp_current_album->name;
 			$imagename = $_zp_current_image->filename;
-			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
+			if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
 				// if admin has edit rights on this album, provide a delete link for the image.
 				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
 				urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
@@ -4252,7 +4252,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin;
-	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS | ALL_ALBUMS_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
+	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$show = (getOption('search_user') != '');

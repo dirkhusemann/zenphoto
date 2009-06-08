@@ -12,7 +12,7 @@ require_once($zp.'/functions-basic.php');
 
 if (isset($_GET['clear_rating'])) {
 	require_once($zp.'/admin-functions.php'); // you have to be loged in to do this
-	if (!(zp_loggedin(ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
+	if (!(zp_loggedin(ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 		$const_webpath = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
 		header("Location: " . PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $const_webpath . ZENFOLDER . "/admin.php");
 		exit();

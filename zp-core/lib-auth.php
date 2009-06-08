@@ -30,23 +30,40 @@
  * "most privileged" Admin to ADMIN_RIGHTS
  * 
  */
+
 define('LIBAUTH_VERSION', 1);
 define('NO_RIGHTS', 2);
-define('MAIN_RIGHTS', 4);
-define('VIEWALL_RIGHTS', 8);
-define('UPLOAD_RIGHTS', 16);
-define('COMMENT_RIGHTS', 64);
-define('EDIT_RIGHTS', 256);
-define('ALL_ALBUMS_RIGHTS', 512);
-define('THEMES_RIGHTS', 1024);
-define('ZENPAGE_RIGHTS', 2048);
-define('TAGS_RIGHTS', 4096);
-define('OPTIONS_RIGHTS', 8192);
-define('ADMIN_RIGHTS', 65536);
-define('ALL_RIGHTS',	NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
-											EDIT_RIGHTS | ALL_ALBUMS_RIGHTS | THEMES_RIGHTS | ZENPAGE_RIGHTS | TAGS_RIGHTS |
-											OPTIONS_RIGHTS | ADMIN_RIGHTS);
+$_admin_rights = array();
+define('ALL_RIGHTS', defineRights());
+foreach ($_admin_rights as $right=>$value) {
+	define($right, $value);
+}
 
+/**
+ * Sets the rights array for the above definition loop
+ * Returns the value for ALL_RIGHTS
+ *
+ * @return bit
+ */
+function defineRights() {
+	global $_admin_rights;
+	$_admin_rights = array(	'MAIN_RIGHTS' => 4,
+													'VIEWALL_RIGHTS' => 8,
+													'UPLOAD_RIGHTS' => 16,
+													'POST_COMMENT_RIGHTS'=>32,
+													'COMMENT_RIGHTS' => 64,
+													'ALBUM_RIGHTS' => 256,
+													'MANAGE_ALL_ALBUM_RIGHTS' => 512,
+													'THEMES_RIGHTS' => 1024,
+													'ZENPAGE_RIGHTS' => 2048,
+													'TAGS_RIGHTS' => 4096,
+													'OPTIONS_RIGHTS' => 8192,
+													'ADMIN_RIGHTS' => 65536);
+	$allrights = 0;
+	foreach ($_admin_rights as $right) $allrights = $allrights | $right;
+	return $allrights | NO_RIGHTS;
+}
+	
 /**
  * Returns the hash of the zenphoto password
  *
@@ -250,44 +267,83 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
  * @param int $oldversion
  */
 function migrateAuth($oldversion) {
-	if ($oldversion < LIBAUTH_VERSION) {
-		$_zp_admin_users = array();
-		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
-		$admins = query_full_array($sql, true);
-		if ($admins !== false) {
-			foreach($admins as $user) {
-				$update = false;
+	
+	printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, LIBAUTH_VERSION);	
+	
+	global $_admin_rights;
+	$_zp_admin_users = array();
+	$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
+	$admins = query_full_array($sql, true);
+	if ($admins !== false) {
+		switch ($oldversion) {
+			case 1:
+				$oldrights = array(	'MAIN_RIGHTS' => 4,
+														'VIEWALL_RIGHTS' => 8,
+														'UPLOAD_RIGHTS' => 16,
+														'POST_COMMENT_RIGHTS'=>32,
+														'COMMENT_RIGHTS' => 64,
+														'ALBUM_RIGHTS' => 256,
+														'MANAGE_ALL_ALBUM_RIGHTS' => 512,
+														'THEMES_RIGHTS' => 1024,
+														'ZENPAGE_RIGHTS' => 2048,
+														'TAGS_RIGHTS' => 4096,
+														'OPTIONS_RIGHTS' => 8192,
+														'ADMIN_RIGHTS' => 65536);
+				break;
+			case 2:
+				$oldrights = array(	'MAIN_RIGHTS' => pow(2,2),
+														'VIEWALL_RIGHTS' => pow(2,4),
+														'UPLOAD_RIGHTS' => pow(2,6),
+														'POST_COMMENT_RIGHTS'=> pow(2,8),
+														'COMMENT_RIGHTS' => pow(2,10),
+														'ALBUM_RIGHTS' => pow(2,12),
+														'MANAGE_ALL_ALBUM_RIGHTS' => pow(2,14),
+														'THEMES_RIGHTS' => pow(2,16),
+														'ZENPAGE_RIGHTS' => pow(2,18),
+														'TAGS_RIGHTS' => pow(2,20),
+														'OPTIONS_RIGHTS' => pow(2,22),
+														'ADMIN_RIGHTS' => pow(2,24));
+				break;
+			default: // anything before the rights version was created
+				$oldrights = NULL;
+				break;
+		}
+		foreach($admins as $user) {
+			$update = false;
+			if (is_array($oldrights)) {
+				$rights = $user['rights'];
+				$newrights = 0;
+				foreach ($_admin_rights as $key=>$right) {
+					if (array_key_exists($key, $oldrights) && $rights & $oldrights[$key]) {
+						$newrights = $newrights | $right;
+					}
+				}
+			} else {
 				if (NO_RIGHTS == 2) {
 					if (($rights = $user['rights']) & 1) { // old compressed rights
 						$newrights = MAIN_RIGHTS;
 						if ($rights & 2) $newrights = $newrights | UPLOAD_RIGHTS;
 						if ($rights & 4) $newrights = $newrights | COMMENT_RIGHTS;
-						if ($rights & 8) $newrights = $newrights | EDIT_RIGHTS;
+						if ($rights & 8) $newrights = $newrights | ALBUM_RIGHTS;
 						if ($rights & 16) $newrights = $newrights | THEMES_RIGHTS;
 						if ($rights & 32) $newrights = $newrights | OPTIONS_RIGHTS;
 						if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
-						$user['rights'] = $newrights;
-						$update = true;
 					}
 				} else {
 					if (!(($rights = $user['rights']) & 1)) { // new expanded rights
 						$newrights = MAIN_RIGHTS;
 						if ($rights & 16) $newrights = $newrights | UPLOAD_RIGHTS;
 						if ($rights & 64) $newrights = $newrights | COMMENT_RIGHTS;
-						if ($rights & 256) $newrights = $newrights | EDIT_RIGHTS;
+						if ($rights & 256) $newrights = $newrights | ALBUM_RIGHTS;
 						if ($rights & 1024) $newrights = $newrights | THEMES_RIGHTS;
 						if ($rights & 8192) $newrights = $newrights | OPTIONS_RIGHTS;
 						if ($rights & 65536) $newrights = $newrights | ADMIN_RIGHTS;
-						$user['rights'] = $newrights;
-						$update = true;
 					}
 				}
-				if ($update) {
-					$sql = 'UPDATE '.prefix('administrators').' SET `rights`='.$user['rights'].' WHERE `id`='.$user['id'];
-					query($sql);
-				}
 			}
-		}
+			$sql = 'UPDATE '.prefix('administrators').' SET `rights`='.$newrights.' WHERE `id`='.$user['id'];
+			query($sql);
+		} // end loop
 	}
 }
 
@@ -328,7 +384,7 @@ function updateAdminField($field, $value, $constraints) {
 	$sql = 'UPDATE '.prefix('administrators').' SET `'.$field.'`='.$value.' WHERE '.$where;
 	return query($sql);
 }
-
+				
 class Administrator extends PersistentObject {
 	
 	/**

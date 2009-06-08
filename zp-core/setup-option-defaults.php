@@ -49,7 +49,14 @@ function setDefault($option, $default) {
 		query($sql);
   }
 
-	// old zp-config.php opitons. preserve them
+	if (defined('LIBAUTH_VERSION')) {
+		if (LIBAUTH_VERSION != getOption('libauth_version')) {
+			migrateAuth(getOption('libauth_version'));
+			setOption('libauth_version',LIBAUTH_VERSION);
+		}
+	}
+	
+  // old zp-config.php opitons. preserve them
 	$conf = $_zp_conf_vars;
 	setDefault('gallery_title', "Gallery");
 	setDefault('website_title', "");
@@ -256,14 +263,7 @@ function setDefault($option, $default) {
 		}
 	}
 	if (getOption('zp_plugin_rating') == 1) setOption('zp_plugin_rating', 5);
-	
-	if (defined('LIBAUTH_VERSION')) {
-		if (LIBAUTH_VERSION != getOption('libauth_version')) {
-			migrateAuth(getOption('libauth_version'));
-			setOption('libauth_version',LIBAUTH_VERSION);
-		}
-	}
-	
+
 	// default groups
 	$result = array();
 	$admins = getAdministrators();
@@ -291,7 +291,7 @@ function setDefault($option, $default) {
 	}
 	if (in_array('album managers',$list)) {
 		saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
-										EDIT_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
+										ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
 	}
 	
 	?>

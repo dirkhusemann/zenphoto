@@ -526,7 +526,7 @@ if ($subtab == 'users') {
 			if (empty($admins)) {
 				$rights = ALL_RIGHTS;
 			} else {
-				$rights = ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS;
+				$rights = ALL_RIGHTS ^ MANAGE_ALL_ALBUM_RIGHTS;
 			}
 			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => $rights, 'custom_data' => NULL, 'valid'=>1);
 			$alterrights = '';
@@ -747,7 +747,7 @@ if (empty($alterrights)) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<p>
 						<?php
-							if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
+							if (!($userobj->getRights() & MANAGE_ALL_ALBUM_RIGHTS) && !$current) {
 								printManagedAlbums($albumlist, $local_alterrights, $user['id'], $id);
 							} else {
 								if ($ismaster) {
@@ -758,7 +758,7 @@ if (empty($alterrights)) {
 					</p>
 					<p>
 						<?php
-							if (!($userobj->getRights() & ALL_ALBUMS_RIGHTS) && !$current) {
+							if (!($userobj->getRights() & MANAGE_ALL_ALBUM_RIGHTS) && !$current) {
 								if (!empty($local_alterrights)) {
 									echo gettext("You may manage these albums subject to the above rights.");
 								} else {

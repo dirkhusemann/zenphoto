@@ -40,7 +40,7 @@ if (OFFSET_PATH) {
 								'subtabs'=>NULL);
 	}
 
- 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
+ 	if (($_zp_loggedin & (ALBUM_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['edit'] = array('text'=>gettext("albums"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-edit.php',
 								'subtabs'=>NULL,
@@ -2474,18 +2474,7 @@ function removeParentAlbumNames($album) {
  * @param bit $rights rights of the admin
  */
 function printAdminRightsTable($id, $background, $alterrights, $rights) {
-	$rightslist = array();
-	$rightslist[gettext("User admin")] = array('key'=>'admin_rights', 'value'=>ADMIN_RIGHTS);
-	$rightslist[gettext("Options")] = array('key'=>'options_rights', 'value'=>OPTIONS_RIGHTS);
-	$rightslist[gettext("Zenpage")] = array('key'=>'zenpage_rights', 'value'=>ZENPAGE_RIGHTS);
-	$rightslist[gettext("Tags")] = array('key'=>'tags_rights', 'value'=>TAGS_RIGHTS);
-	$rightslist[gettext("Themes")] = array('key'=>'themes_rights', 'value'=>THEMES_RIGHTS);
-	$rightslist[gettext("Manage all albums")] = array('key'=>'all_album_rights', 'value'=>ALL_ALBUMS_RIGHTS);
-	$rightslist[gettext("Albums")] = array('key'=>'edit_rights', 'value'=>EDIT_RIGHTS);
-	$rightslist[gettext("Comment")] = array('key'=>'comment_rights', 'value'=>COMMENT_RIGHTS);
-	$rightslist[gettext("Upload")] = array('key'=>'upload_rights', 'value'=>UPLOAD_RIGHTS);
-	$rightslist[gettext("View all")] = array('key'=>'view_rights', 'value'=>VIEWALL_RIGHTS);
-	$rightslist[gettext("Overview")] = array('key'=>'main_rights', 'value'=>MAIN_RIGHTS);
+	global $_admin_rights;
 	?>
 	<table class="checkboxes" > <!-- checkbox table -->
 		<tr>
@@ -2495,7 +2484,9 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 		</tr>
 		<?php
 		$element = 3;
-		foreach ($rightslist as $rightstext=>$rightselement) {
+		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
+			$name = strtolower(str_replace('_', ' ', str_replace('_RIGHTS', '', $rightselement)));
+			$name[0] = strtoupper($name[0]);
 			if ($element>2) {
 				$element = 0;
 				?>
@@ -2506,10 +2497,10 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<span style="white-space:nowrap">
 						<label>
-							<input type="checkbox" name="<?php echo $id.'-'.$rightselement['key']; ?>" id="<?php echo $id.'-'.$rightselement['key']; ?>"
-								value=<?php echo $rightselement['value']; if ($rights & $rightselement['value']) echo ' checked'; 
+							<input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $id.'-'.$rightselement; ?>"
+								value=<?php echo $rightsvalue; if ($rights & $rightsvalue) echo ' checked'; 
 								echo $alterrights; ?>>
-							<?php echo $rightstext; ?>
+							<?php echo $name; ?>
 						</label>
 					</span>
 				</td>
@@ -2582,20 +2573,12 @@ function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
  * @return bit
  */
 function processRights($i) {
+	global $_admin_rights;
 	$rights = 0;
 	if (isset($_POST[$i.'-confirmed'])) $rights = $rights | NO_RIGHTS;
-	if (isset($_POST[$i.'-main_rights'])) $rights = $rights | MAIN_RIGHTS;
-	if (isset($_POST[$i.'-view_rights'])) $rights = $rights | VIEWALL_RIGHTS;
-	if (isset($_POST[$i.'-upload_rights'])) $rights = $rights | UPLOAD_RIGHTS;
-	if (isset($_POST[$i.'-comment_rights'])) $rights = $rights | COMMENT_RIGHTS;
-	if (isset($_POST[$i.'-edit_rights'])) $rights = $rights | EDIT_RIGHTS;
-	if (isset($_POST[$i.'-all_album_rights'])) $rights = $rights | ALL_ALBUMS_RIGHTS;
-	if (isset($_POST[$i.'-themes_rights'])) $rights = $rights | THEMES_RIGHTS;
-	if (isset($_POST[$i.'-tags_rights'])) $rights = $rights | TAGS_RIGHTS;
-	if (isset($_POST[$i.'-options_rights'])) $rights = $rights | OPTIONS_RIGHTS;
-	if (isset($_POST[$i.'-zenpage_rights'])) $rights = $rights | ZENPAGE_RIGHTS;
-	if (isset($_POST[$i.'-admin_rights'])) $rights = $rights | ADMIN_RIGHTS;
-	if ($rights & ALL_ALBUMS_RIGHTS) $rights = $rights | EDIT_RIGHTS;
+	foreach ($_admin_rights as $name=>$right) {
+		if (isset($_POST[$i.'-'.$name])) $rights = $rights | $right;
+	}
 	return $rights;
 }
 

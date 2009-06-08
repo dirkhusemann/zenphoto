@@ -29,7 +29,7 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 $button_text = gettext('Publish content');
 $button_hint = gettext('Manage unpublished content in your gallery.');
 $button_icon = 'images/calendar.png';
-$button_rights = EDIT_RIGHTS;
+$button_rights = ALBUM_RIGHTS;
 
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
@@ -37,7 +37,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
+if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
 	exit();
 }

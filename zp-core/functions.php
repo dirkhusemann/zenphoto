@@ -539,7 +539,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
  */
 function checkAlbumPassword($albumname, &$hint) {
 	global $_zp_pre_authorization, $_zp_loggedin;
-	if (zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS | ALL_ALBUMS_RIGHTS)) { return true; }
+	if (zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return true; }
 	if ($_zp_loggedin) {
 		if (isMyAlbum($albumname, ALL_RIGHTS)) { return true; }  // he is allowed to see it.
 	}
@@ -1134,7 +1134,7 @@ function getManagedAlbumList() {
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) {
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		return true;
 	}
 	if (empty($albumfolder)) {
@@ -1627,7 +1627,7 @@ $_zp_not_viewable_album_list = NULL;
  * @return array
  */
 function getNotViewableAlbums() {
-	if (zp_loggedin(ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) return array(); //admins can see all
+	if (zp_loggedin(ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return array(); //admins can see all
 	$hint = '';
 	global $_zp_not_viewable_album_list;
 	if (is_null($_zp_not_viewable_album_list)) {

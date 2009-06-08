@@ -27,20 +27,22 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
  */
 function user_groups_save_admin($discard, $userobj, $i) {
 	$administrators = getAdministrators();
-	$groupname = sanitize($_POST[$i.'group']);
-	if (empty($groupname)) {
-		$oldgroup = $userobj->getGroup();
-		if (!empty($oldgroup)) {
-			$group = new Administrator($oldgroup, 0);
+	if (isset($_POST[$i.'group'])) {
+		$groupname = sanitize($_POST[$i.'group']);
+		if (empty($groupname)) {
+			$oldgroup = $userobj->getGroup();
+			if (!empty($oldgroup)) {
+				$group = new Administrator($oldgroup, 0);
+				$userobj->setRights($group->getRights());
+			}
+		} else {
+			$group = new Administrator($groupname, 0);
 			$userobj->setRights($group->getRights());
+			$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
+			if ($group->getName() == 'template') $groupname = '';
 		}
-	} else {
-		$group = new Administrator($groupname, 0);
-		$userobj->setRights($group->getRights());
-		$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
-		if ($group->getName() == 'template') $groupname = '';
+		$userobj->setGroup($groupname);
 	}
-	$userobj->setGroup($groupname);
 }
 
 /**
