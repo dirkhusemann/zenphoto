@@ -90,7 +90,7 @@ if (OFFSET_PATH) {
 			$subtabs[gettext("search")] = 'admin-options.php?page=options&tab=search';
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-			$subtabs[gettext("theme")] = 'admin-options.php?tpage=options&ab=theme';
+			$subtabs[gettext("theme")] = 'admin-options.php?page=options&tab=theme';
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			$subtabs[gettext("rss")] = 'admin-options.php?page=options&tab=rss';
