@@ -910,16 +910,16 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	if ($showCounts) {
 		$displaylist = array();
 		foreach ($them as $tag) {
-			$displaylist[$tag.' ['.$counts[$tag].']'] = $tag.' ('.$counts[$tag].')';
+			$displaylist[$tag.' ['.$counts[$tag].']'] = $tag;
 		}
 	} else {
 		$displaylist = $them;
 	}
 	if (count($tags) > 0) {
-		generateUnorderedListFromArray($tags, $tags, $postit, false, !$mostused, false);
+		generateUnorderedListFromArray($tags, $tags, $postit, false, !$mostused, true);
 		echo '<hr />';
 	}
-	generateUnorderedListFromArray(array(), $displaylist, $postit, false, !$mostused, false);
+	generateUnorderedListFromArray(array(), $displaylist, $postit, false, !$mostused, true);
 	echo '</ul>';
 }
 
