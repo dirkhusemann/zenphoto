@@ -23,14 +23,12 @@ if (isset($_GET['action'])) {
 	$themeswitch = false;
 	if ($action == 'deletegroup') {
 		$id = $_GET['groupid'];
-		$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=$id";
-		query($sql);
+		deleteAdmin(array('id'=>$id));
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
 		//first clear out existing user assignments
 		$groupname = sanitize($_GET['group'],3);
-		$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `valid`=1 AND `group`="'.$groupname.'"';
-		query($sql);
+		updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=groups&deleted');
 		exit();
 	} else if ($action == 'savegroups') {
@@ -60,8 +58,7 @@ if (isset($_GET['action'])) {
 						}
 					}
 					//user assignments: first clear out existing ones
-					$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `valid`=1 AND `group`="'.$groupname.'"';
-					query($sql);
+					updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
 					//then add the ones marked
 					$target = 'user_'.$i.'-';
 					foreach ($_POST as $item=>$username) {
@@ -80,9 +77,9 @@ if (isset($_GET['action'])) {
 			$username = trim(sanitize($_POST[$i.'-user'],3));
 			$user = new Administrator($username, 1);
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
-			$group = new Administrator($groupname, 1);
+			$group = new Administrator($groupname, 0);
 			if (empty($groupname)) {
-				$sql = 'UPDATE '.prefix('administrators').' SET `group`=NULL WHERE `id`='.$user->get('id');
+				updateAdminField('group', NULL, array('id'=>$user->get('id')));
 			} else {
 				saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
 			}
@@ -164,6 +161,7 @@ echo '</head>'."\n";
 													<label><input type="radio" name="<?php echo $id; ?>-type" value="group" CHECKED="CHECKED" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('group'); ?></label>
 													<label><input type="radio" name="<?php echo $id; ?>-type" value="template" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('template'); ?></label>
 												</em>
+												<br />
 												<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
 												<?php
 											} else {

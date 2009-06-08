@@ -36,11 +36,10 @@ if (isset($_GET['action'])) {
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
 		$id = $_GET['adminuser'];
-		$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=$id";
-		query($sql);
+		deleteAdmin(array('id'=>$id));
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php?deleted");
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php?page=users&tab=users&deleted");
 		exit();
 	} else if ($action == 'saveoptions') {
 		$table = NULL;

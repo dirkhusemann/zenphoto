@@ -265,10 +265,15 @@ function setDefault($option, $default) {
 	}
 	
 	// default groups
-	$sql = 'SELECT * FROM '.prefix('administrators').' WHERE `valid`=0';
-	$result = query_full_array($sql);
-	if (!is_array($result)|| empty($result)) {
-		$list = array('administrators','user'=>'viewers','user'=>'bozos','album managers');
+	$result = array();
+	$admins = getAdministrators();
+	foreach ($admins as $admin) {
+		if ($admin['valid']==0) {
+			$result[] = $admin;
+		}
+	}
+	if (empty($result)) {
+		$list = array('administrators','viewers','user'=>'bozos','album managers');
 	} else {
 		$list = array();
 		foreach ($result as $group) {

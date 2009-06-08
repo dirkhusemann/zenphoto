@@ -30,8 +30,10 @@ function user_groups_save_admin($discard, $userobj, $i) {
 	$groupname = sanitize($_POST[$i.'group']);
 	if (empty($groupname)) {
 		$oldgroup = $userobj->getGroup();
-		$group = new Administrator($oldgroup, 0);
-		$userobj->setRights($group->getRights());
+		if (!empty($oldgroup)) {
+			$group = new Administrator($oldgroup, 0);
+			$userobj->setRights($group->getRights());
+		}
 	} else {
 		$group = new Administrator($groupname, 0);
 		$userobj->setRights($group->getRights());

@@ -3463,14 +3463,17 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='',
 			case "album":
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
-		$randomImageURL = htmlspecialchars(getURL($randomImage));
-		echo '<a href="' . $randomImageURL . '" title="'.sprintf(gettext('View image: %s'), html_encode($randomImage->getTitle())) . '">';
-		if($crop) {
-			echo "<img src=\"".htmlspecialchars($randomImage->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE))."\" alt=\"" . html_encode($randomImage->getTitle()) . "\" />\n";
-		} else {
-			echo "<img src=\"".htmlspecialchars($randomImage->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE))."\" alt=\"" . html_encode($randomImage->getTitle()) . "\" />\n";
+		if (is_object($randomImage) && $randomImage->exists) {
+			$randomImageURL = htmlspecialchars(getURL($randomImage));
+			echo '<a href="' . $randomImageURL . '" title="'.sprintf(gettext('View image: %s'), html_encode($randomImage->getTitle())) . '">';
+			if($crop) {
+				echo "<img src=\"".htmlspecialchars($randomImage->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE))."\" alt=\"" . html_encode($randomImage->getTitle()) . "\" />\n";
+			} else {
+				echo "<img src=\"".htmlspecialchars($randomImage->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE))."\" alt=\"" . html_encode($randomImage->getTitle()) . "\" />\n";
+			}
+			echo "</a>";
 		}
-		echo "</a></li>\n";
+		echo "</li>\n";
 	}
 	echo "</ul>";
 }

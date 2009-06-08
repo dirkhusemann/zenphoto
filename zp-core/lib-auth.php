@@ -291,6 +291,44 @@ function migrateAuth($oldversion) {
 	}
 }
 
+/**
+ * Deletes admin record(s)
+ *
+ * @param array $constraints field value pairs for constraining the delete
+ * @return mixed Query result
+ */
+function deleteAdmin($constraints) {
+	$where = '';
+	foreach ($constraints as $field=>$clause) {
+		$where .= '`'.$field.'`="'.$clause.'" ';
+	}
+	$sql = "DELETE FROM ".prefix('administrators')." WHERE $where";
+	return query($sql);
+}
+
+/**
+ * Updates a field in admin record(s)
+ *
+ * @param string $field name of the field
+ * @param mixed $value what to store
+ * @param array $constraints field value pairs for constraining the update
+ * @return mixed Query result
+ */
+function updateAdminField($field, $value, $constraints) {
+	$where = '';
+	foreach ($constraints as $field=>$clause) {
+		if (!empty($where)) $where .= ' AND ';
+		$where .= '`'.$field.'`="'.$clause.'" ';
+	}
+	if (is_null($value)) {
+		$value = 'NULL';
+	} else {
+		$value = '"'.$value.'"';
+	}
+	$sql = 'UPDATE '.prefix('administrators').' SET `'.$field.'`='.$value.' WHERE '.$where;
+	return query($sql);
+}
+
 class Administrator extends PersistentObject {
 	
 	/**
