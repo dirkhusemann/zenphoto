@@ -105,7 +105,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<?php if ($show) { ?>
 			<div id="description">
 				<p><?php	printImageDesc(true); ?></p>
-				<?php if (function_exists('printRating')) printRating(); ?>
+				<p align="left"><?php if (function_exists('printRating')) printRating(); ?></p>
 			</div>
 			<?php
 				if (function_exists('printImageMap')) {

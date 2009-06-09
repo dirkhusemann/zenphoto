@@ -184,7 +184,7 @@ echo '</head>'."\n";
 											if (empty($groupname) && !empty($groups)) {
 												?>
 												<br />
-												<?php echo gettext('initialize from:'); ?>
+												<?php echo gettext('clone:'); ?>
 												<br />
 												<select name="<?php echo $id; ?>-initgroup" onchange="javascript: $('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
 													<option title=""></option>

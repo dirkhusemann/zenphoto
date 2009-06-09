@@ -30,13 +30,13 @@ class SpamFilter  {
 	 *  the array is indexed by the option name. The value for each option is an array:
 	 *          'type' => 0 says for admin to use a standard textbox for the option
 	 *          'type' => 1 says for admin to use a standard checkbox for the option
-	 *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
+	 *          'type' => OPTION_TYPE_CUSTOM will cause admin to call handleOption to generate the HTML for the option
 	 *          'desc' => text to be displayed for the option description.
 	 *
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(gettext('Action') => array('key' => 'Action', 'type' => 5, 
+		return array(gettext('Action') => array('key' => 'Action', 'type' => OPTION_TYPE_SELECTOR, 
 										'selections' => array(gettext('pass') => 'pass', gettext('moderate') => 'moderate', gettext('reject') => 'reject'),
 										'desc' => gettext('This action will be taken for all messages.')));
 	}

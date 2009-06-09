@@ -49,27 +49,27 @@ class slideshowOptions {
 
 
 	function getOptionsSupported() {
-		return array(	gettext('Slide width') => array('key' => 'slideshow_width', 'type' => 0,
+		return array(	gettext('Slide width') => array('key' => 'slideshow_width', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Width of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
-		gettext('Slide height') => array('key' => 'slideshow_height', 'type' => 0,
+		gettext('Slide height') => array('key' => 'slideshow_height', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Height of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
-		gettext('Watermark') => array('key' => 'slideshow_watermark', 'type' => 1,
+		gettext('Watermark') => array('key' => 'slideshow_watermark', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to use your watermark on the images <em>[jQuery mode option]</em>.")),
-		gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 5,
+		gettext('Mode') => array('key' => 'slideshow_mode', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext("jQuery")=>"jQuery", gettext("flash")=>"flash"),
 										'desc' => gettext("<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow (requires Flowplayer.)")),
-		gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 5,
+		gettext('Effect') => array('key' => 'slideshow_effect', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('fade')=>"fade", gettext('shuffle')=>"shuffle", gettext('zoom')=>"zoom", gettext('slide X')=>"slideX", gettext('slide Y')=>"slideY", gettext('scroll up')=>"scrollUp", gettext('scroll down')=>"scrollDown", gettext('scroll left')=>"scrollLeft", gettext('scroll right')=>"scrollRight"),
 										'desc' => gettext("The cycle slide effect to be used. <em>[jQuery mode option]</em>")),
-		gettext('Speed') => array('key' => 'slideshow_speed', 'type' => 0,
+		gettext('Speed') => array('key' => 'slideshow_speed', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Speed of the transition in milliseconds.")),
-		gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => 0,
+		gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance.) <em>[jQuery mode option]</em>")),
-		gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
+		gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to show the image's description below the slideshow <em>[jQuery mode option]</em>.")),
-		gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => 0,
+		gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Width of the Flowplayer display for the slideshow <em>(Flash mode)</em>.")),
-		gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => 0,
+		gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Height of the Flowplayer display for the slideshow <em>(Flash mode)</em>."))
 		);
 	}

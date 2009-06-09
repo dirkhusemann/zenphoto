@@ -26,7 +26,7 @@ class user_logout_options {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Enable login form') => array('key' => 'user_logout_login_form', 'type' => 1,
+		return array(	gettext('Enable login form') => array('key' => 'user_logout_login_form', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If enabled, a login form will be displayed if the viewer is not logged in.'))
 		);
 	}

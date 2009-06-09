@@ -9,9 +9,9 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return array(	gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1,
+		return array(	gettext('Allow search') => array('key' => 'Allow_search', 'type' => OPTION_TYPE_CHECKBOX,
 													'desc' => gettext('Check to enable search form.')),
-									gettext('Mini slide selector') => array('key' => 'Mini_slide_selector', 'type' => 5,
+									gettext('Mini slide selector') => array('key' => 'Mini_slide_selector', 'type' => OPTION_TYPE_SELECTOR,
 													'selections' => array(gettext('Recent images') => 'Recent images', gettext('Random images') => 'Random images'),
 													'desc' => gettext('Select what you want for the six special slides.'))
 									);

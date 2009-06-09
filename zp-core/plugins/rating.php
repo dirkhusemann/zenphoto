@@ -60,14 +60,14 @@ class jquery_rating {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Clear ratings') => array('key' => 'clear_rating', 'type' => 2,
+		return array(	gettext('Clear ratings') => array('key' => 'clear_rating', 'type' => OPTION_TYPE_CUSTOM,
 										'desc' => gettext('Sets all images and albums to unrated.')),
-									gettext('Voting state') => array('key' => 'rating_status', 'type' => 4,
+									gettext('Voting state') => array('key' => 'rating_status', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => $this->ratingstate,
 										'desc' => gettext('<em>Enable</em> state of voting.')),
-									gettext('Individual image control') =>array('key' => 'rating_image_individual_control', 'type' => 1,
+									gettext('Individual image control') =>array('key' => 'rating_image_individual_control', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Enable to allow voting status control on individual images.')),
-									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => 1,
+									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Allow users to change their vote.'))
 								);
 	}

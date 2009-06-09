@@ -38,9 +38,9 @@ class admin_login {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Clear log') => array('key' => 'logger_clear_log', 'type' => 2,
+		return array(	gettext('Clear log') => array('key' => 'logger_clear_log', 'type' => OPTION_TYPE_CUSTOM,
 										'desc' => gettext('Resets the log to <em>empty</em>.')),
-									gettext('Log guest users') => array('key' => 'logger_log_guests', 'type' => 1,
+									gettext('Log guest users') => array('key' => 'logger_log_guests', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, guest user login attempts will be logged.'))
 									);
 	}

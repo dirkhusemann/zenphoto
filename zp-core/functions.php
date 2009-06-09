@@ -544,7 +544,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
  */
 function checkAlbumPassword($albumname, &$hint) {
 	global $_zp_pre_authorization, $_zp_loggedin;
-	if (zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return true; }
+	if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return true; }
 	if ($_zp_loggedin) {
 		if (isMyAlbum($albumname, ALL_RIGHTS)) { return true; }  // he is allowed to see it.
 	}
@@ -956,10 +956,7 @@ function fetchComments($number) {
  * Generic comment adding routine. Called by album objects or image objects
  * to add comments.
  *
- * Returns a code for the success of the comment add:
- *    0: Bad entry
- *    1: Marked for moderation
- *    2: Successfully posted
+ * Returns a comment object
  *
  * @param string $name Comment author name
  * @param string $email Comment author email
@@ -972,7 +969,7 @@ function fetchComments($number) {
  * @param string $ip the IP address of the comment poster
  * @param bool $private set to true if the comment is for the admin only
  * @param bool $anon set to true if the poster wishes to remain anonymous
- * @return int
+ * @return object
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
 	global $_zp_captcha, $_zp_gallery;
@@ -985,22 +982,48 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
-	// Let the comment have trailing line breaks and space? Nah...
-	// Also (in)validate HTML here, and in $name.
-	$comment = trim($comment);
-	if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return -2; }
-	if (getOption('comment_name_required') && empty($name)) { return -3; }
-	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
-	if (getOption('Use_Captcha')) {
-		if (!$_zp_captcha->checkCaptcha($code, $code_ok)) return -5;
-	}
-	if (empty($comment)) {
-		return -6;
-	}
 	if (!empty($website) && substr($website, 0, 7) != "http://") {
 		$website = "http://" . $website;
 	}
+	// Let the comment have trailing line breaks and space? Nah...
+	// Also (in)validate HTML here, and in $name.
+	$comment = trim($comment);
+	$receiverid = $receiver->id;
 	$goodMessage = 2;
+	$commentobj = new Comment();
+	$commentobj = new Comment();
+	$commentobj->setOwnerID($receiverid);
+	$commentobj->setName($name);
+	$commentobj->setEmail($email);
+	$commentobj->setWebsite($website);
+	$commentobj->setComment($comment);
+	$commentobj->setType($type);
+	$commentobj->setIP($ip);
+	$commentobj->setPrivate($private);
+	$commentobj->setAnon($anon);
+	$commentobj->setInModeration(2); //mark as not posted
+	if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) {
+		$commentobj->setInModeration(-2);
+		return $commentobj;
+	}
+	if (getOption('comment_name_required') && empty($name)) {
+		$commentobj->setInModeration(-3);
+		return $commentobj;
+	}
+	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) {
+		$commentobj->setInModeration(-4);
+		return $commentobj;
+	}
+	if (getOption('Use_Captcha')) {
+		if (!$_zp_captcha->checkCaptcha($code, $code_ok)) {
+			$commentobj->setInModeration(-5);
+			return $commentobj;
+		}
+	}
+	if (empty($comment)) {
+		$commentobj->setInModeration(-6);
+		return $commentobj;
+	}
 	$gallery = new gallery();
 	if (!(false === ($requirePath = getPlugin('spamfilters/'.internalToFilesystem(getOption('spam_filter')).".php", false)))) {
 		require_once($requirePath);
@@ -1015,20 +1038,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 		if ($private) $private = 1; else $private = 0;
 		if ($anon) $anon = 1; else $anon = 0;
-		$receiverid = $receiver->id;
 		
 		// Update the database entry with the new comment
-		$commentobj = new Comment();
-		$commentobj->setOwnerID($receiverid);
-		$commentobj->setName($name);
-		$commentobj->setEmail($email);
-		$commentobj->setWebsite($website);
-		$commentobj->setComment($comment);
 		$commentobj->setInModeration($moderate);
-		$commentobj->setType($type);
-		$commentobj->setIP($ip);
-		$commentobj->setPrivate($private);
-		$commentobj->setAnon($anon);
 		
 		apply_filter('comment_post', $commentobj, $receiver);
 		
@@ -1110,7 +1122,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			zp_mail("[" . $_zp_gallery->getTitle() . "] $on", $message, "", $emails);
 		}
 	}
-	return $goodMessage;
+	return $commentobj;
 }
 
 /**

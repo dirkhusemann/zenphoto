@@ -15,8 +15,8 @@ define('TABLE_SEPARATOR', '::');
 define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
-require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
 $button_text = gettext('Backup/Restore');
 $button_hint = gettext('Backup and restore your gallery database.');

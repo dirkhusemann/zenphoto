@@ -276,6 +276,25 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  									printAlbumZip();
  									echo "</p>";
  								}
+								if (function_exists('printRating')) {
+									?>
+									<p align="left">
+									<?php
+									printRating();
+									?>
+									</p>
+								<?php
+								}
+								if (function_exists('printCommentForm')) {
+									?>
+									<div id="commentbox">
+										<div id="content">
+										<?php printCommentForm(); ?>
+										</div>
+									</div>
+									<?php
+								}
+								
 						}
 						?>
  					</div> <!-- images -->
@@ -340,19 +359,6 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		}
 		?>
 		</div> <!-- pagenumbers -->
-	<?php
-/*
-	if (function_exists('printRating')) {
-		?>
-		<p align="center">
-		<?php
-		printRating();
-		?>
-		</p>
-	<?php
-	}
-*/
-	?>
 </div> <!-- subcontent -->
 
 <!-- Footer -->

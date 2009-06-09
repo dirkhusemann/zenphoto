@@ -249,7 +249,7 @@ class archive
 		if ($this->options['storepaths'] == 1 && !preg_match("/^(\.+\/*)+$/", $dirname))
 			$files = array (array ('name' => $dirname, 'name2' => $this->options['prepend'] .
 				preg_replace("/(\.+\/+)+/", "", ($this->options['storepaths'] == 0 && strstr($dirname, "/")) ?
-				substr($dirname, strrpos($dirname, "/") + 1) : $dirname), 'type' => 5, 'stat' => stat($dirname)));
+				substr($dirname, strrpos($dirname, "/") + 1) : $dirname), 'type' => OPTION_TYPE_SELECTOR, 'stat' => stat($dirname)));
 		else
 			$files = array ();
 		$dir = @opendir($dirname);

@@ -636,10 +636,7 @@ class _Image extends PersistentObject {
 	 * Adds a comment to the image
 	 * assumes data is coming straight from GET or POST
 	 *
-	 * Returns a code for the success of the comment add:
-	 *    0: Bad entry
-	 *    1: Marked for moderation
-	 *    2: Successfully posted
+	 * Returns a comment object
 	 *
 	 * @param string $name Comment author name
 	 * @param string $email Comment author email
@@ -650,7 +647,7 @@ class _Image extends PersistentObject {
 	 * @param string $ip the IP address of the comment poster
 	 * @param bool $private set to true if the comment is for the admin only
 	 * @param bool $anon set to true if the poster wishes to remain anonymous
-	 * @return int
+	 * @return object
 	 */
 	function addComment($name, $email, $website, $comment, $code, $code_ok, $ip, $private, $anon) {
 		$goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this, $ip, $private, $anon);

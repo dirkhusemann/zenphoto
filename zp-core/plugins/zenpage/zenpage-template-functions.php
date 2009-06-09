@@ -1001,7 +1001,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	$categories = getAllCategories();
-	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEWALL_RIGHTS))) {
+	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS))) {
 		$published = "all";
 		$pub = false;
 	} else {
@@ -2288,7 +2288,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 
-	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEWALL_RIGHTS))) {
+	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS))) {
 		$published = FALSE;
 	} else {
 		$published = TRUE;

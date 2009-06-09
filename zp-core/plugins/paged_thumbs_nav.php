@@ -34,27 +34,27 @@ class pagedthumbsOptions {
 
 
 	function getOptionsSupported() {
-		return array(	gettext('Thumbs per page') => array('key' => 'pagedthumbs_imagesperpage', 'type' => 0,
+		return array(	gettext('Thumbs per page') => array('key' => 'pagedthumbs_imagesperpage', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better.")),
-		gettext('Counter') => array('key' => 'pagedthumbs_counter', 'type' => 1,
+		gettext('Counter') => array('key' => 'pagedthumbs_counter', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If you want to show the counter 'x - y of z images'.")),
-		gettext('Prevtext') => array('key' => 'pagedthumbs_prevtext', 'type' => 0,
+		gettext('Prevtext') => array('key' => 'pagedthumbs_prevtext', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The text for the previous thumbs.")),
-		gettext('Nexttext') => array('key' => 'pagedthumbs_nexttext', 'type' => 0,
+		gettext('Nexttext') => array('key' => 'pagedthumbs_nexttext', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The text for the next thumbs.")),
-		gettext('Crop width') => array('key' => 'pagedthumbs_width', 'type' => 0,
+		gettext('Crop width') => array('key' => 'pagedthumbs_width', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The thumb crop width is the maximum width when height is the shortest side")),
-		gettext('Crop height') => array('key' => 'pagedthumbs_height', 'type' => 0,
+		gettext('Crop height') => array('key' => 'pagedthumbs_height', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The thumb crop height is the maximum height when width is the shortest side")),
-		gettext('Crop') => array('key' => 'pagedthumbs_crop', 'type' => 1,
+		gettext('Crop') => array('key' => 'pagedthumbs_crop', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to thumb	size (by shortest side). Otherwise, it will be the full image resized to thumb size (by shortest side).")),
-		gettext('Placeholders') => array('key' => 'pagedthumbs_placeholders', 'type' => 1,
+		gettext('Placeholders') => array('key' => 'pagedthumbs_placeholders', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("if you want to use placeholder for layout reasons to fill up the thumbs if the the number of thumbs does not match images per page. Recommended only for cropped thumbs.")),
-		gettext('Page list') => array('key' => 'pagedthumbs_pagelist', 'type' => 1,
+		gettext('Page list') => array('key' => 'pagedthumbs_pagelist', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If you want the list of the pages to be shown.")),
-		gettext('Pages list prev and next links') => array('key' => 'pagedthumbs_pagelistprevnext', 'type' => 1,
+		gettext('Pages list prev and next links') => array('key' => 'pagedthumbs_pagelistprevnext', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If you want to show previous and next thumb page links with the page list.")),
-		gettext('Pages list lenght') => array('key' => 'pagedthumbs_pagelistlenght', 'type' => 1,
+		gettext('Pages list lenght') => array('key' => 'pagedthumbs_pagelistlenght', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("The number of links for the page list."))
 		);
 	}

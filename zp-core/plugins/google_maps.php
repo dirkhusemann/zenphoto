@@ -64,28 +64,28 @@ class google_mapsOptions {
 			setOption('gmaps_starting_map', $defaultmap);
 		}
 				
-		return array(	gettext('Google Maps API key') => array('key' => 'gmaps_apikey', 'type' => 0,
+		return array(	gettext('Google Maps API key') => array('key' => 'gmaps_apikey', 'type' => OPTION_TYPE_TEXTBOX,
 																	'desc' => gettext('If you are going to be using Google Maps, <a	href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.')),
-									gettext('All album points') => array ('key' => 'gmaps_show_all_album_points', 'type' => 1,
+									gettext('All album points') => array ('key' => 'gmaps_show_all_album_points', 'type' => OPTION_TYPE_CHECKBOX,
 																	'desc' => gettext('Controls which image points are shown on an album page. Check to show points for all images in the album. If not checked points are shown only for those images whose thumbs are on the page.')),
-									gettext('Map dimensions—width') => array('key' => 'gmaps_width', 'type' => 0,
+									gettext('Map dimensions—width') => array('key' => 'gmaps_width', 'type' => OPTION_TYPE_TEXTBOX,
 																	'desc' => gettext('The default width of the map.')),
-									gettext('Map dimensions—height') => array('key' => 'gmaps_height', 'type' => 0,
+									gettext('Map dimensions—height') => array('key' => 'gmaps_height', 'type' => OPTION_TYPE_TEXTBOX,
 																	'desc' => gettext('The default height of the map.')),
-									gettext('Allowed maps') => array('key' => 'gmaps_allowed_maps', 'type' => 6,
+									gettext('Allowed maps') => array('key' => 'gmaps_allowed_maps', 'type' => OPTION_TYPE_CHECKBOX_ARRAY,
 																	'checkboxes' => array(gettext('Map') => 'gmaps_maptype_map', gettext('Satellite') => 'gmaps_maptype_sat' ,gettext('Hybrid') => 'gmaps_maptype_hyb' ,gettext('Terrain') => 'gmaps_maptype_P', gettext('Google Earth') => 'gmaps_maptype_3D'),
 																	'desc' => gettext('Select the map types that are allowed.')),
 /* Not yet implemented
-									gettext('Add Wikipedia') => array('key' => 'gmaps_wiki_layer', 'type' => 1,
+									gettext('Add Wikipedia') => array('key' => 'gmaps_wiki_layer', 'type' => OPTION_TYPE_CHECKBOX,
 																	'desc' => gettext('Adds wikipedia georeferenced data on your maps.')),
 */
-									gettext('Map type selector') => array('key' => 'gmaps_control_maptype', 'type' => 4,'buttons' => array(gettext('Buttons') => 1,gettext('List') => 2),
+									gettext('Map type selector') => array('key' => 'gmaps_control_maptype', 'type' => OPTION_TYPE_RADIO,'buttons' => array(gettext('Buttons') => 1,gettext('List') => 2),
 																	'desc' => gettext('Use buttons or list for the map type selector.')),
-									gettext('Map controls') => array('key' => 'gmaps_control', 'type' => 4,'buttons' => array(gettext('None') => 'None',gettext('Small') => 'Small',gettext('Large') => 'Large'),
+									gettext('Map controls') => array('key' => 'gmaps_control', 'type' => OPTION_TYPE_RADIO,'buttons' => array(gettext('None') => 'None',gettext('Small') => 'Small',gettext('Large') => 'Large'),
 																	'desc' => gettext('Select the kind of map controls.')),
-									gettext('Map background') => array('key' => 'gmaps_background', 'type' => 8,
+									gettext('Map background') => array('key' => 'gmaps_background', 'type' => OPTION_TYPE_COLOR_PICKER,
 																	'desc' => gettext('Set the map background color to match the one of your theme. (Use the same <em>color</em> values as in your CSS background statements.)')),
-									gettext('Initial map display selection') => array('key' => 'gmaps_starting_map', 'type' => 5, 'selections' => $MapTypes,
+									gettext('Initial map display selection') => array('key' => 'gmaps_starting_map', 'type' => OPTION_TYPE_SELECTOR, 'selections' => $MapTypes,
 																	'desc' => gettext('Select the initial type of map to display. <br /><strong>Note:</strong> If <code>Google Earth</code> is selected the <em>toggle</em> function which initially hides the map is ignored. The browser <em>Google Earth Plugin</em> does not initialize properly when the map is hidden.'))
 									);
 	}

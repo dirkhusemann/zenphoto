@@ -38,7 +38,7 @@ class VideoObject_Options {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(gettext('Watermark default images') => array ('key' => 'video_watermark_default_images', 'type' => 1,
+		return array(gettext('Watermark default images') => array ('key' => 'video_watermark_default_images', 'type' => OPTION_TYPE_CHECKBOX,
 																	'desc' => gettext('Check to place watermark image on default thumbnail images.')));
 	}
 	

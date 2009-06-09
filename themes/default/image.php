@@ -78,7 +78,8 @@
 		<?php
 		if (function_exists('printCommentForm')) {
 			printCommentForm();
-		} ?>
+		}
+		?>
 	</div>
 		<?php } ?>
 </div>

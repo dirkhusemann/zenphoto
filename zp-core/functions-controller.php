@@ -149,8 +149,8 @@ function zp_handle_comment() {
 				$commentadded = $commentobject->addComment($p_name, $p_email, $p_website, $p_comment,
 													$code1, $code2,	$p_server, $p_private, $p_anon);
 			}
-			if ($commentadded == 2) {
-				$comment_error = 0;
+			$comment_error = $commentadded->getInModeration();
+			if (!$comment_error) {
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
 					$info = array($p_name, $p_email, $p_website, '', false, $p_private, $p_anon);
@@ -164,9 +164,10 @@ function zp_handle_comment() {
 				header('Location: ' . $redirectTo);
 				exit();
 			} else {
-				$_zp_comment_stored = array($p_name, $p_email, $p_website, $p_comment, false, $p_private, $p_anon);
+				$_zp_comment_stored = array($commentadded->getName(), $commentadded->getEmail(), $commentadded->getWebsite(), $commentadded->getComment(), false,
+																		$commentadded->getPrivate(), $commentadded->getAnon(), $commentadded->getCustomData());
 				if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
-				$comment_error = 1 + $commentadded;
+				$comment_error++;
 				// ZENPAGE: if statements added
 				if ($activeImage !== false AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND !in_context(ZP_ZENPAGE_PAGE)) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
@@ -181,10 +182,11 @@ function zp_handle_comment() {
 		$_zp_comment_stored[4] = true;
 		if (!isset($_zp_comment_stored[5])) $_zp_comment_stored[5] = false;
 		if (!isset($_zp_comment_stored[6])) $_zp_comment_stored[6] = false;
+		if (!isset($_zp_comment_stored[7])) $_zp_comment_stored[7] = false;
 	} else {
-		$_zp_comment_stored = array('','','', '', false, false, false);
+		$_zp_comment_stored = array('','','', '', false, false, false, false);
 	}
-return $comment_error;
+	return $comment_error;
 }
 
 /**

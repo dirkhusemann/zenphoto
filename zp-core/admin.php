@@ -74,7 +74,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			if (!($_zp_loggedin & (ADMIN_RIGHTS))) $page = '';
 			break;
 		case 'home':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) {
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | OVERVIEW_RIGHTS))) {
 				$page='users';
 			}
 			break;

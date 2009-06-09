@@ -61,6 +61,15 @@
 
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 	<?php if (function_exists('printRating')) { printRating(); }?>
+	<?php
+	if (function_exists('printCommentForm')) {
+		?>
+		<div id="comments">
+			<?php printCommentForm(); ?>
+		</div>
+		<?php
+	}
+	?>
 
 
 	</div><!-- content left-->

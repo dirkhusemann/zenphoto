@@ -123,13 +123,13 @@ class Comment extends PersistentObject {
 	/**
 	 * Returns true if the comment is marked for moderation
 	 *
-	 * @return bool
+	 * @return int
 	 */
 	function getInModeration() { return $this->get('inmoderation'); }
 	/**
 	 * Sets the moderation flag of the comment
 	 *
-	 * @param bool $value
+	 * @param int $value
 	 */
 	function setInModeration($value) { $this->set('inmoderation', $value); }
 	

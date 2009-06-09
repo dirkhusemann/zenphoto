@@ -574,7 +574,7 @@ if (!$checked) {
 	$good = true;
 
 	$required = '4.1';
-	$desired = '5';
+	$desired = '5.2';
 	$err = versionCheck($required, $desired, PHP_VERSION);
 	if ($err < 0) {
 		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is strongly recommended.'),$desired)) && $good;

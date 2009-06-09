@@ -21,11 +21,11 @@ class ThemeOptions {
 		} else {
 			$flv_player_missing = '';
 		}
-		return array(	gettext('Use flv playlist') => array('key' => 'Use_flv_playlist', 'type' => 1, 'desc' => gettext('Check and the theme will use the flv_playlist plugin in place of the next_image loop.').$flv_playlist_missing.$flv_player_missing),
-									gettext('flv playlist option') => array('key' => 'flv_playlist_option', 'type' => 5,
+		return array(	gettext('Use flv playlist') => array('key' => 'Use_flv_playlist', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check and the theme will use the flv_playlist plugin in place of the next_image loop.').$flv_playlist_missing.$flv_player_missing),
+									gettext('flv playlist option') => array('key' => 'flv_playlist_option', 'type' => OPTION_TYPE_SELECTOR,
 													'selections' => array(gettext('Players')=>'players', gettext('Playlist')=>'playlist'),
 													'desc' => gettext('Select the option for the <em>flv_playlist()</em> function.')),
-									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.'))
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable search form.'))
 									);
 	}
 	function handleOption($option, $currentValue) {

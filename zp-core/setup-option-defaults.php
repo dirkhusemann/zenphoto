@@ -272,7 +272,7 @@ function setDefault($option, $default) {
 		}
 	}
 	if (empty($result)) {
-		$list = array('administrators','viewers','user'=>'bozos','album managers');
+		$list = array('administrators','viewers','user'=>'bozos','album managers', 'default');
 	} else {
 		$list = array();
 		foreach ($result as $group) {
@@ -283,14 +283,18 @@ function setDefault($option, $default) {
 		saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
 	}
 	if (in_array('viewers',$list)) {
-		saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | VIEWALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
+		saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
 	}
 	if (in_array('bozos',$list)) {
-		saveAdmin('bozos', NULL, 'group', NULL, NO_RIGHTS, array(), gettext('Banned users'),NULL, 0);
+		saveAdmin('bozos', NULL, 'group', NULL, 0, array(), gettext('Banned users'),NULL, 0);
 	}
 	if (in_array('album managers',$list)) {
-		saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
-										ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
+		saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS
+										| COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
 	}
-	if (getOption('Allow_comments')) setOption('zp_plugin_comment_form');
+	if (in_array('default',$list)) {
+		saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
+	}
+	
+	if (getOption('Allow_comments')) setOption('zp_plugin_comment_form', 1);
 	?>

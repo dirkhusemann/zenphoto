@@ -54,20 +54,20 @@ class htmlmetatags {
 
  // Gettext calls are removed because some terms like "noindex" are fixed terms that should not be translated so user know what setting they make.
 	function getOptionsSupported() {
-		return array(gettext('Cache control') => array('key' => 'htmlmeta_cache_control', 'type' => 5,
+		return array(gettext('Cache control') => array('key' => 'htmlmeta_cache_control', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array('no-cache' => "no-cache",'public' => "public", 'private' => "private",'no-store' => "no-store"),
 										'desc' => gettext("If the browser cache should be used.")),
-		gettext('Pragma') => array('key' => 'htmlmeta_pragma', 'type' => 5,
+		gettext('Pragma') => array('key' => 'htmlmeta_pragma', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array('no-cache' => "no-cache",'cache' => "cache"),
 										'desc' => gettext("If the pages should be allowed to be cached on proxy servers.")),
-		gettext('Robots') => array('key' => 'htmlmeta_robots', 'type' => 5,
+		gettext('Robots') => array('key' => 'htmlmeta_robots', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array('noindex' => "noindex", 'index' => "index",	'nofollow' => "nofollow", 'noindex,nofollow' => "noindex,nofollow",'noindex,follow' => "noindex,follow", 'index,nofollow' => "index,nofollow",	'none' => "none"),
 										'desc' => gettext("If and how robots are allowed to visit the site. Default is 'index'. Note that you also should use a robot.txt file.")),
-		gettext('Revisit after') => array('key' => 'htmlmeta_revisit_after', 'type' => 0, 
+		gettext('Revisit after') => array('key' => 'htmlmeta_revisit_after', 'type' => OPTION_TYPE_TEXTBOX, 
 									'desc' => gettext("Request the crawler to revisit the page after x days.")),
-		gettext('Expires') => array('key' => 'htmlmeta_expires', 'type' => 0, 
+		gettext('Expires') => array('key' => 'htmlmeta_expires', 'type' => OPTION_TYPE_TEXTBOX, 
 									'desc' => gettext("When the page should be loaded directly from the server and not from any cache. You can either set a date/time in international date format <em>Sat, 15 Dec 2001 12:00:00 GMT (example)</em> or a number. A number then means seconds, the default value <em>43200</em> means 12 hours.")),
-		gettext('HTML meta tags') => array('key' => 'htmlmeta_tags', 'type' => 7,
+		gettext('HTML meta tags') => array('key' => 'htmlmeta_tags', 'type' => OPTION_TYPE_CHECKBOX_UL,
 										"checkboxes" => array(
 												"http-equiv='language'" => "htmlmeta_http-equiv-language",
 												"name = 'language'"=>  "htmlmeta_name-language",

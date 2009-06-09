@@ -38,6 +38,7 @@ define('ALL_RIGHTS', defineRights());
 foreach ($_admin_rights as $right=>$value) {
 	define($right, $value);
 }
+define('DEFAULT_RIGHTS', OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | POST_COMMENT_RIGHTS);
 
 /**
  * Sets the rights array for the above definition loop
@@ -47,8 +48,8 @@ foreach ($_admin_rights as $right=>$value) {
  */
 function defineRights() {
 	global $_admin_rights;
-	$_admin_rights = array(	'MAIN_RIGHTS' => 4,
-													'VIEWALL_RIGHTS' => 8,
+	$_admin_rights = array(	'OVERVIEW_RIGHTS' => 4,
+													'VIEW_ALL_RIGHTS' => 8,
 													'UPLOAD_RIGHTS' => 16,
 													'POST_COMMENT_RIGHTS'=>32,
 													'COMMENT_RIGHTS' => 64,
@@ -60,6 +61,7 @@ function defineRights() {
 													'OPTIONS_RIGHTS' => 8192,
 													'ADMIN_RIGHTS' => 65536);
 	$allrights = 0;
+	arsort($_admin_rights);
 	foreach ($_admin_rights as $right) $allrights = $allrights | $right;
 	return $allrights | NO_RIGHTS;
 }
@@ -90,7 +92,7 @@ $_zp_admin_users = null;
  * @param string $custom custom data for the administrator
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
-function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group='', $valid=1) {
+function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='default', $valid=1) {
 
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user' AND `valid`=$valid";
@@ -277,8 +279,9 @@ function migrateAuth($oldversion) {
 	if ($admins !== false) {
 		switch ($oldversion) {
 			case 1:
-				$oldrights = array(	'MAIN_RIGHTS' => 4,
-														'VIEWALL_RIGHTS' => 8,
+				$oldrights = array(	'NO_RIGHTS' => 2, // only in migration array
+														'OVERVIEW_RIGHTS' => 4,
+														'VIEW_ALL_RIGHTS' => 8,
 														'UPLOAD_RIGHTS' => 16,
 														'POST_COMMENT_RIGHTS'=>32,
 														'COMMENT_RIGHTS' => 64,
@@ -291,10 +294,11 @@ function migrateAuth($oldversion) {
 														'ADMIN_RIGHTS' => 65536);
 				break;
 			case 2:
-				$oldrights = array(	'MAIN_RIGHTS' => pow(2,2),
-														'VIEWALL_RIGHTS' => pow(2,4),
-														'UPLOAD_RIGHTS' => pow(2,6),
-														'POST_COMMENT_RIGHTS'=> pow(2,8),
+				$oldrights = array(	'NO_RIGHTS' => 1, // this should only be in the migration array
+														'OVERVIEW_RIGHTS' => pow(2,2),
+														'VIEW_ALL_RIGHTS' => pow(2,4),
+														'POST_COMMENT_RIGHTS'=> pow(2,6),
+														'UPLOAD_RIGHTS' => pow(2,8),
 														'COMMENT_RIGHTS' => pow(2,10),
 														'ALBUM_RIGHTS' => pow(2,12),
 														'MANAGE_ALL_ALBUM_RIGHTS' => pow(2,14),
@@ -319,9 +323,10 @@ function migrateAuth($oldversion) {
 					}
 				}
 			} else {
+				$newrights = $user['rights'];
 				if (NO_RIGHTS == 2) {
 					if (($rights = $user['rights']) & 1) { // old compressed rights
-						$newrights = MAIN_RIGHTS;
+						$newrights = OVERVIEW_RIGHTS;
 						if ($rights & 2) $newrights = $newrights | UPLOAD_RIGHTS;
 						if ($rights & 4) $newrights = $newrights | COMMENT_RIGHTS;
 						if ($rights & 8) $newrights = $newrights | ALBUM_RIGHTS;
@@ -331,7 +336,7 @@ function migrateAuth($oldversion) {
 					}
 				} else {
 					if (!(($rights = $user['rights']) & 1)) { // new expanded rights
-						$newrights = MAIN_RIGHTS;
+						$newrights = OVERVIEW_RIGHTS;
 						if ($rights & 16) $newrights = $newrights | UPLOAD_RIGHTS;
 						if ($rights & 64) $newrights = $newrights | COMMENT_RIGHTS;
 						if ($rights & 256) $newrights = $newrights | ALBUM_RIGHTS;

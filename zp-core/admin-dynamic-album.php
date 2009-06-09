@@ -7,8 +7,8 @@
 // force UTF-8 Ø
 
 define('OFFSET_PATH', 1);
-require_once(dirname(__FILE__).'/template-functions.php');
 require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/template-functions.php');
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");

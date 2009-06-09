@@ -5,8 +5,8 @@
  * Place a call on the function printCommentForm() in your script where you
  * wish the comment items to appear.
  * 
- * Normally the plugin uses the form plugins/comment_form/comment_form.php. However,
- * you may override this form by placing a script of the same name in your theme folder.
+ * Normally the plugin uses the form plugins/comment_form/comment_form.php.
+ * However, you may override this form by placing a script of the same name in your theme folder.
  * This will allow you to customize the appearance of the comments on your site.
  * 
  * There are several options to tune what the plugin will do. 
@@ -35,6 +35,14 @@ class comment_form {
 	function comment_form() {
 		setOptionDefault('comment_form_addresses', 0);
 		setOptionDefault('comment_form_members_only', 0);
+		$default = getOption('Allow_comments');
+		if (is_null($default)) $default = 1;
+		setOptionDefault('comment_form_albums', $default);
+		setOptionDefault('comment_form_images', $default);
+		$default = getOption('zenpage_comments_allowed');
+		if (is_null($default)) $default = 1;
+		setOptionDefault('comment_form_articles', $default);
+		setOptionDefault('comment_form_pages', $default);
 		setOptionDefault('comment_form_rss', 1);
 	}
 
@@ -45,11 +53,19 @@ class comment_form {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Show address form') => array('key' => 'comment_form_addresses', 'type' => 1,
+		$checkboxes = array(gettext('Albums') => 'comment_form_albums', gettext('Images') => 'comment_form_images');	
+		if (getOption('zp_plugin_zenpage')) {					
+			$checkboxes = array_merge($checkboxes, array(gettext('Pages') => 'comment_form_pages', gettext('News') => 'comment_form_articles'));
+		}
+		
+		return array(	gettext('Show address form') => array('key' => 'comment_form_addresses', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, the form will include positions for address information.')),
-									gettext('Only members can comment') => array('key' => 'comment_form_members_only', 'type' => 1,
+									gettext('Allow comments on') => array('key' => 'comment_form_allowed', 'type' => OPTION_TYPE_CHECKBOX_ARRAY,
+										'checkboxes' => $checkboxes,
+									'desc' => gettext('Comment forms will be presented on the checked pages.')),
+									gettext('Only members can comment') => array('key' => 'comment_form_members_only', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, only logged in users will be allowed to post comments.')),
-									gettext('Include RSS link') => array('key' => 'comment_form_rss', 'type' => 1,
+									gettext('Include RSS link') => array('key' => 'comment_form_rss', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, an RSS link will be included at the bottom of the comment section.'))
 									);
 	}
@@ -94,7 +110,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('street:').
 				 '</td>
 			 		<td>
-						<input type="text" name="0-comment_form_street" id="comment_form_street" class="textinput" size="22" value="'.$address['street'].'">
+						<input type="text" name="0-comment_form_street" id="comment_form_street" class="inputbox" size="22" value="'.$address['street'].'">
 					</td>
 				</tr>
 				<tr>
@@ -102,7 +118,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('city:').
 			 		'</td>
 					<td>
-						<input type="text" name="0-comment_form_city" id="comment_form_city" class="textinput" size="22" value="'.$address['city'].'">
+						<input type="text" name="0-comment_form_city" id="comment_form_city" class="inputbox" size="22" value="'.$address['city'].'">
 					</td>
 			 	</tr>
 			 	<tr>
@@ -110,7 +126,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('state:').
 				 '</td>
 			 		<td>
-						<input type="text" name="0-comment_form_state" id="comment_form_state" class="textinput" size="22" value="'.$address['state'].'">
+						<input type="text" name="0-comment_form_state" id="comment_form_state" class="inputbox" size="22" value="'.$address['state'].'">
 					</td>
 				</tr>
 				<tr>
@@ -118,7 +134,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('country:').
 				 '</td>
 					<td>
-						<input type="text" name="0-comment_form_country" id="comment_form_country" class="textinput" size="22" value="'.$address['country'].'">
+						<input type="text" name="0-comment_form_country" id="comment_form_country" class="inputbox" size="22" value="'.$address['country'].'">
 					</td>
 				</tr>
 				<tr>
@@ -126,7 +142,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('postal code:').
 					'</td>
 					<td>
-						<input type="text" name="0-comment_form_postal" id="comment_form_postal" class="textinput" size="22" value="'.$address['postal'].'">
+						<input type="text" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="22" value="'.$address['postal'].'">
 					</td>
 				</tr>'."\n";
 }
@@ -210,18 +226,30 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
  */
 function printCommentForm() {
 	global $_zp_gallery_page, $_zp_themeroot;
-	if (getOption('comment_form_addresses')) {
-		if (zp_loggedin()) {
-			global $_zp_current_admin;
-			$raw = $_zp_current_admin['custom_data'];
-			if (!preg_match('/^a:[0-9]+:{/', $raw)) {
-				$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
-			} else {
-				$address = unserialize($raw);
-			}
-		} else {
-			$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
-		}
+	switch ($_zp_gallery_page) {
+		case 'album.php':
+			if (!getOption('comment_form_albums')) return;
+			$comments_open = OpenedForComments(ALBUM);
+			$formname = '/comment_form.php';
+			break;
+		case 'image.php':
+			if (!getOption('comment_form_images')) return;
+			$comments_open = OpenedForComments('IMAGE');
+			$formname = '/comment_form.php';
+			break;
+		case 'pages.php':
+			if (!getOption('comment_form_pages')) return;
+			$comments_open = zenpageOpenedForComments();
+			$formname = '/comment_form.php';
+			break;
+		case 'news.php':
+			if (!getOption('comment_form_articles')) return;
+			$comments_open = zenpageOpenedForComments();
+			$formname = '/comment_form.php';
+			break;
+		default:
+			return;
+			break;
 	}
 	?>
 <!-- printCommentForm -->
@@ -250,7 +278,7 @@ function printCommentForm() {
 			<?php while (next_comment()):  ?>
 				<div class="comment">
 					<div class="commentinfo">
-						<h4><?php printCommentAuthorLink(); ?></h4>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?>
+						<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
 					</div>
 					<div class="commenttext">
 						<?php echo getCommentBody();?>
@@ -261,20 +289,47 @@ function printCommentForm() {
 
 		<!-- Comment Box -->
 		<?php
-		$what = ALBUM;
-		if ($_zp_gallery_page == 'image.php') {
-			$what = $what | IMAGE;
-		}
-		if (OpenedForComments($what)) {
+		if ($comments_open) {
 			$stored = getCommentStored();
-			$theme = getCurrentTheme();
-			$form = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/comment_form.php';
-			if (file_exists($form)) {
-				$form = SERVERPATH . '/' . THEMEFOLDER . '/' . $theme . '/comment_form.php';
-			} else {
-				$form = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'comment_form/comment_form.php';
+			$disabled = array();
+			foreach ($stored as $key=>$value) {
+				$disabled[$key] = '';
 			}
-			if (getOption('comment_form_members_only') && !zp_loggedin(POST_COMMENT_RIGHTS)) {
+			if ($comments_open) {
+				$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+				$disabled = array_merge($disabled, $address);
+				if (zp_loggedin()) {
+					global $_zp_current_admin;
+					$raw = $_zp_current_admin['custom_data'];
+					if (preg_match('/^a:[0-9]+:{/', $raw)) {
+						$address = unserialize($raw);
+						foreach ($address as $key=>$value) {
+							if (!empty($value)) $disabled[$key] = ' DISABLED';
+						}
+					}
+				} else {
+					$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+				}
+			}
+			if (zp_loggedin()) {
+				if (!empty($_zp_current_admin['name'])) {
+					$stored['name'] = $_zp_current_admin['name'];
+					$disabled['name'] = ' DISABLED';
+				}
+				if (!empty($_zp_current_admin['email'])) {
+					$stored['email'] = $_zp_current_admin['email'];
+					$disabled['email'] = ' DISABLED';
+				}
+			}
+				
+			$theme = getCurrentTheme();
+			$form = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).$formname;
+			if (file_exists($form)) {
+				$form = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.$formname;
+			} else {
+				$form = SERVERPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.'comment_form'.$formname;
+			}
+			if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
 				echo gettext('Only registered users may post comments.');
 			} else {
 				require_once($form);

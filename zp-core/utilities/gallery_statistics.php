@@ -28,7 +28,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) { // prevent nefarious access to this page.
+if (!($_zp_loggedin & (ADMIN_RIGHTS | OVERVIEW_RIGHTS))) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
 	exit();
 }

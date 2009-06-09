@@ -1091,3 +1091,7 @@ table.password td.submit{
 table.password td.hint{
 	text-align:left;
 }
+.inputbox {
+	width: 250px;
+	padding: 2px;
+}

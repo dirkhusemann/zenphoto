@@ -28,7 +28,7 @@ $sortby = array(gettext('Filename') => 'filename',
 if (OFFSET_PATH) {									
 	// setup sub-tab arrays for use in dropdown
 	$zenphoto_tabs = array();										
-	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (OVERVIEW_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['home'] = array('text'=>gettext("overview"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/admin.php',
 							'subtabs'=>NULL);
@@ -76,20 +76,24 @@ if (OFFSET_PATH) {
  							'subtabs'=>NULL);
  	
 	$subtabs = array();
+	$optiondefault='';
 	if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+			$optiondefault='&tab=general';
 			$subtabs[gettext("general")] = 'admin-options.php?page=options&tab=general';
 			$subtabs[gettext("gallery")] = 'admin-options.php?page=options&tab=gallery';
 			$subtabs[gettext("image")] = 'admin-options.php?page=options&tab=image';
 			$subtabs[gettext("comment")] = 'admin-options.php?page=options&tab=comments';
 		}
 		if ($_zp_loggedin & ADMIN_RIGHTS) {
+			if (empty($optiondefault)) $optiondefault='&tab=plugin';
 			$subtabs[gettext("plugin")] = 'admin-options.php?page=options&tab=plugin';
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			$subtabs[gettext("search")] = 'admin-options.php?page=options&tab=search';
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
+			if (empty($optiondefault)) $optiondefault='&tab=theme';
 			$subtabs[gettext("theme")] = 'admin-options.php?page=options&tab=theme';
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
@@ -98,7 +102,7 @@ if (OFFSET_PATH) {
 	}
 	if (!empty($subtabs)) {					
 		$zenphoto_tabs['options'] = array('text'=>gettext("options"),
-				'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php', 
+				'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=options'.$optiondefault, 
 				'subtabs'=>$subtabs,
 				'default'=>'gallery');
 	}
@@ -613,18 +617,27 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * @param bool $hide set to true to hide the output (used by the plugin-options folding
  *
  * There are four type of custom options:
- * 		0: a textbox
- * 		1: a checkbox
- * 		2: handled by $optionHandler->handleOption()
- * 		3: a textarea
- * 		4: radio buttons (button names are in the 'buttons' index of the supported options array)
- * 		5: selector (selection list is in the 'selections' index of the supported options array)
- * 		6: checkbox array (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
- * 		7: checkbox UL (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
- * 		8: Color picker
+ * 		OPTION_TYPE_TEXTBOX:				a textbox
+ * 		OPTION_TYPE_TEXTBOX:				a checkbox
+ * 		OPTION_TYPE_CUSTOM:					handled by $optionHandler->handleOption()
+ * 		OPTION_TYPE_TEXTAREA:				a textarea
+ * 		OPTION_TYPE_RADIO:					radio buttons (button names are in the 'buttons' index of the supported options array)
+ * 		OPTION_TYPE_SELECTOR:				selector (selection list is in the 'selections' index of the supported options array)
+ * 		OPTION_TYPE_CHECKBOX_ARRAY:	checkbox array (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
+ * 		OPTION_TYPE_CHECKBOX_UL:		checkbox UL (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
+ * 		OPTION_TYPE_COLOR_PICKER:		Color picker
  *
  * type 0 and 3 support multi-lingual strings.
  */
+define('OPTION_TYPE_TEXTBOX',0);
+define('OPTION_TYPE_CHECKBOX',1);
+define('OPTION_TYPE_CUSTOM',2);
+define('OPTION_TYPE_TEXTAREA',3);
+define('OPTION_TYPE_RADIO',4);
+define('OPTION_TYPE_SELECTOR',5);
+define('OPTION_TYPE_CHECKBOX_ARRAY',6);
+define('OPTION_TYPE_CHECKBOX_UL',7);
+define('OPTION_TYPE_COLOR_PICKER',8);
 function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 	$supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
@@ -672,8 +685,8 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			echo '<td width="175">' . $indent . $option . ":</td>\n";
 
 			switch ($type) {
-				case 0:  // text box
-				case 3:  // text area
+				case OPTION_TYPE_TEXTBOX:
+				case OPTION_TYPE_TEXTAREA:
 					echo '<td width="350px">';
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />'."\n";
 					if ($multilingual) {
@@ -683,25 +696,25 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					}
 					echo '</td>' . "\n";
 					break;
-				case 1:  // check box
+				case OPTION_TYPE_CHECKBOX:
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$key.'" value=0 />' . "\n";
 					echo '<td width="350px"><input type="checkbox" name="'.$key.'" value="1"';
 					echo checked('1', $v);
 					echo " /></td>\n";
 					break;
-				case 2:  // custom handling
+				case OPTION_TYPE_CUSTOM:
 					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'custom-'.$key.'" value=0 />' . "\n";
 					$optionHandler->handleOption($key, $v);
 					echo "</td>\n";
 					break;
-				case 4: // radio button
+				case OPTION_TYPE_RADIO:
 					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'radio-'.$key.'" value=0 />' . "\n";
 					generateRadiobuttonsFromArray($v,$row['buttons'],$key);
 					echo "</td>\n";
 					break;
-				case 5: // selector
+				case OPTION_TYPE_SELECTOR:
 					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
 					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
@@ -709,7 +722,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo "</select>\n";
 					echo "</td>\n";
 					break;
-				case 6: // checkbox array
+				case OPTION_TYPE_CHECKBOX_ARRAY:
 					echo "<td width=\"350px>\"\n";
 					foreach ($row['checkboxes'] as $display=>$checkbox) {
 						$ck_sql = str_replace($key, $checkbox, $sql);
@@ -734,7 +747,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					}
 					echo "</td>\n";
 					break;
-				case 7: // checkbox UL
+				case OPTION_TYPE_CHECKBOX_UL:
 					echo "<td width=\"350px>\"\n";
 					$cvarray = array();
 					$c = 0;
@@ -751,7 +764,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '</ul>';
 					echo "</td>\n";
 					break;
-				case 8: // Color picker
+				case OPTION_TYPE_COLOR_PICKER:
 					echo '<td width="350px" style="margin:0; padding:0">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />' . "\n";
 					?>

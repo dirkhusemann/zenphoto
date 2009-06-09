@@ -26,11 +26,11 @@ class captcha {
 	 */
 	function getOptionsSupported() {
 		return array(
-								gettext('Hash key') => array('key' => 'zenphoto_captcha_key', 'type' => 0, 
+								gettext('Hash key') => array('key' => 'zenphoto_captcha_key', 'type' => OPTION_TYPE_TEXTBOX, 
 												'desc' => gettext('The key used in hashing the Captcha string. Note: this key will change with each successful Captcha verification.')),
-								gettext('Allowed characters') => array('key' => 'zenphoto_captcha_string', 'type' => 0, 
+								gettext('Allowed characters') => array('key' => 'zenphoto_captcha_string', 'type' => OPTION_TYPE_TEXTBOX, 
 												'desc' => gettext('The characters which may appear in the Captcha string.')),
-								gettext('Captcha length') => array('key' => 'zenphoto_captcha_length', 'type' => 4, 
+								gettext('Captcha length') => array('key' => 'zenphoto_captcha_length', 'type' => OPTION_TYPE_RADIO, 
 												'buttons' => array(gettext('3')=>3, gettext('4')=>4, gettext('5')=>5, gettext('6')=>6),
 												'desc' => gettext('The number of characters in the Captcha.'))
 								);

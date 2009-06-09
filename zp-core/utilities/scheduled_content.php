@@ -23,8 +23,8 @@ define('RESPOND_COUNTER', 1000);
 
 chdir(dirname(dirname(__FILE__)));
 
-require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
 $button_text = gettext('Publish content');
 $button_hint = gettext('Manage unpublished content in your gallery.');

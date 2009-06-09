@@ -525,10 +525,12 @@ if ($subtab == 'users') {
 			$admins = getAdministrators();
 			if (empty($admins)) {
 				$rights = ALL_RIGHTS;
+				$groupname = 'administrators';
 			} else {
-				$rights = ALL_RIGHTS ^ MANAGE_ALL_ALBUM_RIGHTS;
+				$rights = DEFAULT_RIGHTS;
+				$groupname = 'default';
 			}
-			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => $rights, 'custom_data' => NULL, 'valid'=>1);
+			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => $rights, 'custom_data' => NULL, 'valid'=>1, 'group' => $groupname);
 			$alterrights = '';
 		}
 	} else {
@@ -613,14 +615,18 @@ if (empty($alterrights)) {
 	$albumlist = $gallery->getAlbums();
 	foreach($admins as $user) {
 		if ($user['valid']) {
+			$local_alterrights = $alterrights;
 			$userid = $user['user'];
 			$userobj = new Administrator($userid);
 			if (empty($userid)) {
+				$userobj->setGroup($user['group']);
 				$userobj->setRights($user['rights']);
 				$userobj->setValid(1);
 			}
-			if ($userobj->getRights() == 0) {
+			$groupname = $userobj->getGroup();
+			if ($pending = $userobj->getRights() == 0 && empty($groupname)) {
 				$master = '(<em>'.gettext('pending verification').'</em>)';
+				$local_alterrights = ' DISABLED';
 			} else {
 				$master = '&nbsp;';
 			}
@@ -640,7 +646,7 @@ if (empty($alterrights)) {
 			}
 			
 			
-			$local_alterrights = apply_filter('admin_alterrights', $alterrights, $userobj);
+			$local_alterrights = apply_filter('admin_alterrights', $local_alterrights, $userobj);
 			$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 			?>
 			<tr>
@@ -683,7 +689,7 @@ if (empty($alterrights)) {
 							<?php
 						} else {
 							echo $master;
-							if (!$userobj->getRights()) {
+							if ($pending) {
 							?>
 								<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $local_alterrights; ?>>
 								<?php echo gettext("Authenticate user"); ?>
@@ -2066,7 +2072,7 @@ if (empty($alterrights)) {
 				<td colspan="2" align="left">
 					<?php echo gettext('<strong>Standard options</strong>') ?>
 				</td>
-				<td><em><?php echo gettext('These image and album presentation options are standard to all themes.'); ?></em></td>
+				<td><em><?php echo gettext('These image and album presentation options provided by the Zenphoto core for all themes. However, please note that some themes might override these options for design reasons'); ?></em></td>
 			</tr>
 			<tr>
 				<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>

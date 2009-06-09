@@ -52,7 +52,15 @@
 	</div>
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 	<?php if (function_exists('printRating')) { printRating(); }?>
-
+	<?php
+	if (function_exists('printCommentForm')) {
+		?>
+		<div id="comments">
+			<?php printCommentForm(); ?>
+		</div>
+		<?php
+	}
+	?>
 </div>
 
 <div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 

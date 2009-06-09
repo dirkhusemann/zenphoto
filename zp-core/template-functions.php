@@ -2928,7 +2928,7 @@ function getCommentStored($numeric=false) {
 	$stored = array('name'=>$_zp_comment_stored[0],'email'=>$_zp_comment_stored[1],
 							 'website'=>$_zp_comment_stored[2],'comment'=>$_zp_comment_stored[3],
 							 'saved'=>$_zp_comment_stored[4],'private'=>$_zp_comment_stored[5],
-							 'anon'=>$_zp_comment_stored[6]);
+							 'anon'=>$_zp_comment_stored[6],'custom'=>$_zp_comment_stored[7]);
 	if ($numeric) {
 		return Array_merge($stored);
 	}
@@ -4252,7 +4252,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin;
-	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
+	if (zp_loggedin(OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$show = (getOption('search_user') != '');
@@ -4382,9 +4382,9 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect
 	$registerpage = getOption('user_registration_page');
 	if (!empty($registerpage) && file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($registerpage).'.php')) {
 		if (getOption('mod_rewrite')) {
-			$link = '/page/'.$registerpage;
+			$link = WEBPATH.'/page/'.$registerpage;
 		} else {
-			$link = 'index.php?p='.$registerpage;
+			$link = WEBPATH.'/index.php?p='.$registerpage;
 		}
 		printLink($link,get_language_string(getOption('user_registration_text')),get_language_string(getOption('user_registration_tip')));
 	}

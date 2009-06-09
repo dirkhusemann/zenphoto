@@ -40,9 +40,9 @@ class viewer_size_image_options {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Image sizes allowed') => array('key' => 'viewer_size_image_sizes', 'type' => 3,
+		return array(	gettext('Image sizes allowed') => array('key' => 'viewer_size_image_sizes', 'type' => OPTION_TYPE_TEXTAREA,
 										'desc' => gettext('List of sizes from which the viewer may select.<br />The form is "$s=&lt;size&gt;" or "$h=&lt;height&gt;,$w=&lt;width&gt;;"....<br />See printCustomSizedImage() for details')),
-		gettext('Default size') => array('key' => 'viewer_size_image_default', 'type' => 0,
+		gettext('Default size') => array('key' => 'viewer_size_image_default', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext('The initial size for the image. Format is a single instance of the sizes list.'))
 		);
 	}

@@ -53,15 +53,15 @@ class flowplayer3_playlist {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('flow player width') => array('key' => 'flow_player3_playlistwidth', 'type' => 0,
+		return array(	gettext('flow player width') => array('key' => 'flow_player3_playlistwidth', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Player width (Note this refers to the player window. The playlist display itself is styled via CSS.)")),
-		gettext('flow player height') => array('key' => 'flow_player3_playlistheight', 'type' => 0,
+		gettext('flow player height') => array('key' => 'flow_player3_playlistheight', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Player height (Note this refers to the player window. The playlist display itself is styled via CSS.)")),
-		gettext('Autoplay') => array('key' => 'flow_player3_playlistautoplay', 'type' => 1,
+		gettext('Autoplay') => array('key' => 'flow_player3_playlistautoplay', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Should the video start automatically. Yes if selected. (NOTE: Probably because of a flowplayer bug mp3s are always autoplayed.)")),
-		gettext('Controls autohide') => array('key' => 'flow_player3_playlistautohide', 'type' => 1,
+		gettext('Controls autohide') => array('key' => 'flow_player3_playlistautohide', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Specifies whether the controlbar should be hidden when the user is not actively using the player.")),
-		gettext('Splash image') => array('key' => 'flow_player3_playlistsplashimage', 'type' => 1,
+		gettext('Splash image') => array('key' => 'flow_player3_playlistsplashimage', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to display the videothumb of the first playlist entry as a splash/cover image. It will be cropped to the fit the width and height of the player window and will dissapear on starting the playlist."))
 		);
 	}
