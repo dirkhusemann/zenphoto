@@ -39,12 +39,12 @@ class register_user_options {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Default user rights') => array('key' => 'register_user_rights', 'type' => 4,
-										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEWALL_RIGHTS | NO_RIGHTS),
+		return array(	gettext('Default user rights') => array('key' => 'register_user_rights', 'type' => OPTION_TYPE_RADIO,
+										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEW_ALL_RIGHTS | NO_RIGHTS),
 										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified.")),
-									gettext('Notify') => array('key' => 'register_user_notify', 'type' => 1, 
+									gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
 										'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
-									gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => 1, 
+									gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX, 
 										'desc' => gettext('If checked, captcha validation will be required for user registration.'))
 									);
 	}
@@ -54,6 +54,7 @@ class register_user_options {
 
 if (!OFFSET_PATH) { // handle form post
 	if (isset($_GET['verify'])) {
+		$notify = '';
 		$currentadmins = getAdministrators();
 		$params = unserialize(pack("H*", $_GET['verify']));
 		$adminuser = NULL;
@@ -76,10 +77,29 @@ if (!OFFSET_PATH) { // handle form post
 		}
 	}
 	if (isset($_POST['register_user'])) {
+		$notify = '';
+		if (getOption('register_user_captcha')) {
+			if (isset($_POST['code'])) {
+				$code = sanitize($_POST['code'], 3);
+				$code_ok = sanitize($_POST['code_h'], 3);
+			} else {
+				$code = '';
+				$code_ok = '';
+			}
+			if (!$_zp_captcha->checkCaptcha($code, $code_ok)) {
+				$notify = 'invalidcaptcha';
+			}
+		}
+		$admin_n = trim($_POST['admin_name']);
+		if (empty($admin_n)) {
+			$notify = 'incomplete';
+		}
+		$admin_e = trim($_POST['admin_email']);
+		if (!is_valid_email_zp($admin_e)) {
+			$notify = 'invalidemail';
+		}
 		$pass = trim($_POST['adminpass']);
 		$user = trim($_POST['adminuser']);
-		$admin_n = trim($_POST['admin_name']);
-		$admin_e = trim($_POST['admin_email']);
 		if (!empty($user) && !(empty($admin_n)) && !empty($admin_e)) {
 			if ($pass == trim($_POST['adminpass_2'])) {
 				if (empty($pass)) {
@@ -87,16 +107,12 @@ if (!OFFSET_PATH) { // handle form post
 				} else {
 					$pwd = passwordHash($_POST['adminuser'], $pass);
 				}
-				$notify = '';
 				$currentadmins = getAdministrators();
 				foreach ($currentadmins as $admin) {
 					if ($admin['user'] == $user) {
 						$notify = 'exists';
 						break;
 					}
-				}
-				if (!is_valid_email_zp($admin_e)) {
-					$notify = 'invalidemail';
 				}
 				if (empty($notify)) {
 					saveAdmin($user, $pwd, $admin_n, $admin_e, 0, NULL);
@@ -108,18 +124,6 @@ if (!OFFSET_PATH) { // handle form post
 				}
 			} else {
 				$notify = 'mismatch';
-			}
-			if (getOption('register_user_captcha')) {
-				if (isset($_POST['code'])) {
-					$code = sanitize($_POST['code'], 3);
-					$code_ok = sanitize($_POST['code_h'], 3);
-				} else {
-					$code = '';
-					$code_ok = '';
-				}
-				if (!$_zp_captcha->checkCaptcha($code, $code_ok)) {
-					$notify = 'invalidcaptcha';
-				}
 			}
 		} else {
 			$notify = 'incomplete';

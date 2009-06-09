@@ -107,6 +107,7 @@ themes/example/theme_description.php
 themes/example/zen.css
 themes/stopdesign/404.php
 themes/stopdesign/album.php
+themes/stopdesign/comment_form.php
 themes/stopdesign/css/comments-hide.css
 themes/stopdesign/css/comments-show.css
 themes/stopdesign/css/custom.css
@@ -400,6 +401,7 @@ zp-core/lib-encryption.php
 zp-core/lib-GD.php
 zp-core/lib-gettext/gettext.inc
 zp-core/lib-htmlawed.php
+zp-core/lib-json.php
 zp-core/lib-pclzip.php
 zp-core/lib-utf8.php
 zp-core/locale/da_DK/LC_MESSAGES/zenphoto.mo
@@ -425,6 +427,8 @@ zp-core/plugins/class-textobject/textDefault.png
 zp-core/plugins/class-textobject.php
 zp-core/plugins/class-video/multimediaDefault.png
 zp-core/plugins/class-video.php
+zp-core/plugins/comment_form/comment_form.php
+zp-core/plugins/comment_form.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
@@ -433,6 +437,7 @@ zp-core/plugins/filter-comments.php
 zp-core/plugins/filter-crop_image.php
 zp-core/plugins/filter-custom_data.php
 zp-core/plugins/filter-file_searches.php
+zp-core/plugins/filter-login.php
 zp-core/plugins/filter-new_objects.php
 zp-core/plugins/filter-zenphoto_seo.php
 zp-core/plugins/flowplayer/flashembed-0.34.pack.js
@@ -1435,6 +1440,8 @@ zp-core/plugins/tiny_mce/utils/editable_selects.js
 zp-core/plugins/tiny_mce/utils/form_utils.js
 zp-core/plugins/tiny_mce/utils/mctabs.js
 zp-core/plugins/tiny_mce/utils/validate.js
+zp-core/plugins/user_groups/user_groups-tab.php
+zp-core/plugins/user_groups.php
 zp-core/plugins/user_logout.php
 zp-core/plugins/viewer_size_image.php
 zp-core/plugins/zenpage/admin-categories.php

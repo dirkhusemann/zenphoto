@@ -10,23 +10,23 @@
 		<table class="register_user">
 		<tr>
 			<td><?php echo gettext("Name:"); ?></td>
-			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo $admin_n; ?>" /></td>
+			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo $admin_n; ?>" size="22" /></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("User ID:"); ?></td>
-			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo $user; ?>" /></td>
+			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo $user; ?>" size="22" /></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Password:"); ?></td>
-			<td><input type="password" id="adminpass" name="adminpass"	value="" /></td>
+			<td><input type="password" id="adminpass" name="adminpass"	value="" size="23" /></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("re-enter:"); ?></td>
-			<td><input type="password" id="adminpass_2" name="adminpass_2"	value="" /></td>
+			<td><input type="password" id="adminpass_2" name="adminpass_2"	value="" size="23" /></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Email:"); ?></td>
-			<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" /></td>
+			<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" size="22" /></td>
 		</tr>
 		<?php
 		if (getOption('register_user_captcha')) {
@@ -34,15 +34,15 @@
 			<tr>
 				<td>
 					<?php
-					$captchaCode = generateCaptcha(&$img);
+					$captchaCode = generateCaptcha($img);
 					$html = "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
 					?>
-					<input type="hidden" name="code_h" value="<?php echo $captchaCode; ?>"/>
+					<input type="hidden" name="code_h" value="<?php echo $captchaCode; ?>" size="22" />
 					<?php
 					printf(gettext("Enter %s:"),$html);
 					?>
 				</td>
-				<td><input type="text" id="code" name="code" value="" /></td>
+				<td><input type="text" id="code" name="code" value="" size="22" /></td>
 			</tr>
 			<?php
 		}
