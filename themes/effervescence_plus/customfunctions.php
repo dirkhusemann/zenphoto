@@ -204,7 +204,7 @@ function printFooter($page) {
 					<?php $c=get_subalbum_count(); echo sprintf(ngettext("%u Subalbum", "%u Subalbums",$c),$c); ?> &middot;
 					<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
 					$photosNumber = array_shift($photosArray); echo sprintf(ngettext("%u Image","%u Images",$photosNumber),$photosNumber); ?>
-					<?php if (getOption('Allow_comments')) { ?>
+					<?php if (function_exists('printCommentForm')) { ?>
 						&middot;
 						<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
 						$commentsNumber = array_shift($commentsArray); echo sprintf(ngettext("%u Comment","%u Comments",$commentsNumber),$commentsNumber); ?>

@@ -42,8 +42,8 @@ $zp_request = zp_load_request();
 zp_handle_password();
 
 // Handle any comments that might be posted.
-
-if (getOption('Allow_comments')) $_zp_comment_error = zp_handle_comment();
+//TODO: Allow_comments is legacy....
+if (getOption('Allow_comments') || function_exists('printCommentForm')) $_zp_comment_error = zp_handle_comment();
 
 /*** Server-side AJAX Handling ***********
  ******************************************/

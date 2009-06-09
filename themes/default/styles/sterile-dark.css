@@ -328,6 +328,10 @@ ul.pagelist li.next {
 /* Forms
 ------------------------------ */
 form {padding-bottom:10px;}
+.captchainputbox {
+	width: 6.5em;
+	padding: 2px;
+}
 .inputbox {
 	width: 250px;
 	padding: 4px;

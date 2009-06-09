@@ -172,7 +172,7 @@ require_once('normalizer.php');
 							<td><?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); $photosNumber = array_shift($photosArray); echo $photosNumber ?></td>
 							<td><?php printRSSLink('Gallery','','','',true,'i'); ?></td>
 						</tr>
- 					<?php if (getOption('Allow_comments')) { ?>
+ 					<?php if (function_exists('printCommentForm')) { ?>
  						<tr>
 							<th><?php echo gettext('Comments'); ?></th>
 							<td><?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); $commentsNumber = array_shift($commentsArray); echo $commentsNumber ?></td>

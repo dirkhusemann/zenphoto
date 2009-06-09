@@ -12,7 +12,6 @@ require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 class ThemeOptions {
 	
 	function ThemeOptions() {
-		setOptionDefault('Allow_comments', true);
 		setOptionDefault('zenpage_comments_allowed', false); 
 		setOptionDefault('zenpage_zp_index_news', false);
 		setOptionDefault('Allow_search', true);
@@ -22,8 +21,7 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section for images.')),
-									gettext('Allow page & news comments') => array('key' => 'zenpage_comments_allowed', 'type' => 1, 'desc' => gettext("Set to enable comment section for news and pages.")),
+		return array(	gettext('Allow page & news comments') => array('key' => 'zenpage_comments_allowed', 'type' => 1, 'desc' => gettext("Set to enable comment section for news and pages.")),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
 									gettext('Use Thickbox') => array('key' => 'Use_thickbox', 'type' => 1, 'desc' => gettext('Check to display of the full size image with Thickbox.')),
 									gettext('News on index page') => array('key' => 'zenpage_zp_index_news', 'type' => 1, 'desc' => gettext("Enable this if you want to show the news section's first page on the <code>index.php</code> page.")),

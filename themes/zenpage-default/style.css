@@ -912,5 +912,9 @@ table.password td.submit{
 table.password td.hint{
 	text-align:left;
 }
+.captchainputbox {
+	width: 6.6em;
+	padding: 2px;
+}
 
 

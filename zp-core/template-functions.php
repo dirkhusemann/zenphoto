@@ -135,7 +135,7 @@ function printAdminToolbox($id='admin') {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		// options link for all admins with options rights
 			echo "<li>";
-			printLink($zf . '/admin-options.php', gettext("Options"), NULL, NULL, NULL);
+			printLink($zf . '/admin-options.php?tab=general', gettext("Options"), NULL, NULL, NULL);
 			echo "</li>\n";
 		}
 		apply_filter('admin_toolbox_global');
@@ -4416,7 +4416,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 	global $_zp_captcha;
 	if (getOption('Use_Captcha')) {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
-		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
+		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"captchainputbox\" />";
 		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\" />" .
  						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" style=\"vertical-align:bottom\"/></label>&nbsp;";
 

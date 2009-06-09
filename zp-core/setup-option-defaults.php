@@ -239,7 +239,6 @@ function setDefault($option, $default) {
 	setOptionDefault('user_registration_tip', gettext('Click here to register for this site.'));
 	setOptionDefault('auto_rotate', 0);
 	setOptionDefault('IPTC_encoding', 'ISO-8859-1');
-	setOptionDefault('Allow_comments', 1);
 	
 	setOptionDefault('UTF8_image_URI', 0);
 	setOptionDefault('captcha', 'zenphoto');
@@ -293,5 +292,5 @@ function setDefault($option, $default) {
 		saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | MAIN_RIGHTS | VIEWALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS |
 										ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
 	}
-	
+	if (getOption('Allow_comments')) setOption('zp_plugin_comment_form');
 	?>

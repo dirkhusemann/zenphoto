@@ -82,63 +82,10 @@ $firstPageImages = normalizeColumns(1, 7);
 		</div>
 
  <!-- begin comment block -->
-				<?php if (getOption('Allow_comments')  && getCurrentPage() == 1) { ?>
-				<div id="comments">
-					<div class="commentcount"><?php
-						$num = getCommentCount();
-						switch ($num) {
-							case 0:
-								echo gettext("No comments");
-								break;
-							case 1:
-								echo gettext("<strong>One</strong> comment");
-								break;
-							default:
-								printf(gettext("<strong>%u</strong> comments on this album:"), $num);
-						}					 	
-				 ?> </div>
-
-						<?php while (next_comment()):  ?>
-						<div class="comment">
-							<div class="commentmeta">
-									<span class="commentauthor"><?php printCommentAuthorLink(); ?></span>
-									| <span class="commentdate"><?php echo getCommentDateTime();?></span>
- 							</div>
-								<div class="commentbody"><?php echo getCommentBody();?></div>
-						</div>
-						<?php endwhile; ?>
-
-						<div class="imgcommentform">
-				<?php if (OpenedForComments(ALBUM)) { ?>
-							<!-- If comments are on for this album... -->
-							<h3>
-								<?php echo gettext("Add a comment:"); ?>
-							</h3>
-							<form id="commentform" action="#comments" method="post">
-									<input type="hidden" name="comment" value="1" />
-									<input type="hidden" name="remember" value="1" />
-										<?php printCommentErrors();
-													$stored = getCommentStored(); ?>
-									<table border="0">
-										<tr><td>
-											<label for="name"><?php echo gettext("Name:"); ?>
-											(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
-											</label>
-											</td>
-											<td><input type="text" name="name" size="20" value="<?php echo $stored['name'];?>" />
-										</td></tr>
-										<tr><td><label for="email"><?php echo gettext("E-Mail (won't be public):"); ?></label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored['email'];?>" /> </td></tr>
-										<tr><td><label for="website"><?php echo gettext("Site:"); ?></label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored['website'];?>" /></td></tr>
-												<?php printCaptcha('<tr><td>'.gettext('Enter').' ', ':</td><td>', '</td></tr>'); ?>
-										<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td></tr>
-									</table>
-									<textarea name="comment" rows="6" cols="40"><?php echo $stored['comment']; ?></textarea><br />
-									<input type="submit" value="<?php echo gettext('Add Comment'); ?>" />
-							</form>
-						</div>
-				<?php } else { echo gettext('Comments are closed.'); } ?>
-				</div>
-				<?php } ?>
+			<?php if (function_exists('printCommentForm')  && getCurrentPage() == 1) {
+				printCommentForm();
+			}
+			?>
 <!--  end comment block -->
 
  		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>

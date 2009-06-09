@@ -143,13 +143,13 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td><?php echo gettext("IP:"); ?></td>
 		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo $IP; ?>" /></td>
 	</tr>
+	<?php
+ 	echo apply_filter('edit_comment_custom_data', '', $custom_data);
+	?>
 	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
 		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
 	</tr>
-	<?php
- 	echo apply_filter('edit_comment_custom_data', '', $custom_data);
-	?>
 	<tr>
 		<td></td>
 		<td>

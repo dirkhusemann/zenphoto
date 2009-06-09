@@ -11,14 +11,12 @@ require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 class ThemeOptions {
 	
 	function ThemeOptions() {
-		setOptionDefault('Allow_comments', true);
 		setOptionDefault('Allow_search', true);
 		setOptionDefault('Theme_colors', 'light'); 
 	}
 	
 	function getOptionsSupported() {
-		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
-									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
+		return array(	gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
 									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Select the colors of the theme'))
 								);
 	}

@@ -13,7 +13,6 @@ class ThemeOptions {
 
 	function ThemeOptions() {
 		setOptionDefault('Theme_logo', '');
-		setOptionDefault('Allow_comments', true);
 		setOptionDefault('zenpage_comments_allowed', false); 
 		setOptionDefault('Allow_search', true);
 		setOptionDefault('enable_album_zipfile', false);
@@ -26,7 +25,6 @@ class ThemeOptions {
 
 	function getOptionsSupported() {
 		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'multilingual' => 1, 'desc' => gettext('The text for the theme logo')),
-									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
 									gettext('Allow page & news comments') => array('key' => 'zenpage_comments_allowed', 'type' => 1, 'desc' => gettext("Set to enable comment section for news and pages.")),
 									gettext('Watermark head image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
 									gettext('Zipfile download') => array('key' => 'enable_album_zipfile', 'type' => 1, 'desc' => gettext('Check to enable album zipfile download link.')),
