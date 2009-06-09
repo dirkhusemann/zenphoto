@@ -92,7 +92,7 @@ var ZenpageDialog = {
 		
 		// building the final item to include
 		if(type == "zenphoto") {
-			imglink = linkpart1+includetype+linkpart2;
+			imglink = decodeURIComponent(linkpart1+includetype+linkpart2);
 		} else {
 			if(type == "pages") {
 				if(modrewrite == '1') {
