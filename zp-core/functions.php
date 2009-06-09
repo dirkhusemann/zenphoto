@@ -18,6 +18,11 @@ if(!function_exists("gettext")) {
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
+if(!function_exists("json_encode")) {
+	// load the drop-in replacement library
+	require_once(dirname(__FILE__).'/lib-json.php');
+}
+
 require_once(dirname(__FILE__).'/functions-basic.php');
 require_once(dirname(__FILE__).'/functions-filter.php');
 require_once(dirname(__FILE__).'/class-load.php');
