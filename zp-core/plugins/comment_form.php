@@ -2,6 +2,15 @@
 /**
  * Provides a unified comment handling facility
  * 
+ * Place a call on the function printCommentForm() in your script where you
+ * wish the comment items to appear.
+ * 
+ * Normally the plugin uses the form plugins/comment_form/comment_form.php. However,
+ * you may override this form by placing a script of the same name in your theme folder.
+ * This will allow you to customize the appearance of the comments on your site.
+ * 
+ * There are several options to tune what the plugin will do. 
+ * 
  * @package plugins
  */
 $plugin_is_filter = 5;
@@ -26,6 +35,7 @@ class comment_form {
 	function comment_form() {
 		setOptionDefault('comment_form_addresses', 0);
 		setOptionDefault('comment_form_members_only', 0);
+		setOptionDefault('comment_form_rss', 1);
 	}
 
 
@@ -38,7 +48,9 @@ class comment_form {
 		return array(	gettext('Show address form') => array('key' => 'comment_form_addresses', 'type' => 1,
 										'desc' => gettext('If checked, the form will include positions for address information.')),
 									gettext('Only members can comment') => array('key' => 'comment_form_members_only', 'type' => 1,
-										'desc' => gettext('If checked, only logged in users will be allowed to post comments.'))
+										'desc' => gettext('If checked, only logged in users will be allowed to post comments.')),
+									gettext('Include RSS link') => array('key' => 'comment_form_rss', 'type' => 1,
+										'desc' => gettext('If checked, an RSS link will be included at the bottom of the comment section.'))
 									);
 	}
 
@@ -148,7 +160,7 @@ function getStreetInfo($i) {
 }
 
 function comment_form_comment_post($commentobj, $receiver) {
-	$commentobj->setCustomData(serialize(getStreetInfo(0)));
+	if (getOption('comment_form_addresses')) $commentobj->setCustomData(serialize(getStreetInfo(0)));
 }
 
 /**
@@ -277,7 +289,7 @@ function printCommentForm() {
 		?>
 	</div>
 <?php 
-printRSSLink("Comments-image","",gettext("Subscribe to comments"),"");
+if (getOption('comment_form_rss')) printRSSLink("Comments-image","",gettext("Subscribe to comments"),"");
 ?>
 <!-- end printCommentForm -->
 <?php
