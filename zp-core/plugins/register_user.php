@@ -115,7 +115,7 @@ if (!OFFSET_PATH) { // handle form post
 					}
 				}
 				if (empty($notify)) {
-					saveAdmin($user, $pwd, $admin_n, $admin_e, 0, NULL);
+					saveAdmin($user, $pwd, $admin_n, $admin_e, 0, NULL, '', '');
 					$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
 					$message = sprintf(gettext('You have received this email because you registered on the site. To complete your registration visit %s.'), $link);
 					$headers = "From: " . $_zp_gallery->getTitle() . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
