@@ -92,7 +92,7 @@ $_zp_admin_users = null;
  * @param string $custom custom data for the administrator
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
-function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='default', $valid=1) {
+function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1) {
 
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user' AND `valid`=$valid";
