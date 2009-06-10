@@ -7,13 +7,13 @@
  * You can choose on the plugin's admin option what tags you want to be printed.
  *   
  * @author Malte Müller (acrylian)
- * @version 1.0.1.2
+ * @version 1.1.0
  * @package plugins 
  */
 
 $plugin_description = gettext("A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.1.2';
+$plugin_version = '1.1.0';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
 

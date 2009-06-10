@@ -17,13 +17,13 @@
  * displaying the image.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.0.0
+ * @version 1.1.0
  * @package plugins
  */
 
 $plugin_description = gettext("Provides a means allowing users to select the image size to view.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---viewer_size_image.php.html";
 $option_interface = new viewer_size_image_options();
 

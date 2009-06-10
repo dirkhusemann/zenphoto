@@ -6,14 +6,14 @@
  * Plugin Option 'gmaps_apikey' is used to supply the sit Google Maps API key.
  *
  * @author Dustin Brewer (mankind), Stephen Billard (sbillard), Eric Bayard (babar)
- * @version 1.3.0
+ * @version 1.4.0
  *
  * @package plugins
  */
 
 $plugin_description = gettext("Support for providing Google Maps based on EXIF latitude and longitude in the images.");
 $plugin_author = 'Dustin Brewer (mankind), Stephen Billard (sbillard), Eric Bayard (babar)';
-$plugin_version = '1.3';
+$plugin_version = '1.4';
 $plugin_URL = "";
 $option_interface = new google_mapsOptions();
 

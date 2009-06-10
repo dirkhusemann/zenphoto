@@ -16,13 +16,13 @@
  * NOTE: If you change the rights on a user pending verification you have verified the user.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.0.0
+ * @version 1.1.0
  * @package plugins
  */
 
 $plugin_description = gettext("Provides a means for placing a user registration form on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---register_user.php.html";
 $option_interface = new register_user_options();
 
