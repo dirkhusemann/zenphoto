@@ -543,7 +543,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
  * @return bool
  */
 function checkAlbumPassword($albumname, &$hint) {
-	global $_zp_pre_authorization, $_zp_loggedin;
+	global $_zp_pre_authorization, $_zp_loggedin, $_zp_gallery;
 	if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return true; }
 	if ($_zp_loggedin) {
 		if (isMyAlbum($albumname, ALL_RIGHTS)) { return true; }  // he is allowed to see it.
