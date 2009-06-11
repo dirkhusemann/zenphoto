@@ -831,7 +831,7 @@ class Album extends PersistentObject {
 		}
 		$inx = array_search($this->name, $albums)+1;
 		if ($inx >= 0 && $inx < count($albums)) {
-			return new Album($parent, $albums[$inx]);
+			return new Album($this->gallery, $albums[$inx]);
 		}
 		return null;
 	}
@@ -849,7 +849,7 @@ class Album extends PersistentObject {
 		}
 		$inx = array_search($this->name, $albums)-1;
 		if ($inx >= 0 && $inx < count($albums)) {
-			return new Album($paraent, $albums[$inx]);
+			return new Album($this->gallery, $albums[$inx]);
 		}
 		return null;
 	}
@@ -892,7 +892,7 @@ class Album extends PersistentObject {
 	function deleteAlbum() {
 		if (!$this->isDynamic()) {
 			foreach ($this->getSubAlbums() as $folder) {
-				$subalbum = new Album($album, $folder);
+				$subalbum = new Album($this->gallery, $folder);
 				$subalbum->deleteAlbum();
 			}
 			foreach($this->getImages() as $filename) {
