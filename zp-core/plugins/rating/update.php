@@ -8,10 +8,11 @@
 
 $zp = dirname(dirname(dirname(__FILE__)));
 define ('OFFSET_PATH', 4);
-require_once($zp.'/functions-basic.php');
+require_once($zp.'/admin-functions.php'); // you have to be loged in to do this
+require($zp.'/template-functions.php');
+require_once('functions-rating.php');
 
 if (isset($_GET['clear_rating'])) {
-	require_once($zp.'/admin-functions.php'); // you have to be loged in to do this
 	if (!(zp_loggedin(ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 		$const_webpath = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
 		header("Location: " . PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $const_webpath . ZENFOLDER . "/admin.php");
@@ -46,12 +47,12 @@ if (isset($_GET['clear_rating'])) {
 	<?php
 	exit;
 } else {
-	require($zp.'/template-functions.php');
-	require_once('functions-rating.php');
 	$id = sanitize_numeric($_POST['id']);
-	$rating = max(0, min(5, round(sanitize_numeric($_POST['star_rating-value'])/2)));
-	$dbtable = sanitize($_POST['table'],3);
+	$table = sanitize($_POST['table'],3);
+	$dbtable = prefix($table);
 	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
+	$unique = '_'.$table.'_'.$id;
+	$rating = max(0, min(5, round(sanitize_numeric($_POST['star_rating-value'.$unique])/2)));
 	$oldrating = checkForIP($ip,$id,$dbtable);
 	if(!$oldrating || getOption('rating_recast')) {
 		if ($rating) {
@@ -72,7 +73,7 @@ if (isset($_GET['clear_rating'])) {
 			$voting = 1;
 			$valuechange = '+'.$rating;
 		}
-		$sql = "UPDATE ".$dbtable.'SET total_votes=total_votes+'.$voting.", total_value=total_value".$valuechange.", rating=total_value/total_votes, used_ips='".$insertip."' WHERE id='".$id."'";
+		$sql = "UPDATE ".$dbtable.' SET total_votes=total_votes+'.$voting.", total_value=total_value".$valuechange.", rating=total_value/total_votes, used_ips='".$insertip."' WHERE id='".$id."'";
 		$rslt = query($sql,true);
 		//if (!$rslt) debugLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error:").' '.mysql_error());
 	}

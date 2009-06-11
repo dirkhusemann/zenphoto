@@ -40,30 +40,22 @@ function checkForIp($ip, $id, $dbtable) {
 	return false;
 }
 /**
- * Populates $object and $table for the current loaded page
+ * returns the $object for the current loaded page
  *
  * @param object $object
- * @param string $table
+ * @return object
  */
-function getCurrentPageObject(&$object, &$table) {
+function getCurrentPageObject() {
 	global $_zp_gallery_page, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page;
 	switch ($_zp_gallery_page) {
 		case 'album.php':
-			$object = $_zp_current_album;
-			$table = prefix('albums');
-			break;
+			return $_zp_current_album;
 		case 'image.php':
-			$object = $_zp_current_image;
-			$table = prefix('images');
-			break;
+			return $_zp_current_image;
 		case 'news.php':
-			$object = $_zp_current_zenpage_news;
-			$table = prefix('zenpage_news');
-			break;
+			return $_zp_current_zenpage_news;
 		case 'pages.php':
-			$object = $_zp_current_zenpage_page;
-			$table = prefix('zenpage_pages');
-			break;
+			return $_zp_current_zenpage_page;
 		default:
 			die(sprintf(gettext('%s is not a valid getRating() context'), $_zp_gallery_page));
 	}

@@ -17,7 +17,7 @@ require_once(dirname(dirname(__FILE__)).'/functions.php');
 $plugin_is_filter = 5;
 $plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
-$plugin_version = '2.0.0';
+$plugin_version = '2.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
 $option_interface = new jquery_rating();
 
@@ -110,8 +110,9 @@ $_rating_css_loaded = false;
 function printRating($vote=3, $object=NULL) {
 	global $_zp_gallery_page, $_rating_css_loaded;
 	if (is_null($object)) {
-		getCurrentPageObject($object, $table);
+		$object = getCurrentPageObject();
 	}
+	$table = $object->table;
 	$vote = min($vote, getOption('rating_status'), $object->get('rating_status'));
 	switch ($vote) {
 		case 1: // members only
@@ -147,10 +148,10 @@ function printRating($vote=3, $object=NULL) {
 	$rating = round($object->get('rating'));
   $votes = $object->get('total_votes');
 	$id = $object->get('id');
-	$unique = '_'.get_class($object).'_'.$id;
+	$unique = '_'.$table.'_'.$id;
 	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 	$recast = getOption('rating_recast');
-	$oldrating = round(checkForIP($ip, $id, $table));
+	$oldrating = round(checkForIP($ip, $id, prefix($table)));
 	if ($vote && $recast && $oldrating) {
 		$starselector = round($oldrating*2);
 	} else {
@@ -182,22 +183,18 @@ function printRating($vote=3, $object=NULL) {
   }
   ?>
 	<span class="rating">
-		<form name="star_rating">
-			<?php
-			if ($rating > 0) {
-				?>
+		<form name="star_rating<?php echo $unique; ?>" id="star_rating<?php echo $unique; ?>">
 				<script type="text/javascript">
 					$(function() {
-					$('input',this.form).rating('select','<?php echo $starselector; ?>');
+					$('#star_rating<?php echo $unique; ?> :radio.star').rating('select','<?php echo $starselector; ?>');
 				});
 				</script>
-				<?php
-			}
+			<?php
 			if ($disable) {
 				?>
 				<script type="text/javascript">
 					$(function() {
-						$('input',this.form).rating('disable');
+						$('#star_rating<?php echo $unique; ?> :radio.star').rating('disable');
 						$('#submit_button<?php echo $unique; ?>').hide();
 						$('#vote<?php echo $unique; ?>').html('<?php echo $msg; ?>');
 					});
@@ -205,30 +202,30 @@ function printRating($vote=3, $object=NULL) {
 				<?php
 			}
 			?>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="1" title="<?php echo gettext('1 star'); ?>" />
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="2" title="<?php echo gettext('1 star'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="3" title="<?php echo gettext('2 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="4" title="<?php echo gettext('2 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="5" title="<?php echo gettext('3 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="6" title="<?php echo gettext('3 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="7" title="<?php echo gettext('4 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="8" title="<?php echo gettext('4 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="9" title="<?php echo gettext('5 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value" value="10" title="<?php echo gettext('5 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="1" title="<?php echo gettext('1 star'); ?>" />
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="2" title="<?php echo gettext('1 star'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="3" title="<?php echo gettext('2 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="4" title="<?php echo gettext('2 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="5" title="<?php echo gettext('3 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="6" title="<?php echo gettext('3 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="7" title="<?php echo gettext('4 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="8" title="<?php echo gettext('4 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="9" title="<?php echo gettext('5 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="10" title="<?php echo gettext('5 stars'); ?>"/>
 		  <span id="submit_button<?php echo $unique; ?>">
-		  <input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
+		  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
 					var dataString = $(this.form).serialize();
 					if (dataString || <?php printf('%u',$recast && $oldrating); ?>) {
 						<?php
 						if ($recast) {
 							?>
 							if (!dataString) {
-								dataString = 'star_rating-value=0';
+								dataString = 'star_rating-value<?php echo $unique; ?>=0';
 							}
 							<?php
 						} else {
 							?>
-							$('input',this.form).rating('disable');
+							$('#star_rating<?php echo $unique; ?> :radio.star').rating('disable');
 							$('#submit_button<?php echo $unique; ?>').hide();
 							<?php
 						}
@@ -282,7 +279,7 @@ function printAlbumRating() {
  */
 function getRating($object=NULL) {
 	if (is_null($object)) {
-		getCurrentPageObject($object, $table);
+		$object = getCurrentPageObject();
 	}
 	return $object->get('rating');
 }

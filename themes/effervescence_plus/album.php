@@ -170,17 +170,21 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						} else {
 							$lastAlbum++;
 						}
-					?>
-				<li>
-					<?php $annotate = annotateAlbum(); ?>
-					<div class="imagethumb">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
-					<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
-					</div>
-					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
-					<?php printAlbumTitle(); ?></a></h4></li>
-				<?php
-						}
+						?>
+						<li>
+							<?php $annotate = annotateAlbum(); ?>
+							<div class="imagethumb">
+								<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
+								<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
+							</div>
+							<h4>
+								<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
+									<?php printAlbumTitle(); ?>
+								</a>
+							</h4>
+						</li>
+						<?php
+					}
 				?>
 			</ul>
 			<div class="clearage"></div>
@@ -247,20 +251,20 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  						?>
 <!-- Image thumbnails or no flash -->
  									<div class="image">
- 									<div class="imagethumb">
- 									<?php
- 									$annotate = annotateImage();
- 									if ($personality == 'Slimbox') {
- 										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\"";
- 										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n";
- 									} else {
- 										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
- 									}
- 									echo " title=\"".$annotate."\">\n";
- 									printImageThumb($annotate);
- 									echo "</a>"
-									?>
-									</div>
+	 									<div class="imagethumb">
+		 									<?php
+		 									$annotate = annotateImage();
+		 									if ($personality == 'Slimbox') {
+		 										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\"";
+		 										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n";
+		 									} else {
+		 										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
+		 									}
+		 									echo " title=\"".$annotate."\">\n";
+		 									printImageThumb($annotate);
+		 									echo "</a>";
+		 									?>
+										</div>
  									</div>
  									<?php
 									}
