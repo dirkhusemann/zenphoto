@@ -5,40 +5,41 @@
  * @version 2.0.0
  * @package plugins
  */
+
 $_rating_current_IPlist = array();
 /**
- * Checks if an IP address has already voted
+ * Returns the last vote rating from an IP or false if 
+ * no vote on record
  *
- * @param string $ip IP address to be checked
- * @param int $id ID of the object in question
- * @param string $dbtable prefixed database table that contains the object
- * @return bool
+ * @param unknown_type $ip
+ * @param unknown_type $usedips
+ * @return unknown
  */
-function checkForIp($ip, $id, $dbtable) {
+function getRatingByIP($ip, $usedips) {
 	global $_rating_current_IPlist;
-	$_rating_current_IPlist = array();
-	$IPlist = query_single_row("SELECT * FROM $dbtable WHERE id= $id");
-	if (is_array($IPlist)) {
-		if (!empty($IPlist['used_ips'])) {
-			$_rating_current_IPlist = unserialize($IPlist['used_ips']);
+	$rating = 0;
+	if (empty($_rating_current_IPlist)) {
+		if (!empty($usedips)) {
+			$_rating_current_IPlist = unserialize($usedips);
 			if (!empty($_rating_current_IPlist)) {
 				foreach ($_rating_current_IPlist as $element=>$value) {
-					break;
-				}
-				if (!is_numeric($element)) {
-					if (array_key_exists($ip, $_rating_current_IPlist)) {
-						return $_rating_current_IPlist[$ip];
-					}
-				} else {
-					if (in_array($ip, $_rating_current_IPlist)) {
-						return $IPlist['rating']; // use the average when old data.
+					if (!is_numeric($element)) {
+						if (array_key_exists($ip, $_rating_current_IPlist)) {
+							return $_rating_current_IPlist[$ip];
+						}
+					} else {
+						$rating = $rating + $value;
 					}
 				}
+			}
+			if (in_array($ip, $_rating_current_IPlist)) {
+				return $rating / count($_rating_current_IPlist); // no individual data, assume the average
 			}
 		}
 	}
 	return false;
 }
+
 /**
  * returns the $object for the current loaded page
  *

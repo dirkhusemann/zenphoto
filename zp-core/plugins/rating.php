@@ -106,8 +106,9 @@ $_rating_css_loaded = false;
  * 
  * @param bool $vote set to false to disable voting
  * @param object $object optional object for the ratings target. If not set, the current page object is used
+ * @param bool $text if false, no annotation text is displayed
  */
-function printRating($vote=3, $object=NULL) {
+function printRating($vote=3, $object=NULL, $text=true) {
 	global $_zp_gallery_page, $_rating_css_loaded;
 	if (is_null($object)) {
 		$object = getCurrentPageObject();
@@ -151,7 +152,7 @@ function printRating($vote=3, $object=NULL) {
 	$unique = '_'.$table.'_'.$id;
 	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 	$recast = getOption('rating_recast');
-	$oldrating = round(checkForIP($ip, $id, prefix($table)));
+	$oldrating = round(getRatingByIP($ip,$object->get('used_ips')));
 	if ($vote && $recast && $oldrating) {
 		$starselector = round($oldrating*2);
 	} else {
@@ -243,11 +244,15 @@ function printRating($vote=3, $object=NULL) {
 		  </span>
 	  </form>
 	</span>
-	<span style="line-height: 0em;"><br clear=all /></span>
-  <span class="vote" id="vote<?php echo $unique; ?>">
-  	<?php echo $msg; ?>
-  </span>
 	<?php
+	if ($text) {
+		?>
+		<span style="line-height: 0em;"><br clear=all /></span>
+	  <span class="vote" id="vote<?php echo $unique; ?>">
+	  	<?php echo $msg; ?>
+	  </span>
+		<?php
+	}
 }
 
 /**
@@ -257,7 +262,7 @@ function printRating($vote=3, $object=NULL) {
  *
  */
 function printImageRating() {
-	printRating();
+	printRating(3, $_zp_current_image);
 }
 
 /**
@@ -267,7 +272,7 @@ function printImageRating() {
  *
  */
 function printAlbumRating() {
-	printRating();
+	printRating(3, $_zp_current_album);
 }
 
 

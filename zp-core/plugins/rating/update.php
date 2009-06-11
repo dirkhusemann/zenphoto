@@ -53,7 +53,12 @@ if (isset($_GET['clear_rating'])) {
 	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 	$unique = '_'.$table.'_'.$id;
 	$rating = max(0, min(5, round(sanitize_numeric($_POST['star_rating-value'.$unique])/2)));
-	$oldrating = checkForIP($ip,$id,$dbtable);
+	$IPlist = query_single_row("SELECT * FROM $dbtable WHERE id= $id");
+	if (is_array($IPlist)) {
+		$oldrating = getRatingByIP($ip, $IPlist['used_ips']);
+	} else {
+		$oldrating =false;
+	}
 	if(!$oldrating || getOption('rating_recast')) {
 		if ($rating) {
 			$_rating_current_IPlist[$ip] = $rating;
