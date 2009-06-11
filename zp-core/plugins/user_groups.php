@@ -13,7 +13,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-u
 register_filter('admin_tabs', 'user_groups_admin_tabs', 2);
 register_filter('admin_alterrights', 'user_groups_admin_alterrights', 2);
 register_filter('save_admin_custom_data', 'user_groups_save_admin', 3);
-register_filter('edit_admin_custom_data', 'user_groups_edit_admin', 5, 2);
+register_filter('edit_admin_custom_data', 'user_groups_edit_admin', 5);
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
 /**

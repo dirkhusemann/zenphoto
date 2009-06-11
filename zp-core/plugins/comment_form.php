@@ -23,8 +23,8 @@ $option_interface = new comment_form();
 register_filter('comment_post', 'comment_form_comment_post', 2);
 register_filter('save_comment_custom_data', 'comment_form_save_comment');
 register_filter('edit_comment_custom_data', 'comment_form_edit_comment', 2);
-register_filter('save_comment_form_data', 'comment_form_save_admin', 3);
-register_filter('edit_comment_form_data', 'comment_form_edit_admin', 5);
+register_filter('save_admin_custom_data', 'comment_form_save_admin', 3);
+register_filter('edit_admin_custom_data', 'comment_form_edit_admin', 5, 1);
 
 class comment_form {
 	/**
@@ -89,7 +89,7 @@ class comment_form {
  * @return string
  */
 function comment_form_save_comment($discard) {
-	return serialize(getStreetInfo());
+	return serialize(getUserInfo(0));
 }
 
 /**
@@ -100,7 +100,7 @@ function comment_form_save_comment($discard) {
  */
 function comment_form_edit_comment($discard, $raw) {
 	if (!preg_match('/^a:[0-9]+:{/', $raw)) {
-		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'', 'website'=>'');
 	} else {
 		$address = unserialize($raw);
 	}
@@ -110,7 +110,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('street:').
 				 '</td>
 			 		<td>
-						<input type="text" name="0-comment_form_street" id="comment_form_street" class="inputbox" size="22" value="'.$address['street'].'">
+						<input type="text" name="0-comment_form_street" id="comment_form_street" class="inputbox" size="40" value="'.$address['street'].'">
 					</td>
 				</tr>
 				<tr>
@@ -118,7 +118,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('city:').
 			 		'</td>
 					<td>
-						<input type="text" name="0-comment_form_city" id="comment_form_city" class="inputbox" size="22" value="'.$address['city'].'">
+						<input type="text" name="0-comment_form_city" id="comment_form_city" class="inputbox" size="40" value="'.$address['city'].'">
 					</td>
 			 	</tr>
 			 	<tr>
@@ -126,7 +126,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('state:').
 				 '</td>
 			 		<td>
-						<input type="text" name="0-comment_form_state" id="comment_form_state" class="inputbox" size="22" value="'.$address['state'].'">
+						<input type="text" name="0-comment_form_state" id="comment_form_state" class="inputbox" size="40" value="'.$address['state'].'">
 					</td>
 				</tr>
 				<tr>
@@ -134,7 +134,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('country:').
 				 '</td>
 					<td>
-						<input type="text" name="0-comment_form_country" id="comment_form_country" class="inputbox" size="22" value="'.$address['country'].'">
+						<input type="text" name="0-comment_form_country" id="comment_form_country" class="inputbox" size="40" value="'.$address['country'].'">
 					</td>
 				</tr>
 				<tr>
@@ -142,7 +142,7 @@ function comment_form_edit_comment($discard, $raw) {
 						gettext('postal code:').
 					'</td>
 					<td>
-						<input type="text" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="22" value="'.$address['postal'].'">
+						<input type="text" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="40" value="'.$address['postal'].'">
 					</td>
 				</tr>'."\n";
 }
@@ -157,7 +157,7 @@ function comment_form_edit_comment($discard, $raw) {
  * @return string
  */
 function comment_form_save_admin($discard, $userobj, $i) {
-	$userobj->setCustomData(serialize(getStreetInfo($i)));
+	$userobj->setCustomData(serialize(getUserInfo($i)));
 }
 
 /**
@@ -166,17 +166,19 @@ function comment_form_save_admin($discard, $userobj, $i) {
  * @param int $i sequence number of the comment
  * @return array
  */
-function getStreetInfo($i) {
-	return array(	'street'=>sanitize($_POST[$i.'-comment_form_street'], 1),
-								'city'=>sanitize($_POST[$i.'-comment_form_city'], 1),
-								'state'=>sanitize($_POST[$i.'-comment_form_state'], 1),
-								'country'=>sanitize($_POST[$i.'-comment_form_country'], 1),
-								'postal'=>sanitize($_POST[$i.'-comment_form_postal'], 1)
-								);
+function getUserInfo($i) {
+	$result = array();
+	if (isset($_POST[$i.'-comment_form_website'])) $result['website'] = sanitize($_POST[$i.'-comment_form_website'], 1);
+	if (isset($_POST[$i.'-comment_form_street'])) $result['street'] = sanitize($_POST[$i.'-comment_form_street'], 1);
+	if (isset($_POST[$i.'-comment_form_city'])) $result['city'] = sanitize($_POST[$i.'-comment_form_city'], 1);
+	if (isset($_POST[$i.'-comment_form_state'])) $result['state'] = sanitize($_POST[$i.'-comment_form_state'], 1);
+	if (isset($_POST[$i.'-comment_form_country'])) $result['country'] = sanitize($_POST[$i.'-comment_form_country'], 1);
+	if (isset($_POST[$i.'-comment_form_postal'])) $result['postal'] = sanitize($_POST[$i.'-comment_form_postal'], 1);
+	return $result;
 }
 
 function comment_form_comment_post($commentobj, $receiver) {
-	if (getOption('comment_form_addresses')) $commentobj->setCustomData(serialize(getStreetInfo(0)));
+	if (getOption('comment_form_addresses')) $commentobj->setCustomData(serialize(getUserInfo(0)));
 }
 
 /**
@@ -190,17 +192,23 @@ function comment_form_comment_post($commentobj, $receiver) {
  * @return string
  */
 function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
+	$raw = $userobj->getCustomData();
 	if (!preg_match('/^a:[0-9]+:{/', $raw)) {
-		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'', 'website'=>'');
 	} else {
-		$address = unserialize($raw);
+		$address = unserialize($userobj->getCustomData());
 	}
-	
+		
 	return $html.
-		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+	 '<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
+			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Website:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_website" value="'.$address['website'].'"></td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" ></td>
+		</tr>'.
+	 '<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Street:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_street" value="'.$address['street'].'"></td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" rowspan="5">'.gettext('Address information.').'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" rowspan="5">'.gettext('Address information').'</td>
 		</tr>'.
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("City:").'</td>
@@ -225,7 +233,7 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
  *
  */
 function printCommentForm() {
-	global $_zp_gallery_page, $_zp_themeroot;
+	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin;
 	switch ($_zp_gallery_page) {
 		case 'album.php':
 			if (!getOption('comment_form_albums')) return;
@@ -290,27 +298,32 @@ function printCommentForm() {
 		<!-- Comment Box -->
 		<?php
 		if ($comments_open) {
-			$stored = getCommentStored();
-			$disabled = array();
-			foreach ($stored as $key=>$value) {
-				$disabled[$key] = '';
-			}
-			if ($comments_open) {
-				$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
-				$disabled = array_merge($disabled, $address);
-				if (zp_loggedin()) {
-					global $_zp_current_admin;
-					$raw = $_zp_current_admin['custom_data'];
-					if (preg_match('/^a:[0-9]+:{/', $raw)) {
-						$address = unserialize($raw);
-						foreach ($address as $key=>$value) {
-							if (!empty($value)) $disabled[$key] = ' DISABLED';
-						}
-					}
-				} else {
-					$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+			$stored = array_merge(getCommentStored(),array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>''));
+			$raw = $stored['custom'];
+			if (preg_match('/^a:[0-9]+:{/', $raw)) {
+				$custom = unserialize($raw);
+				foreach ($custom as $key=>$value) {
+					if (!empty($value)) $stored[$key] = $value;
 				}
 			}
+			$disabled = array();
+			foreach ($stored as $key=>$value) {
+				$disabled[$key] = false;
+			}
+
+			if (zp_loggedin()) {
+				$raw = $_zp_current_admin['custom_data'];
+				if (preg_match('/^a:[0-9]+:{/', $raw)) {
+					$address = unserialize($raw);
+					foreach ($address as $key=>$value) {
+						if (!empty($value)) {
+							$disabled[$key] = true;
+							$stored[$key] = $value;
+						}
+					}
+				}
+			}
+
 			if (zp_loggedin()) {
 				if (!empty($_zp_current_admin['name'])) {
 					$stored['name'] = $_zp_current_admin['name'];
@@ -320,8 +333,12 @@ function printCommentForm() {
 					$stored['email'] = $_zp_current_admin['email'];
 					$disabled['email'] = ' DISABLED';
 				}
+				if (!empty($address['website'])) {
+					$stored['website'] = $address['website'];
+					$disabled['website'] = ' DISABLED';
+				}
 			}
-				
+			
 			$theme = getCurrentTheme();
 			$form = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).$formname;
 			if (file_exists($form)) {

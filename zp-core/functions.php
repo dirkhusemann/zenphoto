@@ -119,6 +119,7 @@ function parseAllowedTags(&$source) {
 	$source = trim(substr($source, 1)); //strip the close paren
 	return $a;
 }
+
 // Image utility functions
 /**
  * Returns true if the file is an image
@@ -857,28 +858,6 @@ function getImageMetadata($imageName) {
 }
 
 /**
- * Returns an array of $type, $class of the object passed
- *
- * @param object $receiver The object whose class we desire
- * @return array
- */
-function commentObjectClass($receiver) {
-	$class = strtolower(get_class($receiver));
-	switch($class) {
-		case "zenpagenews":
-			$type = "news";
-			break;
-		case "zenpagepage":
-			$type = "pages";
-			break;
-		default:
-			$type = $class.'s'; // Historically we have stored "images" or "albums" as the type
-			break;
-	}
-	return array($type, $class);
-}
-
-/**
  * Gets an array of comments for the current admin
  *
  * @param int $number how many comments desired
@@ -973,8 +952,8 @@ function fetchComments($number) {
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
 	global $_zp_captcha, $_zp_gallery;
-	$result = commentObjectClass($receiver);
-	list($type, $class) = $result;
+	$type = str_replace('zenpage_', '', $receiver->table); // remove the string 'zenpage_' if it is there.
+	$class = get_class($receiver);
 	$receiver->getComments();
 	$name = trim($name);
 	$email = trim($email);

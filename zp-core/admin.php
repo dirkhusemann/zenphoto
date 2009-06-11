@@ -326,22 +326,23 @@ if (defined('RELEASE')) {
 		<?php
 		if ($c > 0) {
 			foreach ($filters as $filter=>$array_of_priority) {
-				foreach ($array_of_priority as $priority=>$array_of_filters) {
-					?>
-					<li>
-						<em><?php echo $filter; ?></em>
-						<ul class="filters">
-						<?php
+				ksort($array_of_priority);
+				?>
+				<li>
+					<em><?php echo $filter; ?></em>
+					<ul class="filters">
+					<?php
+					foreach ($array_of_priority as $priority=>$array_of_filters) {
 						foreach ($array_of_filters as $data) {
 							?>
 							<li><em><?php echo $priority; ?></em>: <?php echo $data['script'] ?> =&gt; <?php echo $data['function'] ?></li>
 							<?php
 						}
-						?>
-						</ul>
-					</li>
-					<?php
-				}
+					}
+					?>
+				</ul>
+			</li>
+			<?php
 			}
 		} else {
 			?>
