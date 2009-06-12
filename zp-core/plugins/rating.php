@@ -261,8 +261,10 @@ function printRating($vote=3, $object=NULL, $text=true) {
  * Included for forward compatibility--use printRating() directly
  *
  */
-function printImageRating() {
-	printRating(3, $_zp_current_image);
+function printImageRating($object=NULL) {
+	global $_zp_current_image;
+	if (is_null($object)) $object = $_zp_current_image;
+	printRating(3, $object);
 }
 
 /**
@@ -271,8 +273,10 @@ function printImageRating() {
  * Included for forward compatibility--use printRating() directly
  *
  */
-function printAlbumRating() {
-	printRating(3, $_zp_current_album);
+function printAlbumRating($object=NULL) {
+	global $_zp_current_album;
+	if (is_null($object)) $object = $_zp_current_album;
+	printRating(3, $object);
 }
 
 
