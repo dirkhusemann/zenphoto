@@ -201,7 +201,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 	} else {
 		$albumid = -1;
 	}
-	
+
 	// setting the image size
 	if (!empty($width) AND !empty($height)) {
 		$width = sanitize_numeric($width);
@@ -214,7 +214,6 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 	$option = getOption("slideshow_mode");
 	// jQuery Cycle slideshow config
 	// get slideshow data
-
 	$gallery = new Gallery();
 	if ($albumid <= 0) { // search page
 		$dynamic = 2;
