@@ -1,6 +1,5 @@
 					<h3><?php echo gettext("Add a comment:"); ?></h3>
 					<form id="commentform" action="#" method="post">
-					<div>
 						<input type="hidden" name="comment" value="1" />
 						<input type="hidden" name="remember" value="1" />
 						<?php
@@ -217,6 +216,6 @@
 						</table>
 						<textarea name="comment" rows="6" cols="42" class="textarea_inputbox"><?php echo $stored['comment']; ?></textarea>
 						<br />
-						<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" /></div>
+						<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" />
 					</form>
-				</div>
+		
