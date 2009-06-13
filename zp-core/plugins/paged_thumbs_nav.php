@@ -3,12 +3,12 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  *
  * @author Malte Müller (acrylian)
- * @version 1.0.7
+ * @version 1.0.7.1
  * @package plugins
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.7';
+$plugin_version = '1.0.7.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -39,9 +39,9 @@ class pagedthumbsOptions {
 		gettext('Counter') => array('key' => 'pagedthumbs_counter', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If you want to show the counter 'x - y of z images'.")),
 		gettext('Prevtext') => array('key' => 'pagedthumbs_prevtext', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("The text for the previous thumbs.")),
+										'desc' => gettext("The text for the previous thumbs."), 'multilingual' => 1),
 		gettext('Nexttext') => array('key' => 'pagedthumbs_nexttext', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("The text for the next thumbs.")),
+										'desc' => gettext("The text for the next thumbs."), 'multilingual' => 1),
 		gettext('Crop width') => array('key' => 'pagedthumbs_width', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The thumb crop width is the maximum width when height is the shortest side")),
 		gettext('Crop height') => array('key' => 'pagedthumbs_height', 'type' => OPTION_TYPE_TEXTBOX,
