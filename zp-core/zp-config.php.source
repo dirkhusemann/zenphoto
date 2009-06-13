@@ -25,10 +25,10 @@ path. For these cases you will need to implement the path overrides below.
 // Database Information 
 ////////////////////////////////////////////////////////////////////////////////
 
-$conf['mysql_user'] = '';
-$conf['mysql_pass'] = '';
-$conf['mysql_host'] = 'localhost'; // Won't need to change this 90% of the time.
-$conf['mysql_database'] = '';
+$conf['mysql_user'] = ''; 					// Supply your MySQL user id.
+$conf['mysql_pass'] = ''; 					// Supply your MySQL password.
+$conf['mysql_host'] = 'localhost';	// Won't need to change this 90% of the time.
+$conf['mysql_database'] = '';				// Supply the name of the database Zenphoto is to use..
 
 // If you are having problems with displaying some characters you may have to change the following.
 $conf['UTF-8'] = true;

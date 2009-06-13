@@ -165,7 +165,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 	}
 	$disable = !$vote || ($oldrating && !$recast);
   if ($rating > 0) {
-  	$msg = sprintf(ngettext('Rating^ %2$.1f (%1$u vote)', 'Rating %2$.1f (%1$u votes)', $votes), $votes, $rating);
+  	$msg = sprintf(ngettext('Rating %2$.1f (%1$u vote)', 'Rating %2$.1f (%1$u votes)', $votes), $votes, $rating);
   } else {
   	$msg = gettext('Not yet rated');
   }
@@ -187,88 +187,82 @@ function printRating($vote=3, $object=NULL, $text=true) {
 		<?php
 		$_rating_css_loaded = true;
   }
+	if ($split_stars>1) {
+		$split = ' {split:2}';
+	} else {
+		$split = '';
+	}
   ?>
-	<span class="rating">
-		<form name="star_rating<?php echo $unique; ?>" id="star_rating<?php echo $unique; ?>">
-				<script type="text/javascript">
-					$(function() {
-					$('#star_rating<?php echo $unique; ?> :radio.star').rating('select','<?php echo $starselector; ?>');
-				});
-				</script>
+	<script type="text/javascript">
+		$(function() {
+			$('#star_rating<?php echo $unique; ?> :radio.star').rating('select','<?php echo $starselector; ?>');
 			<?php
 			if ($disable) {
 				?>
-				<script type="text/javascript">
-					$(function() {
-						$('#star_rating<?php echo $unique; ?> :radio.star').rating('disable');
-						$('#submit_button<?php echo $unique; ?>').hide();
-						$('#vote<?php echo $unique; ?>').html('<?php echo $msg; ?>');
-					});
-				</script>
+				$('#star_rating<?php echo $unique; ?> :radio.star').rating('disable');
 				<?php
 			}
-			if ($split_stars>1) {
-				$split = ' {split:2}';
-			} else {
-				$split = '';
-			}
-			?>
+		?>
+		});
+	</script>
+	<span class="rating">
+		<form name="star_rating<?php echo $unique; ?>" id="star_rating<?php echo $unique; ?>">
 		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="1" title="<?php echo gettext('1 star'); ?>" />
-		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="2" title="<?php echo gettext('1 star'); ?>"/>
-		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="3" title="<?php echo gettext('2 stars'); ?>"/>
-		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="4" title="<?php echo gettext('2 stars'); ?>"/>
-		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="5" title="<?php echo gettext('3 stars'); ?>"/>
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="2" title="<?php echo gettext('1 star'); ?>" />
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="3" title="<?php echo gettext('2 stars'); ?>" />
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="4" title="<?php echo gettext('2 stars'); ?>" />
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="5" title="<?php echo gettext('3 stars'); ?>" />
 		  <?php
 		  if ($split_stars>1) {
 		  	?>
-			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="6" title="<?php echo gettext('3 stars'); ?>"/>
-			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="7" title="<?php echo gettext('4 stars'); ?>"/>
-			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="8" title="<?php echo gettext('4 stars'); ?>"/>
-			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="9" title="<?php echo gettext('5 stars'); ?>"/>
-			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="10" title="<?php echo gettext('5 stars'); ?>"/>
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="6" title="<?php echo gettext('3 stars'); ?>" />
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="7" title="<?php echo gettext('4 stars'); ?>" />
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="8" title="<?php echo gettext('4 stars'); ?>" />
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="9" title="<?php echo gettext('5 stars'); ?>" />
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="10" title="<?php echo gettext('5 stars'); ?>" />
 		  	<?php
 		  }
-		  ?>
-		  <span id="submit_button<?php echo $unique; ?>">
-		  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
-					var dataString = $(this.form).serialize();
-					if (dataString || <?php printf('%u',$recast && $oldrating); ?>) {
-						<?php
-						if ($recast) {
-							?>
-							if (!dataString) {
-								dataString = 'star_rating-value<?php echo $unique; ?>=0';
+		  if (!$disable) {
+			  ?>
+			  <span id="submit_button<?php echo $unique; ?>">
+			  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
+						var dataString = $(this.form).serialize();
+						if (dataString || <?php printf('%u',$recast && $oldrating); ?>) {
+							<?php
+							if ($recast) {
+								?>
+								if (!dataString) {
+									dataString = 'star_rating-value<?php echo $unique; ?>=0';
+								}
+								<?php
+							} else {
+								?>
+								$('#star_rating<?php echo $unique; ?> :radio.star').rating('disable');
+								$('#submit_button<?php echo $unique; ?>').hide();
+								<?php
 							}
-							<?php
-						} else {
 							?>
-							$('#star_rating<?php echo $unique; ?> :radio.star').rating('disable');
-							$('#submit_button<?php echo $unique; ?>').hide();
-							<?php
+							$.ajax({   
+								type: 'POST',   
+								url: '<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4); ?>/update.php',   
+								data: dataString+'&id=<?php echo $id; ?>&table=<?php echo $table; ?>'
+							});
+							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');
+						} else {
+							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('nothing to submit'); ?>');
 						}
-						?>
-						$.ajax({   
-							type: 'POST',   
-							url: '<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4); ?>/update.php',   
-							data: dataString+'&id=<?php echo $id; ?>&table=<?php echo $table; ?>'
-						});
-						$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');
-					} else {
-						$('#vote<?php echo $unique; ?>').html('<?php echo gettext('nothing to submit'); ?>');
-					}
-		  		"/>
-		  </span>
+			  		"/>
+			  </span>
+			  <?php
+		  }
+		  ?>
 	  </form>
-	</span>
-	<?php
-	if ($text) {
-		?>
 		<span style="line-height: 0em;"><br clear=all /></span>
-	  <span class="vote" id="vote<?php echo $unique; ?>">
+	  <span class="vote" id="vote<?php echo $unique; ?>" <?php if (!$text) echo 'style="display:none;"'; ?>>
 	  	<?php echo $msg; ?>
 	  </span>
-		<?php
-	}
+	</span>
+	<?php
 }
 
 /**

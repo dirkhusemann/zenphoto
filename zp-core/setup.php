@@ -663,8 +663,8 @@ if (!$checked) {
 		$cfg = false;
 	}
 	$good = checkMark($cfg, gettext("<em>zp-config.php</em> file"), gettext("<em>zp-config.php</em> file [does not exist]"),
- 							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
- 							"<br /><br />".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
+ 							gettext("Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file's comments and rename it to <code>zp-config.php</code>".
+ 							"<br /><br />You can find the file in the \"zp-core\" directory.")) && $good;
  	if ($cfg) {
  		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.');
  		$msg2 = gettext('You must be logged in to change this.');
