@@ -48,6 +48,7 @@ class jquery_rating {
 	 */
 	function jquery_rating() {
 		setOptionDefault('rating_recast', 1);
+		setOptionDefault('rating_split_stars', 1);
 		setOptionDefault('rating_status', 3);
 		setOptionDefault('rating_image_individual_control', 0);
 		$this->ratingstate = array(gettext('open') => 3, gettext('members &amp; guests') => 2, gettext('members only') => 1, gettext('closed') => 0);
@@ -65,10 +66,13 @@ class jquery_rating {
 									gettext('Voting state') => array('key' => 'rating_status', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => $this->ratingstate,
 										'desc' => gettext('<em>Enable</em> state of voting.')),
+									gettext('Split start') =>array('key' => 'rating_split_stars', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('Enable to allow rating stars to show half stars for fractional rating values. May cause performance problems for pages with large numbers of rating elements.')),
 									gettext('Individual image control') =>array('key' => 'rating_image_individual_control', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Enable to allow voting status control on individual images.')),
-									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Allow users to change their vote.'))
+									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => OPTION_TYPE_RADIO,
+										'buttons' => array(gettext('No') => 0, gettext('Show rating') => 1, gettext('Show previous vote') => 2),
+										'desc' => gettext('Allow users to change their vote. If Show previous vote is chosen, the stars will reflect the last vote of the viewer. Otherwise they will reflect the current rating.'))
 								);
 	}
 
@@ -146,21 +150,22 @@ function printRating($vote=3, $object=NULL, $text=true) {
 			}
 	}
 
-	$rating = round($object->get('rating'));
+	$rating = $object->get('rating');
   $votes = $object->get('total_votes');
 	$id = $object->get('id');
 	$unique = '_'.$table.'_'.$id;
 	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 	$recast = getOption('rating_recast');
-	$oldrating = round(getRatingByIP($ip,$object->get('used_ips')));
-	if ($vote && $recast && $oldrating) {
-		$starselector = round($oldrating*2);
+  $split_stars = getOption('rating_split_stars')+1;  
+	$oldrating = getRatingByIP($ip,$object->get('used_ips'), $object->get('rating'));
+	if ($vote && $recast==2 && $oldrating) {
+		$starselector = round($oldrating*$split_stars);
 	} else {
-		$starselector = round($rating*2);
+		$starselector = round($rating*$split_stars);
 	}
 	$disable = !$vote || ($oldrating && !$recast);
   if ($rating > 0) {
-  	$msg = sprintf(ngettext('Rating %2$d (%1$u vote)', 'Rating %2$d (%1$u votes)', $votes), $votes, $object->get('rating'));
+  	$msg = sprintf(ngettext('Rating^ %2$.1f (%1$u vote)', 'Rating %2$.1f (%1$u votes)', $votes), $votes, $rating);
   } else {
   	$msg = gettext('Not yet rated');
   }
@@ -202,17 +207,28 @@ function printRating($vote=3, $object=NULL, $text=true) {
 				</script>
 				<?php
 			}
+			if ($split_stars>1) {
+				$split = ' {split:2}';
+			} else {
+				$split = '';
+			}
 			?>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="1" title="<?php echo gettext('1 star'); ?>" />
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="2" title="<?php echo gettext('1 star'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="3" title="<?php echo gettext('2 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="4" title="<?php echo gettext('2 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="5" title="<?php echo gettext('3 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="6" title="<?php echo gettext('3 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="7" title="<?php echo gettext('4 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="8" title="<?php echo gettext('4 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="9" title="<?php echo gettext('5 stars'); ?>"/>
-		  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="10" title="<?php echo gettext('5 stars'); ?>"/>
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="1" title="<?php echo gettext('1 star'); ?>" />
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="2" title="<?php echo gettext('1 star'); ?>"/>
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="3" title="<?php echo gettext('2 stars'); ?>"/>
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="4" title="<?php echo gettext('2 stars'); ?>"/>
+		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="5" title="<?php echo gettext('3 stars'); ?>"/>
+		  <?php
+		  if ($split_stars>1) {
+		  	?>
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="6" title="<?php echo gettext('3 stars'); ?>"/>
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="7" title="<?php echo gettext('4 stars'); ?>"/>
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="8" title="<?php echo gettext('4 stars'); ?>"/>
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="9" title="<?php echo gettext('5 stars'); ?>"/>
+			  <input type="radio" class="star {split:2}" name="star_rating-value<?php echo $unique; ?>" value="10" title="<?php echo gettext('5 stars'); ?>"/>
+		  	<?php
+		  }
+		  ?>
 		  <span id="submit_button<?php echo $unique; ?>">
 		  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
 					var dataString = $(this.form).serialize();
