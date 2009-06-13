@@ -1983,5 +1983,13 @@ function restore_context() {
 	$_zp_current_context = $_zp_current_context_restore;
 }
 
+function logTime($tag) {
+   $mtime = microtime(); 
+   $mtime = explode(" ",$mtime); 
+   $mtime = $mtime[1] + $mtime[0]; 
+   $time = $mtime;
+   debugLog($tag.' '.$time);	
+}
+
 setexifvars();
 ?>

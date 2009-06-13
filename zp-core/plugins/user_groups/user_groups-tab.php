@@ -168,9 +168,7 @@ echo '</head>'."\n";
 												?>
 												<em><?php if ($grouptype == 'group') echo gettext('group'); else echo gettext('template'); ?></em>
 												<br />
-												<?php
-												echo $groupname;
-												?>
+												<strong><?php echo $groupname; ?></strong>
 												<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $groupname ?>" />
 												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo $grouptype ?>" />
 												<?php
@@ -208,7 +206,7 @@ echo '</head>'."\n";
 											?>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-											<input type="checkbox" name="<?php echo $id ?>-confirmed" value=1>
+											<input type="hidden" name="<?php echo $id ?>-confirmed" value=1>
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
 											?>
