@@ -296,5 +296,5 @@ function setDefault($option, $default) {
 		saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
 	}
 	
-	if (getOption('Allow_comments')) setOption('zp_plugin_comment_form', 1);
+	if (getOption('Allow_comments')) setOptionDefault('zp_plugin_comment_form', 5);
 	?>
