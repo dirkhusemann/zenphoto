@@ -27,7 +27,7 @@ SERVER path. For these cases you will need to implement the path overrides below
 
 $conf['mysql_user'] = '';           // Supply your MySQL user id.
 $conf['mysql_pass'] = '';           // Supply your MySQL password.
-$conf['mysql_host'] = 'localhost';  // Won't need to change this 90% of the time.
+$conf['mysql_host'] = 'localhost';  // Supply the name of your MySQL server.
 $conf['mysql_database'] = '';       // Supply the name of the database Zenphoto
                                     // is to use..
 
