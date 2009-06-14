@@ -35,6 +35,7 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
+			zp_error('Bad gallery in album instantiation');			
 			$this->exists = false;
 			return NULL;
 		}
@@ -102,7 +103,7 @@ class Album extends PersistentObject {
 				$this->save();
 			}
 		}
-		if ($new) apply_filter('new_album', $this);
+		if ($new) zp_apply_filter('new_album', $this);
 	}
 
 	/**
@@ -1250,7 +1251,7 @@ class Album extends PersistentObject {
 		}
 
 		if ($dirs) $filter = 'album_filter'; else $filter = 'image_filter';
-		return apply_filter($filter, $files);
+		return zp_apply_filter($filter, $files);
 	}
 
 	/**

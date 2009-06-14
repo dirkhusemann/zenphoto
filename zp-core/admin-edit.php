@@ -225,8 +225,8 @@ if (isset($_GET['album'])) {
 										$image->set('hitcounter', 0);
 									}
 									$custom = process_language_string_save("$i-custom_data", 1);
-									$image->setCustomData(apply_filter('save_image_custom_data', $custom, $i));
-									apply_filter('save_image_utilities_data', $image, $i);
+									$image->setCustomData(zp_apply_filter('save_image_custom_data', $custom, $i));
+									zp_apply_filter('save_image_utilities_data', $image, $i);
 									$image->save();
 
 									// Process move/copy/rename
@@ -828,7 +828,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							<span style="line-height: 0em;"><br clear=all /></span>
 							<?php
 						}
-						echo apply_filter('edit_image_utilities', '<!--image-->', $image, $currentimage, $pagenum, $tagsort); //pass space as HTML because there is already a button shown for cropimage
+						echo zp_apply_filter('edit_image_utilities', '<!--image-->', $image, $currentimage, $pagenum, $tagsort); //pass space as HTML because there is already a button shown for cropimage
 						?>
 						<span style="line-height: 0em;"><br clear=all /></span>
 						</div>
@@ -865,7 +865,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 					</tr>		
 					
 					<?php
-					$custom = apply_filter('edit_image_custom_data', '', $image, $currentimage);
+					$custom = zp_apply_filter('edit_image_custom_data', '', $image, $currentimage);
 					if (empty($custom)) {
 						?>
 						<tr>

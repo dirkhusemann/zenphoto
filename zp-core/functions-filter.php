@@ -31,15 +31,15 @@ $_zp_filters = array();
  * 
  * Typical use:
  * 
- *		register_filter('some_hook', 'function_handler_for_hook');
+ *		zp_register_filter('some_hook', 'function_handler_for_hook');
  *
  * @global array $_zp_filters Storage for all of the filters
  * @param string $hook the name of the zenphoto element to be filtered
  * @param callback $function_name the name of the function that is to be called.
- * @param int $accepted_args optional. The number of arguments the function accept (default 1).
+ * @param int $accepted_args optional. The number of arguments the function accept (default is the number provided).
  * @param integer $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default=10, lower=earlier execution, and functions with the same priority are executed in the order in which they were added to the filter)
  */
-function register_filter($hook, $function_name, $accepted_args = 1, $priority = 10) {
+function zp_register_filter($hook, $function_name, $priority = 5, $accepted_args = NULL) {
 	global $_zp_filters;
 	$bt = @debug_backtrace();
 	if (is_array($bt)) {
@@ -50,7 +50,7 @@ function register_filter($hook, $function_name, $accepted_args = 1, $priority = 
 	}
 	// At this point, we cannot check if the function exists, as it may well be defined later (which is OK)
 	
-	$id = filter_unique_id($hook, $function_name, $priority);
+	$id = zp_filter_unique_id($hook, $function_name, $priority);
 	
 	$_zp_filters[$hook][$priority][$id] = array(
 		'function' => $function_name,
@@ -72,7 +72,7 @@ function register_filter($hook, $function_name, $accepted_args = 1, $priority = 
  * @param string $type filter or action
  * @return string unique ID for usage as array key
  */
-function filter_unique_id($hook, $function, $priority) {
+function zp_filter_unique_id($hook, $function, $priority) {
 	global $_zp_filters;
 
 	// If function then just skip all of the tests and not overwrite the following.
@@ -108,10 +108,10 @@ function filter_unique_id($hook, $function, $priority) {
  *
  * 		1) Modify a variable if a function is attached to hook 'zp_hook'
  *		$zp_var = "default value";
- *		$zp_var = apply_filter( 'zp_hook', $zp_var );
+ *		$zp_var = zp_apply_filter( 'zp_hook', $zp_var );
  *
  *		2) Trigger functions is attached to event 'zp_event'
- *		apply_filter( 'zp_event' );
+ *		zp_apply_filter( 'zp_event' );
  * 
  * Returns an element which may have been filtered by a filter.
  *
@@ -120,7 +120,7 @@ function filter_unique_id($hook, $function, $priority) {
  * @param mixed $value the value of the element before filtering
  * @return mixed
  */
-function apply_filter($hook, $value = '' ) {
+function zp_apply_filter($hook, $value = '' ) {
 	global $_zp_filters;
 	
 	if ( !isset($_zp_filters[$hook]) )
@@ -137,7 +137,12 @@ function apply_filter($hook, $value = '' ) {
 		foreach( (array) current($_zp_filters[$hook]) as $the_ )
 			if ( !is_null($the_['function']) ){
 				$args[1] = $value;
-				$value = call_user_func_array($the_['function'], array_slice($args, 1, (int) $the_['accepted_args']));
+				$count = $the_['accepted_args'];
+				if (is_null($count)) {
+					$value = call_user_func_array($the_['function'], array_slice($args, 1));
+				} else {
+					$value = call_user_func_array($the_['function'], array_slice($args, 1, (int) $count));
+				}
 			}
 
 	} while ( next($_zp_filters[$hook]) !== false );
@@ -166,7 +171,7 @@ function apply_filter($hook, $value = '' ) {
 function zp_remove_filter($hook, $function_to_remove, $priority = 10, $accepted_args = 1) {
 	global $_zp_filters;
 	
-	$function_to_remove = filter_unique_id($hook, $function_to_remove, $priority);
+	$function_to_remove = zp_filter_unique_id($hook, $function_to_remove, $priority);
 
 	$remove = isset ($_zp_filters[$hook][$priority][$function_to_remove]);
 
@@ -194,7 +199,7 @@ function zp_has_filter($hook, $function_to_check = false) {
 	if ( false === $function_to_check || false == $has )
 		return $has;
 
-	if ( !$idx = filter_unique_id($hook, $function_to_check, false) )
+	if ( !$idx = zp_filter_unique_id($hook, $function_to_check, false) )
 		return false;
 
 	foreach ( (array) array_keys($_zp_filters[$hook]) as $priority ) {

@@ -10,14 +10,14 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-custom_data.php.html";
 
-register_filter('save_image_custom_data', 'custom_data_save_image', 2);
-register_filter('edit_image_custom_data', 'custom_data_edit_image', 3);
-register_filter('save_album_custom_data', 'custom_data_save_album', 2);
-register_filter('edit_album_custom_data', 'custom_data_edit_album', 3);
-register_filter('save_comment_custom_data', 'custom_data_save_comment');
-register_filter('edit_comment_custom_data', 'custom_data_edit_comment', 2);
-register_filter('save_admin_custom_data', 'custom_data_save_admin', 3);
-register_filter('edit_admin_custom_data', 'custom_data_edit_admin', 5);
+zp_register_filter('save_image_custom_data', 'custom_data_save_image');
+zp_register_filter('edit_image_custom_data', 'custom_data_edit_image');
+zp_register_filter('save_album_custom_data', 'custom_data_save_album');
+zp_register_filter('edit_album_custom_data', 'custom_data_edit_album');
+zp_register_filter('save_comment_custom_data', 'custom_data_save_comment');
+zp_register_filter('edit_comment_custom_data', 'custom_data_edit_comment');
+zp_register_filter('save_admin_custom_data', 'custom_data_save_admin');
+zp_register_filter('edit_admin_custom_data', 'custom_data_edit_admin');
 
 /**
  * Returns a processed custom data item

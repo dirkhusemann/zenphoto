@@ -119,7 +119,7 @@ class TextObject extends _Image {
 					$this->album->save();
 				}
 			}
-			apply_filter('new_image', $this);
+			zp_apply_filter('new_image', $this);
 			$this->save();
 		}
 	}

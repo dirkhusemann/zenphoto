@@ -20,11 +20,11 @@ $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---comment_form.php.html";
 $option_interface = new comment_form();
 
-register_filter('comment_post', 'comment_form_comment_post', 2);
-register_filter('save_comment_custom_data', 'comment_form_save_comment');
-register_filter('edit_comment_custom_data', 'comment_form_edit_comment', 2);
-register_filter('save_admin_custom_data', 'comment_form_save_admin', 3);
-register_filter('edit_admin_custom_data', 'comment_form_edit_admin', 5, 1);
+zp_register_filter('comment_post', 'comment_form_comment_post');
+zp_register_filter('save_comment_custom_data', 'comment_form_save_comment');
+zp_register_filter('edit_comment_custom_data', 'comment_form_edit_comment');
+zp_register_filter('save_admin_custom_data', 'comment_form_save_admin');
+zp_register_filter('edit_admin_custom_data', 'comment_form_edit_admin', 1);
 
 class comment_form {
 	/**

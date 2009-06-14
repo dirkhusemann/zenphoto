@@ -9,7 +9,7 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-seo.php.html";
 
-register_filter('seoFriendlyURL', 'filterAccentedCharacters');
+zp_register_filter('seoFriendlyURL', 'filterAccentedCharacters');
 
 /**
  * translates accented characters to unaccented ones

@@ -14,15 +14,15 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flter-admin_toolbox.php.html";
 
-register_filter('admin_toolbox_global', 'toolbox_global_extensions');
-register_filter('admin_toolbox_gallery', 'toolbox_gallery_extensions');
+zp_register_filter('admin_toolbox_global', 'toolbox_global_extensions');
+zp_register_filter('admin_toolbox_gallery', 'toolbox_gallery_extensions');
 /* enable these registrations if you have album, image, search, or news specific extensions.
  * 
  *
-register_filter('admin_toolbox_album', 'toolbox_album_extensions');
-register_filter('admin_toolbox_image', 'toolbox_image_extensions');
-register_filter('admin_toolbox_search', 'toolbox_search_extensions');
-register_filter('admin_toolbox_news', 'toolbox_news_extensions');
+zp_register_filter('admin_toolbox_album', 'toolbox_album_extensions');
+zp_register_filter('admin_toolbox_image', 'toolbox_image_extensions');
+zp_register_filter('admin_toolbox_search', 'toolbox_search_extensions');
+zp_register_filter('admin_toolbox_news', 'toolbox_news_extensions');
  */
 
 function toolbox_global_extensions() {

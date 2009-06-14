@@ -138,7 +138,7 @@ function printAdminToolbox($id='admin') {
 			printLink($zf . '/admin-options.php?tab=general', gettext("Options"), NULL, NULL, NULL);
 			echo "</li>\n";
 		}
-		apply_filter('admin_toolbox_global');
+		zp_apply_filter('admin_toolbox_global');
 		
 		$gal = getOption('custom_index_page');
 		if (empty($gal) || !file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($gal).'.php')) {
@@ -160,7 +160,7 @@ function printAdminToolbox($id='admin') {
 				printLink($zf . '/admin-upload.php', gettext("New album"), NULL, NULL, NULL);
 				echo "</li>\n";
 			}
-			apply_filter('admin_toolbox_gallery');
+			zp_apply_filter('admin_toolbox_gallery');
 		} else if ($_zp_gallery_page === 'album.php') { 
 		// script is album.php
 			$albumname = $_zp_current_album->name;
@@ -189,7 +189,7 @@ function printAdminToolbox($id='admin') {
 				echo "</li>\n";
 			}
 			// set the return to this album/page
-			apply_filter('admin_toolbox_album', $albumname);
+			zp_apply_filter('admin_toolbox_album', $albumname);
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
 			
 		} else if ($_zp_gallery_page === 'image.php') {
@@ -205,7 +205,7 @@ function printAdminToolbox($id='admin') {
 				echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode($albumname).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo#IT" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
 			}
 			// set return to this image page
-			apply_filter('admin_toolbox_image', $albumname, $imagename);
+			zp_apply_filter('admin_toolbox_image', $albumname, $imagename);
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=".urlencode($imagename);
 			
 		} else if (($_zp_gallery_page === 'search.php') && !empty($_zp_current_search->words)) {
@@ -214,7 +214,7 @@ function printAdminToolbox($id='admin') {
 				// if admin has edit rights allow him to create a dynamic album from the search
 				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
 			}
-			apply_filter('admin_toolbox_search');
+			zp_apply_filter('admin_toolbox_search');
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
 		
@@ -231,7 +231,7 @@ function printAdminToolbox($id='admin') {
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.PLUGIN_FOLDER; ?>zenpage/news-article-admin.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 					<?php
 					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
-					apply_filter('admin_toolbox_news', $titlelink);
+					zp_apply_filter('admin_toolbox_news', $titlelink);
 				}
 				echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-pages.php\">".gettext("Pages")."</a></li>";
 				if (is_Pages()) {
@@ -242,7 +242,7 @@ function printAdminToolbox($id='admin') {
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.PLUGIN_FOLDER; ?>zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
 					<?php	
 					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
-					apply_filter('admin_toolbox_page', $titlelink);
+					zp_apply_filter('admin_toolbox_page', $titlelink);
 				}
 			}
 		}	
@@ -1166,7 +1166,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		return false;
 	}
 	$text = trim( $override !== false ? $override : get_language_string($object->get($field)) );
-	$text = apply_filter($context.'_'.$field, $text, $object, $context, $field);
+	$text = zp_apply_filter($context.'_'.$field, $text, $object, $context, $field);
 	if ($convertBR) {
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\n", "<br />", $text);

@@ -15,8 +15,8 @@ $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---crop_image.php.html";
 
 if (!isset($_REQUEST['performcrop'])) {
-	register_filter('admin_toolbox_image', 'toolbox_crop_image', 2);
-	register_filter('edit_image_utilities', 'edit_crop_image', 5, 1); // we want this one to come right after the crop thumbnail button
+	zp_register_filter('admin_toolbox_image', 'toolbox_crop_image');
+	zp_register_filter('edit_image_utilities', 'edit_crop_image', 1); // we want this one to come right after the crop thumbnail button
 	return;
 }
 

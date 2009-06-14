@@ -28,8 +28,8 @@ foreach ($alloptionlist as $key=>$option) {
 		}
 	}
 }
-if ($enablealbum) register_filter('album_filter', 'filterAlbums');
-if ($enableimage) register_filter('image_filter', 'filterImages');
+if ($enablealbum) zp_register_filter('album_filter', 'filterAlbums');
+if ($enableimage) zp_register_filter('image_filter', 'filterImages');
 
 /**
  * Plugin option handling class

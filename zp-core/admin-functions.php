@@ -431,7 +431,7 @@ function printLogoAndLinks() {
  */
 function printTabs($currenttab) {
 	global $_zp_loggedin, $subtabs, $zenphoto_tabs;
-	$zenphoto_tabs = apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
+	$zenphoto_tabs = zp_apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
 	?>
 	<ul class="nav" id="jsddm">
 	<?php
@@ -1059,7 +1059,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		</td>
 	</tr>
 	<?php
-	$custom = apply_filter('edit_album_custom_data', '', $album, $prefix);
+	$custom = zp_apply_filter('edit_album_custom_data', '', $album, $prefix);
 	if (empty($custom)) {
 		?>
 		<tr>
@@ -1502,7 +1502,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</div>
 			<span style="line-height: 0em;"><br clear=all /></span>
 			<?php
-			echo apply_filter('edit_album_utilities', '', $album, $prefix);
+			echo zp_apply_filter('edit_album_utilities', '', $album, $prefix);
 			?>
 			<span style="line-height: 0em;"><br clear=all /></span>
 			</div>
@@ -1818,8 +1818,8 @@ function processAlbumEdit($index, $album) {
 	}
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));
 	$custom = process_language_string_save($prefix.'album_custom_data', 1);
-	$album->setCustomData(apply_filter('save_album_custom_data', $custom, $prefix));
-	apply_filter('save_album_utilities_data', $album, $prefix);
+	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
+	zp_apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
 		
 	// Move/Copy/Rename the album after saving.
@@ -2169,7 +2169,7 @@ function isolate($target, $str) {
 }
 
 function seoFriendlyURL($source) {
-	$string = apply_filter('seoFriendlyURL', $source);	
+	$string = zp_apply_filter('seoFriendlyURL', $source);	
 	if ($source == $string) { // no filter, do basic cleanup
 		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
 		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);

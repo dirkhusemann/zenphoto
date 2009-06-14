@@ -14,8 +14,8 @@ $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-admin_login.php.html";
 $option_interface = new admin_login();
 
-register_filter('admin_login_attempt', 'adminLoginLogger', 3);
-if (getOption('logger_log_guests')) register_filter('guest_login_attempt', 'guestLoginLogger', 3);
+zp_register_filter('admin_login_attempt', 'adminLoginLogger');
+if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'guestLoginLogger');
 
 /**
  * Option handler class

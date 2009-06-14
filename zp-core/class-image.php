@@ -152,7 +152,7 @@ class _Image extends PersistentObject {
 			if (isset($metadata['copyright'])) {
 				$this->setCopyright(sanitize($metadata['copyright'], 1));
 			}
-			apply_filter('new_image', $this);
+			zp_apply_filter('new_image', $this);
 			$this->save();
 		}
 	}

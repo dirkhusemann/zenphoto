@@ -85,7 +85,7 @@ function addPage() {
 	$page->set('permalink',$permalink);
 	$page->set('locked',$locked);
 	$page->set('expiredate',$expiredate);
-	apply_filter('new_page', $page);
+	zp_apply_filter('new_page', $page);
 	$page->save();
 	if (!$rslt) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists"),$titlelink)."</p>";
@@ -400,7 +400,7 @@ function addArticle() {
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
-	apply_filter('new_article', $article);
+	zp_apply_filter('new_article', $article);
 	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");

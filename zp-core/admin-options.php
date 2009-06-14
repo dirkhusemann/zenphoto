@@ -84,7 +84,7 @@ if (isset($_GET['action'])) {
 						$userobj->setEmail($admin_e);
 						$userobj->setRights($rights);
 						$userobj->setAlbums($albums);
-						apply_filter('save_admin_custom_data', '', $userobj, $i);
+						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
 						saveAdmin($user, $userobj->getPass(), $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 						if ($i == 0) {
 							setOption('admin_reset_date', '1');
@@ -646,8 +646,8 @@ if (empty($alterrights)) {
 			}
 			
 			
-			$local_alterrights = apply_filter('admin_alterrights', $local_alterrights, $userobj);
-			$custom_row = apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
+			$local_alterrights = zp_apply_filter('admin_alterrights', $local_alterrights, $userobj);
+			$custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 			?>
 			<tr>
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">

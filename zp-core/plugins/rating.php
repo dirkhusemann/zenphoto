@@ -21,12 +21,12 @@ $plugin_version = '2.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
 $option_interface = new jquery_rating();
 
-register_filter('edit_album_utilities', 'optionVoteStatus', 3);
-register_filter('save_album_utilities_data', 'optionVoteStatusSave', 2);
+zp_register_filter('edit_album_utilities', 'optionVoteStatus');
+zp_register_filter('save_album_utilities_data', 'optionVoteStatusSave');
 
 if (getOption('rating_image_individual_control')) {
-	register_filter('edit_image_utilities', 'optionVoteStatus', 3);
-	register_filter('save_image_utilities_data', 'optionVoteStatusSave', 2);
+	zp_register_filter('edit_image_utilities', 'optionVoteStatus');
+	zp_register_filter('save_image_utilities_data', 'optionVoteStatusSave');
 }
 
 $ME = substr(basename(__FILE__),0,-4);

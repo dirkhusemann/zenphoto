@@ -41,7 +41,7 @@ if (isset($_GET['action'])) {
 
 	case "moderation":
 		$comment = new Comment(sanitize_numeric($_GET['id']));
-		apply_filter('comment_approve', $comment);
+		zp_apply_filter('comment_approve', $comment);
 		$comment->setInModeration(0);
 		$comment->save();
 /*		
@@ -87,7 +87,7 @@ if (isset($_GET['action'])) {
 		$website = mysql_real_escape_string(sanitize($_POST['website'], 3));
 		$date = mysql_real_escape_string(sanitize($_POST['date'], 3));
 		$comment = mysql_real_escape_string(sanitize($_POST['comment'], 1));
-		$custom = apply_filter('save_comment_custom_data', '');
+		$custom = zp_apply_filter('save_comment_custom_data', '');
 		if (!empty($custom)) {
 			$custom = ", `custom_data`='".$custom."'";
 		}
@@ -144,7 +144,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo $IP; ?>" /></td>
 	</tr>
 	<?php
- 	echo apply_filter('edit_comment_custom_data', '', $custom_data);
+ 	echo zp_apply_filter('edit_comment_custom_data', '', $custom_data);
 	?>
 	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>

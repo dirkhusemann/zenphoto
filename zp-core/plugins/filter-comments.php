@@ -12,8 +12,8 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.1.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-comments.php.html";
 
-register_filter('comment_post', 'emailReply', 2);
-register_filter('comment_approve', 'emailApproval');
+zp_register_filter('comment_post', 'emailReply');
+zp_register_filter('comment_approve', 'emailApproval');
 
 /**
  * Filters a new comment post and sends email replies to previous posters

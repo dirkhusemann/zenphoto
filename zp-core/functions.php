@@ -1021,7 +1021,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		// Update the database entry with the new comment
 		$commentobj->setInModeration($moderate);
 		
-		apply_filter('comment_post', $commentobj, $receiver);
+		zp_apply_filter('comment_post', $commentobj, $receiver);
 		
 		$commentobj->save();
 

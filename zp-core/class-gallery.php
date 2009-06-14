@@ -161,7 +161,7 @@ class Gallery {
 			}
 		}
 		closedir($dir);
-		return apply_filter('album_filter', $albums);
+		return zp_apply_filter('album_filter', $albums);
 	}
 
 
@@ -529,7 +529,7 @@ class Gallery {
 						}
 						$imageobj->set('date', $newDate);
 						
-						apply_filter('image_refresh', $imageobj);
+						zp_apply_filter('image_refresh', $imageobj);
 						/* update DB is necessary */
 						$imageobj->save();
 

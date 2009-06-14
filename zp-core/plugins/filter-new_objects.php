@@ -14,8 +14,8 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-new_objects.php.html";
 
-register_filter('new_album', 'updateAlbum');
-register_filter('new_image', 'updateImage');
+zp_register_filter('new_album', 'updateAlbum');
+zp_register_filter('new_image', 'updateImage');
 
 /**
  * Adds user who caused the album to be created to the description of the album
