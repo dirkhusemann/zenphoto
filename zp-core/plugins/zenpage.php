@@ -1,8 +1,7 @@
 <?php 
 $plugin_version = "1.2.0";
 $plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />" 
-				."<strong>NOTE:</strong> Your theme must be setup to use this feature (or use the zenpage default theme). Also, different from Zenphoto some parts of Zenpage require MySQL 4.1! Please see the Zenphoto site for more information."
-				."<strong>If you enabled Zenpage for the first time you need to run <em>setup.php</em> again.</strong>");
+				."<strong>NOTE:</strong> Your theme must be setup to use this feature (or use the zenpage default theme). Also, different from Zenphoto some parts of Zenpage require MySQL 4.1! Please see the Zenphoto site for more information.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_plugins---zenpage---zenpage-template-functions.php.html";
 $option_interface = new zenpagecms();
