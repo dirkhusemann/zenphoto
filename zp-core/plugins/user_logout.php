@@ -5,13 +5,13 @@
  * Place a call on printUserLogout() where you want the logout link to appear.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.1.0
+ * @version 1.1.1
  * @package plugins
  */
 
 $plugin_description = gettext("Provides a means for placing a user logout link on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_logout.php.html";
 $option_interface = new user_logout_options();
 
@@ -37,6 +37,15 @@ class user_logout_options {
 
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
+$__redirect = '';
+if (isset($_GET['p'])) { $__redirect .= "&p=" . $_GET['p']; }
+if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . $_GET['searchfields']; }
+if (isset($_GET['words'])) { $__redirect .= "&words=" . $_GET['words']; }
+if (isset($_GET['date'])) { $__redirect .= "&date=" . $_GET['date']; }
+if (isset($_GET['album'])) { $__redirect .= "&album=" . $_GET['album']; }
+if (isset($_GET['image'])) { $__redirect .= "&image=" . $_GET['image']; }
+if (isset($_GET['title'])) { $__redirect .= "&title=" . $_GET['title']; }
+if (isset($_GET['page'])) { $__redirect .= "&page=" . $_GET['page']; }
 
 if (!OFFSET_PATH) {
 	$cookies = array();
@@ -59,6 +68,8 @@ if (!OFFSET_PATH) {
 			$saved_auth = NULL;
 			$cookies = array();
 			$_zp_pre_authorization = array();
+			if (!empty($__redirect)) $__redirect = '?'.substr($__redirect, 1);
+			header("Location: " . FULLWEBPATH . '/index.php'. $__redirect);
 		}
 	}
 }
@@ -72,7 +83,7 @@ if (!OFFSET_PATH) {
  * @param bool $showLoginForm set to true to display a login form if no one is logged in
  */
 function printUserLogout($before='', $after='', $showLoginForm=false) {
-	global $cookies;
+	global $cookies, $__redirect;
 	if ($showLoginForm || getOption('user_logout_login_form')) {
 		$showLoginForm = !checkforPassword(true);
 	}
@@ -81,7 +92,7 @@ function printUserLogout($before='', $after='', $showLoginForm=false) {
 			printPasswordForm('', false);
 		}
 	} else {
-		echo $before.'<a href="?userlog=0" title="'.gettext("logout").'" >'.gettext("logout").'</a>'.$after;
+		echo $before.'<a href="?userlog=0'.$__redirect.'" title="'.gettext("logout").'" >'.gettext("logout").'</a>'.$after;
 	}
 }
 

@@ -11,13 +11,13 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.4
+ * @version 1.1.5
  * @package plugins
  */
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1.3.3';
+$plugin_version = '1.1.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---contact_form.php.html";
 $option_interface = new contactformOptions();
 
@@ -234,7 +234,7 @@ function printContactForm() {
 	}
 	if (count($error) > 0 || !isset($_POST['sendmail'])) {
 		echo get_language_string(getOption("contactform_introtext"));
-		include(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "contact_form/form.php");
+		include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
 	}
 }
 

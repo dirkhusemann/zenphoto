@@ -16,7 +16,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides a unified comment handling facility.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---comment_form.php.html";
 $option_interface = new comment_form();
 
@@ -177,8 +177,16 @@ function getUserInfo($i) {
 	return $result;
 }
 
+/**
+ * Processes the address parts of a comment posst
+ *
+ * @param object $commentobj the comment object
+ * @param object $receiver the object receiving the comment
+ * @return object
+ */
 function comment_form_comment_post($commentobj, $receiver) {
 	if (getOption('comment_form_addresses')) $commentobj->setCustomData(serialize(getUserInfo(0)));
+	return $commentobj;
 }
 
 /**
@@ -344,7 +352,7 @@ function printCommentForm() {
 			if (file_exists($form)) {
 				$form = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.$formname;
 			} else {
-				$form = SERVERPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.'comment_form'.$formname;
+				$form = SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/comment_form'.$formname;
 			}
 			if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
 				echo gettext('Only registered users may post comments.');

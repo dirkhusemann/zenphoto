@@ -33,7 +33,7 @@ if (getOption('album_session') && OFFSET_PATH==0) {
 
 $_zp_captcha = getOption('captcha');
 if (empty($_zp_captcha)) 	$_zp_captcha = 'zenphoto';
-require_once(dirname(__FILE__). PLUGIN_FOLDER . 'captcha/'.$_zp_captcha.'.php');
+require_once(dirname(__FILE__). '/'.PLUGIN_FOLDER . '/captcha/'.$_zp_captcha.'.php');
 $_zp_captcha = new Captcha();
 
 require_once(dirname(__FILE__).'/functions-i18n.php');
@@ -625,7 +625,7 @@ function getPlugin($plugin, $inTheme) {
 	if ($inTheme) {
 		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. internalToFilesystem($inTheme . '/' . $plugin);
 	} else {
-		$pluginFile = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . internalToFilesystem($plugin);
+		$pluginFile = SERVERPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . internalToFilesystem($plugin);
 	}
 	if (file_exists($pluginFile)) {
 		return $pluginFile;
@@ -642,7 +642,7 @@ function getPlugin($plugin, $inTheme) {
 function getEnabledPlugins() {
 	$pluginlist = array();
 	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
+	chdir(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/');
 	$filelist = safe_glob('*'.'php');
 	chdir($curdir);
 	foreach ($filelist as $extension) {
@@ -1952,7 +1952,7 @@ define('ZP_ZENPAGE_NEWS_DATE', 1024);
 define('ZP_ZENPAGE_PAGE', 2048);
 
 if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-template-functions.php');
+	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-template-functions.php');
 }
 
 function get_context() {

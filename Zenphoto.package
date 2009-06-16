@@ -236,6 +236,7 @@ zp-core/exif/makers/nikon.php
 zp-core/exif/makers/olympus.php
 zp-core/exif/makers/panasonic.php
 zp-core/exif/makers/sanyo.php
+zp-core/folder-definitions.php
 zp-core/full-image.php
 zp-core/functions-basic.php
 zp-core/functions-controller.php

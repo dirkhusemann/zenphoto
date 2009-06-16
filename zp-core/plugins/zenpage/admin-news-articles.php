@@ -76,7 +76,7 @@ printLogoAndLinks();
 					<div style="float:left; margin-right: 15px; margin-top: 2px;">
 						<div class="buttons">
 							<strong><a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext("Add Article"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
-							<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER; ?>tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=480&amp;width=750" class="thickbox">
+							<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=480&amp;width=750" class="thickbox">
 							<img src="images/folder.png" /> <?php echo gettext("Manage files"); ?></a></strong>
 						</div>
 					</div>

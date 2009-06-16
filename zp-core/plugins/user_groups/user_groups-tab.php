@@ -29,7 +29,7 @@ if (isset($_GET['action'])) {
 		//first clear out existing user assignments
 		$groupname = sanitize($_GET['group'],3);
 		updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
-		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=groups&deleted');
+		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=groups&deleted');
 		exit();
 	} else if ($action == 'savegroups') {
 		for ($i = 0; $i < $_POST['totalgroups']; $i++) {
@@ -70,7 +70,7 @@ if (isset($_GET['action'])) {
 				}
 			}
 		}
-		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=groups&saved');
+		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=groups&saved');
 		exit();
 	} else if ($action == 'saveauserassignments') {
 		for ($i = 0; $i < $_POST['totalusers']; $i++) {
@@ -84,7 +84,7 @@ if (isset($_GET['action'])) {
 				saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
 			}
 		}
-		header("Location: ".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'user_groups/user_groups-tab.php?page=users&tab=assignments&saved');
+		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=assignments&saved');
 		exit();
 	}
 }

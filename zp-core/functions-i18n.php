@@ -260,13 +260,13 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		$domain = $plugindomain;
 		switch ($type) {
 			case "plugin":
-				$domainpath = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $domain . "/locale/";
+				$domainpath = SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $domain . "/locale/";
 				break;
 			case "theme":
 				$domainpath = SERVERPATH . "/" . THEMEFOLDER . "/" . $domain."/locale/";
 				break;
 			case 'admin':
-				$domainpath = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $domain . "/locale/";
+				$domainpath = SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $domain . "/locale/";
 				$domain = 'zenphoto';
 				break;
 		}

@@ -49,13 +49,13 @@ if (OFFSET_PATH) {
 	
 	if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
 		$zenphoto_tabs['pages'] = array('text'=>gettext("pages"),
-								'link'=>WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-pages.php',
+								'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-pages.php',
 								'subtabs'=>NULL);
 		
 		$zenphoto_tabs['articles'] = array('text'=>gettext("news"),
-								'link'=>WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-news-articles.php',
-								'subtabs'=>array(	gettext('articles')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-news-articles.php?page=news&tab=articles', 
-																	gettext('categories')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-categories.php?page=news&tab=categories'),
+								'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-news-articles.php',
+								'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&tab=articles', 
+																	gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&tab=categories'),
 																	'default'=>'articles');
 	}
 	

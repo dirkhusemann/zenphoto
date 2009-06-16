@@ -8,12 +8,12 @@
  */
 
 // force UTF-8 Ø
-
+require_once(dirname(__FILE__).'/folder-definitions.php');
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
-define('DEBUG_404', true); // set to true to log 404 error processing debug information.
+define('DEBUG_404', false); // set to true to log 404 error processing debug information.
 
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 	error_reporting(0);
@@ -48,14 +48,13 @@ require_once(dirname(__FILE__).'/lib-utf8.php');
 
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 
-if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
+if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . "/zp-config.php")) {
 	die (sprintf(gettext("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"),ZENFOLDER));
 }
 // Including zp-config.php more than once is OK, and avoids $conf missing.
-require(dirname(__FILE__).'/zp-config.php');
+require(dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
 
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
 if (!defined('COOKIE_PESISTENCE')) { define('COOKIE_PESISTENCE', 5184000); }
 
@@ -104,11 +103,6 @@ $_zp_conf_vars['version'] = ZENPHOTO_VERSION;
 // the options array
 $_zp_options = NULL;
 
-define('ALBUMFOLDER', '/albums/');
-if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
-define("THEMEFOLDER", 'themes');
-define('BACKUPFOLDER', 'backup');
-define('UTILITIES_FOLDER', '/utilities/');
 define('IMAGE_FORMAT', 'jpg');
 
 
@@ -669,7 +663,7 @@ function getAlbumFolder($root=SERVERPATH) {
 	if (is_null($_zp_album_folder)) {
 		if (!isset($_zp_conf_vars['external_album_folder']) || empty($_zp_conf_vars['external_album_folder'])) {
 			if (!isset($_zp_conf_vars['album_folder']) || empty($_zp_conf_vars['album_folder'])) {
-				$_zp_album_folder = $_zp_conf_vars['album_folder'] = ALBUMFOLDER;
+				$_zp_album_folder = $_zp_conf_vars['album_folder'] = '/'.ALBUMFOLDER.'/';
 			} else {
 				$_zp_album_folder = $_zp_conf_vars['album_folder'];
 			}
@@ -710,7 +704,7 @@ function getAlbumFolder($root=SERVERPATH) {
  */
 function debugLog($message, $reset=false) {
 	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-	$f = fopen(dirname(dirname(__FILE__)) . '/' . ZENFOLDER . '/debug_log.txt', $mode);
+	$f = fopen(dirname(dirname(__FILE__)) . '/' . DATA_FOLDER . '/debug_log.txt', $mode);
 	fwrite($f, $message . "\n");
 	fclose($f);
 }

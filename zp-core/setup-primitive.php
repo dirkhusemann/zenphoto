@@ -9,16 +9,13 @@
 
 
 include('version.php'); // Include the version info.
+require_once(dirname(__FILE__).'/folder-definitions.php');
 
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 if (!defined('SERVERPATH')) { define('SERVERPATH', dirname(dirname(__FILE__))); }
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
-if (!defined('THEMEFOLDER')) {define("THEMEFOLDER", 'themes'); }
-if (!defined('BACKUPFOLDER')) define('BACKUPFOLDER', 'backup');
-if (!defined('UTILITIES_FOLDER')) define('UTILITIES_FOLDER', '/utilities/');
 
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }

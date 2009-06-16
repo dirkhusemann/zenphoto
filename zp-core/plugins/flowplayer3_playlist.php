@@ -10,14 +10,14 @@
  * NOTE: Flash players do not support external albums!
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.2
+ * @version 1.0.3
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3. Important: The Flowplayer 3 plugin needs to be activated to use this plugin.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.2';
+$plugin_version = '1.0.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3_playlist.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer3_playlist();
@@ -31,11 +31,11 @@ if ( in_context(ZP_ALBUM) && !OFFSET_PATH) {
 	if (file_exists($css)) {
 		$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/flowplayer3_playlist.css';
 	} else {
-		$css = WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3_playlist/flowplayer3_playlist.css';
+		$css = WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3_playlist/flowplayer3_playlist.css';
 	}
 	addPluginScript('
-		<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3_playlist/jquery.mousewheel.pack.js"></script>
-		<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3_playlist/jquery.scrollable.pack.js"></script>
+		<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.mousewheel.pack.js"></script>
+		<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.scrollable.pack.js"></script>
 		<link rel="stylesheet" type="text/css" href="' . $css . '" />
 		');
 }
@@ -138,7 +138,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				$albumfolder = $album->name;
 				$videoThumb = checkObjectsThumb(getAlbumFolder().$albumfolder, $playlist[0]);
 				if (!empty($videoThumb) AND getOption('flow_player3_playlistsplashimage')) {
-					$videoThumb = "<img src=\"".WEBPATH."/zp-core/i.php?i=".$videoThumb."&amp;a=".$_zp_current_album->name."&amp;w=".getOption('flow_player3_playlistwidth')."&amp;h=".getOption('flow_player3_playlistheight')."&amp;cw=".getOption('flow_player3_playlistwidth')."&amp;ch=".getOption('flow_player3_playlistheight')."\" />";
+					$videoThumb = "<img src=\"".WEBPATH.'/'.ZENFOLDER."/i.php?i=".$videoThumb."&amp;a=".$_zp_current_album->name."&amp;w=".getOption('flow_player3_playlistwidth')."&amp;h=".getOption('flow_player3_playlistheight')."&amp;cw=".getOption('flow_player3_playlistwidth')."&amp;ch=".getOption('flow_player3_playlistheight')."\" />";
 				} else {
 					$videoThumb = "";
 				}
@@ -155,7 +155,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				next:"a.down",
 				prev:"a.up"
 			});
-			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
+			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
 			plugins: { 
 				controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
@@ -182,7 +182,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				$ext = strtolower(strrchr($item, "."));
 				if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				$list .= '{
-					url:"'.WEBPATH.ALBUMFOLDER.$album->name.'/'.$item.'",
+					url:"'.getAlbumFolder(WEBPATH).$album->name.'/'.$item.'",
 					autoPlay: '.$autoplay.',
 					title: "'.$image->getTitle().' <small>('.$ext.')</small>",
 					autoBuffering: true

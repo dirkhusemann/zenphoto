@@ -495,8 +495,7 @@ printTabs($_current_tab);
 echo "\n" . '<div id="content">';
 if ($_zp_null_account) {
 	echo "<div class=\"errorbox space\">";
-	//TODO: change the <br/> to <br />
-	echo "<h2>".gettext("Password reset request.<br/>You may now set admin usernames and passwords.")."</h2>";
+	echo "<h2>".gettext("Password reset request.<br />You may now set admin usernames and passwords.")."</h2>";
 	echo "</div>";
 }
 
@@ -523,7 +522,7 @@ if ($subtab == 'users') {
 			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
 		} else {
 			$admins = getAdministrators();
-			if (empty($admins)) {
+			if (empty($admins) || $_zp_null_account) {
 				$rights = ALL_RIGHTS;
 				$groupname = 'administrators';
 			} else {
@@ -645,13 +644,16 @@ if (empty($alterrights)) {
 				$background = '';
 			}
 			
-			
-			$local_alterrights = zp_apply_filter('admin_alterrights', $local_alterrights, $userobj);
-			$custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current);
 			?>
+			<!-- apply alterrights filter -->
+			<?php $local_alterrights = zp_apply_filter('admin_alterrights', $local_alterrights, $userobj); ?>
+			<!-- apply admin_custom_data filter -->
+			<?php $custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current); ?>
+			<!-- finished with filters -->
 			<tr>
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
-				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'> <!-- individual admin table -->
+				<!-- individual admin table -->
+				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
 				<tr>
 					<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
 						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
@@ -995,7 +997,7 @@ if (empty($alterrights)) {
 					<td><?php echo gettext('Captcha generator:'); ?></td>
 					<td>
 						<select id="captcha" name="captcha">
-						<?php generateListFromFiles(getOption('captcha'), SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'captcha', '.php'); ?>
+						<?php generateListFromFiles(getOption('captcha'), SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . '/captcha', '.php'); ?>
 						</select>
 					</td>
 					<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
@@ -1911,7 +1913,7 @@ if (empty($alterrights)) {
 			<td><select id="spam_filter" name="spam_filter">
 				<?php
 			$currentValue = getOption('spam_filter');
-			$pluginroot = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "spamfilters";
+			$pluginroot = SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/spamfilters";
 			generateListFromFiles($currentValue, $pluginroot , '.php');
 			?>
 			</select></td>
@@ -2304,7 +2306,7 @@ if (empty($alterrights)) {
 			if (array_key_exists($extension, $class_optionInterface)) {
 				$option_interface = $class_optionInterface[$extension];
 			}
-			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+			require_once(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
 			if (!is_null($option_interface)) {
 				$_zp_plugin_count++;
 				?>

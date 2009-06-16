@@ -125,7 +125,7 @@ function printImageslist($number) {
 					$linkalbumobj = $albumobj;
 					$imageobj = newImage($albumobj,$images[$nr]);
 				}
-				$imgurl = $host.WEBPATH."/zp-core/i.php?a=".urlencode(urlencode($linkalbumobj->name))."&amp;i=".urlencode(urlencode($imageobj->filename));
+				$imgurl = $host.WEBPATH.'/'.ZENFOLDER."/i.php?a=".urlencode(urlencode($linkalbumobj->name))."&amp;i=".urlencode(urlencode($imageobj->filename));
 				$imgsizeurl = $imageobj->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 				echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>\n";
 				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode(urlencode($imageobj->filename))."','".urlencode(urlencode($imageobj->getTitle()))."','".urlencode(urlencode($linkalbumobj->getTitle()))."','zenphoto');\" title='".$imageobj->getTitle()." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
@@ -138,7 +138,7 @@ function printImageslist($number) {
 		} else {
 			$albumthumb = $albumobj->getAlbumThumbImage();
 			$albumthumbalbum = $albumthumb->getAlbum();
-			$imgurl = urlencode(urlencode($host.WEBPATH."/zp-core/i.php?a=".$albumthumbalbum->name."&amp;i=".$albumthumb->filename));
+			$imgurl = urlencode(urlencode($host.WEBPATH.'/'.ZENFOLDER."/i.php?a=".$albumthumbalbum->name."&amp;i=".$albumthumb->filename));
 			$imgsizeurl = $albumthumb->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 			echo "<p style='margin-left: 8px'>".gettext("<strong>Note:</strong> This album does not contain any images.")."</p>";
 			echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>";

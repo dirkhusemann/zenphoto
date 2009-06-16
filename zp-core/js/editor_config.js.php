@@ -1,7 +1,7 @@
 <?php
-if (file_exists(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "tiny_mce/tiny_mce.js")) {
+if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tiny_mce.js")) {
 ?> 
-<script language="javascript" type="text/javascript" src="<?php echo WEBPATH ."/" . ZENFOLDER . PLUGIN_FOLDER; ?>tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo WEBPATH ."/" . ZENFOLDER .'/'. PLUGIN_FOLDER; ?>/tiny_mce/tiny_mce.js"></script>
 	<script language="javascript" type="text/javascript">
 	tinyMCE.init({
 		mode : "textareas",

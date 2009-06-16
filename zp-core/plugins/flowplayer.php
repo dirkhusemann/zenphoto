@@ -7,14 +7,14 @@
  * Plugin option 'flow_player_height' -- height of the player window
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.3
+ * @version 1.0.5
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> <strong>NOTE:</strong> This plugin currently still uses Flowplayer 2. Please see <a href='http://flowplayer.org/v2'>flowplayer.org/v2</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.3';
+$plugin_version = '1.0.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer();
@@ -23,7 +23,7 @@ $_zp_flash_player = $option_interface; // claim to be the flash player.
 if ($external) return; // can't process external album images
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer/flashembed-0.34.pack.js"></script>');
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer/flashembed-0.34.pack.js"></script>');
 
 if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 28);
 /**
@@ -84,7 +84,7 @@ class flowplayer {
 			return '<p id="playerContainer'.$count.'">'.gettext('<a href="http://www.adobe.com/go/getflashplayer">Get Flash</a> to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer/FlowPlayerLight.swf\',
       	width:'.getOption('flow_player_width').', 
       	height:'.FLOW_PLAYER_MP3_HEIGHT.'
     	},
@@ -104,7 +104,7 @@ class flowplayer {
 			return '<p id="playerContainer'.$count.'">'.gettext('<a href="http://www.adobe.com/go/getflashplayer">Get Flash</a> to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer/FlowPlayerLight.swf\',
       	width:'.getOption('flow_player_width').', 
       	height:'.getOption('flow_player_height').'
     	},

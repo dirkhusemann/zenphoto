@@ -10,7 +10,7 @@
  * Customize the stars by placing a modified copy of jquery.rating.css in your theme folder
  *  
  * @author Stephen Billard (sbillard)and Malte Müller (acrylian)
- * @version 2.0.0
+ * @version 2.0.1
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');
@@ -31,8 +31,8 @@ if (getOption('rating_image_individual_control')) {
 
 $ME = substr(basename(__FILE__),0,-4);
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.MetaData.js"></script>');
-addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.rating.js"></script>');
+addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.MetaData.js"></script>');
+addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.rating.js"></script>');
 require_once($ME.'/functions-rating.php');
 
 /**
@@ -86,7 +86,7 @@ class jquery_rating {
 		if($option=="clear_rating") {
 			?>
 			<div class='buttons'>
-				<a href="<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4); ?>/update.php?clear_rating&height=100&width=250" class="thickbox" title="<?php echo gettext("Clear ratings"); ?>">
+				<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4); ?>/update.php?clear_rating&height=100&width=250" class="thickbox" title="<?php echo gettext("Clear ratings"); ?>">
 					<img src='images/edit-delete.png' alt='' />
 					<?php echo gettext("Clear ratings"); ?>
 				</a>
@@ -175,7 +175,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 		if (file_exists($css)) {
 			$css = WEBPATH.'/'.THEMEFOLDER.'/'.$theme.'/jquery.rating.css';
 		} else {
-			$css = WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4).'/jquery.rating.css';
+			$css = WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4).'/jquery.rating.css';
 		}
 	  ?>
 		<link rel="stylesheet" href="<?php echo $css; ?>" type="text/css" />
@@ -244,7 +244,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 							?>
 							$.ajax({   
 								type: 'POST',   
-								url: '<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4); ?>/update.php',   
+								url: '<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4); ?>/update.php',   
 								data: dataString+'&id=<?php echo $id; ?>&table=<?php echo $table; ?>'
 							});
 							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');

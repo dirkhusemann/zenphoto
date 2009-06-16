@@ -6,13 +6,13 @@
 
 // force UTF-8 Ø
 
+require_once(dirname(__FILE__).'/folder-definitions.php');
 header ('Content-Type: text/html; charset=UTF-8');
+define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
 define('HTACCESS_VERSION', '1.2.2.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 
-$debug = isset($_GET['debug']);
-if (isset($_POST['debug'])) {
-	$debug = isset($_POST['debug']);
-}
+$debug = isset($_REQUEST['debug']);
+
 $checked = isset($_GET['checked']);
 $upgrade = false;
 if(!function_exists("gettext")) {
@@ -24,8 +24,6 @@ if(!function_exists("gettext")) {
 }
 require_once(dirname(__FILE__).'/lib-utf8.php');
 
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
-if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define('OFFSET_PATH', 2);
 
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -43,8 +41,11 @@ if (!file_exists($en_US)) {
 function setupLog($message, $reset=false) {
   global $debug;
 	if ($debug) {
+		if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
+			@mkdir(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
+		}
 		if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-		$f = fopen(dirname(dirname(__FILE__)) . '/' . ZENFOLDER . '/setup_log.txt', $mode);
+		$f = fopen(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . '/setup_log.txt', $mode);
 		fwrite($f, $message . "\n");
 		fclose($f);
 	}
@@ -58,8 +59,8 @@ function updateItem($item, $value) {
 }
 
 function checkAlbumParentid($albumname, $id) {
-	Global $gallery;
-	$album = new Album($gallery, $albumname);
+	Global $_zp_gallery;
+	$album = new Album($_zp_gallery, $albumname);
 	$oldid = $album->get('parentid');
 	if ($oldid !== $id) {
 		$album->set('parentid', $id);
@@ -82,11 +83,18 @@ function getOptionTableName($albumname) {
 	}
 	return $albumname.'_options';
 }
-
-if (!file_exists('zp-config.php')) {
-	$newconfig = true;
-	@copy('zp-config.php.source', 'zp-config.php');
-	setupLog("Copied zp-copnfig.php.source");
+if (!file_exists(CONFIGFILE)) {
+	if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
+		@mkdir(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
+	}
+	if (file_exists(dirname(dirname(__FILE__)).'/'.ZENFOLDER.'/zp-config.php')) {
+		@copy(dirname(dirname(__FILE__)).'/'.ZENFOLDER.'/zp-config.php', CONFIGFILE);
+		@unlink(dirname(dirname(__FILE__)).'/'.ZENFOLDER.'/zp-config.php');
+		$newconfig = false;
+	} else {
+		$newconfig = true;
+		@copy('zp-config.php.source', CONFIGFILE);
+	}
 } else {
 	$newconfig = false;
 }
@@ -95,7 +103,7 @@ if ($checked) {
 }
 
 
-$zp_cfg = @file_get_contents('zp-config.php');
+$zp_cfg = @file_get_contents(CONFIGFILE);
 $updatezp_config = false;
 if (isset($_GET['mod_rewrite'])) {
 	$mod = '&mod_rewrite='.$_GET['mod_rewrite'];
@@ -151,9 +159,9 @@ if (isset($_GET['strict_chmod'])) {
 }
 
 if ($updatezp_config) {
-	@chmod('zp-config.php', 0666 & $chmod);
-	if (is_writeable('zp-config.php')) {
-		if ($handle = fopen('zp-config.php', 'w')) {
+	@chmod(CONFIGFILE, 0666 & $chmod);
+	if (is_writeable(CONFIGFILE)) {
+		if ($handle = fopen(CONFIGFILE, 'w')) {
 			if (fwrite($handle, $zp_cfg)) {
 				setupLog("Updated zp-config.php");
 				$base = true;
@@ -165,8 +173,8 @@ if ($updatezp_config) {
 $result = true;
 $chmod_defined = false;
 $environ = false;
-if (file_exists("zp-config.php")) {
-	require(dirname(__FILE__).'/zp-config.php');
+if (file_exists(CONFIGFILE)) {
+	require(CONFIGFILE);
 	if (defined('CHMOD_VALUE')) {
 		$chmod = CHMOD_VALUE | 0755;
 		$chmod_defined = true;
@@ -656,15 +664,16 @@ if (!$checked) {
 
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, gettext("PHP <code>MySQL support</code>"), gettext("PHP <code>MySQL support</code> [is not installed]"), gettext('You need to install MySQL support in your PHP')) && $good;
-	if (file_exists("zp-config.php")) {
-		require(dirname(__FILE__).'/zp-config.php');
+	if (file_exists(CONFIGFILE)) {
+		require(CONFIGFILE);
 		$cfg = true;
 	} else {
 		$cfg = false;
 	}
-	$good = checkMark($cfg, gettext("<em>zp-config.php</em> file"), gettext("<em>zp-config.php</em> file [does not exist]"),
- 							gettext("Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file's comments and rename it to <code>zp-config.php</code>".
- 							"<br /><br />You can find the file in the \"zp-core\" directory.")) && $good;
+	$good = checkMark($cfg, gettext('<em>zp-config.php</em> file'), gettext('<em>zp-config.php</em> file [does not exist]'),
+ 							sprintf(gettext('Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file\'s comments and rename it to <code>zp-config.php</code>.'.
+ 							' Place the file in the %s folder.'),DATA_FOLDER).
+ 							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
  	if ($cfg) {
  		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.');
  		$msg2 = gettext('You must be logged in to change this.');
@@ -705,8 +714,8 @@ if (!$checked) {
 		$sqlv = versionCheck($required, $desired, $mysqlv);;
 	}
 	if ($cfg) {
-		@chmod('zp-config.php', 0666 & $chmod);
-		if ($adminstuff = (!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
+		@chmod(CONFIGFILE, 0666 & $chmod);
+		if ($adminstuff = (!$sql || !$connection  || !$db) && is_writable(CONFIGFILE)) {
 			$good = checkMark(false, gettext("MySQL setup in zp-config.php"), '', '') && $good;
 			// input form for the information
 			?>
@@ -1101,6 +1110,7 @@ if ($debug) {
 	$good = checkmark(file_exists($en_US), gettext('<em>locale</em> folders'), gettext('<em>locale</em> folders [Are not complete]'), gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
 
 	$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
+	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
 	
 	if ($connection) { @mysql_close($connection); }
 	if ($good) {
@@ -1131,9 +1141,9 @@ if ($debug) {
 	$dbmsg = gettext("database connected");
 } // system check
 
-if (file_exists("zp-config.php")) {
+if (file_exists(CONFIGFILE)) {
 
-	require(dirname(__FILE__).'/zp-config.php');
+	require(CONFIGFILE);
 	require_once(dirname(__FILE__).'/functions.php');
 	$task = '';
 	if (isset($_GET['create'])) {
@@ -1674,24 +1684,24 @@ if (file_exists("zp-config.php")) {
 
 		setupLog("Previous Release was $prevRel");
 
-		$gallery = new Gallery();
+		$_zp_gallery = new Gallery();
 		require(dirname(__FILE__).'/setup-option-defaults.php');
 
 		// 1.1.6 special cleanup section for plugins
 		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
 		foreach ($badplugs as $plug) {
-			$path = SERVERPATH . '/' . ZENFOLDER .PLUGIN_FOLDER . $plug;
+			$path = SERVERPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER.'/' . $plug;
 			@unlink($path);
 		}
 
 		if ($prevRel < 1690) {  // cleanup root album DB records
-			$gallery->garbageCollect(true, true);
+			$_zp_gallery->garbageCollect(true, true);
 		}
 
 		// 1.1.7 conversion to the theme option tables
-		$albums = $gallery->getAlbums();
+		$albums = $_zp_gallery->getAlbums();
 		foreach ($albums as $albumname) {
-			$album = new Album($gallery, $albumname);
+			$album = new Album($_zp_gallery, $albumname);
 			$theme = $album->getAlbumTheme();
 			if (!empty($theme)) {
 				$tbl = prefix(getOptionTableName($album->name));
@@ -1785,7 +1795,7 @@ if (file_exists("zp-config.php")) {
 		echo "</h3>";
 
 		// fixes 1.2 move/copy albums with wrong ids
-		$albums = $gallery->getAlbums();
+		$albums = $_zp_gallery->getAlbums();
 		foreach ($albums as $album) {
 			checkAlbumParentid($album, NULL);
 		}
@@ -1794,7 +1804,7 @@ if (file_exists("zp-config.php")) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
-					echo "<p>".gettext("You may <a href=\"admin-options.php?page=users&amp;tab=users\">set your admin user and password</a> or <a href=\"".substr(UTILITIES_FOLDER,1)."backup_restore.php\">run backup-restore</a>")."</p>";
+					echo "<p>".gettext("You may <a href=\"admin-options.php?page=users&amp;tab=users\">set your admin user and password</a> or <a href=\"".UTILITIES_FOLDER."/backup_restore.php\">run backup-restore</a>")."</p>";
 				} else {
 					echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
 				}				

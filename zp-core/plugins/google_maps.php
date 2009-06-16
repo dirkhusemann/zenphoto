@@ -6,14 +6,14 @@
  * Plugin Option 'gmaps_apikey' is used to supply the sit Google Maps API key.
  *
  * @author Dustin Brewer (mankind), Stephen Billard (sbillard), Eric Bayard (babar)
- * @version 1.4.0
+ * @version 1.4.1
  *
  * @package plugins
  */
 
 $plugin_description = gettext("Support for providing Google Maps based on EXIF latitude and longitude in the images.");
 $plugin_author = 'Dustin Brewer (mankind), Stephen Billard (sbillard), Eric Bayard (babar)';
-$plugin_version = '1.4';
+$plugin_version = '1.4.1';
 $plugin_URL = "";
 $option_interface = new google_mapsOptions();
 
@@ -22,7 +22,7 @@ if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php' && !empty($mapk
 	// NOTE: This is copied from the printGoogleJS function in the phoogle class.
 	//       If you update the phoogle class be sure this has not changed.
 	addPluginScript('<script src="http://maps.google.com/maps?file=api&v=2&key='.$mapkey.'" type="text/javascript"></script>');
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'google_maps/gmaps.js"></script>');
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/google_maps/gmaps.js"></script>');
 	addPluginScript('<script type="text/javascript">var map;</script>');
 }
 
@@ -95,7 +95,7 @@ class google_mapsOptions {
 }
 
 if($apiKey = getOption('gmaps_apikey')){
-	require_once(SERVERPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__), 0, -4).'/phoogle.php');
+	require_once(SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__), 0, -4).'/phoogle.php');
 	$_zp_phoogle = new PhoogleMap();
 	$_zp_phoogle->setAPIkey($apiKey);
 } else {

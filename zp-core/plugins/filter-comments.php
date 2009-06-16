@@ -9,7 +9,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Email all posters when a new comment is made on an item.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-comments.php.html";
 
 zp_register_filter('comment_post', 'emailReply');
@@ -63,6 +63,7 @@ function emailReply($comment, $owner) {
 							sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n";
 	$on = gettext('Reply posted');
 	zp_mail("[" . $gallery->getTitle() . "] $on", $message, "", $emails);
+	return $comment;
 }
 
 function emailApproval($comment) {

@@ -42,12 +42,13 @@ $zp_request = zp_load_request();
 zp_handle_password();
 
 // Handle any comments that might be posted.
-//TODO: Allow_comments is legacy....
-if (getOption('Allow_comments') || 
-		getOption('zenpage_comments_allowed') && (in_context(ZP_ZENPAGE_NEWS_ARTICLE) || in_context(ZP_ZENPAGE_PAGE)) ||
+//TODO: Allow_comments and zenpage_comments_allowed are legacy....
+if (getOption('Allow_comments') || getOption('zenpage_comments_allowed') && (in_context(ZP_ZENPAGE_NEWS_ARTICLE) || in_context(ZP_ZENPAGE_PAGE)) ||
 		function_exists('printCommentForm') && (
-					(getOption('comment_form_albums') && $_zp_gallery_page=='album.php') || 
-					(getOption('comment_form_images') && $_zp_gallery_page=='image.php'))
+					(getOption('comment_form_albums') && in_context(ZP_ALBUM) && !in_context(ZP_IMAGE)) || 
+					(getOption('comment_form_images') && in_context(ZP_IMAGE)) ||
+					(getOption('comment_form_articles') && in_context(ZP_ZENPAGE_NEWS_ARTICLE)) ||
+					(getOption('comment_form_pages') && in_context(ZP_ZENPAGE_PAGE)))
 					){
 			$_zp_comment_error = zp_handle_comment();
 		}

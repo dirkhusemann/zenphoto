@@ -51,7 +51,7 @@ function printTextEditorConfigJS($locale='') {
 		});
 
 		function ajaxfilemanager(field_name, url, type, win) {
-<?php	echo "var ajaxfilemanagerurl = \"".FULLWEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER."tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=tinymce\";"; ?>
+<?php	echo "var ajaxfilemanagerurl = \"".FULLWEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER."/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=tinymce\";"; ?>
 			switch (type) {
 				case "image":
 					ajaxfilemanagerurl += "&type=img&language=<?php echo $locale; ?>";

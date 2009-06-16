@@ -16,13 +16,13 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.1.0
+ * @version 1.1.1
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -333,7 +333,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 							<?php if (!isMyALbum($album->name, ALL_RIGHTS)) { ?>
 							//Only register at hit count the first time the image is viewed.
 							if ($(next).attr( 'viewed') != 1) {
-								$.get("<?php echo FULLWEBPATH .'/'. ZENFOLDER . PLUGIN_FOLDER; ?>slideshow/slideshow-counter.php?album=<?php echo pathurlencode($album->name); ?>&img="+ImageNameList[opts.currSlide]);
+								$.get("<?php echo FULLWEBPATH .'/'. ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/slideshow/slideshow-counter.php?album=<?php echo pathurlencode($album->name); ?>&img="+ImageNameList[opts.currSlide]);
 								$(next).attr( 'viewed', 1 );
 							}
 							<?php } ?>
@@ -477,7 +477,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			?> 
 			<script type="text/javascript">
 			$("#slideshow").flashembed({
-			      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER.PLUGIN_FOLDER; ?>flowplayer/FlowPlayerLight.swf',
+			      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flowplayer/FlowPlayerLight.swf',
 			      width:<?php echo getOption("slideshow_flow_player_width"); ?>,
 			      height:<?php echo getOption("slideshow_flow_player_height"); ?>
 			    },
@@ -528,7 +528,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			<?php
 			echo "</span>";
 			echo "<p>";
-			printf (gettext("Click on %s on the right in the player control bar to view full size."), "<img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER.PLUGIN_FOLDER."slideshow/flowplayerfullsizeicon.png' />");
+			printf (gettext("Click on %s on the right in the player control bar to view full size."), "<img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER.'/'.PLUGIN_FOLDER."/slideshow/flowplayerfullsizeicon.png' />");
 			echo "</p>";
 			break;
 	}
@@ -548,11 +548,11 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 function printSlideShowJS() {
 	?>
 <script
-	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.PLUGIN_FOLDER ?>slideshow/jquery.cycle.all.pack.js"
+	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER ?>/slideshow/jquery.cycle.all.pack.js"
 	type="text/javascript"></script>
 <script
 	type="text/javascript"
-	src="<?php echo WEBPATH . "/" . ZENFOLDER.PLUGIN_FOLDER; ?>flowplayer/flashembed-0.34.pack.js"></script>
+	src="<?php echo WEBPATH . "/" . ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flowplayer/flashembed-0.34.pack.js"></script>
 	<?php
 }
 

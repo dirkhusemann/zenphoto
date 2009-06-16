@@ -1,11 +1,11 @@
 <?php
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
-require_once(ZENFOLDER . PLUGIN_FOLDER . "image_album_statistics.php");
-require_once(ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-functions.php");
-require_once(ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php");
+require_once(ZENFOLDER . '/'.PLUGIN_FOLDER . "/image_album_statistics.php");
+require_once(ZENFOLDER . '/'.PLUGIN_FOLDER . "/zenpage/zenpage-functions.php");
+require_once(ZENFOLDER . '/'.PLUGIN_FOLDER . "/zenpage/zenpage-template-functions.php");
 $themepath = THEMEFOLDER;
 
 if(isset($_GET['category'])) {

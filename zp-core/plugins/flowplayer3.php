@@ -6,14 +6,14 @@
  * Note on splash images: Flowplayer will try to use the first frame of a movie as a splash image or a videothumb if existing.
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.3.1
+ * @version 1.0.3.2
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.3.1';
+$plugin_version = '1.0.3.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer3();
@@ -22,8 +22,8 @@ $_zp_flash_player = $option_interface; // claim to be the flash player.
 if ($external) return; // can't process external album images
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.js"></script>
-<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.playlist.pack.js"></script>');
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.js"></script>
+<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist.pack.js"></script>');
 
 if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 24);
 /**
@@ -164,7 +164,7 @@ class flowplayer3 {
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.$height.'px;">
 			</span>
 			<script>
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
+			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
 			plugins: { 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
@@ -204,7 +204,7 @@ class flowplayer3 {
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.getOption('flow_player3_height').'px;">
 			</span>
 			<script>
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
+			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
 			plugins: { 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",

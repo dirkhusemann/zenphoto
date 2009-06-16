@@ -7,7 +7,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("provides rudimentary user groups.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-user_groups.php.html";
 
 zp_register_filter('admin_tabs', 'user_groups_admin_tabs');
@@ -109,8 +109,8 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 
 function user_groups_admin_tabs($tabs, $current) {
 	$subtabs = array(	gettext('users')=>'admin-options.php?page=users&tab=users',
-										gettext('assignments')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=assignments',
-										gettext('groups')=>substr(PLUGIN_FOLDER,1).'user_groups/user_groups-tab.php?page=users&amp;tab=groups');
+										gettext('assignments')=>PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&amp;tab=assignments',
+										gettext('groups')=>PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&amp;tab=groups');
 	if ((zp_loggedin(ADMIN_RIGHTS))) {
 		$tabs['users'] = array(	'text'=>gettext("admin"),
 														'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=users&tab=users',
@@ -123,9 +123,6 @@ function user_groups_admin_tabs($tabs, $current) {
 function user_groups_admin_alterrights($alterrights, $userobj) {
 	$group = $userobj->getGroup();
 	if (empty($group)) return $alterrights;
-	
-echo "<br/>$group:$alterrights";	
-	
 	return ' DISABLED';
 }
 

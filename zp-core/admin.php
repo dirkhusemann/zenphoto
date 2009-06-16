@@ -9,12 +9,12 @@
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
-if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-admin-functions.php'); 
-}
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
+}
+if(getOption('zp_plugin_zenpage')) {
+	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php'); 
 }
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
@@ -291,7 +291,7 @@ if (defined('RELEASE')) {
 			natsort($plugins);
 			foreach ($plugins as $extension) {
 				$ext = substr($extension, 0, strlen($extension)-4);
-				$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . $extension);
+				$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
 				$str =  $pluginStream;
 				$i = strpos($str, '$plugin_version');
 				if ($i !== false) {
@@ -424,7 +424,7 @@ $buttonlist[gettext("Reset hitcounters")] = array(
 <h2 class="h2_bordered"><?php echo gettext("Utility functions"); ?></h2>
 <?php
 $curdir = getcwd();
-chdir(SERVERPATH . "/" . ZENFOLDER . UTILITIES_FOLDER);
+chdir(SERVERPATH . "/" . ZENFOLDER . '/'.UTILITIES_FOLDER.'/');
 $filelist = safe_glob('*'.'php');
 natcasesort($filelist);
 foreach ($filelist as $utility) {
@@ -441,7 +441,7 @@ foreach ($filelist as $utility) {
 	
 	$buttonlist[$button_text] = array(
 								'formname'=>$utility,
-								'action'=>substr(UTILITIES_FOLDER, 1).$utility,
+								'action'=>UTILITIES_FOLDER.'/'.$utility,
 								'icon'=>$button_icon, 
 								'title'=>$button_hint,
 								'alt'=>'',

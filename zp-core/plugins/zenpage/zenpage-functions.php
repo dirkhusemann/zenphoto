@@ -278,7 +278,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function getLimitAndOffset($articles_per_page) {
 		global $_zp_zenpage_total_pages, $_zp_zenpage_total_articles;
-		if(strstr(dirname($_SERVER['REQUEST_URI']), PLUGIN_FOLDER.'zenpage')) {
+		if(strstr(dirname($_SERVER['REQUEST_URI']), '/'.PLUGIN_FOLDER.'/zenpage')) {
 			$page = getCurrentAdminNewsPage(); // TODO maybe useless since the $_GET['page'] is removed for getting the active main admin tab, too lazy to revert now
 		} else {
 			$page = getCurrentNewsPage();

@@ -18,7 +18,7 @@ require_once("../../../../functions.php");
 $imagename = sanitize($_GET['image']); 
 $albumname = sanitize($_GET['album']); 
 // getting the webpath manually since the offset does not work here
-$partialpath = strpos(FULLWEBPATH,"/zp-core");
+$partialpath = strpos(FULLWEBPATH, '/'.ZENFOLDER);
 $webpath = substr(FULLWEBPATH,0,$partialpath);
 $ext = strtolower(strrchr($imagename, "."));
 if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
@@ -34,7 +34,7 @@ if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp"
       		autoPlay: \'false\',
     			loop: false,
 					controlsOverVideo: \'ease\',
-      		videoFile: \''.$host.'/'.WEBPATH.ALBUMFOLDER.'/'.$albumname.'/'.$imagename.'\',
+      		videoFile: \''.$host.getAlbumFolder(WEBPATH).$albumname.'/'.$imagename.'\',
       		initialScale: \'fit\',
       		backgroundColor: \'black\',
       		controlBarBackgroundColor: \'black\',
@@ -45,7 +45,7 @@ if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp"
   		</script>';
 } else {
 ?>
-<img src="<?php echo $host.WEBPATH; ?>/zp-core/i.php?a=<?php echo $albumname; ?>&amp;i=<?php echo $imagename; ?>&amp;s=440&amp;t=true" />
+<img src="<?php echo $host.WEBPATH.'/'.ZENFOLDER; ?>/i.php?a=<?php echo $albumname; ?>&amp;i=<?php echo $imagename; ?>&amp;s=440&amp;t=true" />
 <?php } ?>
 <div><!-- main div -->
 </body>

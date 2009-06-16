@@ -1,5 +1,5 @@
 <?php
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+require_once(dirname(__FILE__).'zp_core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");

@@ -27,7 +27,7 @@ $saved = false;
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'saveplugins') {
 		$curdir = getcwd();
-		chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
+		chdir(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/');
 		$filelist = safe_glob('*'.'php');
 		chdir($curdir);
 		foreach ($filelist as $extension) {
@@ -62,7 +62,7 @@ if ($saved) {
 }
 
 $curdir = getcwd();
-chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
+chdir(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/');
 $filelist = safe_glob('*'.'php');
 foreach ($filelist as $key=>$plugin) {
 	$filelist[$key] = filesystemToInternal($plugin);

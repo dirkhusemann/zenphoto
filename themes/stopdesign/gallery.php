@@ -97,8 +97,8 @@ require_once('normalizer.php');
 <div id="feeds">
 	<h2><?php echo gettext('Gallery Feeds'); ?></h2>
 	<ul>
-		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss.php" class="i"><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Photos'); ?></a></li>
-		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss-comments.php" class="i"><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Comments'); ?></a></li>
+		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss.php" class="i"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/rss.gif" /> <?php echo gettext('Photos'); ?></a></li>
+		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss-comments.php" class="i"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/rss.gif" /> <?php echo gettext('Comments'); ?></a></li>
 	</ul>
 </div>
 

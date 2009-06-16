@@ -1284,7 +1284,7 @@ function printNewsCategoryURL($before='',$catlink='') {
  */
 function getNewsIndexURL() {
 	if(getOption("zenpage_zp_index_news")) {
-		return getGalleryIndexURL();
+		return getGalleryIndexURL(false);
 	} else {
 		return rewrite_path(urlencode(ZENPAGE_NEWS), "/index.php?p=".ZENPAGE_NEWS);
 	}
@@ -2300,7 +2300,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 		if($_zp_gallery_page == "index.php") {
 			echo "<li $css_class_topactive>".$indexname."</li>";
 		} else {
-			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
+			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL(true))."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
 		}
 	}
 	$baseindent = max(1,count(explode("-", getPageSortorder())));

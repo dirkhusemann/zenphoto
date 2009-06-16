@@ -2,9 +2,8 @@
 
 // force UTF-8 Ø
 
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
-
-if (!file_exists(dirname(__FILE__) . '/' . ZENFOLDER . "/zp-config.php")) {
+require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
+if (!file_exists(dirname(__FILE__) . '/' . DATA_FOLDER . "/zp-config.php")) {
 	$dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 	if (substr($dir, -1) == '/') $dir = substr($dir, 0, -1);
 	$location = "http://". $_SERVER['HTTP_HOST']. $dir . "/" . ZENFOLDER . "/setup.php";
@@ -17,6 +16,11 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
+
+/**
+ * Invoke the controller to handle requests
+ */
+require_once(dirname(__FILE__). "/".ZENFOLDER.'/controller.php');
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
@@ -80,7 +84,7 @@ if (isset($_GET['p'])) {
 if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 	foreach (getEnabledPlugins() as $extension=>$loadtype) {
 		$_zp_loaded_plugins[] = $extension;
-		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+		require_once(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
 	}
 
 	// Zenpage automatic hitcounter update support
@@ -121,7 +125,12 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 		$theme = setupTheme();
 	}
 	$errpage = THEMEFOLDER.'/'.internalToFilesystem($theme).'/404.php';
-	if (DEBUG_404) debugLogArray("404 error: album=$album; image=$image; theme=$theme", $_SERVER);
+	if (DEBUG_404) {
+		debugLog("404 error: album=$album; image=$image; theme=$theme");
+		debugLogArray('$_SERVER', $_SERVER);
+		debugLogArray('$_REQUEST', $_REQUEST);
+		debugLog('');
+	}
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {

@@ -4,14 +4,14 @@
  * This is intended as an example only.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.1.0
+ * @version 1.1.1
  * @package plugins
  */
 
 $plugin_is_filter = 5;
 $plugin_description = gettext("An image crop tool for the admin toolbox on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---crop_image.php.html";
 
 if (!isset($_REQUEST['performcrop'])) {
@@ -26,7 +26,7 @@ function toolbox_crop_image($albumname, $imagename) {
 		if (isImagePhoto($image)) {
 			?>
 			<li>
-			<a href="<?php echo WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER; ?>filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
+			<a href="<?php echo WEBPATH."/".ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
 					&amp;i=<?php echo urlencode($imagename); ?>&amp;performcrop=frontend "><?php echo gettext("Crop image"); ?></a>
 			</li>
 			<?php
@@ -41,7 +41,7 @@ function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
 	if (isImagePhoto($image)) {
 		$output .= 
 			'<p class="buttons" >'."\n".
-					'<a href="'.WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER.'filter-crop_image.php?a='.pathurlencode($albumname)."\n".
+					'<a href="'.WEBPATH."/".ZENFOLDER . '/'.PLUGIN_FOLDER.'/filter-crop_image.php?a='.pathurlencode($albumname)."\n".
 							'&amp;i='.urlencode($imagename).'&amp;performcrop=backend&amp;subpage='.$subpage.'&amp;tagsort='.$tagsort.'">'."\n".
 							'<img src="images/shape_handles.png" alt="" />'.gettext("Crop image").'</a>'."\n".
 			'</p>'."\n".
