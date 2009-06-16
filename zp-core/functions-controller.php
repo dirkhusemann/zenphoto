@@ -101,7 +101,11 @@ function zp_handle_comment() {
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
 		if ((in_context(ZP_ALBUM) || in_context(ZP_ZENPAGE_NEWS_ARTICLE) || in_context(ZP_ZENPAGE_PAGE))) {
-			$p_name = sanitize($_POST['name'],3);
+			if (isset($_POST['name'])) {
+				$p_name = sanitize($_POST['name'],3);
+			} else {
+				$p_name = '';
+			}
 			if (isset($_POST['email'])) {
 				$p_email = sanitize($_POST['email'], 3);
 			} else {
@@ -112,7 +116,11 @@ function zp_handle_comment() {
 			} else {
 				$p_website = "";
 			}
-			$p_comment = sanitize($_POST['comment'], 1);
+			if (isset($_POST['comment'])) {
+				$p_comment = sanitize($_POST['comment'], 1);
+			} else {
+				$p_comment = '';
+			}
 			$p_server = sanitize($_SERVER['REMOTE_ADDR'], 3);
 			if (isset($_POST['code'])) {
 				$code1 = sanitize($_POST['code'], 3);

@@ -2,6 +2,10 @@
 	display: block;
 }
 
+#addcomment {
+  display: block;
+}	
+
 #showcomments {
   display: none;
 }
@@ -9,5 +13,5 @@
   display: inline;
 }
 #addcommentbutton {
-  display: block;
+  display: none;
 }

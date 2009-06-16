@@ -1,4 +1,3 @@
-					<h3><?php echo gettext("Add a comment:"); ?></h3>
 					<form id="commentform" action="#" method="post">
 						<input type="hidden" name="comment" value="1" />
 						<input type="hidden" name="remember" value="1" />
@@ -218,4 +217,3 @@
 						<br />
 						<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" />
 					</form>
-		

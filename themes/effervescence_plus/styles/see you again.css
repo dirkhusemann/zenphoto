@@ -222,8 +222,62 @@ border: none;
 font-weight: bold;
 }
 
+/* comments
+------------------------------ */
+#commentbox {
+	background: #6e9caa; /*color around the main div in index.*/
+	width: 650px;
+	margin: 0 auto;
+  color: #ECEBE1; /*textbox labels*/
+	font-size: 12px;
+	padding: 10px;
+}
+#commentcontent {
+	padding: 10px;
+}
+#commentcount {
+background: #a56faf;/* background for commentheader (where it says "X Comments")*/
+height: 40px;
+padding: 10px;
+margin: 0 auto;
+width: 610px;
+}
+
+#comments {
+clear: both;
+display: block;
+margin: 0 auto; 
+width: 610px; 
+text-align: left;
+}
+
+#commententry {
+clear: both;
+display: block;
+margin: 0 auto; 
+text-align: left;
+width: 610px;
+}
+#commentcontent h3 {
+	padding: 10px;
+	background: #a56faf;
+}
+
+.comment {
+margin-bottom: 20px;
+}
+
+.commentinfo {
+color: #ECEBE1; /*datum of a comment*/
+font-style: italic;
+border-bottom: 1px solid #a56faf ;  /*seperator between comment info and comment text.*/
+padding: 5px 0 3px;
+}
 /* Comment Authors  --- */
 .commentinfo h4 {
+display: inline;
+font-style: italic;
+font-weight: bold;
 font: 14px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
 color: #98958f; /*the author name*/
 }
@@ -243,6 +297,40 @@ color: #ECEBE1; /*links in commentingo (EDIT-link)*/
 border: none;
 font-style: normal; 
 font-weight: bold;
+}
+.commenttext {
+margin-top: 5px;
+padding: 0 5px;
+color: #ECEBE1; /*comment text color*/
+}
+/* Comment Form
+------------------------------ */
+#commentform {
+margin-top: 10px;
+}
+#commentbox input {
+font: 12px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
+border: none;
+padding: 2px;
+color: #333333; /*Color of text in textbox*/
+}
+#commentbox input:focus {
+background: #FFFFFF;  /*Color of textbox when focused*/
+}
+#commentbox textarea {
+font: 12px/16px Arial, Helvetica, Tahoma, Verdana, sans-serif;
+background: #fafaf9; /*Color of textarea when unfocused*/
+border-top: 1px solid #0E1433 ;
+border-left: 1px solid #0E1433 ;
+border-right: 1px solid #0E1433 ;
+border-bottom: 1px solid #272E46;
+color: #333333; /*textcolor when writing a comment*/
+margin: 5px 0 5px 0;
+padding: 3px;
+width: 600px;
+}
+#commentbox textarea:focus {
+background: #FFFFFF; /*Color of textarea when focused*/
 }
 
 /* Links  --- */
@@ -387,43 +475,6 @@ text-decoration: none;
 #images {
 padding: 25px 0 0 10px;
 }
-
-/* Comment Form
------------------------------- */
-#commentbox {
-	width: 650px;
-	margin: 0 auto;
-    color: #ECEBE1; /*textbox labels*/
-	font-size: 12px;
-}
-#commentform {
-margin-top: 10px;
-}
-#commentbox input {
-font: 12px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
-border: none;
-padding: 2px;
-color: #7AB89F; /*Color of text in textbox*/
-}
-#commentbox input:focus {
-background: #fafaf9; /*Color of textbox when focused*/
-}
-#commentbox textarea {
-font: 12px/16px Arial, Helvetica, Tahoma, Verdana, sans-serif;
-background: #fff; /*Color of textarea when unfocused*/
-border-top: 1px solid #b1aea7;
-border-right: 1px solid #b1aea7;
-border-bottom: 1px solid #c4c2bb;
-border-left: 1px solid #c4c2bb;
-color: #7AB89F; /*textcolor when writing a comment*/
-margin: 5px 0 5px 0;
-padding: 3px;
-width: 600px;
-}
-#commentbox textarea:focus {
-background: #fafaf9; /*Color of textarea when focused*/
-}
-
 
 /* Page Navigation
 ------------------------------ */
@@ -636,52 +687,9 @@ line-height: 200%;
 color: #6e9caa; /*disabled next/prev in single image view*/
 }
 
-
-/* Bottom Separator
------------------------------- */
-#bottomheadings {
-background: #a56faf; /* background for commentheader (where it says "X Comments")*/
-height: 40px;
-}
-
-.bottomfull {
-padding: 10px 10px 0 10px;
-margin: 0 auto;
-width: 610px;
-}
-
-/* Comments 
------------------------------- */
-#comments {
-clear: both;
-display: block;
-margin: 0 auto; 
-width: 650px; 
-text-align: left;
-}
-
 .error { 
 color: #950b42;  /*Error message when a visitor forgets a field.*/
 font-weight: bold; 
-}
-.comment {
-margin-bottom: 20px;
-}
-.commentinfo h4 {
-display: inline;
-font-style: italic;
-font-weight: bold;
-}
-.commentinfo {
-color: #fff; /*datum of a comment*/
-font-style: italic;
-border-bottom: 1px solid #a56faf;  /*seperator between comment info and comment text.*/
-padding: 5px 0 3px 0;
-}
-.commenttext {
-margin-top: 5px;
-padding: 0 5px;
-color: #fff; /*comment text color*/
 }
 
 

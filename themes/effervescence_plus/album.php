@@ -292,9 +292,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 								if (function_exists('printCommentForm')) {
 									?>
 									<div id="commentbox">
-										<div id="content">
 										<?php printCommentForm(); ?>
-										</div>
 									</div>
 									<?php
 								}

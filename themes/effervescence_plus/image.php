@@ -123,9 +123,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	if ($show && function_exists('printCommentForm')) {
 		?>
 		<div id="commentbox">
-			<div id="content">
 			<?php printCommentForm(); ?>
-			</div>
 		</div>
 		<?php
 	}

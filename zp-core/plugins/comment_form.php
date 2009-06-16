@@ -238,9 +238,10 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
 
 /**
  * prints a form for posting comments
+ * @param bool $showcomments defaults to true for showing list of comments
  *
  */
-function printCommentForm() {
+function printCommentForm($showcomments=true) {
 	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin;
 	switch ($_zp_gallery_page) {
 		case 'album.php':
@@ -267,48 +268,55 @@ function printCommentForm() {
 			return;
 			break;
 	}
+	$arraytest = '/^a:[0-9]+:{/'; // this screws up Eclipse's brace count!!!
 	?>
 <!-- printCommentForm -->
 	<!-- Headings -->
-	<div id="bottomheadings">
-		<div class="bottomfull">
+	<?php
+	if ($showcomments) {
+		?>
+		<div id="commentcount">
 			<?php 
 			$num = getCommentCount(); 
 			switch ($num) {
 				case 0:
-					echo gettext('<h3>No Comments</h3>');
-					break;
-				case 1:
-					echo gettext('<h3>1 Comment</h3>');
+					echo '<h3>'.gettext('No Comments').'</h3>';
 					break;
 				default:
-					printf(gettext('<h3>%u Comments</h3>'), $num);
+					echo '<h3>'.sprintf(ngettext('%u Comment','%u Comments',$num), $num).'</h3>';
 			}
 			?>
 		</div>
-	</div>
-
+		<?php
+	}
+	?>
 	<!-- Wrap Comments -->
-	<div id="main3">
-		<div id="comments">
-			<?php while (next_comment()):  ?>
-				<div class="comment">
-					<div class="commentinfo">
-						<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
+	<div id="commentcontent">
+		<?php
+		if ($showcomments) {
+		?>
+			<div id="comments">
+				<?php while (next_comment()):  ?>
+					<div class="comment">
+						<div class="commentinfo">
+							<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
+						</div>
+						<div class="commenttext">
+							<?php echo getCommentBody();?>
+						</div>
 					</div>
-					<div class="commenttext">
-						<?php echo getCommentBody();?>
-					</div>
-				</div>
-			<?php endwhile; ?>
-		</div>
+				<?php endwhile; ?>
+			</div>
+			<?php
+		}
+		?>
 
 		<!-- Comment Box -->
 		<?php
 		if ($comments_open) {
 			$stored = array_merge(getCommentStored(),array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>''));
 			$raw = $stored['custom'];
-			if (preg_match('/^a:[0-9]+:{/', $raw)) {
+			if (preg_match($arraytest, $raw)) {
 				$custom = unserialize($raw);
 				foreach ($custom as $key=>$value) {
 					if (!empty($value)) $stored[$key] = $value;
@@ -321,7 +329,7 @@ function printCommentForm() {
 
 			if (zp_loggedin()) {
 				$raw = $_zp_current_admin['custom_data'];
-				if (preg_match('/^a:[0-9]+:{/', $raw)) {
+				if (preg_match($arraytest, $raw)) {
 					$address = unserialize($raw);
 					foreach ($address as $key=>$value) {
 						if (!empty($value)) {
@@ -357,17 +365,24 @@ function printCommentForm() {
 			if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
 				echo gettext('Only registered users may post comments.');
 			} else {
-				require_once($form);
+				?>
+				<h3><?php echo gettext("Add a comment:"); ?></h3>
+				<div id="commententry">
+					<?php
+					require_once($form);
+					?>
+				</div>
+				<?php
 			}
 		} else {
-		?>
-			<div id="commentbox">
+			?>
+			<div id="commententry">
 				<h3><?php echo gettext('Closed for comments.');?></h3>
 			</div>
-		<?php
+			<?php
 		}
-		?>
-	</div>
+	?>
+</div>
 <?php 
 if (getOption('comment_form_rss')) printRSSLink("Comments-image","",gettext("Subscribe to comments"),"");
 ?>

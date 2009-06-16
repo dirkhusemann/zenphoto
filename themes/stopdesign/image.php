@@ -11,8 +11,6 @@ require_once('normalizer.php');
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript">var blogrelurl = "<?php echo $_zp_themeroot ?>";</script>
-	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/rememberMe.js"></script>
-	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
 	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js"></script>
 	<?php
 		printRSSHeaderLink('Gallery','Gallery RSS');
@@ -76,16 +74,35 @@ require_once('normalizer.php');
 			<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
 			<div class="main">
-				<?php if (function_exists('printCommentForm')) { ?>
-					<!-- BEGIN #commentblock -->
+				<?php
+				if (function_exists('printCommentForm')) { 
+					if (getCommentErrors()) {
+						$errors = 1;
+						?>
+						<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />
+						<?php
+					} else {
+						$errors = 0;
+						?>
+						<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-hide.css" />
+						<?php
+					}
+				?>
+				<script type="text/javascript">
+					var initstate = <?php echo $errors; ?>;
+				</script>
+				<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
+				<!-- BEGIN #commentblock -->
 					<div id="commentblock">
-					<?php printCommentForm(); ?>
+					<?php printCommentForm(false); ?>
 					</div>
-					<!-- END #commentblock -->
-					<?php }
-				} ?>
+				<!-- END #commentblock -->
+				<?php
+				}
+			}
+			?>
 
-				</div>
+			</div>
 
 				<div id="prevnext">
 					<?php

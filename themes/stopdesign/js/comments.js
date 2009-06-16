@@ -3,14 +3,6 @@
 The hide/show code is based on an example from the article "Unobtrusive show/hide behavior reloaded" by Bobby van der Sluis
 URL: http://www.bobbyvandersluis.com/articles/unobtrusiveshowhide.php
 */
-if (document.getElementById) {
-  if (getCookie('showcomments') != 1) {
-    document.write('<link rel="stylesheet" type="text/css" href="' + blogrelurl + '/css/comments-hide.css" />');
-  } else {
-    document.write('<link rel="stylesheet" type="text/css" href="' + blogrelurl + '/css/comments-show.css" />');
-  }
-  window.onload = initCommentState;
-}
 
 // Hide all toggleable sections with JavaScript for the highly improbable case that CSS is disabled
 // Note that in this case the 'flash of visible content' still will occur
@@ -18,7 +10,7 @@ function initCommentState() {
   var showBtn = document.getElementById('showcomments');
   var hideBtn = document.getElementById('hidecomments');
   if ((showBtn) && (hideBtn)) {
-    if (getCookie('showcomments') != 1) {
+    if (initstate != 1) {
       document.getElementById('comments').style.display = 'none';
       document.getElementById('hidecomments').style.display = 'none';
       document.getElementById('showcomments').style.display = 'inline';
@@ -39,8 +31,13 @@ function initCommentState() {
   var addComment = document.getElementById('addcomment');
   var addCommentButton = document.getElementById('addcommentbutton');
 
-  addComment.style.display = 'none';
-  addCommentButton.style.display = 'block';
+	if (initstate) {
+	  addComment.style.display = 'block';
+	  addCommentButton.style.display = 'none';
+	} else {
+	  addComment.style.display = 'none';
+	  addCommentButton.style.display = 'block';
+  }
   addCommentButton.onclick = function() {
     addComment.style.display = 'block';
     addCommentButton.style.display = 'none';
