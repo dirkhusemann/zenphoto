@@ -44,11 +44,49 @@ class register_user_options {
 										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified.")),
 									gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
 										'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
+									gettext('User registration page') => array('key' => 'user_registration_page', 'type' => OPTION_TYPE_CUSTOM, 
+										'desc' => gettext('If this option is not empty, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
 									gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX, 
 										'desc' => gettext('If checked, captcha validation will be required for user registration.'))
 									);
 	}
 	function handleOption($option, $currentValue) {
+		global $gallery;
+		?>
+		<table>
+			<tr>
+				<td style="margin:0; padding:0"><?php echo gettext('script'); ?></td>
+				<td style="margin:0; padding:0"> 
+					<select id="user_registration_page" name="user_registration_page">
+						<option value=''>
+						<?php
+						$curdir = getcwd();
+						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$gallery->getCurrentTheme().'/';
+						chdir($root);
+						$filelist = safe_glob('*.php');
+						$list = array();
+						foreach($filelist as $file) {
+							$list[] = str_replace('.php', '', filesystemToInternal($file));
+						}
+						$standardlist = array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
+						if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
+						$list = array_diff($list, $standardlist);
+						generateListFromArray(array(getOption('user_registration_page')), $list, false, false);
+						chdir($curdir);
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td style="margin:0; padding:0"><?php echo gettext('Link text'); ?></td>
+				<td style="margin:0; padding:0"><?php print_language_string_list(getOption('user_registration_text'), 'user_registration_text', false, NULL, '', true); ?></td>
+			</tr>
+			<tr>
+				<td style="margin:0; padding:0"><?php echo gettext('Hint text'); ?></td>
+				<td style="margin:0; padding:0"><?php print_language_string_list(getOption('user_registration_tip'), 'user_registration_tip', false, NULL, '', true); ?></td>
+			</tr>
+		</table>
+		<?php
 	}
 }
 
