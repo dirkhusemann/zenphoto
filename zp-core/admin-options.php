@@ -2198,7 +2198,7 @@ if (empty($alterrights)) {
 						$standardlist = array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
 						if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
 						$list = array_diff($list, $standardlist);
-						generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list, false, false);
+						generateListFromArray(array(getOption('custom_index_page')), $list, false, false);
 						chdir($curdir);
 						?>
 					</select>
@@ -2217,7 +2217,7 @@ if (empty($alterrights)) {
 				<td colspan="2" align="left">
 					<?php echo gettext('<strong>Custom theme options</strong>') ?>
 				</td>
-				<td><em><?php echo gettext('The following are options specifically implemented by the theme.'); ?></em></td>
+				<td><em><?php printf(gettext('The following are options specifically implemented by %s.'),$theme['name']); ?></em></td>
 			</tr>
 				<?php
 					customOptions($optionHandler, '', $album);

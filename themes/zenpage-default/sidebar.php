@@ -45,25 +45,39 @@
 		<?php } ?>
 	</ul>
 </div>
-<?php if(function_exists("printUserLogout") AND getOption("loginform")) { ?>
-<div class="menu">
-<?php if($_zp_loggedin) { ?>
-<ul>
-<li>
-<?php }
-if(getOption("loginform")) {
-	$showform = TRUE;
-} else {
-	$showform = FALSE;
-}
-printUserLogout("","",getOption("loginform"));
-if($_zp_loggedin) { ?>
-</li></ul>
-<?php }
+	<?php
+	if (function_exists('printContactForm')) {
+		?>
+		<div class="menu">
+			<ul>
+				<li><?php	printCustomPageURL(gettext('Contact us'), 'contact', '', ''); ?></li>
+				</ul>
+			</div>
+		<?php
+	}
+	?>
+	<?php
+	if(function_exists("printUserLogout")) {
+		?>
+		<?php
+		if (zp_loggedin()) {
+			?>
+			<div class="menu">
+				<ul>
+					<li>
+			<?php
+		}
+		printUserLogout("","");
+		if (zp_loggedin()) {
+			?>
+				</li>
+			</ul>
+		</div>
+		<?php
+		}
+	}
+	?>
+<?php if (function_exists('printLanguageSelector')) {
+	printLanguageSelector("langselector");
+	}
 ?>
-</div>
-<?php }	?>
-
-<?php if (function_exists('printLanguageSelector')) { ?>
- <?php printLanguageSelector("langselector"); ?>
-<?php } ?>
