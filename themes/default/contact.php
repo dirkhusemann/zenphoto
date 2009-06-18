@@ -5,7 +5,6 @@
 	<?php zenJavascript(); ?>
 	<title><?php echo getBareGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
-	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 </head>
 
 <body>
@@ -13,7 +12,11 @@
 <div id="main">
 
 	<div id="gallerytitle">
-		<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?></h2>
+		<h2>
+		<?php printHomeLink('', ' | '); ?>
+		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index'); ?>"><?php echo gettext('Gallery Index');?></a> | 
+		<?php echo gettext('Contact us') ?>
+		</h2>
 	</div>
 
 <h3><?php echo gettext('Please use the form below to contact us.') ?></h3>
@@ -21,16 +24,10 @@
 <?php  printContactForm();  ?>
 
 </div>
-<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
 <?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 
+<div id="credit">
 <?php printZenphotoLink(); ?>
-<?php
-if (function_exists('printUserLogout')) {
-	printUserLogout(" | ");
-}
-?>
 </div>
 
 <?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>

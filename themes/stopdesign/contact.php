@@ -18,23 +18,20 @@ require_once('normalizer.php');
 </head>
 
 <body class="archive">
-	<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
-
-<div id="content">
-
-	<h1><?php printGalleryTitle(); echo ' | '.gettext('Contact'); ?></h1>
-
-<h3><?php echo gettext('Please use the form below to contact us.') ?></h3>
-
-<?php  printContactForm();  ?>
-
+	<?php echo getGalleryTitle(); ?>
+	<div id="content">
+		<h1><?php printGalleryTitle(); echo ' | '.gettext('Contact'); ?></h1>
+		<div class="galleries">
+		<h2><?php echo gettext('Please use the form below to contact us.') ?></h2>
+		<?php  printContactForm();  ?>
+	</div>
 </div>
 
 <p id="path">
 	<?php printHomeLink('', ' > '); ?>
 	<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
 	<?php echo getGalleryTitle();?> 
-	<?php echo gettext('Gallery Archive'); ?>
+	<?php echo gettext('Contact Form'); ?>
 </p>
 
 <div id="footer">

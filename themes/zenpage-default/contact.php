@@ -25,6 +25,7 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 	</div>
 
 	<div id="content-left">	
+	<h2><?php echo gettext('Please use the form below to contact us.') ?></h2>
 	<?php
 	printContactForm();
 	?> 
