@@ -107,6 +107,7 @@ themes/example/theme_description.php
 themes/example/zen.css
 themes/stopdesign/404.php
 themes/stopdesign/album.php
+themes/stopdesign/comment.php
 themes/stopdesign/comment_form.php
 themes/stopdesign/css/comments-hide.css
 themes/stopdesign/css/comments-show.css

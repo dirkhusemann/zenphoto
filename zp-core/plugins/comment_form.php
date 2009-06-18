@@ -241,8 +241,9 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
  * @param bool $showcomments defaults to true for showing list of comments
  *
  */
-function printCommentForm($showcomments=true) {
+function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin;
+	if (is_null($addcommenttext)) $addcommenttext = gettext('Add a comment:');
 	switch ($_zp_gallery_page) {
 		case 'album.php':
 			if (!getOption('comment_form_albums')) return;
@@ -271,32 +272,23 @@ function printCommentForm($showcomments=true) {
 	$arraytest = '/^a:[0-9]+:{/'; // this screws up Eclipse's brace count!!!
 	?>
 <!-- printCommentForm -->
-	<!-- Headings -->
-	<?php
-	if ($showcomments) {
-		?>
-		<div id="commentcount">
-			<?php 
+	<!-- Wrap Comments -->
+	<div id="commentcontent">
+		<?php
+		if ($showcomments) {
 			$num = getCommentCount(); 
 			switch ($num) {
 				case 0:
-					echo '<h3>'.gettext('No Comments').'</h3>';
+					echo '<h3>'.gettext('No Comments').'</h3><br />';
 					break;
 				default:
 					echo '<h3>'.sprintf(ngettext('%u Comment','%u Comments',$num), $num).'</h3>';
 			}
 			?>
-		</div>
-		<?php
-	}
-	?>
-	<!-- Wrap Comments -->
-	<div id="commentcontent">
-		<?php
-		if ($showcomments) {
-		?>
 			<div id="comments">
-				<?php while (next_comment()):  ?>
+				<?php
+				while (next_comment()) {
+					?>
 					<div class="comment">
 						<div class="commentinfo">
 							<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
@@ -305,7 +297,9 @@ function printCommentForm($showcomments=true) {
 							<?php echo getCommentBody();?>
 						</div>
 					</div>
-				<?php endwhile; ?>
+					<?php
+				}
+				?>
 			</div>
 			<?php
 		}
@@ -365,8 +359,12 @@ function printCommentForm($showcomments=true) {
 			if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
 				echo gettext('Only registered users may post comments.');
 			} else {
+				if (!empty($addcommenttext)) {
+					?>
+					<h3><?php echo $addcommenttext; ?></h3>
+					<?php
+				}
 				?>
-				<h3><?php echo gettext("Add a comment:"); ?></h3>
 				<div id="commententry">
 					<?php
 					require_once($form);

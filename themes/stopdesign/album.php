@@ -145,6 +145,13 @@ require_once('normalizer.php');
 			<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?>
 		</p>
 
+		<div class="main">
+			<?php
+			if (function_exists('printCommentForm')) { 
+				require_once('comment.php');
+			}
+			?>
+		</div>
 		<div id="footer">
 			<hr />
 			<p>

@@ -76,28 +76,7 @@ require_once('normalizer.php');
 			<div class="main">
 				<?php
 				if (function_exists('printCommentForm')) { 
-					if (getCommentErrors()) {
-						$errors = 1;
-						?>
-						<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />
-						<?php
-					} else {
-						$errors = 0;
-						?>
-						<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-hide.css" />
-						<?php
-					}
-				?>
-				<script type="text/javascript">
-					var initstate = <?php echo $errors; ?>;
-				</script>
-				<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
-				<!-- BEGIN #commentblock -->
-					<div id="commentblock">
-					<?php printCommentForm(false); ?>
-					</div>
-				<!-- END #commentblock -->
-				<?php
+					require_once('comment.php');
 				}
 			}
 			?>

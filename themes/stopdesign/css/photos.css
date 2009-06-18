@@ -916,6 +916,12 @@ the JavaScript uses to hide/show comments
   font:140% "Trebuchet MS",Verdana,Sans-serif;
   color:#974;
   }
+#commententry h3{
+  margin:.5em 0 .75em;
+  font:145% "Trebuchet MS",Verdana,Sans-serif;
+  color:#974;
+	text-align:center;
+}
 
 
 /* =Comment photo
