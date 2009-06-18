@@ -136,6 +136,7 @@ require_once('normalizer.php');
 						<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 				<?php } ?>
 				</p>
+				<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
 			</div>
 		</div>
 

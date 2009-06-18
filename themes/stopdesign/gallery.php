@@ -113,6 +113,7 @@ require_once('normalizer.php');
 
 <div id="footer">
 	<hr />
+	<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
 	<p>
 		<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign');?>.
 		<?php printZenphotoLink(); ?>

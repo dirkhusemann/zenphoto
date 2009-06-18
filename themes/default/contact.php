@@ -13,30 +13,12 @@
 <div id="main">
 
 	<div id="gallerytitle">
-		<?php if (getOption('Allow_search')) {  printSearchForm(''); } ?>
 		<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?></h2>
 	</div>
 
-		<div id="padbox">
+<h3><?php echo gettext('Please use the form below to contact us.') ?></h3>
 
-		<div id="albums">
-			<?php while (next_album()): ?>
-			<div class="album">
-						<div class="thumb">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getAnnotatedAlbumTitle();?>"><?php printAlbumThumbImage(getAnnotatedAlbumTitle()); ?></a>
- 						 </div>
-						<div class="albumdesc">
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
- 							<small><?php printAlbumDate(""); ?></small>
-					<p><?php printAlbumDesc(); ?></p>
-				</div>
-				<p style="clear: both; "></p>
-			</div>
-			<?php endwhile; ?>
-		</div>
-		<br clear="all" />
-		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
-	</div>
+<?php  printContactForm();  ?>
 
 </div>
 <?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>

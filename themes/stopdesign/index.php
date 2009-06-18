@@ -190,10 +190,12 @@ require_once('normalizer.php');
 		</p>
 	<div id="footer">
 		<hr />
+		<?php	if (function_exists('printContactForm')) { echo '<p>'; printCustomPageURL(gettext('Contact us'), 'contact', '', ''); echo '</p>'; }	?>
+		<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
 		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>
 		<p>
 			<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.'); ?>
-		<?php printZenphotoLink(); ?>
+			<?php printZenphotoLink(); ?>
 		</p>
 	</div>
 

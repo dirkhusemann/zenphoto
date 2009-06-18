@@ -27,6 +27,11 @@
 
 	<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | 
 	<?php printZenphotoLink(); ?>
+		<?php
+	if (function_exists('printUserLogout')) {
+		printUserLogout(" | ");
+	}
+	?>
 </div>
 
 </div>

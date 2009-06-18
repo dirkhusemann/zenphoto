@@ -65,6 +65,11 @@
 
 <div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 
 <?php printZenphotoLink(); ?>
+<?php
+if (function_exists('printUserLogout')) {
+	printUserLogout(" | ");
+}
+?>
 </div>
 
 <?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>

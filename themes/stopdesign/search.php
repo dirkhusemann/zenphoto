@@ -161,6 +161,7 @@ require_once('normalizer.php');
 
 	<div id="footer">
 		<hr />
+		<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
 		<p>
 		<?php printZenphotoLink(); ?>
 		</p>

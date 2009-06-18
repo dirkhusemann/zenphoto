@@ -74,9 +74,15 @@
 		<?php } ?>
 
 		<div id="credit">
-		<?php printRSSLink('Gallery','','RSS', ' | '); ?>
-		<?php printZenphotoLink(); ?>
-		 | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?><br />
+			<?php printRSSLink('Gallery','','RSS', ' | '); ?>
+			<?php printZenphotoLink(); ?>
+			 | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
+			<?php
+			if (function_exists('printUserLogout')) {
+				printUserLogout(" | ");
+			}
+			?>
+			<br />
 			<?php printf(gettext("%u seconds"), round((array_sum(explode(" ",microtime())) - $startTime),4)); ?>
 		</div>
 </div>

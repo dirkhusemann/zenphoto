@@ -11,36 +11,21 @@
 <div id="main">
 		<div id="gallerytitle">
 			<h2><?php printHomeLink('', ' | '); echo getGalleryTitle();?></h2>
-			<?php	if (getOption('Allow_search')) {  printSearchForm(); } ?>
 		</div>
+		
+		<h3><?php echo gettext('Please use the form below to contact us.') ?></h3>
+		
+		<?php  printContactForm();  ?>
 
-		<hr />
-		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 
-		<div id="albums">
-			<?php while (next_album()): ?>
-
- 			<div class="album">
-					<div class="albumthumb">
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getAnnotatedAlbumTitle();?>">
-						<?php printAlbumThumbImage(getAnnotatedAlbumTitle()); ?></a>
-						</div>
-					<div class="albumtitle">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getAnnotatedAlbumTitle();?>">
-						<?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?>
-						</div>
-					<div class="albumdesc"><?php printAlbumDesc(); ?></div>
-			</div>
-			<hr />
-
-			<?php endwhile; ?>
-		</div>
-		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
+		<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
+
+		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
+
 		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | 
 		<?php printZenphotoLink(); ?>
 		 | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
-		<?php	if (function_exists('printContactForm')) { echo ' | '; printCustomPageURL(gettext('Contact us'), 'contact', '', ''); } ?>
 		<?php
 		if (function_exists('printUserLogout')) {
 			printUserLogout(' | ', '', true);
