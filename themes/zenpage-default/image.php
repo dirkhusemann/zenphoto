@@ -90,7 +90,6 @@
 		<?php } ?>
 	
 		<?php } ?>
-</div>
 </div><!-- content-left -->
 					
 <div id="sidebar">
