@@ -47,20 +47,9 @@ $validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Zenpage - A CMS plugin for ZenPhoto</generator>
-<?php
-  $admin = getAdministrators();
-	$admin = array_shift($admin);
-	$adminname = $admin['user'];
-	$adminemail = $admin['email'];
-?>
-<managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
-<webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 <?php 
-
 $items = getOption("zenpage_rss_items"); // # of Items displayed on the feed
-
 db_connect();
-
 switch ($option) {
 	case "category":
 		$latest = getLatestNews($items,"none",$catlink); 	
@@ -72,7 +61,6 @@ switch ($option) {
 		$latest = getLatestNews($items,"with_latest_images_date");
 		break;
 } 
-
 $count = "";
 foreach($latest as $item) {
 	$count++;

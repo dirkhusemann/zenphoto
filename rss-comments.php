@@ -49,15 +49,6 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPhoto Comment RSS Generator</generator>
 <?php
-	$admin = getAdministrators();
-	$admin = array_shift($admin);
-	$adminname = $admin['user'];
-	$adminemail = $admin['email'];
-?>
-<managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
-<webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
-
-<?php
 $comments = getLatestComments($items);
 foreach ($comments as $comment) {
 	if($comment['anon'] === "0") {

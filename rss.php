@@ -78,14 +78,6 @@ if(getOption('mod_rewrite')) {
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPhoto RSS Generator</generator>
 	<?php
-	$admins = getAdministrators();
-	$admin = array_shift($admins);
-	$adminname = $admin['user'];
-	$adminemail = $admin['email'];
-	?>
-<managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
-<webMaster>	<?php echo "$adminemail ($adminname)"; ?></webMaster>
-	<?php
 	if ($rssmode == "albums") {
 		$result = getAlbumStatistic($items,getOption("feed_sortorder_albums"));
 	} else {

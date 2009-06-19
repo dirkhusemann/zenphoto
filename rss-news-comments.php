@@ -43,15 +43,6 @@ $items = getOption("zenpage_rss_items");
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPage - A CMS plugin for Zenphoto</generator>
 <?php
-  $admin = getAdministrators();
-	$admin = array_shift($admin);
-	$adminname = $admin['user'];
-	$adminemail = $admin['email'];
-?>
-<managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
-<webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
-
-<?php
 $items = getOption("zenpage_rss_items");
 
 db_connect();
