@@ -111,7 +111,7 @@ $backgroundImagePath="";
 </div> <!-- footerlinks -->
 
 
-<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

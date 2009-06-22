@@ -46,6 +46,6 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 </div><!-- content -->
 
 </div><!-- main -->
-<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 </body>
 </html>

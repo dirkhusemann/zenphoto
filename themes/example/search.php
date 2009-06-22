@@ -96,7 +96,7 @@ $firstPageImages = normalizeColumns(1, 7);
 	</div>
 </div>
 
-<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

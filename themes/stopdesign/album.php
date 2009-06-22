@@ -159,6 +159,6 @@ require_once('normalizer.php');
 			<?php printZenphotoLink(); ?>
 			</p>
 		</div>
-		<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+		<?php printAdminToolbox(); ?>
 </body>
 </html>

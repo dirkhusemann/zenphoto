@@ -90,6 +90,6 @@ if(is_GalleryNewsType()) {
 </div><!-- content -->
 
 </div><!-- main -->
-<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 </body>
 </html>

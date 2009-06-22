@@ -50,7 +50,7 @@ if (function_exists('printUserLogout')) {
 <?php printZenphotoLink(); ?>
 </div>
 
-<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>
