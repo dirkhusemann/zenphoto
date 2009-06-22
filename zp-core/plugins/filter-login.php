@@ -1,7 +1,11 @@
 <?php
 /**
  * Logs admin login attempts
- * This is an example filter for 'admin_login_attempt' 
+ * This is an example filter for 'admin_login_attempt'
+ * 
+ * Note: Your server must be configured so that your php scripts run as the owner of the files 
+ * they create otherwise this script will fail due when file security on the server blocks it
+ * from writing to the log file.
  *  
  * @author Stephen Billard (sbillard)
  * @version 1.0.1
@@ -73,11 +77,13 @@ class admin_login {
  * @param string $user
  * @param string $pass
  * @param string $name
+ * @param string $ip
  * @param string $type
  */
-function loginLogger($success, $user, $pass, $name, $type) {
-	$f = fopen(dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/zenphoto_security_log.txt', 'a');
+function loginLogger($success, $user, $pass, $name, $ip, $type) {
+	$f = fopen($file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/zenphoto_security_log.txt', 'a');
 	$message = date('Y-m-d H:i:s')."\t";
+	$message .= $ip."\t";
 	$message .= $type."\t";
 	$message .= $user."\t";
 	$message .= $pass."\t";
@@ -88,6 +94,7 @@ function loginLogger($success, $user, $pass, $name, $type) {
 	}
 	fwrite($f, $message . "\n");
 	fclose($f);
+	chmod($file, 0600);
 }
 
 /**
@@ -111,7 +118,7 @@ function adminLoginLogger($success, $user, $pass) {
 	} else {
 		$name = '';
 	}
-	loginLogger($success, $user, $pass, $name, '[admin]');
+	loginLogger($success, $user, $pass, $name, sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('[admin]'));
 	return $success;
 }
 
@@ -125,7 +132,7 @@ function adminLoginLogger($success, $user, $pass) {
  * @return bool
  */
 function guestLoginLogger($success, $user, $pass) {
-	loginLogger($success, $user, $pass, '', gettext('[guest]'));
+	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('[guest]'));
 	return $success;
 }
 
