@@ -253,6 +253,10 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 	// slideshow display section
 	switch($option) {
 		case "jQuery":
+			//TODO: This is really an issue as there may be conflicts with some other player. But for now,
+			//      At least we need to load the swfojbect.js script as the addPluginScript() function is 
+			//      not useful once the page is beign rendered.
+			echo '<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>';
 			require_once('flvplayer.php');
 			$player = new flvplayer;
 			?>
@@ -468,6 +472,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 				break;
 
 		case "flash":
+			//TODO: This is really an issue as there may be conflicts with some other player.
 			require_once('flowplayer.php');
 			$player = new flowplayer();
 			if ($heading) {
