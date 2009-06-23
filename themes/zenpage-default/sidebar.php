@@ -46,11 +46,22 @@
 	</ul>
 </div>
 	<?php
-	if (function_exists('printContactForm')) {
+	if (function_exists('printContactForm') && $_zp_gallery_page != 'contact.php') {
 		?>
 		<div class="menu">
 			<ul>
 				<li><?php	printCustomPageURL(gettext('Contact us'), 'contact', '', ''); ?></li>
+				</ul>
+			</div>
+		<?php
+	}
+	?>
+	<?php
+	if (!zp_loggedin() && function_exists('printRegistrationForm') && $_zp_gallery_page != 'register.php') {
+		?>
+		<div class="menu">
+			<ul>
+				<li><?php	printCustomPageURL(gettext('Register for this site'), 'register', '', ''); ?></li>
 				</ul>
 			</div>
 		<?php

@@ -189,17 +189,34 @@ require_once('normalizer.php');
 		<?php echo getGalleryTitle(); ?>
 		</p>
 	<div id="footer">
-		<hr />
-		<?php	if (function_exists('printContactForm')) { echo '<p>'; printCustomPageURL(gettext('Contact us'), 'contact', '', ''); echo '</p>'; }	?>
-		<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
-		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>
 		<p>
+		<?php	
+		if (function_exists('printContactForm')) {
+			printCustomPageURL(gettext('Contact us'), 'contact', '', '');
+			echo '<br />';
+		}
+		if (!zp_loggedin() && function_exists('printRegistrationForm')) {
+			printCustomPageURL(gettext('Register for this site'), 'register', '', '');
+			echo '<br />';
+		}
+		if (function_exists('printLanguageSelector')) {
+			printLanguageSelector();
+			echo '<br />';
+		}
+		?>
 			<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.'); ?>
 			<?php printZenphotoLink(); ?>
 		</p>
+		<?php
+		if (function_exists('printUserLogout')) {
+			printUserLogout("");
+		}
+		?>
 	</div>
 
-	<?php  printAdminToolbox(); ?>
+	<?php
+	printAdminToolbox();
+	?>
 
 </body>
 

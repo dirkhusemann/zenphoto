@@ -41,10 +41,23 @@
 </div>
 <?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | <?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '','',' | ');	?>
+<div id="credit">
 <?php
 if (function_exists('printUserLogout')) {
-	printUserLogout(""," | ");
+	printUserLogout('', ' | ');
+}
+?>
+<?php printRSSLink('Gallery','','RSS', ' | '); ?>
+<?php printCustomPageURL(gettext("Archive View"),"archive"); ?> |
+
+<?php	if (function_exists('printContactForm')) {
+	printCustomPageURL(gettext('Contact us'), 'contact', '', '', ' | ');	
+}
+?>
+
+<?php
+if (!zp_loggedin() && function_exists('printRegistrationForm')) {
+	printCustomPageURL(gettext('Register for this site'), 'register', '', '', ' | ');
 }
 ?>
 <?php printZenphotoLink(); ?>

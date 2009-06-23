@@ -7,7 +7,7 @@ require_once('normalizer.php');
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo getBareGalleryTitle(); ?> <?php echo gettext("Contact form"); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?> <?php echo gettext("Archive"); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php
@@ -20,18 +20,18 @@ require_once('normalizer.php');
 <body class="archive">
 	<?php echo getGalleryTitle(); ?>
 	<div id="content">
-		<h1><?php printGalleryTitle(); echo ' <em>'.gettext('Contact'); ?></em></h1>
+		<h1><?php printGalleryTitle(); echo ' <em>'.gettext('Register'); ?></em></h1>
 		<div class="galleries">
-		<h2><?php echo gettext('Please use the form below to contact us.') ?></h2>
-		<?php  printContactForm();  ?>
+		<h2><?php echo gettext('Fill in your details below.') ?></h2>
+		<?php  printRegistrationForm();  ?>
 	</div>
 </div>
 
 <p id="path">
-	<?php printHomeLink('', ' &gt; '); ?>
+	<?php printHomeLink('', ' > '); ?>
 	<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
 	<?php echo getGalleryTitle();?> 
-	&gt; <em><?php echo gettext('Contact'); ?></em>
+	<em><?php echo gettext('Register'); ?></em>
 </p>
 
 <div id="footer">

@@ -11,6 +11,7 @@ require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/functions-image.php');
 
 $_zp_conf_vars['images_first_page'] = NULL; // insure it is initialized
+$_zp_gallery = new Gallery();
 
 //******************************************************************************
 //*** Template Functions *******************************************************
@@ -4390,15 +4391,6 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect
 		</table>
 	</form>
 	<?php
-	$registerpage = getOption('user_registration_page');
-	if (!empty($registerpage) && file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($registerpage).'.php')) {
-		if (getOption('mod_rewrite')) {
-			$link = WEBPATH.'/page/'.$registerpage;
-		} else {
-			$link = WEBPATH.'/index.php?p='.$registerpage;
-		}
-		printLink($link,get_language_string(getOption('user_registration_text')),get_language_string(getOption('user_registration_tip')));
-	}
 }
 
 /**

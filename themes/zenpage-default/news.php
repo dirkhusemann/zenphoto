@@ -20,7 +20,7 @@
 <div id="content">
 
 	<div id="breadcrumb">
-	<h2><a href="<?php echo getGalleryIndexURL(); ?>"><?php echo gettext("Index"); ?></a> <?php printNewsIndexURL("News"," &raquo; "); ?><strong><?php printCurrentNewsCategory(" &raquo; Category - "); ?><?php printNewsTitle(" &raquo; "); printCurrentNewsArchive(" &raquo; "); ?></strong>
+	<h2><a href="<?php echo getGalleryIndexURL(false); ?>"><?php echo gettext("Index"); ?></a> <?php printNewsIndexURL("News"," &raquo; "); ?><strong><?php printCurrentNewsCategory(" &raquo; Category - "); ?><?php printNewsTitle(" &raquo; "); printCurrentNewsArchive(" &raquo; "); ?></strong>
 	</h2>
 	</div>
 	

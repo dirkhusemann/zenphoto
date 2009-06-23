@@ -220,7 +220,7 @@ function printFooter($page) {
 		<?php if ($page == 'gallery') { echo '<br />'; printRSSLink('Gallery','', 'Gallery RSS', ''); } ?>
 		<?php	if (function_exists('printUserLogout')) printUserLogout('<br />', '', true); ?>
 		<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
-		<?php if (!zp_loggedin() && function_exists('printRegistrationForm')) printCustomPageURL(gettext('Register for this site'), 'request', '', '<br />');	?>
+		<?php if (!zp_loggedin() && function_exists('printRegistrationForm')) printCustomPageURL(gettext('Register for this site'), 'register', '', '<br />');	?>
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 	</div>
 	<!-- Administration Toolbox -->

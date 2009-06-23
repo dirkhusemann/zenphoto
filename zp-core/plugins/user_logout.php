@@ -89,7 +89,13 @@ function printUserLogout($before='', $after='', $showLoginForm=false) {
 	}
 	if (empty($cookies)) {
 		if ($showLoginForm) {
+			?>
+			<div class="passwordform">
+			<?php
 			printPasswordForm('', false);
+			?>
+			</div>
+			<?php
 		}
 	} else {
 		echo $before.'<a href="?userlog=0'.$__redirect.'" title="'.gettext("logout").'" >'.gettext("logout").'</a>'.$after;

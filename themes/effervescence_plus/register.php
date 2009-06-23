@@ -96,7 +96,8 @@ $backgroundImagePath="";
 <div id="subcontent">
 <div id="submain">
 
-<?php  printRegistrationForm();  ?>
+	<h2><?php echo gettext('Fill in your details below.') ?></h2>
+	<?php  printRegistrationForm();  ?>
 </div>
 
 

@@ -15,13 +15,12 @@
 		<h2>
 		<?php printHomeLink('', ' | '); ?>
 		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index'); ?>"><?php echo gettext('Gallery Index');?></a> | 
-		<em><?php echo gettext('Contact us'); ?></em>
+		<em><?php echo gettext('Register')  ?></em>
 		</h2>
 	</div>
 
-<h3><?php echo gettext('Please use the form below to contact us.') ?></h3>
-
-<?php  printContactForm();  ?>
+		<h2><?php echo gettext('Fill in your details below.') ?></h2>
+		<?php  printRegistrationForm();  ?>
 
 </div>
 <?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>

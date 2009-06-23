@@ -265,6 +265,7 @@ function setDefault($option, $default) {
 
 	// default groups
 	$result = array();
+	$_zp_admin_users = NULL; // be sure we get a fresh, updated copy!
 	$admins = getAdministrators();
 	foreach ($admins as $admin) {
 		if ($admin['valid']==0) {
