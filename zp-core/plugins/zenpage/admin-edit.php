@@ -70,7 +70,7 @@ $(document).ready(function() {
 	if(is_AdminEditPage("newsarticle")) {
 		checkRights("articles"); 
 		if (!empty($page)) {
-			$tabs['news']['subtabs'][gettext('articles')] .= $page;
+			$zenphoto_tabs['articles']['subtabs'][gettext('articles')] .= $page;
 		}
 		printSubtabs('articles');
 		?>
