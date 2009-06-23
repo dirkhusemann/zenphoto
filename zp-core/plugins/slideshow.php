@@ -497,7 +497,8 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 													if ($dynamic) {
 														$folder = $animage['folder'];
 														$filename = $animage['filename'];
-														$image = newImage($dalbum, $filename);
+														$salbum = new Album($_zp_gallery, $folder);
+														$image = newImage($salbum, $filename);
 														$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($salbum->name)."/".urlencode($filename);
 													} else {
 														$folder = $album->name;

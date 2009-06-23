@@ -3917,7 +3917,7 @@ function printRSSHeaderLink($option, $linktext) {
  * @return string
  * @since 1.1.3
  */
-function getSearchURL($words, $dates, $fields, $page, $inalbums) {
+function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
 	if ($mr = getOption('mod_rewrite')) {
 		$url = WEBPATH."/page/search/";
 	} else {
