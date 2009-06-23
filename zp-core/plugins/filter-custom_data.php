@@ -132,10 +132,16 @@ function custom_data_save_admin($discard, $userobj, $i) {
  */
 function custom_data_edit_admin($html, $userobj, $i, $background, $current) {
 	$raw = $userobj->getCustomData();
+	$needs = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
 	if (!preg_match('/^a:[0-9]+:{/', $raw)) {
-		$address = array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
+		$address = $needs;
 	} else {
 		$address = unserialize($userobj->getCustomData());
+		foreach ($needs as $needed=>$value) {
+			if (!isset($address[$needed])) {
+				$address[$needed] = '';
+			}
+		}
 	}
 	
 	return $html.
