@@ -86,10 +86,11 @@ function loginLogger($success, $user, $pass, $name, $ip, $type) {
 	$message .= $ip."\t";
 	$message .= $type."\t";
 	$message .= $user."\t";
-	$message .= $pass."\t";
 	if ($success) {
+		$message .= "**********\t";
 		$message .= $name."\tSuccess";
 	} else {
+		$message .= $pass."\t";
 		$message .= "\tFailed";
 	}
 	fwrite($f, $message . "\n");

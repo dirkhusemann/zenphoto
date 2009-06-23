@@ -1,10 +1,18 @@
+<?php
+define('OFFSET_PATH', 5);
+$const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
+$basepath = dirname(dirname(dirname(dirname(dirname(__FILE__)))));	
+require_once($basepath."/functions.php");
+require_once($basepath .'/'. PLUGIN_FOLDER ."/zenpage/zenpage-functions.php");
+require_once($basepath .'/'. PLUGIN_FOLDER ."/zenpage/zenpage-template-functions.php");
+require_once("tinyzenpage-functions.php");
+require_once("js/dialog.php");
+?>
 <!-- tinyZenpage - A TinyMCE plugin for Zenphoto with Zenpage
 		 Version: 1.0.6.1
 		 Author: Malte Müller (acrylian) 
 		 inspired by Alessandro "Simbul" Morandi's  ZenphotoPres (http://simbul.bzaar.net/zenphotopress)
 		 Licence: GPL v2 http://www.gnu.org/licenses/gpl.html
--->
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -16,16 +24,6 @@
 	<link rel="stylesheet" type="text/css" href="css/thickbox.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="css/tinyzenpage.css" media="screen" />
 
-<?php
-define('OFFSET_PATH', 5);
-$const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
-$basepath = dirname(dirname(dirname(dirname(dirname(__FILE__)))));	
-?>
-<?php require_once($basepath . "/functions.php"); ?>
-<?php require_once($basepath .'/'. PLUGIN_FOLDER ."/zenpage/zenpage-functions.php"); ?>
-<?php require_once($basepath .'/'. PLUGIN_FOLDER ."/zenpage/zenpage-template-functions.php"); ?>
-<?php require_once("tinyzenpage-functions.php"); ?>
-<?php require_once("js/dialog.php"); ?>
 </head>
 
 <body>

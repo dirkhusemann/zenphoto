@@ -6,6 +6,8 @@
 
 // force UTF-8 Ø
 
+require_once(dirname(__FILE__).'/functions.php');
+
 if (session_id() == '') session_start();
 
 $_zp_admin_ordered_taglist = NULL;
@@ -15,7 +17,6 @@ define('TEXTAREA_COLUMNS', 50);
 define('TEXT_INPUT_SIZE', 48);
 define('TEXTAREA_COLUMNS_SHORT', 32);
 define('TEXT_INPUT_SIZE_SHORT', 30);
-require_once(dirname(__FILE__).'/functions.php');
 
 
 $sortby = array(gettext('Filename') => 'filename',
