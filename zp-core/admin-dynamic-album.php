@@ -18,7 +18,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 $imagelist = array();
 
 function getSubalbumImages($folder) {
-	global $imagelist;
+	global $imagelist, $gallery;
 	if (hasDyanmicAlbumSuffix($folder)) { return; }
 	$album = new Album($gallery, $folder);
 	$images = $album->getImages();

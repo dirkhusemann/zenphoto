@@ -23,6 +23,8 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
+$gallery = new Gallery();
+
 //check for security incursions
 if (isset($_GET['album'])) {
 	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
@@ -37,7 +39,6 @@ if (isset($_GET['album'])) {
 	$mcr_errors = array();
 
 
-	$gallery = new Gallery();
 	$gallery->garbageCollect();
 	if (isset($_GET['action'])) {
 		$action = $_GET['action'];

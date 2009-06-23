@@ -512,7 +512,7 @@ function checked($checked, $current) {
 }
 
 function genAlbumUploadList(&$list, $curAlbum=NULL) {
-	global $gallery;
+	$gallery = new Gallery();
 	$albums = array();
 	if (is_null($curAlbum)) {
 		$albumsprime = $gallery->getAlbums(0);
