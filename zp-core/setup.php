@@ -581,13 +581,14 @@ if (!$checked) {
 
 	$good = true;
 
-	$required = '4.1';
+	$required = '4.4.8';
 	$desired = '5.2';
 	$err = versionCheck($required, $desired, PHP_VERSION);
 	if ($err < 0) {
 		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is strongly recommended.'),$desired)) && $good;
 	} else {
-		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required. Version %2$s or greater is strongly recommended.'),$required, $desired)) && $good;
+		if ($err == 0) $err = -1; // make it non-fatal
+		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required. Use earlier versions at your own risk. Version %2$s or greater is strongly recommended.'),$required, $desired)) && $good;
 	}
 	
 	if (ini_get('safe_mode')) {
@@ -709,8 +710,8 @@ if (!$checked) {
 		if ($i !== false) {
 			$mysqlv = substr($mysqlv, 0, $i);
 		}
-		$required = '3.23.36';
-		$desired = '4.1.1';
+		$required = '4.1';
+		$desired = '5.0';
 		$sqlv = versionCheck($required, $desired, $mysqlv);;
 	}
 	if ($cfg) {
@@ -780,7 +781,8 @@ if ($debug) {
 		$good = checkMark($connection, gettext("Connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
 	}
 	if ($connection) {
-		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
+		if ($sqlv == 0) $sqlv = -1; // make it non-fatal
+		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
 		$good = checkMark($db, sprintf(gettext("Connect to the database <code>%s</code>"),$_zp_conf_vars['mysql_database']), '',
 			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
