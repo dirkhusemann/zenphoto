@@ -483,6 +483,8 @@ zp-core/plugins/google_maps/license.txt
 zp-core/plugins/google_maps/phoogle.php
 zp-core/plugins/google_maps.php
 zp-core/plugins/html_meta_tags.php
+zp-core/plugins/image-massedit/image-massedit_tab.php
+zp-core/plugins/image-massedit.php
 zp-core/plugins/image_album_statistics.php
 zp-core/plugins/paged_thumbs_nav.php
 zp-core/plugins/print_album_menu.php

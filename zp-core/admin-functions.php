@@ -252,7 +252,7 @@ function printAdminHeader($path='') {
  * @since  1.0.0
  */
 function printAlbumEditLinks($param, $text, $title=NULL, $class=NULL, $id=NULL) {
-	printLink("admin-edit.php?page=edit". $param, $text, $title, $class, $id);
+	printLink(WEBPATH.'/'.ZENFOLDER."/admin-edit.php?page=edit". $param, $text, $title, $class, $id);
 }
 
 /**
@@ -477,11 +477,15 @@ function getSubtabs($tab, $default) {
 		} else {
 			$current = $tabs;
 			$current = array_shift($current);
-			$i = strrpos($current, '=');
+			$i = strrpos($current, 'tab=');
+			$amp = strrpos($current, '&');
 			if ($i===false) {
 				$current = $default;
 			} else {
-				$current = substr($current, $i+1);
+				if ($amp > $i) {
+					$current = substr($current, 0, $amp);
+				}
+				$current = substr($current, $i+4);
 			}
 		}
 	}
@@ -491,13 +495,25 @@ function getSubtabs($tab, $default) {
 function printSubtabs($tab, $default=NULL) {
 	global $zenphoto_tabs;
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
+	
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
 	?>
 	<ul class="subnav">
 	<?php
 	foreach ($tabs as $key=>$link) {
-		$tab = substr($link, strrpos($link, '=')+1);
+		$i = strrpos($link, 'tab=');
+		$amp = strrpos($link, '&');
+		if ($i===false) {
+			$tab = '';
+		} else {
+			if ($amp > $i) {
+				$source = substr($link, 0, $amp);
+			} else {
+				$source = $link;
+			}
+			$tab = substr($source, $i+4);
+		}
 		echo '<li'.(($current == $tab) ? ' class="current"' : '').'>'.
 				 '<a href = "'.WEBPATH.'/'.ZENFOLDER.'/'.$link.'">'.$key.'</a></li>'."\n";
 	}
@@ -1551,7 +1567,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 	</table>
 	
-<br / clear:all>
+<br clear:all />
 <p class="buttons">
 <button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 <button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
@@ -1567,7 +1583,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
  */
 function printAlbumButtons($album) {
 	if ($album->getNumImages() > 0) {
-	?><hr />
+		?>
 		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
 		<input type="hidden" name="action" value="clear_cache">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?> ">
@@ -1600,7 +1616,7 @@ function printAlbumButtons($album) {
 		</div>
 		</form>
 		<br /><br />
-<?php		
+	<?php		
 	}
 }
 /**

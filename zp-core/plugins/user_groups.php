@@ -1,14 +1,14 @@
 <?php
 /**
- * Provides an example of the use of the custom data filters
+ * Provides rudimentary user groups
  * 
  * @package plugins
  */
 $plugin_is_filter = 5;
-$plugin_description = gettext("provides rudimentary user groups.");
+$plugin_description = gettext("Provides rudimentary user groups.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.1.1';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-user_groups.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_groups.php.html";
 
 zp_register_filter('admin_tabs', 'user_groups_admin_tabs');
 zp_register_filter('admin_alterrights', 'user_groups_admin_alterrights');

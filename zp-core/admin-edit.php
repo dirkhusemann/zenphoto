@@ -451,7 +451,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	
 	?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php if($album->getParent()) { printAlbumBreadcrumbAdmin($album); } echo removeParentAlbumNames($album); ?></em></h1>
-<p><?php printAlbumEditLinks('' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
+<p><?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
    printSortLink($album, gettext("Sort Album"), gettext("Sort Album"));
    echo ' | '; }?>
@@ -500,10 +500,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo '</div>';
 	}
 	$albumlink = '?page=edit&album='.urlencode($album->name);
-	$tabs = array(gettext('Album')=>'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo');
-	if (count($subalbums) > 0) $tabs[gettext('Subalbums')] = 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo';
-	if ($allimagecount) $tabs[gettext('Images')] = 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo';
-	$zenphoto_tabs['edit']['subtabs'] = $tabs;
+	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
+	if ($allimagecount) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),$zenphoto_tabs['edit']['subtabs']);
+	if (count($subalbums) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
+	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 	$subtab = printSubtabs('edit', 'albuminfo');
 	?>
 	<?php
@@ -511,12 +511,15 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
-		<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
-			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
-			<input type="hidden"	name="savealbuminfo" value="1" />
-			<?php printAlbumEditForm(0, $album, true); ?>
-		</form>
-		<?php printAlbumButtons($album); ?>
+			<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
+				<input type="hidden"	name="savealbuminfo" value="1" />
+				<?php printAlbumEditForm(0, $album, true); ?>
+			</form>
+			<br clear="all" />
+			<hr />
+			
+			<?php printAlbumButtons($album); ?>
 		</div>
 		</div>
 		<?php
