@@ -702,7 +702,7 @@ class _Image extends PersistentObject {
 	function getSizedImage($size) {
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array($size)));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			return rewrite_path(
 			pathurlencode($this->album->name).'/image/'.$size.'/'.urlencode($this->filename),
@@ -731,7 +731,7 @@ class _Image extends PersistentObject {
 		$args = array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL);
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,	getImageParameters($args));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			if ($thumbStandin) {
 				$wmt = getOption('Image_watermark');
@@ -792,7 +792,7 @@ class _Image extends PersistentObject {
 		if ($wmt) $wmt = '&wmt='.$wmt;
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb)) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);

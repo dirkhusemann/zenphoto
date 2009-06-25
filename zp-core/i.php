@@ -187,22 +187,21 @@ if (file_exists($newfile) & !$adminrequest) {
 	}
 }
 
-// If the file hasn't been cached yet, create it.
-if ($process) {
+if ($process) { // If the file hasn't been cached yet, create it.
 	// setup standard image options from the album theme if it exists
-	cacheImage($newfilename, $imgfile, $args, $allowWatermark, false, $theme);
+	if (!cacheImage_protected($newfilename, $imgfile, $args, $allowWatermark, false, $theme)) {
+		imageError(gettext('Image processing resulted in a fatal error.'));
+	}
 	$fmt = filemtime($newfile);
 }
 if (!$debug) {
 	// ... and redirect the browser to it.
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
 	header('Content-Type: image/jpeg');
-	header('Location: ' . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($newfilename)), true, 301);
+	header('Location: ' . FULLWEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename)), true, 301);
 	exit();
-
 } else {
-	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($newfilename)) ."\" /></p>";
-
+	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename)) ."\" /></p>";
 }
 
 ////////////////////////////////////////////////////////////////////////////////

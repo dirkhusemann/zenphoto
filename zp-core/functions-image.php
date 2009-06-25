@@ -27,7 +27,7 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 		echo('<strong>'.sprintf(gettext('Zenphoto Image Processing Error: %s'), $errormessage).'</strong>'
 		. '<br /><br />'.sprintf(gettext('Request URI: [ <code>%s</code> ]'), sanitize($_SERVER['REQUEST_URI'], 3))
 		. '<br />PHP_SELF: [ <code>' . sanitize($_SERVER['PHP_SELF'], 3) . '</code> ]'
-		. (empty($newfilename) ? '' : '<br />'.sprintf(gettext('Cache: [<code>%s</code>]'), substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, 3)).' ')
+		. (empty($newfilename) ? '' : '<br />'.sprintf(gettext('Cache: [<code>%s</code>]'), '/'.CACHEFOLDER.'/' . sanitize($newfilename, 3)).' ')
 		. (empty($image) || empty($album) ? '' : ' <br />'.sprintf(gettext('Image: [<code>%s</code>]'),sanitize($album.'/'.$image, 3)).' <br />'));
 	} else {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/images/' . $errorimg);
@@ -67,6 +67,12 @@ function imageDebug($album, $image, $args, $imgfile) {
 		<li><?php echo gettext("crop =") ?>    <strong> <?php echo sanitize($crop, 3)     ?> </strong></li>
 	</ul>
 	<?php
+}
+
+if (version_compare(PHP_VERSION, '5.0.0') === 1) {
+	require_once(dirname(__FILE__).'/PHP5_functions/cacheImage_protected.php');
+} else {
+	require_once(dirname(__FILE__).'/PHP4_functions/cacheImage_protected.php'); // [sic]
 }
 
 /**

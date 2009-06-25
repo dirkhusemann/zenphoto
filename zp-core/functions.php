@@ -658,26 +658,10 @@ function getEnabledPlugins() {
 	return $pluginlist;
 }
 
-/**
- * Provides an error protected read of image EXIF/IPTC data
- * (requires PHP version 5 to protect the read)
- *
- * @param string $path image path
- * @return array
- */
-function read_exif_data_protected($path) {
-	if (version_compare(PHP_VERSION, '5.0.0') === 1) {
-		eval('
-			try {
-				$rslt = read_exif_data_raw($path, false);
-			} catch (Exception $e) {
-				$rslt = array();
-			}'
-		);
-		return $rslt;
-	} else {
-		return read_exif_data_raw($path, false);
-	}
+if (version_compare(PHP_VERSION, '5.0.0') === 1) {
+	require_once(dirname(__FILE__).'/PHP5_functions/read_exif_data_protected.php');
+} else {
+	require_once(dirname(__FILE__).'/PHP4_functions/read_exif_data_protected.php'); // [sic]
 }
 
 /**

@@ -155,7 +155,7 @@ class Video extends _Image {
 		if ($wmt) $wmt = '&wmt='.$wmt;
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $this->filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb) && !$special) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
@@ -202,7 +202,7 @@ class Video extends _Image {
 				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
 														getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL)));
 				if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-					return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+					return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 				} else {
 					$path = ZENFOLDER . '/i.php?a=' . urlencode($alb) . '&i=' . urlencode($filename);
 					if (substr($path, 0, 1) == "/") $path = substr($path, 1);
@@ -217,7 +217,7 @@ class Video extends _Image {
 			$filename = $this->filename;
 			$cachefilename = getImageCacheFilename($this->album->name, $filename,	getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL)));
 			if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+				return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 			} else {
 				return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename)
 				. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")

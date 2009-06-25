@@ -94,8 +94,7 @@ if (!defined('SERVERPATH')) define('SERVERPATH', str_replace("\\", '/', dirname(
 define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
-define('CACHEFOLDER', '/cache/');
-define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
+define('SERVERCACHE', SERVERPATH . '/'.CACHEFOLDER.'/');
 
 // Set the version number.
 $_zp_conf_vars['version'] = ZENPHOTO_VERSION;

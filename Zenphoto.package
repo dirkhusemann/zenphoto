@@ -431,6 +431,10 @@ zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.mo
 zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.po
 zp-core/locale/pl_PL/select_files_button.png
 zp-core/locale/sl_SI
+zp-core/PHP4_functions/cacheImage_protected.php
+zp-core/PHP4_functions/read_exif_data_protected.php
+zp-core/PHP5_functions/cacheImage_protected.php
+zp-core/PHP5_functions/read_exif_data_protected.php
 zp-core/plugins/captcha/zenphoto.php
 zp-core/plugins/class-textobject/textDefault.png
 zp-core/plugins/class-textobject.php

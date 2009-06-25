@@ -117,7 +117,7 @@ if (!is_null($cache_path)) {
 	@touch($cache_path);
 	@chmod($cache_path, 0666 & CHMOD_VALUE);
 	header('Content-Type: image/'.$suffix);
-	header('Location: ' . FULLWEBPATH . CACHEFOLDER . $cache_file, true, 301);
+	header('Location: ' . FULLWEBPATH . '/'.CACHEFOLDER.'/' . $cache_file, true, 301);
 	exit();
 }
 

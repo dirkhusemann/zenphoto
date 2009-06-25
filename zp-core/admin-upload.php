@@ -61,7 +61,7 @@ if (isset($_GET['action'])) {
 					$album->save();
 				} else {
 					$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
-					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, "
+					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
 
