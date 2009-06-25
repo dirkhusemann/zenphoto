@@ -90,6 +90,7 @@ if (($albumdir == '/') || ($albumdir == '.')) {
 $allimagecount = count($images);
 $albumlink = '?page=edit&album='.urlencode($album->name);
 if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
+$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),$zenphoto_tabs['edit']['subtabs']);
 if (count($subalbums) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
 $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 ?>
