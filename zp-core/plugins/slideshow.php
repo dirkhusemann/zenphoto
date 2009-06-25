@@ -282,7 +282,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 							$ext = $player->is_valid($filename);
 							if ($ext) {
 								// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
-								if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
+								if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
 									$img = FULLWEBPATH.'/albums/'.pathurlencode($image->album->name) .'/'. urlencode($filename);
 								} else {
 									makeImageCurrent($image);
@@ -425,7 +425,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 						$imgnr++;
 						echo "<span class='slideimage'><h4><strong>".$albumtitle.gettext(":")."</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
 					
-						if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
+						if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
 							//Player Embed...
 							if (is_null($_zp_flash_player)) {
 								echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext("No flash player installed.")."' />";
@@ -433,7 +433,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 								//FIX ME: The slideshow should really handle playing this when type=jquery but it currently does not.
 								//$_zp_flash_player->printPlayerConfig($imagepath,html_encode($image->getTitle()),$idx);
 							}
-						}	elseif ($ext == ".3gp") {
+						}	elseif ($ext == "3gp") {
 							echo '</a>
 									<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
 									<param name="src" value="' . $imagepath. '"/>
@@ -444,7 +444,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 									pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 									</object><a>';
 						}
-						elseif ($ext == ".mov") {
+						elseif ($ext == "mov") {
 							echo '</a>
 							 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
 								 	<param name="src" value="' . $imagepath. '"/>
@@ -508,7 +508,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 													}
 												$ext = $player->is_valid($filename);
 												if ($ext) {
-													if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
+													if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
 														$duration = "";
 													} else {
 														$duration = " duration: ".getOption("slideshow_speed")/10;
