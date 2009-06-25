@@ -12,13 +12,14 @@
  * @package plugins
  */
 $plugin_is_filter = 5;
-$plugin_description = sprintf(gettext("Logs all attempts to login to the admin pages to <em>zenphoto_security_log.txt</em> in the %s folder."),DATA_FOLDER);
+$plugin_description = sprintf(gettext("Logs all attempts to login to the admin pages to <em>security_log.txt</em> in the %s folder."),DATA_FOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-admin_login.php.html";
 $option_interface = new admin_login();
 
 zp_register_filter('admin_login_attempt', 'adminLoginLogger');
+zp_register_filter('admin_tabs', 'filter_login_admin_tabs');
 if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'guestLoginLogger');
 
 /**
@@ -81,7 +82,7 @@ class admin_login {
  * @param string $type
  */
 function loginLogger($success, $user, $pass, $name, $ip, $type) {
-	$f = fopen($file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/zenphoto_security_log.txt', 'a');
+	$f = fopen($file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt', 'a');
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
 	$message .= $type."\t";
@@ -142,6 +143,15 @@ if (isset($_GET['logger_clear_log']) && $_GET['logger_clear_log']) {
 	if (zp_loggedin(ADMIN_RIGHTS)) {
 		@unlink(dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/zenphoto_security_log.txt');
 	}
+}
+
+function filter_login_admin_tabs($tabs, $current) {
+	if ((zp_loggedin(ADMIN_RIGHTS))) {
+		$tabs['logs'] = array(	'text'=>gettext("Logs"),
+														'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/filter-login/view_log_tab.php?page=logs',
+														'subtabs'=>NULL);
+	}
+	return $tabs;
 }
 
 ?>

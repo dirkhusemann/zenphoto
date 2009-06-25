@@ -446,6 +446,8 @@ zp-core/plugins/filter-comments.php
 zp-core/plugins/filter-crop_image.php
 zp-core/plugins/filter-custom_data.php
 zp-core/plugins/filter-file_searches.php
+zp-core/plugins/filter-login/log.css
+zp-core/plugins/filter-login/view_log_tab.php
 zp-core/plugins/filter-login.php
 zp-core/plugins/filter-new_objects.php
 zp-core/plugins/filter-zenphoto_seo.php

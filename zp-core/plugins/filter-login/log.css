@@ -1,0 +1,20 @@
+/* css for the log viewer */
+.logtext {
+line-height: 0.7em;
+border-spacing: 1px;
+border: 1px solid #BAC9CF;
+width: 650px;
+height: 650px;
+overflow-x: scroll
+}
+.logtext p {
+padding:0;
+margin-top:0.05em;
+margin-left:0.5em;
+margin-bottom:0.05em;
+margin-right:0.5em;
+font-family:courier;
+}
+.nowrap {
+white-space:nowrap;
+}
