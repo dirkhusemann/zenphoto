@@ -137,6 +137,21 @@ function printSlideShowLink($linktext='') {
 		$slideshow_instance ++;
 }
 
+/**
+ * Returns the file extension if the item passed is displayable by the player
+ * 
+ * @param mixed $image either an image object or the filename of an image.
+ * @param array $valid_types list of the types we will accept
+ * @return string;
+ */
+function is_valid($image, $valid_types) {
+	if (is_object($image)) $image = $image->filename;
+	$ext = getSuffix($image);
+	if (in_array($ext, $valid_types)) {
+		return $ext; 
+	}
+	return false;
+}
 
 /**
  * Prints the slideshow using the jQuery plugin Cycle (http://http://www.malsup.com/jquery/cycle/)
@@ -259,6 +274,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			echo '<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>';
 			require_once('flvplayer.php');
 			$player = new flvplayer;
+			$validtypes = array('jpg','jpeg','gif','png','mov','3gp');
 			?>
 			<script type="text/javascript">
 				$(document).ready(function(){
@@ -279,16 +295,11 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 								$filename = $images[$idx];
 								$image = newImage($album, $filename);
 							}
-							$ext = $player->is_valid($filename);
+							$ext = is_valid($filename, $validtypes);
 							if ($ext) {
-								// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
-								if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
-									$img = FULLWEBPATH.'/albums/'.pathurlencode($image->album->name) .'/'. urlencode($filename);
-								} else {
-									makeImageCurrent($image);
-									$img = getCustomSizedImageMaxSpace($width,$height);
-									//$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . pathurlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
-								}
+								makeImageCurrent($image);
+								$img = getCustomSizedImageMaxSpace($width,$height);
+								//$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . pathurlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
 								echo 'ImageList[' . $cntr . '] = "' . $img . '";'. "\n";
 								echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. "\n";
 								if(getOption("slideshow_showdesc")) {
@@ -366,7 +377,8 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 				});	// Documentready()
 			
 				</script>
-				<div id="slideshow" align="center"><?php
+				<div id="slideshow" align="center">
+				<?php
 				// 7/21/08dp
 				if ($speedctl) {
 					echo '<div id="speedcontrol">'; // just to keep it away from controls for sake of this demo
@@ -420,40 +432,33 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 						$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename);
 				
 					}
-					$ext = $player->is_valid($filename);
+					$ext = is_valid($filename, $validtypes);
 					if ($ext) {
 						$imgnr++;
 						echo "<span class='slideimage'><h4><strong>".$albumtitle.gettext(":")."</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
 					
-						if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
-							//Player Embed...
-							if (is_null($_zp_flash_player)) {
-								echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext("No flash player installed.")."' />";
-							} else {
-								//FIX ME: The slideshow should really handle playing this when type=jquery but it currently does not.
-								//$_zp_flash_player->printPlayerConfig($imagepath,html_encode($image->getTitle()),$idx);
-							}
-						}	elseif ($ext == "3gp") {
+						if ($ext == "3gp") {
 							echo '</a>
-									<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-									<param name="src" value="' . $imagepath. '"/>
-									<param name="autoplay" value="false" />
-									<param name="type" value="video/quicktime" />
-									<param name="controller" value="true" />
-									<embed src="' . $imagepath. '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
-									pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-									</object><a>';
-						}
-						elseif ($ext == "mov") {
+										<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+										<param name="src" value="' . $imagepath. '"/>
+										<param name="autoplay" value="false" />
+										<param name="type" value="video/quicktime" />
+										<param name="controller" value="true" />
+										<embed src="' . $imagepath. '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
+										pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
+										</object>
+										<a>';
+						}	elseif ($ext == "mov") {
 							echo '</a>
-							 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-								 	<param name="src" value="' . $imagepath. '"/>
-								 	<param name="autoplay" value="false" />
-								 	<param name="type" value="video/quicktime" />
-								 	<param name="controller" value="true" />
-								 	<embed src="'  . $imagepath. '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
-								 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-									</object><a>';
+							 			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+								 		<param name="src" value="' . $imagepath. '"/>
+								 		<param name="autoplay" value="false" />
+								 		<param name="type" value="video/quicktime" />
+								 		<param name="controller" value="true" />
+								 		<embed src="'  . $imagepath. '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
+								 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
+										</object>
+										<a>';
 						} else {
 							makeImageCurrent($image);
 							printCustomSizedImageMaxSpace($alt='',$width,$height,NULL,NULL,false);
@@ -506,7 +511,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 														$image = newImage($album, $filename);
 														$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".pathurlencode($filename);
 													}
-												$ext = $player->is_valid($filename);
+												$ext = is_valid($filename, array('jpg','jpeg','gif','png','flv','mp3','mp4'));
 												if ($ext) {
 													if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
 														$duration = "";

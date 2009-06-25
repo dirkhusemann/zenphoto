@@ -193,21 +193,6 @@ class flvplayer {
 		return getOption('flv_player_height');
 	}
 	
-	/**
-	 * Returns the file extension if the item passed is displayable by the player
-	 * 
-	 * @param mixed $image either an image object or the filename of an image.
-	 * @return string;
-	 */
-	function is_valid($image) {
-		$valid_types = array('jpg','jpeg','gif','png','mov','3gp','flv','mp3','mp4');
-		if (is_object($image)) $image = $image->filename;
-		$ext = getSuffix($image);
-		if (in_array($ext, $valid_types)) {
-			return $ext; 
-		}
-		return false;
-	}
 }
 
 /**
