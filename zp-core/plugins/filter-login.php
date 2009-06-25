@@ -82,7 +82,11 @@ class admin_login {
  * @param string $type
  */
 function loginLogger($success, $user, $pass, $name, $ip, $type) {
-	$f = fopen($file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt', 'a');
+	$preexists = file_exists($file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt');
+	$f = fopen($file, 'a');
+	if (!$preexists) { // add a header
+		fwrite($f, 'date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\n");
+	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
 	$message .= $type."\t";

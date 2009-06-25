@@ -64,7 +64,6 @@ echo "\n</head>";
 			$logtext = explode("\n",file_get_contents(SERVERPATH . "/" . DATA_FOLDER . '/'.$subtab.'.txt'));
 			if ($subtab == 'security_log') {
 				// pretty up the tabs
-				array_unshift($logtext,'date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome');
 				$fields = array();
 				$sizes = array(0,0,0,0,0,0,0);
 				foreach ($logtext as $lineno=>$line) {

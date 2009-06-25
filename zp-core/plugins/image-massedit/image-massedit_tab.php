@@ -64,7 +64,7 @@ if (isset($_GET['action'])) {
 }
 // Print our header
 $page = 'edit';
-printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
+printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 echo "\n</head>";
 ?>
 

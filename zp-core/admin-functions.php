@@ -180,7 +180,7 @@ function datepickerJS($path) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printAdminHeader($path='') {
+function printAdminHeader($path='', $tinyMCE=true) {
 	header ('Content-Type: text/html; charset=' . getOption('charset'));
 	?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -191,9 +191,7 @@ function printAdminHeader($path='') {
 	<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
 	<script src="<?php echo $path; ?>js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/zenphoto.js.php" type="text/javascript" ></script>
-
 	<?php datepickerJS($path); ?>
-
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
@@ -208,6 +206,8 @@ function printAdminHeader($path='') {
 			});
 			});
 	</script>
+	<?php
+/* enable for drop-down tabs (not working as yet)
 	<script type="text/javascript">
 	var timeout         = 500;
 	var closetimer		= 0;
@@ -235,8 +235,10 @@ function printAdminHeader($path='') {
 	
 	document.onclick = jsddm_close;
 	</script>
+*/
+	?>
 	<?php
-	if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
+	if ($tinyMCE && file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
 }
 
 /**
@@ -441,7 +443,7 @@ function printTabs($currenttab) {
 		<li <?php if($currenttab == $key) echo 'class="current"' ?>>
 			<a href="<?php echo $atab['link']; ?>"><?php echo $atab['text']; ?></a>
 			<?php
-/*
+/* also enable the javascript in printAdminHeader()
 			if (is_array($atab['subtabs']) && $currenttab !== $key) {
 				?>
 				<ul id="subdropdownnav">
