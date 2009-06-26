@@ -657,12 +657,14 @@ define('OPTION_TYPE_SELECTOR',5);
 define('OPTION_TYPE_CHECKBOX_ARRAY',6);
 define('OPTION_TYPE_CHECKBOX_UL',7);
 define('OPTION_TYPE_COLOR_PICKER',8);
-function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
-	$supportedOptions = $optionHandler->getOptionsSupported();
+function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $supportedOptions=NULL) {
+	$whom = get_class($optionHandler);
+	if (is_null($supportedOptions)) $supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
 		$options = array_keys($supportedOptions);
 		natcasesort($options);
 		foreach($options as $option) {
+			$optionID = $whom.'_'.$option;
 			$row = $supportedOptions[$option];
 			$type = $row['type'];
 			$desc = $row['desc'];
@@ -700,110 +702,144 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 				$v = 0;
 			}
 
-			if ($hide) echo "\n<tr class='".$hide."extrainfo' style='display:none'>\n";
-			echo '<td width="175">' . $indent . $option . ":</td>\n";
-
-			switch ($type) {
-				case OPTION_TYPE_TEXTBOX:
-				case OPTION_TYPE_TEXTAREA:
-					echo '<td width="350px">';
-					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />'."\n";
-					if ($multilingual) {
-						print_language_string_list($v, $key, $type, NULL, $editor);
-					} else {
-						echo '<input type="text" size="40" name="' . $key . '" style="width: 338px" value="' . html_encode($v) . '">' . "\n";
-					}
-					echo '</td>' . "\n";
-					break;
-				case OPTION_TYPE_CHECKBOX:
-					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$key.'" value=0 />' . "\n";
-					echo '<td width="350px"><input type="checkbox" name="'.$key.'" value="1"';
-					echo checked('1', $v);
-					echo " /></td>\n";
-					break;
-				case OPTION_TYPE_CUSTOM:
-					echo '<td width="350px">' . "\n";
-					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'custom-'.$key.'" value=0 />' . "\n";
-					$optionHandler->handleOption($key, $v);
-					echo "</td>\n";
-					break;
-				case OPTION_TYPE_RADIO:
-					echo '<td width="350px">' . "\n";
-					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'radio-'.$key.'" value=0 />' . "\n";
-					generateRadiobuttonsFromArray($v,$row['buttons'],$key);
-					echo "</td>\n";
-					break;
-				case OPTION_TYPE_SELECTOR:
-					echo '<td width="350px">' . "\n";
-					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
-					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
-					generateListFromArray(array($v),$row['selections'], false, true);
-					echo "</select>\n";
-					echo "</td>\n";
-					break;
-				case OPTION_TYPE_CHECKBOX_ARRAY:
-					echo "<td width=\"350px>\"\n";
-					foreach ($row['checkboxes'] as $display=>$checkbox) {
-						$ck_sql = str_replace($key, $checkbox, $sql);
-						$db = query_single_row($ck_sql);
-						if ($db) {
-							$v = $db['value'];
-						} else {
-							$v = 0;
-						}
-						$display = str_replace(' ', '&nbsp;', $display);
-						?>
-						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
-						
-						<span style="white-space:nowrap">
-							<label>
-								<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
-								<?php echo($display); ?>
-							</label>
-						</span>
-						
-						<?php
-					}
-					echo "</td>\n";
-					break;
-				case OPTION_TYPE_CHECKBOX_UL:
-					echo "<td width=\"350px>\"\n";
-					$cvarray = array();
-					$c = 0;
-					foreach ($row['checkboxes'] as $display=>$checkbox) {
-						echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox.'" value=0 />' . "\n";
-						$ck_sql = str_replace($key, $checkbox, $sql);
-						$db = query_single_row($ck_sql);
-						if ($db) {
-							if ($db['value'])	$cvarray[$c++] = $checkbox;
-						}
-					}
-					echo '<ul class="customchecklist">'."\n";
-					generateUnorderedListFromArray($cvarray, $row['checkboxes'], '', '', true, true);
-					echo '</ul>';
-					echo "</td>\n";
-					break;
-				case OPTION_TYPE_COLOR_PICKER:
-					echo '<td width="350px" style="margin:0; padding:0">' . "\n";
-					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />' . "\n";
-					?>
-					<script type="text/javascript">
-				  	$(document).ready(function() {
-				    	$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>_color');
-				  	});
-					</script>
-					<table style="margin:0; padding:0" >
-						<tr>
-							<td><input type="text" id="<?php echo $key; ?>_color" name="<?php echo $key; ?>"	value="<?php echo $v; ?>"style="height:100px; width:100px; float:right;" /></td>
-							<td><div id="<?php echo $key; ?>_colorpicker"></div></td>
-						</tr>
-					</table>
-					<?php
-					echo "</td>\n";
-					break;
+			if ($hide) {
+				?>
+				<tr id="<?php echo $optionID; ?>_tr" class="<?php echo $hide; ?>extrainfo" style="display:none">
+				<?php
+			} else {
+				?>
+				<tr id="<?php echo $optionID; ?>_tr">
+				<?php
 			}
-			echo '<td>' . $desc . "</td>\n";
-			echo "</tr>\n";
+				?>
+				<td width="175"><?php echo $indent . $option; ?></td>
+				<?php
+				switch ($type) {
+					case OPTION_TYPE_TEXTBOX:
+					case OPTION_TYPE_TEXTAREA:
+						?>
+						<td width="350px">
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value=0 />
+							<?php
+							if ($multilingual) {
+								print_language_string_list($v, $key, $type, NULL, $editor);
+							} else {
+								?>
+								<input type="text" size="40" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo html_encode($v); ?>">
+								<?php
+							}
+							?>
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_CHECKBOX:
+						?>
+						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$key; ?>" value=0 />
+						<td width="350px">
+							<input type="checkbox" name="<?php echo $key; ?>" value="1" <?php echo checked('1', $v); ?> />
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_CUSTOM:
+						?>
+						<td width="350px">
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'custom-'.$key; ?>" value=0 />
+							<?php	$optionHandler->handleOption($key, $v); ?>
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_RADIO:
+						?>
+						<td width="350px">
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'radio-'.$key; ?>" value=0 />
+							<?php generateRadiobuttonsFromArray($v,$row['buttons'],$key); ?>
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_SELECTOR:
+						?>
+						<td width="350px">
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'selector-'.$key?>" value=0 />
+							<select id="<?php echo $option; ?>" name="<?php echo $key; ?>">
+								<?php generateListFromArray(array($v),$row['selections'], false, true); ?>
+							</select>
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_CHECKBOX_ARRAY:
+						?>
+						<td width=\"350px>
+							<?php
+							foreach ($row['checkboxes'] as $display=>$checkbox) {
+								$ck_sql = str_replace($key, $checkbox, $sql);
+								$db = query_single_row($ck_sql);
+								if ($db) {
+									$v = $db['value'];
+								} else {
+									$v = 0;
+								}
+								$display = str_replace(' ', '&nbsp;', $display);
+								?>
+								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
+								
+								<span style="white-space:nowrap">
+									<label>
+										<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
+										<?php echo($display); ?>
+									</label>
+								</span>
+								<?php
+							}
+							?>
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_CHECKBOX_UL:
+						?>
+						<td width=\"350px>
+						<?php
+						$cvarray = array();
+						$c = 0;
+						foreach ($row['checkboxes'] as $display=>$checkbox) {
+							?>
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />' . "\n";
+							<?php
+							$ck_sql = str_replace($key, $checkbox, $sql);
+							$db = query_single_row($ck_sql);
+							if ($db) {
+								if ($db['value'])	$cvarray[$c++] = $checkbox;
+							}
+						}
+						?>
+							<ul class="customchecklist">
+								<?php generateUnorderedListFromArray($cvarray, $row['checkboxes'], '', '', true, true); ?>
+							</ul>
+						</td>
+						<?php
+						break;
+					case OPTION_TYPE_COLOR_PICKER:
+						?>
+						<td width="350px" style="margin:0; padding:0">
+						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value=0 />
+						<script type="text/javascript">
+					  	$(document).ready(function() {
+					    	$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>_color');
+					  	});
+						</script>
+						<table style="margin:0; padding:0" >
+							<tr>
+								<td><input type="text" id="<?php echo $key; ?>_color" name="<?php echo $key; ?>"	value="<?php echo $v; ?>"style="height:100px; width:100px; float:right;" /></td>
+								<td><div id="<?php echo $key; ?>_colorpicker"></div></td>
+							</tr>
+						</table>
+						</td>
+						<?php
+						break;
+				}
+				?>
+				<td><?php echo $desc; ?></td>
+			</tr>
+			<?php
 		}
 	}
 }
@@ -1972,9 +2008,14 @@ $_zp_current_locale = NULL;
  * @param string $locale optional locale of the translation desired
  * @param string $edit optional class
  */
-function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $short=false) {
+function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $short=false, $id='') {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
 	if (!empty($edit)) $edit = ' class="'.$edit.'"';
+	if (empty($id)) {
+		$groupid ='';
+	} else {
+		$groupid = ' id="'.$id.'"';
+	}
 	if (is_null($locale)) {
 		if (is_null($_zp_current_locale)) {
 			$_zp_current_locale = getUserLocale();
@@ -1995,7 +2036,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		unset($emptylang['']);
 		natsort($emptylang);
 		if ($textbox) $class = 'box'; else $class = '';
-		echo '<ul class="'.($short ? 'language_string_list_short' : 'language_string_list').$class.'"'.">\n";
+		echo '<ul'.$groupid.' class="'.($short ? 'language_string_list_short' : 'language_string_list').$class.'"'.">\n";
 		$empty = true;
 		foreach ($emptylang as $key=>$lang) {
 			if (isset($strings[$key])) {
@@ -2043,9 +2084,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
+			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 		}
 	}
 }

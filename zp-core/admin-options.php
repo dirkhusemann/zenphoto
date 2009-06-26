@@ -2220,7 +2220,7 @@ if (empty($alterrights)) {
 				<td><em><?php printf(gettext('The following are options specifically implemented by %s.'),$theme['name']); ?></em></td>
 			</tr>
 				<?php
-					customOptions($optionHandler, '', $album);
+					customOptions($optionHandler, '', $album, false, $supportedOptions);
 				}
 			}
 		
@@ -2282,7 +2282,7 @@ if (empty($alterrights)) {
 				<?php
 				$supportedOptions = $option_interface->getOptionsSupported();
 				if (count($supportedOptions) > 0) {
-					customOptions($option_interface, '', NULL, 'plugin');
+					customOptions($option_interface, '', NULL, 'plugin', $supportedOptions);
 				}
 			?>
 			</table>

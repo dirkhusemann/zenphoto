@@ -21,11 +21,13 @@ $_zp_flash_player = $option_interface; // claim to be the flash player.
 
 if ($external) return; // can't process external album images
 
-// register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>');
 
 
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
+// load the script needed
+?>
+<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>
+<?php
 /**
  * Plugin option handling class
  *

@@ -51,25 +51,25 @@ class slideshowOptions {
 	function getOptionsSupported() {
 		return array(	gettext('Slide width') => array('key' => 'slideshow_width', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Width of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
-		gettext('Slide height') => array('key' => 'slideshow_height', 'type' => OPTION_TYPE_TEXTBOX,
+									gettext('Slide height') => array('key' => 'slideshow_height', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Height of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
-		gettext('Watermark') => array('key' => 'slideshow_watermark', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Watermark') => array('key' => 'slideshow_watermark', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to use your watermark on the images <em>[jQuery mode option]</em>.")),
-		gettext('Mode') => array('key' => 'slideshow_mode', 'type' => OPTION_TYPE_SELECTOR,
+									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext("jQuery")=>"jQuery", gettext("flash")=>"flash"),
-										'desc' => gettext("<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow (requires Flowplayer.)")),
-		gettext('Effect') => array('key' => 'slideshow_effect', 'type' => OPTION_TYPE_SELECTOR,
+										'desc' => gettext("<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow.)")),
+									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('fade')=>"fade", gettext('shuffle')=>"shuffle", gettext('zoom')=>"zoom", gettext('slide X')=>"slideX", gettext('slide Y')=>"slideY", gettext('scroll up')=>"scrollUp", gettext('scroll down')=>"scrollDown", gettext('scroll left')=>"scrollLeft", gettext('scroll right')=>"scrollRight"),
 										'desc' => gettext("The cycle slide effect to be used. <em>[jQuery mode option]</em>")),
-		gettext('Speed') => array('key' => 'slideshow_speed', 'type' => OPTION_TYPE_TEXTBOX,
+									gettext('Speed') => array('key' => 'slideshow_speed', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Speed of the transition in milliseconds.")),
-		gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => OPTION_TYPE_TEXTBOX,
+									gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance.) <em>[jQuery mode option]</em>")),
-		gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to show the image's description below the slideshow <em>[jQuery mode option]</em>.")),
-		gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => OPTION_TYPE_TEXTBOX,
+									gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Width of the Flowplayer display for the slideshow <em>(Flash mode)</em>.")),
-		gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => OPTION_TYPE_TEXTBOX,
+									gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Height of the Flowplayer display for the slideshow <em>(Flash mode)</em>."))
 		);
 	}
@@ -268,12 +268,6 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 	// slideshow display section
 	switch($option) {
 		case "jQuery":
-			//TODO: This is really an issue as there may be conflicts with some other player. But for now,
-			//      At least we need to load the swfojbect.js script as the addPluginScript() function is 
-			//      not useful once the page is beign rendered.
-			echo '<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>';
-			require_once('flvplayer.php');
-			$player = new flvplayer;
 			$validtypes = array('jpg','jpeg','gif','png','mov','3gp');
 			?>
 			<script type="text/javascript">
@@ -477,9 +471,6 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 				break;
 
 		case "flash":
-			//TODO: This is really an issue as there may be conflicts with some other player.
-			require_once('flowplayer.php');
-			$player = new flowplayer();
 			if ($heading) {
 				echo "<span class='slideimage'><h4><strong>".$albumtitle."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
 			}
@@ -516,10 +507,10 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 													if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
 														$duration = "";
 													} else {
-														$duration = " duration: ".getOption("slideshow_speed")/10;
+														$duration = ", duration: ".getOption("slideshow_speed")/10;
 													}
 													if($count > 0) { echo ",\n"; }
-													echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."', ".$duration." }";
+													echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."'".$duration." }";
 													$count++;
 												}
 											}
