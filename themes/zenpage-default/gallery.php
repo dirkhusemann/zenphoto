@@ -27,7 +27,7 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 	</div>
 
 	<div id="content-left">	
-	<?php if(!getOption("zenpage_zp_index_news")) { ?>
+	<?php if(!getOption("zenpage_zp_index_news") OR !function_exists("printNewsPageListWithNav")) { ?>
 			<div id="albums">
 				<?php while (next_album()): ?>
 					<div class="album">
