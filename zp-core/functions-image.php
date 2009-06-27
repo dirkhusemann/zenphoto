@@ -69,12 +69,6 @@ function imageDebug($album, $image, $args, $imgfile) {
 	<?php
 }
 
-if (version_compare(PHP_VERSION, '5.0.0') === 1) {
-	require_once(dirname(__FILE__).'/PHP5_functions/cacheImage_protected.php');
-} else {
-	require_once(dirname(__FILE__).'/PHP4_functions/cacheImage_protected.php'); // [sic]
-}
-
 /**
  * Calculates proprotional width and height
  * Used internally by cacheImage
@@ -399,6 +393,14 @@ function getImageRotation($imgfile) {
 		}
 	}
 	return false;
+}
+
+//load PHP specific functions
+
+if (version_compare(PHP_VERSION, '5.0.0') === 1) {
+	require_once(dirname(__FILE__).'/PHP5_functions/_functions-image.php');
+} else {
+	require_once(dirname(__FILE__).'/PHP4_functions/_functions-image.php'); // [sic]
 }
 
 ?>
