@@ -46,7 +46,7 @@
 	</ul>
 </div>
 	<?php
-	if (function_exists('printContactForm') && $_zp_gallery_page != 'contact.php') {
+	if (getOption("zenpage_contactpage") && function_exists('printContactForm')) {
 		?>
 		<div class="menu">
 			<ul>
