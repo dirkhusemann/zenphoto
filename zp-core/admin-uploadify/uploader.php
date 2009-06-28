@@ -6,7 +6,7 @@ if (!zp_loggedin()) {
 		$auth = $_GET['auth'];
 		$admins = getAdministrators();
 		foreach ($admins as $admin) {
-			if (md5(serialize($admin)) == $auth) {
+			if (md5(serialize($admin)) == $auth && $admin['rights'] & UPLOAD_RIGHTS) {
 				$_zp_loggedin = checkAuthorization($admin['pass']);
 				break;
 			}
