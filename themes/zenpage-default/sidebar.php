@@ -46,22 +46,36 @@
 	</ul>
 </div>
 	<?php
-	if (getOption("zenpage_contactpage") && function_exists('printContactForm') && $_zp_gallery_page != 'contact.php') {
+	if (getOption("zenpage_contactpage") && function_exists('printContactForm')) {
 		?>
 		<div class="menu">
 			<ul>
-				<li><?php	printCustomPageURL(gettext('Contact us'), 'contact', '', ''); ?></li>
+				<li>
+				<?php
+				if($_zp_gallery_page != 'contact.php') {
+					printCustomPageURL(gettext('Contact us'), 'contact', '', '');
+				} else {
+					echo gettext("Contact us");
+				}
+				?></li>
 				</ul>
 			</div>
 		<?php
 	}
 	?>
 	<?php
-	if (!zp_loggedin() && function_exists('printRegistrationForm') && $_zp_gallery_page != 'register.php') {
+	if (!zp_loggedin() && function_exists('printRegistrationForm')) {
 		?>
 		<div class="menu">
 			<ul>
-				<li><?php	printCustomPageURL(gettext('Register for this site'), 'register', '', ''); ?></li>
+				<li>
+				<?php	
+				if($_zp_gallery_page != 'register.php') {
+					printCustomPageURL(gettext('Register for this site'), 'register', '', '');
+				} else {
+					echo gettext("Register for this site");
+				}
+				?></li>
 				</ul>
 			</div>
 		<?php
