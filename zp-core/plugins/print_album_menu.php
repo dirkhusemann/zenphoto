@@ -33,8 +33,8 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * @param string $css_class insert css class for the sub album lists (only list mode)
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name how you want to call the link to the gallery index (insert "" if you don't use it, it is not printed then)
- * @param string $showsubs 'true' to always show the subalbums, 'false' for normal context sensitive behaviour (only list mode)
- * @return html list or drop down jump menu of the albums
+ * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
+  * @return html list or drop down jump menu of the albums
  * @since 1.2
  */
 
@@ -64,7 +64,7 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  * @param string $css_class insert css class for the sub album lists (only list mode)
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
- * @param string $showsubs 'true' to always show the subalbums, 'false' for normal context sensitive behaviour (only list mode)
+ * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
  * @return html list of the albums
  */
 
@@ -88,7 +88,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
-
+	
 	echo "<ul".$css_id.">\n"; // top level list
 	/**** Top level start with Index link  ****/
 	if($option === "list" OR $option === "list-top") {
@@ -118,18 +118,19 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
  * @param string $folder 
  * @param string $option see printAlbumMenuList
  * @param string $option2 see printAlbumMenuList
- * @param string $showsubs see printAlbumMenuList
+ * @param int $showsubs see printAlbumMenuList
  * @param string $css_class see printAlbumMenuList
  * @param string $css_class_topactive see printAlbumMenuList
  * @param string $css_class_active see printAlbumMenuList
  */
 function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active) {
 	global $_zp_gallery;
+	if ($showsubs === true) $showsubs = 9999999999;
 	$pagelevel = count(explode('/', $folder));
 	foreach ($albums as $album) {
 		$level = count(explode('/', $album));
-		$process =  ($showsubs
-									|| ($option != 'list-top' // not top only
+		$process =  (($level < $showsubs && $option == "list") // user wants all the pages whose level is <= to the parameter
+									|| ($option != 'list-top' && $option != 'list' // not top only
 											&& strpos($folder, $album) === 0 // within the family
 											&& $level<=$pagelevel) // but not too deep
 								);

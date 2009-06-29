@@ -93,7 +93,7 @@ if (isset($_GET['action'])) {
 		$page = "upload";
 		$_GET['page'] = 'upload';
 		$error = true;
-		if ($files_empty) {
+		if ($files_empty && !isset($_POST['newalbum'])) {
 			$errormsg = gettext("You must upload at least one file.");
 		} else if (empty($_POST['folder'])) {
 			$errormsg = gettext("You must enter a folder name for your new album.");

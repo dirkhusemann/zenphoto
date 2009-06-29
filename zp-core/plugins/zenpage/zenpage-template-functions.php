@@ -2279,15 +2279,16 @@ function printParentPagesBreadcrumb($before='', $after='') {
  * @param string $css_class CSS class of the sub level list(s)
  * @param string $$css_class_active CSS class of the sub level list(s)
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" (default) if you don't use it, it is not printed then.
- * @param bool $showsubs Set to TRUE if you want all sublevels should be shown always. FALSE by default. Only if in "list" mode.
- * * @return string
+ * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
+ * @return string
  */
-function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$indexname='',$showsubs=FALSE) {
+function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$indexname='',$showsubs=0) {
 	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
+	if ($showsubs === true) $showsubs = 9999999999;
 
 	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS))) {
 		$published = FALSE;
@@ -2319,10 +2320,8 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	foreach ($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
 		$level = max(1,count(explode('-', $pageobj->getSortOrder())));
-		if($showsubs && $option == "list") {
-			$process = TRUE;
-		} else {
-		$process = (($option == 'list' || $option == 'list-top') && $level==1 // show the top level
+		$process = (($level <= $showsubs && $option == "list") // user wants all the pages whose level is <= to the parameter
+								|| ($option == 'list' || $option == 'list-top') && $level==1 // show the top level
 								|| (($option == 'list' || ($option == 'omit-top' && $level>1))
 										&& (($pageobj->getID() == $pageid) // current page
 											|| ($pageobj->getParentID()==$pageid) // offspring of current page
@@ -2332,7 +2331,6 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 										&& ($pageobj->getParentID()==$pageid) // offspring of the current page
 									 )
 								);
-		}
 		if ($process) {
 			if ($level > $indent) {
 				echo "\n".str_pad("\t",$indent,"\t")."<ul $css_class>\n";
