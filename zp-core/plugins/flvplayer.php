@@ -25,9 +25,9 @@ if ($external) return; // can't process external album images
 
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
 // load the script needed
-?>
-<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>
-<?php
+
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>');
+
 /**
  * Plugin option handling class
  *
