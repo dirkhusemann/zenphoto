@@ -1624,7 +1624,7 @@ function printAlbumButtons($album) {
 		?>
 		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
 		<input type="hidden" name="action" value="clear_cache">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?> ">
+		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
 		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Clears the album's cached images.");?>"><img src="images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Clear album cache"); ?></button>
 		</div>
@@ -1640,7 +1640,7 @@ function printAlbumButtons($album) {
 		</form>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
-		<input type="hidden" name=\return" value="<?php echo urlencode($album->name); ?> ">
+		<input type="hidden" name=\return" value="<?php echo urlencode($album->name); ?>">
 		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/redo.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
 	  </div>	

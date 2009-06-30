@@ -13,7 +13,7 @@ if (!zp_loggedin(ADMIN_RIGHTS)) {
 }
 if (isset($_GET['action'])) {
 	$action = sanitize($_GET['action'],3);
-	$file = SERVERPATH.'/'.DATA_FOLDER . '/'.sanitize($_POST['filename'],3).'.txt';
+	$file = SERVERPATH.'/'.DATA_FOLDER . '/'.sanitize($_POST['filename'],3);
 	switch ($action) {
 		case 'clear':
 			$f = fopen($file, 'w');
@@ -23,6 +23,21 @@ if (isset($_GET['action'])) {
 		case 'delete':
 			@unlink($file);
 			unset($_GET['tab']); // it is gone, after all
+			break;
+		case 'download':
+			include_once(SERVERPATH.'/'.ZENFOLDER . '/archive.php');
+			$subtab = sanitize($_GET['tab'],3);
+			$dest = SERVERPATH.'/'.DATA_FOLDER . '/'.$subtab. ".zip";
+			$rp = dirname($file);
+			$z = new zip_file($dest);
+			$z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
+			$z->add_files(array(basename($file)));
+			$z->create_archive();
+			header('Content-Type: application/zip');
+			header('Content-Disposition: attachment; filename="' . $subtab . '.zip"');
+			header("Content-Length: " . filesize($dest));
+			printLargeFileContents($dest);
+			unlink($dest);
 			break;
 	}
 }
@@ -61,7 +76,8 @@ echo "\n</head>";
 			$subtab = printSubtabs('logs', 'security_log');
 			$logfiletext = str_replace('_', ' ',$subtab);
 			$logfiletext = strtoupper(substr($logfiletext, 0, 1)).substr($logfiletext, 1);
-			$logtext = explode("\n",file_get_contents(SERVERPATH . "/" . DATA_FOLDER . '/'.$subtab.'.txt'));
+			$logfile = SERVERPATH . "/" . DATA_FOLDER . '/'.$subtab.'.txt';
+			$logtext = explode("\n",file_get_contents($logfile));
 			if ($subtab == 'security_log') {
 				// pretty up the tabs
 				$fields = array();
@@ -72,35 +88,92 @@ echo "\n</head>";
 						if ($sizes[$key] < strlen($field)) $sizes[$key] = strlen($field);
 					}
 				}
-				$logtext = array();
-				foreach ($fields as $fieldset) {
-					$line = '';
-					foreach ($fieldset as $key=>$field) {
-						if (strlen($field) < $sizes[$key]+2) $field .= str_repeat('&nbsp;',$sizes[$key]+2-strlen($field));
-						$line .= $field;
-					}
-					$logtext[] = $line;
-				}
 			}
 			?>
 			<!-- A log -->
 			<div id="theme-editor" class="tabbox">
-				<form action="?action=delete&page=logs&tab=<?php echo $subtab; ?>" method="post">
-					<input type="hidden" name="filename" value="<?php echo $subtab; ?>" />
-					<p class="buttons">
-						<button type="submit" value="delete" title="<?php printf(gettext("Delete %s"),$logfiletext); ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo gettext("Delete"); ?></strong></button>
-					</p>
+			
+				<form name="delete_log" action="?action=delete&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
+					<input type="hidden" name="action" value="delete">
+					<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
+					<div class="log_buttons">
+						<button type="submit" class="tooltip" id="delete_log" title="<?php printf(gettext("Delete <em>%s</em>"),$logfiletext);?>">
+							<img src="../../images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Delete");?>
+						</button>
+					</div>
 				</form>
+				<?php
+				if (filesize($logfile) > 0) {
+					?>
+					<form name="clear_log" action="?action=clear&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
+						<input type="hidden" name="action" value="clear">
+						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
+						<div class="log_buttons">
+							<button type="submit" class="tooltip" id="clear_log" title="<?php printf(gettext("Reset <em>%s</em>"),$logfiletext);?>">
+								<img src="../../images/refresh.png" style="border: 0px;" /> <?php echo gettext("Reset");?>
+							</button>
+						</div>
+					</form>
+					
+					<form name="download_log" action="?action=download&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
+						<input type="hidden" name="action" value="download">
+						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
+						<div class="log_buttons">
+							<button type="submit" class="tooltip" id="download_log" title="<?php printf(gettext("Download <em>%s</em> zipfile"),$logfiletext);?>">
+								<img src="down.png" style="border: 0px;" /> <?php echo gettext("Download");?>
+							</button>
+						</div>
+					</form>
+					<?php
+				}
+				?>
 				<br clear="all" />
 				<br />
 				<blockquote class="logtext">
 					<?php
-					foreach ($logtext as $line) {
+					if ($subtab == 'security_log') {
+						$header = explode("\t", array_shift($logtext));
 						?>
-						<p>
-							<span class="nowrap"><?php echo $line; ?></span>
-						</p>
+						<table id="log_table">
+							<tr>
+								<?php
+								foreach ($sizes as $width) {
+									?>
+									<th>
+										<span class="nowrap"><?php echo array_shift($header); ?></span>
+									</th>
+									<?php
+								}
+								?>
+							</tr>
+							<?php
+							foreach ($logtext as $line) {
+								?>
+								<tr>
+								<?php
+								$fields = explode("\t", $line);
+								foreach ($fields as $key=>$field) {
+									?>
+									<td>
+										<span class="nowrap"><?php echo $field; ?></span>
+									</td>
+									<?php
+								}
+								?>
+								</tr>
+								<?php
+							}
+							?>
+						</table>
 						<?php
+					} else {
+						foreach ($logtext as $line) {
+							?>
+							<p>
+								<span class="nowrap"><?php echo $line; ?></span>
+							</p>
+							<?php
+						}
 					}
 					?>
 				</blockquote>

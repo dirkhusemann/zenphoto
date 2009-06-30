@@ -82,7 +82,8 @@ class admin_login {
  * @param string $type
  */
 function loginLogger($success, $user, $pass, $name, $ip, $type) {
-	$preexists = file_exists($file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt');
+	$file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt';
+	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
 		fwrite($f, 'date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\n");
@@ -124,7 +125,7 @@ function adminLoginLogger($success, $user, $pass) {
 	} else {
 		$name = '';
 	}
-	loginLogger($success, $user, $pass, $name, sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('[admin]'));
+	loginLogger($success, $user, $pass, $name, sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('admin'));
 	return $success;
 }
 
@@ -138,7 +139,7 @@ function adminLoginLogger($success, $user, $pass) {
  * @return bool
  */
 function guestLoginLogger($success, $user, $pass) {
-	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('[guest]'));
+	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('guest'));
 	return $success;
 }
 
