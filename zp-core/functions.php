@@ -950,7 +950,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$receiverid = $receiver->id;
 	$goodMessage = 2;
 	$commentobj = new Comment();
-	$commentobj = new Comment();
+	$commentobj->transient = false; // otherwise we won't be able to save it....
 	$commentobj->setOwnerID($receiverid);
 	$commentobj->setName($name);
 	$commentobj->setEmail($email);
