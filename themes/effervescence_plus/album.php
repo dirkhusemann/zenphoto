@@ -289,13 +289,6 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									</p>
 								<?php
 								}
-								if (function_exists('printCommentForm')) {
-									?>
-									<div id="commentbox">
-										<?php printCommentForm(); ?>
-									</div>
-									<?php
-								}
 								
 						}
 						?>
@@ -361,6 +354,15 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		}
 		?>
 		</div> <!-- pagenumbers -->
+	<?php
+	if (function_exists('printCommentForm')) {
+		?>
+		<div id="commentbox">
+			<?php printCommentForm(); ?>
+		</div>
+		<?php
+	}
+	?>
 </div> <!-- subcontent -->
 
 <!-- Footer -->

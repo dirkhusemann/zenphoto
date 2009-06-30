@@ -53,8 +53,12 @@ if (getOption('cache_full_image')) {
 } else {
 	$cache_path = NULL;
 }
+$rotate = false;
+if (zp_imageCanRotate() && getOption('auto_rotate'))  {
+	$rotate = getImageRotation($image_path);
+}
 
-if (!getOption('fullimage_watermark')) { // no processing needed
+if (!getOption('fullimage_watermark') && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && !getOption('protect_full_image') == 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
 		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->filename));
@@ -80,6 +84,9 @@ $newim = zp_imageGet($image_path);
 
 if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
+}
+if ($rotate) {
+	$newim = zp_rotateImage($newim, $rotate);
 }
 if (getOption('fullimage_watermark')) {
 	$watermark_image = getOption('fullimage_watermark');
