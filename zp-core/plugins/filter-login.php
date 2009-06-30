@@ -18,7 +18,7 @@ $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-admin_login.php.html";
 $option_interface = new admin_login();
 
-zp_register_filter('admin_login_attempt', 'adminLoginLogger');
+if (getOption('logger_log_admin')) zp_register_filter('admin_login_attempt', 'adminLoginLogger');
 zp_register_filter('admin_tabs', 'filter_login_admin_tabs');
 if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'guestLoginLogger');
 
@@ -34,6 +34,7 @@ class admin_login {
 	 */
 	function admin_login() {
 		setOptionDefault('logger_log_guests', 1);
+		setOptionDefault('logger_log_admin', 1);
 	}
 
 
@@ -43,10 +44,9 @@ class admin_login {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Clear log') => array('key' => 'logger_clear_log', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('Resets the log to <em>empty</em>.')),
-									gettext('Log guest users') => array('key' => 'logger_log_guests', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('If checked, guest user login attempts will be logged.'))
+		return array(	gettext('Record logon attempts of') => array('key' => 'logger_log_allowed', 'type' => OPTION_TYPE_CHECKBOX_ARRAY,
+										'checkboxes' => array(gettext('Administrators') => 'logger_log_admin', gettext('Guests') => 'logger_log_guests'),
+										'desc' => gettext('If checked login attempts will be logged.'))
 									);
 	}
 
@@ -141,13 +141,6 @@ function adminLoginLogger($success, $user, $pass) {
 function guestLoginLogger($success, $user, $pass) {
 	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('guest'));
 	return $success;
-}
-
-if (isset($_GET['logger_clear_log']) && $_GET['logger_clear_log']) {
-	require_once(dirname(dirname(__FILE__)).'/auth_zp.php');
-	if (zp_loggedin(ADMIN_RIGHTS)) {
-		@unlink(dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/zenphoto_security_log.txt');
-	}
 }
 
 function filter_login_admin_tabs($tabs, $current) {

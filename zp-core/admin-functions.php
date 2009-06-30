@@ -637,7 +637,7 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  *
  * There are four type of custom options:
  * 		OPTION_TYPE_TEXTBOX:				a textbox
- * 		OPTION_TYPE_TEXTBOX:				a checkbox
+ * 		OPTION_TYPE_CHECKBOX:				a checkbox
  * 		OPTION_TYPE_CUSTOM:					handled by $optionHandler->handleOption()
  * 		OPTION_TYPE_TEXTAREA:				a textarea
  * 		OPTION_TYPE_RADIO:					radio buttons (button names are in the 'buttons' index of the supported options array)
