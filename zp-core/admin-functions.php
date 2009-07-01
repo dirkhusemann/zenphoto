@@ -476,7 +476,7 @@ function getSubtabs($tab, $default) {
 	} else {
 		if (isset($zenphoto_tabs[$tab]['default'])) {
 			$current = $zenphoto_tabs[$tab]['default'];
-		} else {
+		} else if (empty($default)) {
 			$current = $tabs;
 			$current = array_shift($current);
 			$i = strrpos($current, 'tab=');
@@ -489,6 +489,8 @@ function getSubtabs($tab, $default) {
 				}
 				$current = substr($current, $i+4);
 			}
+		} else {
+			$current = $default;
 		}
 	}
 	return $current;

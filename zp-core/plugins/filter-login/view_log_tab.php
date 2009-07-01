@@ -65,29 +65,35 @@ echo "\n</head>";
 		<?php
 		$filelist = safe_glob(SERVERPATH . "/" . DATA_FOLDER . '/*.txt');
 		$subtabs = array();
+		$default = '';
 		if (count($filelist)>0) {
 			foreach ($filelist as $logfile) {
-				$logfiletext = str_replace('_', ' ',$log = substr(basename($logfile), 0, -4));
+				$log = substr(basename($logfile), 0, -4);
+				$logfiletext = str_replace('_', ' ',$log);
 				$logfiletext = strtoupper(substr($logfiletext, 0, 1)).substr($logfiletext, 1);
 				$subtabs = array_merge($subtabs, array($logfiletext => PLUGIN_FOLDER.'/filter-login/view_log_tab.php?page=logs&amp;tab='.$log));
+				if (filesize($logfile) > 0 && empty($default)) $default = $log;
 			}
 			$zenphoto_tabs['logs']['subtabs'] = $subtabs;
-			
-			$subtab = printSubtabs('logs', 'security_log');
+			$subtab = printSubtabs('logs', $default);
 			$logfiletext = str_replace('_', ' ',$subtab);
 			$logfiletext = strtoupper(substr($logfiletext, 0, 1)).substr($logfiletext, 1);
 			$logfile = SERVERPATH . "/" . DATA_FOLDER . '/'.$subtab.'.txt';
-			$logtext = explode("\n",file_get_contents($logfile));
-			if ($subtab == 'security_log') {
-				// pretty up the tabs
-				$fields = array();
-				$sizes = array(0,0,0,0,0,0,0);
-				foreach ($logtext as $lineno=>$line) {
-					$fields[$lineno] = explode("\t", $line);
-					foreach ($fields[$lineno] as $key=>$field) {
-						if ($sizes[$key] < strlen($field)) $sizes[$key] = strlen($field);
+			if (filesize($logfile) > 0) {
+				$logtext = explode("\n",file_get_contents($logfile));
+				if ($subtab == 'security_log') {
+					// pretty up the tabs
+					$fields = array();
+					$sizes = array(0,0,0,0,0,0,0);
+					foreach ($logtext as $lineno=>$line) {
+						$fields[$lineno] = explode("\t", $line);
+						foreach ($fields[$lineno] as $key=>$field) {
+							if ($sizes[$key] < strlen($field)) $sizes[$key] = strlen($field);
+						}
 					}
 				}
+			} else {
+				$logtext = array();
 			}
 			?>
 			<!-- A log -->
@@ -103,7 +109,7 @@ echo "\n</head>";
 					</div>
 				</form>
 				<?php
-				if (filesize($logfile) > 0) {
+				if (!empty($logtext)) {
 					?>
 					<form name="clear_log" action="?action=clear&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
 						<input type="hidden" name="action" value="clear">
@@ -131,22 +137,26 @@ echo "\n</head>";
 				<br />
 				<blockquote class="logtext">
 					<?php
-					if ($subtab == 'security_log') {
+					if ($subtab == 'security_log' && !empty($logtext)) {
 						$header = explode("\t", array_shift($logtext));
 						?>
 						<table id="log_table">
-							<tr>
-								<?php
-								foreach ($sizes as $width) {
-									?>
-									<th>
-										<span class="nowrap"><?php echo array_shift($header); ?></span>
-									</th>
-									<?php
-								}
-								?>
-							</tr>
 							<?php
+							if (!empty($header)) {
+								?>
+								<tr>
+									<?php
+										foreach ($header as $field) {
+											?>
+											<th>
+												<span class="nowrap"><?php echo $field; ?></span>
+											</th>
+											<?php
+										}
+									?>
+								</tr>
+								<?php
+							}
 							foreach ($logtext as $line) {
 								?>
 								<tr>
@@ -167,12 +177,14 @@ echo "\n</head>";
 						</table>
 						<?php
 					} else {
-						foreach ($logtext as $line) {
-							?>
-							<p>
-								<span class="nowrap"><?php echo $line; ?></span>
-							</p>
-							<?php
+						if (!empty($logtext)) {
+							foreach ($logtext as $line) {
+								?>
+								<p>
+									<span class="nowrap"><?php echo $line; ?></span>
+								</p>
+								<?php
+							}
 						}
 					}
 					?>

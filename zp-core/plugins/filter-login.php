@@ -35,6 +35,7 @@ class admin_login {
 	function admin_login() {
 		setOptionDefault('logger_log_guests', 1);
 		setOptionDefault('logger_log_admin', 1);
+		setOptionDefault('logger_log_type', 'all');
 	}
 
 
@@ -46,8 +47,11 @@ class admin_login {
 	function getOptionsSupported() {
 		return array(	gettext('Record logon attempts of') => array('key' => 'logger_log_allowed', 'type' => OPTION_TYPE_CHECKBOX_ARRAY,
 										'checkboxes' => array(gettext('Administrators') => 'logger_log_admin', gettext('Guests') => 'logger_log_guests'),
-										'desc' => gettext('If checked login attempts will be logged.'))
-									);
+										'desc' => gettext('If checked login attempts will be logged.')),
+									gettext('Record') =>array('key' => 'logger_log_type', 'type' => OPTION_TYPE_RADIO,
+										'buttons' => array(gettext('All attempts') => 'all', gettext('Successful attempts') => 'success', gettext('unsuccessful attempts') => 'fail'),
+										'desc' => gettext('Record login failures, successes, or all attempts.'))
+		);
 	}
 
 	/**
@@ -82,6 +86,16 @@ class admin_login {
  * @param string $type
  */
 function loginLogger($success, $user, $pass, $name, $ip, $type) {
+	switch (getOption('logger_log_type')) {
+		case 'all': 
+			break;
+		case 'success':
+			if (!$success) return;
+			break;
+		case 'fail':
+			if ($success) return;
+			break;
+	}
 	$file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt';
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
