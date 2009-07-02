@@ -755,23 +755,26 @@ if (empty($alterrights)) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<p>
 						<?php
-							if (!($userobj->getRights() & MANAGE_ALL_ALBUM_RIGHTS) && !$current) {
-								printManagedAlbums($albumlist, $local_alterrights, $user['id'], $id);
-							} else {
-								if ($ismaster) {
-									echo gettext("This account's username and email are used as contact data in the RSS feeds.");
-								}
-							}
+						if ($_zp_loggedin & (MANAGE_ALL_ALBUM_RIGHTS | ADMIN_RIGHTS)) {
+							$album_alter_rights = $local_alterrights;
+						} else {
+							$album_alter_rights = ' DISABLED';
+						}
+						if ($current && $ismaster) {
+							echo gettext("This account's username and email are used as contact data in the RSS feeds.");
+						} else {
+							printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
+						}
 						?>
 					</p>
 					<p>
 						<?php
-							if (!($userobj->getRights() & MANAGE_ALL_ALBUM_RIGHTS) && !$current) {
-								if (!empty($local_alterrights)) {
-									echo gettext("You may manage these albums subject to the above rights.");
-								} else {
+							if (!$ismaster) {
+								if (empty($album_alter_rights)) {
 									echo gettext("Select one or more albums for the administrator to manage.").' ';
 									echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
+								} else {
+									echo gettext("You may manage these albums subject to the above rights.");
 								}
 							}
 						?>

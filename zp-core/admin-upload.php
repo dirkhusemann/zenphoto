@@ -198,11 +198,16 @@ if (ini_get('safe_mode')) { ?>
 				<?php
 			}
 			$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
+			if (isset($_GET['album'])) {
+				$passedalbum = sanitize($_GET['album']);
+			} else {
+				$passedalbum = NULL;
+			}
 			foreach ($albumlist as $fullfolder => $albumtitle) {
 				$singlefolder = $fullfolder;
 				$saprefix = "";
 				$salevel = 0;
-				if (isset($_GET['album']) && ($_GET['album'] == $fullfolder)) {
+				if (!is_null($passedalbum) && ($passedalbum == $fullfolder)) {
 					$selected = " SELECTED=\"true\" ";
 				} else {
 					$selected = "";
@@ -235,7 +240,7 @@ if (ini_get('safe_mode')) { ?>
 				<br />
 			</div>
 			
-			<input type="hidden" name="folder" value="" />
+			<input id="folderslot" type="hidden" name="folder" value="<?php echo $passedalbum; ?>" />
 		</div>
 		
 		<hr />
@@ -291,6 +296,7 @@ if (ini_get('safe_mode')) { ?>
 					if($('#folderdisplay').val() == "") {
 						$('#fileUploadbuttons').hide();
 					} else {
+						$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
 						$('#fileUploadbuttons').show();
 					}
 					$('#albumselectmenu').change(function(){
@@ -347,10 +353,12 @@ if (ini_get('safe_mode')) { ?>
 				<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
 				
 				
-				<p><p class="buttons"><button type="submit" value="<?php echo gettext('Upload'); ?>"
-					onClick="this.form.folder.value = this.form.folderdisplay.value;"
-					class="button"><img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?></button>
-					</p>
+				<p class="buttons">
+					<button type="submit" value="<?php echo gettext('Upload'); ?>"
+						onClick="this.form.folder.value = this.form.folderdisplay.value;" class="button">
+						<img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?>
+					</button>
+				</p>
 				<br /><br clear: all />
 				</div>
 				<p><?php echo gettext("Try the <a href='admin-upload.php?uploadtype=multifile'>multi file upload</a>"); ?></p>

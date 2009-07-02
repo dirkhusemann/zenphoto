@@ -13,6 +13,7 @@ if (!zp_loggedin()) {
 		}
 	}
 }
+
 if (!empty($_FILES)) {
 	$tempFile = sanitize($_FILES['Filedata']['tmp_name'],3);
 	$folder = sanitize($_GET['folder'],3);
