@@ -761,7 +761,7 @@ if (empty($alterrights)) {
 							$album_alter_rights = ' DISABLED';
 						}
 						if ($current && $ismaster) {
-							echo gettext("This account's username and email are used as contact data in the RSS feeds.");
+							echo gettext("The <em>master</em> account has full rights to all albums.");
 						} else {
 							printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
 						}

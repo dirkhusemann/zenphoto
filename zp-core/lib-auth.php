@@ -259,11 +259,11 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
  */
 function migrateAuth($oldversion) {
 	global $_admin_rights;
-	printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, LIBAUTH_VERSION);	
 	$_zp_admin_users = array();
 	$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 	$admins = query_full_array($sql, true);
-	if ($admins !== false) {
+	if (count($admins)>0) { // something to migrate
+		printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, LIBAUTH_VERSION);	
 		switch ($oldversion) {
 			case 1:
 				$oldrights = array(	'NO_RIGHTS' => 2, // only in migration array

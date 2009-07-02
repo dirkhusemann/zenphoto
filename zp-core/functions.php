@@ -13,10 +13,6 @@ $_zp_loaded_plugins = array();
 $_zp_flash_player = NULL;
 $_zp_HTML_cache = NULL;
 
-if (getOption('album_session') && OFFSET_PATH==0 && session_id() == '') {
-	session_start();
-}
-
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
@@ -37,7 +33,11 @@ if (empty($_zp_captcha)) 	$_zp_captcha = 'zenphoto';
 require_once(dirname(__FILE__). '/'.PLUGIN_FOLDER . '/captcha/'.$_zp_captcha.'.php');
 $_zp_captcha = new Captcha();
 
+//setup session before checking for logon cookie
 require_once(dirname(__FILE__).'/functions-i18n.php');
+if (getOption('album_session') && defined(OFFSET_PATH) && OFFSET_PATH==0 && session_id() == '') {
+	session_start();
+}
 require_once(dirname(__FILE__).'/auth_zp.php');
 
 
