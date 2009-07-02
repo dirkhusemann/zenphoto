@@ -65,7 +65,7 @@ require_once('normalizer.php');
 						}
 						$text = getAlbumDesc();
 						if(strlen($text) > 50) {
-							$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50)) . "...";
+							$text = preg_replace("/[^ ]*$/", '', sanitize(substr($text, 0, 50),1)) . "...";
 						}
 						echo $text;
 					?></p>

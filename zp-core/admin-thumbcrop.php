@@ -8,13 +8,13 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
-if (!($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
+$albumname = sanitize_path($_REQUEST['a']);
+$imagename = sanitize_path($_REQUEST['i']);
+
+if (!isMyALbum($albumname, ALBUM_RIGHTS)) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }
-
-$albumname = sanitize_path($_REQUEST['a']);
-$imagename = sanitize_path($_REQUEST['i']);
 
 // get what image side is being used for resizing
 $use_side = getOption('image_use_side');
