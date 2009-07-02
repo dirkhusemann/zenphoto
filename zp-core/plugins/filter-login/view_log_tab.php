@@ -81,17 +81,6 @@ echo "\n</head>";
 			$logfile = SERVERPATH . "/" . DATA_FOLDER . '/'.$subtab.'.txt';
 			if (filesize($logfile) > 0) {
 				$logtext = explode("\n",file_get_contents($logfile));
-				if ($subtab == 'security_log') {
-					// pretty up the tabs
-					$fields = array();
-					$sizes = array(0,0,0,0,0,0,0);
-					foreach ($logtext as $lineno=>$line) {
-						$fields[$lineno] = explode("\t", $line);
-						foreach ($fields[$lineno] as $key=>$field) {
-							if ($sizes[$key] < strlen($field)) $sizes[$key] = strlen($field);
-						}
-					}
-				}
 			} else {
 				$logtext = array();
 			}
@@ -137,47 +126,49 @@ echo "\n</head>";
 				<br />
 				<blockquote class="logtext">
 					<?php
-					if ($subtab == 'security_log' && !empty($logtext)) {
-						$header = explode("\t", array_shift($logtext));
-						?>
-						<table id="log_table">
-							<?php
-							if (!empty($header)) {
-								?>
-								<tr>
+					if (!empty($logtext)) {
+						$header = array_shift($logtext);
+						$fields = explode("\t", $header);
+						if (count($fields) > 1) { // there is a header row, display in a table
+							?>
+							<table id="log_table">
+								<?php
+								if (!empty($header)) {
+									?>
+									<tr>
+										<?php
+											foreach ($fields as $field) {
+												?>
+												<th>
+													<span class="nowrap"><?php echo $field; ?></span>
+												</th>
+												<?php
+											}
+										?>
+									</tr>
 									<?php
-										foreach ($header as $field) {
-											?>
-											<th>
-												<span class="nowrap"><?php echo $field; ?></span>
-											</th>
-											<?php
-										}
+								}
+								foreach ($logtext as $line) {
 									?>
-								</tr>
-								<?php
-							}
-							foreach ($logtext as $line) {
-								?>
-								<tr>
-								<?php
-								$fields = explode("\t", $line);
-								foreach ($fields as $key=>$field) {
+									<tr>
+									<?php
+									$fields = explode("\t", $line);
+									foreach ($fields as $key=>$field) {
+										?>
+										<td>
+											<span class="nowrap"><?php echo $field; ?></span>
+										</td>
+										<?php
+									}
 									?>
-									<td>
-										<span class="nowrap"><?php echo $field; ?></span>
-									</td>
+									</tr>
 									<?php
 								}
 								?>
-								</tr>
-								<?php
-							}
-							?>
-						</table>
-						<?php
-					} else {
-						if (!empty($logtext)) {
+							</table>
+							<?php
+						} else {
+							array_unshift($logtext, $header);
 							foreach ($logtext as $line) {
 								?>
 								<p>

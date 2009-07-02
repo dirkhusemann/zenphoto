@@ -93,7 +93,6 @@ $_zp_admin_users = null;
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
 function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1) {
-
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user' AND `valid`=$valid";
 	$result = query_single_row($sql);
@@ -127,9 +126,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $g
 				mysql_real_escape_string($group)."')";
 		$result = query($sql);
 		$id = mysql_insert_id();
-
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: inserting[$id]:$result"); }
-
 	}
 	$gallery = new Gallery();
 	if (is_array($albums)) {
@@ -179,35 +176,27 @@ function getAdministrators() {
  * @return bit
  */
 function checkAuthorization($authCode) {
-
 	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
-
 	global $_zp_current_admin;
 	$admins = getAdministrators();
 	if (DEBUG_LOGIN) { debugLogArray("checkAuthorization: admins",$admins);	}
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
 		$_zp_current_admin = null;
-
 		if (DEBUG_LOGIN) { debugLog("checkAuthorization: no admin or reset request"); }
-
 		return ADMIN_RIGHTS; //no admins or reset request
 	}
 	if (empty($authCode)) return 0; //  so we don't "match" with an empty password
 	$i = 0;
 	foreach($admins as $key=>$user) {
-
 		if (DEBUG_LOGIN) { debugLog("checkAuthorization: checking: $key");	}
-
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
 			$result = $user['rights'];
 			if ($i == 0) { // the first admin is the master.
 				$result = $result | ADMIN_RIGHTS;
 			}
-
 			if (DEBUG_LOGIN) { debugLog("checkAuthorization: match");	}
-
 			return $result;
 		}
 		$i++;
@@ -269,10 +258,8 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
  * @param int $oldversion
  */
 function migrateAuth($oldversion) {
-	
-	printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, LIBAUTH_VERSION);	
-	
 	global $_admin_rights;
+	printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, LIBAUTH_VERSION);	
 	$_zp_admin_users = array();
 	$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 	$admins = query_full_array($sql, true);
@@ -297,7 +284,7 @@ function migrateAuth($oldversion) {
 				$oldrights = array(	'NO_RIGHTS' => 1, // this should only be in the migration array
 														'OVERVIEW_RIGHTS' => pow(2,2),
 														'VIEW_ALL_RIGHTS' => pow(2,4),
-														'POST_COMMENT_RIGHTS'=> pow(2,6),
+														'POST_COMMENT_RIGHTS' => pow(2,6),
 														'UPLOAD_RIGHTS' => pow(2,8),
 														'COMMENT_RIGHTS' => pow(2,10),
 														'ALBUM_RIGHTS' => pow(2,12),
@@ -395,14 +382,13 @@ class Administrator extends PersistentObject {
 	/**
 	 * This is a simple class so that we have a convienient "handle" for manipulating Administrators.
 	 *
-	 * @return Administrator
 	 */
 	
 	/**
 	 * Constructor for an Administrator
 	 *
 	 * @param string $userid.
-	 * @return Comment
+	 * @return Administrator
 	 */
 	function Administrator($userid, $valid=1) {
 		parent::PersistentObject('administrators',  array('user' => $userid, 'valid'=>$valid), 'user', true, empty($userid));

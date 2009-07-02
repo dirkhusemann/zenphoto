@@ -27,7 +27,7 @@ require_once(dirname(__FILE__).'/functions-basic.php');
 require_once(dirname(__FILE__).'/functions-filter.php');
 require_once(dirname(__FILE__).'/class-load.php');
 
-if (getOption('album_session') && OFFSET_PATH==0) {
+if (getOption('album_session') && OFFSET_PATH==0 && session_id() == '') {
 	session_start();
 }
 

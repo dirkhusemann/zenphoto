@@ -6,10 +6,10 @@
 
 // force UTF-8 Ø
 
-require_once(dirname(__FILE__).'/functions.php');
 
 if (session_id() == '') session_start();
 
+require_once(dirname(__FILE__).'/functions.php');
 $_zp_admin_ordered_taglist = NULL;
 $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
