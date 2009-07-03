@@ -84,8 +84,9 @@ class admin_login {
  * @param string $name
  * @param string $ip
  * @param string $type
+ * @param bool $authority kind of login
  */
-function loginLogger($success, $user, $pass, $name, $ip, $type) {
+function loginLogger($success, $user, $pass, $name, $ip, $type, $authority) {
 	switch (getOption('logger_log_type')) {
 		case 'all': 
 			break;
@@ -100,11 +101,20 @@ function loginLogger($success, $user, $pass, $name, $ip, $type) {
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
-		fwrite($f, 'date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\n");
+		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'athority'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\n"));
 	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
-	$message .= $type."\t";
+	if ($type == 'frontend') {
+		$message .= gettext('Front-end')."\t";
+	} else {
+		$message .= gettext('Back-end')."\t";
+	}
+	if ($success) {
+		$message .= substr($authority, 0, strrpos($authority,'_auth'))."\t";
+	} else {
+		$message .= "\t";
+	}
 	$message .= $user."\t";
 	if ($success) {
 		$message .= "**********\t";
@@ -139,7 +149,7 @@ function adminLoginLogger($success, $user, $pass) {
 	} else {
 		$name = '';
 	}
-	loginLogger($success, $user, $pass, $name, sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('admin'));
+	loginLogger($success, $user, $pass, $name, sanitize($_SERVER['REMOTE_ADDR'], 0), 'backend', 'zp_admin_auth');
 	return $success;
 }
 
@@ -150,10 +160,11 @@ function adminLoginLogger($success, $user, $pass) {
  * @param bool $success
  * @param string $user
  * @param string $pass
+ * @param string $athority what kind of login
  * @return bool
  */
-function guestLoginLogger($success, $user, $pass) {
-	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), gettext('guest'));
+function guestLoginLogger($success, $user, $pass, $athority) {
+	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), 'frontend', $athority);
 	return $success;
 }
 
