@@ -1085,9 +1085,7 @@ if (empty($alterrights)) {
 					?>
 					</td>
 					<td style="background-color: #ECF1F2;">
-						<p><?php echo gettext("User ID for the gallery guest user") ?></p>
-						<p><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></p>
-						<p><?php echo gettext("A reminder hint for the password."); ?></p>
+						<p><?php echo gettext("Master password for the gallery. Click on <em>Gallery password</em> to change."); ?></p>
 					</td>
 				</tr>
 				<tr class="passwordextrahide" style="display:none" >
@@ -1313,9 +1311,7 @@ if (empty($alterrights)) {
 					?>
 					</td>
 					<td style="background-color: #ECF1F2;">
-						<p><?php echo gettext("User ID for the search guest user") ?></p>
-						<p><?php echo gettext("Password for the search guest user. If this is set, visitors must know this password to view search results."); ?></p>
-						<p><?php echo gettext("A reminder hint for the password."); ?></p>
+						<p><?php echo gettext("Password for the search guest user. click on <em>Search password</em> to change."); ?></p>
 					</td>
 				</tr>
 				<tr class="passwordextrahide" style="display:none" >
