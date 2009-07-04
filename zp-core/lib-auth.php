@@ -65,7 +65,8 @@ function defineRights() {
 	foreach ($_admin_rights as $right) $allrights = $allrights | $right;
 	return $allrights | NO_RIGHTS;
 }
-	
+
+$_lib_auth_extratext = getOption('extra_auth_hash_text');
 /**
  * Returns the hash of the zenphoto password
  *
@@ -74,7 +75,8 @@ function defineRights() {
  * @return string
  */
 function passwordHash($user, $pass) {
-	return md5($user . $pass);
+	global $_lib_auth_extratext;
+	return md5($user . $pass . $_lib_auth_extratext);
 }
 
 //admin user handling
@@ -219,9 +221,9 @@ function checkAuthorization($authCode) {
 function checkLogon($user, $pass, $admin_login) {
 	$admins = getAdministrators();
 	$success = false;
+	$md5 = passwordHash($user, $pass);
 	foreach ($admins as $admin) {
 		if ($admin['user'] == $user) {
-			$md5 = passwordHash($user, $pass);
 			if ($admin['pass'] == $md5) {
 				$success = checkAuthorization($md5);
 				break;
@@ -336,6 +338,15 @@ function migrateAuth($oldversion) {
 			$sql = 'UPDATE '.prefix('administrators').' SET `rights`='.$newrights.' WHERE `id`='.$user['id'];
 			query($sql);
 		} // end loop
+	} else {
+		$_lib_auth_extratext = "";
+		$salt = 'abcdefghijklmnopqursuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+-={}[]|\:;<>,.?/';
+		$list = range(0, strlen($salt));
+		shuffle($list);
+		for ($i=0; $i < 30; $i++) {
+			$_lib_auth_extratext = $_lib_auth_extratext . substr($salt, $list[$i], 1);
+		}
+		setOption('extra_auth_hash_text', $_lib_auth_extratext);
 	}
 }
 
@@ -375,6 +386,33 @@ function updateAdminField($field, $value, $constraints) {
 	}
 	$sql = 'UPDATE '.prefix('administrators').' SET `'.$field.'`='.$value.' WHERE '.$where;
 	return query($sql);
+}
+
+/**
+ * Option handler class
+ *
+ */
+class lib_auth_options {
+	
+	/**
+	 * class instantiatio function
+	 *
+	 * @return lib_auth_options
+	 */
+	function lib_auth_options() {
+		setOptionDefault('extra_auth_hash_text', '');
+	}
+
+	/**
+	 * Declares options used by lib-auth
+	 *
+	 * @return array
+	 */
+	function getOptionsSupported() {
+		return array(	gettext('Augment password hash:') => array('key' => 'extra_auth_hash_text', 'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication. <strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.'))
+								);
+	}
 }
 				
 class Administrator extends PersistentObject {
