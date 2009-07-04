@@ -915,6 +915,7 @@ if (empty($alterrights)) {
 						<select id="date_format_list" name="date_format_list" onchange="showfield(this, 'customTextBox')">
 						<?php
 						$formatlist = array(gettext('Custom')=>'custom',
+								gettext('Preferred date representation') => '%x',
 								gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
 								gettext('02/25/08')=>'%d/%m/%y',
 								gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
@@ -996,6 +997,11 @@ if (empty($alterrights)) {
 					?>
 					</td>
 				</tr>
+				<?php
+				if (class_exists('lib_auth_options')) {
+					customOptions(new lib_auth_options(), "");
+				}
+				?>
 				<tr>
 					<td><?php echo gettext('Captcha generator:'); ?></td>
 					<td>
@@ -1305,10 +1311,10 @@ if (empty($alterrights)) {
 						</p>
 					</td>
 					<td style="background-color: #ECF1F2;">
-					<?php
-					$x = getOption('search_password');
-					if (!empty($x)) echo "**********";
-					?>
+						<?php
+						$x = getOption('search_password');
+						if (!empty($x)) echo "**********";
+						?>
 					</td>
 					<td style="background-color: #ECF1F2;">
 						<p><?php echo gettext("Password for the search guest user. click on <em>Search password</em> to change."); ?></p>
@@ -1345,43 +1351,42 @@ if (empty($alterrights)) {
 				</tr>
 				<tr>
 					<td><?php echo gettext("Search behavior settings:"); ?></td>
+					<?php 
+					$exact = ' <input type="radio" id="exact_tags" name="tag_match" value="1" ';
+					$partial = ' <input type="radio" id="exact_tags" name="tag_match" value="0" ';
+					if (getOption('exact_tag_match')) {
+						$exact .= ' CHECKED ';
+					} else {
+						$partial .= ' CHECKED ';
+					}
+					$exact .= '/>'. gettext('exact');
+					$partial .= '/>'. gettext('partial');
+					$engine = new SearchEngine();
+					$fields = array_flip($engine->zp_search_fields);
+					$fields[SEARCH_TAGS] .= $exact.$partial;
+					$fields = array_flip($fields);
+					$set_fields = $engine->allowedSearchFields();
+					?>
 					<td>
-					<p>
-						<?php 
-						$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
-						$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
-						if (getOption('exact_tag_match')) {
-							$exact .= ' CHECKED ';
-						} else {
-							$partial .= ' CHECKED ';
-						}
-						$exact .= '/>'. gettext('exact');
-						$partial .= '/>'. gettext('partial');
-						$engine = new SearchEngine();
-						$fields = array_flip($engine->zp_search_fields);
-						$fields[SEARCH_TAGS] .= $exact.$partial;
-						$fields = array_flip($fields);
-						$set_fields = $engine->allowedSearchFields();
-						echo gettext('Fields list:');
-						?>
-							<ul class="searchchecklist">
-								<?php
-								generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
-								?>
-							</ul>
-					</p>
-					<p>
-						<label>
-							<input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> />
-							<?php echo gettext('Treat spaces as <em>OR</em>') ?>
-						</label>
-					</p>
-					<p>
-						<label>
-							<input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> />
-							<?php echo gettext('Do not return <em>album</em> matches') ?>
-						</label>
-					</p>
+						<?php echo gettext('Fields list:'); ?>
+						<ul class="searchchecklist">
+							<?php
+							generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+							?>
+						</ul>
+						<br />
+						<p>
+							<label>
+								<input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> />
+								<?php echo gettext('Treat spaces as <em>OR</em>') ?>
+							</label>
+						</p>
+						<p>
+							<label>
+								<input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> />
+								<?php echo gettext('Do not return <em>album</em> matches') ?>
+							</label>
+						</p>
 					</td>
 					<td>
 						<p><?php echo gettext('Search behavior settings.') ?></p>
@@ -1674,33 +1679,60 @@ if (empty($alterrights)) {
 			</td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Watermark images:"); ?></td>
+			<td><?php echo gettext("Watermarks:"); ?></td>
 			<td>
+				<table>
 				<?php
 				$current = getOption('fullimage_watermark');
-				echo gettext('watermark with');
+				
 				?>
-				<select id="fullimage_watermark" name="fullimage_watermark">
-				<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
-				<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
-				</select>
-			<br />
-			<?php echo gettext('cover').' '; ?>
-			<input type="text" size="2" name="watermark_scale"
-					value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
-			<span style="white-space:nowrap">
-				<label>
-					<input type="checkbox" name="watermark_allow_upscale" value="1"
-					<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />
-					<?php echo gettext("allow upscale"); ?>
-				</label>
-			</span>
-			<br />
-			<?php echo gettext("offset h"); ?>
-			<input type="text" size="2" name="watermark_h_offset"
-					value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
-			<input type="text" size="2" name="watermark_w_offset"
-				value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
+				<tr>
+					<td style="margin:0; padding:0;"><?php echo gettext('Images'); ?> </td>
+					<td style="margin:0; padding:0">
+						<select id="fullimage_watermark" name="fullimage_watermark">
+							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
+							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+						</select>
+					</td>
+				</tr>
+				<?php
+				$imageplugins = array_unique($_zp_extra_filetypes);
+				$imageplugins[] = 'Image';
+				ksort($imageplugins);
+				foreach ($imageplugins as $plugin) {
+					$opt = $plugin.'_watermark';
+					$current = getOption($opt);
+					?>
+					<tr>
+						<td style="margin:0; padding:0;"><?php	echo $plugin;	?> <?php echo gettext('thumbnails'); ?> </td>
+						<td style="margin:0; padding:0">
+							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
+							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
+							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+							</select>
+						</td>
+					</tr>
+					<?php
+					}
+				?>
+				</table>
+				<br />
+				<?php echo gettext('cover').' '; ?>
+				<input type="text" size="2" name="watermark_scale"
+						value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="watermark_allow_upscale" value="1"
+						<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />
+						<?php echo gettext("allow upscale"); ?>
+					</label>
+				</span>
+				<br />
+				<?php echo gettext("offset h"); ?>
+				<input type="text" size="2" name="watermark_h_offset"
+						value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
+				<input type="text" size="2" name="watermark_w_offset"
+					value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 			</td>
 			<td>
 				<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image."); ?></p>
@@ -1709,39 +1741,6 @@ if (empty($alterrights)) {
 				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?></p>
 			</td>
 												           
-		</tr>
-		<?php
-			$imageplugins = array_unique($_zp_extra_filetypes);
-			$imageplugins[] = 'Image';
-			ksort($imageplugins);
-		?>
-		<tr>
-			<td><?php echo gettext("Watermark thumbnails:"); ?></td>
-			<td>
-				<table>
-				<?php
-				foreach ($imageplugins as $plugin) {
-					$opt = $plugin.'_watermark';
-					$current = getOption($opt);
-					?>
-					<tr>
-						<td style="margin:0; padding:0"><?php	echo "$plugin";	?></td>
-						<td style="margin:0; padding:0">
-							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
-							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
-							</select>
-						</td>
-					</tr>
-				<?php
-					}
-				?>
-				</table>
-			</td>
-			<td>
-				<p><?php echo gettext("The watermark image that will be overlayed on the thumbnail."); ?></p> 
-				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?></p>
-			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Full image protection:"); ?></td>
@@ -1827,7 +1826,6 @@ if (empty($alterrights)) {
 						</td>
 					</tr>
 				</table>
-				</td>
 			</td>
 			<td>
 				<p><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?></p>

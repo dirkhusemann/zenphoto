@@ -254,20 +254,21 @@ printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
 							<input type="hidden" id="performcrop" name="performcrop" value="<?php echo $_REQUEST['performcrop'] ?>" />
 							<br />	
 							<p class="buttons">
-							<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>"><img src="../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-							<?php
-							if ($_REQUEST['performcrop'] == 'backend') {
-								?>
-								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
-								</p><br />
+								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>"><img src="../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 								<?php
-							} else {
-								?>
-								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../../index.php?album=<?php echo urlencode($albumname); ?>&amp;image=<?php echo urlencode($imagename); ?>'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
-								</p><br />
-								<?php
-							}
-							?>			
+								if ($_REQUEST['performcrop'] == 'backend') {
+									?>
+									<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+									<br />
+									<?php
+								} else {
+									?>
+									<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../../index.php?album=<?php echo urlencode($albumname); ?>&amp;image=<?php echo urlencode($imagename); ?>'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+									<?php
+								}
+								?>			
+							</p>
+							<br />
 						</form>
 
 					</div>

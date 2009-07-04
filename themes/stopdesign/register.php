@@ -20,7 +20,7 @@ require_once('normalizer.php');
 <body class="archive">
 	<?php echo getGalleryTitle(); ?>
 	<div id="content">
-		<h1><?php printGalleryTitle(); echo ' <em>'.gettext('Register'); ?></em></h1>
+		<h1><?php printGalleryTitle(); ?> <em><?php echo gettext('Register'); ?></em></h1>
 		<div class="galleries">
 		<h2><?php echo gettext('Fill in your details below.') ?></h2>
 		<?php  printRegistrationForm();  ?>

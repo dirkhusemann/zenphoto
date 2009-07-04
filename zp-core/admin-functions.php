@@ -181,7 +181,8 @@ function datepickerJS($path) {
  * @since  1.0.0
  */
 function printAdminHeader($path='', $tinyMCE=true) {
-	header ('Content-Type: text/html; charset=' . getOption('charset'));
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+	header('Content-Type: text/html; charset=' . getOption('charset'));
 	?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
@@ -799,20 +800,20 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $su
 					case OPTION_TYPE_CHECKBOX_UL:
 						?>
 						<td width=\"350px>
-						<?php
-						$cvarray = array();
-						$c = 0;
-						foreach ($row['checkboxes'] as $display=>$checkbox) {
-							?>
-							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />' . "\n";
 							<?php
-							$ck_sql = str_replace($key, $checkbox, $sql);
-							$db = query_single_row($ck_sql);
-							if ($db) {
-								if ($db['value'])	$cvarray[$c++] = $checkbox;
+							$cvarray = array();
+							$c = 0;
+							foreach ($row['checkboxes'] as $display=>$checkbox) {
+								?>
+								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
+								<?php
+								$ck_sql = str_replace($key, $checkbox, $sql);
+								$db = query_single_row($ck_sql);
+								if ($db) {
+									if ($db['value'])	$cvarray[$c++] = $checkbox;
+								}
 							}
-						}
-						?>
+							?>
 							<ul class="customchecklist">
 								<?php generateUnorderedListFromArray($cvarray, $row['checkboxes'], '', '', true, true); ?>
 							</ul>
@@ -1021,6 +1022,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<table>
 		<td width="70%" valign="top">
 		<table>
+		<tr>
 		<td align="left" valign="top" width="150"><?php echo gettext("Album Title"); ?>: </td>
 		<td>
 		<?php print_language_string_list($album->get('title'), $prefix."albumtitle", false); ?>
@@ -1065,8 +1067,8 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</p>
 		</td>
 		<td>
-			<p></p>
-			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
+			<p>
+				<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
 			</p>
 			<p>
 			<?php

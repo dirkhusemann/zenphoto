@@ -113,6 +113,7 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 		// Include the appropriate page for the requested object, and a 200 OK header.
 		header("HTTP/1.0 200 OK");
 		header("Status: 200 OK");
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		include($obj);
 
 } else {

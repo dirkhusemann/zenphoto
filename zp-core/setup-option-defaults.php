@@ -191,7 +191,7 @@ function setDefault($option, $default) {
 	}
 
 	setOptionDefault('locale', '');
-	setOptionDefault('date_format', '%c');
+	setOptionDefault('date_format', '%x');
 
 	// plugins--default to enabled
 	setOptionDefault('zp_plugin_google_maps', 0);

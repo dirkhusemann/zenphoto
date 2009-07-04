@@ -300,18 +300,23 @@ if(is_object($result)) {
     		
     		</div>
 			
-    	<p>
-    	<?php
-    if (is_AdminEditPage("newsarticle")) { ?>
-    	<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>
-    	<?php 
-    	if(is_object($result)) {
-    	 	printCategorySelection(getIfObject($result,"id")); 
-    	} else {
-    		printCategorySelection("","all");
-    	}
-		} ?>
-      </p>
+		    <?php
+		    if (is_AdminEditPage("newsarticle")) {
+		    	?>
+			    <h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>
+		    	<p>
+			    	<?php 
+			    	if(is_object($result)) {
+			    	 	printCategorySelection(getIfObject($result,"id")); 
+			    	} else {
+			    		printCategorySelection("","all");
+			    	}
+			    	?>
+      		</p>
+      		<?php
+				}
+				?>
+
     </td>
    </tr>
     <tr>

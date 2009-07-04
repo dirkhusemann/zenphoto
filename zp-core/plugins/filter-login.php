@@ -101,7 +101,7 @@ function loginLogger($success, $user, $pass, $name, $ip, $type, $authority) {
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
-		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'athority'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\n"));
+		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'athority'."\n"));
 	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
@@ -110,18 +110,16 @@ function loginLogger($success, $user, $pass, $name, $ip, $type, $authority) {
 	} else {
 		$message .= gettext('Back-end')."\t";
 	}
-	if ($success) {
-		$message .= substr($authority, 0, strrpos($authority,'_auth'))."\t";
-	} else {
-		$message .= "\t";
-	}
 	$message .= $user."\t";
 	if ($success) {
 		$message .= "**********\t";
-		$message .= $name."\tSuccess";
+		$message .= $name."\tSuccess\t";
 	} else {
 		$message .= $pass."\t";
-		$message .= "\tFailed";
+		$message .= "\tFailed\t";
+	}
+	if ($success) {
+		$message .= substr($authority, 0, strrpos($authority,'_auth'));
 	}
 	fwrite($f, $message . "\n");
 	fclose($f);
