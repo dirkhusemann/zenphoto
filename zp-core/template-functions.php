@@ -951,7 +951,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
  * @param string $elipsis the text to append to the truncated description
  */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $truncate=NULL, $elipsis='...') {
-	global $_zp_current_search, $_zp_current_album, $_zp_last_album, $_zp_search_album_list;
+	global $_zp_gallery, $_zp_current_search, $_zp_current_album, $_zp_last_album, $_zp_search_album_list;
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
 		$page = $_zp_current_search->page;
