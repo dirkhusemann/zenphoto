@@ -58,7 +58,7 @@ class register_user_options {
 				<td style="margin:0; padding:0"><?php echo gettext('script'); ?></td>
 				<td style="margin:0; padding:0"> 
 					<select id="user_registration_page" name="user_registration_page">
-						<option value=''>
+						<option value=""></option>
 						<?php
 						$curdir = getcwd();
 						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$gallery->getCurrentTheme().'/';
@@ -188,15 +188,20 @@ function printRegistrationForm($thanks=NULL) {
 	}
 	if (isset($notify)) {
 		if ($notify == 'verified' || $notify == 'accepted') {
-			if ($notify == 'verified') {
-				if (is_null($thanks)) $thanks = gettext("Thank you for registering.");
-			} else {
-				$thanks = gettext('An email has been sent to you to verify your email address.');
-			}
-			echo '<div class="Messagebox" id="fade-message">';
-			echo  '<h2>'.gettext('Your registration has been accepted.').'</h2>';
-			echo  '<p>'.$thanks.'</p>';
-			echo '</div>';
+			?>
+			<div class="Messagebox" id="fade-message">
+				<p>
+				<?php
+				if ($notify == 'verified') {
+					if (is_null($thanks)) $thanks = gettext("Thank you for registering.");
+					echo $thanks;
+				} else {
+					echo gettext('Your registration information has been accepted. An email has been sent to you to verify your email address.');
+				}
+				?>
+				</p>
+			</div>
+			<?php
 			if (function_exists('printUserLogout') && $notify == 'verified') {
 				?>
 				<p><?php echo gettext('You may now log onto the site.'); ?></p>

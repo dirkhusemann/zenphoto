@@ -1305,10 +1305,19 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		</tr>
 	<?php
 	}
+	$current = $album->get('watermark');
   ?>
+  <tr>
+  	<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
+  	<td>
+			<select id="album_watermark" name="album_watermark">
+				<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">not set</option>
+				<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+			</select>
+  	</td>
+  </tr>
   
   <tr>
- 
 	<td align="left" valign="top" width="150"><?php echo gettext("Thumbnail:"); ?> </td>
 	<td>
 	<?php
@@ -1775,6 +1784,7 @@ function printAlbumEditRow($album) {
  *@since 1.1.3
  */
 function processAlbumEdit($index, $album) {
+	global $gallery;
 	if ($index == 0) {
 		$prefix = '';
 	} else {
@@ -1876,6 +1886,12 @@ function processAlbumEdit($index, $album) {
 		}
 	}
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));
+	$old = $album->get('watermark');
+	if (isset($_POST['album_watermark'])) {
+		$new = sanitize($_POST['album_watermark'], 3);
+		$album->set('watermark', $new);
+		if ($new != $old) $gallery->clearCache(SERVERCACHE . '/' . $album->name);
+	}
 	$custom = process_language_string_save($prefix.'album_custom_data', 1);
 	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
 	zp_apply_filter('save_album_utilities_data', $album, $prefix);

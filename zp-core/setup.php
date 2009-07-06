@@ -1637,6 +1637,7 @@ if (file_exists(CONFIGFILE)) {
 			}
 		}
 	}
+	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `watermark` varchar(256)';
 	
 	
 	

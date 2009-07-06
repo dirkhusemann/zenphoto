@@ -1684,13 +1684,12 @@ if (empty($alterrights)) {
 				<table>
 				<?php
 				$current = getOption('fullimage_watermark');
-				
 				?>
 				<tr>
 					<td style="margin:0; padding:0;"><?php echo gettext('Images'); ?> </td>
 					<td style="margin:0; padding:0">
 						<select id="fullimage_watermark" name="fullimage_watermark">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
+							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">none</option>
 							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
 						</select>
 					</td>
@@ -1707,7 +1706,7 @@ if (empty($alterrights)) {
 						<td style="margin:0; padding:0;"><?php	echo $plugin;	?> <?php echo gettext('thumbnails'); ?> </td>
 						<td style="margin:0; padding:0">
 							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
+							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">none</option>
 							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
 							</select>
 						</td>
@@ -2182,7 +2181,7 @@ if (empty($alterrights)) {
 				<td><?php echo gettext("Custom index page:"); ?></td>
 				<td>
 					<select id="custom_index_page" name="custom_index_page">
-						<option value=''>
+						<option value=""></option>
 						<?php
 						$curdir = getcwd();
 						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';

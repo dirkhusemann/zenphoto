@@ -22,7 +22,7 @@ require_once('normalizer.php');
 	<div id="content">
 		<h1><?php printGalleryTitle(); ?> <em><?php echo gettext('Register'); ?></em></h1>
 		<div class="galleries">
-		<h2><?php echo gettext('Fill in your details below.') ?></h2>
+		<h2><?php echo gettext('User Registration') ?></h2>
 		<?php  printRegistrationForm();  ?>
 	</div>
 </div>

@@ -11,7 +11,7 @@
 require_once(dirname(__FILE__).'/folder-definitions.php');
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_ERROR', true); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 define('DEBUG_404', false); // set to true to log 404 error processing debug information.
 
@@ -903,4 +903,45 @@ function im_suffix() {
 function getSuffix($filename) {
 	return strtolower(substr(strrchr($filename, "."), 1));
 }
+
+/**
+ * Returns the Require string for the appropriate script based on the PHP version
+ *
+ * @param string $v The version dermarkation
+ * @param string $script the script name
+ * @return string
+ */
+function PHPScript($v, $script) {
+	return dirname(__FILE__).'/'.(version_compare(PHP_VERSION, $v) === 1?'PHP5':'PHP4').'_functions/'.$script;
+}
+
+/**
+ * returns the non-empty value of $field from the album or one of its parents
+ *
+ * @param string $folder the album name
+ * @param string $field the desired field name
+ * @param int $id will be set to the album `id` of the album which has the non-empty field
+ * @return string
+ */
+function getAlbumInherited($folder, $field, &$id) {
+	$folders = explode('/',filesystemToInternal($folder));
+	$album = array_shift($folders);
+	$like = ' LIKE "'.$album.'"';
+	while (count($folders) > 0) {
+		$album .= '/'.array_shift($folders);
+		$like .= ' OR `folder` LIKE "'.$album.'"';
+	}
+	$sql = 'SELECT `id`, `'.$field.'` FROM '.prefix('albums').' WHERE `folder`'.$like;
+	$result = query_full_array($sql);
+	if (!is_array($result)) return '';
+	while (count($result) > 0) {
+		$try = array_pop($result);
+		if (!empty($try[$field])) {
+			$id = $try['id'];
+			return $try[$field];
+		}
+	}
+	return '';
+}
+
 ?>

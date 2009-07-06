@@ -121,8 +121,9 @@ function propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim
  * @param bool $allow_watermark set to true if image may be watermarked
  * @param bool $force_cache set to true to force the image into the cache folders
  * @param string $theme the current theme
+ * @param string $album the album containing the image
  */
-function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
+function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme, $album) {
 	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
 	// Set the config variables for convenience.
 	$image_use_side = getOption('image_use_side');
@@ -130,6 +131,9 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	$allowscale = true;
 	$sharpenthumbs = getOption('thumb_sharpen');
 	$sharpenimages = getOption('image_sharpen');
+	$id = NULL;
+	$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
+	if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
 	if ($gray) {
 		$grayscale = true;
 	} else 	if ($thumb) {
@@ -196,7 +200,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 											"\$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache \$grayscale=$grayscale");
 		
 		if (!$upscale && $newh >= $h && $neww >= $w) { // image is the same size or smaller than the request
-			if (!$grayscale && !getOption('fullimage_watermark') && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
+			if (!$grayscale && !$watermark_use_image && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
 				if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
 				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
 					$image = substr(strrchr($imgfile, '/'), 1);
@@ -229,7 +233,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 					$height = $newh;
 				}
 			}
-			if (DEBUG_IMAGE) debugLog("cacheImage:no upscale ".basename($imgfile).":  \$newh=$newh, \$neww=$neww, \$crop=$crop, \$thumb=$thumb, \$rotate=$rotate, \$force_cache=$force_cache, watermark=".getOption('fullimage_watermark'));
+			if (DEBUG_IMAGE) debugLog("cacheImage:no upscale ".basename($imgfile).":  \$newh=$newh, \$neww=$neww, \$crop=$crop, \$thumb=$thumb, \$rotate=$rotate, \$force_cache=$force_cache, watermark=".$watermark_use_image);
 		}
 		// Crop the image if requested.
 		if ($crop) {
@@ -318,7 +322,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 		} else {
 			if ($allow_watermark) {
-				$watermark_image = getOption('fullimage_watermark');
+				$watermark_image = $watermark_use_image;
 				if ($watermark_image) {
 					$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_image).'.png';
 					if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
@@ -396,11 +400,6 @@ function getImageRotation($imgfile) {
 }
 
 //load PHP specific functions
-
-if (version_compare(PHP_VERSION, '5.0.0') === 1) {
-	require_once(dirname(__FILE__).'/PHP5_functions/_functions-image.php');
-} else {
-	require_once(dirname(__FILE__).'/PHP4_functions/_functions-image.php'); // [sic]
-}
+require_once(PHPscript('5.0.0', '_functions-image.php'));
 
 ?>

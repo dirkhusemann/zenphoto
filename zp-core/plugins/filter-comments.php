@@ -34,7 +34,6 @@ function emailReply($comment, $owner) {
 	switch ($comment->getType()) {
 		case "albums":
 			$url = "album=" . urlencode($owner->name);
-			$ur_album = getUrAlbum($owner);
 			$action = sprintf(gettext('A reply has been posted on album "%1$s".'), $owner->name);
 			break;
 		case "news":
@@ -47,8 +46,6 @@ function emailReply($comment, $owner) {
 			break;
 		default: // all image types
 			$url = "album=" . urlencode($owner->album->name) . "&image=" . urlencode($owner->filename);
-			$album = $owner->getAlbum();
-			$ur_album = getUrAlbum($album);
 			$action = sprintf(gettext('A reply has been posted on "%1$s" the album "%2$s".'), $owner->getTitle(), $owner->getAlbumName());
 	}
 

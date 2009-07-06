@@ -57,8 +57,11 @@ $rotate = false;
 if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 	$rotate = getImageRotation($image_path);
 }
+$id = NULL;
+$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
+if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
 
-if (!getOption('fullimage_watermark') && !$rotate) { // no processing needed
+if (!$watermark_use_image && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && !getOption('protect_full_image') == 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
 		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->filename));
@@ -88,12 +91,9 @@ if (getOption('protect_full_image') == 'Download') {
 if ($rotate) {
 	$newim = zp_rotateImage($newim, $rotate);
 }
-if (getOption('fullimage_watermark')) {
-	$watermark_image = getOption('fullimage_watermark');
-	if ($watermark_image) {
-		$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_image).'.png';
-		if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
-	}
+if ($watermark_use_image) {
+	$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_use_image).'.png';
+	if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;
 	$watermark = zp_imageGet($watermark_image);

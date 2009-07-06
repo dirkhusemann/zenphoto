@@ -26,7 +26,6 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 
 	<div id="content-left">
 	<h1><?php echo gettext('User Registration') ?></h1>
-	<h2><?php echo gettext('Fill in your details below.') ?></h2>
 	<?php  printRegistrationForm();  ?>
 	</div><!-- content left-->
 		

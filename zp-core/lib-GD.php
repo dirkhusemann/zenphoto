@@ -170,60 +170,10 @@ function zp_imageUnsharpMask($img, $amount, $radius, $threshold) {
 	$w = imagesx($img); $h = imagesy($img);
 	$imgCanvas = imagecreatetruecolor($w, $h);
 	$imgCanvas2 = imagecreatetruecolor($w, $h);
-	$imgBlur = imagecreatetruecolor($w, $h);
-	$imgBlur2 = imagecreatetruecolor($w, $h);
 	imagecopy ($imgCanvas, $img, 0, 0, 0, 0, $w, $h);
 	imagecopy ($imgCanvas2, $img, 0, 0, 0, 0, $w, $h);
-
-
-	// Gaussian blur matrix:
-	//    1    2    1
-	//    2    4    2
-	//    1    2    1
-	//////////////////////////////////////////////////
-
-	imagecopy($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h); // background
-
-	for ($i = 0; $i < $radius; $i++)    {
-		if (function_exists('imageconvolution')) { // PHP >= 5.1
-			$matrix = array(
-			array( 1, 2, 1 ),
-			array( 2, 4, 2 ),
-			array( 1, 2, 1 )
-			);
-			imageconvolution($imgCanvas, $matrix, 16, 0);
-		} else {
-
-			// Move copies of the image around one pixel at the time and merge them with weight
-			// according to the matrix. The same matrix is simply repeated for higher radii.
-
-			imagecopy      ($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
-			imagecopymerge ($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 1, 1, 0, $w - 1, $h, 33.33333); // down left
-			imagecopymerge ($imgBlur, $imgCanvas, 1, 0, 0, 1, $w, $h - 1, 25); // up right
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 1, 0, $w - 1, $h, 33.33333); // left
-			imagecopymerge ($imgBlur, $imgCanvas, 1, 0, 0, 0, $w, $h, 25); // right
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 0, 1, $w, $h - 1, 20 ); // up
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 1, 0, 0, $w, $h, 16.666667); // down
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h, 50); // center
-			imagecopy      ($imgCanvas, $imgBlur, 0, 0, 0, 0, $w, $h);
-
-			// During the loop above the blurred copy darkens, possibly due to a roundoff
-			// error. Therefore the sharp picture has to go through the same loop to
-			// produce a similar image for comparison. This is not a good thing, as processing
-			// time increases heavily.
-			imagecopy      ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 50);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 33.33333);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 25);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 33.33333);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 25);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 20 );
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 16.666667);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 50);
-			imagecopy      ($imgCanvas2, $imgBlur2, 0, 0, 0, 0, $w, $h);
-		}
-	}
+	
+	imageBlurGD($imgCanvas, $radius, $w, $h);
 
 	// Calculate the difference between the blurred pixels and the original
 	// and set the pixels
@@ -288,52 +238,6 @@ function zp_imageResizeAlpha(&$src, $w, $h) {
 	/* use imagecopyresampled if you concern more about the quality */
 	//imagecopyresampled($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
 	return $temp;
-}
-
-if (!function_exists('imagerotate')) {
-	 
-	/**
-	 * Substitute for GD imagerotate
-	 *
-	 * @param image $imgSrc
-	 * @param int $angle
-	 * @param int $bgd_colour
-	 * @return image
-	 */
-	function imagerotate($imgSrc, $angle, $bgd_colour) {
-		// ensuring we got really RightAngle (if not we choose the closest one)
-		$angle = min( ( (int)(($angle+45) / 90) * 90), 270 );
-
-		// no need to fight
-		if ($angle == 0)
-		return ($imgSrc);
-
-		// dimenstion of source image
-		$srcX = imagesx($imgSrc);
-		$srcY = imagesy($imgSrc);
-
-		switch ($angle) {
-			case 90:
-				$imgDest = imagecreatetruecolor($srcY, $srcX);
-				for ($x=0; $x<$srcX; $x++)
-				for ($y=0; $y<$srcY; $y++)
-				imagecopy($imgDest, $imgSrc, $srcY-$y-1, $x, $x, $y, 1, 1);
-				break;
-
-			case 180:
-				$imgDest = imageflip($imgSrc, IMAGE_FLIP_BOTH);
-				break;
-
-			case 270:
-				$imgDest = imagecreatetruecolor($srcY, $srcX);
-				for ($x=0; $x<$srcX; $x++)
-				for ($y=0; $y<$srcY; $y++)
-				imagecopy($imgDest, $imgSrc, $y, $srcX-$x-1, $x, $y, 1, 1);
-				break;
-		}
-
-		return ($imgDest);
-	}
 }
 
 /**
@@ -419,20 +323,7 @@ function zp_imageGray($image) {
 	$img_width = imagesx($image);
 	for ($y = 0; $y <$img_height; $y++) {
 		for ($x = 0; $x <$img_width; $x++) {
-
-			/* here we extract the green from
-				 the pixel at x,y , to use it as gray value */
 			$gray = (ImageColorAt($image, $x, $y) >> 8) & 0xFF;
-
-			/* a more exact way would be this:
-			$rgb = ImageColorAt($image, $x, $y);
-			$red = ($rgb >> 16) & 0xFF;
-			$green = (trgb >> 8) & 0xFF;
-			$blue = $rgb & 0xFF;
-			$gray = int(($red+$green+$blue)/4);
-			*/
-
-			// and here we set the new pixel/color
 			imagesetpixel ($image, $x, $y, ImageColorAllocate ($image, $gray,$gray,$gray));
 		}
 	}
@@ -511,5 +402,7 @@ function zp_graphicsLibInfo() {
 	}
 	return $lib;
 }
+
+require_once(PHPScript('5.1.0', '_functions_GD.php'));
 
 ?>

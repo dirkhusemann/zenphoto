@@ -189,7 +189,7 @@ if (file_exists($newfile) & !$adminrequest) {
 
 if ($process) { // If the file hasn't been cached yet, create it.
 	// setup standard image options from the album theme if it exists
-	if (!cacheImage_protected($newfilename, $imgfile, $args, $allowWatermark, false, $theme)) {
+	if (!cacheImage_protected($newfilename, $imgfile, $args, $allowWatermark, false, $theme, $album)) {
 		imageError(gettext('Image processing resulted in a fatal error.'));
 	}
 	$fmt = filemtime($newfile);
@@ -207,29 +207,21 @@ if (!$debug) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function themeSetup($album) {
-	// a real hack--but we need to conserve memory in i.php so loading the classes is out of the question.
-	$theme = getOption('current_theme');
-	$folders = explode('/', str_replace('\\', '/', $album));
-	if (isset($_GET['album'])) { //it is an album thumb
-		if (count($folders) <= 1) { // and the album is in the gallery
-			return $theme;
-		}
-	}
-	$uralbum = filesystemToInternal($folders[0]);
-	$sql = 'SELECT `id`, `album_theme` FROM '.prefix('albums').' WHERE `folder`="'.$uralbum.'"';
-	$result = query_single_row($sql);
-	if (!empty($result['album_theme'])) {
-		$theme = $result['album_theme'];
-		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`='.$result['id'];
+	// we need to conserve memory in i.php so loading the classes is out of the question.
+	$id = NULL;
+	$theme = getAlbumInherited(filesystemToInternal($album), 'album_theme', $id);
+	if (empty($theme)) {
+		return getOption('current_theme');
+	} else {
+		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`='.$id;
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
 				setOption($option['name'], $option['value'], false);
 			}
 		}
+		return $theme;
 	}
-	return $theme;
 }
 
 ?>

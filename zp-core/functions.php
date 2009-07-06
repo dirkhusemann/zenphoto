@@ -1973,12 +1973,7 @@ function logTime($tag) {
    debugLog($tag.' '.$time);	
 }
 //load PHP specific functions
-
-if (version_compare(PHP_VERSION, '5.0.0') === 1) {
-	require_once(dirname(__FILE__).'/PHP5_functions/_functions.php');
-} else {
-	require_once(dirname(__FILE__).'/PHP4_functions/_functions.php'); // [sic]
-}
+require_once(PHPScript('5.0.0', '_functions.php'));
 
 setexifvars();
 ?>

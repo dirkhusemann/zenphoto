@@ -8,12 +8,13 @@
  * Provides an error protected cacheImage for PHP 5
  *
  */
-function cacheImage_protected($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
+function cacheImage_protected($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme, $album) {
 	try {
-		cacheImage($newfilename, $imgfile, $args, $allow_watermark, $force_cache, $theme);
+		cacheImage($newfilename, $imgfile, $args, $allow_watermark, $force_cache, $theme, $album);
 		return true;
 	} catch (Exception $e) {
 		return false;
 	}
 }
+
 ?>
