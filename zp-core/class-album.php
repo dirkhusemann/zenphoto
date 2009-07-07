@@ -35,9 +35,8 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
-			zp_error('Bad gallery in album instantiation');			
-			$this->exists = false;
-			return NULL;
+			debugLogBacktrace('Bad gallery in album instantiation');			
+			$gallery = new Gallery();
 		}
 		$folder8 = sanitize_path($folder8);
 		$folderFS = internalToFilesystem($folder8);
