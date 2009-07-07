@@ -38,9 +38,9 @@ if (!file_exists($en_US)) {
 	@mkdir($en_US, $chmod);
 }
 
-function setupLog($message, $reset=false) {
+function setupLog($message, $anyway=false, $reset=false) {
   global $debug;
-	if ($debug) {
+	if ($debug || $anyway) {
 		if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
 			@mkdir(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
 		}
@@ -198,14 +198,14 @@ if (!function_exists('setOption')) { // setup a primitive environment
 
 if (!$checked) {
 	if (!isset($_POST['mysql'])) {
-		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);  // initialize the log file
+		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true, true);  // initialize the log file
 	}
 	if ($environ) {
 		setupLog("Full environment");
 	} else {
 		setupLog("Primitive environment");
 		if ($result) {
-			setupLog("Query error: ".mysql_error());
+			setupLog("Query error: ".mysql_error(), true);
 		}
 	}
 } else {
@@ -479,7 +479,7 @@ if (!$checked) {
 			<?php
 			$dsp .= ' '.trim($text);
 		}
-		setupLog($dsp);
+		setupLog($dsp, $check>-2 && $check<=0);
 		return $check;
 	}
 	
