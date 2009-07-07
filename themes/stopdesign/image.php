@@ -63,7 +63,7 @@ require_once('normalizer.php');
 					<li class="tags"><?php echo getAlbumPlace(); ?></li>
 					<li class="exif">
 				<?php
-					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
+					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
 						printImageMetadata('', false);
 						echo "&nbsp;/&nbsp;";
 					}

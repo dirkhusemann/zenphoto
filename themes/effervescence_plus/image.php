@@ -93,7 +93,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					</div>
 					<?php
 					if (getImageEXIFData()) {
-						echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
+						echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=500&amp;inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
 						printImageMetadata('', false);
 					}
 				} ?>

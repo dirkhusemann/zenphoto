@@ -51,6 +51,9 @@ $_zp_exifvars = array(
 	'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            false),
 	'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           true),
 	'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           true),
+	'EXIFDescription'       => array('IFD0',   'ImageDescription',  gettext('Image Title'), 	         false),
+	'EXIFArtist'			      => array('IFD0',   'Artist', 						gettext('Artist'), 	     					 false),
+	'EXIFCopyright'			    => array('IFD0',   'Copyright', 				gettext('Copyright Holder'), 			 false),
 	'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      gettext('Shutter Speed'),          true),
 	'EXIFFNumber'           => array('SubIFD', 'FNumber',           gettext('Aperture'),               true),
 	'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       gettext('Focal Length'),           true),
@@ -749,6 +752,10 @@ function getImageMetadata($imageName) {
 		}
 		if (!empty($date)) {
 			$result['date'] = $date;
+		}
+		//EXIF title
+		if (isset($sufIFD['ImageDescription'])) {
+			$result['title'] = $sufIFD['ImageDescription'];
 		}
 
 		/* check IPTC data */
