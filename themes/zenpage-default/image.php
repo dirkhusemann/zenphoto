@@ -59,10 +59,19 @@
 		} else {
 			$thickboxclass = "";
 		}
+		if (isImagePhoto()) {
+			?>
+			<a href="<?php echo htmlspecialchars(getUnprotectedImageURL()); ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
+			<?php
+		}
+		printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
+		<?php
+		if (isImagePhoto()) {
+			?>
+	  	</a>
+	  	<?php
+		}
 		?>
-		<a href="<?php echo htmlspecialchars(getUnprotectedImageURL()); ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
-		<?php printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
-   </a>
 	</div>
 
 	<div id="narrow">

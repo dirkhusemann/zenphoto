@@ -81,14 +81,15 @@ $firstPageImages = normalizeColumns(1, 7);
 			<?php if (function_exists('printAlbumMap')) printAlbumMap(); ?>
 		</div>
 
- <!-- begin comment block -->
+
+ 		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
+
+<!-- begin comment block -->
 			<?php if (function_exists('printCommentForm')  && getCurrentPage() == 1) {
 				printCommentForm();
 			}
 			?>
 <!--  end comment block -->
-
- 		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 
 		<div id="credit">
 		<?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | 

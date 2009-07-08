@@ -43,18 +43,27 @@
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	<div id="image">
-		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>">
 		<strong>
 		<?php
-		if (function_exists('printUserSizeImage')) {
+		if (isImagePhoto()) {
+			?>
+			<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>">
+			<?php
+		}
+		if (function_exists('printUserSizeImage') && isImagePhoto()) {
 			printUserSizeImage(getImageTitle());
 		} else {
 			printDefaultSizedImage(getImageTitle());
 		}
+		if (isImagePhoto()) {
+			?>
+			</a>
+			<?php
+		}
 		?>
 		</strong>
-		</a>
-		<?php if (function_exists('printUserSizeImage')) printUserSizeSelectior(); ?>
+		<?php
+	if (function_exists('printUserSizeImage') && isImagePhoto()) printUserSizeSelectior(); ?>
 	</div>
 
 	<div id="narrow">

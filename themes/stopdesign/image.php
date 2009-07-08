@@ -65,9 +65,14 @@ require_once('normalizer.php');
 				<?php
 					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
 						printImageMetadata('', false);
-						echo "&nbsp;/&nbsp;";
+						if (isImagePhoto()) echo "&nbsp;/&nbsp;";
 					}
-				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+					if (isImagePhoto()) {
+						?>
+						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+						<?php
+					}
+					?>
  					</li>
 				</ul>
 			</div>

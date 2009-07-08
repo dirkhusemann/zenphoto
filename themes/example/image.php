@@ -27,18 +27,22 @@
 			<?php if (hasPrevImage()) { ?> <a class="prev" href="<?php echo htmlspecialchars(getPrevImageURL());?>" title="<?php echo gettext('Previous Image'); ?>">&laquo; <?php echo gettext("prev"); ?></a>
 			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext('Next Image'); ?>"><?php echo gettext("next");?> &raquo;</a><?php } ?>
 		</div>
-
-				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>">
 				<?php printDefaultSizedImage(getImageTitle()); ?></a>
 
 				<div id="image_data">
-					<div id="fullsize_download_link">
-						<em>
-						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext("Original Size:"); ?>
-							<?php echo getFullWidth() . "x" . getFullHeight(); ?>
-						</a>
-						</em>
-					</div>
+						<?php
+						if (isImagePhoto()) {
+							?>
+							<div id="fullsize_download_link">
+								<em>
+								<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext("Original Size:"); ?>
+									<?php echo getFullWidth() . "x" . getFullHeight(); ?>
+								</a>
+								</em>
+							</div>
+							<?
+						}
+						?>
 
 					<div id="meta_link">
 						<?php
