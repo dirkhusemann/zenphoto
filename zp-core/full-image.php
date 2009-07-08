@@ -58,7 +58,8 @@ if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 	$rotate = getImageRotation($image_path);
 }
 $id = NULL;
-$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
+$folder = internalToFilesystem($_zp_current_album->name);
+$watermark_use_image = getAlbumInherited($folder, 'watermark', $id);
 if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
 
 if (!$watermark_use_image && !$rotate) { // no processing needed
