@@ -227,7 +227,7 @@ class _Image extends PersistentObject {
 			if (isset($exifraw['ValidEXIFData'])) {
 				foreach($_zp_exifvars as $field => $exifvar) {
 					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
-						$exif[$field] = sanitize($exifraw[$exifvar[0]][$exifvar[1]],3);
+						$exif[$field] = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
 						$this->set($field, $exif[$field]);
 					}
 				}

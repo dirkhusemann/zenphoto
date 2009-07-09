@@ -679,7 +679,7 @@ function getIPTCTag($tag) {
 			if (!empty($r)) { $r .= ", "; }
 			$r .= $w;
 		}
-		return $r;
+		return trim($r);
 	}
 	return '';
 }
@@ -740,22 +740,23 @@ function getImageMetadata($imageName) {
 		
 		/* EXIF date */
 		if (isset($subIFD['DateTime'])) {
-			$date = $subIFD['DateTime'];
+			$date = trim($subIFD['DateTime']);
 		} else {
 			$date = '';
 		}
 		if (empty($date) && isset($subIFD['DateTimeOriginal'])) {
-			$date = $subIFD['DateTimeOriginal'];
+			$date = trim($subIFD['DateTimeOriginal']);
 		}
 		if (empty($date)  && isset($subIFD['DateTimeDigitized'])) {
-			$date = $subIFD['DateTimeDigitized'];
+			$date = trim($subIFD['DateTimeDigitized']);
 		}
 		if (!empty($date)) {
 			$result['date'] = $date;
 		}
-		//EXIF title
+		//EXIF title [sic]
 		if (isset($sufIFD['ImageDescription'])) {
-			$result['title'] = $sufIFD['ImageDescription'];
+			$title = trim($sufIFD['ImageDescription']);
+			if (!empty($title)) $result['title'] = $title;
 		}
 
 		/* check IPTC data */
@@ -835,7 +836,7 @@ function getImageMetadata($imageName) {
 				if (is_array($keywords)) {
 					$taglist = array();
 					foreach($keywords as $keyword) {
-						$taglist[] = prepIPTCString($keyword, $characterset);
+						$taglist[] = prepIPTCString(trim($keyword), $characterset);
 					}
 					$result['tags'] = $taglist;
 				}
