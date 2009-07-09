@@ -68,7 +68,7 @@ function addPage() {
 	$codeblock = base64_encode(serialize($codeblock));
 	$locked = getCheckboxState('locked');
 
-	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"',true);
+	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
 	if (!$rslt) {
 		$titlelink = seoFriendlyURL($date); // force unique so that data may be saved.
 	}
@@ -122,9 +122,9 @@ function updatePage() {
 	$locked = getCheckboxState('locked');
 
 	if (getCheckboxState('edittitlelink')) {
-		$titlelink = sanitize($_POST['titlelink']);
+		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
-		$titlelink = sanitize($_POST['titlelink-old']);
+		$titlelink = sanitize($_POST['titlelink-old'],3);
 	} else {
 		$titlelink = seoFriendlyURL(get_language_string($title));
 	}
@@ -132,7 +132,7 @@ function updatePage() {
 	$id = sanitize($_POST['id']);
 	$rslt = true;
 	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
-		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.$titlelink.'" WHERE `id`="'.$id.'"',true);
+		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.mysql_real_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
 			$titlelink = sanitize($_POST['titlelink-old']); // force old link so data gets saved
 		}
@@ -363,7 +363,7 @@ function printPagesList($pages) {
  */
 function addArticle() {
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(sanitize($title));
+	$titlelink = seoFriendlyURL(sanitize($title,3));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
 
 	$author = sanitize($_POST['author']);
@@ -382,7 +382,7 @@ function addArticle() {
 	$codeblock = base64_encode(serialize($codeblock));
 	$locked = getCheckboxState('locked');
 
-	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"',true);
+	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
 	if (!$rslt) {
 		$titlelink = seoFriendlyURL($date); // force unique so that data may be saved.
 	}
@@ -444,9 +444,9 @@ function updateArticle() {
 	$locked = getCheckboxState('locked');
 
 	if (getCheckboxState('edittitlelink')) {
-		$titlelink = sanitize($_POST['titlelink']);
+		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
-		$titlelink = sanitize($_POST['titlelink-old']);
+		$titlelink = sanitize($_POST['titlelink-old'],3);
 	} else {
 		$titlelink = seoFriendlyURL(get_language_string($title));
 	}
@@ -455,9 +455,9 @@ function updateArticle() {
 	$id = sanitize($_POST['id']);
 	$rslt = true;
 	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
-		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.$titlelink.'" WHERE `id`="'.$id.'"',true);
+		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.mysql_real_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
-			$titlelink = sanitize($_POST['titlelink-old']); // force old link so data gets saved
+			$titlelink = sanitize($_POST['titlelink-old'],3); // force old link so data gets saved
 		}
 	}
 	// update article
@@ -852,11 +852,12 @@ function deleteCategory() {
   global $_zp_current_zenpage_news;
   if(isset($_GET['delete'])) {
     // check if the category is in use, don't delete
-    $count = countArticles($_GET['cat_link'],false);
+    $count = countArticles(sanitize($_GET['cat_link'],3),false);
+    $delete = mysql_real_escape_string(sanitize($_GET['delete'],3));
     if ($count != 0) {
-			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = '{$_GET['delete']}'");
+			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = '{$delete}'");
     } 
-    query("DELETE FROM ".prefix('zenpage_news_categories')." WHERE id = '{$_GET['delete']}'");
+    query("DELETE FROM ".prefix('zenpage_news_categories')." WHERE id = '{$delete}'");
     echo "<p class='messagebox' id='fade-message'>".gettext("Category successfully deleted!")."</p>";
   }
 }

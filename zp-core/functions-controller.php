@@ -440,11 +440,11 @@ function zenpage_load_page() {
 	global $_zp_current_zenpage_page;
 	$_zp_current_zenpage_page = NULL;
 	if (isset($_GET['title'])) {
-		$titlelink = sanitize($_GET['title']);
+		$titlelink = sanitize($_GET['title'],3);
 	} else {
 		$titlelink = '';
 	}
-	$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
+	$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"';
 	$result = query_single_row($sql);
 	if (!empty($titlelink) && is_array($result)) {
 		$_zp_current_zenpage_page = new ZenpagePage($titlelink);
@@ -465,8 +465,8 @@ function zenpage_load_news() {
 	global $_zp_current_zenpage_news;
 	$_zp_current_zenpage_news = NULL;
 	if (isset($_GET['title'])) {
-		$titlelink = sanitize($_GET['title']);
-		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"';
+		$titlelink = sanitize($_GET['title'],3);
+		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"';
 		$result = query_single_row($sql);
 		if (is_array($result)) {
 			add_context(ZP_ZENPAGE_NEWS_ARTICLE);

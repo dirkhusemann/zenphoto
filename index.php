@@ -95,8 +95,8 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 			$_zp_current_zenpage_news->save();
 		}
 		if(is_NewsCategory()) {
-			$catname = sanitize($_GET['category']);
-			query("UPDATE ".prefix('zenpage_news_categories')." SET `hitcounter` = `hitcounter`+1 WHERE `cat_link` = '".$catname."'",true);
+			$catname = sanitize($_GET['category'],3);
+			query("UPDATE ".prefix('zenpage_news_categories')." SET `hitcounter` = `hitcounter`+1 WHERE `cat_link` = '".mysql_real_escape_string($catname)."'",true);
 		}
 		if(is_Pages()) {
 			$hc = $_zp_current_zenpage_page->get('hitcounter')+1;

@@ -103,14 +103,14 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $g
 		if (is_null($pass)) {
 			$password = '';
 		} else {
-			$password = "' ,`pass`='" . escape($pass);
+			$password = "' ,`pass`='" . mysql_real_escape_string($pass);
 		}
 		if (is_null($rights)) {
 			$rightsset = '';
 		} else {
-			$rightsset = "', `rights`='" . escape($rights);
+			$rightsset = "', `rights`='" . mysql_real_escape_string($rights);
 		}
-		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .
+		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . mysql_real_escape_string($name) . $password .
  					"', `email`='" . mysql_real_escape_string($email) . $rightsset . "', `custom_data`='".mysql_real_escape_string($custom)."', `valid`=".$valid.", `group`='".
 					mysql_real_escape_string($group)."' WHERE `id`='" . $id ."'";
 		$result = query($sql);
