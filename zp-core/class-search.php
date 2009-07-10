@@ -368,7 +368,7 @@ class SearchEngine
 	 */
 	function parseQueryFields() {
 		if (isset($_REQUEST['searchfields'])) {
-			$fields = 0+strip($_GET['searchfields']);
+			$fields = 0+sanitize_numeric($_GET['searchfields']);
 		} else {
 			$fields = 0;
 			foreach ($_REQUEST as $key=>$value) {

@@ -102,7 +102,7 @@ function printImageslist($number) {
 		if($albumobj->getNumImages() != 0) {
 			$images_per_page = $number;
 			if(isset($_GET['page'])) {
-				$currentpage = $_GET['page'];
+				$currentpage = sanitize_numeric($_GET['page']);
 			} else {
 				$currentpage = 1;
 			}

@@ -37,14 +37,14 @@ if (!zp_loggedin()) {
 }
 $search = new SearchEngine();
 if (isset($_POST['savealbum'])) {
-	$albumname = $_POST['album'];
+	$albumname = sanitize($_POST['album']);
 	if (!isMyAlbum($albumname, ALBUM_RIGHTS)) {
 		die(gettext("You do not have edit rights on this album."));
 	}
-	$album = $_POST['albumselect'];
-	$words = $_POST['words'];
+	$album = sanitize($_POST['albumselect']);
+	$words = sanitize($_POST['words']);
 	if (isset($_POST['thumb'])) {
-		$thumb = $_POST['thumb'];
+		$thumb = sanitize($_POST['thumb']);
 	} else {
 		$thumb = '';
 	}

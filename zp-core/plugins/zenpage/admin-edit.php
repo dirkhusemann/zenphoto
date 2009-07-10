@@ -350,10 +350,10 @@ if(is_object($result)) {
     			<?php
 							$getcodeblock = getIfObject($result,"codeblock");
 							if(!empty($getcodeblock)) {
-								$codeblock = unserialize(base64_decode($getcodeblock));
-								$codeblock[1] = stripslashes($codeblock[1]);
-								$codeblock[2] = stripslashes($codeblock[2]);
-								$codeblock[3] = stripslashes($codeblock[3]);
+								if (!preg_match('/^a:[0-9]+:{/', $getcodeblock)) { // old style base64 codeblock data
+									$getcodeblock = base64_decode($getcodeblock);
+								}
+								$codeblock = unserialize($getcodeblock);
 							} else {
 								$codeblock[1] = "";
 								$codeblock[2] = "";
@@ -361,13 +361,13 @@ if(is_object($result)) {
 							}
 							?>
 				<div id="first">
-					<textarea name="codeblock1" id="codeblock1"><?php echo stripslashes($codeblock[1]); ?></textarea>
+					<textarea name="codeblock1" id="codeblock1"><?php echo $codeblock[1]; ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="codeblock2" id="codeblock2"><?php echo stripslashes($codeblock[2]); ?></textarea>
+					<textarea name="codeblock2" id="codeblock2"><?php echo $codeblock[2]; ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="codeblock3" id="codeblock3"><?php echo stripslashes($codeblock[3]); ?></textarea></div>
+					<textarea name="codeblock3" id="codeblock3"><?php echo $codeblock[3]; ?></textarea></div>
 				</div>
 			</div>
 		</td>

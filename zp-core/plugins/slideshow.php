@@ -94,7 +94,7 @@ function printSlideShowLink($linktext='') {
 	if(empty($_GET['page'])) {
 		$pagenr = 1;
 	} else {
-		$pagenr = $_GET['page'];
+		$pagenr = sanitize_numeric($_GET['page']);
 	}
 	$slideshowhidden = '';
 	if (in_context(ZP_SEARCH)) {

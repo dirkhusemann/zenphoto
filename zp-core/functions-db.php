@@ -141,34 +141,6 @@ function prefix($tablename) {
 }
 
 /**
- * For things that *are* going into the database, but not from G/P/C.
- *@param string $string string to clean
- *@return cleaned up string
- *@since 0.6
-	*/
-function escape($string) {
-	if (get_magic_quotes_gpc()) {
-		return $string;
-	} else {
-		return mysql_real_escape_string($string);
-	}
-}
-
-/**
- * For things that *aren't* going into the database, but not from G/P/C.
- *@param string $string string to clean
- *@return cleaned up string
- *@since 0.6
-	*/
-function strip($string) {
-	if (get_magic_quotes_gpc()) {
-		return stripslashes($string);
-	} else {
-		return $string;
-	}
-}
-
-/**
  * Constructs a WHERE clause ("WHERE uniqueid1='uniquevalue1' AND uniqueid2='uniquevalue2' ...")
  *  from an array (map) of variables and their values which identifies a unique record
  *  in the database table.

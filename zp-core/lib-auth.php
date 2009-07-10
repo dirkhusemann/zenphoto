@@ -377,7 +377,7 @@ function updateAdminField($field, $value, $constraints) {
 	$where = '';
 	foreach ($constraints as $field=>$clause) {
 		if (!empty($where)) $where .= ' AND ';
-		$where .= '`'.$field.'`="'.$clause.'" ';
+		$where .= '`'.$field.'`="'.mysql_real_escape_string($clause).'" ';
 	}
 	if (is_null($value)) {
 		$value = 'NULL';

@@ -61,11 +61,10 @@ function addPage() {
 	$expiredate = getExpiryDatePost();
 	$commentson = getCheckboxState('commentson');
 	$permalink = getCheckboxState('permalink');
-	$codeblock1 = $_POST['codeblock1'];
-	$codeblock2 = $_POST['codeblock2'];
-	$codeblock3 = $_POST['codeblock3'];
-	$codeblock = array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3);
-	$codeblock = base64_encode(serialize($codeblock));
+	$codeblock1 = sanitize($_POST['codeblock1'], 0);
+	$codeblock2 = sanitize($_POST['codeblock2'], 0);
+	$codeblock3 = sanitize($_POST['codeblock3'], 0);
+	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
 	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
@@ -114,11 +113,10 @@ function updatePage() {
 	$expiredate = getExpiryDatePost();
 	$commentson = getCheckboxState('commentson');
 	$permalink = getCheckboxState('permalink');
-	$codeblock1 = $_POST['codeblock1'];
-	$codeblock2 = $_POST['codeblock2'];
-	$codeblock3 = $_POST['codeblock3'];
-	$codeblock = array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3);
-	$codeblock = base64_encode(serialize($codeblock));
+	$codeblock1 = sanitize($_POST['codeblock1'], 0);
+	$codeblock2 = sanitize($_POST['codeblock2'], 0);
+	$codeblock3 = sanitize($_POST['codeblock3'], 0);
+	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
 	if (getCheckboxState('edittitlelink')) {
@@ -375,11 +373,10 @@ function addArticle() {
 	$permalink = getCheckboxState('permalink');
 	$lastchange = getCheckboxState('lastchange');
 	$commentson = getCheckboxState('commentson');
-	$codeblock1 = $_POST['codeblock1'];
-	$codeblock2 = $_POST['codeblock2'];
-	$codeblock3 = $_POST['codeblock3'];
-	$codeblock = array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3);
-	$codeblock = base64_encode(serialize($codeblock));
+	$codeblock1 = sanitize($_POST['codeblock1'], 0);
+	$codeblock2 = sanitize($_POST['codeblock2'], 0);
+	$codeblock3 = sanitize($_POST['codeblock3'], 0);
+	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
 	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
@@ -436,11 +433,10 @@ function updateArticle() {
 	$permalink = getCheckboxState('permalink');
 	$lastchange = getCheckboxState('lastchange');
 	$commentson = getCheckboxState('commentson');
-	$codeblock1 = $_POST['codeblock1'];
-	$codeblock2 = $_POST['codeblock2'];
-	$codeblock3 = $_POST['codeblock3'];
-	$codeblock = array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3);
-	$codeblock = base64_encode(serialize($codeblock));
+	$codeblock1 = sanitize($_POST['codeblock1'], 0);
+	$codeblock2 = sanitize($_POST['codeblock2'], 0);
+	$codeblock3 = sanitize($_POST['codeblock3'], 0);
+	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
 	if (getCheckboxState('edittitlelink')) {
@@ -510,7 +506,7 @@ function updateArticle() {
  *
  */
 function deleteArticle() {
-	$id = $_GET['del'];
+	$id = sanitize_numeric($_GET['del']);
 	query("DELETE FROM ".prefix('zenpage_news')." WHERE id = $id");  // remove the article
 	query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE news_id = $id"); // delete the category association
 	echo "<p class='messagebox' id='fade-message'>".gettext("Article successfully deleted!")."</p>";

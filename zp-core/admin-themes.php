@@ -29,7 +29,7 @@ if (isset($_GET['action'])) {
 		case 'settheme':
 			if (isset($_GET['theme'])) {
 				$alb = sanitize_path($_GET['themealbum']);
-				$newtheme = strip($_GET['theme']);
+				$newtheme = sanitize($_GET['theme']);
 				if (empty($alb)) {
 					$gallery->setCurrentTheme($newtheme);
 				} else {

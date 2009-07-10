@@ -12,6 +12,8 @@
 /* ZENPAGE TEMPLATE FUNCTIONS
  /************************************************/
 
+require_once(PHPScript('5.0.0', '_zenpage_template_functions.php'));
+
 /************************************************/
 /* General functions
 /************************************************/
@@ -31,20 +33,6 @@ function rewrite_path_zenpage($rewrite='',$plain='') {
 		return $plain;
 	}
 }
-
-/**
- * Returns if the current page is $page (examples: isPage("news") or isPage("pages"))
- *
- * @param string $page The name of the page to check for
- * @return bool
- */
-function isPage($page) {
-	if(isset($_GET['p'])) {
-		return $page = $_GET["p"];
-	}
-	return false;
-}
-
 
 /**
  * Checks if the current page is a news or single news article page.
@@ -1692,53 +1680,29 @@ function printPrevNewsLink($prev="&laquo; ") {
  */
 function getCodeblock($number='',$titlelink='') {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
-	$codeblock = "";
-	if(is_News() AND in_context(ZP_ZENPAGE_NEWS_ARTICLE)) { // single news article or page
-		$codeblock = unserialize(base64_decode($_zp_current_zenpage_news->getCodeblock()));
-		$codeblock = strip($codeblock[$number]);
-	}
-	if(is_Pages()) { // single news article or page
-		$codeblock = unserialize(base64_decode($_zp_current_zenpage_page->getCodeblock()));
-		$codeblock = strip($codeblock[$number]);
-	}
-	if((is_News() AND !is_Pages()) AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND is_NewsType("news")) { // news loop
-		$codeblock = unserialize(base64_decode($_zp_current_zenpage_news->getCodeblock()));
-		$codeblock = strip($codeblock[$number]);
-	} 
-	if(!empty($titlelink)) { // direct page request
+	$getcodeblock = '';
+	if (empty($titlelink)) {
+		if(is_News() AND in_context(ZP_ZENPAGE_NEWS_ARTICLE)) { // single news article or page
+			$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+		}
+		if(is_Pages()) { // single news article or page
+			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
+		}
+		if((is_News() AND !is_Pages()) AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND is_NewsType("news")) { // news loop
+			$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+		}
+	}	else { // direct page request
 		$page = new ZenpagePage($titlelink);
-		$codeblock = unserialize(base64_decode($page->getCodeblock()));
-		$codeblock = strip($codeblock[$number]);
-	} 
-	return stripslashes($codeblock);
-}
-
-
-/**
- * Prints the content of a codeblock for a page or news article
- * 
- * NOTE: This executes PHP and JavaScript code if available
- * 
- * @param int $number The codeblock you want to get
- * @param string $titlelink The titlelink of a specific page you want to get the codeblock of (only for pages!)
- * 
- * @return string
- */
-function printCodeblock($number='',$titlelink='') {
-	$codeblock = getCodeblock($number,$titlelink);
-	if (version_compare(PHP_VERSION, '5.0.0') == 1) {
-		$context = get_context();
-		eval('
-			try {
-				eval("?>$codeblock");
-			} catch (Exception $e) {
-			}'
-		);
-		add_context($context);
-	} else {
-		eval("?>$codeblock");
+		$getcodeblock = $page->getCodeblock();
 	}
+	if (!preg_match('/^a:[0-9]+:{/', $getcodeblock)) { // old style base64 codeblock data
+		$getcodeblock = base64_decode($getcodeblock);
+	}
+	if (empty($getcodeblock)) return '';
+	$codeblock = unserialize($getcodeblock);
+	return $codeblock[$number];
 }
+
 
 /**
  * Gets the statistic for pages, news articles or categories as an unordered list
@@ -2690,3 +2654,4 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
 	}
 	rem_context(ZP_IMAGE | ZP_ALBUM);
 }
+?>

@@ -45,17 +45,7 @@ function setOption($key, $value, $persistent=true) {
 	$_options[$key] = $value;
 }
 
-function sanitize($input_string, $sanitize_level=0) {
-	if ($sanitize_level === false) {
-		$sanitize_level = 0;
-	} else if ($sanitize_level === true) {
-		$sanitize_level = 2;
-	}
-
-	if (empty($sanitize_level) || !is_numeric($sanitize_level)) {
-		$sanitize_level = 0;
-	}
-
+function sanitize($input_string, $sanitize_level=3) {
 	if (is_array($input_string)) {
 		foreach ($input_string as $output_key => $output_value) {
 			$output_string[$output_key] = sanitize_string($output_value, $sanitize_level);
@@ -70,19 +60,20 @@ function sanitize($input_string, $sanitize_level=0) {
 function sanitize_string($input_string, $sanitize_level) {
 	require_once(dirname(__FILE__).'/lib-htmlawed.php');
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-
 	if ($sanitize_level === 0) {
 		$input_string = str_replace(chr(0), " ", $input_string);
-
 	} else if ($sanitize_level === 1) {
 		$allowed_tags = "(".getOption('allowed_tags').")";
 		$allowed = parseAllowedTags($allowed_tags);
 		if ($allowed === false) { $allowed = array(); }
 		$input_string = kses($input_string, $allowed);
-
 	} else if ($sanitize_level === 2) {
 		$allowed = array();
 		$input_string = kses($input_string, $allowed);
+	// Full sanitation.  Strips all code.
+	} else if ($sanitize_level === 3) {
+		$allowed_tags = array();
+		$input_string = kses($input_string, $allowed_tags);
 	}
 	return $input_string;
 }

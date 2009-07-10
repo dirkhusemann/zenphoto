@@ -43,7 +43,7 @@ $gallery = new Gallery();
 if (!isset($_GET['album'])) {
 	die(gettext("No album provided to sort."));
 } else {
-	$folder = strip($_GET['album']);
+	$folder = sanitize($_GET['album']);
 	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
 		die(gettext("You do not have rights to sort this album"));
 	}

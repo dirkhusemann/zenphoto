@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
 		}
 		
 		for ($i = 0; $i < $_POST['totalimages']; $i++) {
-			$filename = strip($_POST["$i-filename"]);
+			$filename = sanitize($_POST["$i-filename"]);
 
 			// The file might no longer exist
 			$image = newImage($album, $filename);

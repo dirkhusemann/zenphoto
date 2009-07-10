@@ -61,6 +61,7 @@ if ($alb) {
 	$object = '<em>'.gettext('Gallery').'</em>';
 	$tab = 'home';
 }
+
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";

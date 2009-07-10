@@ -148,7 +148,7 @@ if (isset($_GET['album'])) {
 					$newsort = sanitize($_POST['albumimagesort'],3);
 					if ($oldsort == $newsort) {
 						for ($i = 0; $i < $_POST['totalimages']; $i++) {
-							$filename = strip($_POST["$i-filename"]);
+							$filename = sanitize($_POST["$i-filename"]);
 
 							// The file might no longer exist
 							$image = newImage($album, $filename);
@@ -199,7 +199,7 @@ if (isset($_GET['album'])) {
 									$tags = array();
 									for ($j=0; $j<4; $j++) {
 										if (isset($_POST[$tagsprefix.'new_tag_value_'.$j])) {
-											$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$j]));
+											$tag = trim(sanitize($_POST[$tagsprefix.'new_tag_value_'.$j]));
 											unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
 											if (!empty($tag)) {
 												$tags[] = $tag;
@@ -219,7 +219,7 @@ if (isset($_GET['album'])) {
 									$image->setTags(sanitize($tags, 3));
 
 
-									$image->setDateTime(strip($_POST["$i-date"]));
+									$image->setDateTime(sanitize($_POST["$i-date"]));
 									$image->setShow(isset($_POST["$i-Visible"]));
 									$image->setCommentsAllowed(isset($_POST["$i-allowcomments"]));
 									if (isset($_POST["$i-reset_hitcounter"])) {

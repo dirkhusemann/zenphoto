@@ -22,7 +22,7 @@ if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	$themeswitch = false;
 	if ($action == 'deletegroup') {
-		$id = $_GET['groupid'];
+		$id = sanitize_numeric($_GET['groupid']);
 		deleteAdmin(array('id'=>$id));
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);

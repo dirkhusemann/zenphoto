@@ -22,7 +22,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 
 $gallery = new Gallery();
 if (isset($_GET['page'])) {
-	$page = $_GET['page'];
+	$page = sanitize($_GET['page']);
 } else {
 	$page = '';
 }
@@ -64,7 +64,7 @@ if (isset($_GET['action'])) {
 				$sql = "DELETE FROM ".prefix('comments')." WHERE ";
 				foreach ($ids as $id) {
 					$n++;
-					$sql .= "id='$id' ";
+					$sql .= "id='".sanitize_numeric($id)."' ";
 					if ($n < $total) $sql .= "OR ";
 				}
 				query($sql);
@@ -81,7 +81,7 @@ if (isset($_GET['action'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
 		}
-		$id = $_POST['id'];
+		$id = snitize_numeric($_POST['id']);
 		$name = mysql_real_escape_string(sanitize($_POST['name'], 3));
 		$email = mysql_real_escape_string(sanitize($_POST['email'], 3));
 		$website = mysql_real_escape_string(sanitize($_POST['website'], 3));
@@ -89,7 +89,7 @@ if (isset($_GET['action'])) {
 		$comment = mysql_real_escape_string(sanitize($_POST['comment'], 1));
 		$custom = zp_apply_filter('save_comment_custom_data', '');
 		if (!empty($custom)) {
-			$custom = ", `custom_data`='".$custom."'";
+			$custom = ", `custom_data`='".mysql_real_escape_string($custom)."'";
 		}
 
 		$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment'".$custom." WHERE id = $id";
@@ -113,7 +113,7 @@ echo "\n" . '<div id="content">';
 if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <h1><?php echo gettext("edit comment"); ?></h1>
 <?php
-	$id = $_GET['id'];
+	$id = sanitize_numeric($_GET['id']);
 	
 	$commentarr = query_single_row("SELECT * FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
 	extract($commentarr);

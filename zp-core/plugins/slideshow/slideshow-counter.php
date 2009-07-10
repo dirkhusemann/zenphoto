@@ -7,8 +7,8 @@
 
 require_once("../../functions.php");
 
-$album_name = $_GET["album"];
-$img_name = $_GET["img"];
+$album_name = sanitize($_GET["album"]);
+$img_name = sanitize($_GET["img"]);
 
 if ($album_name && $img_name ) {
 	$gallery = new Gallery();

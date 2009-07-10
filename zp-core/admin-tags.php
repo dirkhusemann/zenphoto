@@ -86,7 +86,7 @@ printLogoAndLinks();
 						$key = postIndexDecode($key);
 						$key = substr($key, 2); // strip off the 'R_'
 						$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($newName).'"');
-						$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
+						$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($key).'"');
 						if (is_array($newtag)) { // there is an existing tag of the same name
 							$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
 						} else {
@@ -96,7 +96,7 @@ printLogoAndLinks();
 							query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
 							query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
 						} else {
-							query('UPDATE '.prefix('tags').' SET `name`="'.escape($newName).'" WHERE `id`='.$oldtag['id']);
+							query('UPDATE '.prefix('tags').' SET `name`="'.mysql_real_escape_string($newName).'" WHERE `id`='.$oldtag['id']);
 						}
 					}
 				}

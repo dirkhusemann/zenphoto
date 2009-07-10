@@ -48,7 +48,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 /************************************************************************************/
 
 	if (isset($_GET['page'])) {
-		$page = $_GET['page'];
+		$page = sanitize($_GET['page']);
 	} else if (empty($page)) {
 		$page = "home";
 	}

@@ -38,7 +38,7 @@ echo "\n" . '<div id="content">';
 // First, set up a few vars:
 $message = $file_to_edit = $file_content = null;
 $themes = $gallery->getThemes();
-$theme = $_GET['theme'];
+$theme = sanitize($_GET['theme']);
 $themedir = SERVERPATH . '/themes/'.internalToFilesystem($theme);
 $themefiles = listDirectoryFiles($themedir);
 $themefiles_to_ext = array();

@@ -35,7 +35,7 @@ if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
-		$id = $_GET['adminuser'];
+		$id = sanitize_numeric($_GET['adminuser']);
 		deleteAdmin(array('id'=>$id));
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
@@ -572,7 +572,7 @@ if ($subtab == 'users') {
 		echo '</div>';
 	}
 	if (isset($_GET['local_failed'])) {
-		$locale = $_GET['local_failed'];
+		$locale = sanitize($_GET['local_failed']);
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".
 					sprintf(gettext("<em>%s</em> is not available."),$_zp_languages[$locale]).

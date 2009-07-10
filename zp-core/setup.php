@@ -1756,7 +1756,7 @@ if (file_exists(CONFIGFILE)) {
 			}
 			$alltags = array_merge($taglist);
 			foreach ($alltags as $tag) {
-				query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')", true);
+				query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . mysql_real_escape_string($tag) . "')", true);
 			}
 			$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
 			$result = query_full_array($sql);

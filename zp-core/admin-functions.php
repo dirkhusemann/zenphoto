@@ -560,7 +560,7 @@ function genAlbumUploadList(&$list, $curAlbum=NULL) {
 function displayDeleted() {
 	/* Display a message if needed. Fade out and hide after 2 seconds. */
 	if (isset($_GET['ndeleted'])) {
-		$ntdel = strip($_GET['ndeleted']);
+		$ntdel = sanitize_numeric($_GET['ndeleted']);
 		if ($ntdel <= 2) {
 			$msg = gettext("Image");
 		} else {
@@ -621,7 +621,7 @@ function getThemeOption($album, $option) {
 	if (empty($alb)) {
 		return getOption($option);
 	}
-	$sql = "SELECT `value` FROM " . prefix($alb) . " WHERE `name`='" . escape($option) . "'".$where;
+	$sql = "SELECT `value` FROM " . prefix($alb) . " WHERE `name`='" . mysql_real_escape_string($option) . "'".$where;
 	$db = query_single_row($sql);
 	if (!$db) {
 		return getOption($option);
@@ -690,13 +690,13 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $su
 			if (is_null($album)) {
 				$db = false;
 			} else {
-				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . escape($key) .
+				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($key) .
 										"' AND `ownerid`=".$album->id;
 
 				$db = query_single_row($sql);
 			}
 			if (!$db) {
-				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . escape($key) . "';";
+				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($key) . "';";
 				$db = query_single_row($sql);
 			}
 			if ($db) {
@@ -864,7 +864,7 @@ function postIndexEncode($str) {
  * @return string
  */
 function postIndexDecode($str) {
-	$str = str_replace('%2E', '.', strip($str));
+	$str = str_replace('%2E', '.', sanitrize($str,0));
 	return urldecode($str);
 }
 
@@ -1797,7 +1797,7 @@ function processAlbumEdit($index, $album) {
 	$tags = array();
 	for ($i=0; $i<4; $i++) {
 		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
-			$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$i]));
+			$tag = trim(sanitize($_POST[$tagsprefix.'new_tag_value_'.$i]));
 			unset($_POST[$tagsprefix.'new_tag_value_'.$i]);
 			if (!empty($tag)) {
 				$tags[] = $tag;
@@ -1815,9 +1815,9 @@ function processAlbumEdit($index, $album) {
 	}
 	$tags = array_unique($tags);
 	$album->setTags($tags);
-	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
+	$album->setDateTime(sanitize($_POST[$prefix."albumdate"]));
 	$album->setPlace(process_language_string_save($prefix.'albumplace', 3));
-	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
+	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(sanitize($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
 	$sorttype = strtolower(sanitize($_POST[$prefix.'sortby'], 3));
@@ -1880,7 +1880,7 @@ function processAlbumEdit($index, $album) {
 	}
 	$oldtheme = $album->getAlbumTheme();
 	if (isset($_POST[$prefix.'album_theme'])) {
-		$newtheme = strip($_POST[$prefix.'album_theme']);
+		$newtheme = sanitize($_POST[$prefix.'album_theme']);
 		if ($oldtheme != $newtheme) {
 			$album->setAlbumTheme($newtheme);
 		}
