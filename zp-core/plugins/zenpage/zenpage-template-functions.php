@@ -443,13 +443,9 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 	switch($newstype) {
 		case "news":
 			$articlecontent = $_zp_current_zenpage_news->getContent();
-			$excerptbreak = stristr($articlecontent,"<!-- pagebreak -->");
-			if($excerptbreak !== FALSE) {
+			if($shorten && stristr($articlecontent,"<!-- pagebreak -->") !== FALSE) {
 				$array = explode("<!-- pagebreak -->",$articlecontent);
-				if ($shorten) {
-					$articlecontent = $array[0].$shortenindicator;
-				}
-				return $articlecontent;
+				return $array[0].$shortenindicator;
 			}
 			break;
 		case "image":
