@@ -52,6 +52,8 @@ $(document).ready(function() {
 </head>
 <body>
 <?php 
+	$result = '';
+	$saveitem = '';
 	printLogoAndLinks();
 	echo "<div id=\"main\">";
 	if(is_AdminEditPage("newsarticle")) {
@@ -80,8 +82,6 @@ $(document).ready(function() {
 			$result = new ZenpageNews(urldecode($_GET['titlelink']));
 		} else if(isset($_GET['update'])) {
 			$result = updateArticle();
-		} else if(isset($_GET['add'])) {
-			$result = "";
 		}
 		if(isset($_GET['save'])) {
 			$result = addArticle();
@@ -103,8 +103,6 @@ $(document).ready(function() {
 			$result = new ZenpagePage(urldecode($_GET['titlelink']));
 		} else if(isset($_GET['update'])) {
 			$result = updatePage();
-		} else if(isset($_GET['add'])) {
-			$result = "";
 		}
 		if(isset($_GET['save'])) {
 			$result = addPage();
@@ -350,6 +348,7 @@ if(is_object($result)) {
     			<?php
 							$getcodeblock = getIfObject($result,"codeblock");
 							if(!empty($getcodeblock)) {
+								//TODO: remove base64 decoding
 								if (!preg_match('/^a:[0-9]+:{/', $getcodeblock)) { // old style base64 codeblock data
 									$getcodeblock = base64_decode($getcodeblock);
 								}

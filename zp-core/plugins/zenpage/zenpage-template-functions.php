@@ -430,13 +430,13 @@ function printNewsTitleLink($before='') {
  * @param string $shortenindicator The optional placeholder that indicates that the content is shortened, if this is set it overrides the plugin options setting.
  * * @return string
  */
-function getNewsContent($shorten='', $shortenindicator='') {
+function getNewsContent($shorten=false, $shortenindicator='') {
 	global $_zp_current_zenpage_news;
 	$excerptbreak = false;
 	if(empty($shortenindicator)) {
 		$shortenindicator = getOption("zenpage_textshorten_indicator");
 	}
-	if(empty($shorten) AND !is_NewsArticle()) {
+	if(!$shorten && !is_NewsArticle()) {
 		$shorten = getOption("zenpage_text_length");
 	}
 	$newstype = getNewsType();
@@ -444,9 +444,12 @@ function getNewsContent($shorten='', $shortenindicator='') {
 		case "news":
 			$articlecontent = $_zp_current_zenpage_news->getContent();
 			$excerptbreak = stristr($articlecontent,"<!-- pagebreak -->");
-			if($excerptbreak != FALSE) {
+			if($excerptbreak !== FALSE) {
 				$array = explode("<!-- pagebreak -->",$articlecontent);
-				$articlecontent = $array[0].$shortenindicator; 
+				if ($shorten) {
+					$articlecontent = $array[0].$shortenindicator;
+				}
+				return $articlecontent;
 			}
 			break;
 		case "image":
@@ -455,7 +458,7 @@ function getNewsContent($shorten='', $shortenindicator='') {
 			$articlecontent = $_zp_current_zenpage_news->getDesc();
 			break;
 	}
-	if(!$excerptbreak AND !empty($shorten) AND strlen($articlecontent) > $shorten) {
+	if(!empty($shorten) && strlen($articlecontent) > $shorten) {
 		$articlecontent = shortenContent($articlecontent,$shorten,$shortenindicator);
 	}
 	return $articlecontent;
@@ -470,7 +473,7 @@ function getNewsContent($shorten='', $shortenindicator='') {
  *
  * @param int $shorten $shorten The lengths of the content for the news main page for example (only for video/audio descriptions, not for normal image descriptions)
  */
-function printNewsContent($shorten='',$shortenindicator='') {
+function printNewsContent($shorten=false,$shortenindicator='') {
 	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
 	$size = getOption("zenpage_combinews_imagesize");
 	$mode = getOption("zenpage_combinews_mode");
@@ -488,7 +491,7 @@ function printNewsContent($shorten='',$shortenindicator='') {
 					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
-			echo getNewsContent("");
+			echo getNewsContent();
 			break;
 		case "video":
 			$ext = strtolower(strrchr(getFullNewsImageURL(), "."));
@@ -544,7 +547,7 @@ function printNewsContent($shorten='',$shortenindicator='') {
 					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
-			echo getNewsContent("");
+			echo getNewsContent();
 			break;
 	}
 }
@@ -1695,6 +1698,7 @@ function getCodeblock($number='',$titlelink='') {
 		$page = new ZenpagePage($titlelink);
 		$getcodeblock = $page->getCodeblock();
 	}
+	//TODO: remove base64 decoding
 	if (!preg_match('/^a:[0-9]+:{/', $getcodeblock)) { // old style base64 codeblock data
 		$getcodeblock = base64_decode($getcodeblock);
 	}
