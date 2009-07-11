@@ -10,8 +10,9 @@
 
 /************************************************/
 /* ZENPAGE TEMPLATE FUNCTIONS
- /************************************************/
+/************************************************/
 
+require_once(dirname(__FILE__)."/zenpage-functions.php");
 require_once(PHPScript('5.0.0', '_zenpage_template_functions.php'));
 
 /************************************************/

@@ -22,7 +22,6 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---contact_
 $option_interface = new contactformOptions();
 
 require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
-if (getOption('zp_plugin_zenpage')) require_once("zenpage/zenpage-template-functions.php");
 /**
  * Plugin option handling class
  *
@@ -113,7 +112,7 @@ function getField($field, $level=3) {
  *
  */
 function printContactForm() {
-	global $_zp_UTF8, $_zp_captcha;
+	global $_zp_UTF8, $_zp_captcha,$_processing_post;
 	$error = array();
 	if(isset($_POST['sendmail'])) {
 		$mailcontent = array();
@@ -129,7 +128,7 @@ function printContactForm() {
 		$mailcontent['subject'] = getField('subject');
 		$mailcontent['message'] = getField('message',1);
 		
-		// if you want other required fiels or less add/modify their checks here
+		// if you want other required fields or less add/modify their checks here
 		if (getOption('contactform_title') == "required" && empty($mailcontent['title'])) { $error[1] = gettext("a <strong>title</strong>"); }
 		if (getOption('contactform_name') == "required" && empty($mailcontent['name'])) { $error[2] = gettext("a <strong>name</strong>"); }
 		if (getOption('contactform_company') == "required" && empty($mailcontent['company'])) { $error[3] = gettext("a <strong>company</strong>"); }
@@ -194,6 +193,10 @@ function printContactForm() {
 			echo get_language_string(getOption("contactform_confirmtext"));
 			?>
 <div>
+	<?PHP
+	$_processing_post = true;
+	include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
+	?>
 	<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
 		<input type="hidden" id="confirm" name="confirm" value="confirm" />
 		<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
@@ -234,6 +237,7 @@ function printContactForm() {
 	}
 	if (count($error) > 0 || !isset($_POST['sendmail'])) {
 		echo get_language_string(getOption("contactform_introtext"));
+		$_processing_post = false;
 		include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
 	}
 }
@@ -261,7 +265,8 @@ function showOrNotShowField($option) {
  * @return string
  */
 function checkRequiredField($option) {
-	if($option == "required") {
+	global $_processing_post;
+	if($option == "required" && !$_processing_post) {
 		return "*";
 	} else {
 		return "";

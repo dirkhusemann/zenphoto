@@ -3,7 +3,6 @@ define('OFFSET_PATH', 5);
 $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
 $basepath = dirname(dirname(dirname(dirname(dirname(__FILE__)))));	
 require_once($basepath."/admin-functions.php");
-require_once($basepath .'/'. PLUGIN_FOLDER ."/zenpage/zenpage-functions.php");
 require_once($basepath .'/'. PLUGIN_FOLDER ."/zenpage/zenpage-template-functions.php");
 require_once("tinyzenpage-functions.php");
 require_once("js/dialog.php");

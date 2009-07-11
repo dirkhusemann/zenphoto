@@ -70,7 +70,6 @@ class zenpagecms {
 	}
 }
 
-require_once("zenpage/zenpage-functions.php");
-require_once("zenpage/zenpage-template-functions.php");
+require_once(dirname(__FILE__)."/zenpage/zenpage-template-functions.php");
 
 ?>

@@ -22,7 +22,7 @@ require_once('normalizer.php');
 	<div id="content">
 		<h1><?php printGalleryTitle(); ?> <em><?php echo gettext('Contact'); ?></em></h1>
 		<div class="galleries">
-		<h2><?php echo gettext('Please use the form below to contact us.') ?></h2>
+		<h2><?php echo gettext('Contact us.') ?></h2>
 		<?php  printContactForm();  ?>
 	</div>
 </div>
