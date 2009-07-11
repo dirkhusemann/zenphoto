@@ -167,10 +167,11 @@ function zp_handle_comment() {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
 				}
 				//use $redirectTo to send users back to where they came from instead of booting them back to the gallery index. (default behaviour)
-				//TODO: this does not work for IIS. How to detect IIS server and just fall through?
-				// if you are running IIS, delete the next two lines
-				header('Location: ' . $redirectTo);
-				exit();
+				if (!isset($_SERVER['SERVER_SOFTWARE']) || strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'microsoft-iis') === false) {
+					// but not for Microsoft IIS because that server fails if we redirect!
+					header('Location: ' . $redirectTo);
+					exit();
+				}
 			} else {
 				$_zp_comment_stored = array($commentadded->getName(), $commentadded->getEmail(), $commentadded->getWebsite(), $commentadded->getComment(), false,
 																		$commentadded->getPrivate(), $commentadded->getAnon(), $commentadded->getCustomData());
