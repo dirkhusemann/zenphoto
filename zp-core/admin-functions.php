@@ -864,7 +864,7 @@ function postIndexEncode($str) {
  * @return string
  */
 function postIndexDecode($str) {
-	$str = str_replace('%2E', '.', sanitrize($str,0));
+	$str = str_replace('%2E', '.', sanitize($str,0));
 	return urldecode($str);
 }
 
