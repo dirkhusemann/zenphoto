@@ -85,7 +85,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 				$high = " height:".$s."px;\"";
 			?>
 			<div id="image" <?php echo $wide.$high; ?>>
-				<?php if ($show = !checkForPassword()) { ?>
+
 					<div id="image_container">
 						<?php
 						if (isImagePhoto()) {
@@ -106,13 +106,13 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 						echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=500&amp;inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
 						printImageMetadata('', false);
 					}
-				} ?>
+					?>
 			</div>
 			<br clear="all" />
 		</div>
 
 		<!-- Image Description -->
-		<?php if ($show) { ?>
+
 			<div id="description">
 				<p><?php	printImageDesc(true); ?></p>
 				<p align="left"><?php if (function_exists('printRating')) printRating(); ?></p>
@@ -123,14 +123,14 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					printImageMap();
 					echo '</div>';
 				}
-		}
+
 		if (function_exists('printShutterfly')) printShutterfly();
 		?>
 	</div>
 
 	<!-- Wrap Bottom Content -->
 	<?php
-	if ($show && function_exists('printCommentForm')) {
+	if (function_exists('printCommentForm')) {
 		?>
 		<div id="commentbox">
 			<?php printCommentForm(); ?>

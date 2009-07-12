@@ -17,6 +17,7 @@ themes/default/images/50percent.png
 themes/default/images/img-bg.gif
 themes/default/images/tag.png
 themes/default/index.php
+themes/default/password.php
 themes/default/register.php
 themes/default/search.php
 themes/default/slideshow-controls.png
@@ -66,6 +67,7 @@ themes/effervescence_plus/indexpage.php
 themes/effervescence_plus/jd.gallery.css
 themes/effervescence_plus/news.php
 themes/effervescence_plus/pages.php
+themes/effervescence_plus/password.php
 themes/effervescence_plus/register.php
 themes/effervescence_plus/scripts/bluranchors.js
 themes/effervescence_plus/scripts/jd.gallery.js
@@ -98,6 +100,7 @@ themes/example/archive.php
 themes/example/contact.php
 themes/example/image.php
 themes/example/index.php
+themes/example/password.php
 themes/example/register.php
 themes/example/search.php
 themes/example/slideshow-controls-old.png
@@ -163,6 +166,7 @@ themes/stopdesign/images/txt_forward.gif
 themes/stopdesign/index.php
 themes/stopdesign/js/comments.js
 themes/stopdesign/normalizer.php
+themes/stopdesign/password.php
 themes/stopdesign/register.php
 themes/stopdesign/search.php
 themes/stopdesign/slideshow-controls.png
@@ -188,6 +192,7 @@ themes/zenpage-default/images/tag.png
 themes/zenpage-default/index.php
 themes/zenpage-default/news.php
 themes/zenpage-default/pages.php
+themes/zenpage-default/password.php
 themes/zenpage-default/register.php
 themes/zenpage-default/search.php
 themes/zenpage-default/sidebar.php

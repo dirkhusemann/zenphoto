@@ -87,6 +87,17 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 		require_once(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
 	}
 
+	if (checkforPassword(true)) { // password protected object
+		$passwordpage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password.php';
+		if (file_exists($passwordpage)) {
+			header("HTTP/1.0 200 OK");
+			header("Status: 200 OK");
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+			include($passwordpage);
+			exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );
+			exit();
+		}
+	}
 	// Zenpage automatic hitcounter update support
 	if(function_exists("is_NewsArticle") AND !$_zp_loggedin) {
 		if(is_NewsArticle()) {
