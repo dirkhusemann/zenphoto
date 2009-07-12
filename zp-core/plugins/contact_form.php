@@ -44,11 +44,7 @@ class contactformOptions {
 		setOptionDefault('contactform_captcha', 0);
 		setOptionDefault('contactform_subject', "required");
 		setOptionDefault('contactform_message', "required");
-		$admins = getAdministrators();
-		$admin = array_shift($admins);
-		$adminname = $admin['user'];
-		$adminemail = $admin['email'];
-		setOptionDefault('contactform_mailaddress', $adminemail);
+		setOptionDefault('contactform_mailaddress', getAdminEmail());
 	}
 
 
@@ -192,25 +188,26 @@ function printContactForm() {
 			$message .= "\n\n";
 			echo get_language_string(getOption("contactform_confirmtext"));
 			?>
-<div>
-	<?PHP
-	$_processing_post = true;
-	include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
-	?>
-	<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
-		<input type="hidden" id="confirm" name="confirm" value="confirm" />
-		<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
-		<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
-		<input type="hidden" id="headers" name="headers" value="<?php echo $headers; ?>" />
-		<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
-		<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
-	</form>
-	<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
-		<input type="hidden" id="discard" name="discard" value="discard" />
-		<input type="submit" value="<?php echo gettext("Discard"); ?>" />
-	</form>
-</div>
+			<div>
+				<?PHP
+				$_processing_post = true;
+				include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
+				?>
+				<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
+					<input type="hidden" id="confirm" name="confirm" value="confirm" />
+					<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
+					<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
+					<input type="hidden" id="headers" name="headers" value="<?php echo $headers; ?>" />
+					<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
+					<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
+				</form>
+				<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
+					<input type="hidden" id="discard" name="discard" value="discard" />
+					<input type="submit" value="<?php echo gettext("Discard"); ?>" />
+				</form>
+			</div>
 			<?php
+			return;
 		}
 	}
 	if(isset($_POST['confirm'])) {
@@ -220,22 +217,21 @@ function printContactForm() {
 		$mailaddress = sanitize($_POST['mailaddress']);
 		$_zp_UTF8->send_mail(getOption("contactform_mailaddress").",".$mailaddress, $subject, $message, $headers);
 		echo get_language_string(getOption("contactform_thankstext"));
-	}
-	if (count($error) <= 0) {
-		$mailcontent = array();
-		$mailcontent['title'] = '';
-		$mailcontent['name'] = '';
-		$mailcontent['company'] = '';
-		$mailcontent['street'] = '';
-		$mailcontent['city'] = '';
-		$mailcontent['country'] = '';
-		$mailcontent['email'] = '';
-		$mailcontent['website'] = '';
-		$mailcontent['phone'] = '';
-		$mailcontent['subject'] = '';
-		$mailcontent['message'] ='';
-	}
-	if (count($error) > 0 || !isset($_POST['sendmail'])) {
+	} else {
+		if (count($error) <= 0) {
+			$mailcontent = array();
+			$mailcontent['title'] = '';
+			$mailcontent['name'] = '';
+			$mailcontent['company'] = '';
+			$mailcontent['street'] = '';
+			$mailcontent['city'] = '';
+			$mailcontent['country'] = '';
+			$mailcontent['email'] = '';
+			$mailcontent['website'] = '';
+			$mailcontent['phone'] = '';
+			$mailcontent['subject'] = '';
+			$mailcontent['message'] ='';
+		}
 		echo get_language_string(getOption("contactform_introtext"));
 		$_processing_post = false;
 		include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
