@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
 					
 				$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
 				if (!is_dir($uploaddir)) {
-					mkdir ($uploaddir, CHMOD_VALUE);
+					mkdir_recursive($uploaddir, CHMOD_VALUE);
 				}
 				@chmod($uploaddir, CHMOD_VALUE);
 
@@ -245,12 +245,11 @@ if (ini_get('safe_mode')) { ?>
 		
 		<hr />
 		<?php
-		$extensions = '';
+		$extensions = '*.zip';
 		$types = array_merge($_zp_supported_images, array_keys($_zp_extra_filetypes)); // supported extensions
 		foreach ($types as $ext) {
 			$extensions .= ';*.'.$ext;
 		}
-		$extensions = substr($extensions, 1);
 		if($uploadtype != 'http') {
 			?>
 			<div id="uploadboxes" style="display: none;"></div> <!--  need this so that toggling it does not fail. -->

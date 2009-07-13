@@ -26,10 +26,13 @@ if (!empty($_FILES)) {
 	$targetPath = getAlbumFolder().internalToFilesystem($folder);
 	$name = basename(sanitize($_FILES['Filedata']['name'],3));
 	if (!empty($folder) && isMyAlbum($folder, UPLOAD_RIGHTS)) {
+		if (!is_dir($targetPath)) {
+			mkdir_recursive($targetPath, CHMOD_VALUE);
+		}
+		@chmod($targetPath, CHMOD_VALUE);
 		if (is_valid_image($name) || is_valid_other_type($name)) {
 			$soename = seoFriendlyURL($name);
 			$targetFile =  $targetPath.'/'.internalToFilesystem($soename);
-			@mkdir($targetPath, 0777 & CHMOD_VALUE, true);
 			move_uploaded_file($tempFile,$targetFile);
 			@chmod($targetFile, 0666 & CHMOD_VALUE);
 			$album = new Album(New Gallery(), $folder);
@@ -39,7 +42,7 @@ if (!empty($_FILES)) {
 				$image->save();
 			}
 		} else if (is_zip($name)) {
-			unzip($tmp_name, $targetPath);
+			unzip($tempFile, $targetPath);
 		}
 	}
 }
