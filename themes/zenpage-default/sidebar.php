@@ -12,7 +12,7 @@
 	if(!getOption("zenpage_zp_index_news") OR !getOption("zenpage_homepage")) {
 		$allalbums = "";
 	} else {
-		$allalbums = gettext("All albums");
+		$allalbums = gettext("Gallery index");
 	}
 	printAlbumMenu("list","count","","menu-active","submenu","menu-active",$allalbums); 
 	?>
