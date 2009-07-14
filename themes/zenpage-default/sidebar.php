@@ -8,7 +8,14 @@
 <?php if(function_exists("printAlbumMenu")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("Gallery"); ?></h3>
-	<?php printAlbumMenu("list","count","","menu-active","submenu","menu-active",""); ?>
+	<?php 
+	if(!getOption("zenpage_zp_index_news") OR !getOption("zenpage_homepage")) {
+		$allalbums = "";
+	} else {
+		$allalbums = gettext("All albums");
+	}
+	printAlbumMenu("list","count","","menu-active","submenu","menu-active",$allalbums); 
+	?>
 </div>
 <?php } ?>
 
