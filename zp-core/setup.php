@@ -1781,6 +1781,27 @@ if (file_exists(CONFIGFILE)) {
 			query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
 			query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
 		}
+		
+		// update zenpage codeblocks--remove the base64 encoding
+		$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_news').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
+		$result = query_full_array($sql);
+		if (is_array($result)) {
+			foreach ($result as $row) {
+				$codeblock = base64_decode($row['codeblock']);
+				$sql = 'UPDATE '.prefix('zenpage_news').' SET `codeblock`="'.mysql_real_escape_string($codeblock).'" WHERE `id`='.$row['id'];
+				query($sql);
+			}
+		}
+		$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_pages').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
+		$result = query_full_array($sql);
+		if (is_array($result)) {
+			foreach ($result as $row) {
+				$codeblock = base64_decode($row['codeblock']);
+				$sql = 'UPDATE '.prefix('zenpage_pages').' SET `codeblock`="'.mysql_real_escape_string($codeblock).'" WHERE `id`='.$row['id'];
+				query($sql);
+			}
+		}
+		
 		echo "<h3>";
 		if ($taskDisplay[substr($task,0,8)] == 'create') {
 			if ($createTables) {

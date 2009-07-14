@@ -1695,10 +1695,6 @@ function getCodeblock($number='',$titlelink='') {
 		$page = new ZenpagePage($titlelink);
 		$getcodeblock = $page->getCodeblock();
 	}
-	//TODO: remove base64 decoding
-	if (!preg_match('/^a:[0-9]+:{/', $getcodeblock)) { // old style base64 codeblock data
-		$getcodeblock = base64_decode($getcodeblock);
-	}
 	if (empty($getcodeblock)) return '';
 	$codeblock = unserialize($getcodeblock);
 	return $codeblock[$number];

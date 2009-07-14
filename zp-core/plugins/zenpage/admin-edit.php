@@ -348,10 +348,6 @@ if(is_object($result)) {
     			<?php
 							$getcodeblock = getIfObject($result,"codeblock");
 							if(!empty($getcodeblock)) {
-								//TODO: remove base64 decoding
-								if (!preg_match('/^a:[0-9]+:{/', $getcodeblock)) { // old style base64 codeblock data
-									$getcodeblock = base64_decode($getcodeblock);
-								}
 								$codeblock = unserialize($getcodeblock);
 							} else {
 								$codeblock[1] = "";
