@@ -40,26 +40,28 @@ class Album extends PersistentObject {
 		}
 		$folder8 = sanitize_path($folder8);
 		$folderFS = internalToFilesystem($folder8);
-		$this->name = $folder8;
 		$this->gallery = &$gallery;
 		if (empty($folder8)) {
-			$this->localpath = getAlbumFolder();
+			$localpath = getAlbumFolder();
 		} else {
-			$this->localpath = getAlbumFolder() . $folderFS . "/";
+			$localpath = getAlbumFolder() . $folderFS . "/";
 		}
 		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
 			$this->exists = false;
 			return NULL;
 		}
 		if (hasDyanmicAlbumSuffix($folder8)) {
-			$this->localpath = substr($this->localpath, 0, -1);
+			$localpath = substr($localpath, 0, -1);
 		}
 
 		// Must be a valid (local) folder:
-		if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
+		$valid = file_exists($localpath) && (hasDyanmicAlbumSuffix($localpath) || is_dir($localpath));
+		if(!$valid || strpos($localpath, '..') !== false) {
 			$this->exists = false;
 			return NULL;
 		}
+		$this->localpath = $localpath;
+		$this->name = $folder8;
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder8));
 		
 		if (hasDyanmicAlbumSuffix($folder8)) {
