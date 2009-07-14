@@ -27,7 +27,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * 									"list-sub" lists the offspring level of subalbums for the current album
  * 									"jump" dropdown menu of all albums(not context sensitive)
  * 
- * @param string $option2 "count" for a image counter in brackets behind the album name, "countsubalbums" for a count of the direct subalbums, "" = for no image numbers or leave blank
+ * @param string $option2 "count" for a image counter or subalbum count in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_class_topactive insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
@@ -58,7 +58,7 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  * 									"list-top" for only the top level albums, 
  * 									"omit-top" same as list, but the first level of albums is omitted
  * 									"list-sub" lists the offspring level of subalbums for the current album
- * @param string $option2 "count" for a image counter in brackets behind the album name, "countsubalbums" for a count of the direct subalbums, "" = for no image numbers or leave blank
+ * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
@@ -130,7 +130,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 	foreach ($albums as $album) {
 		$level = count(explode('/', $album));
 		$process =  (($level < $showsubs && $option == "list") // user wants all the pages whose level is <= to the parameter
-									|| ($option != 'list-top' && $option != 'list' // not top only
+									|| ($option != 'list-top' // not top only
 											&& strpos($folder, $album) === 0 // within the family
 											&& $level<=$pagelevel) // but not too deep
 								);
@@ -144,11 +144,16 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 			} else {
 				$css_class_t = $css_class_active;
 			}
-			if($option2 == 'count' AND $topalbum->getNumImages() > 0) {
-				$count = " (".$topalbum->getNumImages().")";
-			} else if($option2 == 'countsubalbums' AND $topalbum->getSubalbums()){
-				$countsubalbums = $topalbum->getSubalbums();
-				$count = " (".count($countsubalbums).")";
+			if($option2 == 'count') {
+				if($topalbum->getNumImages() > 0) {
+					$topalbumnumimages = $topalbum->getNumImages();
+					$count = sprintf(ngettext(' (%u Image)', ' (%u Images)',$topalbumnumimages),$topalbumnumimages);
+				}
+				$toplevelsubalbums = $topalbum->getSubalbums();
+				$toplevelsubalbums = count($toplevelsubalbums);
+				if($toplevelsubalbums > 0) {
+					$count = sprintf(ngettext(' (%u Album)', ' (%u Albums)',$toplevelsubalbums),$toplevelsubalbums);
+				}
 			} else {
 				$count = "";
 			}
