@@ -50,7 +50,7 @@ function getExpiryDatePost() {
  */
 function addPage() {
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(sanitize($title));
+	$titlelink = seoFriendlyURL(get_language_string($title));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
 
 	$author = sanitize($_POST['author']);
@@ -361,7 +361,7 @@ function printPagesList($pages) {
  */
 function addArticle() {
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(sanitize($title,3));
+	$titlelink = seoFriendlyURL(get_language_string($title));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
 
 	$author = sanitize($_POST['author']);
