@@ -2,13 +2,13 @@
 /** printAlbumMenu for Zenphoto
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.4.7
+ * @version 1.4.7.1
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.4.7';
+$plugin_version = '1.4.7.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
@@ -27,7 +27,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * 									"list-sub" lists the offspring level of subalbums for the current album
  * 									"jump" dropdown menu of all albums(not context sensitive)
  * 
- * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
+ * @param string $option2 "count" for a image counter in brackets behind the album name, "countsubalbums" for a count of the direct subalbums, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_class_topactive insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
@@ -58,7 +58,7 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  * 									"list-top" for only the top level albums, 
  * 									"omit-top" same as list, but the first level of albums is omitted
  * 									"list-sub" lists the offspring level of subalbums for the current album
- * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
+ * @param string $option2 "count" for a image counter in brackets behind the album name, "countsubalbums" for a count of the direct subalbums, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
@@ -146,6 +146,9 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 			}
 			if($option2 == 'count' AND $topalbum->getNumImages() > 0) {
 				$count = " (".$topalbum->getNumImages().")";
+			} else if($option2 == 'countsubalbums' AND $topalbum->getSubalbums()){
+				$countsubalbums = $topalbum->getSubalbums();
+				$count = " (".count($countsubalbums).")";
 			} else {
 				$count = "";
 			}
