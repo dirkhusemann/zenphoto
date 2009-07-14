@@ -11,13 +11,13 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.5
+ * @version 1.1.6
  * @package plugins
  */
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1.5';
+$plugin_version = '1.1.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---contact_form.php.html";
 $option_interface = new contactformOptions();
 
@@ -32,6 +32,7 @@ class contactformOptions {
 		setOptionDefault('contactform_introtext', '<p>Fields with <strong>*</strong> are required. HTML or any other code is not allowed. A copy of your e-mail will automatically be sent to the address you provided for your own records.</p>');
 		setOptionDefault('contactform_confirmtext', '<p>Please confirm that you really want to send this email. Thanks.</p>');
 		setOptionDefault('contactform_thankstext', '<p>Thanks for your message. A copy has been sent to your provided e-mail adress for your own records.</p>');
+		setOptionDefault('contactform_newmessagelink', 'Send another message.');
 		setOptionDefault('contactform_title', "show");
 		setOptionDefault('contactform_name', "required");
 		setOptionDefault('contactform_company', "show");
@@ -57,8 +58,10 @@ class contactformOptions {
 										'desc' => gettext("The text that asks the vistior to confirm that he really wants to send the message.")),
 									gettext('Thanks text') => array('key' => 'contactform_thankstext', 'type' => OPTION_TYPE_TEXTAREA,
 										'desc' => gettext("The text that is shown after a message has been confirmed and sent.")),
+									gettext('New message link text') => array('key' => 'contactform_newmessagelink', 'type' => OPTION_TYPE_TEXTAREA,
+										'desc' => gettext("The text for the link after the thanks text to return to the contact page to send another message.")),
 									gettext('Mail address') => array('key' => 'contactform_mailaddress', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("The e-mail address the messages should be sent to.")),
+										'desc' => gettext("The e-mail address the messages should be sent to. Enter more than one address separated by comma without any spaces.")),
 									gettext('01. Title field') => array('key' => 'contactform_title', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
 										'desc' => sprintf($mailfieldinstruction,gettext("Title field."))),
 									gettext('02. Name field') => array('key' => 'contactform_name', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
@@ -215,8 +218,11 @@ function printContactForm() {
 		$message = sanitize($_POST['message'],1);
 		$headers = sanitize($_POST['headers']);
 		$mailaddress = sanitize($_POST['mailaddress']);
-		$_zp_UTF8->send_mail(getOption("contactform_mailaddress").",".$mailaddress, $subject, $message, $headers);
+		$contactform_mailaddress = getOption("contactform_mailaddress");
+		$contactform_mailaddress = str_replace(" ","",$contactform_mailaddress);
+		$_zp_UTF8->send_mail($contactform_mailaddress.",".$mailaddress, $subject, $message, $headers);
 		echo get_language_string(getOption("contactform_thankstext"));
+		echo "<p><a href=\"\">".get_language_string(getOption("contactform_newmessagelink"))."</a></p>";
 	} else {
 		if (count($error) <= 0) {
 			$mailcontent = array();
