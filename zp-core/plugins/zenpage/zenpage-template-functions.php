@@ -1011,7 +1011,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 			}
 			//$articlecount = countArticles("",$published);
 			//$totalcount = $articlecount+$galleryitemcount;
-			echo " (".$totalcount.")";
+			echo "<small> (".$totalcount.")</small>";
 		}
 		echo "</li>\n";
 	}
@@ -1020,7 +1020,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 			$catname = htmlspecialchars(get_language_string($category['cat_name']));
 			$catcount = countArticles($category['cat_link'],$published);
 			if($counter) {
-				$count = " (".$catcount.")";
+				$count = "<small> (".$catcount.")</small>";
 			}
 			if($catcount != 0) {
 				if(getCurrentNewsCategoryID() == $category['id']) {

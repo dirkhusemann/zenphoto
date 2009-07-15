@@ -147,12 +147,12 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 			if($option2 == 'count') {
 				if($topalbum->getNumImages() > 0) {
 					$topalbumnumimages = $topalbum->getNumImages();
-					$count = sprintf(ngettext(' (%u Image)', ' (%u Images)',$topalbumnumimages),$topalbumnumimages);
+					$count = "<small>".sprintf(ngettext(' (%u image)', ' (%u images)',$topalbumnumimages),$topalbumnumimages)."</small>";
 				}
 				$toplevelsubalbums = $topalbum->getSubalbums();
 				$toplevelsubalbums = count($toplevelsubalbums);
 				if($toplevelsubalbums > 0) {
-					$count = sprintf(ngettext(' (%u Album)', ' (%u Albums)',$toplevelsubalbums),$toplevelsubalbums);
+					$count = "<small>".sprintf(ngettext(' (%u album)', ' (%u albums)',$toplevelsubalbums),$toplevelsubalbums)."</small>";
 				}
 			} else {
 				$count = "";
