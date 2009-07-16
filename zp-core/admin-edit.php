@@ -703,24 +703,32 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 								<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
 							<?php echo gettext("Visible"); ?>
 						</label>
-						<p style="margin-top: 0; margin-bottom: 1em;"><?php
-									$hc = $image->get('hitcounter');
-									if (empty($hc)) { $hc = '0'; }
+						<p style="margin-top: 0; margin-bottom: 1em;">
+							<?php
+							$hc = $image->get('hitcounter');
+							if (empty($hc)) { $hc = '0'; }
+							
+							printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
+							$tv = $image->get('total_value');
+							$tc = $image->get('total_votes');
+							echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+							if ($tc > 0) {
+								$hc = $tv/$tc;
+								?>
+								<?php  printf(gettext('Rating: <strong>%u</strong>'),$hc) ?>
+								<label>
+									<input type="checkbox" id="<?php echo $currentimage; ?>-reset_rating" name="<?php echo $currentimage; ?>-reset_rating" value=1 />
+									<?php echo gettext("Reset"); ?>
+								</label>
+								<?php
+							} else {
+								echo ' '.gettext("Rating: Unrated");
+							}
+							?>
+							</p>
+						</div>
 									
-									printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
-									$tv = $image->get('total_value');
-									$tc = $image->get('total_votes');
-									echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-									if ($tc > 0) {
-										$hc = $tv/$tc;
-										printf(gettext('Rating: <strong>%u</strong>'),$hc)." <label for=\"$currentimage-reset_rating\"><input type=\"checkbox\" id=\"$currentimage-reset_rating\" name=\"$currentimage-reset_rating\" value=1> ".gettext("Reset")."</label> ";
-									} else {
-										echo ' '.gettext("Rating: Unrated");
-									}
-									?></p>
-									</div>
-									
-							<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
+						<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
      				<div class="box-edit">
 						<!-- Move/Copy/Rename this image -->
 						<label style="padding-right: .5em">

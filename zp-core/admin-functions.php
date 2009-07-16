@@ -1493,7 +1493,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					printf(gettext('Rating: <strong>%u</strong>'), $hc);
 					?>
 					<label>
-						<input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1>
+						<input type="checkbox" id="<?php echo $prefix; ?>reset_rating" name="<?php echo $prefix; ?>reset_rating" value=1 />
 						<?php echo gettext("Reset"); ?>
 					</label>
 					<?php
