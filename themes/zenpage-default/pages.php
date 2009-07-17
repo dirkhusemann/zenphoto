@@ -38,7 +38,7 @@ if (function_exists('printCommentForm')) { ?>
 	<div id="comments">
 	<?php printCommentForm(); ?>
 	</div>
-	<?php printZenpageRSSLink("Comments-page","","",gettext("Subscribe to comments"));} ?>
+	<?php } ?>
 	
 	<?php } // password check end ?>
 	</div><!-- content left-->

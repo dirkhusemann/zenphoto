@@ -44,7 +44,7 @@ if (function_exists('printCommentForm')) { ?>
 	<div id="comments">
 		<?php printCommentForm(); ?>
 	</div>
-	<?php printZenpageRSSLink("Comments-news","","",gettext("Subscribe to comments")); } // comments allowed - end
+	<?php  } // comments allowed - end
 } else {
 echo "<hr />";	
 // news article loop
