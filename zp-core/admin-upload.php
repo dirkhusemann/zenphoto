@@ -221,21 +221,34 @@ if (ini_get('safe_mode')) { ?>
 				echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
 						. "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
 			}
+			if (!isset($_GET['publishalbum']) || $_GET['publishalbum']=='true') {
+				$publishchecked = ' CHECKED="CHECKED"';
+			} else {
+				$publishchecked = '';
+			}
 			?>
 		</select>
 		
 		<div id="newalbumbox" style="margin-top: 5px;">
-			<div><label><input type="checkbox" name="newalbum"<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')"><?php echo gettext("Make a new Album"); ?></label></div>
-			<div id="publishtext"><?php echo gettext("and"); ?><label> <input type="checkbox" name="publishalbum" id="publishalbum" value="1" checked="checked" /> <?php echo gettext("Publish the album so everyone can see it."); ?></label></div>
+			<div>
+				<label>
+					<input id="newalbumcheckbox" type="checkbox" name="newalbum"<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')"><?php echo gettext("Make a new Album"); ?>
+				</label>
+			</div>
+			<div id="publishtext"><?php echo gettext("and"); ?>
+				<label>
+					<input type="checkbox" name="publishalbum" id="publishalbum" value="1" <?php echo $publishchecked; ?> /> <?php echo gettext("Publish the album so everyone can see it."); ?>
+				</label>
+			</div>
 		</div>
 		
 		<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?>
-			<input id="albumtitle" size="42" type="text" name="albumtitle" value="" onKeyUp="updateFolder(this, 'folderdisplay', 'autogen', '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
+			<input id="albumtitle" size="42" type="text" name="albumtitle"  onKeyUp="updateFolder(this, 'folderdisplay', 'autogen', '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
 		
 			<div style="position: relative; margin-top: 4px;"><?php echo gettext("with the folder name:"); ?>
 				<div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="DISABLED" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
-				<label><input type="checkbox" name="autogenfolder" id="autogen" checked="checked" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /><?php echo gettext("Auto-generate"); ?></label>
+				<label><input type="checkbox" name="autogenfolder" id="autogen" CHECKED="CHECKED" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /><?php echo gettext("Auto-generate"); ?></label>
 				<br />
 				<br />
 			</div>
@@ -244,6 +257,16 @@ if (ini_get('safe_mode')) { ?>
 		</div>
 		
 		<hr />
+		
+		<script type="text/javascript">
+			function switchUploader(url) {
+				var urlx = url+'&album='+$('#albumselectmenu').val()+'&publishalbum='+$('#publishalbum').attr("checked")+
+												'&albumtitle='+$('#albumtitle').val()+'&folderdisplay='+$('#folderdisplay').val()+
+												'&autogen='+$('#autogen').attr("checked");
+				if ($('#newalbumcheckbox').attr("checked")) urlx = urlx+'&new';		
+				window.location = urlx;
+			}
+		</script>
 		<?php
 		$extensions = '*.zip';
 		$types = array_merge($_zp_supported_images, array_keys($_zp_extra_filetypes)); // supported extensions
@@ -332,7 +355,7 @@ if (ini_get('safe_mode')) { ?>
 					<a href="javascript:$('#fileUpload').fileUploadClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
 				<br clear: all /><br />
 				</p>
-				<p><?php echo gettext("If your upload does not work try the <a href='admin-upload.php?uploadtype=http'>http-browser single file upload</a> or use FTP instead."); ?></p>
+				<p><?php echo gettext('If your upload does not work try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=http\');" >http-browser single file upload</a> or use FTP instead.'); ?></p>
 			</div>
 			<?php
 		} else {
@@ -360,7 +383,7 @@ if (ini_get('safe_mode')) { ?>
 				</p>
 				<br /><br clear: all />
 				</div>
-				<p><?php echo gettext("Try the <a href='admin-upload.php?uploadtype=multifile'>multi file upload</a>"); ?></p>
+				<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
 				<?php
 		}
 	} else {
@@ -369,7 +392,37 @@ if (ini_get('safe_mode')) { ?>
 	?>
 	</div>
 </form>
-<script type="text/javascript">albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');</script>
+<script type="text/javascript">
+	albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');
+	<?php
+		if (isset($_GET['folderdisplay'])) {
+			?>
+			$('#folderdisplay').val('<?php echo sanitize($_GET['folderdisplay']); ?>');
+			<?php
+		}
+		if (isset($_GET['albumtitle'])) {
+			?>
+			$('#albumtitle').val('<?php echo sanitize($_GET['albumtitle']); ?>');
+			<?php
+		}
+		if (isset($_GET['autogen'])) {
+			if ($_GET['autogen'] == 'true') {
+				?>
+				$('#autogen').attr('checked', 'checked');
+				$('#folderdisplay').attr('disabled', 'disabled'); 
+				if ($('#albumtitle').val() != '') {
+					$('#foldererror').hide();
+				}
+				<?php
+			} else {
+				?>
+				$('#autogen').removeAttr('checked');  
+				$('#folderdisplay').removeAttr('disabled'); 
+				<?php        
+			}
+		}
+	?>
+</script>
 </div>
 <?php
 printAdminFooter();
