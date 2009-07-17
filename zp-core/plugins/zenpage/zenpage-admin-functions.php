@@ -16,15 +16,6 @@ require_once("zenpage-class-news.php");
 require_once("zenpage-functions.php");
 
 global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
-/**
- * Returns the value of a checkbox form item
- *
- * @param string $id the $_REQUEST index
- * @return int (0 or 1)
- */
-function getCheckboxState($id) {
-	if (isset($_REQUEST[$id])) return 1; else return 0;
-}
 
 /**
  * Retrieves posted expiry date and checks it against the current date/time
@@ -87,12 +78,16 @@ function addPage() {
 	zp_apply_filter('new_page', $page);
 	$page->save();
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists"),$titlelink)."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists"),$titlelink);
 	} else if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink)."</p>";
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink);
 	}
+	if($rslt && !empty($title)) {
+		zp_apply_filter('zenpage_utilities_successful_save',$page); 
+	}
+	echo "</p>";
 	return $page;
 }
 
@@ -153,12 +148,16 @@ function updatePage() {
 	}
 	$page->save();
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink);
 	} else 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink)."</p>";
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink);
 	}
+	if($rslt && !empty($title)) {
+		zp_apply_filter('zenpage_utilities_successful_save',$page);
+	}
+	echo "</p>";
 	return $page;
 }
 
@@ -407,12 +406,16 @@ function addArticle() {
 		}
 	}
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink);
 	} else if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink)."</p>";
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink);	
 	}
+	if($rslt && !empty($title)) {
+		zp_apply_filter('zenpage_utilities_successful_save',$article); 
+	}
+	echo "</p>"; // close the message box
 	return $article;
 }
 
@@ -438,7 +441,7 @@ function updateArticle() {
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
-
+		
 	if (getCheckboxState('edittitlelink')) {
 		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
@@ -491,12 +494,18 @@ function updateArticle() {
 		}
 	}
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink);
 	} else if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink)."</p>";
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink);
 	}
+	// The sendTrackbackping function sends and generates messages that should be belowe the general messages. 
+	// Also a trackback ping should only be send if the save was successful!
+	if($rslt && !empty($title)) {
+		zp_apply_filter('zenpage_utilities_successful_save',$article); 
+	}
+	echo "</p>"; // close the message box
 	return $article;
 }
 

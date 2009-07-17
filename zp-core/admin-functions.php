@@ -2697,4 +2697,13 @@ function processManagedAlbums($i) {
 	return $albums;
 }
 
+/**
+ * Returns the value of a checkbox form item
+ *
+ * @param string $id the $_REQUEST index
+ * @return int (0 or 1)
+ */
+function getCheckboxState($id) {
+	if (isset($_REQUEST[$id])) return 1; else return 0;
+}
 ?>
