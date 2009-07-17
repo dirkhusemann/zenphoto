@@ -388,7 +388,22 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 	?>
 </div>
 <?php 
-if (getOption('comment_form_rss')) printRSSLink("Comments-image","",gettext("Subscribe to comments"),"");
+if (getOption('comment_form_rss')) {
+	switch($_zp_gallery_page) {
+		case "image.php":
+			printRSSLink("Comments-image","",gettext("Subscribe to comments"),"");
+			break;
+		case "album.php":
+			printRSSLink("Comments-album","",gettext("Subscribe to comments"),"");
+			break;
+		case ZENPAGE_NEWS.".php":
+			printZenpageRSSLink("Comments-news", "", "", gettext("Subscribe to comments"), "");
+			break;
+		case ZENPAGE_PAGES.".php":
+			printZenpageRSSLink("Comments-page", "", "", gettext("Subscribe to comments"), "");
+			break;
+	}
+}
 ?>
 <!-- end printCommentForm -->
 <?php
