@@ -298,4 +298,5 @@ function setDefault($option, $default) {
 	}
 	
 	if (getOption('Allow_comments')) setOptionDefault('zp_plugin_comment_form', 5);
+	setOptionDefault('comment_body_requiired', 1);
 	?>

@@ -988,7 +988,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			return $commentobj;
 		}
 	}
-	if (empty($comment)) {
+	if (getOption('comment_body_requiired') && empty($comment)) {
 		$commentobj->setInModeration(-6);
 		return $commentobj;
 	}
