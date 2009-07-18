@@ -446,7 +446,11 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 			$articlecontent = $_zp_current_zenpage_news->getContent();
 			if($shorten && stristr($articlecontent,"<!-- pagebreak -->") !== FALSE) {
 				$array = explode("<!-- pagebreak -->",$articlecontent);
-				return $array[0].$shortenindicator;
+				if (count($array) > 1 && !($array[1] == '</p>' || trim($array[1]) =='')) {
+					return $array[0].$shortenindicator;
+				} else {
+					return $array[0];
+				}
 			}
 			break;
 		case "image":

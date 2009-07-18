@@ -221,10 +221,29 @@ if (ini_get('safe_mode')) { ?>
 				echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
 						. "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
 			}
-			if (!isset($_GET['publishalbum']) || $_GET['publishalbum']=='true') {
-				$publishchecked = ' CHECKED="CHECKED"';
+			if (isset($_GET['publishalbum'])) {
+				if ($_GET['publishalbum']=='true') {
+					$publishchecked = ' CHECKED="CHECKED"';
+				} else {
+					$publishchecked = '';
+				}
 			} else {
-				$publishchecked = '';
+				// get default for publishing of albums
+				$sql = 'SHOW COLUMNS FROM '.prefix('albums');
+				$result = query_full_array($sql);
+				if (is_array($result)) {
+					foreach ($result as $row) {
+						if ($row['Field'] == 'show') {
+							$albpublish = $row['Default'];
+							break;	
+						}
+					}
+				}
+				if ($albpublish) {
+					$publishchecked = ' CHECKED="CHECKED"';
+				} else {
+					$publishchecked = '';
+				}
 			}
 			?>
 		</select>

@@ -232,7 +232,7 @@ if(is_object($result)) {
     	 	<label for="locked"><?php echo gettext("Locked for changes"); ?></label>
 				</p>
 								
-				<?php echo zp_apply_filter('publish_zenpage_utilities'); ?>
+				<?php echo zp_apply_filter('publish_zenpage_utilities', ''); ?>
 				
      		<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
 				<br style="clear:both" />
@@ -298,7 +298,7 @@ if(is_object($result)) {
 				<label for="resethitcounter"> <?php printf(gettext('Reset hitcounter (Hits: %1$s)'),$result->getHitcounter()); ?></label>  
 				</p>
 				<?php } ?>
-    		<?php echo zp_apply_filter('general_zenpage_utilities'); ?>
+    		<?php echo zp_apply_filter('general_zenpage_utilities', ''); ?>
     		</div>
 			
 		    <?php
