@@ -40,6 +40,7 @@ function getExpiryDatePost() {
  * @return object
  */
 function addPage() {
+	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
 	$titlelink = seoFriendlyURL(get_language_string($title));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
@@ -58,7 +59,7 @@ function addPage() {
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
-	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
+	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
 	if ($rslt) {
 		$titlelink .= '_'.seoFriendlyURL($date); // force unique so that data may be saved.
 	}
@@ -353,6 +354,7 @@ function printPagesList($pages) {
  * @return object
  */
 function addArticle() {
+	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
 	$titlelink = seoFriendlyURL(get_language_string($title));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
@@ -372,7 +374,7 @@ function addArticle() {
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
-	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
+	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
 	if ($rslt) {
 		$titlelink .= '_'.seoFriendlyURL($date); // force unique so that data may be saved.
 	}
@@ -415,6 +417,7 @@ function addArticle() {
  * @return object
  */
 function updateArticle() {
+	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
