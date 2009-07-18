@@ -69,7 +69,7 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  */
 
 function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
-	global $_zp_gallery, $_zp_current_album;
+	global $_zp_gallery, $_zp_current_album, $_zp_gallery_page;
 	
 	// if in search mode don't use the foldout contextsensitiveness and show only toplevel albums
 	if(in_context(ZP_SEARCH_LINKED)) {
@@ -77,7 +77,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	}
 
 	$albumpath = rewrite_path("/", "/index.php?album=");
-	if(empty($_zp_current_album)) {
+	if(empty($_zp_current_album) || $_zp_gallery_page != 'album.php') {
 		$currentfolder = "";
 	} else {
 		$currentfolder = $_zp_current_album->name;
@@ -194,9 +194,9 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
  */
 function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
-	global $_zp_gallery, $_zp_current_album;
+	global $_zp_gallery, $_zp_current_album, $_zp_gallery_page;
 	$albumpath = rewrite_path("/", "/index.php?album=");
-	if(!empty($_zp_current_album)) {
+	if(!empty($_zp_current_album) || $_zp_gallery_page != 'album.php') {
 		$currentfolder = $_zp_current_album->name;
 	}
 	?>
