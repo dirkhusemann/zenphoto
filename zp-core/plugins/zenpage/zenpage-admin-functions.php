@@ -75,17 +75,14 @@ function addPage() {
 	$page->set('permalink',$permalink);
 	$page->set('locked',$locked);
 	$page->set('expiredate',$expiredate);
-	$msg = zp_apply_filter('new_page', '', $page, $rslt);
+	$msg = zp_apply_filter('new_page', '', $page);
 	$page->save();
-	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink);
-	} else 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
+	if(empty($title)) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink);
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink).'</p>';
 	}
-	echo "<br />".$msg;
-	echo "</p>";
+	echo $msg;
 	return $page;
 }
 
@@ -122,10 +119,11 @@ function updatePage() {
 	if(empty($titlelink)) $titlelink = seoFriendlyURL($result['date']);
 	$id = sanitize($_POST['id']);
 	$rslt = true;
+	$oldtitlelink = sanitize($_POST['titlelink-old']);
 	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
 		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.mysql_real_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
-			$titlelink = sanitize($_POST['titlelink-old']); // force old link so data gets saved
+			$titlelink = $oldtitlelink; // force old link so data gets saved
 		}
 	}
 	// update page
@@ -144,17 +142,16 @@ function updatePage() {
 	if (getCheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
-	$msg = zp_apply_filter('update_page', '', $page, $rslt);
+	$msg = zp_apply_filter('update_page', '', $page, $oldtitlelink);
 	$page->save();
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink);
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
 	} else 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink);
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink).'</p>';
 	}
 	echo $msg;
-	echo "</p>";
 	return $page;
 }
 
@@ -393,7 +390,7 @@ function addArticle() {
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
-	$msg = zp_apply_filter('new_article', '', $article, $rslt);
+	$msg = zp_apply_filter('new_article', '', $article);
 	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
@@ -402,15 +399,12 @@ function addArticle() {
 			query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id, news_id) VALUES ('".$cat['id']."', '".$article->get('id')."')");
 		}
 	}
-	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink);
-	} else 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
+	if(empty($title)) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink);	
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink).'</p>';	
 	}
 	echo $msg;
-	echo "</p>";
 	return $article;
 }
 
@@ -448,10 +442,11 @@ function updateArticle() {
 
 	$id = sanitize($_POST['id']);
 	$rslt = true;
+	$oldtitlelink = sanitize($_POST['titlelink-old']);
 	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
 		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.mysql_real_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
-			$titlelink = sanitize($_POST['titlelink-old'],3); // force old link so data gets saved
+			$titlelink = $oldtitlelink; // force old link so data gets saved
 		}
 	}
 	// update article
@@ -471,7 +466,7 @@ function updateArticle() {
 	if(getCheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
-	$msg = zp_apply_filter('update_article', $article, $rslt); 
+	$msg = zp_apply_filter('update_article', $article, $oldtitlelink); 
 	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY id");
@@ -490,14 +485,13 @@ function updateArticle() {
 		}
 	}
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink);
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
 	} else if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink));
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink);
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink).'</p>';
 	}
 	echo $msg;
-	echo "</p>";
 	return $article;
 }
 
