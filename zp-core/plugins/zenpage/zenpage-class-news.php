@@ -131,15 +131,6 @@ class ZenpageNews extends PersistentObject {
 	}
 
 	/**
-	 * Returns the comments status of the news article, "1" if comments are enabled
-	 *
-	 * @return string
-	 */
-	function getCommentson() {
-		return $this->get("commentson");
-	}
-
-	/**
 	 * Returns the hitcount of the news article
 	 *
 	 * @return string
@@ -194,6 +185,14 @@ class ZenpageNews extends PersistentObject {
 	 * Comments
 	 ****************/
 
+	/**
+	 * Returns true of comments are allowed
+	 *
+	 * @return bool
+	 */
+	function getCommentsAllowed() { return $this->get('commentson'); }
+	
+	
 	/**
 	 * Returns an array of comments of the current news article
 	 *

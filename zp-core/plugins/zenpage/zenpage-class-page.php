@@ -138,15 +138,6 @@ class ZenpagePage extends PersistentObject {
 	function getLastchangeAuthor() {
 		return $this->get("lastchangeauthor");
 	}
-
-	/**
-	 * Returns the comment status of the page, "1" if comments are enabled
-	 *
-	 * @return string
-	 */
-	function getCommentson() {
-		return $this->get("commentson");
-	}
 	
 	/**
 	 * Returns the hitcount of the page
@@ -189,10 +180,18 @@ class ZenpagePage extends PersistentObject {
 		}
 	}
 	
+	
 	/****************
 	 * Comments
 	 ****************/
 
+	/**
+	 * Returns true of comments are allowed
+	 *
+	 * @return bool
+	 */
+	function getCommentsAllowed() { return $this->get('commentson'); }
+	
 	/**
 	 * Returns an array of comments of the current page
 	 *

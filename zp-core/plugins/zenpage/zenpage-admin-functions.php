@@ -241,8 +241,8 @@ function printPagesListTable($page, $flag) {
 		<?php printPublishIconLink($page,"page"); ?>
 	</td>
 	<td class="icons">
-		<a href="?commentson=<?php echo $page->getCommentson(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
-		<?php echo checkIfCommentsAllowed($page->getCommentson()); ?>
+		<a href="?commentson=<?php echo $page->getCommentsAllowed(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
+		<?php echo checkIfCommentsAllowed($page->getCommentsAllowed()); ?>
 	</td>
 	<?php } else { ?>
 	<td class="icons">
