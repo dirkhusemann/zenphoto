@@ -10,7 +10,7 @@
  * Zenphoto image manipulation functions using the PHP GD library
  *
  */
-	
+
 /**
  * Takes an image filename and returns a GD Image using the correct function
  * for the image's format (imagecreatefrom*). Supports JPEG, GIF, and PNG.
@@ -103,9 +103,10 @@ function zp_copyCanvas($imgCanvas, $img, $dest_x, $dest_y, $src_x, $src_y, $w, $
  * @param int $dst_h
  * @param int $src_w
  * @param int $src_h
+ * @param string $suffix
  * @return bool
  */
-function zp_resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
+function zp_resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $suffix) {
 	return imagecopyresampled($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
 }
 
@@ -172,7 +173,7 @@ function zp_imageUnsharpMask($img, $amount, $radius, $threshold) {
 	$imgCanvas2 = imagecreatetruecolor($w, $h);
 	imagecopy ($imgCanvas, $img, 0, 0, 0, 0, $w, $h);
 	imagecopy ($imgCanvas2, $img, 0, 0, 0, 0, $w, $h);
-	
+
 	imageBlurGD($imgCanvas, $radius, $w, $h);
 
 	// Calculate the difference between the blurred pixels and the original
@@ -394,7 +395,7 @@ function zp_graphicsLibInfo() {
 		$lib['Library'] = 'PHP GD library <em>'.$info['GD Version'].'</em>';
 		$imgtypes = imagetypes();
 		$lib['GIF'] = $imgtypes & IMG_GIF;
- 		$lib['JPG'] = $imgtypes & IMG_JPG;
+		$lib['JPG'] = $imgtypes & IMG_JPG;
 		$lib['PNG'] = $imgtypes & IMG_PNG;
 		$lib['BMP'] = $imgtypes & IMG_WBMP;
 	} else {

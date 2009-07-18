@@ -156,7 +156,7 @@ if (isset($_REQUEST['crop'])) {
 	}
 	
 	$newim = zp_createImage($cw, $ch);
-	zp_resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch);
+	zp_resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch, getSuffix($imagename));
 	@unlink($imgpath);
 	if (zp_imageOutput($newim, getSuffix($imgpath), $imgpath, $quality)) {
 		if (DEBUG_IMAGE) debugLog('image_crop Finished:'.basename($imgpath));

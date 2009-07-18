@@ -102,8 +102,6 @@ $_zp_conf_vars['version'] = ZENPHOTO_VERSION;
 // the options array
 $_zp_options = NULL;
 
-define('IMAGE_FORMAT', 'jpg');
-
 
 /**
  * Decodes HTML Special Characters.  Function for backwards compatability with PHP 4.1.
@@ -363,6 +361,7 @@ function getImageCacheFilename($album8, $image8, $args) {
 	// this function works in FILESYSTEM_CHARSET, so convert the file names
 	$album = internalToFilesystem($album8);
 	$image = internalToFilesystem($image8);
+	$suffix = getSuffix($image8);
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
 	if (empty($album)) {
@@ -375,7 +374,7 @@ function getImageCacheFilename($album8, $image8, $args) {
 			$albumsep = '/';
 		}
 	}
-	return '/' . $album . $albumsep . $image . $postfix . '.'.IMAGE_FORMAT;
+	return '/' . $album . $albumsep . $image . $postfix . '.'.$suffix;
 }
 
 /**

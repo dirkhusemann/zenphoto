@@ -197,7 +197,23 @@ if ($process) { // If the file hasn't been cached yet, create it.
 if (!$debug) {
 	// ... and redirect the browser to it.
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
-	header('Content-Type: image/jpeg');
+	$suffix = getSuffix($newfilename);
+	switch ($suffix) {
+		case 'bmp':
+			$suffix = 'wbmp';
+			break;
+		case 'jpg':
+			$suffix = 'jpeg';
+			break;
+		case 'png':
+		case 'gif':
+		case 'jpeg':
+			break;
+		default:
+			pageError(405, gettext("Method Not Allowed"));
+			exit();
+	}
+	header('Content-Type: image/'.$suffix);
 	header('Location: ' . FULLWEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename)), true, 301);
 	exit();
 } else {

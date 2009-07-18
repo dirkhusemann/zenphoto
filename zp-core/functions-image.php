@@ -295,7 +295,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
 			$newim = zp_createImage($neww, $newh);
-			zp_resampleImage($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
+			zp_resampleImage($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch, getsuffix($imgfile));
 		} else {
 			if ($allowscale) {
 				$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
@@ -304,7 +304,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
 			$newim = zp_createImage($neww, $newh);
-			zp_resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
+			zp_resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h, getsuffix($imgfile));
 		}		
 		
 		if ($grayscale) {
