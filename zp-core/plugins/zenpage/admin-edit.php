@@ -232,7 +232,14 @@ if(is_object($result)) {
     	 	<label for="locked"><?php echo gettext("Locked for changes"); ?></label>
 				</p>
 								
-				<?php echo zp_apply_filter('publish_zenpage_utilities', ''); ?>
+				<?php 
+				if(is_AdminEditPage("newsarticle")) {
+					echo zp_apply_filter('publish_article_utilities', ''); 
+				} else {
+					echo zp_apply_filter('publish_page_utilities', ''); 
+				}
+				
+				?>
 				
      		<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
 				<br style="clear:both" />
