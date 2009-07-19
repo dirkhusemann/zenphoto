@@ -11,12 +11,15 @@ Delete these comments and rename the file robots.txt.
 Place it in the root folder of your web pages.
 ****delete all lines above and including this one *******
 User-agent: *
-Disallow: /zenphoto/albums
-Disallow: /zenphoto/cache
-Disallow: /zenphoto/themes
-Disallow: /zenphoto/zp-core
-Disallow: /zenphoto/zp-data
+Disallow: /zenphoto/albums/
+Disallow: /zenphoto/cache/
+Disallow: /zenphoto/themes/
+Disallow: /zenphoto/zp-core/
+Disallow: /zenphoto/zp-data/
+Disallow: /zenphoto/page/search/
+Disallow: /zenphoto/uploaded/
 Disallow: /zenphoto/rss.php
 Disallow: /zenphoto/rss-comments.php
-Disallow: /zenphoto/page/search
-Disallow: /zenphoto/uploaded
+Disallow: /zenphoto/README.html
+Disallow: /zenphoto/rss-news-comments.php
+Disallow: /zenphoto/rss-news.php

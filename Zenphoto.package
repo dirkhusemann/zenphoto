@@ -1,5 +1,4 @@
 .htaccess
-example_robots.txt
 index.php
 License.txt
 lighttpd_rules.conf
@@ -241,6 +240,7 @@ zp-core/class-sortable.php
 zp-core/class-transientimage.php
 zp-core/classes.php
 zp-core/controller.php
+zp-core/example_robots.txt
 zp-core/exif/exif.php
 zp-core/exif/makers/canon.php
 zp-core/exif/makers/fujifilm.php

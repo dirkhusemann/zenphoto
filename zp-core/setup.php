@@ -1077,7 +1077,24 @@ if ($debug) {
 											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
 											"<br />".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
-
+		//robots.txt file
+		$robots = file_get_contents(dirname(__FILE__).'/example_robots.txt');
+		if ($robots === false) {
+			$rslt = -1;
+		} else {
+			$text = explode('****delete all lines above and including this one *******'."\n", $robots);
+			$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
+			if ($d == '/') $d = '';
+			$robots = str_replace('/zenphoto', $d, $text[1]);
+			$rslt = file_put_contents(dirname(dirname(__FILE__)).'/robots.txt', $robots);
+			if ($rslt === false) {
+				$rslt = -1;
+			} else {
+				$rslt = 1;
+			}
+		}
+		checkmark($rslt, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not create a <em>robots.txt</em> file.'));
+			
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
 		checkmark(-1, 'albums', gettext("albums [<code>\$conf['external_album_folder']</code> is deprecated]"), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 		$_zp_conf_vars['album_folder_class'] = 'external';
