@@ -1764,7 +1764,7 @@ function zp_getCookie($name) {
 		} else {
 			$cookiev = '';
 		}
-		debugLog("zp_getCookie($name): SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
+		debugLog("zp_getCookie($name)::".'album_session='.getOption('album_session')."; SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
 	}
 	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) {
 		return $_COOKIE[$name];
