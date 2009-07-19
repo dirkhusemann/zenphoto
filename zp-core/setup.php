@@ -440,13 +440,13 @@ if (!$checked) {
 				<br />
 				<span class="<?php echo $dsp; ?>"><?php echo  $text2; ?></span>
 				<?php
-				$dsp .= ' '.trim($text2);
+				$dsp .= ': '.trim($text2);
 			} else {
 				?>
 				<br />
 				<span class="<?php echo $dsp; ?>"><?php echo  $text; ?></span>
 				<?php
-				$dsp .= ' '.trim($text);
+				$dsp .= ': '.trim($text);
 			}
 			if (!empty($msg)) {
 				if ($check == 0) {
@@ -470,7 +470,7 @@ if (!$checked) {
 					echo "<p>".$msg."</p>";
 					echo "</div>";
 				}
-				$dsp .= ': '.trim($msg);
+				$dsp .= ' '.trim($msg);
 			}
 		} else {
 			?> 
