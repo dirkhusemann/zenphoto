@@ -877,7 +877,17 @@ if (empty($alterrights)) {
 					<td>
 						<p>
 							<label>
-								<input type="checkbox" name="mod_rewrite" value="1"<?php echo checked('1', getOption('mod_rewrite')); ?> />
+								<?php
+								$mod_rewrite = getOption('mod_rewrite');
+								if (is_null($mod_rewrite)) {
+									$state = ' DISABLED';
+								} else if ($mod_rewrite) {
+									$state = ' CHECKED';
+								} else {
+									$state = '';
+								}
+								?>
+								<input type="checkbox" name="mod_rewrite" value="1"<?php echo $state; ?> />
 								<?php echo gettext('mod rewrite'); ?>
 							</label>
 						</p>
@@ -890,7 +900,12 @@ if (empty($alterrights)) {
 						<p><?php echo gettext("mod_rewrite suffix:"); ?> <input type="text" size="10" name="mod_rewrite_image_suffix" value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></p>
 					</td>
 					<td>
-						<p><?php echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); ?></p>
+						<p>
+							<?php
+							echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); 
+							if (is_null($mod_rewrite)) echo ' '.gettext('If the checkbox is disabled, setup did not detect a working Apache <em>mod rewrite</em> facility and proper <em>.htaccess</em> file.');
+							?>
+						</p>
 						<p><?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?></p>
 						<p><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	the <em>mod_rewrite suffix</em> to the end of image URLs. (This helps search engines.) Examples: <em>.html, .php,	/view</em>, etc."); ?></p>
 					</td>

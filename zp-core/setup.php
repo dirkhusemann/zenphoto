@@ -470,14 +470,14 @@ if (!$checked) {
 					echo "<p>".$msg."</p>";
 					echo "</div>";
 				}
-				$dsp .= ' '.trim($msg);
+				$dsp .= ': '.trim($msg);
 			}
 		} else {
 			?> 
 			<br />
 			<span class="<?php echo $dsp; ?>"><?php echo  $text; ?></span>
 			<?php
-			$dsp .= ' '.trim($text);
+			$dsp .= ': '.trim($text);
 		}
 		setupLog($dsp, $check>-2 && $check<=0);
 		return $check;
@@ -1024,7 +1024,7 @@ if ($debug) {
 		$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
 	}
 
-	$mod = '&mod_rewrite=OFF';
+	$mod = '';
 	if ($ch) {
 		$i = strpos($htu, 'REWRITEENGINE');
 		if ($i === false) {
@@ -1035,9 +1035,7 @@ if ($debug) {
 		}
 		if (!empty($rw)) {
 			$msg = sprintf(gettext("<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
-			if (isset($_SERVER['REQUEST_URI'])) {
-				$mod = "&mod_rewrite=$rw";
-			}
+			$mod = "&mod_rewrite=$rw";
 		}
 	}
 	if ($Apache || $ch != -2) {

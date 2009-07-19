@@ -62,12 +62,20 @@ function setDefault($option, $default) {
 	setDefault('website_title', "");
 	setDefault('website_url', "");
 	setDefault('time_offset', 0);
-	if (isset($_GET['mod_rewrite']) && ($_GET['mod_rewrite'] == 'ON')) {
-		$rw = 1;
-	} else {
-		$rw = 0;
+	if (isset($_GET['mod_rewrite'])) {
+		if ($_GET['mod_rewrite'] == 'ON') {
+			?>
+			<script type="text/javascript">
+				$.ajax({   
+					type: 'POST',   
+					url: '<?php echo WEBPATH; ?>/page/setup_set-mod_rewrite?z'
+				});
+			</script>				
+			<?php
+		} else {
+			setOption('mod_rewrite', 0);
+		}
 	}
-	setDefault('mod_rewrite', $rw);
 	setDefault('mod_rewrite_image_suffix', ".php");
 	setDefault('server_protocol', "http");
 	setDefault('charset', "UTF-8");
