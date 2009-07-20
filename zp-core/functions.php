@@ -983,11 +983,11 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$commentobj->setPrivate($private);
 	$commentobj->setAnon($anon);
 	$commentobj->setInModeration(2); //mark as not posted
-	if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) {
+	if (COMMENT_EMAIL_REQUIRED && (empty($email) || !is_valid_email_zp($email))) {
 		$commentobj->setInModeration(-2);
 		return $commentobj;
 	}
-	if (($whattocheck & COMMENT_EMAIL_REQUIRED) && empty($name)) {
+	if (($whattocheck & COMMENT_NAME_REQUIRED) && empty($name)) {
 		$commentobj->setInModeration(-3);
 		return $commentobj;
 	}

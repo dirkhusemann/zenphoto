@@ -1358,7 +1358,7 @@ if (file_exists(CONFIGFILE)) {
 		`country` tinytext,
 		`credit` text,
 		`copyright` text,
-		`commentson` int(1) NOT NULL default '1',
+		`commentson` int(1) UNSIGNED NOT NULL default '1',
 		`show` int(1) NOT NULL default '1',
 		`date` datetime default NULL,
 		`sort_order` int(11) unsigned default NULL,
@@ -1391,7 +1391,7 @@ if (file_exists(CONFIGFILE)) {
 		`show` int(1) unsigned NOT NULL default '1',
 		`date` datetime,
 		`titlelink` varchar(255) NOT NULL,
-		`commentson` int(11) unsigned NOT NULL,
+		`commentson` int(1) UNSIGNED NOT NULL,
 		`codeblock` text,
 		`author` varchar(64) NOT NULL,
 		`lastchange` datetime default NULL,
@@ -1410,7 +1410,7 @@ if (file_exists(CONFIGFILE)) {
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`cat_name` text,
 		`cat_link` varchar(255) NOT NULL default '',
-		`permalink` int(1) unsigned NOT NULL default 0,
+		`permalink` int(1) UNSIGNED NOT NULL default 0,
 		`hitcounter` int(11) unsigned default 0,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`cat_link`)
@@ -1436,7 +1436,7 @@ if (file_exists(CONFIGFILE)) {
 		`sort_order`varchar(48) NOT NULL default '',
 		`show` int(1) unsigned NOT NULL default '1',
 		`titlelink` varchar(255) NOT NULL,
-		`commentson` int(11) unsigned NOT NULL,
+		`commentson` int(1) unsigned NOT NULL,
 		`codeblock` text,
 		`author` varchar(64) NOT NULL,
 		`date` datetime default NULL,
@@ -1653,6 +1653,8 @@ if (file_exists(CONFIGFILE)) {
 		}
 	}
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `watermark` varchar(256)';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
 	
 	
 	
