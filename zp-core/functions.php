@@ -1133,7 +1133,7 @@ function getManagedAlbumList() {
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list;
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		return true;
+		return $_zp_loggedin & (ADMIN_RIGHTS | $action);
 	}
 	if (empty($albumfolder)) {
 		return false;

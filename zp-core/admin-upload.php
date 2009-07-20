@@ -147,7 +147,9 @@ $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $_zp_supported_images));
 $s2 = strtoupper(implode(', ', $types));
 printf(gettext('This web-based upload accepts ZenPhoto formats: %s, %s, and %s.'), $s1, $s2, $last);
-echo gettext(" If using the <em>http-browser single file upload</em> you can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
+echo ' '.gettext('You can also upload ZIP files containing files of these types.')
+?>
+</p>
 <p>
 <?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), ini_get('upload_max_filesize')); ?>
 <?php echo gettext(' Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'); ?>
