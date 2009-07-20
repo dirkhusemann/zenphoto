@@ -23,8 +23,5 @@ function ngettext($msgid1,$msgid2,$n) {
 	}
 	return $msgid1;
 }
-function _($msgid) {
-	return $msgid;
-}
 
 ?>
