@@ -26,8 +26,7 @@ if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 if (defined("RELEASE")) {
 	error_reporting(E_ALL ^E_NOTICE);
 } else {
-	$v = explode('.',PHP_VERSION);
-	if ($v[0]>4) {
+	if (version_compare(PHP_VERSION,'5.0.0') == 1) {
 		error_reporting(E_ALL | E_STRICT);
 	} else {
 		error_reporting(E_ALL);
@@ -911,7 +910,7 @@ function getSuffix($filename) {
  * @return string
  */
 function PHPScript($v, $script) {
-	return dirname(__FILE__).'/'.(version_compare(PHP_VERSION, $v) === 1?'PHP5':'PHP4').'_functions/'.$script;
+	return dirname(__FILE__).'/'.(version_compare(PHP_VERSION, $v) == 1?'PHP5':'PHP4').'_functions/'.$script;
 }
 
 /**

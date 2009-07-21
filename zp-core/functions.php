@@ -924,7 +924,7 @@ define ('COMMENT_EMAIL_REQUIRED', 1);
 define ('COMMENT_NAME_REQUIRED', 2);
 define ('COMMENT_WEB_REQUIRED', 4);
 define ('USE_CAPTCHA', 8);
-define ('COMMENT_BODY_REQUIIRED', 18);
+define ('COMMENT_BODY_REQUIRED', 18);
 /**
  * Generic comment adding routine. Called by album objects or image objects
  * to add comments.
@@ -952,7 +952,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		if (getOption('comment_name_required')) $whattocheck = $whattocheck | COMMENT_NAME_REQUIRED;
 		if (getOption('comment_web_required')) $whattocheck = $whattocheck | COMMENT_WEB_REQUIRED;
 		if (getOption('Use_Captcha')) $whattocheck = $whattocheck | USE_CAPTCHA;
-		if (getOption('comment_body_requiired')) $whattocheck = $whattocheck | COMMENT_BODY_REQUIIRED;
+		if (getOption('comment_body_requiired')) $whattocheck = $whattocheck | COMMENT_BODY_REQUIRED;
 	}
 	$type = str_replace('zenpage_', '', $receiver->table); // remove the string 'zenpage_' if it is there.
 	$class = get_class($receiver);
@@ -971,6 +971,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$comment = trim($comment);
 	$receiverid = $receiver->id;
 	$goodMessage = 2;
+	if ($private) $private = 1; else $private = 0;
+	if ($anon) $anon = 1; else $anon = 0;
 	$commentobj = new Comment();
 	$commentobj->transient = false; // otherwise we won't be able to save it....
 	$commentobj->setOwnerID($receiverid);
@@ -985,28 +987,27 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$commentobj->setInModeration(2); //mark as not posted
 	if (($whattocheck & COMMENT_EMAIL_REQUIRED) && (empty($email) || !is_valid_email_zp($email))) {
 		$commentobj->setInModeration(-2);
-		return $commentobj;
+		$goodMessage = false;
 	}
 	if (($whattocheck & COMMENT_NAME_REQUIRED) && empty($name)) {
 		$commentobj->setInModeration(-3);
-		return $commentobj;
+		$goodMessage = false;
 	}
 	if (($whattocheck & COMMENT_WEB_REQUIRED) && (empty($website) || !isValidURL($website))) {
 		$commentobj->setInModeration(-4);
-		return $commentobj;
+		$goodMessage = false;
 	}
 	if (($whattocheck & USE_CAPTCHA)) {
 		if (!$_zp_captcha->checkCaptcha($code, $code_ok)) {
 			$commentobj->setInModeration(-5);
-			return $commentobj;
+			$goodMessage = false;
 		}
 	}
-	if (($whattocheck & COMMENT_BODY_REQUIIRED) && empty($comment)) {
+	if (($whattocheck & COMMENT_BODY_REQUIRED) && empty($comment)) {
 		$commentobj->setInModeration(-6);
-		return $commentobj;
+		$goodMessage = false;
 	}
-	$gallery = new gallery();
-	if (!(false === ($requirePath = getPlugin('spamfilters/'.internalToFilesystem(getOption('spam_filter')).".php", false)))) {
+	if ($goodMessage && !(false === ($requirePath = getPlugin('spamfilters/'.internalToFilesystem(getOption('spam_filter')).".php", false)))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
 		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, isImageClass($receiver)?$receiver->getFullImage():NULL, $ip);
@@ -1017,17 +1018,12 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		} else { 
 			$moderate = 0;
 		}
-		if ($private) $private = 1; else $private = 0;
-		if ($anon) $anon = 1; else $anon = 0;
-		
-		// Update the database entry with the new comment
 		$commentobj->setInModeration($moderate);
-		
-		zp_apply_filter('comment_post', $commentobj, $receiver);
-		if ($commentobj->getInModeration() < 0)	return $commentobj;
-	
+	}
+	zp_apply_filter('comment_post', $commentobj, $receiver);		
+	if ($goodMessage && $commentobj->getInModeration() >= 0)	{
+		// Update the database entry with the new comment
 		$commentobj->save();
-
 		//  add to comments array and notify the admin user
 		if (!$moderate) {
 			$receiver->comments[] = array('name' => $commentobj->getname(),

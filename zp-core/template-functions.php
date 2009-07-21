@@ -2366,7 +2366,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 }
 
 /**
- * Returns a link to a custom sized version of he current image
+ * Returns an array with the height & width
  *
  * @param int $size size
  * @param int $width width
@@ -2375,7 +2375,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
  * @param int $ch crop height
  * @param int $cx crop x axis
  * @param int $cy crop y axis
- * @return string
+ * @return array
  */
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {
 	if(!in_context(ZP_IMAGE)) return false;

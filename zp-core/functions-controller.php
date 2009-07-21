@@ -140,7 +140,6 @@ function zp_handle_comment() {
 	 				$redirectTo = $activeImage->getImageLink();
 					}
 			} else {
-				// ZENPAGE: if else change
 				if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 					$commentobject = $_zp_current_image;
 					$redirectTo = $_zp_current_image->getImageLink();
