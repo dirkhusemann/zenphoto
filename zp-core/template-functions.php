@@ -2742,7 +2742,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 			' alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"' .
 			(($class) ? ' class="'.$class.'"' : '') .
-			(($id) ? ' id="'.$id.'"' : '') . ' />';
+			(($id) ? ' id="'.$id.'"' : '') . ' width="'.$width.'" height="'.$height.'" />'; // TODO width and height added
 	} else { // better be a plugin
 		echo $_zp_current_image->getBody();
 	}
