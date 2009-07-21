@@ -925,6 +925,7 @@ define ('COMMENT_NAME_REQUIRED', 2);
 define ('COMMENT_WEB_REQUIRED', 4);
 define ('USE_CAPTCHA', 8);
 define ('COMMENT_BODY_REQUIRED', 18);
+define ('COMMENT_SEND_EMAIL', 18);
 /**
  * Generic comment adding routine. Called by album objects or image objects
  * to add comments.
@@ -942,17 +943,20 @@ define ('COMMENT_BODY_REQUIRED', 18);
  * @param string $ip the IP address of the comment poster
  * @param bool $private set to true if the comment is for the admin only
  * @param bool $anon set to true if the poster wishes to remain anonymous
- * @param bit $whattocheck bitmask of which fields must be checked. If set overrides the options
+ * @param bit $check bitmask of which fields must be checked. If set overrides the options
  * @return object
  */
-function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon, $whattocheck=false) {
+function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon, $check=false) {
 	global $_zp_captcha, $_zp_gallery;
-	if ($whattocheck === false) {
+	if ($check === false) {
 		if (getOption('comment_email_required')) $whattocheck = $whattocheck | COMMENT_EMAIL_REQUIRED;
 		if (getOption('comment_name_required')) $whattocheck = $whattocheck | COMMENT_NAME_REQUIRED;
 		if (getOption('comment_web_required')) $whattocheck = $whattocheck | COMMENT_WEB_REQUIRED;
 		if (getOption('Use_Captcha')) $whattocheck = $whattocheck | USE_CAPTCHA;
 		if (getOption('comment_body_requiired')) $whattocheck = $whattocheck | COMMENT_BODY_REQUIRED;
+		IF (getOption('email_new_comments')) $whattocheck = $whattocheck | COMMENT_SEND_EMAIL;
+	} else {
+		$whattocheck = $check;
 	}
 	$type = str_replace('zenpage_', '', $receiver->table); // remove the string 'zenpage_' if it is there.
 	$class = get_class($receiver);
@@ -1020,8 +1024,12 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 		$commentobj->setInModeration($moderate);
 	}
-	zp_apply_filter('comment_post', $commentobj, $receiver);		
-	if ($goodMessage && $commentobj->getInModeration() >= 0)	{
+	$localerrors = $commentobj->getInModeration();
+	zp_apply_filter('comment_post', $commentobj, $receiver);	
+	if ($check === false)	{ // ignore filter provided errors if caller is supplying the fields to check
+		$localerrors = $commentobj->getInModeration();
+	}
+	if ($goodMessage && $localerrors >= 0)	{
 		// Update the database entry with the new comment
 		$commentobj->save();
 		//  add to comments array and notify the admin user
@@ -1071,7 +1079,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				}
 				break;
 		}
-		if (getOption('email_new_comments')) {
+		if (($whattocheck & COMMENT_SEND_EMAIL)) {
 			$message = $action . "\n\n" . 
 					sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$commentobj->getname(), $commentobj->getEmail(), $commentobj->getWebsite(), $commentobj->getComment()) . "\n\n" .
 					sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n" .
@@ -1097,7 +1105,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				}
 			}
 			$on = gettext('Comment posted');
-			zp_mail("[" . $_zp_gallery->getTitle() . "] $on", $message, "", $emails);
+			$gallery = new Gallery();
+			zp_mail("[" . $gallery->getTitle() . "] $on", $message, "", $emails);
 		}
 	}
 	return $commentobj;
