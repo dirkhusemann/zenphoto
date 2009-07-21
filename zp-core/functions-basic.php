@@ -9,9 +9,11 @@
 
 // force UTF-8 Ø
 require_once(dirname(__FILE__).'/folder-definitions.php');
+include(dirname(__FILE__).'/version.php'); // Include the version info.
+
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_ERROR', !defined('RELEASE')); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 define('DEBUG_404', false); // set to true to log 404 error processing debug information.
 
@@ -44,8 +46,6 @@ if (class_exists('Imagick')) {
 }
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
-
-include(dirname(__FILE__).'/version.php'); // Include the version info.
 
 if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . "/zp-config.php")) {
 	die (sprintf(gettext("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"),ZENFOLDER));
