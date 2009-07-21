@@ -158,11 +158,14 @@ function zp_handle_comment() {
 													$code1, $code2,	$p_server, $p_private, $p_anon);
 			}
 			$comment_error = $commentadded->getInModeration();
+			$_zp_comment_stored = array($commentadded->getName(), $commentadded->getEmail(), $commentadded->getWebsite(), $commentadded->getComment(), false,
+																	$commentadded->getPrivate(), $commentadded->getAnon(), $commentadded->getCustomData());
+			if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
 			if (!$comment_error) {
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
-					$info = array($p_name, $p_email, $p_website, '', false, $p_private, $p_anon);
-					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+COOKIE_PESISTENCE, '/');
+					$_zp_comment_stored[3] = ''; // clear the comment itself
+					zp_setcookie('zenphoto', implode('|~*~|', $_zp_comment_stored), time()+COOKIE_PESISTENCE, '/');
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
 				}
@@ -173,11 +176,7 @@ function zp_handle_comment() {
 					exit();
 				}
 			} else {
-				$_zp_comment_stored = array($commentadded->getName(), $commentadded->getEmail(), $commentadded->getWebsite(), $commentadded->getComment(), false,
-																		$commentadded->getPrivate(), $commentadded->getAnon(), $commentadded->getCustomData());
-				if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
 				$comment_error++;
-				// ZENPAGE: if statements added
 				if ($activeImage !== false AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND !in_context(ZP_ZENPAGE_PAGE)) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
 					$_zp_current_album = $activeImage->getAlbum();
@@ -439,7 +438,6 @@ function zp_load_image($folder, $filename) {
  */
 function zenpage_load_page() {
 	global $_zp_current_zenpage_page;
-	$_zp_current_zenpage_page = NULL;
 	if (isset($_GET['title'])) {
 		$titlelink = sanitize($_GET['title'],3);
 	} else {
@@ -464,7 +462,6 @@ function zenpage_load_page() {
  */
 function zenpage_load_news() {
 	global $_zp_current_zenpage_news;
-	$_zp_current_zenpage_news = NULL;
 	if (isset($_GET['title'])) {
 		$titlelink = sanitize($_GET['title'],3);
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"';

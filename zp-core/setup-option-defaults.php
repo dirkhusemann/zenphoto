@@ -305,6 +305,16 @@ function setDefault($option, $default) {
 		saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
 	}
 	
-	if (getOption('Allow_comments')) setOptionDefault('zp_plugin_comment_form', 5);
+	if (getOption('Allow_comments') || getOption('zenpage_comments_allowed')) {
+		setOptionDefault('zp_plugin_comment_form', 5);
+		if (!is_null($default = getOption('Allow_comments'))) {
+			setOptionDefault('comment_form_albums', $default);
+			setOptionDefault('comment_form_images', $default);
+		}
+		if (!is_null($default = getOption('zenpage_comments_allowed'))) {
+			setOptionDefault('comment_form_articles', $default);
+			setOptionDefault('comment_form_pages', $default);
+		}
+	}
 	setOptionDefault('comment_body_requiired', 1);
 	?>

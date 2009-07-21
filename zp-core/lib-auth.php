@@ -31,6 +31,8 @@
  * 
  */
 
+require_once(dirname(__FILE__).'/classes.php');
+
 define('LIBAUTH_VERSION', 1);
 define('NO_RIGHTS', 2);
 $_admin_rights = array();

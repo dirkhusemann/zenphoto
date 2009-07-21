@@ -26,6 +26,14 @@ zp_register_filter('edit_comment_custom_data', 'comment_form_edit_comment');
 zp_register_filter('save_admin_custom_data', 'comment_form_save_admin');
 zp_register_filter('edit_admin_custom_data', 'comment_form_edit_admin', 1);
 
+if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
+	//disable comment post processing for non-members
+	setOption('comment_form_albums',0, false);
+	setOption('comment_form_images', 0, false);
+	setOption('comment_form_articles', 0, false);
+	setOption('comment_form_pages', 0, false);
+}
+
 class comment_form {
 	/**
 	 * class instantiation function
@@ -34,15 +42,12 @@ class comment_form {
 	 */
 	function comment_form() {
 		setOptionDefault('comment_form_addresses', 0);
+		setOptionDefault('comment_form_require_addresses', 0);
 		setOptionDefault('comment_form_members_only', 0);
-		$default = getOption('Allow_comments');
-		if (is_null($default)) $default = 1;
-		setOptionDefault('comment_form_albums', $default);
-		setOptionDefault('comment_form_images', $default);
-		$default = getOption('zenpage_comments_allowed');
-		if (is_null($default)) $default = 1;
-		setOptionDefault('comment_form_articles', $default);
-		setOptionDefault('comment_form_pages', $default);
+		setOptionDefault('comment_form_albums', 1);
+		setOptionDefault('comment_form_images', 1);
+		setOptionDefault('comment_form_articles', 1);
+		setOptionDefault('comment_form_pages', 1);
 		setOptionDefault('comment_form_rss', 1);
 	}
 
@@ -58,8 +63,9 @@ class comment_form {
 			$checkboxes = array_merge($checkboxes, array(gettext('Pages') => 'comment_form_pages', gettext('News') => 'comment_form_articles'));
 		}
 		
-		return array(	gettext('Show address form') => array('key' => 'comment_form_addresses', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('If checked, the form will include positions for address information.')),
+		return array(	gettext('Address fields') => array('key' => 'comment_form_addresses', 'type' => OPTION_TYPE_RADIO,
+										'buttons' => array(gettext('Omit')=>0, gettext('Show')=>1, gettext('Require')=>'required'),
+										'desc' => gettext('If <em>Address fields</em> are shown or required, the form will include positions for address information. If required, the poster must supply data in each address field.')),
 									gettext('Allow comments on') => array('key' => 'comment_form_allowed', 'type' => OPTION_TYPE_CHECKBOX_ARRAY,
 										'checkboxes' => $checkboxes,
 									'desc' => gettext('Comment forms will be presented on the checked pages.')),
@@ -185,7 +191,28 @@ function getUserInfo($i) {
  * @return object
  */
 function comment_form_comment_post($commentobj, $receiver) {
-	if (getOption('comment_form_addresses')) $commentobj->setCustomData(serialize(getUserInfo(0)));
+	if ($addresses = getOption('comment_form_addresses')) {
+		$userinfo = getUserInfo(0);
+		if ($addresses == 'required') {
+			// Note: this error will be incremented by functions-controller
+			if (!isset($userinfo['street']) || empty($userinfo['street'])) {
+				$commentobj->setInModeration(-11);
+			}
+			if (!isset($userinfo['city']) || empty($userinfo['city'])) {
+				$commentobj->setInModeration(-12);
+			}
+			if (!isset($userinfo['state']) || empty($userinfo['state'])) {
+				$commentobj->setInModeration(-13);
+			}
+			if (!isset($userinfo['country']) || empty($userinfo['country'])) {
+				$commentobj->setInModeration(-14);
+			}
+			if (!isset($userinfo['postal']) || empty($userinfo['postal'])) {
+				$commentobj->setInModeration(-15);
+			}
+		}
+		$commentobj->setCustomData(serialize($userinfo));
+	}
 	return $commentobj;
 }
 
@@ -240,6 +267,45 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
 			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Postal code:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_postal" value="'.$address['postal'].'"></td>
 		</tr>';
+}
+
+/**
+ * returns an error message if a comment possting was not accepted
+ *
+ */
+function getCommentErrors() {
+	global $_zp_comment_error;
+	if (isset($_zp_comment_error)) {
+		switch ($_zp_comment_error) {
+			case   0: return false;
+			case -10: return gettext('You must supply the street field'); 
+			case -11: return gettext('You must supply the city field'); 
+			case -12: return gettext('You must supply the state field'); 
+			case -13: return gettext('You must supply the country field');
+			case -14: return gettext('You must supply the postal code field'); 
+			case  -1: return gettext("You must supply an e-mail address.");
+			case  -2: return gettext("You must enter your name.");
+			case  -3: return gettext("You must supply an WEB page URL.");
+			case  -4: return gettext("Captcha verification failed.");
+			case  -5: return gettext("You must enter something in the comment text.");
+			case   1: return gettext("Your comment failed the SPAM filter check.");
+			case   2: return gettext("Your comment has been marked for moderation.");
+			default: return sprintf(gettext('Comment error "%d" not defined.'), $_zp_comment_error);
+		}
+	}
+	return false; 
+}
+
+/**
+ * Tool to put an out error message if a comment possting was not accepted
+ *
+ * @param string $class optional division class for the message
+ */
+function printCommentErrors($class = 'error') {
+	$s = getCommentErrors();
+	if ($s) {	
+		echo '<div class="'.$class.'">'.$s.'</div>';
+	}
 }
 
 /**

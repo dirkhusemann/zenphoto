@@ -26,6 +26,8 @@ $_zp_comments = NULL;
 $_zp_current_context = 0;
 $_zp_current_context_restore = NULL;
 $_zp_current_search = NULL;
+$_zp_current_zenpage_news = NULL;
+$_zp_current_zenpage_page = NULL;
 $_zp_pre_authorization = array();
 
 
@@ -43,15 +45,14 @@ zp_handle_password();
 
 // Handle any comments that might be posted.
 //TODO: Allow_comments and zenpage_comments_allowed are legacy....
-if (getOption('Allow_comments') || getOption('zenpage_comments_allowed') && (in_context(ZP_ZENPAGE_NEWS_ARTICLE) || in_context(ZP_ZENPAGE_PAGE)) ||
-		function_exists('printCommentForm') && (
-					(getOption('comment_form_albums') && in_context(ZP_ALBUM) && !in_context(ZP_IMAGE)) || 
-					(getOption('comment_form_images') && in_context(ZP_IMAGE)) ||
-					(getOption('comment_form_articles') && in_context(ZP_ZENPAGE_NEWS_ARTICLE)) ||
-					(getOption('comment_form_pages') && in_context(ZP_ZENPAGE_PAGE)))
-					){
-			$_zp_comment_error = zp_handle_comment();
-		}
+if (getOption('zp_plugin_comment_form') && 
+		( (getOption('comment_form_albums') && in_context(ZP_ALBUM) && !in_context(ZP_IMAGE) && $_zp_current_album->getCommentsAllowed()) || 
+			(getOption('comment_form_images') && in_context(ZP_IMAGE) && $_zp_current_image->getCommentsAllowed()) ||
+			(getOption('comment_form_articles') && in_context(ZP_ZENPAGE_NEWS_ARTICLE) && $_zp_current_zenpage_news->getCommentsAllowed()) ||
+			(getOption('comment_form_pages') && in_context(ZP_ZENPAGE_PAGE) && $_zp_current_zenpage_page->getCommentsAllowed()) )
+		){
+	$_zp_comment_error = zp_handle_comment();
+}
 
 /*** Server-side AJAX Handling ***********
  ******************************************/

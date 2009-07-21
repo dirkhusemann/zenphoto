@@ -25,7 +25,6 @@ if(!function_exists("json_encode")) {
 
 require_once(dirname(__FILE__).'/functions-basic.php');
 require_once(dirname(__FILE__).'/functions-filter.php');
-require_once(dirname(__FILE__).'/class-load.php');
 
 
 $_zp_captcha = getOption('captcha');
@@ -39,6 +38,7 @@ if (getOption('album_session') && defined(OFFSET_PATH) && OFFSET_PATH==0 && sess
 	session_start();
 }
 require_once(dirname(__FILE__).'/auth_zp.php');
+require_once(dirname(__FILE__).'/class-load.php');
 
 
 $_zp_setupCurrentLocale_result = setMainDomain();
@@ -1024,7 +1024,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		$commentobj->setInModeration($moderate);
 		
 		zp_apply_filter('comment_post', $commentobj, $receiver);
-		
+		if ($commentobj->getInModeration() < 0)	return $commentobj;
+	
 		$commentobj->save();
 
 		//  add to comments array and notify the admin user
