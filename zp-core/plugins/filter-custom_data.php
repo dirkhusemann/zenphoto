@@ -14,10 +14,15 @@ zp_register_filter('save_image_custom_data', 'custom_data_save_image');
 zp_register_filter('edit_image_custom_data', 'custom_data_edit_image');
 zp_register_filter('save_album_custom_data', 'custom_data_save_album');
 zp_register_filter('edit_album_custom_data', 'custom_data_edit_album');
+/* 
+ * these are commented out so as not to conflict with the comment_form
+ * plugin implementation. They are still valid examples, though.
+ * 
 zp_register_filter('save_comment_custom_data', 'custom_data_save_comment');
 zp_register_filter('edit_comment_custom_data', 'custom_data_edit_comment');
 zp_register_filter('save_admin_custom_data', 'custom_data_save_admin');
 zp_register_filter('edit_admin_custom_data', 'custom_data_edit_admin');
+*/
 
 /**
  * Returns a processed custom data item
