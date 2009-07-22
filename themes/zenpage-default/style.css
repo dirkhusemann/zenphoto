@@ -571,11 +571,11 @@ ul.pagelist li.next {
 }
 
 .comment {
-	padding: 0px;
+	padding: 0px 8px 12px 8px;
 	border: 1px solid #E7F0F5;
 	background: #F8F9F2;
 	margin-bottom: 12px;
-	width: 580px;
+
 }
 
 .commentmeta {
@@ -591,6 +591,7 @@ ul.pagelist li.next {
 	color: #8DB8CF;
 	font-size: 85%;
 }
+
 
 /* Forms
 ------------------------------ */
