@@ -778,6 +778,21 @@ function debugLogBacktrace($message) {
 	}
 }
 
+/**
+ * Records a Var to the debug log
+ *
+ * @param string $message message to insert in log
+ * @param mixed $var the variable to record
+ */
+function debugLogVar($message, $var) {
+	ob_start();
+	var_dump($var);
+	$str = ob_get_contents();
+	ob_end_clean();
+	debugLog($message);
+	debugLog($str);
+}
+
 
 /**
  * Makes directory recursively, returns TRUE if exists or was created sucessfuly.
