@@ -433,13 +433,30 @@ if (ini_get('safe_mode')) { ?>
 				$('#folderdisplay').attr('disabled', 'disabled'); 
 				if ($('#albumtitle').val() != '') {
 					$('#foldererror').hide();
+					<?php
+					if($uploadtype == 'http') {
+						?>
+						$('#uploadboxes').show();
+						<?php
+					}
+					?>
 				}
 				<?php
 			} else {
 				?>
 				$('#autogen').removeAttr('checked');  
 				$('#folderdisplay').removeAttr('disabled'); 
-				<?php        
+				if ($('#folderdisplay').val() != '') {
+					<?php
+					if($uploadtype == 'http') {
+						?>
+						$('#uploadboxes').show();
+						<?php
+					}
+					?>
+					$('#foldererror').hide();
+				}
+				<?php
 			}
 		}
 	?>
