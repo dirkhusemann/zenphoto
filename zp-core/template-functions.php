@@ -2737,8 +2737,16 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	if (zp_loggedin() && !empty($pwd)) {
 		$class .= " password_protected";
 	}
+	if ($size) {
+		$dims = getSizeDefaultImage();
+		$sizing = ' width="'.$dims[0].'" height="'.$dims[1].'"';
+	} else {
+		$sizing = '';
+		if ($width) $sizing .= ' width="'.$width.'"';
+		if ($height) $sizing .= ' height="'.$height.'"';
+	}
 	if (isImagePhoto() || $thumbStandin) {
-		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' .
+		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . $sizing;
 			' alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"' .
 			(($class) ? ' class="'.$class.'"' : '') .
