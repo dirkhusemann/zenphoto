@@ -949,6 +949,7 @@ define ('COMMENT_SEND_EMAIL', 18);
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon, $check=false) {
 	global $_zp_captcha, $_zp_gallery;
 	if ($check === false) {
+		$whattocheck = 0;
 		if (getOption('comment_email_required')) $whattocheck = $whattocheck | COMMENT_EMAIL_REQUIRED;
 		if (getOption('comment_name_required')) $whattocheck = $whattocheck | COMMENT_NAME_REQUIRED;
 		if (getOption('comment_web_required')) $whattocheck = $whattocheck | COMMENT_WEB_REQUIRED;

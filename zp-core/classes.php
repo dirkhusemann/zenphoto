@@ -309,8 +309,12 @@ class PersistentObject {
 			
 			$success = query($sql);
 			if ($success == false || mysql_affected_rows() != 1) { return false; }
+			foreach ($insert_data as $key=>$value) { // copy over any changes
+				$this->data[$key] = $value;
+			}
 			$this->id = mysql_insert_id();
 			$this->data['id'] = $this->id; // so 'get' will retrieve it!
+			$this->loaded = true;
 			$this->updates = array();
 			$this->tempdata = array();
 
@@ -334,6 +338,9 @@ class PersistentObject {
 				$sql .= ' WHERE id=' . $this->id . ';';
 				$success = query($sql);
 				if ($success == false || mysql_affected_rows() != 1) { return false; }
+				foreach ($this->updates as $key=>$value) {
+					$this->data[$key] = $value;
+				}
 				$this->updates = array();
 			}
 		}
