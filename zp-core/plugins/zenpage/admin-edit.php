@@ -305,7 +305,7 @@ if(is_object($result)) {
 				<label for="resethitcounter"> <?php printf(gettext('Reset hitcounter (Hits: %1$s)'),$result->getHitcounter()); ?></label>  
 				</p>
 				<?php } ?>
-    		<?php echo zp_apply_filter('general_zenpage_utilities', ''); ?>
+    		<?php echo zp_apply_filter('general_zenpage_utilities', '', $result); ?>
     		</div>
 			
 		    <?php
