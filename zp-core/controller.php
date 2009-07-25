@@ -28,6 +28,8 @@ $_zp_current_context_restore = NULL;
 $_zp_current_search = NULL;
 $_zp_current_zenpage_news = NULL;
 $_zp_current_zenpage_page = NULL;
+$_zp_current_category = NULL;
+$_zp_post_date = NULL;
 $_zp_pre_authorization = array();
 
 

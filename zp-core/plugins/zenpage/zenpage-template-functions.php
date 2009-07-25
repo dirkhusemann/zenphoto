@@ -1498,8 +1498,8 @@ function printNewsPageList($class='pagelist') {
  * @return string
  */
 function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $nextprev=true, $class='pagelist') {
-	global $_zp_zenpage_total_pages,$_zp_zenpage_total_articles;
-	$total = ceil($_zp_zenpage_total_articles / getOption("zenpage_articles_per_page"));
+	global $_zp_zenpage_total_pages;
+	$total = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
 	$current = getCurrentNewsPage();
 	if($total > 1) {
 		echo "<ul class=\"$class\">";

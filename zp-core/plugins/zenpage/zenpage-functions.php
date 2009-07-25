@@ -12,28 +12,13 @@
  * Some global variable setup
  *
  */
-$_zp_zenpage_all_categories = getAllCategories();
-if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['category']) AND !isset($_GET['date']) AND OFFSET_PATH != 4) {
-	$_zp_zenpage_total_articles = countCombiNews();
-} else {
-	if (isset($_GET['date'])) {
-		add_context(ZP_ZENPAGE_NEWS_DATE);
-		$_zp_post_date = sanitize($_GET['date']);
-	}
-	if(isset($_GET['category'])) {
-		add_context(ZP_ZENPAGE_NEWS_CATEGORY);
-		$_zp_current_category = sanitize($_GET['category']);
-	} else {
-		$_zp_current_category = "";
-	}
-	$_zp_zenpage_total_articles = countArticles($_zp_current_category);
-}
+$_zp_zenpage_all_categories = NULL; // for use by getAllCategories() only!
 
 
 /**
-	 * Unpublishes pages/news whose expiration date has been reached
-	 *
-	 */
+ * Unpublishes pages/news whose expiration date has been reached
+ *
+ */
 function processExpired($table) {
 	$expire = date('Y-m-d H:i:s');
 	query('update'.prefix($table).'SET `show`=0 WHERE `date`<="'.$expire.'"'.
@@ -277,14 +262,14 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @return string
 	 */
 	function getLimitAndOffset($articles_per_page) {
-		global $_zp_zenpage_total_pages, $_zp_zenpage_total_articles;
+		global $_zp_zenpage_total_pages;
 		if(strstr(dirname($_SERVER['REQUEST_URI']), '/'.PLUGIN_FOLDER.'/zenpage')) {
 			$page = getCurrentAdminNewsPage(); // TODO maybe useless since the $_GET['page'] is removed for getting the active main admin tab, too lazy to revert now
 		} else {
 			$page = getCurrentNewsPage();
 		}
 		if(!empty($articles_per_page)) {
-			$_zp_zenpage_total_pages = ceil($_zp_zenpage_total_articles / $articles_per_page);
+			$_zp_zenpage_total_pages = ceil(getTotalArticles() / $articles_per_page);
 		}
 		$offset = ($page - 1) * $articles_per_page;
 			
@@ -489,8 +474,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @return string
 	 */
 	function getCategoryLink($catname) {
-		global $_zp_zenpage_all_categories;
-		foreach($_zp_zenpage_all_categories as $cat) {
+		foreach(getAllCategories() as $cat) {
 			if($cat['cat_name'] == $catname) {
 				return $cat['cat_link'];
 			}
@@ -505,8 +489,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @return string
 	 */
 	function getCategoryTitle($catlink) {
-		global $_zp_zenpage_all_categories;
-		foreach($_zp_zenpage_all_categories as $cat) {
+		foreach(getAllCategories() as $cat) {
 			if($cat['cat_link'] == $catlink) {
 				return htmlspecialchars(get_language_string($cat['cat_name']));
 			}
@@ -521,8 +504,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @return int
 	 */
 	function getCategoryID($catlink) {
-		global $_zp_zenpage_all_categories;
-		foreach($_zp_zenpage_all_categories as $cat) {
+		foreach(getAllCategories() as $cat) {
 			if($cat['cat_link'] == $catlink) {
 				return $cat['id'];
 			}
@@ -543,7 +525,19 @@ function getParentPages(&$parentid,$initparents=true) {
 		return $_zp_zenpage_all_categories;
 	}
 
-
+	/**
+	 * Returns the articles count
+	 *
+	 */
+	function getTotalArticles() {
+		global $_zp_current_category;
+		if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['category']) AND !isset($_GET['date']) AND OFFSET_PATH != 4) {
+			return countCombiNews();
+		} else {
+			return countArticles($_zp_current_category);
+		}
+	}
+	
 	/**
 	 * Gets a category by id
 	 *

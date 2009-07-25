@@ -460,7 +460,15 @@ function zenpage_load_page() {
  * @return object
  */
 function zenpage_load_news() {
-	global $_zp_current_zenpage_news;
+	global $_zp_current_zenpage_news, $_zp_current_category, $_zp_post_date;
+	if (isset($_GET['date'])) {
+		add_context(ZP_ZENPAGE_NEWS_DATE);
+		$_zp_post_date = sanitize($_GET['date']);
+	}
+	if(isset($_GET['category'])) {
+		add_context(ZP_ZENPAGE_NEWS_CATEGORY);
+		$_zp_current_category = sanitize($_GET['category']);
+	}
 	if (isset($_GET['title'])) {
 		$titlelink = sanitize($_GET['title'],3);
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"';
