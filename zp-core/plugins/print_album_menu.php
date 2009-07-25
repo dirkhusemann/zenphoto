@@ -77,7 +77,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	}
 
 	$albumpath = rewrite_path("/", "/index.php?album=");
-	if(empty($_zp_current_album) || $_zp_gallery_page != 'album.php') {
+	if(empty($_zp_current_album) || ($_zp_gallery_page != 'album.php' && $_zp_gallery_page != 'image.php')) {
 		$currentfolder = "";
 	} else {
 		$currentfolder = $_zp_current_album->name;
@@ -144,6 +144,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 			} else {
 				$css_class_t = $css_class_active;
 			}
+			$count = "";
 			if($option2 == 'count') {
 				if($topalbum->getNumImages() > 0) {
 					$topalbumnumimages = $topalbum->getNumImages();
@@ -154,8 +155,6 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 				if($toplevelsubalbums > 0) {
 					$count = "<small>".sprintf(ngettext(' (%u album)', ' (%u albums)',$toplevelsubalbums),$toplevelsubalbums)."</small>";
 				}
-			} else {
-				$count = "";
 			}
 			
 			if(in_context(ZP_ALBUM) && !in_context(ZP_SEARCH_LINKED) && getAlbumID() == $topalbum->getAlbumID()) {
