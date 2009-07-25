@@ -11,7 +11,7 @@ $plugin_description = gettext('Adds admin user who uploaded image to the descrip
 											gettext('For this to work with ZIP files you must have ZZIPlib configured in your PHP.').
 											(function_exists('zip_open') ? '':' '.gettext('<strong>You do not have ZZIPlib configured.</strong>'));
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-new_objects.php.html";
 
 zp_register_filter('new_album', 'updateAlbum');

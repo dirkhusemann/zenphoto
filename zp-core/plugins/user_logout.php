@@ -11,7 +11,7 @@
 
 $plugin_description = gettext("Provides a means for placing a user logout link on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.1.1';
+$plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_logout.php.html";
 $option_interface = new user_logout_options();
 

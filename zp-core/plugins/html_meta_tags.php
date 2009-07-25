@@ -13,7 +13,7 @@
 
 $plugin_description = gettext("A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.1.0';
+$plugin_version = '1.2.6';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
 

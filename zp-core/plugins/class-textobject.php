@@ -49,15 +49,14 @@
  * plugin folder. 
  * 
  * @author Stephen Billard (sbillard)
- * @version 1.1.0
- * @package plugins
+  * @package plugins
  * 
  * */
 
 $plugin_is_filter = 9;
 $plugin_description = ($disable = (ZENPHOTO_RELEASE < 2492))? gettext('class-textobject requires Zenphoto v 1.2.1 or greater.') : gettext('Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file.');
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.1.1';
+$plugin_version = '1.2.6';
 $plugin_disable = $disable;
 
 if ($plugin_disable) return;

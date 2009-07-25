@@ -8,7 +8,7 @@
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.7.1';
+$plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 

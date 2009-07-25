@@ -22,7 +22,7 @@
  */
 $plugin_description = gettext("Enable <strong>dynamic-locale</strong> to allow viewers of your site to select the language translation of their choice.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---dynamic-locale.php.html";
 
 /**

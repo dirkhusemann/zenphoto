@@ -14,7 +14,7 @@
 $plugin_is_filter = 5;
 $plugin_description = sprintf(gettext("Logs all attempts to login to the admin pages to <em>security_log.txt</em> in the %s folder."),DATA_FOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.0.1';
+$plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-admin_login.php.html";
 $option_interface = new admin_login();
 
