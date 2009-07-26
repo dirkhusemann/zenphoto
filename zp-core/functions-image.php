@@ -31,8 +31,8 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 		. (empty($image) || empty($album) ? '' : ' <br />'.sprintf(gettext('Image: [<code>%s</code>]'),sanitize($album.'/'.$image, 3)).' <br />'));
 	} else {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/images/' . $errorimg);
-		exit();
 	}
+	exit();
 }
 
 /**
