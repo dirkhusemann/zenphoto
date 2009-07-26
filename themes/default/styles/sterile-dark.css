@@ -17,7 +17,7 @@ body {
 #main {
 	text-align: left;
 	margin: 40px auto 5px auto;
-	padding: 0;
+	padding-bottom: 15px;
 	width: 700px;
 	background: #333333;
 	-moz-border-radius: 10px;
@@ -41,7 +41,7 @@ body {
 	text-decoration: none;
 }
 #gallerytitle {
-	padding: 10px 10px 10px 20px;
+	padding: 20px 10px 10px 20px;
 	-moz-border-radius-topleft: 10px;
 	-moz-border-radius-topright: 10px;
 	background: #c0db5a;
@@ -92,7 +92,7 @@ h2 {
 	text-transform: uppercase;
 	padding:0;
 	margin:0;
-	width:510px;
+	width:410px;
 	float:left;
 }
 h2 a:link, h2 a:active, h2 a:visited { text-decoration: none; color: #666;}
@@ -261,7 +261,7 @@ ul.pagelist li.next {
 }
 .albumdesc {
 	float: right;
-	width: 205px;
+	width: 195px;
 	padding: 6px 0 0 0;
 }
 
@@ -277,21 +277,15 @@ ul.pagelist li.next {
 	line-height: 0;
 	margin:10px 0;
 }
+
 .imgnav {
 	float: right;
 	width: 140px;
 	text-align: center;
-	margin-top: 13px;
-	_margin-top: 8px; /* IE Only */
-}
-.imgnav {
-	float: right;
-	width: 140px;
-	text-align: center;
-	margin-top: 5px;
+	margin-top: 0px;
 	color: #0c2601;
 	padding: 0;
-	margin: 0;
+	_margin-top: 8px; /* IE Only */
 }
 .imgnav .imgprevious a, .imgnav .imgnext a {
 	font: normal 16px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;

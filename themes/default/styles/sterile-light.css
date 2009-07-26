@@ -17,8 +17,8 @@ body {
 #main {
 	text-align: left;
 	margin: 40px auto 5px auto;
-	padding: 0;
 	width: 700px;
+	padding-bottom: 15px;
 	background: #FFF;
 	-moz-border-radius: 10px;
 	border: 1px solid #CCC;
@@ -41,7 +41,7 @@ body {
 	text-decoration: none;
 }
 #gallerytitle {
-	padding: 10px 10px 10px 20px;
+	padding: 20px 10px 10px 20px;
 	-moz-border-radius-topleft: 10px;
 	-moz-border-radius-topright: 10px;
 	background: #F8F8F8;
@@ -92,7 +92,7 @@ h2 {
 	text-transform: uppercase;
 	padding:0;
 	margin:0;
-	width:510px;
+	width:410px;
 	float:left;
 }
 h2 a:link, h2 a:active, h2 a:visited { text-decoration: none; color: #9C3;}
@@ -259,7 +259,7 @@ ul.pagelist li.next {
 }
 .albumdesc {
 	float: right;
-	width: 205px;
+	width: 195px;
 	padding: 6px 0 0 0;
 }
 
@@ -280,6 +280,15 @@ ul.pagelist li.next {
 	width: 140px;
 	text-align: center;
 	margin-top: 13px;
+	
+}
+.imgnav {
+	float: right;
+	width: 140px;
+	text-align: center;
+	margin-top: 0px;
+	color: #0c2601;
+	padding: 0;
 	_margin-top: 8px; /* IE Only */
 }
 .imgnav .imgprevious a, .imgnav .imgnext a {
