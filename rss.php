@@ -87,7 +87,7 @@ if(getOption('mod_rewrite')) {
 		if($rssmode != "albums") {
 			$ext = strtolower(strrchr($item->filename, "."));
 			$albumobj = $item->getAlbum();
-			$itemlink = $host.WEBPATH.$albumpath.urlencode($albumobj->name).$imagepath.urlencode($item->filename).$modrewritesuffix;
+			$itemlink = $host.WEBPATH.$albumpath.pathurlencode($albumobj->name).$imagepath.pathurlencode($item->filename).$modrewritesuffix;
 			$fullimagelink = $host.WEBPATH."/albums/".$albumobj->name."/".$item->filename;
 			$imagefile = "albums/".$albumobj->name."/".$item->filename;
 			$thumburl = '<img border="0" src="http://'.$host.$item->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($item->get("title"),$locale) .'" />';
@@ -98,7 +98,7 @@ if(getOption('mod_rewrite')) {
 			$galleryobj = new Gallery();
 			$albumitem = new Album($galleryobj, $item['folder']);
 			$totalimages = $albumitem->getNumImages();
-			$itemlink = $host.WEBPATH.$albumpath.$albumitem->name;
+			$itemlink = $host.WEBPATH.$albumpath.pathurlencode($albumitem->name);
 			$albumthumb = $albumitem->getAlbumThumbImage();
 			$thumb = newImage($albumitem, $albumthumb->filename);
 			$thumburl = '<img border="0" src="'.$thumb->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($albumitem->get("title"),$locale) .'" />';
