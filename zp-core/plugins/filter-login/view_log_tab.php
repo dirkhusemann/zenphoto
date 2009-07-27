@@ -2,7 +2,6 @@
 /**
  * user_groups plugin--tabs
  * @author Stephen Billard (sbillard)
- * @version 1.0.0
  * @package plugins
  */
 define ('OFFSET_PATH', 4);

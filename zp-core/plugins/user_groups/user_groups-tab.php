@@ -2,8 +2,7 @@
 /**
  * user_groups plugin--tabs
  * @author Stephen Billard (sbillard)
- * @version 1.0.0
- * @package plugins
+  * @package plugins
  */
 $zp = dirname(dirname(dirname(__FILE__)));
 define ('OFFSET_PATH', 4);

@@ -4,8 +4,7 @@
  * It uses a word black list and checks for excessive URLs
  *
  * @author Stephen Billard (sbillard)
- * @version 1.0.0
- * @package plugins
+  * @package plugins
  */
 
 /**

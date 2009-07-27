@@ -2,7 +2,6 @@
 /**
  * user_groups plugin--tabs
  * @author Stephen Billard (sbillard)
- * @version 1.0.0
  * @package plugins
  */
 define ('OFFSET_PATH', 4);
@@ -146,8 +145,6 @@ $subtab = printSubtabs('edit', 'mass_edit');
 						<img
 							id="thumb-<?php echo $currentimage; ?>"
 							src="<?php echo $image->getThumb(); ?>"
-							alt="<?php printf(gettext('crop %s'), $image->filename); ?>"
-							title="<?php printf(gettext('crop %s'), $image->filename); ?>"
 							/>
 						<p><strong><?php echo $image->filename; ?></strong></p>					
 						<p>
