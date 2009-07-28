@@ -20,12 +20,10 @@ function newImage(&$album, $filename) {
 	if (!is_object($album) || strtoLower(get_class($album)) != 'album' || !$album->exists) return NULL;
 	if ($ext = is_valid_other_type($filename)) {
 		$object = $_zp_extra_filetypes[$ext];
-		$result = new $object($album, $filename);
+		return New $object($album, $filename);
 	} else {
-		$result = New _Image($album, $filename);
+		return New _Image($album, $filename);
 	}
-	if ($result->exists) return $result;
-	return NULL;
 }
 
 /**
@@ -85,12 +83,12 @@ class _Image extends PersistentObject {
 		if (!is_object($album)) return NULL;
 		if (!$this->classSetup($album, $filename)) { // spoof attempt
 			$this->exists = false;
-			return NULL;
+			return;
 		}
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {
 			$this->exists = false;
-			return NULL;
+			return;
 		}
 
 		// This is where the magic happens...

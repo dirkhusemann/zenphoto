@@ -48,7 +48,7 @@ class Album extends PersistentObject {
 		}
 		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
 			$this->exists = false;
-			return NULL;
+			return;
 		}
 		if (hasDyanmicAlbumSuffix($folder8)) {
 			$localpath = substr($localpath, 0, -1);
@@ -58,7 +58,7 @@ class Album extends PersistentObject {
 		$valid = file_exists($localpath) && (hasDyanmicAlbumSuffix($localpath) || is_dir($localpath));
 		if(!$valid || strpos($localpath, '..') !== false) {
 			$this->exists = false;
-			return NULL;
+			return;
 		}
 		$this->localpath = $localpath;
 		$this->name = $folder8;
