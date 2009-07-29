@@ -1960,11 +1960,20 @@ function checkForUpdate() {
 	global $_zp_WEB_Version;
 	if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
 	$c = ZENPHOTO_VERSION;
-	$candidate = strpos($c, 'RC');
-	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
+	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');	
 	if (empty($v)) {
 		$_zp_WEB_Version = 'X';
 	} else {
+		if ($i = strpos($v, 'RC')) {
+			$v_candidate = intval(substr($v, $i+2));
+		} else {
+			$v_candidate = 9999;
+		}
+		if ($i = strpos($c, 'RC')) {
+			$c_candidate = intval(substr($c, $i+2));
+		} else {
+			$c_candidate = 9999;
+		}
 		$pot = array(1000000000, 10000000, 100000, 1);
 		$wv = explode('.', $v);
 		$wvd = 0;
@@ -1976,7 +1985,7 @@ function checkForUpdate() {
 		foreach ($cv as $i => $d) {
 			$cvd = $cvd + $d * $pot[$i];
 		}
-		if ($wvd > $cvd || ($wvd == $cvd && $candidate)) {
+		if ($wvd > $cvd || (($wvd == $cvd) && ($c_candidate < $v_candidate))) {
 			$_zp_WEB_Version = $v;
 		} else {
 			$_zp_WEB_Version = '';

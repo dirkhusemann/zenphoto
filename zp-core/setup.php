@@ -1078,19 +1078,25 @@ if ($debug) {
 											"<br />".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
 		//robots.txt file
+		
+		// TODO: refine error messages post 1.2.6 release
 		$robots = file_get_contents(dirname(__FILE__).'/example_robots.txt');
 		if ($robots === false) {
 			$rslt = -1;
 		} else {
-			$text = explode('****delete all lines above and including this one *******'."\n", $robots);
-			$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
-			if ($d == '/') $d = '';
-			$robots = str_replace('/zenphoto', $d, $text[1]);
-			$rslt = file_put_contents(dirname(dirname(__FILE__)).'/robots.txt', $robots);
-			if ($rslt === false) {
-				$rslt = -1;
+			if (file_exists(dirname(dirname(__FILE__)).'/robots.txt')) {
+				$rslt = -2;
 			} else {
-				$rslt = 1;
+				$text = explode('****delete all lines above and including this one *******'."\n", $robots);
+				$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
+				if ($d == '/') $d = '';
+				$robots = str_replace('/zenphoto', $d, $text[1]);
+				$rslt = file_put_contents(dirname(dirname(__FILE__)).'/robots.txt', $robots);
+				if ($rslt === false) {
+					$rslt = -1;
+				} else {
+					$rslt = 1;
+				}
 			}
 		}
 		checkmark($rslt, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not create a <em>robots.txt</em> file.'));

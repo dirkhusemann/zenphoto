@@ -148,7 +148,9 @@ $page = "home"; ?>
 /********************************************************************************/
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
 	$v = checkForUpdate();
-	if (!empty($v)) {
+	if (empty($v)) {
+		$msg = gettext("You are running the latest zenphoto version.");
+	} else {
 		echo '<div class="errorbox" id="fade-message">';
 		if ($v == 'X') {
 			echo  "<h2>".gettext("Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</h2>";
@@ -156,8 +158,6 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
 			echo  "<h2><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></h2>";
 		}
 		echo '</div>';
-	} else {
-		$msg = gettext("You are running the latest zenphoto version.");
 	}
 }
 
