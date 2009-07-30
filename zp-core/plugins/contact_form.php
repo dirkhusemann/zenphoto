@@ -220,7 +220,7 @@ function printContactForm() {
 		$mailaddress = sanitize($_POST['mailaddress']);
 		$contactform_mailaddress = getOption("contactform_mailaddress");
 		$contactform_mailaddress = str_replace(" ","",$contactform_mailaddress);
-		$_zp_UTF8->send_mail($contactform_mailaddress.",".$mailaddress, $subject, $message, $headers);
+		zp_mail($subject, $message, $headers, array($contactform_mailaddress,$mailaddress));
 		echo get_language_string(getOption("contactform_thankstext"));
 		echo "<p><a href=\"\">".get_language_string(getOption("contactform_newmessagelink"))."</a></p>";
 	} else {
