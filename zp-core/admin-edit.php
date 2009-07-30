@@ -149,7 +149,6 @@ if (isset($_GET['album'])) {
 					if ($oldsort == $newsort) {
 						for ($i = 0; $i < $_POST['totalimages']; $i++) {
 							$filename = sanitize($_POST["$i-filename"]);
-
 							// The file might no longer exist
 							$image = newImage($album, $filename);
 							if ($image->exists) {
@@ -668,12 +667,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						
 						<a <?php echo $placemark; ?>href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
 										title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
-						<img
-							id="thumb-<?php echo $currentimage; ?>"
-							src="<?php echo $image->getThumb(); ?>"
-							alt="<?php printf(gettext('crop %s'), $image->filename); ?>"
-							title="<?php printf(gettext('crop %s'), $image->filename); ?>"
-							/>
+							<img
+								id="thumb-<?php echo $currentimage; ?>"
+								src="<?php echo $image->getThumb(); ?>"
+								alt="<?php printf(gettext('crop %s'), $image->filename); ?>"
+								title="<?php printf(gettext('crop %s'), $image->filename); ?>"
+								/>
 						</a>
 						<p><strong><?php echo $image->filename; ?></strong></p>
 						<p><?php echo gettext("Dimensions:"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>

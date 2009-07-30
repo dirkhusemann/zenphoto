@@ -17,10 +17,14 @@
 
 <!-- BEGIN #comments -->
 <div id="comments">
-	<dl class="commentlist">
 	<?php
 		$autonumber = 0;
-		while (next_comment()):
+		while (next_comment()) {
+			if (!$autonumber) {
+				?>
+				<dl class="commentlist">
+				<?php
+			}
 			$autonumber++;
 		?>
 		<dt id="comment<?php echo $autonumber; ?>">
@@ -28,20 +32,13 @@
 			<em>On <?php echo getCommentDateTime();?>, <?php printf(gettext('%s wrote:'),printCommentAuthorLink()); ?></em>
 		</dt>
 		<dd><p><?php echo getCommentBody();?><?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?></p></dd>
-		<?php endwhile; ?>
-	</dl>
-	<?php
-	if (getCommentErrors()) {
-		$errors = 1;
-		?>
-		<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />
-		<?php
-	} else {
-		$errors = 0;
-		?>
-		<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-hide.css" />
-		<?php
-	}
+		<?php 
+		}
+		if ($autonumber) {
+			?>
+			</dl>
+			<?php
+		}
 	?>
 	<script type="text/javascript">
 		var initstate = <?php echo $errors; ?>;

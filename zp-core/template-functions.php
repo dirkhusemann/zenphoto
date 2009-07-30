@@ -2745,13 +2745,16 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		if ($width) $sizing .= ' width="'.$width.'"';
 		if ($height) $sizing .= ' height="'.$height.'"';
 	}
+	if ($id) $id = ' id="'.$id.'"';
+	if ($class) $id = ' class="'.$class.'"';
 	if (isImagePhoto() || $thumbStandin) {
-		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . $sizing;
+		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . 
 			' alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"' .
-			(($class) ? ' class="'.$class.'"' : '') .
-			(($id) ? ' id="'.$id.'"' : '') .
-			'" />';
+			$class .
+			$id .
+			$sizing .
+			' />';
 	} else { // better be a plugin
 		echo $_zp_current_image->getBody();
 	}
@@ -4333,7 +4336,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect
 	}
 	?>
 
-	<form id="passwordform" name="password" action=?userlog=1<?php echo $action; ?> method="POST">
+	<form id="passwordform" name="password" action="?userlog=1<?php echo $action; ?>" method="post">
 		<input type="hidden" name="password" value="1" />
 		<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 	

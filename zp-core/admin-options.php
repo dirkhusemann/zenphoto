@@ -687,7 +687,7 @@ if (empty($alterrights)) {
 						if (empty($userid)) {
 							?>
 							<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
-								onClick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
+								onclick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
 							<?php
 						} else {
 							echo $master;

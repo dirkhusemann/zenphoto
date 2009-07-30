@@ -199,23 +199,24 @@ function printFooter($page) {
 			break;
 		case 'gallery':
 			?>
-			<small>
-				<p><?php $albumNumber = getNumAlbums(); echo sprintf(ngettext("%u Album","%u Albums",$albumNumber),$albumNumber); ?> &middot;
-					<?php $c=get_subalbum_count(); echo sprintf(ngettext("%u Subalbum", "%u Subalbums",$c),$c); ?> &middot;
-					<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
-					$photosNumber = array_shift($photosArray); echo sprintf(ngettext("%u Image","%u Images",$photosNumber),$photosNumber); ?>
-					<?php if (function_exists('printCommentForm')) { ?>
-						&middot;
-						<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
-						$commentsNumber = array_shift($commentsArray); echo sprintf(ngettext("%u Comment","%u Comments",$commentsNumber),$commentsNumber); ?>
-					<?php } ?>
-				</p>
-			</small>
+			<p>
+				<small>
+					<?php $albumNumber = getNumAlbums(); echo sprintf(ngettext("%u Album","%u Albums",$albumNumber),$albumNumber); ?> &middot;
+						<?php $c=get_subalbum_count(); echo sprintf(ngettext("%u Subalbum", "%u Subalbums",$c),$c); ?> &middot;
+						<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
+						$photosNumber = array_shift($photosArray); echo sprintf(ngettext("%u Image","%u Images",$photosNumber),$photosNumber); ?>
+						<?php if (function_exists('printCommentForm')) { ?>
+							&middot;
+							<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
+							$commentsNumber = array_shift($commentsArray); echo sprintf(ngettext("%u Comment","%u Comments",$commentsNumber),$commentsNumber); ?>
+						<?php } ?>
+				</small>
+			</p>
 			<?php
 			break;
 		}
 		?>
-		<small><?php printThemeInfo(); ?></small>
+		<?php printThemeInfo(); ?>
 		<?php printZenphotoLink(); ?>
 		<?php if ($page == 'gallery') { echo '<br />'; printRSSLink('Gallery','', 'Gallery RSS', ''); } ?>
 		<?php	if (function_exists('printUserLogout')) printUserLogout('<br />', '', true); ?>

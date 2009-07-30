@@ -155,7 +155,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td>
 		<p class="buttons">
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-		<button type="button" title="<?php echo gettext("Cancel"); ?>" onClick="window.location = 'admin-comments.php';"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+		<button type="button" title="<?php echo gettext("Cancel"); ?>" onclick="window.location = 'admin-comments.php';"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
 		</p>
 		
 		</td>
@@ -352,7 +352,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 	<tr>
 		<td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
-			onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
+			onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 		<td><?php echo $link; ?></td>
 		<td>
 		<?php
@@ -392,7 +392,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	<tr>
 		<td colspan="11" class="subhead">
 			<label>
-				<input type="checkbox" name="allbox" id="allbox" onClick="checkAll(this.form, 'ids[]', this.checked);" />
+				<input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
 				<?php echo gettext("Check All"); ?>
 			</label>
 		</td>

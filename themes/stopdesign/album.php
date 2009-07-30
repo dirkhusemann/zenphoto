@@ -10,7 +10,20 @@ require_once('normalizer.php');
 	<title><?php echo getBareGalleryTitle(); ?> &gt; <?php echo getBareAlbumTitle(); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
-	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
+	<?php
+	printRSSHeaderLink('Album',getAlbumTitle()); 
+	if (getCommentErrors()) {
+		$errors = 1;
+		?>
+		<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />
+		<?php
+	} else {
+		$errors = 0;
+		?>
+		<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-hide.css" />
+		<?php
+	}
+	?>
 </head>
 
 <body class="gallery">
@@ -136,7 +149,7 @@ require_once('normalizer.php');
 						<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 				<?php } ?>
 				</p>
-				<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
+				<?php if (function_exists('printUserLogout')) { printUserLogout(""); } ?>
 			</div>
 		</div>
 

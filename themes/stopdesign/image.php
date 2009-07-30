@@ -18,7 +18,18 @@ require_once('normalizer.php');
 		setOption('thumb_crop_height', 85, false);
 		setOption('images_per_page', getOption('images_per_page') - 1, false);
 		if (!isImagePhoto($_zp_current_image)) echo '<style type="text/css"> #prevnext a strong {display:none;}</style>';
-	?>
+		if (getCommentErrors()) {
+			$errors = 1;
+			?>
+			<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />
+			<?php
+		} else {
+			$errors = 0;
+			?>
+			<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-hide.css" />
+			<?php
+		}
+		?>
 </head>
 
 <body class="photosolo">
@@ -27,10 +38,8 @@ require_once('normalizer.php');
 		<div id="content" class="v">
 
 			<div id="desc">
-				<?php if (!checkForPassword(true)) { ?>
-					<h1><?php printImageTitle(true); ?></h1>
-					<div id="descText"><?php printImageDesc(true); ?></div>
-				<?php } ?>
+				<h1><?php printImageTitle(true); ?></h1>
+				<div id="descText"><?php printImageDesc(true); ?></div>
 			</div>
 
 			<?php
@@ -142,7 +151,7 @@ require_once('normalizer.php');
 
 		<div id="footer">
 			<hr />
-			<?php if (function_exists('printUserLogout')) { echo '<p>'; printUserLogout(""); echo '</p>'; } ?>
+			<?php if (function_exists('printUserLogout')) { printUserLogout(""); } ?>
 			<p>
 				<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.'); ?>
 				<?php printZenphotoLink(); ?>

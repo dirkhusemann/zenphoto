@@ -252,10 +252,10 @@ function getMetaAlbumAndImageTags($tags,$mode="") {
 		foreach($tags as $keyword) {
 			switch($mode) {
 				case "gallery":
-					$alltags .= ','.$keyword;
+					$alltags .= ','.htmlspecialchars($keyword);
 					break;
 				case "zenpage":
-					$alltags .= ','.$keyword["cat_name"];
+					$alltags .= ','.htmlspecialchars($keyword["cat_name"]);
 					break;
 			}
 		}

@@ -253,7 +253,7 @@ if (ini_get('safe_mode')) { ?>
 		<div id="newalbumbox" style="margin-top: 5px;">
 			<div>
 				<label>
-					<input id="newalbumcheckbox" type="checkbox" name="newalbum"<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')"><?php echo gettext("Make a new Album"); ?>
+					<input id="newalbumcheckbox" type="checkbox" name="newalbum"<?php echo $checked; ?> onclick="albumSwitch(this.form.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')"><?php echo gettext("Make a new Album"); ?>
 				</label>
 			</div>
 			<div id="publishtext"><?php echo gettext("and"); ?>
@@ -269,7 +269,7 @@ if (ini_get('safe_mode')) { ?>
 			<div style="position: relative; margin-top: 4px;"><?php echo gettext("with the folder name:"); ?>
 				<div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="DISABLED" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
-				<label><input type="checkbox" name="autogenfolder" id="autogen" CHECKED="CHECKED" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /><?php echo gettext("Auto-generate"); ?></label>
+				<label><input type="checkbox" name="autogenfolder" id="autogen" CHECKED="CHECKED" onclick="toggleAutogen('folderdisplay', 'albumtitle', this);" /><?php echo gettext("Auto-generate"); ?></label>
 				<br />
 				<br />
 			</div>
@@ -398,7 +398,7 @@ if (ini_get('safe_mode')) { ?>
 				
 				<p class="buttons">
 					<button type="submit" value="<?php echo gettext('Upload'); ?>"
-						onClick="this.form.folder.value = this.form.folderdisplay.value;" class="button">
+						onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button">
 						<img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?>
 					</button>
 				</p>

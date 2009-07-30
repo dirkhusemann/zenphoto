@@ -258,12 +258,12 @@ printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
 								<?php
 								if ($_REQUEST['performcrop'] == 'backend') {
 									?>
-									<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+									<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onclick="window.location='../admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
 									<br />
 									<?php
 								} else {
 									?>
-									<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../../index.php?album=<?php echo urlencode($albumname); ?>&amp;image=<?php echo urlencode($imagename); ?>'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+									<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onclick="window.location='../../index.php?album=<?php echo urlencode($albumname); ?>&amp;image=<?php echo urlencode($imagename); ?>'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
 									<?php
 								}
 								?>			

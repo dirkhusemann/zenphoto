@@ -14,7 +14,7 @@
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');
-$plugin_is_filter = 5;
+$plugin_is_filter = -5;
 $plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
 $plugin_version = '1.2.6';
@@ -31,8 +31,24 @@ if (getOption('rating_image_individual_control')) {
 
 $ME = substr(basename(__FILE__),0,-4);
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.MetaData.js"></script>');
-addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.rating.js"></script>');
+if (!OFFSET_PATH) {
+	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.MetaData.js"></script>');
+	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.rating.js"></script>');
+	$theme = getCurrentTheme();
+	$css = SERVERPATH.'/'.THEMEFOLDER. '/'.internalToFilesystem($theme).'/jquery.rating.css';
+	if (file_exists($css)) {
+		$css = WEBPATH.'/'.THEMEFOLDER.'/'.$theme.'/jquery.rating.css';
+	} else {
+		$css = WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4).'/jquery.rating.css';
+	}
+	addPluginScript('<link rel="stylesheet" href="'.$css.'" type="text/css" />');
+	addPluginScript('<script type="text/javascript">'.
+										"$.fn.rating.options = { 
+											cancel: '".gettext('retract')."'   // advisory title for the 'cancel' link
+									 	}; 
+						 			</script>");
+}
+
 require_once($ME.'/functions-rating.php');
 
 /**
@@ -169,24 +185,6 @@ function printRating($vote=3, $object=NULL, $text=true) {
   } else {
   	$msg = gettext('Not yet rated');
   }
-  if (!$_rating_css_loaded) {
-	  $theme = getCurrentTheme();
-	  $css = SERVERPATH.'/'.THEMEFOLDER. '/'.internalToFilesystem($theme).'/jquery.rating.css';
-		if (file_exists($css)) {
-			$css = WEBPATH.'/'.THEMEFOLDER.'/'.$theme.'/jquery.rating.css';
-		} else {
-			$css = WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4).'/jquery.rating.css';
-		}
-	  ?>
-		<link rel="stylesheet" href="<?php echo $css; ?>" type="text/css" />
-		<script type="text/javascript">
-			$.fn.rating.options = { 
-				cancel: '<?php echo gettext('retract'); ?>'   // advisory title for the 'cancel' link
-		 	}; 
- 		</script>
-		<?php
-		$_rating_css_loaded = true;
-  }
 	if ($split_stars>1) {
 		$split = ' {split:2}';
 	} else {
@@ -205,8 +203,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 		?>
 		});
 	</script>
-	<span class="rating">
-		<form name="star_rating<?php echo $unique; ?>" id="star_rating<?php echo $unique; ?>">
+		<form name="star_rating<?php echo $unique; ?>" id="star_rating<?php echo $unique; ?>" action="submit">
 		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="1" title="<?php echo gettext('1 star'); ?>" />
 		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="2" title="<?php echo gettext('1 star'); ?>" />
 		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="3" title="<?php echo gettext('2 stars'); ?>" />
@@ -225,7 +222,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 		  if (!$disable) {
 			  ?>
 			  <span id="submit_button<?php echo $unique; ?>">
-			  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
+			  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onclick="javascript:
 						var dataString = $(this.form).serialize();
 						if (dataString || <?php printf('%u',$recast && $oldrating); ?>) {
 							<?php
@@ -245,7 +242,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 							$.ajax({   
 								type: 'POST',   
 								url: '<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4); ?>/update.php',   
-								data: dataString+'&id=<?php echo $id; ?>&table=<?php echo $table; ?>'
+								data: dataString+'&amp;id=<?php echo $id; ?>&amp;table=<?php echo $table; ?>'
 							});
 							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');
 						} else {
@@ -257,11 +254,10 @@ function printRating($vote=3, $object=NULL, $text=true) {
 		  }
 		  ?>
 	  </form>
-		<span style="line-height: 0em;"><br clear=all /></span>
+		<span style="line-height: 0em;"><br clear="all" /></span>
 	  <span class="vote" id="vote<?php echo $unique; ?>" <?php if (!$text) echo 'style="display:none;"'; ?>>
 	  	<?php echo $msg; ?>
 	  </span>
-	</span>
 	<?php
 }
 
