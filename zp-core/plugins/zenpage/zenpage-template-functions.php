@@ -446,10 +446,9 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 			$articlecontent = $_zp_current_zenpage_news->getContent();
 			if($shorten && stristr($articlecontent,"<!-- pagebreak -->") !== FALSE) {
 				$array = explode("<!-- pagebreak -->",$articlecontent);
-				if (count($array) > 1 && !($array[1] == '</p>' || trim($array[1]) =='')) {
-					return $array[0].$shortenindicator;
-				} else {
-					return $array[0];
+				$articlecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
+				if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
+					$articlecontent = str_replace($shortenindicator, '', $articlecontent);
 				}
 			}
 			break;
@@ -791,7 +790,7 @@ function printNewsCategories($separator='',$before='',$class='') {
 	$catcount = count($categories);
 	if($catcount != 0) {
 		if(is_NewsType("news")) {
-			echo "<ul class=\"$class\">\n $before ";
+			echo  $before."<ul class=\"$class\">\n";
 			$count = 0;
 			foreach($categories as $cat) {
 				$count++;
@@ -799,7 +798,7 @@ function printNewsCategories($separator='',$before='',$class='') {
 				if($count >= $catcount) {
 					$separator = "";
 				}
-				echo "<li><a href=\"".getNewsCategoryURL($cat['cat_link'])."\" title=\"".$catname."\">".$catname.$separator."</a></li>\n";
+				echo "<li><a href=\"".getNewsCategoryURL($cat['cat_link'])."\" title=\"".$catname."\">".$catname.'</a>'.$separator."</li>\n";
 			}
 			echo "</ul>\n";
 		}
@@ -2262,7 +2261,8 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	}
 	
 	$pages = getPages($published);
-	echo "<ul $css_id>\n";
+	if (count($pages)==0) return; // nothing to do
+	echo "<ul$css_id>";
 	if(!empty($indexname)) {
 		if($_zp_gallery_page == "index.php") {
 			echo "<li $css_class_topactive>".$indexname."</li>";
@@ -2298,7 +2298,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 								);
 		if ($process) {
 			if ($level > $indent) {
-				echo "\n".str_pad("\t",$indent,"\t")."<ul $css_class>\n";
+				echo "\n".str_pad("\t",$indent,"\t")."<ul$css_class>\n";
 				$indent++;
 				$parents[$indent] = NULL;
 				$open[$indent] = 0;

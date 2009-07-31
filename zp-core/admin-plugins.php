@@ -154,7 +154,7 @@ foreach ($filelist as $extension) {
 	if (false !== $str) {
 		if (false !== eval($str)) {
 			if ($plugin_is_filter) {
-				$loadtype = $plugin_is_filter;
+				$loadtype = $plugin_is_filter;				
 			}
 		}
 	}

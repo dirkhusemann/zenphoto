@@ -1388,14 +1388,14 @@ function getAlbumThumb() {
  */
 function getPasswordProtectImage($extra) {
 	global $_zp_themeroot;
-	$image = $_zp_themeroot."/images/err-passwordprotected.gif\"";
-	$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
-	$imagebase = $themedir."/images/err-passwordprotected.gif";
+	$image = $_zp_themeroot.'/images/err-passwordprotected.gif';
+	$themedir = SERVERPATH . '/themes/'.basename($_zp_themeroot);
+	$imagebase = $themedir.'/images/err-passwordprotected.gif';
 	if (file_exists(internalToFilesystem($imagebase))) {
-		return '<img src="'.$image.'" '.$extra.' />';
+		return '<img src="'.$image.'" '.$extra.' alt="protected" />';
 	} else {
 		return '<img src="'. WEBPATH . '/' . ZENFOLDER.'/images/err-passwordprotected.gif" '.
-						$extra.' />';
+						$extra.' alt="protected" />';
 	}
 }
 
@@ -4326,7 +4326,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect
 			break;
 		default:
 		if (in_context(ZP_SEARCH)) {
-			$action = "&amp;p=search" . $_zp_current_search->getSearchParams();
+			$action = "&amp;p=search" . htmlspecialchars($_zp_current_search->getSearchParams());
 		} else {
 			$action = '&amp;p='.substr($_zp_gallery_page, 0, -4);
 		}

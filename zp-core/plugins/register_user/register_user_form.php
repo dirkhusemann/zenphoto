@@ -5,7 +5,7 @@
  * @package plugins 
  */
 ?>
-	<form action="?action=register_user" method="post" AUTOCOMPLETE=OFF>
+	<form action="?action=register_user" method="post" AUTOCOMPLETE="OFF">
 		<input type="hidden" name="register_user" value="yes" />
 		<table class="register_user">
 		<tr>
@@ -48,5 +48,5 @@
 		}
 		?>
 		</table>
-		<input type="submit" value= <?php echo gettext('Submit') ?> />
+		<input type="submit" value="<?php echo gettext('Submit') ?>" />
 	</form>

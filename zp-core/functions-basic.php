@@ -476,7 +476,7 @@ function sanitize_path($filename) {
  */
 function sanitize_numeric($num) {
 	if (is_numeric($num)) {
-		return abs(round($num));
+		return round($num);
 	} else {
 		return false;
 	}
