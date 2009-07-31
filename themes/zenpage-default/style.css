@@ -832,6 +832,7 @@ hr {
 .newscategories {
 	margin: 0;
 	padding: 0;
+	display: inline;
 }
 
 .newscategories li {
