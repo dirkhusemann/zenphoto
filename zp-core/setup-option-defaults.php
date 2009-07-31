@@ -318,7 +318,7 @@ function setDefault($option, $default) {
 	}
 	setOptionDefault('comment_body_requiired', 1);
 	
-	setOption('zp_plugin_rating', -getOption('zp_plugin_rating'));
+	setOption('zp_plugin_rating', -abs(getOption('zp_plugin_rating')));
 	
 	setOptionDefault('zp_plugin_zenphoto_sendmail', 5);
 	?>
