@@ -3,7 +3,6 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  *
  * @author Malte Müller (acrylian)
- * @version 1.0.7.1
  * @package plugins
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
@@ -176,7 +175,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	}
 	echo "<div id=\"pagedthumbsnav\">\n";
 	if ($currentpage == 1) {
-		echo "<div id=\"pagedthumbsnav-prevdisabled\">".$prev.">";
+		echo "<div id=\"pagedthumbsnav-prevdisabled\">".$prev;
 	} else {
 		echo "<div id=\"pagedthumbsnav-prev\">\n";
 	}
@@ -243,7 +242,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	// next thumbnails - show only if there is a next page
 	$nextpageimage = ""; // define needed for page list
 	if ($currentpage == $totalpages) {
-		echo "<div id=\"pagedthumbsnav-nextdisabled\">".$prev.">";
+		echo "<div id=\"pagedthumbsnav-nextdisabled\">".$next;
 	} else {
 		echo "<div id=\"pagedthumbsnav-next\">\n";
 	}
