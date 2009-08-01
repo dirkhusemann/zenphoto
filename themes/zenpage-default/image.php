@@ -56,12 +56,14 @@
 	<div id="image">
 		<?php if(getOption("Use_thickbox")) {
 			$thickboxclass = " class=\"thickbox\"";
+			$tburl = htmlspecialchars(getUnprotectedImageURL());
 		} else {
 			$thickboxclass = "";
+			$tburl = htmlspecialchars(getProtectedImageURL());
 		}
 		if (isImagePhoto()) {
 			?>
-			<a href="<?php echo htmlspecialchars(getUnprotectedImageURL()); ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
+			<a href="<?php echo $tburl; ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
 			<?php
 		}
 		printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
