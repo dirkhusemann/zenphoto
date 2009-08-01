@@ -608,7 +608,11 @@ if (!$checked) {
 		/* Check for graphic library and image type support. */
 		if (function_exists('zp_graphicsLibInfo')) {
 			$graphics_lib = zp_graphicsLibInfo();
-			$library = $graphics_lib['Library'];
+			if (empty($library)) {
+				$library = '';
+			} else {
+				$library = $graphics_lib['Library'];
+			}
 			$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library support in your PHP')) && $good;
 			if (!empty($library)) {
 				$missing = array();
