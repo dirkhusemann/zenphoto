@@ -6,6 +6,8 @@
 
 // force UTF-8 Ø
 
+define('OFFSET_PATH', 2);
+
 require_once(dirname(__FILE__).'/folder-definitions.php');
 header ('Content-Type: text/html; charset=UTF-8');
 define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
@@ -23,9 +25,6 @@ if(!function_exists("gettext")) {
 	$noxlate = 1;
 }
 require_once(dirname(__FILE__).'/lib-utf8.php');
-
-define('OFFSET_PATH', 2);
-
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';

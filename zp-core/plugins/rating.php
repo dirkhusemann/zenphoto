@@ -31,7 +31,7 @@ if (getOption('rating_image_individual_control')) {
 
 $ME = substr(basename(__FILE__),0,-4);
 // register the scripts needed
-if (!OFFSET_PATH) {
+if (isset($_zp_gallery) && !is_null($_zp_gallery)) {
 	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.MetaData.js"></script>');
 	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.rating.js"></script>');
 	$theme = getCurrentTheme();

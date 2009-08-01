@@ -1142,7 +1142,7 @@ function isMyAlbum($albumfolder, $action) {
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		return $_zp_loggedin & (ADMIN_RIGHTS | $action);
 	}
-	if (empty($albumfolder)) {
+	if (empty($albumfolder) || $albumfolder == '/') {
 		return false;
 	}
 	if ($_zp_loggedin & $action) {
@@ -1152,15 +1152,22 @@ function isMyAlbum($albumfolder, $action) {
 		if (count($_zp_admin_album_list) == 0) {
 			return false;
 		}
+		$desired_folders = explode('/', $albumfolder);
 		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
-			if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) {
+			$admin_folders = explode('/', $adminalbum);
+			$found = true;
+			foreach ($admin_folders as $level=>$folder) {
+				if ($level >= count($desired_folders) || $folder != $desired_folders[$level]) {
+					$found = false;
+					break;
+				}
+			}
+			if ($found) {
 				return true;
 			}
 		}
-		return false;
-	} else {
-		return false;
 	}
+	return false;
 }
 /**
  * Returns  an array of album ids whose parent is the folder

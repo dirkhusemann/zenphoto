@@ -44,7 +44,7 @@ function zipAddSubalbum($base, $offset, $subalbum, $zip) {
 function createAlbumZip($album){
 	global $_zp_zip_list;
 	if (!checkAlbumPassword($album, $hint)) {
-		pageError();
+		pageError(403, gettext("Forbidden"));
 		exit();
 	}
 	$album = internalToFilesystem($album);
