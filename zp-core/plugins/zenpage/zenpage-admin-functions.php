@@ -469,7 +469,7 @@ function updateArticle() {
 	if(getCheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
-	$msg = zp_apply_filter('update_article', $article, $oldtitlelink); 
+	$msg = zp_apply_filter('update_article', '', $article, $oldtitlelink); 
 	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY id");
