@@ -94,10 +94,11 @@ $backgroundImagePath="";
 
 <!-- Wrap Subalbums -->
 <div id="subcontent">
-<div id="submain">
-
-	<h2><?php echo gettext('User Registration') ?></h2>
-	<?php  printRegistrationForm();  ?>
+	<div id="submain">
+	
+		<h2><?php echo gettext('User Registration') ?></h2>
+		<?php  printRegistrationForm();  ?>
+	</div>
 </div>
 
 

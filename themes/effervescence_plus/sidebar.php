@@ -28,7 +28,7 @@ if(function_exists("printAllNewsCategories")) {
 <?php if(function_exists("printPageMenu")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("Pages"); ?></h3>
-	<?php printPageMenu("list","","menu-active","submenu","menu-active"); ?>
+	<?php	printPageMenu("list","","menu-active","submenu","menu-active"); ?>
 </div>
 <?php } ?>
 
@@ -37,10 +37,18 @@ if(function_exists("printAllNewsCategories")) {
 	<ul>
 	<?php
 	  if($_zp_gallery_page == "archive.php") {
-	  	echo "<li class='menu-active'>".gettext("Gallery and News")."</li>";
- 	 	} else {
-			echo "<li>"; printCustomPageURL(gettext("Gallery and News"),"archive")."</li>";
-		} 
+	  	?>
+	  	<li class='menu-active'>
+	  	<?php echo gettext("Gallery and News");	?>
+	  	</li>
+	  	<?php
+	  } else {
+	  	?>
+	  	<li>
+	  	<?php echo printCustomPageURL(gettext("Gallery and News"),"archive"); ?>
+	  	</li>
+	  	<?php
+ 	 	} 
 		?>
 	</ul>
 </div>

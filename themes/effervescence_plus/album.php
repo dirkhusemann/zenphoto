@@ -159,7 +159,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			</div>
 
 			<!-- SubAlbum List -->
-			<ul id="albums">
+			
 					<?php
 					$firstAlbum = null;
 					$lastAlbum = null;
@@ -167,6 +167,9 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						if (is_null($firstAlbum)) {
 							$lastAlbum = albumNumber();
 							$firstAlbum = $lastAlbum;
+							?>
+							<ul id="albums">
+							<?php
 						} else {
 							$lastAlbum++;
 						}
@@ -185,11 +188,18 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						</li>
 						<?php
 					}
-				?>
-			</ul>
+					if (!is_null($firstAlbum)) {
+						?>
+						</ul>
+						<?php
+					}
+					?>
+			
 			<div class="clearage"></div>
 			<?php
-			if (function_exists('printAlbumMap')) printAlbumMap(NULL, NULL, NULL, NULL, '<p align="center">'.gettext('Google Map').'</p>', true, 'googlemap', $firstPageImages);
+			if (function_exists('printAlbumMap')) {
+				printAlbumMap(NULL, NULL, NULL, NULL, gettext('Google Map'), true, 'googlemap', $firstPageImages);
+			}
 			printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums());
 			?>
 		</div> <!-- submain -->

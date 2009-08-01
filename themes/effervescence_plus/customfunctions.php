@@ -39,7 +39,7 @@ function printHeadingImage($randomImage) {
 	}
 		echo "<a href='".$randomImageURL."' title='".gettext('Random picture...')."'><img src='".
 					htmlspecialchars($randomImage->getCustomImage(NULL, $wide, $high, $wide, $high, NULL, NULL, !getOption('Watermark_head_image'))).
-					"' width=$wide height=$high alt=".'"'.
+					"' width='$wide' height='$high' alt=".'"'.
 					htmlspecialchars($randomAlt1, ENT_QUOTES).
 					":\n".htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).
 					'" /></a>';

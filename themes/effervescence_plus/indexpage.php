@@ -97,8 +97,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
     			<?php printNewsContent(); ?>
     			<?php printCodeblock(2); ?>
     			<p><?php printNewsReadMoreLink(); ?></p>
-    
-    		</div>	
+    			</div>	
 			<?php
 			} 
   		printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));

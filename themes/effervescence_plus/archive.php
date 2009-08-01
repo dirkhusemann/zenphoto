@@ -54,22 +54,31 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 			<div id="content-left">
 			<?php 
 		}
-			 if (!checkForPassword()) {?>
-				<!-- Date List -->
-				<div id="archive"><p><?php echo gettext('Images By Date'); ?></p><?php printAllDates('archive', 'year', 'month', 'desc'); ?></div>
-				<div id="tag_cloud"><p><?php echo gettext('Popular Tags'); ?></p><?php printAllTagsAs('cloud', 'tags'); ?></div>
-					<?php if ($zenpage = getOption('zp_plugin_zenpage')) { ?>
-					<?php if(function_exists("printNewsArchive")) { ?>
-						<div id="archive"><p><?php echo('News archive') ?></p><?php printNewsArchive("archive");	?></div>
-					<?php }	?>
-					</div><!-- content left-->
-					<div id="sidebar">
-					<?php include("sidebar.php"); ?>
-					</div><!-- sidebar -->
-				<?php 
-				}
-			} ?>
+		?>
+			<!-- Date List -->
+			<div id="archive">
+				<p><?php echo gettext('Images By Date'); ?></p>
+				<?php printAllDates('archive', 'year', 'month', 'desc'); ?>
+					<?php
+					if(function_exists("printNewsArchive")) {
+						?>
+						<p><?php echo('News archive') ?></p><?php printNewsArchive("archive");	?>
+						<?php
+					}
+					?>
+			</div>
+			<div id="tag_cloud"><p><?php echo gettext('Popular Tags'); ?></p><?php printAllTagsAs('cloud', 'tags'); ?></div>
 			<br style="clear:both" />
+			<?php
+			if ($zenpage = getOption('zp_plugin_zenpage')) {
+				?>
+				</div><!-- content left-->
+				<div id="sidebar">
+				<?php include("sidebar.php"); ?>
+				</div><!-- sidebar -->
+				<?php 
+			}
+			?>
 		</div> <!-- main2 -->
 		
 	</div> <!-- content -->

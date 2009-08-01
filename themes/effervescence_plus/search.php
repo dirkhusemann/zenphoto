@@ -120,7 +120,6 @@ $backgroundImagePath="";
 </div>
 
 	<!-- Album List -->
-	<ul id="albums">
 		<?php
 		$firstAlbum = null;
 		$lastAlbum = null;
@@ -128,6 +127,9 @@ $backgroundImagePath="";
 			if (is_null($firstAlbum)) {
 				$lastAlbum = albumNumber();
 				$firstAlbum = $lastAlbum;
+				?>
+				<ul id="albums">
+				<?php
 			} else {
 				$lastAlbum++;
 			}
@@ -141,8 +143,12 @@ $backgroundImagePath="";
 			<?php printAlbumTitle(); ?></a></h4></li>
 		<?php
 			}
-		?>
-	</ul>
+			if (!is_null($firstAlbum)) {
+				?>
+				</ul>
+				<?php
+			}
+			?>
 	<div class="clearage"></div>
 	<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 </div>
