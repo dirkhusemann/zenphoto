@@ -164,7 +164,7 @@ function generateLanguageList() {
 		}
 		closedir($dir);
 	}
-	natsort($locales);
+	natcasesort($locales);
 	return $locales;
 }
 

@@ -2271,7 +2271,7 @@ if (empty($alterrights)) {
 		<td style="padding: 0;margin:0" colspan="3">
 		<?php
 		$plugins = array_keys(getEnabledPlugins());
-		natsort($plugins);
+		natcasesort($plugins);
 		foreach ($plugins as $extension) {
 			$ext = substr($extension, 0, strlen($extension)-4);
 			$option_interface = NULL;

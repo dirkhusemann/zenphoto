@@ -2063,7 +2063,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		}
 		$emptylang = array_flip($_zp_active_languages);
 		unset($emptylang['']);
-		natsort($emptylang);
+		natcasesort($emptylang);
 		if ($textbox) $class = 'box'; else $class = '';
 		echo '<ul'.$groupid.' class="'.($short ? 'language_string_list_short' : 'language_string_list').$class.'"'.">\n";
 		$empty = true;

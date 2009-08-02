@@ -1416,7 +1416,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 		}
 		$emptylang = array_flip($_zp_active_languages);
 		unset($emptylang['']);
-		natsort($emptylang);
+		natcasesort($emptylang);
 		if ($textbox) $class = 'box'; else $class = '';
 		echo "<ul class=\"zenpage_language_string_list".$class."\">\n";
 		$empty = true;

@@ -288,7 +288,7 @@ if (defined('RELEASE')) {
 		<ul class="plugins">
 		<?php
 		if ($c > 0) {
-			natsort($plugins);
+			natcasesort($plugins);
 			foreach ($plugins as $extension) {
 				$ext = substr($extension, 0, strlen($extension)-4);
 				$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);

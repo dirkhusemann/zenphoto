@@ -44,14 +44,14 @@ class filter_file_searches_options {
 		global $_zp_supported_images, $_zp_extra_filetypes, $mysetoptions;
 		$albums = $this->loadAlbumNames(getAlbumFolder());
 		$albums = array_unique($albums);
-		natsort($albums);
+		natcasesort($albums);
 		$lista = array();
 		foreach ($albums as $album) {
 			$lista[$album] = 'filter_file_searches_albums_'.$album;
 		}
-		natsort($_zp_supported_images);
+		natcasesort($_zp_supported_images);
 		$types = array_keys($_zp_extra_filetypes);
-		natsort($types);
+		natcasesort($types);
 		$list = array_merge($_zp_supported_images, $types);
 		$listi = array();
 		foreach ($list as $suffix) {

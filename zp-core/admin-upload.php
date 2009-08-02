@@ -140,9 +140,9 @@ printLogoAndLinks();
 <h1><?php echo gettext("Upload Photos"); ?></h1>
 <p>
 <?php 
-natsort($_zp_supported_images);
+natcasesort($_zp_supported_images);
 $types = array_keys($_zp_extra_filetypes);
-natsort($types);
+natcasesort($types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $_zp_supported_images));
 $s2 = strtoupper(implode(', ', $types));
