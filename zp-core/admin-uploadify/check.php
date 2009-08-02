@@ -1,15 +1,18 @@
 <?php
+require_once(dirname(dirname(__FILE__)).'/functions-basic.php');
 if(!function_exists("json_encode")) {
 	// load the drop-in replacement library
 	require_once('../lib-json.php');
 }
-// Uploadify v1.6.2
-// Copyright (C) 2009 by Ronnie Garcia
-// Co-developed by Travis Nickels
+
+debugLogArray('$_POST',$_POST);
+
 $fileArray = array();
 foreach ($_POST as $key => $value) {
 	if ($key != 'folder') {
-		if (file_exists($_POST['folder'] . '/' . $value)) {
+		$folder = str_replace('/'.ZENFOLDER.'/','',$_POST['folder']); // hack to remove the 
+		$targetPath = getAlbumFolder().internalToFilesystem($folder.'/'.$value);
+		if (file_exists($targetPath)) {
 			$fileArray[$key] = $value;
 		}
 	}

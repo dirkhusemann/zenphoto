@@ -327,12 +327,17 @@ if (ini_get('safe_mode')) { ?>
 							'height': '<?php echo $info[1] ?>',
 							'width': '<?php echo $info[0] ?>',
 							<?php echo $rollover; ?>
+/* TODO: enable checkScript and use onCheck for the messages once we figure out how to do that.		
 							'checkScript': 'admin-uploadify/check.php',
+							'onCheck':	function(event, scritp, queue, folder, single) {
+														alert('onCheck trigger');
+													},
+*/
 							'displayData': 'speed',
 							'simUploadLimit': 3,
-							'onAllComplete': function() {
-							  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
-							},
+							'onAllComplete':	function() {
+																  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
+																},
 							'fileDesc': 'Allowed file types',
 							'fileExt': '<?php echo $extensions; ?>'
 						});
