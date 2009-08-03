@@ -2,7 +2,6 @@
 index.php
 License.txt
 lighttpd_rules.conf
-README.html
 rss-comments.php
 rss-news-comments.php
 rss-news.php
@@ -202,10 +201,7 @@ themes/zenpage-default/style.css
 themes/zenpage-default/theme.png
 themes/zenpage-default/themeoptions.php
 themes/zenpage-default/theme_description.php
-zenpage_quick_reference.pdf
 Zenphoto.package
-zenphoto_developer_quick_reference.pdf
-zenphoto_quick_reference.pdf
 zp-core/404.php
 zp-core/admin-albumsort.php
 zp-core/admin-cache-images.php
@@ -673,7 +669,6 @@ zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/ajax_save_as_form.php
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/ajax_save_name.php
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/ajax_save_text.php
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/ajax_text_editor.php
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/debug.html
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/inc/class.auth.php
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/inc/class.file.php
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/inc/class.history.php
@@ -1065,9 +1060,7 @@ zp-core/plugins/tiny_mce/plugins/paste/pastetext.htm
 zp-core/plugins/tiny_mce/plugins/paste/pasteword.htm
 zp-core/plugins/tiny_mce/plugins/preview/editor_plugin.js
 zp-core/plugins/tiny_mce/plugins/preview/editor_plugin_src.js
-zp-core/plugins/tiny_mce/plugins/preview/example.html
 zp-core/plugins/tiny_mce/plugins/preview/jscripts/embed.js
-zp-core/plugins/tiny_mce/plugins/preview/preview.html
 zp-core/plugins/tiny_mce/plugins/print/editor_plugin.js
 zp-core/plugins/tiny_mce/plugins/print/editor_plugin_src.js
 zp-core/plugins/tiny_mce/plugins/safari/blank.htm
@@ -1228,7 +1221,6 @@ zp-core/plugins/tiny_mce/plugins/tinyzenpage/img/tinyzenpage.gif
 zp-core/plugins/tiny_mce/plugins/tinyzenpage/img/wrapLeft.gif
 zp-core/plugins/tiny_mce/plugins/tinyzenpage/img/wrapNone.gif
 zp-core/plugins/tiny_mce/plugins/tinyzenpage/img/wrapRight.gif
-zp-core/plugins/tiny_mce/plugins/tinyzenpage/installation.html
 zp-core/plugins/tiny_mce/plugins/tinyzenpage/js/dialog.php
 zp-core/plugins/tiny_mce/plugins/tinyzenpage/js/thickbox-compressed.js
 zp-core/plugins/tiny_mce/plugins/tinyzenpage/License.txt
