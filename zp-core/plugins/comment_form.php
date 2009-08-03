@@ -314,7 +314,7 @@ function printCommentErrors($class = 'error') {
  *
  */
 function printCommentForm($showcomments=true, $addcommenttext=NULL) {
-	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin;
+	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin, $_zp_current_comment;
 	if (is_null($addcommenttext)) $addcommenttext = gettext('Add a comment:');
 	switch ($_zp_gallery_page) {
 		case 'album.php':
@@ -361,7 +361,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 				<?php
 				while (next_comment()) {
 					?>
-					<div class="comment">
+					<div class="comment"><a name="<?php echo $_zp_current_comment['id']; ?>"></a>
 						<div class="commentinfo">
 							<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
 						</div>

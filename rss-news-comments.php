@@ -61,10 +61,10 @@ foreach ($comments as $comment) {
 ?>
 <item>
 <title><?php echo strip_tags($title.$author); ?></title>
-<link><?php echo '<![CDATA[http://'.$host.getNewsURL($titlelink).']]>';?></link>
+<link><?php echo '<![CDATA[http://'.$host.getNewsURL($titlelink)."#".$comment['id'].']]>';?></link>
 <description><?php echo $comment['comment']; ?></description>
 <category><?php echo ""; ?></category>
-<guid><?php echo '<![CDATA[http://'.$host.getNewsURL($titlelink).']]>';?></guid>
+<guid><?php echo '<![CDATA[http://'.$host.getNewsURL($titlelink)."#".$comment['id'].']]>';?></guid>
 <pubDate><?php echo date("r",strtotime($date)); ?></pubDate>
 </item>
 <?php } ?>

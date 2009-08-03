@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'zp_core/folder-definitions.php');
+require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
@@ -72,10 +72,10 @@ foreach ($comments as $comment) {
 ?>
 <item>
 <title><?php echo strip_tags($albumtitle.$title.$author); ?></title>
-<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
+<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag."#".$comment['id'].']]>';?></link>
 <description><?php echo $comment['comment']; ?></description>
 <category><?php echo strip_tags($albumtitle); ?></category>
-<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
+<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag."#".$comment['id'].']]>';?></guid>
 <pubDate><?php echo date("r",strtotime($date)); ?></pubDate>
 </item>
 <?php } ?>
