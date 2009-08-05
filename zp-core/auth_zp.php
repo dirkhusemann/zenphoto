@@ -7,7 +7,7 @@
 // force UTF-8 Ø
 
 if (file_exists(dirname(__FILE__).'/lib-auth_custom.php')) { // load a custom authroization package if it is present
-	debugLog('Loading '.dirname(__FILE__).'/lib-auth_custom.php');
+	require_once(dirname(__FILE__).'/lib-auth_custom.php');
 } else {
 	require_once(dirname(__FILE__).'/lib-auth.php');
 }
@@ -49,8 +49,8 @@ if (!isset($_POST['login'])) {
 } else {
 	// Handle the login form.
 	if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
-		$post_user = sanitize($_POST['user'],3);
-		$post_pass = sanitize($_POST['pass'],3);
+		$post_user = $_POST['user'];
+		$post_pass = $_POST['pass'];
 		$redirect = sanitize_path($_POST['redirect']);
 		$_zp_loggedin = checkLogon($post_user, $post_pass, true);
 		$_zp_loggedin = zp_apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
