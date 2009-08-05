@@ -20,5 +20,4 @@ function read_exif_data_protected($path) {
 	return $rslt;
 }
 
-
 ?>
