@@ -1047,7 +1047,7 @@ if ($debug) {
 	$base = true;
 	$f = '';
 	if ($rw == 'ON') {
-		$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
+		$d = str_replace('\\','/',dirname(dirname($_SERVER['SCRIPT_NAME'])));
 		$i = strpos($htu, 'REWRITEBASE', $j);
 		if ($i === false) {
 			$base = false;
