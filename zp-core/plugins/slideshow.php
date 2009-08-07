@@ -16,7 +16,7 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.1.1
+ * @version 1.2.6
  * @package plugins
  */
 
@@ -550,7 +550,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 function printSlideShowJS() {
 	?>
 <script
-	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER ?>/slideshow/jquery.cycle.all.pack.js"
+	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER ?>/slideshow/jquery.cycle.all.js"
 	type="text/javascript"></script>
 <script
 	type="text/javascript"

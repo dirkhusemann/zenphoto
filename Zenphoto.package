@@ -426,6 +426,7 @@ zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
 zp-core/locale/fr_FR/select_files_button.png
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.mo
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.po
+zp-core/locale/it_IT/select_files_button.png
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.mo
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.po
 zp-core/locale/nl_NL/select_files_button.png
@@ -515,7 +516,7 @@ zp-core/plugins/register_user/register_user_form.php
 zp-core/plugins/register_user.php
 zp-core/plugins/slideshow/controls.png
 zp-core/plugins/slideshow/flowplayerfullsizeicon.png
-zp-core/plugins/slideshow/jquery.cycle.all.pack.js
+zp-core/plugins/slideshow/jquery.cycle.all.js
 zp-core/plugins/slideshow/slideshow-counter.php
 zp-core/plugins/slideshow.php
 zp-core/plugins/spamfilters/none.php
