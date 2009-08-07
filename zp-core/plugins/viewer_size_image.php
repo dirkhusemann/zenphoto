@@ -121,6 +121,10 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 	<script>
 		function switchimage(obj){
 			var url = $(obj).attr('url');
+			var w = $(obj).attr('im_w');
+			var h = $(obj).attr('im_h');
+			$('#image img').attr('width',w);
+			$('#image img').attr('height',h);
 			$('#image img').attr('src',url);
 			document.cookie='viewer_size_image_saved='+$(obj).attr('value')+'; expires=<?php echo date('Y-m-d H:i:s', time()+COOKIE_PESISTENCE); ?>; path=<?php echo $cookiepath ?>';
 		}
@@ -133,7 +137,9 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 			$display = sprintf(gettext('%1$s x %2$s px'), $size['$w'],$size['$h']);
 			$url = getCustomImageURL(null, $size['$w'],$size['$h'], null, null, null, null, false);
 			$value='$h='.$size['$h'].',$w='.$size['$w'];
+			$dims = array($size['$w'],$size['$h']);
 		} else {
+			$dims = getSizeCustomImage($size['$s']);
 			$display = sprintf(gettext('%s px'),$size['$s']);
 			$url = getCustomImageURL($size['$s'], null, null, null, null, null, null, false);
 			$value='$s='.$size['$s'];
@@ -143,7 +149,9 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 			$checked = 'checked="CHECKED" '; 
 		}
 		?>
-		<input type="radio" name="viewer_size_image_selection" id="s<?php echo $key; ?>" url="<?php echo $url;?>" value="<?php echo $value; ?>" <?php echo $checked; ?> onclick="switchimage(this);" />
+		<input type="radio" name="viewer_size_image_selection" id="s<?php echo $key; ?>" url="<?php echo $url;?>"
+					im_w="<?php echo $dims[0]; ?>" im_h="<?php echo $dims[1]; ?>"
+					value="<?php echo $value; ?>" <?php echo $checked; ?> onclick="switchimage(this);" />
 		<label for="s<?php echo $key; ?>"> <?php echo $display; ?></label>
 		<?php
 	}

@@ -2738,7 +2738,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		$class .= " password_protected";
 	}
 	if ($size) {
-		$dims = getSizeDefaultImage();
+		$dims = getSizeCustomImage($size);
 		$sizing = ' width="'.$dims[0].'" height="'.$dims[1].'"';
 	} else {
 		$sizing = '';
