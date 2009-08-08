@@ -74,18 +74,17 @@ if (isset($_GET['action'])) {
 							$albums = NULL;
 						}
 						if (empty($pass)) {
-							$pwd = null;
-						} else {
-							$pwd = passwordHash($_POST[$i.'-adminuser'], $pass);
+							$pass = NULL;
 						}
-						$userobj = new Administrator($user);
-						$userobj->setPass($pwd);
+						$userobj = new Administrator(''); // get a transient object
+						$userobj->setuser($user);
+						$userobj->setPass(NULL);
 						$userobj->setName($admin_n);
 						$userobj->setEmail($admin_e);
 						$userobj->setRights($rights);
 						$userobj->setAlbums($albums);
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-						saveAdmin($user, $userobj->getPass(), $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+						saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 						if ($i == 0) {
 							setOption('admin_reset_date', '1');
 						}

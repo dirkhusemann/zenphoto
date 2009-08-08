@@ -42,6 +42,10 @@ foreach ($_admin_rights as $right=>$value) {
 }
 define('DEFAULT_RIGHTS', OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | POST_COMMENT_RIGHTS);
 
+//admin user handling
+$_zp_current_admin = null;
+$_zp_admin_users = null;
+
 /**
  * Sets the rights array for the above definition loop
  * Returns the value for ALL_RIGHTS
@@ -78,23 +82,22 @@ $_lib_auth_extratext = getOption('extra_auth_hash_text');
  */
 function passwordHash($user, $pass) {
 	global $_lib_auth_extratext;
-	return md5($user . $pass . $_lib_auth_extratext);
+	$md5 = md5($user . $pass . $_lib_auth_extratext);
+	return $md5;	
 }
 
-//admin user handling
-$_zp_current_admin = null;
-$_zp_admin_users = null;
 
 /**
  * Saves an admin user's settings
  *
  * @param string $user The username of the admin
- * @param string $pass The password associated with the user name (md5)
+ * @param string $pass The password associated with the user name
  * @param string $name The display name of the admin
  * @param string $email The email address of the admin
  * @param bit $rights The administrating rites for the admin
  * @param string $custom custom data for the administrator
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
+ * @return string error message if any errors
  */
 function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1) {
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
@@ -105,23 +108,21 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $g
 		if (is_null($pass)) {
 			$password = '';
 		} else {
-			$password = "' ,`pass`='" . mysql_real_escape_string($pass);
+			$password = "`pass`='" . mysql_real_escape_string(passwordHash($user, $pass))."', ";
 		}
 		if (is_null($rights)) {
 			$rightsset = '';
 		} else {
-			$rightsset = "', `rights`='" . mysql_real_escape_string($rights);
+			$rightsset = "`rights`='" . mysql_real_escape_string($rights)."', ";
 		}
-		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . mysql_real_escape_string($name) . $password .
- 					"', `email`='" . mysql_real_escape_string($email) . $rightsset . "', `custom_data`='".mysql_real_escape_string($custom)."', `valid`=".$valid.", `group`='".
+		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . mysql_real_escape_string($name)."', " . $password .
+ 					"`email`='" . mysql_real_escape_string($email)."', " . $rightsset . "`custom_data`='".mysql_real_escape_string($custom)."', `valid`=".$valid.", `group`='".
 					mysql_real_escape_string($group)."' WHERE `id`='" . $id ."'";
 		$result = query($sql);
-
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
 	} else {
 		$passupdate = 'NULL';
-		if (is_null($pass)) {
-		} else {
+		if (!is_null($pass)) {
 			$passupdate = "'".mysql_real_escape_string(passwordHash($user, $pass))."'";
 		}
 		$sql = "INSERT INTO " . prefix('administrators') . " (`user`, `pass`, `name`, `email`, `rights`, `custom_data`, `valid`, `group`) VALUES ('" .
@@ -143,6 +144,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $g
 			$result = query($sql);
 		}
 	}
+	return '';
 }
 
 /**
@@ -156,7 +158,7 @@ function getAdministrators() {
 	global $_zp_admin_users;
 	if (is_null($_zp_admin_users)) {
 		$_zp_admin_users = array();
-		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
+		$sql = 'SELECT * FROM '.prefix('administrators').' ORDER BY `rights` DESC, `id`';
 		$admins = query_full_array($sql, true);
 		if ($admins !== false) {
 			foreach($admins as $user) {
@@ -183,6 +185,11 @@ function checkAuthorization($authCode) {
 	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
 	global $_zp_current_admin;
 	$admins = getAdministrators();
+	foreach ($admins as $key=>$user) {
+		if (!$user['valid']) {
+			unset($admins[$key]);
+		}
+	}
 	if (DEBUG_LOGIN) { debugLogArray("checkAuthorization: admins",$admins);	}
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
@@ -246,7 +253,11 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
 	$admins = getAdministrators();
 	$user = array_shift($admins);
 	if (!empty($user['email'])) {
-		$emails[] = $user['email'];
+		$name = $user['name'];
+		if (empty($name)) {
+			$name = $user['user'];
+		}
+		$emails[$name] = $user['email'].' ('.$user['user'].')';
 	}
 	foreach ($admins as $user) {
 		if (($user['rights'] & $rights)  && !empty($user['email'])) {

@@ -32,13 +32,6 @@ function setDefault($option, $default) {
 	unset($_zp_conf_vars['adminpass']);
 	$admin = getOption('adminuser');
 	if (!empty($admin)) {   // transfer the old credentials and then remove them
-		if ((count(getAdministrators()) == 0)) {  // don't revert anything!
-			$pass = getOption('adminpass');
-			$string = preg_replace("/[^a-f0-9]/","",$pass);
-			if ((strlen($pass) == 32) && ($pass == $string)){  // best guess it that it is a md5 pasword, not cleartext
-				saveAdmin($admin, $pass, getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS, array());
-			}
-		}
 		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="adminuser"';
 		query($sql);
 		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="adminpass"';
