@@ -166,6 +166,9 @@ function getAdministrators() {
 					$user['pass'] = $user['password'];
 					unset($user['password']);
 				}
+				if (!array_key_exists('valid', $user)) { // transition code!
+					$user['valid'] = 1;
+				}
 				$_zp_admin_users[$user['id']] = $user;
 			}
 		}
