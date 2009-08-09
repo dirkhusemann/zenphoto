@@ -5,7 +5,6 @@
  * Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php
  *
  * @author Malte Müller (acrylian)
- * @version 1.0.3
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');

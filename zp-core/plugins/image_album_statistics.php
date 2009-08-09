@@ -7,7 +7,6 @@
  * C A U T I O N: With 1.0.4.7 the usage to get an specific album changes. You now have to pass the foldername of an album instead the album title.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.7.2
  * @package plugins
  */
 

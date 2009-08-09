@@ -28,7 +28,8 @@ function emailReply($comment, $owner) {
 	$oldcomments = $owner->comments;
 	$emails = array();
 	foreach ($oldcomments as $oldcomment) {
-		$emails[] = $oldcomment['email'];
+		$name = $oldcomment['name'];
+		$emails[$name] = $oldcomment['email'];
 	}
 	$emails = array_unique($emails);
 	switch ($comment->getType()) {

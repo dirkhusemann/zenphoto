@@ -8,7 +8,6 @@
  * from writing to the log file.
  *  
  * @author Stephen Billard (sbillard)
- * @version 1.0.1
  * @package plugins
  */
 $plugin_is_filter = 5;

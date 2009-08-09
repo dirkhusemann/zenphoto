@@ -6,7 +6,6 @@
  * Plugin Option 'gmaps_apikey' is used to supply the sit Google Maps API key.
  *
  * @author Dustin Brewer (mankind), Stephen Billard (sbillard), Eric Bayard (babar)
- * @version 1.4.1
  *
  * @package plugins
  */

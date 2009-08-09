@@ -59,10 +59,12 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.6';
 $plugin_disable = $disable;
 
-if ($plugin_disable) return;
-addPluginType('txt', 'TextObject');
-
-$option_interface = new textObject_Options();
+if ($plugin_disable) {
+	setOption('zp_plugin_class-textobject',0);
+} else {
+	addPluginType('txt', 'TextObject');
+	$option_interface = new textObject_Options();
+}
 
 /**
  * Option class for textobjects objects

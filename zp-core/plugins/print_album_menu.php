@@ -2,7 +2,6 @@
 /** printAlbumMenu for Zenphoto
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.4.7.1
  * @package plugins
  */
 

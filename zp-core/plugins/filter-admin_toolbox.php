@@ -4,7 +4,6 @@
  * This is intended as an example only.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.1.0
  * @package plugins
  */
 

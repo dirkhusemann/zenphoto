@@ -7,7 +7,6 @@
  * Plugin option 'flow_player_height' -- height of the player window
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.5
  * @package plugins 
  */
 
@@ -20,11 +19,12 @@ $plugin_disable = $external;
 $option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
 
-if ($external) return; // can't process external album images
-
-// register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer/flashembed-0.34.pack.js"></script>');
-
+if ($external) {
+	setOption('zp_plugin_flowplayer',0);
+} else {
+	// register the scripts needed
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer/flashembed-0.34.pack.js"></script>');
+}
 if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 28);
 /**
  * Plugin option handling class

@@ -11,7 +11,6 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.6
  * @package plugins
  */
 

@@ -5,7 +5,6 @@
  * Place a call on printUserLogout() where you want the logout link to appear.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.1.1
  * @package plugins
  */
 

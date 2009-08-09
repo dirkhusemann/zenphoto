@@ -12,19 +12,21 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.6';
 $plugin_disable = $disable;
 
-if ($plugin_disable) return;
-addPluginType('flv', 'Video');
-addPluginType('3gp', 'Video');
-addPluginType('mov', 'Video');
-addPluginType('mp3', 'Video');
-addPluginType('mp4', 'Video');
+if ($plugin_disable) {
+	setOption('zp_plugin_class-video',0);
+} else {
+	addPluginType('flv', 'Video');
+	addPluginType('3gp', 'Video');
+	addPluginType('mov', 'Video');
+	addPluginType('mp3', 'Video');
+	addPluginType('mp4', 'Video');
+	$option_interface = new VideoObject_Options();
+}
 
 define('DEFAULT_MOV_HEIGHT', 496);
 define('DEFAULT_MOV_WIDTH', 640);
 define('DEFAULT_3GP_HEIGHT', 304);
 define('DEFAULT_3GP_WIDTH', 352);
-
-$option_interface = new VideoObject_Options();
 
 /**
  * Option class for video objects

@@ -16,7 +16,6 @@
  * NOTE: If you change the rights on a user pending verification you have verified the user.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.1.0
  * @package plugins
  */
 

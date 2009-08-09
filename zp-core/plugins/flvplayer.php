@@ -7,7 +7,6 @@
  * IMPORTANT: Flash players do not support external albums!
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.2
  * @package plugins
  */
 
@@ -16,17 +15,17 @@ $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flvplayer.php.html";
 $plugin_disable = $external;
-$option_interface = new flvplayer();
-$_zp_flash_player = $option_interface; // claim to be the flash player.
 
-if ($external) return; // can't process external album images
-
-
-
+if ($external) {
+	setOption('zp_plugin_flvplayer',0);
+} else {
+	$option_interface = new flvplayer();
+	$_zp_flash_player = $option_interface; // claim to be the flash player.
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>');
+}
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
 // load the script needed
 
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>');
 
 /**
  * Plugin option handling class

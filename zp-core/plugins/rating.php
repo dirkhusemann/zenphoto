@@ -10,7 +10,6 @@
  * Customize the stars by placing a modified copy of jquery.rating.css in your theme folder
  *  
  * @author Stephen Billard (sbillard)and Malte Müller (acrylian)
- * @version 2.0.1
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');

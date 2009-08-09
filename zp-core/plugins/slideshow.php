@@ -16,7 +16,6 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.2.6
  * @package plugins
  */
 

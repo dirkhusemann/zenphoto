@@ -10,7 +10,6 @@
  * NOTE: Flash players do not support external albums!
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.3
  * @package plugins 
  */
 
@@ -20,25 +19,28 @@ $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3_playlist.php.html";
 $plugin_disable = $external;
-$option_interface = new flowplayer3_playlist();
 
-if ($external) return; // can't process external album images 
-
-// register the scripts needed - only playlist additions, all others incl. the playlist plugin are loaded by the flowplayer3 plugin!
-if ( in_context(ZP_ALBUM) && !OFFSET_PATH) {
-	$theme = getCurrentTheme();
-	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/flowplayer3_playlist.css';
-	if (file_exists($css)) {
-		$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/flowplayer3_playlist.css';
-	} else {
-		$css = WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3_playlist/flowplayer3_playlist.css';
+if ($external) {
+	setOption('zp_plugin_flowplayer3_playlist',0);
+} else {
+	$option_interface = new flowplayer3_playlist();
+	// register the scripts needed - only playlist additions, all others incl. the playlist plugin are loaded by the flowplayer3 plugin!
+	if (in_context(ZP_ALBUM) && !OFFSET_PATH) {
+		$theme = getCurrentTheme();
+		$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/flowplayer3_playlist.css';
+		if (file_exists($css)) {
+			$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/flowplayer3_playlist.css';
+		} else {
+			$css = WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3_playlist/flowplayer3_playlist.css';
+		}
+		addPluginScript('
+			<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.mousewheel.pack.js"></script>
+			<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.scrollable.pack.js"></script>
+			<link rel="stylesheet" type="text/css" href="' . $css . '" />
+			');
 	}
-	addPluginScript('
-		<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.mousewheel.pack.js"></script>
-		<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.scrollable.pack.js"></script>
-		<link rel="stylesheet" type="text/css" href="' . $css . '" />
-		');
 }
+
 /**
  * Plugin option handling class
  *

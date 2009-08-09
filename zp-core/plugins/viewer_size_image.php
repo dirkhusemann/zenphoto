@@ -17,7 +17,6 @@
  * displaying the image.
  *
  * @author Stephen Billard (sbillard)
- * @version 1.1.0
  * @package plugins
  */
 

@@ -7,7 +7,6 @@
  * You can choose on the plugin's admin option what tags you want to be printed.
  *   
  * @author Malte Müller (acrylian)
- * @version 1.1.0
  * @package plugins 
  */
 

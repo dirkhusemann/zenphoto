@@ -6,7 +6,6 @@
  * Note on splash images: Flowplayer will try to use the first frame of a movie as a splash image or a videothumb if existing.
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.3.2
  * @package plugins 
  */
 
@@ -16,14 +15,17 @@ $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3.php.html";
 $plugin_disable = $external;
-$option_interface = new flowplayer3();
-$_zp_flash_player = $option_interface; // claim to be the flash player.
 
-if ($external) return; // can't process external album images
+if ($external) {
+	setOption('zp_plugin_flowplayer3',0);
+} else {
+	$option_interface = new flowplayer3();
+	$_zp_flash_player = $option_interface; // claim to be the flash player.
+	// register the scripts needed
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.js"></script>
+	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist.pack.js"></script>');
+}
 
-// register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.js"></script>
-<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist.pack.js"></script>');
 
 if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 24);
 /**

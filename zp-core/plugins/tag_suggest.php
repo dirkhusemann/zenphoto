@@ -4,7 +4,6 @@
  * Just activate the plugin and the feature is available on the theme's search field.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard) - an adaption of Remy Sharp's <a href='http://remysharp.com/2007/12/28/jquery-tag-suggestion/ '>jQuery Tag Suggestion</a>
- * @version 1.0.0
  * @package plugins
  */
 
