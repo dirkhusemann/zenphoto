@@ -60,7 +60,7 @@ if (!function_exists('imagerotate')) {
  * @param int $w
  * @param int $h
  */
-function imageBlurGD($imgCanvas, $radius, $w, $h) {
+function imageBlurGD($imgCanvas, $imgCanvas2, $radius, $w, $h) {
 	$imgBlur = imagecreatetruecolor($w, $h);
 	$imgBlur2 = imagecreatetruecolor($w, $h);
 	imagecopy($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h); // background

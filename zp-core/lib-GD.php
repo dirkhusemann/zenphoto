@@ -174,7 +174,7 @@ function zp_imageUnsharpMask($img, $amount, $radius, $threshold) {
 	imagecopy ($imgCanvas, $img, 0, 0, 0, 0, $w, $h);
 	imagecopy ($imgCanvas2, $img, 0, 0, 0, 0, $w, $h);
 
-	imageBlurGD($imgCanvas, $radius, $w, $h);
+	imageBlurGD($imgCanvas, $imgCanvas2, $radius, $w, $h);
 
 	// Calculate the difference between the blurred pixels and the original
 	// and set the pixels

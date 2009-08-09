@@ -13,7 +13,7 @@
  * @param int $w
  * @param int $h
  */
-function imageBlurGD($imgCanvas, $radius, $w, $h) {
+function imageBlurGD($imgCanvas, $imgCanvas2, $radius, $w, $h) {
 	// Gaussian blur matrix:
 	//    1    2    1
 	//    2    4    2
