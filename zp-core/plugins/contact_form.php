@@ -44,7 +44,12 @@ class contactformOptions {
 		setOptionDefault('contactform_captcha', 0);
 		setOptionDefault('contactform_subject', "required");
 		setOptionDefault('contactform_message', "required");
-		setOptionDefault('contactform_mailaddress', getAdminEmail());
+		$mailings = getAdminEmail();
+		$email_list = '';
+		foreach ($mailings as $email) {
+			$email_list .= ';'.$email;
+		}
+		setOptionDefault('contactform_mailaddress', substr($email_list,1));
 	}
 
 
@@ -174,10 +179,8 @@ function printContactForm() {
 		} else {
 			$mailaddress = $mailcontent['email'];
 			$name = $mailcontent['name'];
-			$headers = 'From: '.$mailaddress.''."\r\n";
-			//$headers .= 'Cc: '.$mailaddress.''."\r\n"; // somehow does not work on all servers!
 			$subject = $mailcontent['subject']." (".getBareGalleryTitle().")";
-			$message = $mailcontent['message']."\n";
+			$message = $mailcontent['message']."\n\n";
 			if(!empty($mailcontent['title'])) { $message .= $mailcontent['title']; }
 			if(!empty($mailcontent['name'])) { $message .= $mailcontent['name']."\n"; }
 			if(!empty($mailcontent['company'])) { $message .= $mailcontent['company']."\n"; }
@@ -197,9 +200,9 @@ function printContactForm() {
 				?>
 				<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
 					<input type="hidden" id="confirm" name="confirm" value="confirm" />
+					<input type="hidden" id="name" name="name"	value="<?php echo $name; ?>" />
 					<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
 					<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
-					<input type="hidden" id="headers" name="headers" value="<?php echo $headers; ?>" />
 					<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
 					<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
 				</form>
@@ -215,12 +218,16 @@ function printContactForm() {
 	if(isset($_POST['confirm'])) {
 		$subject = sanitize($_POST['subject']);
 		$message = sanitize($_POST['message'],1);
-		$headers = sanitize($_POST['headers']);
 		$mailaddress = sanitize($_POST['mailaddress']);
-		$contactform_mailaddress = getOption("contactform_mailaddress");
-		$contactform_mailaddress = str_replace(" ","",$contactform_mailaddress);
-		zp_mail($subject, $message, $headers, array($contactform_mailaddress,$mailaddress));
-		echo get_language_string(getOption("contactform_thankstext"));
+		$name = sanitize($_POST['name']);
+		$contactform_mailinglist = getOption("contactform_mailaddress");
+		$mailinglist = explode(';',$contactform_mailinglist);
+		$err_msg = zp_mail($subject, $message, $mailaddress, $name, $mailinglist, array($name=>$mailaddress));
+		if ($err_msg) {
+			echo $err_msg;
+		} else {
+			echo get_language_string(getOption("contactform_thankstext"));
+		}
 		echo '<p><a href="?again">'.get_language_string(getOption('contactform_newmessagelink')).'</a></p>';
 	} else {
 		if (count($error) <= 0) {

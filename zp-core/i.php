@@ -6,15 +6,16 @@
  *******************************************************************************
  * URI Parameters:
  *   s  - size (logical): Based on config, makes an image of "size s."
- *   h  - height (explicit): Image is always h pixels high, w is calculated.
- *   w  - width (explicit): Image is always w pixels wide, h is calculated.
+ *   h  - height (explicit): Image will be resized to h pixels high, w is calculated.
+ *   w  - width (explicit): Image will resized to w pixels wide, h is calculated.
  *   cw - crop width: crops the image to cw pixels wide.
  *   ch - crop height: crops the image to ch pixels high.
  *   cx - crop x position: the x (horizontal) position of the crop area.
  *   cy - crop y position: the y (vertical) position of the crop area.
  *   q  - JPEG quality (1-100): sets the quality of the resulting image.
- *   t  - Set for custom images if used as thumbs (no watermarking.)
+ *   t  - Set for custom images if used as thumbs.
  *
+ * 	 Cropping is performed on the original image before resizing is done.
  * - cx and cy are measured from the top-left corner of the image.
  * - One of s, h, or w _must_ be specified; the others are optional.
  * - If more than one of s, h, or w are specified, s takes priority, then w+h:

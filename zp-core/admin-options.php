@@ -84,9 +84,13 @@ if (isset($_GET['action'])) {
 						$userobj->setRights($rights);
 						$userobj->setAlbums($albums);
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-						saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
-						if ($i == 0) {
-							setOption('admin_reset_date', '1');
+						$msg = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
+						if (empty($msg)) {
+							if ($i == 0) {
+								setOption('admin_reset_date', '1');
+							}
+						} else {
+							$notify = '?mismatch=format&error='.urlencode($msg);
 						}
 					} else {
 						$notify = '?mismatch=password';
@@ -147,6 +151,7 @@ if (isset($_GET['action'])) {
 			setOption('date_format', $f);
 			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
 			setOption('captcha', sanitize($_POST['captcha']));
+			$msg = zp_apply_filter('save_admin_general_data', '');
 			
 			$returntab = "&tab=general";
 		}
@@ -416,6 +421,13 @@ if (isset($_GET['action'])) {
 						case 'text':
 							$value = process_language_string_save($key, 1);
 							break;
+						case 'cleartext':
+							if (isset($_POST[$key])) {
+								$value = sanitize($_POST[$key], 0);
+							} else {
+								$value = '';
+							}
+							break;
 						case 'chkbox':
 							if (isset($_POST[$key])) {
 								$value = sanitize($_POST[$key], 1);
@@ -563,6 +575,9 @@ if ($subtab == 'users') {
 				break;
 			case 'nothing':
 				echo  "<h2>".gettext('User name not provided')."</h2>";
+				break;
+			case 'format':
+				echo '<h2>'.urldecode(sanitize($_GET['error'])).'</h2>';
 				break;
 			default:
 				echo  "<h2>".gettext('Your passwords did not match')."</h2>";
@@ -732,6 +747,16 @@ if (empty($alterrights)) {
 					<br />
 					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
 						value="<?php echo $x; ?>" />
+					<?php
+					$msg = passwordNote();
+					if (!empty($msg)) {
+						?>
+						<p>
+						<?php echo  $msg; ?>
+						</p>
+						<?php
+					}
+					?>
 				</td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<?php printAdminRightsTable($id, $background, $local_alterrights, $userobj->getRights()); ?>	
@@ -1053,6 +1078,7 @@ if (empty($alterrights)) {
 					</td>
 					<td></td>
 				</tr>
+				<?php zp_apply_filter('admin_general_data'); ?>
 			</table>
 		</form>
 	</div>

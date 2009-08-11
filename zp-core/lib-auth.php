@@ -86,6 +86,76 @@ function passwordHash($user, $pass) {
 	return $md5;	
 }
 
+/**
+ * Checks to see if password follows rules
+ * Returns error message if not.
+ *
+ * @param string $pass
+ * @return string
+ */
+function validatePassword($pass) {
+	$l = getOption('min_password_lenght');
+	if ($l > 0) {
+		if (strlen($pass) < $l) return sprintf(gettext('Password must be at least %u characters'), $l);
+	}
+	$p = getOption('password_pattern');
+	if (!empty($p)) {
+		$p = str_replace('\|', "\t", $p);	
+		$patterns = explode('|', $p);
+		foreach ($patterns as $pat) {
+			$pat = trim(str_replace("\t", '|', $pat));
+			if (!empty($pat)) {
+				if (preg_match('/[0-9A-Za-z]-[0-90-9A-Za-z]/', $pat)) {
+					$patrn = $pat;
+				} else {
+					$patrn = addcslashes($pat,'\\/.()[]^-');
+				}
+				if (!preg_match('/(['.$patrn.'])/', $pass)) return sprintf(gettext('Password must contain at least one of <em>%s</em>'), $pat);
+			}		
+		}
+	}
+	return false;
+}
+
+/**
+ * Returns text describing password constraints
+ *
+ * @return string
+ */
+function passwordNote() {
+	$l = getOption('min_password_lenght');
+	$p = getOption('password_pattern');
+	$p = str_replace('\|', "\t", $p);	
+	$c = 0;
+	if (!empty($p)) {
+		$patterns = explode('|', $p);
+		$text = '';
+		foreach ($patterns as $pat) {
+			$pat = trim(str_replace("\t", '|', $pat));
+			if (!empty($pat)) {
+				$c++;
+				$text .= ', <span style="white-space:nowrap;"><strong>{</strong><em>'.$pat.'</em><strong>}</strong></span>';
+			}		
+		}
+		$text = substr($text, 2);
+	}
+	if ($c > 0) {
+		if ($l > 0) {
+			$msg = sprintf(ngettext('<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s.',
+															'<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s.', $c), $l, $text);
+		} else {
+			$msg = sprintf(ngettext('<strong>Note</strong>: passwords must contain at least one character from %s.',
+															'<strong>Note</strong>: passwords must contain at least one character from each of the following groups: %s.', $c), $text);
+		}
+	} else {
+		if ($l > 0) {
+			$msg = sprintf(gettext('<strong>Note</strong>: ptasswords must be at least %u characters long.'), $l);
+		} else {
+			$msg = '';
+		}
+	}
+	return $msg;
+}
 
 /**
  * Saves an admin user's settings
@@ -103,6 +173,11 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $g
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user' AND `valid`=$valid";
 	$result = query_single_row($sql);
+	if (!is_null($pass)) {
+		// validate the password.
+		$msg = validatePassword($pass);
+		if (!empty($msg)) return $msg;
+	}
 	if ($result) {
 		$id = $result['id'];
 		if (is_null($pass)) {
@@ -417,6 +492,8 @@ class lib_auth_options {
 	 */
 	function lib_auth_options() {
 		setOptionDefault('extra_auth_hash_text', '');
+		setOptionDefault('min_password_lenght', 6);
+		setOptionDefault('password_pattern', 'A-Za-z0-9   |   ~!@#$%&*_+`-(),.\^\'"/[]{}=:;?\|');
 	}
 
 	/**
@@ -426,8 +503,12 @@ class lib_auth_options {
 	 */
 	function getOptionsSupported() {
 		return array(	gettext('Augment password hash:') => array('key' => 'extra_auth_hash_text', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication. <strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.'))
-								);
+										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication. <strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.')),
+									gettext('Minimum password length:') => array('key' => 'min_password_lenght', 'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext('Minimum number of characters a password must contain.')),
+									gettext('Password charcters:') => array('key' => 'password_pattern', 'type' => OPTION_TYPE_CLEARTEXT,
+										'desc' => gettext('Passwords must contain at least one of the characters from each of the groups. Groups are separated by "|". (Use "\|" to represent the "|" character in the groups.)'))
+		);
 	}
 }
 				

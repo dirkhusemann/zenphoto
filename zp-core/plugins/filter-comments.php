@@ -60,7 +60,7 @@ function emailReply($comment, $owner) {
 							sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$name, $email, $comment->getWebsite(), $comment->getComment()) . "\n\n" .
 							sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n";
 	$on = gettext('Reply posted');
-	zp_mail("[" . $gallery->getTitle() . "] $on", $message, "", $emails);
+	zp_mail("[" . $gallery->getTitle() . "] $on", $message, NULL, NULL, $emails);
 	return $comment;
 }
 

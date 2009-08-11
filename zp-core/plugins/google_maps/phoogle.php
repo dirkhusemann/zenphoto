@@ -300,50 +300,77 @@ class PhoogleMap{
 	 *
 	 */
 	function showMap($autozoom=false){
-		echo "\n<div id=\"map\" style=\"width: ".$this->mapWidth."px; height: ".$this->mapHeight."px\">\n</div>\n";
-		echo "    <script type=\"text/javascript\">\n
-	
-	function showmap(){
-   	if (GBrowserIsCompatible()) {\n
-     	map = new GMap(document.getElementById(\"map\"), {backgroundColor:'".$this->backGround."'});\n";
-		echo "map.centerAndZoom(new GPoint(".$this->validPoints[0]['long'].",".$this->validPoints[0]['lat']."), ".$this->zoomLevel.");\n";
-		echo "map.enableScrollWheelZoom();\n";
-		echo $this->mapselections."\n";
-		echo $this->mapTypeControl."\n";
-		echo $this->controlType."\n";
-		echo $this->defaultMap."\n";
-		echo "var points = [];\n";
-		
-		$numPoints = count($this->validPoints);
-		for ($g = 0; $g<$numPoints; $g++){
-			echo "points[".$g."] = new GPoint(".$this->validPoints[$g]['long'].",".$this->validPoints[$g]['lat'].");\n";
-			echo "var marker".$g." = new GMarker(points[".$g."]);\n";
-			echo "map.addOverlay(marker".$g.");\n";
-			echo "GEvent.addListener(marker".$g.", \"click\", function() {\n";
-			if (isset($this->validPoints[$g]['htmlMessage'])) {
-				echo "marker".$g.".openInfoWindowHtml(\"".$this->validPoints[$g]['htmlMessage']."\");\n";
-			}else{
-				if (isset($this->validPoints[$g]['passedAddress'])) {
-					$addr = $this->validPoints[$g]['passedAddress'];
-				} else {
-					$addr = '';
+		?>
+		<div id="map" style="width: <?php echo $this->mapWidth; ?>px; height: <?php echo $this->mapHeight; ?>px">
+		</div>
+		<script type="text/javascript">
+		function showmap(){
+	   	if (GBrowserIsCompatible()) {
+	     	map = new GMap(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
+				map.centerAndZoom(new GPoint(<?php echo $this->validPoints[0]['long']; ?>,<?php echo $this->validPoints[0]['lat']; ?>), <?php echo $this->zoomLevel; ?>);
+				map.enableScrollWheelZoom();
+				<?php
+				$types = explode('; ', $this->mapselections); 
+				foreach ($types as $control) {
+					if (!empty($control)) {
+						?>
+						<?php echo $control; ?>;
+						<?php
+					}
 				}
-				echo "marker".$g.".openInfoWindowHtml(\"".$addr."\");\n";
+				?>
+				<?php echo $this->mapTypeControl; ?>
+
+				<?php echo $this->controlType; ?>
+
+				<?php echo $this->defaultMap; ?>
+
+				var points = [];
+				<?php
+				$numPoints = count($this->validPoints);
+
+				for ($g = 0; $g<$numPoints; $g++){
+					?>
+					points[<?php echo $g; ?>] = new GPoint(<?php echo $this->validPoints[$g]['long']; ?>,<?php echo $this->validPoints[$g]['lat']; ?>);
+					var marker<?php echo $g; ?> = new GMarker(points[<?php echo $g; ?>]);
+					map.addOverlay(marker<?php echo $g; ?>);
+					GEvent.addListener(marker<?php echo $g; ?>, "click", function() {
+					<?php
+					if (isset($this->validPoints[$g]['htmlMessage'])) {
+						?>
+						marker<?php echo $g; ?>openInfoWindowHtml("<?php echo $this->validPoints[$g]['htmlMessage']; ?>");
+						<?php
+					} else {
+						if (isset($this->validPoints[$g]['passedAddress'])) {
+							$addr = $this->validPoints[$g]['passedAddress'];
+						} else {
+							$addr = '';
+						}
+						?>
+						marker<?php echo $g; ?>openInfoWindowHtml("<?php echo $addr; ?>");
+						<?php
+					}
+					?>
+					});
+
+				<?php
+				}
+				if ($autozoom) {
+					?>
+					resizeMap( map, points );
+					<?php
+				}
+				?>
+				<?php echo $this->customJS;	?>
+
+				} else {
+					var text = document.createTextNode("<?php echo gettext('Your browser is not compatible with Google maps'); ?>");
+					document.getElementById("map").appendChild(text);
+				}
 			}
-			echo "});\n";
-		}
-		if ($autozoom) {
-			echo 'resizeMap( map, points );';
-		}
-		echo $this->customJS."\n";
-		echo"} else {
-		var text = document.createTextNode(\"".gettext('Your browser is not compatible with Google maps')."\");
-		document.getElementById(\"map\").appendChild(text);
-		}\n
-	}\n";
-		echo "window.onload = showmap;
-		
-    	</script>\n";
+			window.onload = showmap;
+			</script>
+		<?php
 	}
 	///////////THIS BLOCK OF CODE IS FROM Roger Veciana's CLASS (assoc_array2xml) OBTAINED FROM PHPCLASSES.ORG//////////////
 	function xml2array($xml){

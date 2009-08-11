@@ -107,8 +107,8 @@ class SpamFilter  {
 	function hasSpamPattern($text) {
 		$patterns = $this->patternsToDieOn;
 		foreach ($patterns as $pattern) {
-			if (eregi('('.trim($pattern).')', $text, $matches)) {
-				return $matches[1];
+			if (preg_match('/'.addcslashes(trim($pattern),'/').'/i')) {
+				return true;
 			}
 		}
 		return false;

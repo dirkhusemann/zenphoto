@@ -29,36 +29,85 @@ if (isset($_GET['action'])) {
 		} else {
 			$thumbnail = -1;
 		}
-		
+
 		for ($i = 0; $i < $_POST['totalimages']; $i++) {
 			$filename = sanitize($_POST["$i-filename"]);
 
 			// The file might no longer exist
 			$image = newImage($album, $filename);
 			if ($image->exists) {
-				if ($thumbnail == $i) { //selected as album thumb
-					$album = $image->getAlbum();
-					$album->setAlbumThumb($image->filename);
-					$album->save();
+				if (isset($_POST[$i.'-MoveCopyRename'])) {
+					$movecopyrename_action = sanitize($_POST[$i.'-MoveCopyRename'],3);
+				} else {
+					$movecopyrename_action = '';
 				}
-				if (isset($_POST[$i.'-reset_rating'])) {
-					$image->set('total_value', 0);
-					$image->set('total_votes', 0);
-					$image->set('used_ips', 0);
-				}
-				$image->setTitle(process_language_string_save("$i-title", 2));
-				$image->setDesc(process_language_string_save("$i-desc", 1));
+				if ($movecopyrename_action == 'delete') {
+					$image->deleteImage(true);
+				} else {
+					if ($thumbnail == $i) { //selected as album thumb
+						$album = $image->getAlbum();
+						$album->setAlbumThumb($image->filename);
+						$album->save();
+					}
+					if (isset($_POST[$i.'-reset_rating'])) {
+						$image->set('total_value', 0);
+						$image->set('total_votes', 0);
+						$image->set('used_ips', 0);
+					}
+					$image->setTitle(process_language_string_save("$i-title", 2));
+					$image->setDesc(process_language_string_save("$i-desc", 1));
 
 
-				$image->setShow(isset($_POST["$i-Visible"]));
-				$image->setCommentsAllowed(isset($_POST["$i-allowcomments"]));
-				if (isset($_POST["$i-reset_hitcounter"])) {
-					$image->set('hitcounter', 0);
+					$image->setShow(isset($_POST["$i-Visible"]));
+					$image->setCommentsAllowed(isset($_POST["$i-allowcomments"]));
+					if (isset($_POST["$i-reset_hitcounter"])) {
+						$image->set('hitcounter', 0);
+					}
+
+					if (isset($_POST[$i.'-oldrotation'])) {
+						$oldrotation = sanitize_numeric($_POST[$i.'-oldrotation']);
+					} else {
+						$oldrotation = 0;
+					}
+					if (isset($_POST[$i.'-rotation'])) {
+						$rotation = sanitize_numeric($_POST[$i.'-rotation']);
+					} else {
+						$rotation = 0;
+					}
+					if ($rotation != $oldrotation) {
+						$image->set('EXIFOrientation', $rotation);
+						$image->updateDimensions();
+						$album = $image->getAlbum();
+						$gallery->clearCache(SERVERCACHE . '/' . $album->name);
+					}
+					$image->save();
+					// Process move/copy/rename
+					if ($movecopyrename_action == 'move') {
+						$dest = sanitize_path($_POST[$i.'-albumselect'], 3);
+						if ($dest && $dest != $folder) {
+							if (!$image->moveImage($dest)) {
+								$notify = "&mcrerr=1";
+							}
+						} else {
+							// Cannot move image to same album.
+						}
+					} else if ($movecopyrename_action == 'copy') {
+						$dest = sanitize_path($_POST[$i.'-albumselect'],2);
+						if ($dest && $dest != $folder) {
+							if(!$image->copyImage($dest)) {
+								$notify = "&mcrerr=1";
+							}
+						} else {
+							// Cannot copy image to existing album.
+							// Or, copy with rename?
+						}
+					} else if ($movecopyrename_action == 'rename') {
+						$renameto = sanitize_path($_POST[$i.'-renameto'],3);
+						$image->renameImage($renameto);
+					}
 				}
-				$image->save();
 			}
 		}
-
 	}
 }
 // Print our header
@@ -131,6 +180,11 @@ $subtab = printSubtabs('edit', 'mass_edit');
 			$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
 		
 			$currentimage = 0;
+			if (getOption('auto_rotate')) {
+				$disablerotate = '';
+			} else {
+				$disablerotate = ' DISABLED';
+			}
 			foreach ($images as $filename) {
 				$image = newImage($album, $filename);
 				?>
@@ -142,10 +196,16 @@ $subtab = printSubtabs('edit', 'mass_edit');
 					<tr>
 						<td valign="top" width="150" rowspan="14">
 						
+						<a href="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/admin-edit.php?album=<?php echo urlencode($album->name); ?>
+										&amp;image=<?php echo urlencode($image->filename); ?>&amp;tab=imageinfo#IT"
+										title="<?php printf(gettext('full edit %s'), $image->filename); ?>"  >
 						<img
-							id="thumb-<?php echo $currentimage; ?>"
-							src="<?php echo $image->getThumb(); ?>"
-							/>
+								id="thumb-<?php echo $currentimage; ?>"
+								src="<?php echo $image->getThumb(); ?>"
+								alt="<?php printf(gettext('full edit %s'), $image->filename); ?>"
+								title="<?php printf(gettext('full edit %s'), $image->filename); ?>"
+								/>
+							</a>
 						<p><strong><?php echo $image->filename; ?></strong></p>					
 						<p>
 							<label>
@@ -158,7 +218,6 @@ $subtab = printSubtabs('edit', 'mass_edit');
 						<td><?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
 						</td>
 						<td style="padding-left: 1em; text-align: left;" rowspan="14" valign="top">
-							<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
 	     				<div class="box-edit">
 								<label>
 									<span style="white-space:nowrap">
@@ -199,6 +258,71 @@ $subtab = printSubtabs('edit', 'mass_edit');
 										<?php printf(gettext('Reset rating (Rating: %1$s)'), $hc); ?>
 									</span>
 								</label>
+								<hr />
+								<!-- Move/Copy/Rename this image -->
+								<label style="padding-right: .5em">
+									<span style="white-space:nowrap">
+										<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
+											onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" style="display:inline" /> <?php echo gettext("Rename File");?>
+									</span>
+								</label>
+								<label style="padding-right: .5em">
+									<span style="white-space:nowrap">
+										<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
+											onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image") ?>
+									</span>
+								</label>
+								<div id="<?php echo $currentimage; ?>-renamediv" style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
+								<input name="<?php echo $currentimage; ?>-renameto" type="text" value="<?php echo $image->filename;?>" /><br />
+								<br /><p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="../../images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+								</p>
+								</div>
+								<div id="deletemsg<?php echo $currentimage; ?>"	style="padding-top: .5em; padding-left: .5em; color: red; display: none">
+								<?php echo gettext('Image will be deleted when changes are saved.'); ?>
+								<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="../../images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+								</p>
+								</div>
+								<span style="line-height: 0em;"><br clear=all /></span>						
+								<?php
+								if (isImagePhoto($image)) {
+									?>
+									<hr />
+									<?php echo gettext("Rotation:"); ?>
+									<br />
+									<?php
+									$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
+									$rotation = $splits[0];
+									if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
+									?>
+									<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
+									<label style="padding-right: .5em">
+										<span style="white-space:nowrap">
+											<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> />
+											<?php echo gettext('none'); ?>
+										</span>
+									</label>
+									<label style="padding-right: .5em">
+										<span style="white-space:nowrap">
+											<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> />
+											<?php echo gettext('90 degrees'); ?>
+										</span>
+									</label>
+									<label style="padding-right: .5em">
+										<span style="white-space:nowrap">
+											<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> />
+											<?php echo gettext('180 degrees'); ?>
+										</span>
+									</label>
+									<label style="padding-right: .5em">
+										<span style="white-space:nowrap">
+											<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> />
+											<?php echo gettext('270 degrees'); ?>
+										</span>
+									</label>
+									<span style="line-height: 0em;"><br clear=all /></span>
+									<?php
+								}
+								?>
 							</div>
 						</td>
 					</tr>

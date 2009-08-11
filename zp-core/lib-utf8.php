@@ -298,10 +298,10 @@ class utf8 {
 	 */
 	function detect($string) {
 		if (function_exists('mb_detect_encoding')) return mb_detect_encoding($string);
-		if (!ereg("[\x80-\xFF]", $string) && !ereg("\x1B", $string))
+		if (!preg_match("/[\x80-\xFF]/", $string) && !preg_match("/\x1B/", $string))
 			return 'US-ASCII';
 
-		if (!ereg("[\x80-\xFF]", $string) && ereg("\x1B", $string))
+		if (!preg_match("/[\x80-\xFF]/", $string) && preg_match("/\x1B/", $string))
 			return 'ISO-2022-JP';
 
 		if (preg_match("/^([\x01-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF][\x80-\xBF])+$/", $string) == 1)
@@ -533,11 +533,11 @@ class utf8 {
 
 		if(ini_get('safe_mode')) 
 		{
-			@mail($to, $subject, $message, $additional_headers); 
+			return @mail($to, $subject, $message, $additional_headers); 
 		}
 		else
 		{
-			@mail($to, $subject, $message, $additional_headers, $additional_parameter);
+			return @mail($to, $subject, $message, $additional_headers, $additional_parameter);
 		}
 	}
 

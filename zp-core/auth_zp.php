@@ -62,6 +62,7 @@ if (!isset($_POST['login'])) {
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
 			// was it a request for a reset?
 			if (isset($_POST['code_h']) && $_zp_captcha->checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
+				require_once(dirname(__FILE__).'/class-load.php'); // be sure that the plugins are loaded for the mail handler		
 				if (empty($post_user)) {
 					$requestor = gettext('You are receiving this e-mail because of a password reset request on your Zenphoto gallery.');
 				} else {
@@ -74,7 +75,11 @@ if (!isset($_POST['login'])) {
 					$user = null;
 					foreach ($admins as $tuser) {
 						if ($tuser['user'] == $post_user && !empty($tuser['email'])) {
-							$mails[] = $tuser['email'];
+							$name = $tuser['name'];
+							if (empty($name)) {
+								$name = $tuser['user'];
+							}
+							$mails[$name] = $tuser['email'];
 							$user = $tuser;
 							break;
 						}
@@ -82,7 +87,11 @@ if (!isset($_POST['login'])) {
 				}
 				$tuser = array_shift($admins);
 				if ($tuser['email'] && count($mails) == 0 || $mails[0] != $tuser['email']) {
-					$mails [] = $tuser['email'];
+					$name = $tuser['name'];
+					if (empty($name)) {
+							$name = $tuser['user'];
+					}
+					$mails [$name] = $tuser['email'];
 					if (is_null($user)) {
 						$user = $tuser;
 					}
@@ -95,8 +104,12 @@ if (!isset($_POST['login'])) {
 				$msg = "\n".$requestor.
 						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-options.php?ticket=$ref&user=$adm") .
 						"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
-				zp_mail(gettext("The Zenphoto information you requested"),  $msg, '', $mails);
-				$_zp_login_error = 2;
+				$err_msg = zp_mail(gettext("The Zenphoto information you requested"),  $msg, NULL, NULL, $mails);
+				if (empty($err_msg)) {
+					$_zp_login_error = 2;
+				} else {
+					$_zp_login_error = $err_msg;
+				}
 			} else {
 				$_zp_login_error = 1;
 			}

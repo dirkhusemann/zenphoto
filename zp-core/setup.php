@@ -613,7 +613,7 @@ if (!$checked) {
 			} else {
 				$library = '';
 			}
-			$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library support in your PHP')) && $good;
+			$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library such as the <em>GD library</em> in your PHP')) && $good;
 			if (!empty($library)) {
 				$missing = array();
 				if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
@@ -1080,29 +1080,27 @@ if ($debug) {
 											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
 											"<br />".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
-		//robots.txt file
-		
-		// TODO: refine error messages post 1.2.6 release
-		$robots = file_get_contents(dirname(__FILE__).'/example_robots.txt');
-		if ($robots === false) {
-			$rslt = -1;
+	//robots.txt file
+	$robots = file_get_contents(dirname(__FILE__).'/example_robots.txt');
+	if ($robots === false) {
+		checkmark(-1, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not find the  <em>example_robots.txt</em> file.'));
+	} else {
+		if (file_exists(dirname(dirname(__FILE__)).'/robots.txt')) {
+			checkmark(-2, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup did not create a <em>robots.txt</em> file because one already exists.'));
 		} else {
-			if (file_exists(dirname(dirname(__FILE__)).'/robots.txt')) {
-				$rslt = -2;
+			$text = explode('****delete all lines above and including this one *******'."\n", $robots);
+			$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
+			if ($d == '/') $d = '';
+			$robots = str_replace('/zenphoto', $d, $text[1]);
+			$rslt = file_put_contents(dirname(dirname(__FILE__)).'/robots.txt', $robots);
+			if ($rslt === false) {
+				$rslt = -1;
 			} else {
-				$text = explode('****delete all lines above and including this one *******'."\n", $robots);
-				$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
-				if ($d == '/') $d = '';
-				$robots = str_replace('/zenphoto', $d, $text[1]);
-				$rslt = file_put_contents(dirname(dirname(__FILE__)).'/robots.txt', $robots);
-				if ($rslt === false) {
-					$rslt = -1;
-				} else {
-					$rslt = 1;
-				}
+				$rslt = 1;
 			}
+			checkmark($rslt, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not create a <em>robots.txt</em> file.'));
 		}
-		checkmark($rslt, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not create a <em>robots.txt</em> file.'));
+	}
 			
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
 		checkmark(-1, 'albums', gettext("albums [<code>\$conf['external_album_folder']</code> is deprecated]"), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));

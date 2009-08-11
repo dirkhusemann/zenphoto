@@ -377,60 +377,74 @@ function is_valid_email_zp($input_email) {
 
 
 /**
- * Send an mail to the admin user(s). We also attempt to intercept any form injection
- * attacks by slime ball spammers.
+ * Send an mail to the mailing list. We also attempt to intercept any form injection
+ * attacks by slime ball spammers. Returns error message if send failure.
  *
  * @param string $subject  The subject of the email.
  * @param string $message  The message contents of the email.
- * @param string $headers  Optional headers for the email.
- * @param array $admin_emails a list of email addresses
+ * @param string $from_mail Optional sender for the email.
+ * @param string $from_name Optional sender for the name.
+ * @param array $email_list a list of email addresses
+ * 
+ * @return string
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
-	global $_zp_UTF8;
-	if (is_null($admin_emails)) { $admin_emails = getAdminEmail(); }
-	if (count($admin_emails) > 0) {
-		// Make sure no one is trying to use our forms to send Spam
-		// Stolen from Hosting Place:
-		//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
-		$badStrings = array("Content-Type:", "MIME-Version:",	"Content-Transfer-Encoding:",	"bcc:",	"cc:");
-		foreach($_POST as $k => $v) {
-			foreach($badStrings as $v2) {
-				if (strpos($v, $v2) !== false) {
-					header("HTTP/1.0 403 Forbidden");
-					die("Forbidden");
-					exit();
-				}
-			}
-		}
-
-		foreach($_GET as $k => $v){
-			foreach($badStrings as $v2){
-				if (strpos($v, $v2) !== false){
-					header("HTTP/1.0 403 Forbidden");
-					die("Forbidden");
-					exit();
-				}
-			}
-		}
-
-		if( $headers == '' ) {
-			$headers = "From: " . get_language_string(getOption('gallery_title'), getOption('locale')) . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
-		}
-
-		// Convert to UTF-8
-		if (getOption('charset') != 'UTF-8') {
-			$subject = $_zp_UTF8->convert($subject, getOption('charset'));
-			$message = $_zp_UTF8->convert($message, getOption('charset'));
-		}
-
-		// Send the mail
-		foreach ($admin_emails as $email) {
-			$_zp_UTF8->send_mail($email, $subject, $message, $headers);
-		}
+function zp_mail($subject, $message, $from_mail=NULL, $from_name=NULL, $email_list=null, $cc_addresses=NULL) {
+	$result = '';
+	if (is_null($email_list)) {
+		$email_list = getAdminEmail();
 	}
+	if (is_null($cc_addresses)) {
+		$cc_addresses = array();
+	}
+	if (count($email_list) > 0) {
+		if (zp_has_filter('sendmail')) {
+			// Make sure no one is trying to use our forms to send Spam
+			// Stolen from Hosting Place:
+			//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
+			$badStrings = array("Content-Type:", "MIME-Version:",	"Content-Transfer-Encoding:",	"bcc:",	"cc:");
+			foreach($_POST as $k => $v) {
+				foreach($badStrings as $v2) {
+					if (strpos($v, $v2) !== false) {
+						header("HTTP/1.0 403 Forbidden");
+						die("Forbidden");
+						exit();
+					}
+				}
+			}
+
+			foreach($_GET as $k => $v){
+				foreach($badStrings as $v2){
+					if (strpos($v, $v2) !== false){
+						header("HTTP/1.0 403 Forbidden");
+						die("Forbidden");
+						exit();
+					}
+				}
+			}
+
+			if(is_null($from_mail)) {
+				$from_mail = "zenphoto@" . $_SERVER['SERVER_NAME'];
+				$from_name = get_language_string(getOption('gallery_title'), getOption('locale'));
+			}
+
+			// Convert to UTF-8
+			if (getOption('charset') != 'UTF-8') {
+				$subject = $_zp_UTF8->convert($subject, getOption('charset'));
+				$message = $_zp_UTF8->convert($message, getOption('charset'));
+			}
+
+			// Send the mail
+			$result = zp_apply_filter('sendmail', '', $email_list, $subject, $message, $from_mail, $from_name, $cc_addresses); // will be true if all mailers succeeded
+		} else {
+			$result = gettext('Mail send failed. There is no mail handler configured.');
+		}
+	} else {
+		$result = gettext('Mail send failed. The "to" list is empty.');
+	}
+	return $result;
 }
 
 /**

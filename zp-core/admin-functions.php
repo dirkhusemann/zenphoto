@@ -351,16 +351,30 @@ function printLoginForm($redirect=null, $logo=true) {
 	<div id="loginform">
 	<?php
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
-	if ($_zp_login_error == 1) {
+	switch ($_zp_login_error) {
+		case 1:
+			?>
+			<div class="errorbox" id="message"><h2><?php echo gettext("There was an error logging in."); ?></h2><?php echo gettext("Check your username and password and try again.");?></div>
+			<?php
+			break;
+		case 2:
+			?>
+			<div class="messagebox" id="fade-message">
+			<h2><?php echo gettext("A reset request has been sent."); ?></h2>
+			</div>
+			<?php
+			break;
+		default:
+			if (!empty($_zp_login_error)) {
+				?>
+				<div class="errorbox" id="fade-message">
+				<h2><?php echo $_zp_login_error; ?></h2>
+				</div>
+				<?php
+			}
+			break;
+	}
 	?>
-		<div class="errorbox" id="message"><h2><?php echo gettext("There was an error logging in."); ?></h2><?php echo gettext("Check your username and password and try again.");?></div>
-	<?php
-	} else if ($_zp_login_error == 2){
-	?>
-		<div class="messagebox" id="fade-message">
-		<h2><?php echo gettext("A reset request has been sent."); ?></h2>
-		</div>
-	<?php } ?>
 	<form name="login" action="#" method="post">
 	<input type="hidden" name="login" value="1" />
 	<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
@@ -640,6 +654,7 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  *
  * There are four type of custom options:
  * 		OPTION_TYPE_TEXTBOX:				a textbox
+ * 		OPTION_TYPE_CLEAARTEXT:			a textbox, but no sanitization on save
  * 		OPTION_TYPE_CHECKBOX:				a checkbox
  * 		OPTION_TYPE_CUSTOM:					handled by $optionHandler->handleOption()
  * 		OPTION_TYPE_TEXTAREA:				a textarea
@@ -660,6 +675,8 @@ define('OPTION_TYPE_SELECTOR',5);
 define('OPTION_TYPE_CHECKBOX_ARRAY',6);
 define('OPTION_TYPE_CHECKBOX_UL',7);
 define('OPTION_TYPE_COLOR_PICKER',8);
+define('OPTION_TYPE_CLEARTEXT',9);
+
 function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $supportedOptions=NULL) {
 	$whom = get_class($optionHandler);
 	if (is_null($supportedOptions)) $supportedOptions = $optionHandler->getOptionsSupported();
@@ -718,11 +735,18 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $su
 				<td width="175"><?php echo $indent . $option; ?></td>
 				<?php
 				switch ($type) {
+					case OPTION_TYPE_CLEARTEXT:
+						$multilingual = false;
 					case OPTION_TYPE_TEXTBOX:
 					case OPTION_TYPE_TEXTAREA:
+						if ($type == OPTION_TYPE_CLEARTEXT) {
+							$clear = 'clear';
+						} else {
+							$clear = '';
+						}
 						?>
 						<td width="350px">
-							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value=0 />
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.$clear.'text-'.$key; ?>" value=0 />
 							<?php
 							if ($multilingual) {
 								print_language_string_list($v, $key, $type, NULL, $editor);

@@ -106,7 +106,7 @@ if (!OFFSET_PATH) { // handle form post
 			saveAdmin($adminuser['user'], NULL, $admin_n = $adminuser['name'], $admin_e = $adminuser['email'], $rights, NULL);
 			if (getOption('register_user_notify')) {
 				zp_mail(gettext('Zenphoto Gallery registration'),
-				sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$admin_n, $adminuser['user'], $admin_e));
+									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$admin_n, $adminuser['user'], $admin_e));
 			}
 			$notify = 'verified';
 		} else {
@@ -147,12 +147,13 @@ if (!OFFSET_PATH) { // handle form post
 					}
 				}
 				if (empty($notify)) {
-					saveAdmin($user, $pass, $admin_n, $admin_e, 0, NULL, '', '');
-					$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
-					$message = sprintf(gettext('You have received this email because you registered on the site. To complete your registration visit %s.'), $link);
-					$headers = "From: " . $_zp_gallery->getTitle() . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
-					zp_mail(gettext('Registration confirmation'), $message, $headers, array($admin_e));
-					$notify = 'accepted';
+					$notify = saveAdmin($user, $pass, $admin_n, $admin_e, 0, NULL, '', '');
+					if (empty($notify)) {
+						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
+						$message = sprintf(gettext('You have received this email because you registered on the site. To complete your registration visit %s.'), $link);
+						zp_mail(gettext('Registration confirmation'), $message, NULL, NULL, array($user=>$admin_e));
+						$notify = 'accepted';
+					}
 				}
 			} else {
 				$notify = 'mismatch';
@@ -225,6 +226,9 @@ function printRegistrationForm($thanks=NULL) {
 					break;
 				case 'invalidcaptcha':
 					echo gettext('The captcha you entered was not correct.');
+					break;
+				default:
+					echo $notify;
 					break;
 			}
 			echo '</p>';

@@ -751,7 +751,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
 								<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
-									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image.") ?>
+									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image") ?>
 							</span>
 						</label>
 						<div id="<?php echo $currentimage; ?>-movecopydiv"

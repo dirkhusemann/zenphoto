@@ -109,7 +109,71 @@ if (isset($_GET['action'])) {
 printAdminHeader();
 /* MULTI FILE UPLOAD: Script additions */ ?>
 <link rel="stylesheet" href="admin-uploadify/uploadify.css" type="text/css" />
+<script type="text/javascript">
+var uploadifier_replace_message =  "<?php echo gettext('Do you want to replace the file %s?'); ?>";
+// sprintf function for javascript 
+function sprintf() { 
+if (!arguments || arguments.length < 1 ||!RegExp) { return; } 
+var str = arguments[0]; 
+var re = /([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X)(.*)/; 
+var a = b = [], numSubstitutions = 0, numMatches = 0; 
+while (a = re.exec(str)) { 
+var leftpart = a[1], pPad = a[2], pJustify = a[3], pMinLength = a[4]; 
+var pPrecision = a[5], pType = a[6], rightPart = a[7]; numMatches++; 
+if (pType == '%') { 
+subst = '%'; 
+} else { 
+numSubstitutions++; 
+if (numSubstitutions >= arguments.length) { 
+alert('Error! Not enough function arguments (' + 
+(arguments.length - 1) + ', excluding the string)\n' + 
+'for the number of substitution parameters in string (' + 
+numSubstitutions + ' so far).'); 
+} 
+var param = arguments[numSubstitutions]; 
+var pad = ''; 
+if (pPad && pPad.substr(0,1) == "'") { 
+pad = leftpart.substr(1,1); 
+} else if (pPad) { 
+pad = pPad; 
+} 
+var justifyRight = true; 
+if (pJustify && pJustify === "-") justifyRight = false; 
+var minLength = -1; 
+if (pMinLength) minLength = parseInt(pMinLength); 
+var precision = -1; 
+if (pPrecision && pType == 'f') { 
+precision = parseInt(pPrecision.substring(1)); 
+} 
+var subst = param; 
+switch (pType) { 
+case 'b': subst = parseInt(param).toString(2); break; 
+case 'c': subst = String.fromCharCode(parseInt(param)); break; 
+case 'd': subst = parseInt(param)? parseInt(param) : 0; break; 
+case 'u': subst = Math.abs(param); break; 
+case 'f': subst = (precision > -1)? 
+Math.round(parseFloat(param) * Math.pow(10, precision)) / 
+Math.pow(10, precision) : parseFloat(param); break; 
+case 'o': subst = parseInt(param).toString(8); break; 
+case 's': subst = param; break; 
+case 'x': subst = ('' + 
+parseInt(param).toString(16)).toLowerCase(); break; 
+case 'X': subst = ('' + 
+parseInt(param).toString(16)).toUpperCase(); break; 
+} 
+var padLeft = minLength - subst.toString().length; 
+if (padLeft > 0) { 
+var arrTmp = new Array(padLeft+1); 
+var padding = arrTmp.join(pad?pad:" "); 
+} else { 
+var padding = ""; } } 
+str = leftpart + padding + subst + rightPart; 
+} 
+return str; 
+} 
+</script>
 <script type="text/javascript" src="admin-uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="admin-uploadify/swfobject.js"></script>
 <?php
 echo "\n</head>";
 echo "\n<body>";
@@ -300,9 +364,9 @@ if (ini_get('safe_mode')) { ?>
 			<div>
 			<!-- UPLOADIFY JQUERY/FLASH MULTIFILE UPLOAD TEST -->
 				<script type="text/javascript">
-					$(document).ready(function() { 
-						$('#fileUpload').fileUpload({
-							'uploader': 'admin-uploadify/uploader.swf',
+					$(document).ready(function() { 					
+						$('#fileUpload').uploadify({ 
+							'uploader': 'admin-uploadify/uploadify.swf',
 							'cancelImg': 'images/fail.png',
 							'script': 'admin-uploadify/uploader.php',
 							'scriptData': {'auth': '<?php echo md5(serialize($_zp_current_admin)); ?>'},
@@ -327,10 +391,22 @@ if (ini_get('safe_mode')) { ?>
 							'height': '<?php echo $info[1] ?>',
 							'width': '<?php echo $info[0] ?>',
 							<?php echo $rollover; ?>
-/* TODO: enable checkScript and use onCheck for the messages once we figure out how to do that.		
 							'checkScript': 'admin-uploadify/check.php',
-							'onCheck':	function(event, scritp, queue, folder, single) {
-														alert('onCheck trigger');
+/* Uploadify does not really support this onCheck facility (it is unusable as implemented, this gets called fore each element
+										passing the whole queue each time!)							
+							'onCheck':	function(event, script, queue, folder, single) {
+							
+														alert('folder: '+folder);
+														alert('single: '+single);
+														for (var key in queue ) {
+															if (queue[key] != folder) {
+																var replaceFile = confirm("Do you want to replace the file " + queue[key] + "?");
+																if (!replaceFile) {
+																	document.getElementById(jQuery(event.target).attr('id') + 'Uploader').cancelFileUpload(key, true,true);
+																}
+															}
+														}
+														return false;
 													},
 */
 							'displayData': 'speed',
@@ -344,11 +420,11 @@ if (ini_get('safe_mode')) { ?>
 					if($('#folderdisplay').val() == "") {
 						$('#fileUploadbuttons').hide();
 					} else {
-						$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
 						$('#fileUploadbuttons').show();
 					}
 					$('#albumselectmenu').change(function(){
-						$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
 						if($('#folderdisplay').val() == "") {
 							$('#fileUploadbuttons').hide();
 						} else {
@@ -356,7 +432,7 @@ if (ini_get('safe_mode')) { ?>
 						}
 					});
 					$('#albumtitle').change(function(){
-						$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
 						if($('#folderdisplay').val() == "") {
 							$('#fileUploadbuttons').hide();
 						} else {
@@ -364,7 +440,7 @@ if (ini_get('safe_mode')) { ?>
 						}
 					});
 					$('#folderdisplay').change(function(){
-						$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
 						if($('#folderdisplay').val() == "") {
 							$('#fileUploadbuttons').hide();
 						} else {
@@ -377,8 +453,8 @@ if (ini_get('safe_mode')) { ?>
 					<?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?>
 				</div>
 				<p class="buttons" id="fileUploadbuttons" style="display: none;">
-					<a href="javascript:$('#fileUpload').fileUploadStart()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
-					<a href="javascript:$('#fileUpload').fileUploadClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
+					<a href="javascript:$('#fileUpload').uploadifyUpload()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
+					<a href="javascript:$('#fileUpload').uploadifyClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
 				<br clear: all /><br />
 				</p>
 				<p><?php echo gettext('If your upload does not work try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=http\');" >http-browser single file upload</a> or use FTP instead.'); ?></p>

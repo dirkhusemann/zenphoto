@@ -17,8 +17,21 @@
 			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo $user; ?>" size="22" /></td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Password:"); ?></td>
-			<td><input type="password" id="adminpass" name="adminpass"	value="" size="23" /></td>
+			<td valign="top" ><?php echo gettext("Password:"); ?></td>
+			<td width=400 valign="top">
+				<p style="line-height: 1em;">
+					<input type="password" id="adminpass" name="adminpass"	value="" size="23" />
+					<?php
+					$msg = passwordNote();
+					if (!empty($msg)) {
+						?>
+						<br />
+						<?php
+						echo  $msg;
+					}
+					?>
+				</p>
+			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("re-enter:"); ?></td>

@@ -220,9 +220,10 @@ zp-core/admin-upload.php
 zp-core/admin-uploadify/cancel.png
 zp-core/admin-uploadify/check.php
 zp-core/admin-uploadify/jquery.uploadify.js
+zp-core/admin-uploadify/swfobject.js
 zp-core/admin-uploadify/uploader.php
-zp-core/admin-uploadify/uploader.swf
 zp-core/admin-uploadify/uploadify.css
+zp-core/admin-uploadify/uploadify.swf
 zp-core/admin.css
 zp-core/admin.php
 zp-core/album-zip.php
@@ -503,6 +504,10 @@ zp-core/plugins/image-massedit/image-massedit_tab.php
 zp-core/plugins/image-massedit.php
 zp-core/plugins/image_album_statistics.php
 zp-core/plugins/paged_thumbs_nav.php
+zp-core/plugins/PHPMailer/class.phpmailer.php
+zp-core/plugins/PHPMailer/class.pop3.php
+zp-core/plugins/PHPMailer/class.smtp.php
+zp-core/plugins/PHPMailer.php
 zp-core/plugins/print_album_menu.php
 zp-core/plugins/rating/alt_star.png
 zp-core/plugins/rating/clear.png
@@ -1502,6 +1507,7 @@ zp-core/plugins/zenpage/zenpage-template-functions.php
 zp-core/plugins/zenpage/zenpage.css
 zp-core/plugins/zenpage/zp-functions.php
 zp-core/plugins/zenpage.php
+zp-core/plugins/zenphoto_sendmail.php
 zp-core/setup-option-defaults.php
 zp-core/setup-primitive.php
 zp-core/setup.php

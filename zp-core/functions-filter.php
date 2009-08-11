@@ -196,17 +196,17 @@ function zp_has_filter($hook, $function_to_check = false) {
 	global $_zp_filters;
 
 	$has = !empty($_zp_filters[$hook]);
-	if ( false === $function_to_check || false == $has )
+	if ( false === $function_to_check || false == $has ) {
 		return $has;
-
-	if ( !$idx = zp_filter_unique_id($hook, $function_to_check, false) )
+	}
+	if ( !$idx = zp_filter_unique_id($hook, $function_to_check, false) ) {
 		return false;
+	}
 
 	foreach ( (array) array_keys($_zp_filters[$hook]) as $priority ) {
 		if ( isset($_zp_filters[$hook][$priority][$idx]) )
 			return $priority;
 	}
-
 	return false;
 }
 
