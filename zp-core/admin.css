@@ -108,7 +108,7 @@ h2 {
 
 h2.h2_bordered {
 	font-weight: bold;
-	padding: 8px 0px 4px 6px;
+	padding: 4px 12px;
 	border-bottom: 2px solid #cccccc;
 	background-image: url(images/admin-headlineback.jpg);
 	background-repeat: repeat-x;
@@ -155,7 +155,7 @@ p {
 	font-size: 115%;
 	display: block;
 	float: left;
-	padding: 8px 10px 4px 10px;
+	padding: 6px 12px;
 	margin: 0px 8px 0px 0px;
 	text-decoration: none;
 	font-weight: normal;
@@ -244,7 +244,7 @@ p {
 	font-size: 115%;
 	display: block;
 	float: left;
-	padding: 8px 10px 4px 10px;
+	padding: 6px 12px;
 	margin: 0px 8px 0px 0px;
 	text-decoration: none;
 	font-weight: normal;
@@ -418,7 +418,7 @@ table.bordered {
 
 table.bordered th {
 	font-weight: bold;
-	padding: 8px 0px 4px 6px;
+	padding: 4px 12px;
 	border-bottom: 2px solid #cccccc;
 	background: #ECF1F2;
 	background-image: url(images/admin-headlineback.jpg);
@@ -1365,7 +1365,7 @@ span.tagMatches span {
 .h2_bordered_edit {
 	width: 18.4em;
 	font-weight: bold;
-	padding: 8px 10px 4px 6px;
+	padding: 5px 8px 5px 8px;
 	border-bottom: 2px solid #cccccc;
 	border-left: 1px solid  #cccccc;
 	border-right: 1px solid  #cccccc;
