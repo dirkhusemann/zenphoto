@@ -1,4 +1,9 @@
 <?php 
+/**
+ * Zenpage CMS plugin
+ * 
+ * @package plugins
+ */
 $plugin_version = '1.2.6';
 $plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />" 
 				."<strong>NOTE:</strong> Your theme must be setup to use this feature (or use the zenpage default theme). Also, different from Zenphoto some parts of Zenpage require MySQL 4.1! Please see the Zenphoto site for more information.");
