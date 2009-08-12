@@ -260,30 +260,6 @@ function printRating($vote=3, $object=NULL, $text=true) {
 	<?php
 }
 
-/**
- * Prints the image rating information for the current image
- * Deprecated:
- * Included for forward compatibility--use printRating() directly
- *
- */
-function printImageRating($object=NULL) {
-	global $_zp_current_image;
-	if (is_null($object)) $object = $_zp_current_image;
-	printRating(3, $object);
-}
-
-/**
- * Prints the album rating information for the current image
- * Deprecated:
- * Included for forward compatibility--use printRating() directly
- *
- */
-function printAlbumRating($object=NULL) {
-	global $_zp_current_album;
-	if (is_null($object)) $object = $_zp_current_album;
-	printRating(3, $object);
-}
-
 
 /**
  * Returns the current rating of an object

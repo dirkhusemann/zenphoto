@@ -136,62 +136,6 @@ function is_GalleryNewsType() {
 	return is_NewsType("image") || is_NewsType("video") || is_NewsType("album"); // later to be extended with albums, too
 }
 
-
-
-/**
- * THIS FUNCTION IS DEPRECATED! Use getZenpageHitcounter()!
- * 
- * Increments (optionally) and returns the hitcounter for a news category (page 1), a single news article or a page
- * Does not increment the hitcounter if the viewer is logged in as the gallery admin.
- * Also does currently not work if the static cache is enabled
- *
- * @param string $option "pages" for a page, "news" for a news article, "category" for a news category (page 1 only)
- * @param bool $viewonly set to true if you don't want to increment the counter.
- * @param int $id Optional record id of the object if not the current image or album
- * @return string
- */
-function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
-	global $_zp_current_zenpage_page, $_zp_current_zenpage_news, $_zp_loggedin;
-	trigger_error(gettext('hitcounter is deprecated. Use getZenpageHitcounter().'), E_USER_NOTICE);
-	switch($option) {
-		case "pages":
-			if (is_null($id)) {
-				$id = getPageID();
-			}
-			$dbtable = prefix('zenpage_pages');
-			$doUpdate = true;
-			break;
-		case "category":
-			if (is_null($id)) {
-				$id = getCurrentNewsCategoryID();
-			}
-			$dbtable = prefix('zenpage_news_categories');
-			$doUpdate = getCurrentNewsPage() == 1; // only count initial page for a hit on an album
-			break;
-		case "news":
-			if (is_null($id)) {
-				$id = getNewsID();
-			}
-			$dbtable = prefix('zenpage_news');
-			$doUpdate = true;
-			break;
-	}
-	if(($option == "pages" AND is_Pages()) OR ($option == "news" AND is_NewsArticle()) OR ($option == "category" AND is_NewsCategory())) {
-		if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) || $viewonly) { $doUpdate = false; }
-		$hitcounter = "hitcounter";
-		$whereID = " WHERE `id` = $id";
-		$sql = "SELECT `".$hitcounter."` FROM $dbtable $whereID";
-		if ($doUpdate) { $sql .= " FOR UPDATE"; }
-		$result = query_single_row($sql);
-		$resultupdate = $result['hitcounter'];
-		if ($doUpdate) {
-			$resultupdate++;
-			query("UPDATE $dbtable SET `".$hitcounter."`= $resultupdate $whereID");
-		}
-		return $resultupdate;
-	}
-}
-
 /**
  * Gets the hitcount of a page, news article or news category
  * 
