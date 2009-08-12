@@ -306,7 +306,11 @@ class PhoogleMap{
 		<script type="text/javascript">
 		function showmap(){
 	   	if (GBrowserIsCompatible()) {
-	     	map = new GMap(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
+	   		
+	     	map = new GMap(document.getElementById("map"));
+//this causes the map to fail to load
+//    	map = new GMap(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
+//
 				map.centerAndZoom(new GPoint(<?php echo $this->validPoints[0]['long']; ?>,<?php echo $this->validPoints[0]['lat']; ?>), <?php echo $this->zoomLevel; ?>);
 				map.enableScrollWheelZoom();
 				<?php
