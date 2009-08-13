@@ -201,6 +201,7 @@ themes/zenpage-default/style.css
 themes/zenpage-default/theme.png
 themes/zenpage-default/themeoptions.php
 themes/zenpage-default/theme_description.php
+trackback.php
 Zenphoto.package
 zp-core/404.php
 zp-core/admin-albumsort.php
@@ -452,6 +453,7 @@ zp-core/plugins/class-video/multimediaDefault.png
 zp-core/plugins/class-video.php
 zp-core/plugins/comment_form/comment_form.php
 zp-core/plugins/comment_form.php
+zp-core/plugins/comment_trackback.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/deprecated-functions.php
