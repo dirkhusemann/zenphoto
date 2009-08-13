@@ -903,12 +903,14 @@ if ($debug) {
 		if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
 			if (!empty($tableslist)) {
 				$fields = 0;
-				$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
+				$fieldlist = array();
+				$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'images`';
 				$result1 = @mysql_query($sql, $mysql_connection);
 				if ($result1) {
 					while ($row = @mysql_fetch_row($result1)) {
 						if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
 							$fields = $fields | 1;
+							$fieldlist[] = '<code>images->'.$row[0].'</code>';
 						}
 					}
 				} else {
@@ -920,6 +922,7 @@ if ($debug) {
 					while ($row = @mysql_fetch_row($result2)) {
 						if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
 							$fields = $fields | 2;
+							$fieldlist[] = '<code>albums->'.$row[0].'</code>';
 						}
 					}
 				} else {
@@ -944,7 +947,7 @@ if ($debug) {
 						$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
 						break;
 				}
-				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>'));
+				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
 			}
 		} else {
 			checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
