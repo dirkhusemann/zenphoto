@@ -81,7 +81,7 @@ if (isset($_GET['action'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
 		}
-		$id = snitize_numeric($_POST['id']);
+		$id = sanitize_numeric($_POST['id']);
 		$name = mysql_real_escape_string(sanitize($_POST['name'], 3));
 		$email = mysql_real_escape_string(sanitize($_POST['email'], 3));
 		$website = mysql_real_escape_string(sanitize($_POST['website'], 3));
@@ -112,6 +112,7 @@ echo "\n" . '<div id="content">';
 
 if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <h1><?php echo gettext("edit comment"); ?></h1>
+<div class="box" style="padding: 10px">
 <?php
 	$id = sanitize_numeric($_GET['id']);
 	
@@ -153,27 +154,27 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	<tr>
 		<td></td>
 		<td>
-		<p class="buttons">
-		<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-		<button type="button" title="<?php echo gettext("Cancel"); ?>" onclick="window.location = 'admin-comments.php';"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
-		</p>
+		
 		
 		</td>
 	</tr>
 </table>
-<div>
-<h2><?php echo gettext('Comment management:'); ?></h2>
+<div style="width:260px; float:right">
+<h2 class="h2_bordered_edit"><?php echo gettext('Comment management'); ?></h2>
+<div class="box-edit">
 <?php
 	if ($inmoderation) {
 		$status_moderation = gettext('Comment is unapproved');
 		$link_moderation = gettext('Approve');
 		$title_moderation = gettext('Approve this comment');
 		$url_moderation = '?action=moderation&id='.$id;
+		$linkimage = "images/pass.png";
 	} else {
 		$status_moderation = gettext('Comment is approved');
 		$link_moderation = gettext('Unapprove');
 		$title_moderation = gettext('Unapprove this comment');
 		$url_moderation = '?action=unapprove&id='.$id;
+		$linkimage = "images/warn.png";
 	}
 	
 	if ($private) {
@@ -190,17 +191,30 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 
 ?>
-<ul>
-<li><?php echo $status_moderation; ?>. <a href="<?php echo $url_moderation; ?>" title="<?php echo $title_moderation; ?>" ><?php echo $link_moderation; ?></a></li>
-<li><?php echo $status_private; ?></li>
-<li><?php echo $status_anon; ?></li>
-<li><a href="javascript: if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
-		title="<?php echo gettext('Delete this comment.'); ?>" >
-		<?php echo gettext('Delete this comment'); ?></a></li>
-</ul>
+<p><?php echo $status_moderation; ?>. <div class="buttons"><a href="<?php echo $url_moderation; ?>" title="<?php echo $title_moderation; ?>" ><img src="<?php echo $linkimage; ?>" alt="" /><?php echo $link_moderation; ?></a></div></p>
+<br clear=all />
+<hr />
+<p><?php echo $status_private; ?></p>
+<p><?php echo $status_anon; ?></p>
+<hr />
+<p class="buttons">
+<a href="javascript: if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+		title="<?php echo gettext('Delete'); ?>" ><img src="images/fail.png" alt="" />
+		<?php echo gettext('Delete'); ?></a></p>
+		<br style="clear:both" />
+<p class="buttons" style="margin-top: 10px">
+		<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+		</p>
+		<br style="clear:both;" />
+<p class="buttons" style="margin-top: 10px">
+		<button type="button" title="<?php echo gettext("Cancel"); ?>" onclick="window.location = 'admin-comments.php';"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+		</p>
+		<br style="clear:both" />
+</div><!-- div box-edit-unpadded end -->
 </div>
 </form>
-
+<br clear=all />
+</div> <!-- div box end -->
 <?php
 // end of $page == "editcomment"
 } else {
