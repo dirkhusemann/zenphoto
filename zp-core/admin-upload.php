@@ -210,8 +210,8 @@ natcasesort($types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $_zp_supported_images));
 $s2 = strtoupper(implode(', ', $types));
-printf(gettext('This web-based upload accepts ZenPhoto formats: %s, %s, and %s.'), $s1, $s2, $last);
-echo ' '.gettext('You can also upload ZIP files containing files of these types.')
+printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s, %s, and %s.'), $s1, $s2, $last);
+echo '<br />'.gettext('You can also upload ZIP files containing files of these types.')
 ?>
 </p>
 <p>
@@ -356,7 +356,7 @@ if (ini_get('safe_mode')) { ?>
 		$extensions = '*.zip';
 		$types = array_merge($_zp_supported_images, array_keys($_zp_extra_filetypes)); // supported extensions
 		foreach ($types as $ext) {
-			$extensions .= ';*.'.$ext;
+			$extensions .= ';*.'.$ext.';*.'.strtoupper($ext);
 		}
 		if($uploadtype != 'http') {
 			?>
@@ -414,8 +414,8 @@ if (ini_get('safe_mode')) { ?>
 							'onAllComplete':	function() {
 																  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
 																},
-							'fileDesc': 'Allowed file types',
-							'fileExt': '<?php echo $extensions; ?>'
+							'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
+							'fileExt': '<?php echo $extensions.'|*.*'; ?>'
 						});
 					if($('#folderdisplay').val() == "") {
 						$('#fileUploadbuttons').hide();
