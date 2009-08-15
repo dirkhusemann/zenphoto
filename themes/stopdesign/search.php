@@ -37,7 +37,7 @@ require_once('normalizer.php');
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, null, 210, 60); ?></a>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, null, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php

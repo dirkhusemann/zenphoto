@@ -35,7 +35,7 @@ require_once('normalizer.php');
 					?>
 						<li class="gal">
 							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"),getAnnotatedAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
 							<p>
 					<?php
 						$anumber = getNumSubalbums();

@@ -88,6 +88,7 @@ require_once('normalizer.php');
 			<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
 			<div class="main">
+				<div class="rating"><?php if (function_exists('printImageRating')) printImageRating(); ?></div>
 				<?php
 				if (function_exists('printCommentForm')) { 
 					require_once('comment.php');
