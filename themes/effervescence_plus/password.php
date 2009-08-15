@@ -47,14 +47,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 		</div>
 	</div>
 
-	<!-- Footer -->
-	<div class="footlinks">
-		<small><?php printThemeInfo(); ?></small>
-		<?php printZenphotoLink(); ?>
-		<br />
-	</div>
-	
-<?php printAdminToolbox(); ?>
+<?php printFooter('password'); ?>
 
 </body>
 </html>

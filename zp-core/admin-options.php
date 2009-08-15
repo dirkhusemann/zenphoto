@@ -177,6 +177,17 @@ if (isset($_GET['action'])) {
 			} else {
 				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
 			}
+			foreach ($_POST as $item=>$value) {
+				if (strpos($item, 'gallery-page_')===0) {
+					$item = 'gallery_page_unprotected_'.sanitize(substr($item, 13));
+					if (isset($_POST[$item])) {
+						$v = 1;
+					} else {
+						$v = 0;
+					}
+					setOption($item, $v);
+				}
+			}
 			$olduser = getOption('gallery_user');
 			$newuser = sanitize($_POST['gallery_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
@@ -1162,6 +1173,37 @@ if (empty($alterrights)) {
 						<p><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></p>
 						<p><?php echo gettext("A reminder hint for the password."); ?></p>
 					</td>
+				</tr>
+				<tr>
+					<td><?php echo gettext('Unprotected pages:'); ?></td>
+					<td>
+						<?php
+						$curdir = getcwd();
+						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$gallery->getCurrentTheme().'/';
+						chdir($root);
+						$filelist = safe_glob('*.php');
+						$list = array();
+						foreach($filelist as $file) {
+							$list[] = str_replace('.php', '', filesystemToInternal($file));
+						}
+						chdir($curdir);
+						$list = array_diff($list, standardScripts());
+						$list[] = 'index';
+						$current = array();
+						foreach ($list as $page) {
+							?>
+							<input type="hidden" name="gallery-page_<?php echo $page; ?>" value="0" />
+							<?php
+							if (getOption('gallery_page_unprotected_'.$page)) {
+								$current[] = $page;
+							}
+						}
+						?>
+						<ul class="customchecklist">
+							<?php generateUnorderedListFromArray($current, $list, 'gallery_page_unprotected_', false, true, false); ?>
+						</ul>
+					</td>
+					<td><?php echo gettext('Place a checkmark on any pages which should not be protected by the gallery password.'); ?></td>
 				</tr>
 				<tr>
 					<td><?php echo gettext("Website title:"); ?></td>
@@ -2231,9 +2273,7 @@ if (empty($alterrights)) {
 						foreach($filelist as $file) {
 							$list[] = str_replace('.php', '', filesystemToInternal($file));
 						}
-						$standardlist = array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
-						if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
-						$list = array_diff($list, $standardlist);
+						$list = array_diff($list, standardScripts());
 						generateListFromArray(array(getOption('custom_index_page')), $list, false, false);
 						chdir($curdir);
 						?>

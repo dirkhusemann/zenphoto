@@ -67,9 +67,7 @@ class register_user_options {
 						foreach($filelist as $file) {
 							$list[] = str_replace('.php', '', filesystemToInternal($file));
 						}
-						$standardlist = array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
-						if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
-						$list = array_diff($list, $standardlist);
+						$list = array_diff($list, standardScripts());
 						generateListFromArray(array(getOption('user_registration_page')), $list, false, false);
 						chdir($curdir);
 						?>

@@ -312,4 +312,7 @@ function setDefault($option, $default) {
 	setOption('zp_plugin_rating', -abs(getOption('zp_plugin_rating')));
 	
 	setOptionDefault('zp_plugin_zenphoto_sendmail', 5);
+	setOptionDefault('gallery_page_unprotected_register', 5);
+	setOptionDefault('gallery_page_unprotected_contact', 5);
+	
 	?>

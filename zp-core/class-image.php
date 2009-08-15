@@ -95,8 +95,9 @@ class _Image extends PersistentObject {
 		$album_name = $album->name;
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
 		$this->getExifData(); // prime the exif fields
-		if ($new) {
-			$this->set('mtime', filemtime($this->localpath));
+		$mtime = filemtime($this->localpath);
+		if ($new || ($mtime != $this->get('mtime'))) {
+			$this->set('mtime', $mtime);
 			$this->updateDimensions();
 			$metadata = getImageMetadata($this->localpath);
 			$this->set('EXIFValid', 1);

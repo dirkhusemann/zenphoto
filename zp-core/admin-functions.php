@@ -2739,4 +2739,16 @@ function processManagedAlbums($i) {
 function getCheckboxState($id) {
 	if (isset($_REQUEST[$id])) return 1; else return 0;
 }
+
+/**
+ * Returns an array of "standard" theme scripts. This list is
+ * normally used to exclude these scripts form various option seletors.
+ *
+ * @return array
+ */
+function standardScripts() {
+	$standardlist = array('themeoptions', 'password', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
+	if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
+	return $standardlist;
+}
 ?>

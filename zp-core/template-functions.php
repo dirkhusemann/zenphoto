@@ -4112,7 +4112,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * @since 1.1.3
  */
 function checkforPassword($silent=false) {
-	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin;
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
 	if (zp_loggedin(OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
@@ -4144,13 +4144,16 @@ function checkforPassword($silent=false) {
 			}
 			return true;
 		}
-	} else {  // index page
+	} else {  // other page
 		if ($_zp_loggedin) return false;
 		$hash = $_zp_gallery->getPassword();
 		$show = $_zp_gallery->getUser() != '';
 		$hint = $_zp_gallery->getPasswordHint();
 		if (!empty($hash)) {
 			if (zp_getCookie('zp_gallery_auth') != $hash) {
+				if (getOption('gallery_page_unprotected_'.substr($_zp_gallery_page, 0, -4))) {
+					return false; // excluded page
+				}
 				if (!$silent) {
 					printPasswordForm($hint, true, getOption('login_user_field') || $show);
 				}
