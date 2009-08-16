@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
@@ -33,15 +33,16 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name how you want to call the link to the gallery index (insert "" if you don't use it, it is not printed then)
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
+ * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
   * @return html list or drop down jump menu of the albums
  * @since 1.2
  */
 
-function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
+function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false,$firstimagelink=false) {
 	if ($option == "jump") {
-		printAlbumMenuJump($option,$indexname);
+		printAlbumMenuJump($option,$indexname,$firstimagelink);
 	} else {
-		printAlbumMenuList($option,$option2,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs);
+		printAlbumMenuList($option,$option2,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs,$firstimagelink);
 	}
 }
 
@@ -64,10 +65,11 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
+ * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  * @return html list of the albums
  */
 
-function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
+function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false,$firstimagelink=false) {
 	global $_zp_gallery, $_zp_current_album, $_zp_gallery_page;
 	
 	// if in search mode don't use the foldout contextsensitiveness and show only toplevel albums
@@ -102,7 +104,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 		$albums = $_zp_gallery->getAlbums();
 	}
 
-	printAlbumMenuListAlbum($albums, $albumpath, $currentfolder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active);
+	printAlbumMenuListAlbum($albums, $albumpath, $currentfolder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
 
 	echo "</ul>\n";
 
@@ -121,8 +123,9 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
  * @param string $css_class see printAlbumMenuList
  * @param string $css_class_topactive see printAlbumMenuList
  * @param string $css_class_active see printAlbumMenuList
+ * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  */
-function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active) {
+function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink) {
 	global $_zp_gallery;
 	if ($showsubs === true) $showsubs = 9999999999;
 	$pagelevel = count(explode('/', $folder));
@@ -159,16 +162,20 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 			if(in_context(ZP_ALBUM) && !in_context(ZP_SEARCH_LINKED) && getAlbumID() == $topalbum->getAlbumID()) {
 				$link = "<li".$css_class_t.">".$topalbum->getTitle().$count;
 			} else {
-				$link = "<li><a href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+				if($firstimagelink && $topalbum->getNumImages() != 0) {
+					$imgurl = getFirstImageOfAlbum($topalbum);
+					$link = "<li><a href='".$imgurl."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+				} else {
+					$link = "<li><a href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+				}
 			}
 			echo $link;
 		}
 		if ($process) { // listing subalbums
 			$subalbums = $topalbum->getSubAlbums();
 			if (!empty($subalbums)) {
-
 				echo "\n<ul".$css_class.">\n";
-				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active);
+				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
 				echo "\n</ul>\n";
 
 			}
@@ -190,8 +197,9 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
  *
  * @param string $option "count" for a image counter in brackets behind the album name, "" = for no image numbers
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
+ * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  */
-function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
+function printAlbumMenuJump($option="count", $indexname="Gallery Index",$firstimagelink=false) {
 	global $_zp_gallery, $_zp_current_album, $_zp_gallery_page;
 	$albumpath = rewrite_path("/", "/index.php?album=");
 	if(!empty($_zp_current_album) || $_zp_gallery_page != 'album.php') {
@@ -215,7 +223,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 			<?php 
 			}
 			$albums = $_zp_gallery->getAlbums();
-			printAlbumMenuJumpAlbum($albums,$option,$albumpath);
+			printAlbumMenuJumpAlbum($albums,$option,$albumpath,$firstimagelink);
 			?>
 			</select>
 		</p>
@@ -229,9 +237,10 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
  * @param array $albums list of album names
  * @param string $option2 see printAlbumMenuJump
  * @param string $albumpath path of the page album
+ * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  * @param int $level current level
  */
-function printAlbumMenuJumpAlbum($albums,$option,$albumpath,$level=1) {
+function printAlbumMenuJumpAlbum($albums,$option,$albumpath,$firstimagelink,$level=1) {
 	global $_zp_gallery;
 	foreach ($albums as $album) {
 		$subalbum = new Album($_zp_gallery,$album,true);
@@ -245,11 +254,16 @@ function printAlbumMenuJumpAlbum($albums,$option,$albumpath,$level=1) {
 		$arrow = str_replace(':', '&raquo; ', str_pad("", $level-1, ":"));
 						
 		$selected = checkSelectedAlbum($subalbum->name, "album");
-		$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($subalbum->name))."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
+		if($firstimagelink && $subalbum->getNumImages() != 0) {
+			$imgurl = getFirstImageOfAlbum($subalbum);
+			$link = "<option $selected value='".$imgurl."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
+		} else {
+			$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($subalbum->name))."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
+		}
 		echo $link;
 		$subalbums = $subalbum->getSubAlbums();
 		if (!empty($subalbums)) {
-			printAlbumMenuJumpAlbum($subalbums,$option,$albumpath,$level+1);
+			printAlbumMenuJumpAlbum($subalbums,$option,$albumpath,$firstimagelink,$level+1);
 		}
 	}
 
@@ -285,5 +299,17 @@ function checkSelectedAlbum($checkalbum, $option) {
 			break;
 	}
 	return $selected;
+}
+
+/**
+ * Returns the link of the first image in $albumobj
+ * 
+ * @param object $albumobj The object of the album to use
+ */
+function getFirstImageOfAlbum($albumobj) {
+	$images = $albumobj->getImages();
+	$firstimage = newImage($albumobj,array_shift($images));
+	$link = $firstimage->getImageLink();
+	return $link;
 }
 ?>
