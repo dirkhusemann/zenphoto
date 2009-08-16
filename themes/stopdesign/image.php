@@ -18,7 +18,7 @@ require_once('normalizer.php');
 		setOption('thumb_crop_height', 85, false);
 		setOption('images_per_page', getOption('images_per_page') - 1, false);
 		if (!isImagePhoto($_zp_current_image)) echo '<style type="text/css"> #prevnext a strong {display:none;}</style>';
-		if (getCommentErrors()) {
+		if (function_exists('getCommentErrors') && getCommentErrors()) {
 			$errors = 1;
 			?>
 			<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />

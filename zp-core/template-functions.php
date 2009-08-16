@@ -3440,7 +3440,7 @@ define('ALLTAGS_MINFONTSIZE', 0.8);
  * @param bool $counter TRUE if you want the tag count within brackets behind the tag
  * @param bool $links set to TRUE to have tag search links included with the tag.
  * @param int $maxfontsize largest font size the cloud should display
- * @param int $maxcount the maximum count for a tag to appear in the output
+ * @param int $maxcount the floor count for setting the cloud font size to $maxfontsize 
  * @param int $mincount the minimum count for a tag to appear in the output
  * @param int $limit set to limit the number of tags displayed to the top $numtags
  * @since 1.1

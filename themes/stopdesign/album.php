@@ -12,7 +12,7 @@ require_once('normalizer.php');
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php
 	printRSSHeaderLink('Album',getAlbumTitle()); 
-	if (getCommentErrors()) {
+	if (function_exists('getCommentErrors') && getCommentErrors()) {
 		$errors = 1;
 		?>
 		<link rel="stylesheet" type="text/css" href="<?php echo $_zp_themeroot ?>/css/comments-show.css" />

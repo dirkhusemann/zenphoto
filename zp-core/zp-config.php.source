@@ -49,7 +49,7 @@ $conf['mysql_prefix'] = "zp_";
 //    'in_webpath'  --	the folder must be the full path of the album folder from 
 //                      the WEB root of the zenphoto installation.
 //    'external'    --	the folder must be a full server path to the album folder.
-//                      Images within an external folder	are not visible to web
+//                      Images within an external folder are not visible to web
 //                      browsers, so certain features such as flash players cannot
 //                      display them
 $conf['album_folder'] = '/albums/';
