@@ -29,7 +29,8 @@
  * @copyright    2005 system7designs
  * @package plugins 
  *
- *@Modified in 2008 by Eric Bayard to include in Zenphoto
+ * @Modified in 2008 by Eric Bayard to include in Zenphoto
+ * @modified in 2009 by Stephen Billard to operate correctly with the Google Maps API2
  *
  */
 
@@ -77,7 +78,7 @@ class PhoogleMap{
 	 * int: 0-17
 	 * set's the initial zoom level of the map
 	 */
-	var $zoomLevel = 4;
+	var $zoomLevel = 13;
 	var $mapselections = ''; // list of the addmap calls
 	/**
 	 * backGround
@@ -307,13 +308,11 @@ class PhoogleMap{
 		function showmap(){
 	   	if (GBrowserIsCompatible()) {
 	   		
-	     	map = new GMap(document.getElementById("map"));
-//this causes the map to fail to load
-//    	map = new GMap(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
-//
-				map.centerAndZoom(new GPoint(<?php echo $this->validPoints[0]['long']; ?>,<?php echo $this->validPoints[0]['lat']; ?>), <?php echo $this->zoomLevel; ?>);
+    		map = new GMap2(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
+ 	   		map.setCenter(new GLatLng(<?php echo $this->validPoints[0]['lat']; ?>,<?php echo $this->validPoints[0]['long']; ?>),<?php echo $this->zoomLevel; ?>);
 				map.enableScrollWheelZoom();
 				<?php
+			
 				$types = explode('; ', $this->mapselections); 
 				foreach ($types as $control) {
 					if (!empty($control)) {
@@ -329,17 +328,34 @@ class PhoogleMap{
 
 				<?php echo $this->defaultMap; ?>
 
-				var points = [];
+				var latlng = [];
 				<?php
 				$numPoints = count($this->validPoints);
-
 				for ($g = 0; $g<$numPoints; $g++){
 					?>
-					points[<?php echo $g; ?>] = new GPoint(<?php echo $this->validPoints[$g]['long']; ?>,<?php echo $this->validPoints[$g]['lat']; ?>);
-					var marker<?php echo $g; ?> = new GMarker(points[<?php echo $g; ?>]);
-					map.addOverlay(marker<?php echo $g; ?>);
-					GEvent.addListener(marker<?php echo $g; ?>, "click", function() {
+					latlng[<?php echo $g; ?>] = new GLatLng(<?php echo $this->validPoints[$g]['lat']; ?>,<?php echo $this->validPoints[$g]['long']; ?>);
 					<?php
+					if (isset($this->validPoints[$g]['htmlMessage'])) {
+						?>
+						var pointHtml = "<?php echo $this->validPoints[$g]['htmlMessage']; ?>";
+						<?php
+					} else {
+						if (isset($this->validPoints[$g]['passedAddress'])) {
+							$addr = $this->validPoints[$g]['passedAddress'];
+						} else {
+							$addr = '';
+						}
+						?>
+						var pointHtml = "<?php echo $addr; ?>";
+						<?php
+					}
+					?>
+					map.addOverlay(createMarker(latlng[<?php echo $g; ?>], pointHtml));
+/*	
+					var marker<?php echo $g; ?> = new GMarker(latlng[<?php echo $g; ?>]);
+	 				map.addOverlay(marker<?php echo $g; ?>); 				
+ 					GEvent.addListener(marker<?php echo $g; ?>, "click", function() {
+					<?php				
 					if (isset($this->validPoints[$g]['htmlMessage'])) {
 						?>
 						marker<?php echo $g; ?>openInfoWindowHtml("<?php echo $this->validPoints[$g]['htmlMessage']; ?>");
@@ -356,12 +372,18 @@ class PhoogleMap{
 					}
 					?>
 					});
-
+*/
 				<?php
-				}
+				}			
 				if ($autozoom) {
 					?>
-					resizeMap( map, points );
+					var latlngbounds = new GLatLngBounds( );
+					for ( var i = 0; i < latlng.length; i++ ) {
+						latlngbounds.extend( latlng[ i ] );
+					}
+					map.setCenter( latlngbounds.getCenter( ), map.getBoundsZoomLevel( latlngbounds ) );
+					
+//					resizeMap( map, points );
 					<?php
 				}
 				?>
