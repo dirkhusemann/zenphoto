@@ -290,6 +290,7 @@ function getCommentErrors() {
 			case  -5: return gettext("You must enter something in the comment text.");
 			case   1: return gettext("Your comment failed the SPAM filter check.");
 			case   2: return gettext("Your comment has been marked for moderation.");
+			case	 3: return sprintf(gettext('Your comment was rejected by the <em>%s</em> SPAM filter.'),getOption('spam_filter'));
 			default: return sprintf(gettext('Comment error "%d" not defined.'), $_zp_comment_error);
 		}
 	}
