@@ -1121,7 +1121,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			}
 			$on = gettext('Comment posted');
 			$gallery = new Gallery();
-			zp_mail("[" . $gallery->getTitle() . "] $on", $message, "", $emails);
+			zp_mail("[" . $gallery->getTitle() . "] $on", $message, NULL, NULL, $emails);
 		}
 	}
 	return $commentobj;

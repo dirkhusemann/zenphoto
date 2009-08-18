@@ -2260,7 +2260,7 @@ if (empty($alterrights)) {
 			</tr>
 			<?php if (is_null($album)) {?>
 			<tr>
-				<td><?php echo gettext("Custom index page:"); ?></td>
+				<td><?php echo gettext("Gallery index page link:"); ?></td>
 				<td>
 					<select id="custom_index_page" name="custom_index_page">
 						<option value=""></option>
@@ -2279,7 +2279,7 @@ if (empty($alterrights)) {
 						?>
 					</select>
 				</td>
-				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
+				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This frees up the <code>index.php</code> so that you can create a customized <em>Home</em> page script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
 			</tr>
 			<?php
 			}
