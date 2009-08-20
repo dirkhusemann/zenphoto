@@ -1646,6 +1646,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 <p class="buttons">
 <button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 <button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+<button type="reset" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 </p>
 <br clear: all />
 <?php

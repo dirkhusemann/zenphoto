@@ -27,24 +27,26 @@ $gallery = new Gallery();
 
 //check for security incursions
 if (isset($_GET['album'])) {
+	$folder = sanitize_path($_GET['album']);
 	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-		if (!isMyAlbum(sanitize_path($_GET['album']), $_zp_loggedin)) {
+		if (!isMyAlbum($folder, $_zp_loggedin)) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 			exit();
 		}
 	}
 }
 
-	$tagsort = getTagOrder();
-	$mcr_errors = array();
+$tagsort = getTagOrder();
+$mcr_errors = array();
 
 
-	$gallery->garbageCollect();
-	if (isset($_GET['action'])) {
-		$action = $_GET['action'];
+$gallery->garbageCollect();
+if (isset($_GET['action'])) {
+	$action = $_GET['action'];
+	switch ($action) {
 		/** reorder the tag list ******************************************************/
 		/******************************************************************************/
-		if ($action == 'sorttags') {
+		case 'sorttags':
 			if (isset($_GET['subpage'])) {
 				$pg = '&subpage='.$_GET['subpage'];
 				$tab = '&tab=imageinfo';
@@ -52,21 +54,21 @@ if (isset($_GET['album'])) {
 				$pg = '';
 				$tab = '';
 			}
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$_GET['album'].$pg.'&tagsort='.$tagsort.$tab);
-		}
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$folder.$pg.'&tagsort='.$tagsort.$tab);
+			exit();
+			break;
 
 		/** clear the cache ***********************************************************/
 		/******************************************************************************/
-		if ($action == "clear_cache") {
+		case "clear_cache":
 			$gallery->clearCache(SERVERCACHE . '/' . sanitize_path($_POST['album']));
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&cleared&album='.$_POST['album']);
 			exit();
-		}
+			break;
 
 		/** Publish album  ************************************************************/
 		/******************************************************************************/
-		if ($action == "publish") {
-			$folder = sanitize_path($_GET['album']);
+		case "publish":
 			$album = new Album($gallery, $folder);
 			$album->setShow($_GET['value']);
 			$album->save();
@@ -80,34 +82,36 @@ if (isset($_GET['album'])) {
 			}
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit'.$return);
 			exit();
-
-			/** Reset hitcounters ***********************************************************/
-			/********************************************************************************/
-		} else if ($action == "reset_hitcounters") {
-				$id = sanitize_numeric($_REQUEST['albumid']);
-				$where = ' WHERE `id`='.$id;
-				$imgwhere = ' WHERE `albumid`='.$id;
-				$return = '?counters_reset';
-				$subalbum = '';
-				if (isset($_REQUEST['subalbum'])) {
-					$return = urlencode(dirname(sanitize_path($_REQUEST['album'])));
-					$subalbum = '&tab=subalbuminfo';
-				} else {
-					$return = urlencode(sanitize_path(urldecode($_POST['album'])));	
-				}
-				if (empty($return) || $return == '.' || $return == '/') {
-					$return = '?page=edit&counters_reset';
-				} else {
-					$return = '?page=edit&album='.$return.'&counters_reset'.$subalbum;
-				}
+			break;
+			
+		/** Reset hitcounters ***********************************************************/
+		/********************************************************************************/
+		case "reset_hitcounters":
+			$id = sanitize_numeric($_REQUEST['albumid']);
+			$where = ' WHERE `id`='.$id;
+			$imgwhere = ' WHERE `albumid`='.$id;
+			$return = '?counters_reset';
+			$subalbum = '';
+			if (isset($_REQUEST['subalbum'])) {
+				$return = urlencode(dirname(sanitize_path($_REQUEST['album'])));
+				$subalbum = '&tab=subalbuminfo';
+			} else {
+				$return = urlencode(sanitize_path(urldecode($_POST['album'])));
+			}
+			if (empty($return) || $return == '.' || $return == '/') {
+				$return = '?page=edit&counters_reset';
+			} else {
+				$return = '?page=edit&album='.$return.'&counters_reset'.$subalbum;
+			}
 			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
 			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php' . $return);
 			exit();
-			
-			//** DELETEIMAGE **************************************************************/
-			/******************************************************************************/
-		} else if ($action == 'deleteimage') {
+			break;
+				
+		//** DELETEIMAGE **************************************************************/
+		/******************************************************************************/
+		case 'deleteimage':
 			$albumname = sanitize_path($_REQUEST['album']);
 			$imagename = sanitize_path($_REQUEST['image']);
 			$album = new Album($gallery, $albumname);
@@ -120,10 +124,11 @@ if (isset($_GET['album'])) {
 
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.pathurlencode($albumname).'&ndeleted='.$nd);
 			exit();
+			break;
 			
-			/** SAVE **********************************************************************/
-			/******************************************************************************/
-		} else if ($action == "save") {
+		/** SAVE **********************************************************************/
+		/******************************************************************************/
+		case "save":
 			$returntab = '';
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
@@ -267,9 +272,9 @@ if (isset($_GET['album'])) {
 						$notify = '&';
 					}
 				}
-			$qs_albumsuffix = '';
-				
-			/** SAVE MULTIPLE ALBUMS ******************************************************/
+				$qs_albumsuffix = '';
+
+				/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
 				$notify = '';
 				for ($i = 0; $i < $_POST['totalalbums']; $i++) {
@@ -286,8 +291,7 @@ if (isset($_GET['album'])) {
 				$qs_albumsuffix = "&massedit";
 			}
 			// Redirect to the same album we saved.
-			if (isset($_GET['album'])) {
-				$folder = sanitize_path($_GET['album']);
+			if (isset($folder)) {
 				$qs_albumsuffix .= '&album='.urlencode($folder);
 			}
 			if (isset($_POST['subpage'])) {
@@ -302,12 +306,12 @@ if (isset($_GET['album'])) {
 			}
 			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$qs_albumsuffix.$notify.$pg.$returntab);
 			exit();
-
-			/** DELETION ******************************************************************/
-			/*****************************************************************************/
-		} else if ($action == "deletealbum") {
-			if ($_GET['album']) {
-				$folder = sanitize_path($_GET['album']);
+			break;
+			
+		/** DELETION ******************************************************************/
+		/*****************************************************************************/
+		case "deletealbum":
+			if ($folder) {
 				$album = new Album($gallery, $folder);
 				if ($album->deleteAlbum()) {
 					$nd = 3;
@@ -323,8 +327,49 @@ if (isset($_GET['album'])) {
 			}
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit" . $albumdir . "&ndeleted=".$nd);
 			exit();
-		}
-	}
+			break;
+		case 'newalbum':
+			$name = sanitize($_GET['name']);
+			$soename = seoFriendlyURL($name);
+			if ($folder != '/' && $folder != '.') {
+				$albumdir = "&album=" . urlencode($folder);
+			} else {
+				$albumdir = '';
+			}
+			$folder = $folder.'/'.$soename;
+			$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
+			if (is_dir($uploaddir)) {
+				if ($name != $soename) $name .= ' ('.$soename.')';
+				if (isset($_GET['albumtab'])) {
+					if (empty($albumdir)) {
+						$tab='';
+					} else {
+						$tab = '&tab=subalbuminfo';
+					}
+				} else {
+					$tab = '&tab=albuminfo';
+				}
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit$albumdir&exists=" . urlencode($name).$tab);
+				exit();
+			} else {
+				mkdir_recursive($uploaddir, CHMOD_VALUE);
+			}
+			@chmod($uploaddir, CHMOD_VALUE);
+
+			$album = new Album($gallery, $folder);
+			if ($album->exists) {
+				$album->setTitle($name);
+				$album->save();
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit" . "&album=" . urlencode($folder));
+				exit();
+			} else {
+				$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
+				zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
+				. gettext("or use your FTP program to give everyone write permissions to those folders."));
+			}
+			break;
+	} // end of switch
+}
 
 
 
@@ -357,6 +402,16 @@ if (empty($subtab) || $subtab=='albuminfo') {
 	<script type="text/javascript" src="js/tag.js"></script>
 	<?php
 }
+?>
+<script type="text/javascript">
+	function newAlbum(folder,albumtab) {
+		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
+		if (album) {
+			window.location = '?action=newalbum&album='+encodeURIComponent(folder)+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
+		}
+	}
+</script>
+<?php
 $result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
 $dbfields = array();
 while ($row = mysql_fetch_row($result)) {
@@ -498,6 +553,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".gettext("Album cache purged")."</h2>";
 		echo '</div>';
 	}
+	if (isset($_GET['exists'])) {
+		echo '<div class="errorbox" id="fade-message">';
+		echo  "<h2>".sprintf(gettext("<em>%s</em> already exists."),sanitize($_GET['exists']))."</h2>";
+		echo '</div>';
+	}
 	$albumlink = '?page=edit&album='.urlencode($album->name);
 	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
 	if ($allimagecount) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),$zenphoto_tabs['edit']['subtabs']);
@@ -571,10 +631,23 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
-			<?php
-				zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
-			?>
-	<br /><br />
+				<table>
+					<tr>
+						<td>
+							<p class="buttons">
+							<?php
+							zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
+							?>
+							</p>
+						</td>
+						<td>
+							<p class="buttons">
+							<button class="buttons" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+							</p>
+						</td>
+					</tr>
+				</table>
+				<br clear="all"/>
 		<?php
 		} ?>
 <?php 
@@ -1108,6 +1181,11 @@ if (isset($_GET['saved'])) {
 		echo  "<h2>".gettext("Cache has been purged.")."</h2>";
 		echo '</div>';
 	}
+	if (isset($_GET['exists'])) {
+		echo '<div class="errorbox" id="fade-message">';
+		echo  "<h2>".sprintf(gettext("<em>%s</em> already exists."),sanitize($_GET['exists']))."</h2>";
+		echo '</div>';
+	}
 	$albumsprime = $gallery->getAlbums();
 	$albums = array();
 	foreach ($albumsprime as $album) { // check for rights
@@ -1165,7 +1243,25 @@ if (isset($_GET['saved'])) {
 		</ul>
 <?php
   if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		zenSortablesSaveButton($_zp_sortable_list, "?page=edit&saved", gettext("Save Order"));
+  	?>
+		<table>
+			<tr>
+				<td>
+					<p class="buttons">
+					<?php
+					zenSortablesSaveButton($_zp_sortable_list, "?page=edit&saved", gettext("Save Order"));
+					?>
+					</p>
+				</td>
+				<td>
+					<p class="buttons">
+					<button class="buttons" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
+					</p>
+				</td>
+			</tr>
+		</table>
+		<br clear="all"/>
+		<?php
   }
 	?>
 </div>

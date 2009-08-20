@@ -130,7 +130,6 @@ function zenphoto_PHPMailer($msg, $email_list, $subject, $message, $from_mail, $
 			$mail->AddCC($cc_mail);
 		}
 	}
-
 	if (!$mail->Send()) {
 		if (!empty($msg)) $msg .= '<br/>';
 		$msg .= sprintf(gettext('<code>PHPMailer</code> failed to send <em>%1$s</em>. ErrorInfo:%2$s'), $subject, $mail->ErrorInfo);
