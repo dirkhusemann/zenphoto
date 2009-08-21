@@ -392,6 +392,7 @@ if (ini_get('safe_mode')) { ?>
 							'width': '<?php echo $info[0] ?>',
 							<?php echo $rollover; ?>
 							'checkScript': 'admin-uploadify/check.php',
+<?php
 /* Uploadify does not really support this onCheck facility (it is unusable as implemented, this gets called fore each element
 										passing the whole queue each time!)							
 							'onCheck':	function(event, script, queue, folder, single) {
@@ -409,6 +410,7 @@ if (ini_get('safe_mode')) { ?>
 														return false;
 													},
 */
+?>
 							'displayData': 'speed',
 							'simUploadLimit': 3,
 							'onAllComplete':	function() {

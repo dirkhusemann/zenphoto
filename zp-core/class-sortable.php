@@ -37,7 +37,7 @@ function zenSortablesHeader(&$jQuerySortable, $sortContainerID, $orderedList, $s
  * @since  1.0.0
  */
 function zenSortablesSaveButton(&$jQuerySortable, $link, $label="Save") {
-	$jQuerySortable->printForm($link, 'POST', $label, 'button');
+	$jQuerySortable->printForm($link, 'POST', $label, 'buttons');
 }
 
 
@@ -160,11 +160,8 @@ class jQuerySortable {
 		?>
 		<form action="<?php echo $action;?>" method="<?php echo $method;?>" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
 			<?php $this->printHiddenInputs();?>
-			<br clear="all"/>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
-			<p class="buttons">
 			<button type="submit" title="<?php echo $submitText; ?>" class="<?php echo $submitClass; ?>"><img src="images/pass.png" alt="" /><strong><?php echo $submitText; ?></strong></button>
-			</p>
 		</form>
 		<?php
 	}
