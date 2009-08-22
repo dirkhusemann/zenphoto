@@ -33,21 +33,19 @@ if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
 	
-	case "unapprove":
-		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=1 WHERE `id`=' . $_GET['id'] . ';';
-		query($sql);
+	case "spam":
+		$comment = new Comment(sanitize_numeric($_GET['id']));
+		zp_apply_filter('comment_disapprove', $comment);
+		$comment->setInModeration(1);
+		$comment->save();
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
 		exit();
 
-	case "moderation":
+	case "notspam":
 		$comment = new Comment(sanitize_numeric($_GET['id']));
 		zp_apply_filter('comment_approve', $comment);
 		$comment->setInModeration(0);
 		$comment->save();
-/*		
-		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . sanitize_numeric($_get['id']) . ';';
-		query($sql);
-*/
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
 		exit();
 	
@@ -279,7 +277,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<th><?php echo gettext("E&#8209;Mail"); ?></th>
 		<th><?php echo gettext("IP address"); ?></th>
 		<th><?php echo gettext("Private"); ?></th>
-		<th><?php echo gettext("Pending<br />approval"); ?></th>
+		<th><?php echo gettext("SPAM"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
 		<th><?php echo gettext("Delete"); ?>
 
@@ -391,8 +389,11 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		</td>
 		<td align="center"><?php
 		if ($inmoderation) {
-			echo "<a href=\"?action=moderation&id=" . $id . "\" title=\"".gettext('Approve this message')."\">";
-			echo '<img src="images/warn.png" style="border: 0px;" alt="'. gettext("Approve this message").'" /></a>';
+			echo "<a href=\"?action=notspam&id=" . $id . "\" title=\"".gettext('Approve this message (not SPAM)')."\">";
+			echo '<img src="images/lock_open.png" style="border: 0px;" alt="'. gettext("Approve this message (not SPAM").'" /></a>';
+		} else {
+			echo "<a href=\"?action=spam&id=" . $id . "\" title=\"".gettext('Mark this message as SPAM')."\">";
+			echo '<img src="images/lock_2.png" style="border: 0px;" alt="'. gettext("Mark this message as SPAM").'" /></a>';
 		}
 		?></td>
 		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
