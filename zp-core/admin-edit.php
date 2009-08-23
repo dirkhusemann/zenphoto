@@ -136,8 +136,9 @@ if (isset($_GET['action'])) {
 				$folder = sanitize_path($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
+				$returnalbum = '';
 				if (isset($_POST['savealbuminfo'])) {
-					$notify = processAlbumEdit(0, $album);
+					$notify = processAlbumEdit(0, $album, $returnalbum);
 					$returntab = '&tagsort='.$tagsort.'&tab=albuminfo';
 				}
 
@@ -238,25 +239,29 @@ if (isset($_GET['action'])) {
 									if ($movecopyrename_action == 'move') {
 										$dest = sanitize_path($_POST[$i.'-albumselect'], 3);
 										if ($dest && $dest != $folder) {
-											if (!$image->moveImage($dest)) {
-												$notify = "&mcrerr=1";
+											if ($e = $image->moveImage($dest)) {
+												$notify = "&mcrerr=".$e;
 											}
 										} else {
 											// Cannot move image to same album.
+											$notify = "&mcrerr=2";
 										}
 									} else if ($movecopyrename_action == 'copy') {
 										$dest = sanitize_path($_POST[$i.'-albumselect'],2);
 										if ($dest && $dest != $folder) {
-											if(!$image->copyImage($dest)) {
-												$notify = "&mcrerr=1";
+											if($e = $image->copyImage($dest)) {
+												$notify = "&mcrerr=".$e;
 											}
 										} else {
 											// Cannot copy image to existing album.
 											// Or, copy with rename?
+											$notify = "&mcrerr=2";
 										}
 									} else if ($movecopyrename_action == 'rename') {
 										$renameto = sanitize_path($_POST[$i.'-renameto'],3);
-										$image->renameImage($renameto);
+										if ($e = $image->renameImage($renameto)) {
+											$notify = "&mcrerr=".$e;
+										}
 									}
 								}
 							}
@@ -272,6 +277,9 @@ if (isset($_GET['action'])) {
 						$notify = '&';
 					}
 				}
+				if (!empty($returnalbum)) {
+					$folder = $returnalbum;
+				}
 				$qs_albumsuffix = '';
 
 				/** SAVE MULTIPLE ALBUMS ******************************************************/
@@ -285,7 +293,8 @@ if (isset($_GET['action'])) {
 					}
 					$folder = sanitize_path(trim($_POST[$prefix.'folder']));
 					$album = new Album($gallery, $folder);
-					$rslt = processAlbumEdit($i, $album);
+					$returnalbum = '';
+					$rslt = processAlbumEdit($i, $album, $returnalbum);
 					if (!empty($rslt)) { $notify = $rslt; }
 				}
 				$qs_albumsuffix = "&massedit";
@@ -302,7 +311,7 @@ if (isset($_GET['action'])) {
 			if ($notify == '&') {
 				$notify = '';
 			} else {
-				$notify .= '&saved';
+				if (empty($notify)) $notify = '&saved';
 			}
 			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$qs_albumsuffix.$notify.$pg.$returntab);
 			exit();
@@ -535,13 +544,30 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			</div>
 		<?php
 		}
-		if (isset($_GET['mcrerr'])) {
-			echo '<div class="errorbox" id="fade-message2">';
-			echo  "<h2>".gettext("There was an error with a move, copy, or rename operation.")."</h2>";
-			echo '</div>';
-		}
+	}
+	if (isset($_GET['mcrerr'])) {
 		?>
-	<?php
+		<div class="errorbox" id="fade-message2">
+			<h2>
+			<?php
+			switch (sanitize_numeric($_GET['mcrerr'])) {
+				case 2:
+					echo  gettext("Image already exists.");
+					break;
+				case 3:
+					echo  gettext("Album already exists.");
+					break;
+				case 4:
+					echo  gettext("Cannot move, copy, or rename to a subalbum of this album.");
+					break;
+				default:
+					echo  gettext("There was an error with a move, copy, or rename operation.");
+					break;
+			}
+			?>
+			</h2>
+		</div>
+		<?php
 	}
 	if (isset($_GET['uploaded'])) {
 		echo '<div class="messagebox" id="fade-message">';

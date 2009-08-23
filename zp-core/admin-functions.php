@@ -28,54 +28,54 @@ $sortby = array(gettext('Filename') => 'filename',
 									
 if (OFFSET_PATH) {									
 	// setup sub-tab arrays for use in dropdown
-	$zenphoto_tabs = array();										
+	$zenphoto_tabs = array();
 	if (($_zp_loggedin & (OVERVIEW_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['home'] = array('text'=>gettext("overview"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/admin.php',
 							'subtabs'=>NULL);
 	}
-	
+
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php',
 								'subtabs'=>NULL);
 	}
 
- 	if (($_zp_loggedin & (ALBUM_RIGHTS | ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (ALBUM_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['edit'] = array('text'=>gettext("albums"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-edit.php',
 								'subtabs'=>NULL,
 								'default'=>'albuminfo');
 	}
-	
+
 	if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
 		$zenphoto_tabs['pages'] = array('text'=>gettext("pages"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-pages.php',
 								'subtabs'=>NULL);
-		
+
 		$zenphoto_tabs['articles'] = array('text'=>gettext("news"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-news-articles.php',
 								'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&tab=articles', 
 																	gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&tab=categories'),
 																	'default'=>'articles');
 	}
-	
+
 	if (($_zp_loggedin & (TAGS_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['tags'] = array('text'=>gettext("tags"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-tags.php',
 								'subtabs'=>NULL);
- 	}
- 	
+	}
+
 	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['comments'] = array('text'=>gettext("comments"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-comments.php',
 								'subtabs'=>NULL);
 	}
-	
- 	$zenphoto_tabs['users'] = array('text'=>gettext("admin"),
+
+	$zenphoto_tabs['users'] = array('text'=>gettext("admin"),
  							'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=users&tab=users',
  							'subtabs'=>NULL);
- 	
+
 	$subtabs = array();
 	$optiondefault='';
 	if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
@@ -101,25 +101,25 @@ if (OFFSET_PATH) {
 			$subtabs[gettext("rss")] = 'admin-options.php?page=options&tab=rss';
 		}
 	}
-	if (!empty($subtabs)) {					
+	if (!empty($subtabs)) {
 		$zenphoto_tabs['options'] = array('text'=>gettext("options"),
 				'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=options'.$optiondefault, 
 				'subtabs'=>$subtabs,
 				'default'=>'gallery');
 	}
- 	
+
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
 		$zenphoto_tabs['themes'] = array('text'=>gettext("themes"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/admin-themes.php',
 							'subtabs'=>NULL);
 	}
-	
+
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
 		$zenphoto_tabs['plugins'] = array('text'=>gettext("plugins"),
 								'link'=>WEBPATH."/".ZENFOLDER.'/admin-plugins.php',
 								'subtabs'=>NULL);
 	}
-	
+
 }
 
 /**
@@ -239,7 +239,7 @@ function printAdminHeader($path='', $tinyMCE=true) {
 */
 	?>
 	<?php
-	if ($tinyMCE && file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
+	if ($tinyMCE && file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');
 }
 
 /**
@@ -296,7 +296,7 @@ function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @param $image object The Image object whose thumbnail we want to display.
  * @param $class string Optional class attribute for the hyperlink.  Default is NULL.
  * @param $id	 string Optional id attribute for the hyperlink.  Default is NULL.
- * @param $bg    
+ * @param $bg
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
@@ -333,7 +333,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	}
 	$star = '';
 	$admins = getAdministrators();
-	$mails = array();	
+	$mails = array();
 	if (!empty($requestor)) {
 		$user = null;
 		foreach ($admins as $tuser) {
@@ -379,17 +379,29 @@ function printLoginForm($redirect=null, $logo=true) {
 	<input type="hidden" name="login" value="1" />
 	<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 
-	<table>
-	<tr><td align="left"><h2><?php echo gettext("Login"); ?>&nbsp;</h2></td><td><input class="textfield" name="user" type="text" size="20" value="<?php echo $requestor; ?>" /></td></tr>
-	<tr><td align="left"><h2><?php echo gettext("Password").$star; ?></h2></td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
-	<?php 
+<table>
+	<tr>
+		<td align="left">
+		<h2><?php echo gettext("Login"); ?>&nbsp;</h2>
+		</td>
+		<td><input class="textfield" name="user" type="text" size="20"
+			value="<?php echo $requestor; ?>" /></td>
+	</tr>
+	<tr>
+		<td align="left">
+		<h2><?php echo gettext("Password").$star; ?></h2>
+		</td>
+		<td><input class="textfield" name="pass" type="password" size="20" /></td>
+	</tr>
+	<?php
 	if ($star == '*') {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
-	?>	
-	<tr><td colspan="2">
-		<?php echo "\n		".sprintf(gettext("*Enter %s to email a password reset."), $html); ?>
-		</td></tr>
+		?>
+	<tr>
+		<td colspan="2"><?php echo "\n		".sprintf(gettext("*Enter %s to email a password reset."), $html); ?>
+		</td>
+	</tr>
 	<?php } ?>
 	<tr><td></td><td colspan="2">
 	<div class="buttons">
@@ -514,7 +526,7 @@ function getSubtabs($tab, $default) {
 function printSubtabs($tab, $default=NULL) {
 	global $zenphoto_tabs;
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
-	
+
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
 	?>
@@ -986,7 +998,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	} else {
 		$them = $_zp_admin_ordered_taglist;
 	}
-	
+
 	if (is_null($that)) {
 		$tags = array();
 	} else {
@@ -1097,7 +1109,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<p>
 			<?php
 			$x = $album->getPassword();
-		
+
 			if (!empty($x)) {
 				$x = '			 ';
 			}
@@ -1803,13 +1815,15 @@ function printAlbumEditRow($album) {
 
 /**
  * processes the post from the above
- *@param int param1 the index of the entry in mass edit or 0 if single album
- *@param object param2 the album object
+ * @param int $index the index of the entry in mass edit or 0 if single album
+ * @param object $album the album object
+ * @param string $redirectto used to redirect page refresh on move/copy/rename 
  *@return string error flag if passwords don't match
  *@since 1.1.3
  */
-function processAlbumEdit($index, $album) {
+function processAlbumEdit($index, $album, &$redirectto) {
 	global $gallery;
+	$redirectto = ''; // no redirection required
 	if ($index == 0) {
 		$prefix = '';
 	} else {
@@ -1921,7 +1935,7 @@ function processAlbumEdit($index, $album) {
 	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
 	zp_apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
-		
+
 	// Move/Copy/Rename the album after saving.
 	$movecopyrename_action = '';
 	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {
@@ -1933,26 +1947,32 @@ function processAlbumEdit($index, $album) {
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
-			if ($returnalbum = $album->moveAlbum($dest)) {
-				// A slight hack to redirect to the new album after moving.
-				$_GET['album'] = $returnalbum;
+			if ($album->isDynamic()) { // be sure there is a .alb suffix
+				if (substr($dest, -4) != '.alb') {
+					$dest .= '.alb';
+				}
+			}
+			if ($e = $album->moveAlbum($dest)) {
+				$notify = "&mcrerr=".$e;
 			} else {
-				$notify .= "&mcrerr=1";
+				$redirectto = $dest;
 			}
 		} else {
 			// Cannot move album to same album.
+			$notify = "&mcrerr=3";
 		}
 	} else if ($movecopyrename_action == 'copy') {
 		$dest = sanitize_path($_POST['a'.$prefix.'-albumselect'],3);
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
-			if(!$album->copyAlbum($dest)) {
-				$notify .= "&mcrerr=1";
+			if($e = $album->copyAlbum($dest)) {
+				$notify = "&mcrerr=".$e;
 			}
 		} else {
 			// Cannot copy album to existing album.
 			// Or, copy with rename?
+			$notify = '&mcrerr=3';
 		}
 	} else if ($movecopyrename_action == 'rename') {
 		$renameto = sanitize_path($_POST['a'.$prefix.'-renameto'],3);
@@ -1961,15 +1981,20 @@ function processAlbumEdit($index, $album) {
 			$renameto = dirname($album->name) . '/' . $renameto;
 		}
 		if ($renameto != $album->name) {
-			if ($returnalbum = $album->renameAlbum($renameto)) {
-				// A slight hack to redirect to the new album after moving.
-				$_GET['album'] = $returnalbum;
-			} else {
-				$notify .= "&mcrerr=1";
+			if ($album->isDynamic()) { // be sure there is a .alb suffix
+				if (substr($renameto, -4) != '.alb') {
+					$renameto .= '.alb';
+				}
 			}
+			if ($e = $album->renameAlbum($renameto)) {
+				$notify = "&mcrerr=".$e;
+			} else {
+				$redirectto = $renameto;
+			}
+		} else {
+			$notify = "&mcrerr=3";
 		}
 	}
-
 	return $notify;
 }
 
@@ -1985,7 +2010,7 @@ function checkForUpdate() {
 	global $_zp_WEB_Version;
 	if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
 	$c = ZENPHOTO_VERSION;
-	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');	
+	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
 	if (empty($v)) {
 		$_zp_WEB_Version = 'X';
 	} else {
@@ -2283,7 +2308,7 @@ function isolate($target, $str) {
 }
 
 function seoFriendlyURL($source) {
-	$string = zp_apply_filter('seoFriendlyURL', $source);	
+	$string = zp_apply_filter('seoFriendlyURL', $source);
 	if ($source == $string) { // no filter, do basic cleanup
 		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
 		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
@@ -2328,7 +2353,7 @@ function listDirectoryFiles( $dir ) {
 /**
  * Check if a file is a text file
  *
- * @param string $file 
+ * @param string $file
  * @param array $ok_extensions array of file extensions that are OK to edit (ie text files)
  * @return bool
  * @author Ozh
@@ -2375,12 +2400,12 @@ function copyThemeDirectory($source, $target, $newname) {
 	$message = true;
 	$source  = SERVERPATH . '/themes/'.internalToFilesystem($source);
 	$target  = SERVERPATH . '/themes/'.internalToFilesystem($target);
-	
+
 	// If the target theme already exists, nothing to do.
 	if ( is_dir($target)) {
 		return gettext('Cannot create new theme.') .' '. sprintf(gettext('Directory "%s" already exists!'), basename($target));
 	}
-	
+
 	// If source dir is missing, exit too
 	if ( !is_dir($source)) {
 		return gettext('Cannot create new theme.') .' '.sprintf(gettext('Cannot find theme directory "%s" to copy!'), basename($source));
@@ -2396,10 +2421,10 @@ function copyThemeDirectory($source, $target, $newname) {
 		return gettext('Cannot create new theme.') .' '.gettext('Could not create directory for the new theme');
 	}
 	chmod($target, CHMOD_VALUE);
-	
+
 	// Get a list of files to copy: get all files from the directory, remove those containing '/.svn/'
 	$source_files = array_filter( listDirectoryFiles( $source ), create_function('$str', 'return strpos($str, "/.svn/") === false;') );
-	
+
 	// Determine nested (sub)directories structure to create: go through each file, explode path on "/"
 	// and collect every unique directory
 	$dirs_to_create = array();
@@ -2412,7 +2437,7 @@ function copyThemeDirectory($source, $target, $newname) {
 				continue 2;
 			}
 			$dirs = "$dirs/$subdir";
-			$dirs_to_create[$dirs] = $dirs;	
+			$dirs_to_create[$dirs] = $dirs;
 		}
 	}
 	/*
@@ -2430,7 +2455,7 @@ function copyThemeDirectory($source, $target, $newname) {
 		mkdir("$target/$dir", CHMOD_VALUE);
 		chmod("$target/$dir", CHMOD_VALUE); // Using chmod as PHP doc suggested: "Avoid using umask() in multithreaded webservers. It is better to change the file permissions with chmod() after creating the file."
 	}
-	
+
 	// Now copy every file
 	foreach ( $source_files as $file ) {
 		$newfile = str_replace($source, $target, $file);
@@ -2440,18 +2465,18 @@ function copyThemeDirectory($source, $target, $newname) {
 	}	
 
 	// Rewrite the theme header.
-	if ( file_exists($target.'/theme_description.php') ) {		
+	if ( file_exists($target.'/theme_description.php') ) {
 		$theme_description = array();
 		require($target.'/theme_description.php');
 		$theme_description['desc'] = sprintf(gettext('Your theme, based on theme %s'), $theme_description['name']);
 	} else  {
-		$theme_description['desc'] = gettext('Your theme');	
+		$theme_description['desc'] = gettext('Your theme');
 	}
 	$theme_description['name'] = $newname;
 	$theme_description['author'] = $_zp_current_admin['user'];
 	$theme_description['version'] = '1.0';
 	$theme_description['date']  = zpFormattedDate(getOption('date_format'), time());
-	
+
 	$description = sprintf('<'.'?php
 // Zenphoto theme definition file
 $theme_description["name"] = "%s";
@@ -2473,7 +2498,7 @@ $theme_description["desc"] = "%s";
 	} else {
 		$message = gettext('New custom theme created, but its description could not be updated');
 	}
-	
+
 	// Make a slightly custom theme image
 	if (file_exists("$target/theme.png")) $themeimage = "$target/theme.png";
 	else if (file_exists("$target/theme.gif")) $themeimage = "$target/theme.gif";
@@ -2497,7 +2522,7 @@ $theme_description["desc"] = "%s";
 			imagestring ( $im,  5,  $x,  $y,   $text,  0x0ff0000 );
 			// Save new theme image
 			zp_imageOutput($im, 'png', $themeimage);
-		}	
+		}
 	}
 
 	return $message;
@@ -2534,7 +2559,7 @@ function deleteThemeDirectory($source) {
  * @return string current URL
  * @author Ozh
  * @since 1.3
- * 
+ *
  * @param string $source the script file incase REQUEST_URI is not available
  */
 function currentRelativeURL($source) {

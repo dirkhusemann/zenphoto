@@ -85,25 +85,29 @@ if (isset($_GET['action'])) {
 					if ($movecopyrename_action == 'move') {
 						$dest = sanitize_path($_POST[$i.'-albumselect'], 3);
 						if ($dest && $dest != $folder) {
-							if (!$image->moveImage($dest)) {
-								$notify = "&mcrerr=1";
+							if ($e = $image->moveImage($dest)) {
+								$notify = "&mcrerr=".$e;
 							}
 						} else {
 							// Cannot move image to same album.
+							$notify = "&mcrerr=2";
 						}
 					} else if ($movecopyrename_action == 'copy') {
 						$dest = sanitize_path($_POST[$i.'-albumselect'],2);
 						if ($dest && $dest != $folder) {
-							if(!$image->copyImage($dest)) {
-								$notify = "&mcrerr=1";
+							if($e = $image->copyImage($dest)) {
+								$notify = "&mcrerr=".$e;
 							}
 						} else {
 							// Cannot copy image to existing album.
 							// Or, copy with rename?
+							$notify = "&mcrerr=2";
 						}
 					} else if ($movecopyrename_action == 'rename') {
 						$renameto = sanitize_path($_POST[$i.'-renameto'],3);
-						$image->renameImage($renameto);
+						if ($e = $image->renameImage($renameto)) {
+							$notify = "&mcrerr=".$e;
+						}
 					}
 				}
 			}

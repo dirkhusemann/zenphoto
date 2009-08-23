@@ -923,26 +923,21 @@ class Album extends PersistentObject {
 	 * Move this album to the location specified by $newfolder, copying all
 	 * metadata, subalbums, and subalbums' metadata with it.
 	 * @param $newfolder string the folder to move to, including the name of the current folder (possibly renamed).
-	 * @return boolean true on success and false on failure.
+	 * @return int 0 on success and error indicator on failure.
 	 *
 	 */
 	function moveAlbum($newfolder) {
 		// First, ensure the new base directory exists.
-		if ($this->isDynamic()) { // be sure there is a .alb suffix
-			if (substr($newfolder, -4) != '.alb') {
-				$newfolder .= '.alb';
-			}
-		}
 		$oldfolder = $this->name;
 		$dest = getAlbumFolder().internalToFilesystem($newfolder);
 		// Check to see if the destination already exists
 		if (file_exists($dest)) {
 			// Disallow moving an album over an existing one.
-			return false;
+			return 3;
 		}
 		if (substr($newfolder, count($oldfolder)) == $oldfolder) {
 			// Disallow moving to a subfolder of the current folder.
-			return false;
+			return 4;
 		}
 		if ($this->isDynamic()) {
 			if (@rename($this->localpath, $dest))	{
@@ -954,7 +949,7 @@ class Album extends PersistentObject {
 					return $newfolder;
 				}
 			}
-			return false;
+			return 1;
 		} else {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
@@ -975,10 +970,10 @@ class Album extends PersistentObject {
 					// Handle result here.
 				}
 				$this->updateParent($newfolder);
-				return $newfolder;
+				return 0;
 			}
 		}
-		return false;
+		return 1;
 	}
 	/**
 	 * Rename this album folder. Alias for moveAlbum($newfoldername);
@@ -987,6 +982,40 @@ class Album extends PersistentObject {
 	 */
 	function renameAlbum($newfolder) {
 		return $this->moveAlbum($newfolder);
+	}
+	
+	/**
+	 * returns the SQL to insert a row like $subrow into $table
+	 *
+	 * @param string $subrow
+	 * @param string $table
+	 * @return string
+	 */
+	function replicateSQL($subrow, $table) {
+		// From PersistentObject::copy()
+		$insert_data = $subrow;
+		unset($insert_data['id']);
+		if (empty($insert_data)) { return true; }
+		$sql = 'INSERT INTO ' . prefix($table) . ' (';
+		$i = 0;
+		foreach(array_keys($insert_data) as $col) {
+			if ($i > 0) $sql .= ", ";
+			$sql .= "`$col`";
+			$i++;
+		}
+		$sql .= ') VALUES (';
+		$i = 0;
+		foreach(array_values($insert_data) as $value) {
+			if ($i > 0) $sql .= ', ';
+			if (is_null($value)) {
+				$sql .= "NULL";
+			} else {
+				$sql .= "'" . mysql_real_escape_string($value) . "'";
+			}
+			$i++;
+		}
+		$sql .= ');';
+		return $sql;
 	}
 
 	/**
@@ -1015,30 +1044,7 @@ class Album extends PersistentObject {
 				$subrow['parentid'] =  $parent->getAlbumid();
 			}
 		}
-
-		// From PersistentObject::copy()
-		$insert_data = $subrow;
-		unset($insert_data['id']);
-		if (empty($insert_data)) { return true; }
-		$sql = 'INSERT INTO ' . prefix('albums') . ' (';
-		$i = 0;
-		foreach(array_keys($insert_data) as $col) {
-			if ($i > 0) $sql .= ", ";
-			$sql .= "`$col`";
-			$i++;
-		}
-		$sql .= ') VALUES (';
-		$i = 0;
-		foreach(array_values($insert_data) as $value) {
-			if ($i > 0) $sql .= ', ';
-			if (is_null($value)) {
-				$sql .= "NULL";
-			} else {
-				$sql .= "'" . mysql_real_escape_string($value) . "'";
-			}
-			$i++;
-		}
-		$sql .= ');';
+		$sql = $this->replicateSQL($subrow, 'albums');
 		return query($sql);
 	}
 
@@ -1046,7 +1052,7 @@ class Album extends PersistentObject {
 	 * Copy this album to the location specified by $newfolder, copying all
 	 * metadata, subalbums, and subalbums' metadata with it.
 	 * @param $newfolder string the folder to copy to, including the name of the current folder (possibly renamed).
-	 * @return boolean true on success and false on failure.
+	 * @return int 0 on success and error indicator on failure.
 	 *
 	 */
 	function copyAlbum($newfolder) {
@@ -1054,14 +1060,13 @@ class Album extends PersistentObject {
 		$oldfolder = $this->name;
 		$dest = getAlbumFolder().'/'.internalToFilesystem($newfolder);
 		// Check to see if the destination directory already exists
-
 		if (file_exists($dest)) {
 			// Disallow moving an album over an existing one.
-			return false;
+			return 3;
 		}
 		if (substr($newfolder, count($oldfolder)) == $oldfolder) {
 			// Disallow copying to a subfolder of the current folder (infinite loop).
-			return false;
+			return 4;
 		}
 		if ($this->isDynamic()) {
 			if (@copy($this->localpath, $dest)) {
@@ -1069,9 +1074,10 @@ class Album extends PersistentObject {
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
 				$subrow = query_single_row($sql);
 				$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, true);
-				return $success;
+				if ($success) return 0;
+				return 1;
 			} else {
-				return false;
+				return 2;
 			}
 		} else {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
@@ -1085,14 +1091,31 @@ class Album extends PersistentObject {
 				$allsuccess = true;
 				foreach ($result as $subrow) {
 					$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, $subrow['folder'] == $oldfolder);
+					
+					if ($success) {
+						$oldID = $subrow['id'];
+						$newID = mysql_insert_id();
+						$sql = 'SELECT * FROM '.prefix('images').' WHERE `albumid`='.$oldID;
+						$imageresult = query_full_array($sql);
+						foreach ($imageresult as $imagerow) {
+							$imagerow['albumid'] = $newID;
+							$sql = $this->replicateSQL($imagerow, 'images');
+							$success = query($sql);
+							if ($success !== true) {
+								$allsuccess = false;
+							}
+						}
+					}
+					
 					if (!($success == true && mysql_affected_rows() == 1)) {
 						$allsuccess = false;
 					}
 				}
-				return $allsuccess;
+				if ($allsuccess) return 0;
+				return 1;
 			}
 		}
-		return false;
+		return 1;
 	}
 
 	/**
@@ -1212,7 +1235,7 @@ class Album extends PersistentObject {
 		$albumdir = $this->localpath;
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			if (!is_dir($albumdir)) {
-				$msg = sprintf(gettext("Error: The album %s cannot be found."), $this->name);
+				$msg = sprintf(gettext("Error: The album named %s cannot be found."), $this->name);
 			} else {
 				$msg = sprintf(gettext("Error: The album %s is not readable."), $this->name);
 			}

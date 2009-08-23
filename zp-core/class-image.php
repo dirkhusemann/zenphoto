@@ -534,28 +534,29 @@ class _Image extends PersistentObject {
 
 	/**
 	 * Moves an image to a new album and/or filename (rename).
-	 * Returns  true on success and false on failure.
+	 * Returns  0 on success and error indicator on failure.
 	 * @param Album $newalbum the album to move this file to. Must be a valid Album object.
 	 * @param string $newfilename the new file name of the image in the specified album.
-	 * @return bool
+	 * @return int
 	 */
 	function moveImage($newalbum, $newfilename=null) {
 		if (is_string($newalbum)) $newalbum = new Album($this->album->gallery, $newalbum, false);
 		if ($newfilename == null) $newfilename = $this->filename;
 		if ($newalbum->id == $this->album->id && $newfilename == $this->filename) {
 			// Nothing to do - moving the file to the same place.
-			return true;
+			return 2;
 		}
 		$newpath = $newalbum->localpath . internalToFilesystem($newfilename);
 		if (file_exists($newpath)) {
 			// If the file exists, don't overwrite it.
-			return false;
+			return 2;
 		}
 		$result = @rename($this->localpath, $newpath);
 		if ($result) {
 			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
 		}
-		return $result;
+		if ($result) return 0;
+		return 1;
 	}
 
 	/**
@@ -577,18 +578,19 @@ class _Image extends PersistentObject {
 		if (is_string($newalbum)) $newalbum = new Album($this->album->gallery, $newalbum, false);
 		if ($newalbum->id == $this->album->id) {
 			// Nothing to do - moving the file to the same place.
-			return true;
+			return 2;
 		}
 		$newpath = $newalbum->localpath . internalToFilesystem($this->filename);
 		if (file_exists($newpath)) {
 			// If the file exists, don't overwrite it.
-			return false;
+			return 2;
 		}
 		$result = @copy($this->localpath, $newpath);
 		if ($result) {
 			$result = $this->copy(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));
 		}
-		return $result;
+		if ($result) return 0;
+		return 1;
 	}
 
 	/**
