@@ -133,6 +133,7 @@ if (isset($_GET['action'])) {
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if (isset($_POST['album'])) {
+				
 				$folder = sanitize_path($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
@@ -177,7 +178,7 @@ if (isset($_GET['action'])) {
 										$image->set('used_ips', 0);
 									}
 									$image->setTitle(process_language_string_save("$i-title", 2));
-									$image->setDesc(process_language_string_save("$i-desc", 1));
+									$image->setDesc(process_language_string_save("$i-desc", 1, isset($_POST['TINY_MCE_CONFIGURED'])));
 									$image->setLocation(process_language_string_save("$i-location", 3));
 									$image->setCity(process_language_string_save("$i-city", 3));
 									$image->setState(process_language_string_save("$i-state", 3));
@@ -597,6 +598,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
 			<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+				<?php
+				if (defined('TINY_MCE_CONFIGURED')) {
+					?>
+					<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
+					<?php
+				}
+				?>
 				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 				<input type="hidden"	name="savealbuminfo" value="1" />
 				<?php printAlbumEditForm(0, $album, true); ?>
@@ -657,22 +665,14 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
-				<table>
-					<tr>
-						<td>
-							<p class="buttons">
-							<?php
-							zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
-							?>
-							</p>
-						</td>
-						<td>
-							<p class="buttons">
-							<button class="buttons" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
-							</p>
-						</td>
-					</tr>
-				</table>
+				<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&subalbumsaved&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
+					<?php $_zp_sortable_list->printHiddenInputs();?>
+					<input type="hidden" name="sortableListsSubmitted" value="true">
+					<p class="buttons">
+					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+					<button type="reset" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+					</p>
+				</form>
 				<br clear="all"/>
 		<?php
 		} ?>
@@ -685,6 +685,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		if ($allimagecount) {
 		?>
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
+			<?php
+			if (defined('TINY_MCE_CONFIGURED')) {
+				?>
+				<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
+				<?php
+			}
+			?>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
@@ -1162,6 +1169,11 @@ if (isset($_GET['saved'])) {
 <form name="albumedit" AUTOCOMPLETE=OFF	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
+	if (defined('TINY_MCE_CONFIGURED')) {
+		?>
+		<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
+		<?php
+	}
 	$currentalbum = 0;
 	foreach ($albums as $folder) {
 		$album = new Album($gallery, $folder);
@@ -1270,22 +1282,14 @@ if (isset($_GET['saved'])) {
 <?php
   if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
   	?>
-		<table>
-			<tr>
-				<td>
-					<p class="buttons">
-					<?php
-					zenSortablesSaveButton($_zp_sortable_list, "?page=edit&saved", gettext("Save Order"));
-					?>
-					</p>
-				</td>
-				<td>
-					<p class="buttons">
-					<button class="buttons" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
-					</p>
-				</td>
-			</tr>
-		</table>
+		<form action="?page=edit&saved" method="post" name="sortableListForm" id="sortableListForm">
+		<?php $_zp_sortable_list->printHiddenInputs();?>
+		<input type="hidden" name="sortableListsSubmitted" value="true">
+		<p class="buttons">
+			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+			<button type="reset" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
+		</p>
+		</form>
 		<br clear="all"/>
 		<?php
   }

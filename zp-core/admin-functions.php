@@ -1832,7 +1832,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$tagsprefix = 'tags_'.$prefix;
 	$notify = '';
 	$album->setTitle(process_language_string_save($prefix.'albumtitle', 2));
-	$album->setDesc(process_language_string_save($prefix.'albumdesc', 1));
+	$album->setDesc(process_language_string_save($prefix.'albumdesc', 1, isset($_POST['TINY_MCE_CONFIGURED'])));
 	$tags = array();
 	for ($i=0; $i<4; $i++) {
 		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
@@ -1935,7 +1935,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
 	zp_apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
-
+	
 	// Move/Copy/Rename the album after saving.
 	$movecopyrename_action = '';
 	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {
@@ -2174,9 +2174,11 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  * process the post of a language string form
  *
  * @param string $name the prefix for the label, id, and name tags
+ * @param $sanitize_level the type of sanitization required
+ * @param bool $cleanup set to true to clean up after the TinyMCE editor
  * @return string
  */
-function process_language_string_save($name, $sanitize_level=3) {
+function process_language_string_save($name, $sanitize_level=3, $cleanup=false) {
 	global $_zp_active_languages;
 	if (is_null($_zp_active_languages)) {
 		$_zp_active_languages = generateLanguageList();
@@ -2185,6 +2187,9 @@ function process_language_string_save($name, $sanitize_level=3) {
 	$strings = array();
 	foreach ($_POST as $key=>$value) {
 		if (!empty($value) && preg_match('/^'.$name.'_[a-z]{2}_[A-Z]{2}$/', $key)) {
+			if ($cleanup) {
+				$value = cleanupTinyMCE($value);
+			}
 			$key = substr($key, $l);
 			if (in_array($key, $_zp_active_languages)) {
 				$strings[$key] = sanitize($value, $sanitize_level);
@@ -2777,4 +2782,15 @@ function standardScripts() {
 	if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
 	return $standardlist;
 }
+
+/**
+ * Cleans up after the TinyMCE editor
+ *
+ * @param string $str data from the editor
+ * @return string
+ */
+function cleanupTinyMCE($str) {
+	$str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
+	return $str;
+} 
 ?>

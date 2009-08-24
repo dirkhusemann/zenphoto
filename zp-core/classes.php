@@ -306,7 +306,6 @@ class PersistentObject {
 				$i++;
 			}
 			$sql .= ');';
-			
 			$success = query($sql);
 			if ($success == false || mysql_affected_rows() != 1) { return false; }
 			foreach ($insert_data as $key=>$value) { // copy over any changes

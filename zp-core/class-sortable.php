@@ -27,21 +27,6 @@ function zenSortablesHeader(&$jQuerySortable, $sortContainerID, $orderedList, $s
 }
 
 /**
- * Insert the Save button that will POST the sortable list
- *
- * @param object $jQuerySortable the jQuerySortable instance for the sort
- * @param string $link  The destination of the POST operation.
- * @param string $label The label for the button.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
- */
-function zenSortablesSaveButton(&$jQuerySortable, $link, $label="Save") {
-	$jQuerySortable->printForm($link, 'POST', $label, 'buttons');
-}
-
-
-/**
  * Handles the POST operation of the sorted list.
  * 
  * @param object $jQuerySortable the jQuerySortable instance for the sort
@@ -154,16 +139,6 @@ class jQuerySortable {
 		}
 		if ($this->debugging)
 			echo '<br>';
-	}
-
-	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '',$formName = 'sortableListForm') {
-		?>
-		<form action="<?php echo $action;?>" method="<?php echo $method;?>" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
-			<?php $this->printHiddenInputs();?>
-			<input type="hidden" name="sortableListsSubmitted" value="true">
-			<button type="submit" title="<?php echo $submitText; ?>" class="<?php echo $submitClass; ?>"><img src="images/pass.png" alt="" /><strong><?php echo $submitText; ?></strong></button>
-		</form>
-		<?php
 	}
 	
 	function getOrderArray($input, $listname, $itemKeyName = 'element', $orderKeyName = 'order') {

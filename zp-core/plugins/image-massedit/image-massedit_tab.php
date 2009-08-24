@@ -55,7 +55,7 @@ if (isset($_GET['action'])) {
 						$image->set('used_ips', 0);
 					}
 					$image->setTitle(process_language_string_save("$i-title", 2));
-					$image->setDesc(process_language_string_save("$i-desc", 1));
+					$image->setDesc(process_language_string_save("$i-desc", 1, isset($_POST['TINY_MCE_CONFIGURED'])));
 
 
 					$image->setShow(isset($_POST["$i-Visible"]));
@@ -166,6 +166,13 @@ $subtab = printSubtabs('edit', 'mass_edit');
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $allimagecount; ?>" />
+			<?php
+			if (defined('TINY_MCE_CONFIGURED')) {
+				?>
+				<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
+				<?php
+			}
+			?>
 		
 		<table class="bordered">
 			<tr>

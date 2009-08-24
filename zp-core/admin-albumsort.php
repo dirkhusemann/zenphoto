@@ -88,9 +88,17 @@ foreach ($images as $image) {
 ?></div>
 <br>
 
-<div><?php
-zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=". $album->getFolder() . "&saved");
-?><br /></div>
+<div>
+	<form action="?page=edit&album=<?php echo $album->getFolder(); ?>&saved" method="post" name="sortableListForm" id="sortableListForm">
+		<?php $_zp_sortable_list->printHiddenInputs();?>
+		<input type="hidden" name="sortableListsSubmitted" value="true">
+		<p class="buttons">
+			<button type="submit" title="<?php echo gettext('Save order'); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext('Save order'); ?></strong></button>
+		</p>
+	</form>
+	<br clear="all"/>
+
+</div>
 
 </div>
 
