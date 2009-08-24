@@ -515,12 +515,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	
 	?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php if($album->getParent()) { printAlbumBreadcrumbAdmin($album); } echo removeParentAlbumNames($album); ?></em></h1>
-<p><?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
- | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
-   printSortLink($album, gettext("Sort Album"), gettext("Sort Album"));
-   echo ' | '; }?>
-<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
-</p>
 
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
@@ -623,11 +617,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		if (count($subalbums) > 0) {
 		?>
 		<div id="tab_subalbuminfo" class="tabbox">
-			<table class="bordered" width="100%">
+		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&subalbumsaved&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
+			<?php $_zp_sortable_list->printHiddenInputs();?>
+			<input type="hidden" name="sortableListsSubmitted" value="true">
 			<input type="hidden" name="subalbumsortby" value="manual" />
-			<tr>
-				<td colspan="8">
-				<?php
+			<p>
+			<?php
 					$sorttype = strtolower($album->getSubalbumSortType());
 					if ($sorttype != 'manual') {
 						if ($album->getSortDirection('album')) {
@@ -643,9 +638,15 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 					printf(gettext('Current sort: <em>%1$s%2$s</em>. '), $sorttype, $dir);
 					echo gettext('Drag the albums into the order you wish them displayed.').' ';
 					echo gettext("Select an album to edit its description and data, or");
-				?>
-				<a href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.</td>
-			</tr>
+			?>
+			<a href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.
+			</p>
+			<p class="buttons">
+					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+			</p>
+			<br clear="all"/><br />
+			<table class="bordered" width="100%">	
 			<tr>
 				<td style="padding: 0px 0px;" colspan="8">
 				<div id="albumList" class="albumList">
@@ -665,12 +666,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
-				<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&subalbumsaved&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
-					<?php $_zp_sortable_list->printHiddenInputs();?>
-					<input type="hidden" name="sortableListsSubmitted" value="true">
 					<p class="buttons">
 					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
-					<button type="reset" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 					</p>
 				</form>
 				<br clear="all"/>
@@ -1252,7 +1250,21 @@ if (isset($_GET['saved'])) {
 		}
 		echo gettext('Select an album to edit its description and data, or');
 	?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
-
+	
+	<?php
+  if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+  	?>
+  	<form action="?page=edit&saved" method="post" name="sortableListForm" id="sortableListForm">
+  	<?php $_zp_sortable_list->printHiddenInputs(); ?>
+		<input type="hidden" name="sortableListsSubmitted" value="true">
+		<p class="buttons">
+			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
+		</p>
+		<br clear="all"/><br />
+		<?php
+  }
+	?>
 <table class="bordered" width="100%">
 	<tr>
 		<th style="text-align: left;"><?php echo gettext("Edit this album"); ?></th>
@@ -1282,12 +1294,9 @@ if (isset($_GET['saved'])) {
 <?php
   if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
   	?>
-		<form action="?page=edit&saved" method="post" name="sortableListForm" id="sortableListForm">
-		<?php $_zp_sortable_list->printHiddenInputs();?>
-		<input type="hidden" name="sortableListsSubmitted" value="true">
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
-			<button type="reset" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
+			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 		</p>
 		</form>
 		<br clear="all"/>

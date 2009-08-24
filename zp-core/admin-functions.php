@@ -1055,6 +1055,16 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
 	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value=0 />
+	<p class="buttons">
+	<?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
+	<?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
+   printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); }?>
+		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+		<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+		<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
+	</p>
+<br clear="all" /><br />
 	<table>
 		<td width="70%" valign="top">
 		<table>
@@ -1654,13 +1664,17 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 	</table>
 	
-<br clear:all />
-<p class="buttons">
-<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
-<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
-<button type="reset" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
-</p>
-<br clear: all />
+<br clear="all" />
+	<p class="buttons">
+	<?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
+	<?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
+   printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); }?>
+		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+		<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+		<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
+	</p>
+<br clear="all" />
 <?php
 }
 
