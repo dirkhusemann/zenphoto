@@ -1488,5 +1488,5 @@ function getLocaleForTinyMCEandAFM() {
  * The by default included Ajax File Manager does only work with TinyMCE and FCKEditor though.
  *
  */
-require_once("texteditorconfig.php");
+require_once("editor_config.js.php");
 ?>
