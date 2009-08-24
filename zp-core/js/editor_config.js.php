@@ -24,7 +24,8 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tin
 			force_p_newlines : false,	
 			relative_urls : false,
 			document_base_url : "<?php echo WEBPATH."/"; ?>",
-			convert_urls : false
+			convert_urls : false,
+			entity_encoding: "raw"
 		});
 	</script>
 	<?php

@@ -47,7 +47,8 @@ function printTextEditorConfigJS($locale='') {
 			force_p_newlines : true,	
 			relative_urls : false,
 			document_base_url : "<?php echo WEBPATH."/"; ?>",
-			convert_urls : false
+			convert_urls : false,
+			entity_encoding: "raw"
 		});
 
 		function ajaxfilemanager(field_name, url, type, win) {
