@@ -3137,7 +3137,7 @@ function printLatestComments($number, $shorten='123',$type="all",$itemID="") {
  * @return string
  */
 function getHitcounter($obj=NULL) {
-	global $_zp_current_album, $_zp_current_image, $_zp_gallery_page;
+	global $_zp_current_album, $_zp_current_image, $_zp_gallery_page, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_current_category;
 	if (is_null($obj)) {
 		switch ($_zp_gallery_page) {
 			case 'album.php':
@@ -3146,7 +3146,20 @@ function getHitcounter($obj=NULL) {
 			case 'image.php':
 				$obj = $_zp_current_image;
 				break;
-			default: return NULL; // not a valid object for hitcounter
+			case 'pages.php':
+				$obj = $_zp_current_zenpage_page;
+				break;
+			case 'news.php':
+				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
+					$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$_zp_current_category."'");
+					return $hc["hitcounter"];
+				} else {
+					$obj = $_zp_current_zenpage_news;
+				}
+				break;
+			default:
+				$page = substr($_zp_gallery_page, 0, -4);
+				return getOption('Page_'.$page.'_Hitcounter');
 				break;
 		}
 	}

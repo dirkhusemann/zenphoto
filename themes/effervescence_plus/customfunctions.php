@@ -182,22 +182,39 @@ function annotateImage() {
 	return  sprintf(gettext('View the image: %s'),GetBareImageTitle()).$tagit;
 }
 
-function printFooter($page) {
-	global $_zp_themeroot;
+function printFooter() {
+	global $_zp_themeroot, $_zp_gallery_page;
 	?>
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php
-		switch ($page) {
-		case 'image':
-			$h = getHitcounter();
-			echo "<p>".sprintf(ngettext('%1$u hit on this image','%1$u hits on this image',$h),$h)."</p>";
-			break;
-			case 'album':
-			$h = getHitcounter();
-			echo "<p>".sprintf(ngettext('%1$u hit on this album','%1$u hits on this album',$h),$h)."</p>";
-			break;
-		case 'gallery':
+		$page = gettext('page');
+		switch ($_zp_gallery_page) {
+			case 'album.php':
+				$page = gettext('album');
+				break;
+			case 'image.php':
+				$page = gettext('image');
+				break;
+			case 'news.php':
+				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
+					$page = gettext('category');
+				} else {
+					$page = gettext('article');
+				}
+				break;
+			default:
+				break;
+		}
+		$h = getHitcounter();
+		if (!is_null($h) && $page != 'password') {
+			?>
+			<p>
+			<?php printf(ngettext('%1$u hit on this %2$s','%1$u hits on this %2$s',$h),$h, $page); ?>
+			</p>
+			<?php
+		}
+		if ($page == 'gallery') {
 			?>
 			<p>
 				<small>
@@ -213,7 +230,6 @@ function printFooter($page) {
 				</small>
 			</p>
 			<?php
-			break;
 		}
 		?>
 		<?php printThemeInfo(); ?>

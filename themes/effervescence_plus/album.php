@@ -44,6 +44,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		$backgroundColor = parseCSSDef($zenCSS);
 	}
 ?>
+<?php header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -379,7 +380,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <br style="clear:all" />
 
 <?php
-printFooter('album');
+printFooter();
 ?>
 
 

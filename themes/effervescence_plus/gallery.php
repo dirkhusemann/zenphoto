@@ -1,4 +1,5 @@
 <?php require ('customfunctions.php'); $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(3, 5);?>
+<?php header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -83,7 +84,7 @@
 	
 	<br style="clear:all" />	
 
-	<?php printFooter('gallery')?>
+	<?php printFooter()?>
 
 </body>
 </html>

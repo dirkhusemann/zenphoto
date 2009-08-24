@@ -39,6 +39,7 @@ if (isset($_GET['p'])) {
 	} else {
 		$obj = THEMEFOLDER."/$theme/$page.php";
 		$_zp_gallery_page = basename($obj);
+		if (!zp_loggedin()) setOption('Page_'.$page.'_Hitcounter', getOption('Page_'.$page.'_Hitcounter')+1);
 	}
 
 // Display an Image page.
@@ -77,6 +78,7 @@ if (isset($_GET['p'])) {
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms('index');
 	$theme = setupTheme();
+	if (!zp_loggedin()) setOption('Page_index_Hitcounter', getOption('Page_index_Hitcounter')+1);
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
 

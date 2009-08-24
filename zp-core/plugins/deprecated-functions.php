@@ -11,9 +11,50 @@
 $plugin_description = gettext("Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as as they have been supplanted. They are not maintained and they are not guarentted to function correctly with the current version of Zenphoto.");
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---deprecated-functions.php.html";
 
+/**
+ * THIS FUNCTION IS DEPRECATED! Use getHitcounter()!
+ * Gets the hitcount of a page, news article or news category
+ * 
+ * @param string $mode Pass "news", "page" or "category" to get the hitcounter of the current page, article or category if one is set
+ * @param mixed $obj If you want to get the hitcount of a specific page or article you additonally can to pass its object.
+ * 									 If you want to get the hitcount of a specific category you need to pass its cat_link. 
+ * 									 In any case $mode must be set!
+ * @return int
+ */
+function getZenpageHitcounter($mode="",$obj=NULL) {
+	global $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category;
+	trigger_error(gettext('getZenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
+	switch($mode) {
+		case "news":
+			if((is_NewsArticle() OR is_News()) AND !is_object($obj)) {
+				$obj = $_zp_current_zenpage_news;
+				$hc = $obj->get('hitcounter');
+			} else if(is_object($obj)) {
+				$hc = $obj->get('hitcounter');
+			}
+			return $hc;
+			break;
+		case "page":
+			if(is_Pages() AND !is_object($obj)) {
+				$obj = $_zp_current_zenpage_page;
+				$hc = $obj->get('hitcounter');
+			} else if(is_object($obj)) {
+				$hc = $obj->get('hitcounter');
+			}
+			return $hc;
+			break;
+		case "category":
+			if(!is_object($obj) || is_NewsCategory() AND !empty($obj)) {
+				$catname = $_zp_current_category;
+				$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
+				return $hc["hitcounter"];
+			} 
+			break;
+	}
+}
 
 /**
- * THIS FUNCTION IS DEPRECATED! Use getZenpageHitcounter()!
+ * THIS FUNCTION IS DEPRECATED! Use getHitcounter()!
  * 
  * Increments (optionally) and returns the hitcounter for a news category (page 1), a single news article or a page
  * Does not increment the hitcounter if the viewer is logged in as the gallery admin.
@@ -26,7 +67,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---deprecat
  */
 function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
 	global $_zp_current_zenpage_page, $_zp_current_zenpage_news, $_zp_loggedin;
-	trigger_error(gettext('hitcounter is deprecated. Use getZenpageHitcounter().'), E_USER_NOTICE);
+	trigger_error(gettext('zenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
 	switch($option) {
 		case "pages":
 			if (is_null($id)) {
