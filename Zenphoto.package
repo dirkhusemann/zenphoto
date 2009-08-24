@@ -289,6 +289,7 @@ zp-core/images/fail.png
 zp-core/images/folder.png
 zp-core/images/imageDefault.png
 zp-core/images/lock.png
+zp-core/images/lock_2.png
 zp-core/images/lock_open.png
 zp-core/images/marker.png
 zp-core/images/mask.png
@@ -1483,6 +1484,7 @@ zp-core/plugins/zenpage/admin-categories.php
 zp-core/plugins/zenpage/admin-edit.php
 zp-core/plugins/zenpage/admin-news-articles.php
 zp-core/plugins/zenpage/admin-pages.php
+zp-core/plugins/zenpage/editor_config.js.php
 zp-core/plugins/zenpage/images/add.png
 zp-core/plugins/zenpage/images/clock.png
 zp-core/plugins/zenpage/images/comments-off.png
@@ -1500,7 +1502,6 @@ zp-core/plugins/zenpage/js/inestedsortable.js
 zp-core/plugins/zenpage/js/interface-1.2.js
 zp-core/plugins/zenpage/js/jquery.textarearesizer.compressed.js
 zp-core/plugins/zenpage/js/thickbox.js
-zp-core/plugins/zenpage/texteditorconfig.php
 zp-core/plugins/zenpage/thickbox-mod.css
 zp-core/plugins/zenpage/zenpage-admin-functions.php
 zp-core/plugins/zenpage/zenpage-class-news.php

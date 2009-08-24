@@ -178,7 +178,7 @@ if (isset($_GET['action'])) {
 										$image->set('used_ips', 0);
 									}
 									$image->setTitle(process_language_string_save("$i-title", 2));
-									$image->setDesc(process_language_string_save("$i-desc", 1, isset($_POST['TINY_MCE_CONFIGURED'])));
+									$image->setDesc(process_language_string_save("$i-desc", 1));
 									$image->setLocation(process_language_string_save("$i-location", 3));
 									$image->setCity(process_language_string_save("$i-city", 3));
 									$image->setState(process_language_string_save("$i-state", 3));
@@ -592,13 +592,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
 			<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
-				<?php
-				if (defined('TINY_MCE_CONFIGURED')) {
-					?>
-					<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
-					<?php
-				}
-				?>
 				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 				<input type="hidden"	name="savealbuminfo" value="1" />
 				<?php printAlbumEditForm(0, $album, true); ?>
@@ -642,8 +635,17 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<a href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.
 			</p>
 			<p class="buttons">
-					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
-					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+				<?php
+				$parent = dirname($album->name);
+				if ($parent == '/' || $parent == '.') {
+					$parent = '';
+				} else {
+					$parent = '&album='.$parent.'&tab=subalbuminfo';
+				}
+				printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+				?>
+				<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 			</p>
 			<br clear="all"/><br />
 			<table class="bordered" width="100%">	
@@ -667,6 +669,15 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
 					<p class="buttons">
+					<?php
+					$parent = dirname($album->name);
+					if ($parent == '/' || $parent == '.') {
+						$parent = '';
+					} else {
+						$parent = '&album='.$parent.'&tab=subalbuminfo';
+					}
+					printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+					?>
 					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 					</p>
@@ -683,13 +694,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		if ($allimagecount) {
 		?>
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
-			<?php
-			if (defined('TINY_MCE_CONFIGURED')) {
-				?>
-				<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
-				<?php
-			}
-			?>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
@@ -732,10 +736,19 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		 ?>
 			<tr>
 				<td colspan="4">
-			<p class="buttons">
-				<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-				<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-		 </p>
+					<p class="buttons">
+						<?php
+						$parent = dirname($album->name);
+						if ($parent == '/' || $parent == '.') {
+							$parent = '';
+						} else {
+							$parent = '&album='.$parent.'&tab=subalbuminfo';
+						}
+						printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+						?>
+						<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+				 </p>
 			
 				
 				</td>
@@ -1072,12 +1085,21 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			$currentimage++;
 		}
 		?>
-			<tr>
+			<tr <?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
 				<td colspan="4">
 				
 				<p class="buttons">
-				<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-				<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					<?php
+					$parent = dirname($album->name);
+					if ($parent == '/' || $parent == '.') {
+						$parent = '';
+					} else {
+						$parent = '&album='.$parent.'&tab=subalbuminfo';
+					}
+					printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+					?>
+					<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 		 		</p>
 					
 			</td>
@@ -1167,11 +1189,6 @@ if (isset($_GET['saved'])) {
 <form name="albumedit" AUTOCOMPLETE=OFF	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
-	if (defined('TINY_MCE_CONFIGURED')) {
-		?>
-		<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
-		<?php
-	}
 	$currentalbum = 0;
 	foreach ($albums as $folder) {
 		$album = new Album($gallery, $folder);

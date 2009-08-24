@@ -64,10 +64,6 @@ if (!isset($_GET['album'])) {
 <div id="content">
 
 <h1>Sort Album: <?php echo $album->getTitle(); ?></h1>
-<p><?php printAlbumEditLinks('', "&laquo; ".gettext("back to the album list"), gettext("Back to the list of albums"));?> 
-| <?php printAlbumEditLinks("&album=". urlencode( ($album->getFolder()) ), gettext("edit album"), gettext("Edit Album")); ?> 
-| <?php printViewLink($album, gettext("view album"), gettext("View Album")); ?>
-</p>
 	<?php
 	if (isset($_GET['saved'])) {
 		echo '<div class="messagebox" id="fade-message">';
@@ -77,7 +73,12 @@ if (!isset($_GET['album'])) {
 	?>
 
 <div class="tabbox">
-
+	<p class="buttons">
+		<?php printAlbumEditLinks('&album='.$album->name, "&laquo; ".gettext("Back"), gettext("Back to the album"));?>
+		<button type="submit" title="<?php echo gettext("Save order"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
+	</p>
+	<br clear="all"/>
 <p><?php echo gettext("Sort the images by dragging them..."); ?></p>
 
 <div id="images"><?php
@@ -93,7 +94,10 @@ foreach ($images as $image) {
 		<?php $_zp_sortable_list->printHiddenInputs();?>
 		<input type="hidden" name="sortableListsSubmitted" value="true">
 		<p class="buttons">
-			<button type="submit" title="<?php echo gettext('Save order'); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext('Save order'); ?></strong></button>
+			<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
+			<?php printAlbumEditLinks('&album='.$album->name, "&laquo; ".gettext("Back"), gettext("Back to the album"));?>
+			<button type="submit" title="<?php echo gettext("Save order"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 		</p>
 	</form>
 	<br clear="all"/>

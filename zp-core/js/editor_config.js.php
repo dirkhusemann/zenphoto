@@ -29,6 +29,5 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tin
 		});
 	</script>
 	<?php
-	define('TINY_MCE_CONFIGURED', true);
 }
 ?>

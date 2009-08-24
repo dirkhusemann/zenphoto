@@ -55,7 +55,7 @@ if (isset($_GET['action'])) {
 						$image->set('used_ips', 0);
 					}
 					$image->setTitle(process_language_string_save("$i-title", 2));
-					$image->setDesc(process_language_string_save("$i-desc", 1, isset($_POST['TINY_MCE_CONFIGURED'])));
+					$image->setDesc(process_language_string_save("$i-desc", 1));
 
 
 					$image->setShow(isset($_POST["$i-Visible"]));
@@ -147,13 +147,6 @@ if (count($subalbums) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array
 $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 ?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php if($album->getParent()) { printAlbumBreadcrumbAdmin($album); } echo removeParentAlbumNames($album); ?></em></h1>
-<p>
-<?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
- | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
-   printSortLink($album, gettext("Sort Album"), gettext("Sort Album"));
-   echo ' | '; }?>
-<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
-</p>
 
 <?php
 $subtab = printSubtabs('edit', 'mass_edit');
@@ -166,24 +159,22 @@ $subtab = printSubtabs('edit', 'mass_edit');
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $allimagecount; ?>" />
-			<?php
-			if (defined('TINY_MCE_CONFIGURED')) {
-				?>
-				<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
-				<?php
-			}
-			?>
 		
 		<table class="bordered">
 			<tr>
-				<th>
-				</th>
-			</tr>
-			<tr>
 				<td colspan="4">
 					<p class="buttons">
-						<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+						<?php
+						$parent = dirname($album->name);
+						if ($parent == '/' || $parent == '.') {
+							$parent = '';
+						} else {
+							$parent = '&album='.$parent.'&tab=subalbuminfo';
+						}
+						printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+						?>
+						<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="../../images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="../../images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 				</td>
 			</tr>
@@ -191,6 +182,7 @@ $subtab = printSubtabs('edit', 'mass_edit');
 			$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
 		
 			$currentimage = 0;
+			$classalt = '';
 			if (getOption('auto_rotate')) {
 				$disablerotate = '';
 			} else {
@@ -198,9 +190,14 @@ $subtab = printSubtabs('edit', 'mass_edit');
 			}
 			foreach ($images as $filename) {
 				$image = newImage($album, $filename);
+				if (empty($classalt)) {
+					$classalt = 'class="alt"';
+				} else { 
+					$classalt = '';
+				}
 				?>
 		
-			<tr <?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
+			<tr <?php echo $classalt; ?>>
 				<td colspan="4">
 				<input type="hidden" name="<?php echo $currentimage; ?>-filename"	value="<?php echo $image->filename; ?>" />
 				<table border="0" class="formlayout" id="image-<?php echo $currentimage; ?>">
@@ -346,26 +343,54 @@ $subtab = printSubtabs('edit', 'mass_edit');
 			<?php
 			$currentimage++;
 			if ($currentimage % 10 == 0) {
+				if (empty($classalt)) {
+					$classalt = 'class="alt"';
+				} else { 
+					$classalt = '';
+				}
 				?>							
-				<tr>
+				<tr <?php echo $classalt; ?>>
 					<td colspan="4">
 						<p class="buttons">
-							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-				 		</p>
+							<?php
+							$parent = dirname($album->name);
+							if ($parent == '/' || $parent == '.') {
+								$parent = '';
+							} else {
+								$parent = '&album='.$parent.'&tab=subalbuminfo';
+							}
+							printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+							?>
+							<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="../../images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="../../images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+						</p>
 					</td>
 				</tr>
 				<?php
 			}
 		}
 		if ($currentimage % 10 != 0) {
-			?>
-			<tr>
+			if (empty($classalt)) {
+				$classalt = 'class="alt"';
+			} else { 
+				$classalt = '';
+			}
+			?>							
+			<tr <?php echo $classalt; ?>>
 				<td colspan="4">
 					<p class="buttons">
-						<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-			 		</p>
+						<?php
+						$parent = dirname($album->name);
+						if ($parent == '/' || $parent == '.') {
+							$parent = '';
+						} else {
+							$parent = '&album='.$parent.'&tab=subalbuminfo';
+						}
+						printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+						?>
+						<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="../../images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
+						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="../../images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
 				</td>
 			</tr>
 			<?php

@@ -255,39 +255,7 @@ function printAdminHeader($path='', $tinyMCE=true) {
  * @since  1.0.0
  */
 function printAlbumEditLinks($param, $text, $title=NULL, $class=NULL, $id=NULL) {
-	printLink(WEBPATH.'/'.ZENFOLDER."/admin-edit.php?page=edit". $param, $text, $title, $class, $id);
-}
-
-/**
- * Print a link to the album sorting page. We will remain within the Edit tab of the admin section.
- *
- * @param $album The album name to sort.
- * @param $text  Text for the hyperlink.
- * @param $title Optional title attribute for the hyperlink. Default is NULL.
- * @param $class Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id	 Optional id attribute for the hyperlink.  Default is NULL.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
- */
-function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	printLink(WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
-}
-
-/**
- * Print a link that will take the user to the actual album. E.g. useful for View Album.
- *
- * @param $album The album to view.
- * @param $text  Text for the hyperlink.
- * @param $title Optional title attribute for the hyperlink. Default is NULL.
- * @param $class Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id	 Optional id attribute for the hyperlink.  Default is NULL.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
- */
-function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	printLink(WEBPATH . "/index.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
+	printLink(WEBPATH.'/'.ZENFOLDER."/admin-edit.php?page=edit".$param, $text, $title, $class, $id);
 }
 
 /**
@@ -1056,13 +1024,30 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
 	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value=0 />
 	<p class="buttons">
-	<?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
-	<?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
-   printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); }?>
+		<?php
+		$parent = dirname($album->name);
+		if ($parent == '/' || $parent == '.') {
+			$parent = '';
+		} else {
+			$parent = '&album='.$parent.'&tab=subalbuminfo';
+		}
+		printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+		if (!$album->isDynamic() && $album->getNumImages() > 1) {
+			?>
+			<button type="button" title="<?php echo gettext('Sort Images'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=". urlencode($album->getFolder()); ?>'" ><img src="images/sortorder.png" alt="" /><strong><?php echo gettext('Sort Images'); ?></strong></button>
+			<?php
+		}
+		?>
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
-		<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
-		<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
+		<?php
+		if (!$album->isDynamic()) {
+			?>
+			<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+			<?php
+		}
+		?>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 	</p>
 <br clear="all" /><br />
 	<table>
@@ -1666,13 +1651,30 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 <br clear="all" />
 	<p class="buttons">
-	<?php printAlbumEditLinks($albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
-	<?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
-   printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); }?>
+		<?php
+		$parent = dirname($album->name);
+		if ($parent == '/' || $parent == '.') {
+			$parent = '';
+		} else {
+			$parent = '&album='.$parent.'&tab=subalbuminfo';
+		}
+		printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
+		if (!$album->isDynamic() && $album->getNumImages() > 1) {
+			?>
+			<button type="button" title="<?php echo gettext('Sort Images'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=". urlencode($album->getFolder()); ?>'" ><img src="images/sortorder.png" alt="" /><strong><?php echo gettext('Sort Images'); ?></strong></button>
+			<?php
+		}
+		?>
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
-		<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
-		<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
+		<?php
+		if (!$album->isDynamic()) {
+			?>
+			<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+			<?php
+		}
+		?>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 	</p>
 <br clear="all" />
 <?php
@@ -1846,7 +1848,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$tagsprefix = 'tags_'.$prefix;
 	$notify = '';
 	$album->setTitle(process_language_string_save($prefix.'albumtitle', 2));
-	$album->setDesc(process_language_string_save($prefix.'albumdesc', 1, isset($_POST['TINY_MCE_CONFIGURED'])));
+	$album->setDesc(process_language_string_save($prefix.'albumdesc', 1));
 	$tags = array();
 	for ($i=0; $i<4; $i++) {
 		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
@@ -2192,7 +2194,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  * @param bool $cleanup set to true to clean up after the TinyMCE editor
  * @return string
  */
-function process_language_string_save($name, $sanitize_level=3, $cleanup=false) {
+function process_language_string_save($name, $sanitize_level=3) {
 	global $_zp_active_languages;
 	if (is_null($_zp_active_languages)) {
 		$_zp_active_languages = generateLanguageList();
@@ -2201,9 +2203,6 @@ function process_language_string_save($name, $sanitize_level=3, $cleanup=false) 
 	$strings = array();
 	foreach ($_POST as $key=>$value) {
 		if (!empty($value) && preg_match('/^'.$name.'_[a-z]{2}_[A-Z]{2}$/', $key)) {
-			if ($cleanup) {
-				$value = cleanupTinyMCE($value);
-			}
 			$key = substr($key, $l);
 			if (in_array($key, $_zp_active_languages)) {
 				$strings[$key] = sanitize($value, $sanitize_level);
@@ -2797,14 +2796,4 @@ function standardScripts() {
 	return $standardlist;
 }
 
-/**
- * Cleans up after the TinyMCE editor
- *
- * @param string $str data from the editor
- * @return string
- */
-function cleanupTinyMCE($str) {
-	$str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-	return $str;
-} 
 ?>

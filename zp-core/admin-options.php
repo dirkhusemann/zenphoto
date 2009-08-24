@@ -164,7 +164,7 @@ if (isset($_GET['action'])) {
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
 			setOption('login_user_field', isset($_POST['login_user_field']));
 			setOption('gallery_title', process_language_string_save('gallery_title', 2));
-			setoption('Gallery_description', process_language_string_save('Gallery_description', 1, isset($_POST['TINY_MCE_CONFIGURED'])));
+			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
 			setOption('website_title', process_language_string_save('website_title', 2));
 			$web = sanitize($_POST['website_url'],3);
 			setOption('website_url', $web);
@@ -846,13 +846,6 @@ if (empty($alterrights)) {
 		?>
 		<div id="tab_gallery" class="tabbox">
 			<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
-			<?php
-			if (defined('TINY_MCE_CONFIGURED')) {
-				?>
-				<input type="hidden" name="TINY_MCE_CONFIGURED"	value="1" />
-				<?php
-			}
-			?>
 			<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
 				<tr>
