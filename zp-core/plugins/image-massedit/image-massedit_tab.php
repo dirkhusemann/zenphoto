@@ -167,8 +167,8 @@ $subtab = printSubtabs('edit', 'mass_edit');
 						} else {
 							$parent = '&album='.$parent.'&tab=subalbuminfo';
 						}
-						printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
 						?>
+						<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="../../images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
 						<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="../../images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="../../images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
@@ -355,8 +355,8 @@ $subtab = printSubtabs('edit', 'mass_edit');
 							} else {
 								$parent = '&album='.$parent.'&tab=subalbuminfo';
 							}
-							printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
 							?>
+							<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="../../images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="../../images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="../../images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 						</p>
@@ -382,8 +382,8 @@ $subtab = printSubtabs('edit', 'mass_edit');
 						} else {
 							$parent = '&album='.$parent.'&tab=subalbuminfo';
 						}
-						printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
 						?>
+						<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="../../images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
 						<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="../../images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="../../images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
