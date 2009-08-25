@@ -656,17 +656,18 @@ function size_readable($size, $unit = null, $retstring = null)
  */
 $_zp_album_folder = null;
 function getAlbumFolder($root=SERVERPATH) {
+	$root = str_replace('\\', '/', $root);
 	global $_zp_album_folder, $_zp_conf_vars;
 	if (is_null($_zp_album_folder)) {
 		if (!isset($_zp_conf_vars['external_album_folder']) || empty($_zp_conf_vars['external_album_folder'])) {
 			if (!isset($_zp_conf_vars['album_folder']) || empty($_zp_conf_vars['album_folder'])) {
 				$_zp_album_folder = $_zp_conf_vars['album_folder'] = '/'.ALBUMFOLDER.'/';
 			} else {
-				$_zp_album_folder = $_zp_conf_vars['album_folder'];
+				$_zp_album_folder = str_replace('\\', '/', $_zp_conf_vars['album_folder']);
 			}
 		} else {
 			$_zp_conf_vars['album_folder_class'] = 'external';
-			$_zp_album_folder = $_zp_conf_vars['external_album_folder'];
+			$_zp_album_folder =  str_replace('\\', '/', $_zp_conf_vars['external_album_folder']);
 		}
 		if (substr($_zp_album_folder, -1) != '/') $_zp_album_folder .= '/';
 	}

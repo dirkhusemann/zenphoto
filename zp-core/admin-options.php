@@ -681,27 +681,36 @@ if (empty($alterrights)) {
 				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
 				<tr>
 					<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
+					<?php
+					if (empty($userid)) {
+						$displaytitle = gettext("Show details");
+						$hidetitle = gettext("Hide details");
+					} else {
+						$displaytitle = sprintf(gettext('Show details for user %s'),$userid); 
+						$hidetitle = sprintf(gettext('Hide details for user %s'),$userid); 
+					}
+					?>
 						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
-							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
+							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
 								<?php
 								if (empty($userid)) {
-									echo gettext("Add New Admin");
+									echo '<em>'.gettext("Add New User").'</em>';
 								} else {
 									?>
 									<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 									<?php
-									echo $userid; 
+									echo '<strong>'.$userid.'</strong>'; 
 								}
 								?>
 							</a>
 						</span>
 						<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
-							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
+							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
 								<?php 
 								if (empty($userid)) {
-									echo gettext("Add New Admin");
+									echo '<em>'.gettext("Add New User").'</em>';
 								} else {
-									echo $userid;
+									echo '<strong>'.$userid.'</strong>';
 								}
 								?>
 							</a>
