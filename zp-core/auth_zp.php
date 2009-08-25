@@ -86,12 +86,15 @@ if (!isset($_POST['login'])) {
 					}
 				}
 				$tuser = array_shift($admins);
-				if ($tuser['email'] && count($mails) == 0 || $mails[0] != $tuser['email']) {
+				$mail2 = $mails;
+				$primo = array_shift($mail2);
+
+				if ($tuser['email'] && count($mails) == 0 || $primo != $tuser['email']) {
 					$name = $tuser['name'];
 					if (empty($name)) {
 							$name = $tuser['user'];
 					}
-					$mails [$name] = $tuser['email'];
+					$mails[$name] = $tuser['email'];
 					if (is_null($user)) {
 						$user = $tuser;
 					}
