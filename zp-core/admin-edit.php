@@ -462,6 +462,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$oldalbumimagesort = getOption('albumimagesort');
 	$direction = getOption('albumimagedirection');
 	$folder = sanitize_path($_GET['album']); 
+	if ($folder == '/' || $folder == '.') {
+		$parent = '';
+	} else {
+		$parent = '&album='.$folder.'&tab=subalbuminfo';
+	}
 	$album = new Album($gallery, $folder);
 	if ($album->isDynamic()) {
 		$subalbums = array();
@@ -491,13 +496,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
 
 	$totalimages = count($images);
-	$albumdir = "";
 
-	$albumdir = dirname($folder);
-	if (($albumdir == '/') || ($albumdir == '.')) {
-		$albumdir = '';
+	$parent = dirname($album->name);
+	if (($parent == '/') || ($parent == '.') || empty($parent)) {
+		$parent = '';
 	} else {
-		$albumdir = "&album=" . urlencode($albumdir);
+		$parent = "&album=" . urlencode($parent);
 	}
 	if (isset($_GET['subalbumsaved'])) {
 		$album->setSubalbumSortType('manual');
@@ -513,8 +517,14 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo '</div>';
 	}
 	
-	?>
-<h1><?php echo gettext("Edit Album:");?> <em><?php if($album->getParent()) { printAlbumBreadcrumbAdmin($album); } echo removeParentAlbumNames($album); ?></em></h1>
+if($album->getParent()) {
+	$link = getAlbumBreadcrumbAdmin($album);
+} else {
+	$link = '';
+}
+$alb = removeParentAlbumNames($album);
+?>
+<h1><?php printf(gettext('Edit Album: <em>%1$s%2$s</em>'),  $link, $alb); ?></h1>
 
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
@@ -579,11 +589,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".sprintf(gettext("<em>%s</em> already exists."),sanitize($_GET['exists']))."</h2>";
 		echo '</div>';
 	}
-	$albumlink = '?page=edit&album='.urlencode($album->name);
-	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
-	if ($allimagecount) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),$zenphoto_tabs['edit']['subtabs']);
-	if (count($subalbums) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
-	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
+	setAlbumSubtabs($album);
 	$subtab = printSubtabs('edit', 'albuminfo');
 	?>
 	<?php
@@ -635,15 +641,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<a href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.
 			</p>
 			<p class="buttons">
-				<?php
-				$parent = dirname($album->name);
-				if ($parent == '/' || $parent == '.') {
-					$parent = '';
-				} else {
-					$parent = '&album='.$parent.'&tab=subalbuminfo';
-				}
-				printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
-				?>
+				<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back)"), gettext("Back to the album list")); ?>
 				<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 			</p>
@@ -669,15 +667,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
 					<p class="buttons">
-					<?php
-					$parent = dirname($album->name);
-					if ($parent == '/' || $parent == '.') {
-						$parent = '';
-					} else {
-						$parent = '&album='.$parent.'&tab=subalbuminfo';
-					}
-					printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
-					?>
+					<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back)"), gettext("Back to the album list")); ?>
 					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 					</p>
@@ -737,15 +727,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<tr>
 				<td colspan="4">
 					<p class="buttons">
-						<?php
-						$parent = dirname($album->name);
-						if ($parent == '/' || $parent == '.') {
-							$parent = '';
-						} else {
-							$parent = '&album='.$parent.'&tab=subalbuminfo';
-						}
-						printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
-						?>
+						<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back)"), gettext("Back to the album list")); ?>
 						<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 				 </p>
@@ -1089,15 +1071,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<td colspan="4">
 				
 				<p class="buttons">
-					<?php
-					$parent = dirname($album->name);
-					if ($parent == '/' || $parent == '.') {
-						$parent = '';
-					} else {
-						$parent = '&album='.$parent.'&tab=subalbuminfo';
-					}
-					printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
-					?>
+					<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list")); ?>
 					<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 		 		</p>

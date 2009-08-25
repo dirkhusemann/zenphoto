@@ -58,28 +58,46 @@ if (!isset($_GET['album'])) {
 	printLogoAndLinks();
 	?>
 
-<div id="main"><?php printTabs('edit'); ?>
+<div id="main">
+<?php printTabs('edit'); ?>
 
 
 <div id="content">
+<?php
+if($album->getParent()) {
+	$link = getAlbumBreadcrumbAdmin($album);
+} else {
+	$link = '';
+}
+$alb = removeParentAlbumNames($album);
+?>
+<h1><?php printf(gettext('Edit Album: <em>%1$s%2$s</em>'),  $link, $alb); ?></h1>
+<?php
+if (isset($_GET['saved'])) {
+	echo '<div class="messagebox" id="fade-message">';
+	echo  "<h2>".gettext("Image order saved");
+	echo '</h2></div>';
+}
+$images = $album->getImages();
+setAlbumSubtabs($album);
+$subtab = printSubtabs('edit', 'sort');
 
-<h1>Sort Album: <?php echo $album->getTitle(); ?></h1>
-	<?php
-	if (isset($_GET['saved'])) {
-		echo '<div class="messagebox" id="fade-message">';
-		echo  "<h2>".gettext("Image order saved");
-		echo '</h2></div>';
-	}
-	?>
+$parent = dirname($album->name);
+if ($parent == '/' || $parent == '.' || empty($parent)) {
+	$parent = '';
+} else {
+	$parent = '&album='.$parent.'&tab=subalbuminfo';
+}
+?>
 
 <div class="tabbox">
 	<p class="buttons">
-		<?php printAlbumEditLinks('&album='.$album->name, "&laquo; ".gettext("Back"), gettext("Back to the album"));?>
+		<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list")); ?>
 		<button type="submit" title="<?php echo gettext("Save order"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 	</p>
 	<br clear="all"/>
-<p><?php echo gettext("Sort the images by dragging them..."); ?></p>
+<p><?php echo gettext("Set the image order by dragging them to the positions you desire."); ?></p>
 
 <div id="images"><?php
 $images = $album->getImages();
@@ -94,8 +112,7 @@ foreach ($images as $image) {
 		<?php $_zp_sortable_list->printHiddenInputs();?>
 		<input type="hidden" name="sortableListsSubmitted" value="true">
 		<p class="buttons">
-			<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
-			<?php printAlbumEditLinks('&album='.$album->name, "&laquo; ".gettext("Back"), gettext("Back to the album"));?>
+			<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list")); ?>
 			<button type="submit" title="<?php echo gettext("Save order"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 			<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 		</p>

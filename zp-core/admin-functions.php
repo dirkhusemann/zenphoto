@@ -522,6 +522,20 @@ function printSubtabs($tab, $default=NULL) {
 	return $current;
 }
 
+function setAlbumSubtabs($album) {
+	global $zenphoto_tabs;
+	$albumlink = '?page=edit&album='.urlencode($album->name);
+	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
+	if (count($album->getImages())) {
+		$zenphoto_tabs['edit']['subtabs'] = array_merge(
+																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),
+																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&page=edit&tab=sort'),
+																					$zenphoto_tabs['edit']['subtabs']);
+	}
+	if (count($album->getSubalbums()) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
+	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
+}
+
 function checked($checked, $current) {
 	if ( $checked == $current)
 	echo ' checked="checked"';
@@ -1026,17 +1040,12 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<p class="buttons">
 		<?php
 		$parent = dirname($album->name);
-		if ($parent == '/' || $parent == '.') {
+		if ($parent == '/' || $parent == '.' || empty($parent)) {
 			$parent = '';
 		} else {
 			$parent = '&album='.$parent.'&tab=subalbuminfo';
 		}
 		printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
-		if (!$album->isDynamic() && $album->getNumImages() > 1) {
-			?>
-			<button type="button" title="<?php echo gettext('Sort Images'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=". urlencode($album->getFolder()); ?>'" ><img src="images/sortorder.png" alt="" /><strong><?php echo gettext('Sort Images'); ?></strong></button>
-			<?php
-		}
 		?>
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
@@ -1651,20 +1660,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 <br clear="all" />
 	<p class="buttons">
-		<?php
-		$parent = dirname($album->name);
-		if ($parent == '/' || $parent == '.') {
-			$parent = '';
-		} else {
-			$parent = '&album='.$parent.'&tab=subalbuminfo';
-		}
-		printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list"));
-		if (!$album->isDynamic() && $album->getNumImages() > 1) {
-			?>
-			<button type="button" title="<?php echo gettext('Sort Images'); ?>" onclick="javascript:window.location='<?php echo WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=". urlencode($album->getFolder()); ?>'" ><img src="images/sortorder.png" alt="" /><strong><?php echo gettext('Sort Images'); ?></strong></button>
-			<?php
-		}
-		?>
+		<?php printAlbumEditLinks($parent, "&laquo; ".gettext("Back"), gettext("Back to the album list")); ?>
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 		<?php
@@ -2605,16 +2601,22 @@ function getParentAlbumsAdmin($album) {
 	return $parents;
 }
 
+function getAlbumBreadcrumbAdmin($album) {
+	$link = '';
+	$parents = getParentAlbumsAdmin($album);
+	foreach($parents as $parent) {
+		$link .= "<a href='admin-edit.php?page=edit&amp;album=".pathurlencode($parent->name)."'>".removeParentAlbumNames($parent)."</a>/";
+	}
+	return $link;
+}
+
 /**
  * prints the album breadcrumb for the album edit page
  *
  * @param object $album Object of the album
  */
 function printAlbumBreadcrumbAdmin($album) {
-	$parents = getParentAlbumsAdmin($album);
-	foreach($parents as $parent) {
-		echo "<a href='admin-edit.php?page=edit&amp;album=".pathurlencode($parent->name)."'>".removeParentAlbumNames($parent)."</a>/";
-	}
+	echo getAlbumBreadcrumbAdmin($album);
 }
 
 /**

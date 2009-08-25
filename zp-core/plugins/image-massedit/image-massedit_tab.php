@@ -140,11 +140,7 @@ if (($albumdir == '/') || ($albumdir == '.')) {
 	$albumdir = "&album=" . urlencode($albumdir);
 }
 $allimagecount = count($images);
-$albumlink = '?page=edit&album='.urlencode($album->name);
-if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
-$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),$zenphoto_tabs['edit']['subtabs']);
-if (count($subalbums) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
-$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
+setAlbumSubtabs($album);
 ?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php if($album->getParent()) { printAlbumBreadcrumbAdmin($album); } echo removeParentAlbumNames($album); ?></em></h1>
 
@@ -166,7 +162,7 @@ $subtab = printSubtabs('edit', 'mass_edit');
 					<p class="buttons">
 						<?php
 						$parent = dirname($album->name);
-						if ($parent == '/' || $parent == '.') {
+						if ($parent == '/' || $parent == '.' || empty($parent)) {
 							$parent = '';
 						} else {
 							$parent = '&album='.$parent.'&tab=subalbuminfo';
@@ -354,7 +350,7 @@ $subtab = printSubtabs('edit', 'mass_edit');
 						<p class="buttons">
 							<?php
 							$parent = dirname($album->name);
-							if ($parent == '/' || $parent == '.') {
+							if ($parent == '/' || $parent == '.' || empty($parent)) {
 								$parent = '';
 							} else {
 								$parent = '&album='.$parent.'&tab=subalbuminfo';
@@ -381,7 +377,7 @@ $subtab = printSubtabs('edit', 'mass_edit');
 					<p class="buttons">
 						<?php
 						$parent = dirname($album->name);
-						if ($parent == '/' || $parent == '.') {
+						if ($parent == '/' || $parent == '.' || empty($parent)) {
 							$parent = '';
 						} else {
 							$parent = '&album='.$parent.'&tab=subalbuminfo';
