@@ -2589,7 +2589,7 @@ function getAlbumBreadcrumbAdmin($album) {
 	$link = '';
 	$parents = getParentAlbumsAdmin($album);
 	foreach($parents as $parent) {
-		$link .= "<a href='admin-edit.php?page=edit&amp;album=".pathurlencode($parent->name)."'>".removeParentAlbumNames($parent)."</a>/";
+		$link .= "<a href='".WEBPATH.'/'.ZENFOLDER."/admin-edit.php?page=edit&amp;album=".pathurlencode($parent->name)."'>".removeParentAlbumNames($parent)."</a>/";
 	}
 	return $link;
 }
