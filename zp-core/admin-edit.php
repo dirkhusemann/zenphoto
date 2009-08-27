@@ -1111,9 +1111,6 @@ if($subtab != "albuminfo") {	?>
 <!-- page trailer -->
 </div>
 
-<p>
-<a href="?page=edit<?php echo $albumdir ?>"	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a>
-</p>
 <?php } 
 
 /*** MULTI-ALBUM ***************************************************************************/

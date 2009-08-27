@@ -16,7 +16,7 @@ if (!zp_loggedin()) {
 
 if (!empty($_FILES)) {
 	$tempFile = sanitize($_FILES['Filedata']['tmp_name'],3);
-	$folder = sanitize($_GET['folder'],3);
+	$folder = sanitize($_POST['folder'],3);
 	if (substr($folder,0,1) == '/') {
 		$folder = substr($folder,1);
 	}

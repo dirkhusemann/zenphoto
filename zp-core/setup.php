@@ -137,6 +137,7 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 		updateItem('mysql_prefix', $_POST['mysql_prefix']);
 	}
 }
+
 if (isset($_GET['strict_chmod'])) {
 	if ($_GET['strict_chmod']) {
 		$chmod = 0755;
@@ -172,6 +173,9 @@ if ($updatezp_config) {
 $result = true;
 $chmod_defined = false;
 $environ = false;
+$DBcreated = false;
+$createDBErr = '';
+$oktocreate = false;
 if (file_exists(CONFIGFILE)) {
 	require(CONFIGFILE);
 	if (defined('CHMOD_VALUE')) {
@@ -179,6 +183,11 @@ if (file_exists(CONFIGFILE)) {
 		$chmod_defined = true;
 	}
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
+		if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
+			$collation = ' CHARACTER SET utf8 COLLATE utf8_unicode_ci';
+		} else {
+			$collation = '';
+		}
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
 			if ($result) {
@@ -186,6 +195,25 @@ if (file_exists(CONFIGFILE)) {
 			}
 			$environ = true;
 			require_once(dirname(__FILE__).'/admin-functions.php');
+		} else {
+			if (!empty($_zp_conf_vars['mysql_database'])) {
+				if (isset($_GET['Create_Database'])) {
+					$sql = 'CREATE DATABASE IF NOT EXISTS '.$_zp_conf_vars['mysql_database'].$collation;
+					$result = @mysql_query($sql);
+					if ($result && @mysql_select_db($_zp_conf_vars['mysql_database'])) {
+						$environ = true;
+						require_once(dirname(__FILE__).'/admin-functions.php');
+					} else {
+						if ($result) {
+							$DBcreated = true;
+						} else {
+							$createDBErr = mysql_error();
+						}
+					}
+				} else {
+					$oktocreate = true;
+				}
+			}
 		}
 	}
 }
@@ -738,37 +766,44 @@ if ($debug) {
 <table class="inputform">
 	<tr>
 		<td><?php echo gettext("MySQL admin user") ?></td>
-		<td><input type="text" size="40" name="mysql_user"
-			value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
+		<td>
+			<input type="text" size="40" name="mysql_user" value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("MySQL admin password") ?></td>
-		<td><input type="password" size="40" name="mysql_pass"
-			value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
+		<td>
+			<input type="password" size="40" name="mysql_pass" value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("MySQL host") ?></td>
-		<td><input type="text" size="40" name="mysql_host"
-			value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
+		<td>
+			<input type="text" size="40" name="mysql_host" value="<?php echo $_zp_conf_vars['mysql_host']?>" />
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("MySQL database") ?></td>
-		<td><input type="text" size="40" name="mysql_database"
-			value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
+		<td>
+			<input type="text" size="40" name="mysql_database" value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Database table prefix") ?></td>
-		<td><input type="text" size="40" name="mysql_prefix"
-			value="<?php echo $_zp_conf_vars['mysql_prefix']?>" /></td>
+		<td>
+			<input type="text" size="40" name="mysql_prefix" value="<?php echo $_zp_conf_vars['mysql_prefix']?>" />
+		</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td align="right">* <?php echo gettext("required") ?></td>
+		<td></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="save" /></td>
-		<td></td>
+		<td>
+			<input type="submit" value="save" />
+		</td>
 	</tr>
 </table>
 </form>
@@ -784,173 +819,190 @@ if ($debug) {
 		$good = checkMark($connection, gettext("Connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
 	}
 	if ($connection) {
-		if ($sqlv == 0) $sqlv = -1; // make it non-fatal
 		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
-		$good = checkMark($db, sprintf(gettext("Connect to the database <code>%s</code>"),$_zp_conf_vars['mysql_database']), '',
-			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
-			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
-			gettext("Also check the <code>MySQL host</code>.")) && $good;
-
-		$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
-		if ($result) {
-			$row = @mysql_fetch_row($result);
-			$oldmode = $row[0];
+		if ($DBcreated || !empty($createDBErr)) {
+			if (empty($createDBErr)) {
+				$severity = 1;
+			} else {
+				$severity = 0;
+			}
+			checkMark($severity, sprintf(gettext('Database <code>%s</code> created'), $_zp_conf_vars['mysql_database']),sprintf(gettext('Database <code>%s</code> not created [<code>CREATE DATABASE</code> query failed]'), $_zp_conf_vars['mysql_database']),$createDBErr);
 		}
-		$result = @mysql_query('SET SESSION sql_mode="";', $mysql_connection);
-		if ($result) {
+		if (empty($_zp_conf_vars['mysql_database'])) {
+			$good = checkmark(0, '', gettext('Connect to the database [You have not provided a database name]'),gettext('Privode the name of your database in the form above.'));
+		} else {
+			if ($oktocreate) {
+				$good = checkmark(0, '', gettext('Connect to the database [Database does not exist]'),sprintf(gettext('Click here to attempt to create <a href="?Create_Database" >%s</a>.'),$_zp_conf_vars['mysql_database']));
+			}
+		}
+		if ($environ) {
+			if ($sqlv == 0) $sqlv = -1; // make it non-fatal
+			$good = checkMark($db, sprintf(gettext("Connect to the database <code>%s</code>"),$_zp_conf_vars['mysql_database']), '',
+								sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.
+								gettext("Check the <code>user</code>, <code>password</code>, <code>database name</code>, and <code>MySQL host</code>.").'<br />' .
+								sprintf(gettext("Make sure the database has been created and that <code>%s</code> has access to it."),$_zp_conf_vars['mysql_user'])) && $good;
+
 			$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
-			$msg = gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.');
 			if ($result) {
 				$row = @mysql_fetch_row($result);
-				$mode = $row[0];
-				if ($oldmode != $mode) {
-					checkMark(-1, sprintf(gettext('MySQL <code>SQL mode</code> [<em>%s</em> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
-				} else {
-					if (!empty($mode)) {
-						$err = -1;
+				$oldmode = $row[0];
+			}
+			$result = @mysql_query('SET SESSION sql_mode="";', $mysql_connection);
+			$msg = gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.');
+			if ($result) {
+				$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+				if ($result) {
+					$row = @mysql_fetch_row($result);
+					$mode = $row[0];
+					if ($oldmode != $mode) {
+						checkMark(-1, sprintf(gettext('MySQL <code>SQL mode</code> [<em>%s</em> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
 					} else {
-						$err = 1;
+						if (!empty($mode)) {
+							$err = -1;
+						} else {
+							$err = 1;
+						}
+						checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
 					}
-					checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
+				} else {
+					checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), $msg);
 				}
 			} else {
-				checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), $msg);
+				checkMark(-1, '', gettext('MySQL <code>SQL mode</code> [SET SESSION failed]'), $msg);
 			}
-		} else {
-			checkMark(-1, '', gettext('MySQL <code>SQL mode</code> [SET SESSION failed]'), $msg);
-		}
-		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
-		if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
-			$sql = "SHOW GRANTS FOR CURRENT_USER;";
-		} else {
-			$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";
-		}
-		$result = @mysql_query($sql, $mysql_connection);
-		if (!$result) {
-			$result = @mysql_query("SHOW GRANTS;", $mysql_connection);
-		}
-		$MySQL_results = array();
-		while ($onerow = @mysql_fetch_row($result)) {
-			$MySQL_results[] = $onerow[0];
-		}
-		$access = -1;
-		$rightsfound = 'unknown';
-		$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
-																	gettext('Update')=>'UPDATE',gettext('Alter')=>'ALTER',gettext('Delete')=>'DELETE',gettext('Index')=>'INDEX');
-		ksort($rightsneeded);
-		$neededlist = '';
-		foreach ($rightsneeded as $right=>$value) {
+			$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
+			if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
+				$sql = "SHOW GRANTS FOR CURRENT_USER;";
+			} else {
+				$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";
+			}
+			$result = @mysql_query($sql, $mysql_connection);
+			if (!$result) {
+				$result = @mysql_query("SHOW GRANTS;", $mysql_connection);
+			}
+			$MySQL_results = array();
+			while ($onerow = @mysql_fetch_row($result)) {
+				$MySQL_results[] = $onerow[0];
+			}
+			$access = -1;
+			$rightsfound = 'unknown';
+			$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
+			gettext('Update')=>'UPDATE',gettext('Alter')=>'ALTER',gettext('Delete')=>'DELETE',gettext('Index')=>'INDEX');
+			ksort($rightsneeded);
+			$neededlist = '';
+			foreach ($rightsneeded as $right=>$value) {
 				$neededlist .= '<code>'.$right.'</code>, ';
-		}
-		$neededlist = substr($neededlist, 0, -2).' ';
-		$i = strrpos($neededlist, ',');
-		$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
-		if ($result) {
-			$report = "<br /><br /><em>".gettext("Grants found:")."</em> ";
-			foreach ($MySQL_results as $row) {
-				$row_report = "<br /><br />".$row;
-				$r = str_replace(',', '', $row);
-				$i = strpos($r, "ON");
-				$j = strpos($r, "TO", $i);
-				$found = stripslashes(trim(substr($r, $i+2, $j-$i-2)));
-				if ($partial = (($i = strpos($found, '%')) !== false)) {
-					$found = substr($found, 0, $i);
-				}
-				$rights = array_flip(explode(' ', $r));
-				$rightsfound = 'insufficient';
-				if (($found == $dbn) || ($found == "*.*") || $partial && preg_match('/^'.$found.'/', $dbn)) {
-					$allow = true;
-					foreach ($rightsneeded as $key=>$right) {
-						if (!isset($rights[$right])) {
-							$allow = false;
+			}
+			$neededlist = substr($neededlist, 0, -2).' ';
+			$i = strrpos($neededlist, ',');
+			$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
+			if ($result) {
+				$report = "<br /><br /><em>".gettext("Grants found:")."</em> ";
+				foreach ($MySQL_results as $row) {
+					$row_report = "<br /><br />".$row;
+					$r = str_replace(',', '', $row);
+					$i = strpos($r, "ON");
+					$j = strpos($r, "TO", $i);
+					$found = stripslashes(trim(substr($r, $i+2, $j-$i-2)));
+					if ($partial = (($i = strpos($found, '%')) !== false)) {
+						$found = substr($found, 0, $i);
+					}
+					$rights = array_flip(explode(' ', $r));
+					$rightsfound = 'insufficient';
+					if (($found == $dbn) || ($found == "*.*") || $partial && preg_match('/^'.$found.'/', $dbn)) {
+						$allow = true;
+						foreach ($rightsneeded as $key=>$right) {
+							if (!isset($rights[$right])) {
+								$allow = false;
+							}
 						}
+						if (isset($rights['ALL']) || $allow) {
+							$access = 1;
+						}
+						$report .= '<strong>'.$row_report.'</strong>';
+					} else {
+						$report .= $row_report;
 					}
-					if (isset($rights['ALL']) || $allow) {
-						$access = 1;
-					}
-					$report .= '<strong>'.$row_report.'</strong>';
-				} else {
-					$report .= $row_report;
+				}
+			} else {
+				$report = "<br /><br />".gettext("The <em>SHOW GRANTS</em> query failed.");
+			}
+			checkMark($access, gettext("MySQL <code>access rights</code>"), sprintf(gettext("MySQL <code>access rights</code> [%s]"),$rightsfound),
+			sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
+
+
+			$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
+			$result = @mysql_query($sql, $mysql_connection);
+			$tableslist = '';
+			if ($result) {
+				while ($row = @mysql_fetch_row($result)) {
+					$tableslist .= "<code>" . $row[0] . "</code>, ";
 				}
 			}
-		} else {
-			$report = "<br /><br />".gettext("The <em>SHOW GRANTS</em> query failed.");
-		}
-		checkMark($access, gettext("MySQL <code>access rights</code>"), sprintf(gettext("MySQL <code>access rights</code> [%s]"),$rightsfound),
- 											sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
-
-
-		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
-		$result = @mysql_query($sql, $mysql_connection);
-		$tableslist = '';
-		if ($result) {
-			while ($row = @mysql_fetch_row($result)) {
-				$tableslist .= "<code>" . $row[0] . "</code>, ";
+			if (empty($tableslist)) {
+				$msg = gettext('MySQL <em>show tables</em> [found no tables]');
+				$msg2 = '';
+			} else {
+				$msg = sprintf(gettext("MySQL <em>show tables</em> found: %s"),substr($tableslist, 0, -2));
+				$msg2 = '';
 			}
-		}
-		if (empty($tableslist)) {
-			$msg = gettext('MySQL <em>show tables</em> [found no tables]');
-			$msg2 = '';
-		} else {
-			$msg = sprintf(gettext("MySQL <em>show tables</em> found: %s"),substr($tableslist, 0, -2));
-			$msg2 = '';
-		}
-		if (!$result) { $result = -1; }
-		$dbn = $_zp_conf_vars['mysql_database'];
-		checkMark($result, $msg, gettext("MySQL <em>show tables</em> [Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
+			if (!$result) { $result = -1; }
+			$dbn = $_zp_conf_vars['mysql_database'];
+			checkMark($result, $msg, gettext("MySQL <em>show tables</em> [Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
  											"<br />".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
-		if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
-			if (!empty($tableslist)) {
-				$fields = 0;
-				$fieldlist = array();
-				$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'images`';
-				$result1 = @mysql_query($sql, $mysql_connection);
-				if ($result1) {
-					while ($row = @mysql_fetch_row($result1)) {
-						if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
-							$fields = $fields | 1;
-							$fieldlist[] = '<code>images->'.$row[0].'</code>';
+			if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
+				if (!empty($tableslist)) {
+					$fields = 0;
+					$fieldlist = array();
+					$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'images`';
+					$result1 = @mysql_query($sql, $mysql_connection);
+					if ($result1) {
+						while ($row = @mysql_fetch_row($result1)) {
+							if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
+								$fields = $fields | 1;
+								$fieldlist[] = '<code>images->'.$row[0].'</code>';
+							}
 						}
+					} else {
+						$fields = 4;
 					}
-				} else {
-					$fields = 4;
-				}
-				$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
-				$result2 = @mysql_query($sql, $mysql_connection);
-				if ($result2) {
-					while ($row = @mysql_fetch_row($result2)) {
-						if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
-							$fields = $fields | 2;
-							$fieldlist[] = '<code>albums->'.$row[0].'</code>';
+					$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
+					$result2 = @mysql_query($sql, $mysql_connection);
+					if ($result2) {
+						while ($row = @mysql_fetch_row($result2)) {
+							if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
+								$fields = $fields | 2;
+								$fieldlist[] = '<code>albums->'.$row[0].'</code>';
+							}
 						}
+					} else {
+						$fields = 4;
 					}
-				} else {
-					$fields = 4;
+					$err = -1;
+					switch ($fields) {
+						case 0: // all is well
+							$msg2 = '';
+							$err = 1;
+							break;
+						case 1:
+							$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
+							break;
+						case 2:
+							$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
+							break;
+						case 3:
+							$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
+							break;
+						default:
+							$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
+							break;
+					}
+					checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
 				}
-				$err = -1;
-				switch ($fields) {
-					case 0: // all is well
-						$msg2 = '';
-						$err = 1;
-						break;
-					case 1:
-						$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
-						break;
-					case 2:
-						$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
-						break;
-					case 3:
-						$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
-						break;
-					default:
-						$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
-						break;
-				}
-				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
+			} else {
+				checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
 			}
-		} else {
-			checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
 		}
 	}
 
@@ -1241,12 +1293,6 @@ if (file_exists(CONFIGFILE)) {
 	$db_schema = array();
 	$sql_statements = array();
 	
-	if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
-		$collation = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci';
-	} else {
-		$collation = '';
-	}
-
 	/***********************************************************************************
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
