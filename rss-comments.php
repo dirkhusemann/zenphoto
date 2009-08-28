@@ -1,8 +1,14 @@
 <?php
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
-header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
+if (!getOption('RSS_comments')) {
+	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
+	include(ZENFOLDER. '/404.php');
+	exit();
+}
+header('Content-Type: application/xml');
 
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 

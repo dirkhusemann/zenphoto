@@ -53,14 +53,23 @@ if(function_exists("printAllNewsCategories")) {
 	</ul>
 </div>
 
-<div class="menu">
-<h3><?php echo gettext("RSS"); ?></h3>
-	<ul>
-		<li><?php printRSSLink('Gallery','','Gallery', ''); ?></li>
-		<?php if(function_exists("printZenpageRSSLink")) { ?>
-		<li><?php printZenpageRSSLink("News","","","News"); ?></li>
-		<li><?php printZenpageRSSLink("NewsWithImages","","","News and Gallery"); ?></li>
-		<?php } ?>
-	</ul>
-</div>
-
+<?php
+if (getOption('RSS_album_image') || getOption('RSS_articles')) {
+	?>
+	<div class="menu">
+	<h3><?php echo gettext("RSS"); ?></h3>
+		<ul>
+			<?php printRSSLink('Gallery','<li>',gettext('Gallery'), '</li>'); ?>
+			<?php
+			if(function_exists("printZenpageRSSLink")) {
+				?>
+				<?php printZenpageRSSLink("News","","<li>",gettext("News"), '</li>'); ?>
+				<?php printZenpageRSSLink("NewsWithImages","","<li>",gettext("News and Gallery"),'</li>'); ?>
+			<?php
+			}
+			?>
+		</ul>
+	</div>
+	<?php
+}
+?>

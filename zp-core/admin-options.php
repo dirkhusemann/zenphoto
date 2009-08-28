@@ -277,6 +277,10 @@ if (isset($_GET['action'])) {
 			setOption('feed_sortorder_albums', sanitize($_POST['feed_sortorder_albums'],3));
 			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
 			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
+			setBoolOption('RSS_album_image', isset($_POST['RSS_album_image']));
+			setBoolOption('RSS_comments', isset($_POST['RSS_comments']));
+			setBoolOption('RSS_articles', isset($_POST['RSS_articles']));
+			setBoolOption('RSS_article_comments', isset($_POST['RSS_article_comments']));
 			$returntab = "&tab=rss";
 		}
 		
@@ -1519,7 +1523,32 @@ if (empty($alterrights)) {
 			</td>
 			<td></td>
 		</tr>
-
+		<tr>
+			<td width="175"><?php echo gettext("RSS feeds enabled:"); ?></td>
+			<td>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('Gallery'); ?>
+					</label>
+				</span>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="RSS_comments" value=<?php if (getOption('RSS_comments')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('Comments'); ?>
+					</label>
+				</span>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="RSS_articles" value=<?php if (getOption('RSS_articles')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('All news'); ?>
+					</label>
+				</span>
+				<span style="white-space:nowrap">
+					<label>
+						<input type="checkbox" name="RSS_article_comments" value=<?php if (getOption('RSS_article_comments')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('News/Page comments'); ?>
+					</label>
+				</span>
+			</td>
+			<td><?php echo gettext("Check each RSS feed you wish to activate. Note: Theme support is required to display RSS links."); ?></td>
+		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
 			<td width="350">

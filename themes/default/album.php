@@ -65,7 +65,7 @@
 	</div>
 </div>
 
-<div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 
+<div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ' | '); ?><?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 
 <?php printZenphotoLink(); ?>
 <?php
 if (function_exists('printUserLogout')) {

@@ -39,19 +39,26 @@
 	</ul>
 </div>
 
-<div class="menu">
-<h3><?php echo gettext("RSS"); ?></h3>
-	<ul>
-	<?php if(!is_null($_zp_current_album)) { ?>
-	<li><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?></li>
-	<?php } ?>
-		<li><?php printRSSLink('Gallery','','Gallery', ''); ?></li>
-		<?php if(function_exists("printZenpageRSSLink")) { ?>
-		<li><?php printZenpageRSSLink("News","","",gettext("News")); ?></li>
-		<li><?php printZenpageRSSLink("NewsWithImages","","",gettext("News and Gallery")); ?></li>
+<?php
+if (getOption('RSS_album_image') || getOption('RSS_articles')) {
+	?>
+	<div class="menu">
+	<h3><?php echo gettext("RSS"); ?></h3>
+		<ul>
+		<?php if(!is_null($_zp_current_album)) { ?>
+		<?php printRSSLink('Album', '<li>', gettext('Album RSS'), '</li>'); ?>
 		<?php } ?>
-	</ul>
-</div>
+			<li><?php printRSSLink('Gallery','','Gallery', ''); ?>
+			<?php if(function_exists("printZenpageRSSLink")) { ?>
+			<?php printZenpageRSSLink("News","","<li>",gettext("News"),'</li>'); ?>
+			<?php printZenpageRSSLink("NewsWithImages","","<li>",gettext("News and Gallery"),'</li>'); ?>
+			<?php } ?>
+		</ul>
+	</div>
+	<?php
+}
+?>
+
 	<?php
 	if (getOption("zenpage_contactpage") && function_exists('printContactForm')) {
 		?>

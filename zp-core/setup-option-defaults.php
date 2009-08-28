@@ -315,4 +315,8 @@ function setDefault($option, $default) {
 	setOptionDefault('gallery_page_unprotected_register', 5);
 	setOptionDefault('gallery_page_unprotected_contact', 5);
 	
+	setOptionDefault('RSS_album_image', 1);
+	setOptionDefault('RSS_comments', 1);
+	setOptionDefault('RSS_articles', 1);
+	setOptionDefault('RSS_article_comments', 1);
 	?>

@@ -1,9 +1,15 @@
 <?php
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
-header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
+if (!getOption('RSS_album_image')) {
+	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
+	include(ZENFOLDER. '/404.php');
+	exit();
+}
 require_once(ZENFOLDER .'/'.PLUGIN_FOLDER . "/image_album_statistics.php");
+header('Content-Type: application/xml');
 
 // rssmode to differ between images and albums rss
 if(isset($_GET['albumsmode'])) {

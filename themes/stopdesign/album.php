@@ -131,7 +131,7 @@ require_once('normalizer.php');
 
 			<div class="galleryinfo">
 				<br />
-				<p><?php printRSSLink('Album', '', gettext('Album RSS feed').' ', '', true, 'i'); ?></p>
+				<?php printRSSLink('Album', '<p>', gettext('Album RSS feed').' ', '</p>', true, 'i'); ?>
 				<br />
 				<p>
 				<?php

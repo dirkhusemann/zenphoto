@@ -44,8 +44,8 @@
 			printUserLogout('', ' | ', true);
 		}
 		?>
-		<?php printRSSLink('Gallery','','RSS', ''); ?> 
-		| <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> |
+		<?php printRSSLink('Gallery','','RSS', ' | '); ?> 
+		<?php printCustomPageURL(gettext("Archive View"),"archive"); ?> |
 		<?php	if (function_exists('printContactForm')) { printCustomPageURL(gettext('Contact us'), 'contact', '', '', ' | '); } ?>
 		<?php if (!zp_loggedin() && function_exists('printRegistrationForm')) printCustomPageURL(gettext('Register for this site'), 'register', '', '', ' | ');	?>
 		<?php printZenphotoLink(); ?>

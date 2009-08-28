@@ -93,7 +93,7 @@ $firstPageImages = normalizeColumns(1, 7);
 <!--  end comment block -->
 
 		<div id="credit">
-		<?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | 
+		<?php printRSSLink('Album', '', gettext('Album RSS'), ' | '); ?> 
 		<?php printZenphotoLink(); ?>
 		| <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
 		<?php

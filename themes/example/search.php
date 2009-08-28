@@ -84,7 +84,7 @@ $firstPageImages = normalizeColumns(1, 7);
 
 
 		<div id="credit">
-			<?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ''); ?> | 
+			<?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ' | '); ?>
 		<?php printZenphotoLink(); ?>
 			 | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
 		<?php

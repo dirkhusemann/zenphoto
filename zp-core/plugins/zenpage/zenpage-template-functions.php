@@ -2457,22 +2457,34 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
 	}
 	switch($option) {
 		case "News":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."\" title=\"".gettext("News RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			if (getOption('RSS_articles')) {
+				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."\" title=\"".gettext("News RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
 			break;
 		case "Category":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang.$categorylink."\" title=\"".gettext("News Category RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			if (getOption('RSS_articles')) {
+				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang.$categorylink."\" title=\"".gettext("News Category RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
 			break;
 		case "NewsWithImages":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" title=\"".gettext("News and Gallery RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			if (getOption('RSS_articles')) {
+				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" title=\"".gettext("News and Gallery RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
 			break;
 		case "Comments":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?lang=".$lang."\" title=\"".gettext("Zenpage Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			if (getOption('RSS_article_comments')) {
+				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?lang=".$lang."\" title=\"".gettext("Zenpage Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
 			break;
 		case "Comments-news":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?id=".getNewsID()."&amp;title=".urlencode(getNewsTitle())."&amp;type=news&amp;lang=".$lang."\" title=\"".gettext("News article comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			if (getOption('RSS_article_comments')) {
+				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?id=".getNewsID()."&amp;title=".urlencode(getNewsTitle())."&amp;type=news&amp;lang=".$lang."\" title=\"".gettext("News article comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
 			break;
 		case "Comments-page":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?id=".getPageID()."&amp;title=".urlencode(getPageTitle())."&amp;type=page&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			if (getOption('RSS_article_comments')) {
+				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?id=".getPageID()."&amp;title=".urlencode(getPageTitle())."&amp;type=page&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
 			break;
 	}
 }
