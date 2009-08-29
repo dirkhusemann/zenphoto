@@ -1524,6 +1524,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  */
 function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 	global $_zp_gallery;
+	$upscale = getOption('image_allow_upscale');
 	$imagename = $image->filename;
 	if (!isImagePhoto($image) & $thumb) {
 		$imgfile = $image->getThumbImageFile();
@@ -1539,11 +1540,21 @@ function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 	
 	$newW = round($height/$s_height*$s_width);
 	$newH = round($width/$s_width*$s_height);
-	if (DEBUG_IMAGE) debugLog("getMaxSpaceContainer($width, $height, $imagename, $thumb): \$s_width=$s_width; \$s_height=$s_height; \$newW=$newW; \$newH=$newH;");
+	if (DEBUG_IMAGE) debugLog("getMaxSpaceContainer($width, $height, $imagename, $thumb): \$s_width=$s_width; \$s_height=$s_height; \$newW=$newW; \$newH=$newH; \$upscale=$upscale;");
 	if ($newW > $width) {
-		$height = $newH;
+		if ($upscale || $s_height > $newH) {
+			$height = $newH;
+		} else {
+			$height = $s_height;
+			$width = $s_width;
+		}
 	} else {
-		$width = $newW;
+		if ($upscale || $s_width > $newW) {
+			$width = $newW;
+		} else {
+			$height = $s_height;
+			$width = $s_width;
+		}
 	}
 }
 
