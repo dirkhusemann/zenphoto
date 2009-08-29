@@ -330,19 +330,54 @@ cite {
 .pass {
 	background: url(images/pass.png) top left no-repeat;
 	padding-left: 20px;
-	line-height: 20px;
+	line-height: normal;
 }
 
 .fail {
 	background: url(images/fail.png) top left no-repeat;
 	padding-left: 20px;
-	line-height: 20px;
+	line-height: normal;
 }
 
 .warn {
 	background: url(images/warn.png) top left no-repeat;
 	padding-left: 20px;
-	line-height: 20px;
+	line-height: normal;
+}
+
+.createdb {
+	background: url(images/add.png) top left no-repeat;
+	padding-left: 20px;
+	line-height: normal;
+}
+
+.updatedb {
+	background: url(images/burst.png) top left no-repeat;
+	padding-left: 20px;
+	line-height: normal;
+}
+
+
+.sqlform {
+	line-height: 1;
+	text-align: center;
+	border-top: 1px solid #FF9595;
+	border-bottom: 1px solid #FF9595;
+	background-color: #FFEAEA;
+	padding: 2px 8px 0px 8px;
+	margin-left: 20px;
+	color: red;
+	font-weight : bold;
+}
+.sqlform p {
+	text-align: left;
+	color: black;
+	font-weight : normal;
+}
+.sqlform .inputform {
+	text-align: left;
+	color: black;
+	font-weight : normal;
 }
 
 .error {
@@ -352,7 +387,6 @@ cite {
 	border-bottom: 1px solid #FF9595;
 	background-color: #FFEAEA;
 	padding: 2px 8px 0px 8px;
-	margin-left: 20px;
 	color: red;
 	font-weight : bold;
 }
@@ -369,7 +403,6 @@ cite {
 	border-bottom: 1px solid #FF6600;
 	background-color: #FFDDAA;
 	padding: 2px 8px 0px 8px;
-	margin-left: 20px;
 	color: #FF6600;
 	font-weight : bold;
 }
@@ -386,7 +419,6 @@ cite {
 	border-bottom: 1px solid #009966;
 	background-color: #B1F7B6;
 	padding: 2px 8px 0px 8px;
-	margin-left: 20px;
 	color: #009966;
 	font-weight : bold;
 }
@@ -403,10 +435,22 @@ h4 {
 	margin-bottom: .15em;
 	margin-top: .35em;
 }
-.error .inputform {
-	text-align: left;
-	color: black;
-	font-weight : normal;
+ul {
+	margin-left:0;
+	padding-left: 0;
+	padding-top:0;
+	padding-bottom:0;
+}
+li {
+	list-style-type:none;
+	margin-top:0;
+	margin-bottom: 5px;
+}
+.dbwindow {
+	padding: 5px;
+	margin-right: -5px;
+	margin-left: -5px;
+	border:1px solid #009966;
 }
 </style>
 
@@ -424,17 +468,19 @@ h4 {
 <?php
 $warn = false;
 if (!$checked) {
-	// Some descriptions about setup/upgrade.
-  if ($upgrade) {
-    echo gettext("Zenphoto has detected that you're upgrading to a new version.");
-		echo '<br /><br />';
-	} else {
-		echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server.");
-	}
-	echo '<br /><br />';
-	echo '<strong>';
-	echo gettext("Systems Check:");
-	echo '</strong><br />';
+	?>
+	<p>
+		<?php
+		// Some descriptions about setup/upgrade.
+	  if ($upgrade) {
+	    echo gettext("Zenphoto has detected that you're upgrading to a new version.");
+		} else {
+			echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server.");
+		}
+	?>
+	</p>
+	<h2><?php echo gettext("Systems Check:"); ?></h2>
+	<?php
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -462,17 +508,14 @@ if (!$checked) {
 				break;
 		}
 		if ($check <= 0) {
+			?>
+			<li class="<?php echo $dsp; ?>">
+			<?php
 			if (!empty($text2)) {
-				?>
-				<br />
-				<span class="<?php echo $dsp; ?>"><?php echo  $text2; ?></span>
-				<?php
+				echo  $text2;
 				$dsp .= ': '.trim($text2);
 			} else {
-				?>
-				<br />
-				<span class="<?php echo $dsp; ?>"><?php echo  $text; ?></span>
-				<?php
+				echo  $text;
 				$dsp .= ': '.trim($text);
 			}
 			if (!empty($msg)) {
@@ -499,10 +542,12 @@ if (!$checked) {
 				}
 				$dsp .= ' '.trim($msg);
 			}
+			?>
+			</li>
+			<?php
 		} else {
 			?> 
-			<br />
-			<span class="<?php echo $dsp; ?>"><?php echo  $text; ?></span>
+			<li class="<?php echo $dsp; ?>"><?php echo  $text; ?></li>
 			<?php
 			$dsp .= ': '.trim($text);
 		}
@@ -607,7 +652,11 @@ if (!$checked) {
 	}
 
 	$good = true;
-
+	
+	?>
+	<ul>
+	<?php
+	
 	$required = '4.4.8';
 	$desired = '5.2';
 	$err = versionCheck($required, $desired, PHP_VERSION);
@@ -752,7 +801,7 @@ if (!$checked) {
 			// input form for the information
 			?>
 
-<div class="error">
+<div class="sqlform">
 <p>
 <?php echo gettext("Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
 </p>
@@ -1190,6 +1239,11 @@ if ($debug) {
 
 	$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
+	$good = folderCheck('cache_html', dirname(dirname(__FILE__)) . '/cache_html/', 'std') && $good;
+	
+	?>
+	</ul>
+	<?php
 	
 	if ($connection) { @mysql_close($connection); }
 	if ($good) {
@@ -1910,35 +1964,56 @@ if (file_exists(CONFIGFILE)) {
 			}
 		}
 
-	} else if (db_connect()) {		
-		echo "<h3>$dbmsg</h3>";
-		echo "<p>";
-		$db_list = '';
-		$create = array();
-		foreach ($expected_tables as $table) {
-			if ($tables[$table] == 'create') {
-				$create[] = $table;
-				if (!empty($db_list)) { $db_list .= ', '; }
-				$db_list .= "<code>$table</code>";
+	} else if (db_connect()) {
+		if (!empty($dbmsg)) {
+			?>
+			<h2><?php echo $dbmsg; ?></h2>
+			<?php		
+		}
+		?>
+		<div class="dbwindow">
+			<ul>
+			<?php
+			$db_list = '';
+			$create = array();
+			foreach ($expected_tables as $table) {
+				if ($tables[$table] == 'create') {
+					$create[] = $table;
+					if (!empty($db_list)) { $db_list .= ', '; }
+					$db_list .= "<code>$table</code>";
+				}
 			}
-		}
-		if (($nc = count($create)) > 0) {
-			printf(gettext("Database tables to create: %s"), $db_list);
-		}
-		$db_list = '';
-		$update = array();
-		foreach ($expected_tables as $table) {
-			if ($tables[$table] == 'update') {
-				$update[] = $table;
-				if (!empty($db_list)) { $db_list .= ', '; }
-				$db_list .= "<code>$table</code>";
+			if (($nc = count($create)) > 0) {
+			?>
+				<li class="createdb">
+					<?php
+					printf(gettext("Database tables to create: %s"), $db_list);
+					?>
+				</li>
+				<?php
 			}
-		}
-		if (($nu = count($update)) > 0) {
-			if ($nc > 0) { echo "<br />"; }
-			printf(gettext("Database tables to update: %s"), $db_list);
-		}
-		echo ".</p>";
+			$db_list = '';
+			$update = array();
+			foreach ($expected_tables as $table) {
+				if ($tables[$table] == 'update') {
+					$update[] = $table;
+					if (!empty($db_list)) { $db_list .= ', '; }
+					$db_list .= "<code>$table</code>";
+				}
+			}
+			if (($nu = count($update)) > 0) {
+				?>
+				<li class="updatedb">
+					<?php
+					printf(gettext("Database tables to update: %s"), $db_list);
+					?>
+				</li>
+				<?php
+			}
+			?>
+			</ul>
+		</div>
+		<?php
 		$task = '';
 		if ($nc > 0) {
 			$task = "create=" . implode(',', $create);
@@ -1953,23 +2028,31 @@ if (file_exists(CONFIGFILE)) {
 		if ($debug) {
 			$task .= '&debug';
 		}
-		
-		echo "<p class='buttons'>";
+		?>
+		<p class='buttons'>
+		<?php
 		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
-		echo "<a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\"><img src='images/$img' />".gettext("Go")."</a>";
-		echo '</p><br clear:all /><br clear:all />';
+		?>
+		<a href="?checked&amp;<?php echo $task.$mod; ?>" title="<?php echo gettext("create and or update the database tables."); ?>" style="font-size: 15pt; font-weight: bold;"><img src="images/<?php echo $img; ?>" /><?php echo gettext("Go"); ?></a>
+		</p>
+		<br clear:all /><br clear:all />
+		<?php
 	} else {
-		echo "<div class=\"error\">";
-		echo "<h3>".gettext("database did not connect")."</h3>";
-		echo "<p>".gettext("You should run setup.php to check your configuration. If you haven't created the database yet, now would be a good time.");
-		echo "</div>";
+		?>
+		<div class="error">
+			<h3><?php echo gettext("database did not connect"); ?></h3>
+			<p>
+			<?php echo gettext("You should run setup.php to check your configuration. If you haven't created the database yet, now would be a good time."); ?>
+			</p>
+		</div>
+		<?php
 	}
 } else {
 	// The config file hasn't been created yet. Show the steps.
 	?>
-
-<div class="error"><?php echo gettext("The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."); ?></div>
-
+	<div class="error">
+		<?php echo gettext("The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."); ?>
+	</div>
 <?php
 }
 
@@ -1977,21 +2060,30 @@ if (file_exists(CONFIGFILE)) {
 </div>
 <?php
 if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
-	echo "\n<div>\n";
-	echo '<form action="#'.'" method="post">'."\n";
-	echo '<input type="hidden" name="oldlocale" value="'.getOption('locale').'" />';
-	if ($debug) {
-		echo '<input type="hidden" name="debug" />';
-	}
-	echo gettext("Select a language:").' ';
-	echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-	generateLanguageOptionList(false);
-	echo "</select>\n";
-	echo "</form>\n";
-	echo "</div>\n";
+	?>
+	<div>
+		<form action="#'.'" method="post">
+			<input type="hidden" name="oldlocale" value="<?php echo getOption('locale'); ?>" />
+			<?php
+			if ($debug) {
+				?>
+				<input type="hidden" name="debug" />
+				<?php
+			}
+			echo gettext("Select a language:");
+			?>
+			<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">
+			<?php
+			generateLanguageOptionList(false);
+			?>
+			</select>
+		</form>
+	</div>
+	<?php
 }
 printAdminFooter();
-?></div>
+?>
+</div>
 </body>
 </html>
 
