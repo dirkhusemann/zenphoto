@@ -11,6 +11,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext('Archive'); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
+	<?php printZenpageRSSHeaderLink("News","", "Zenpage news", ""); ?>
 </head>
 
 <body onload="blurAnchors()">

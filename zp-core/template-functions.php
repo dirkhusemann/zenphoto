@@ -3757,19 +3757,33 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
 	}
 	switch($option) {
 		case "Gallery":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" />\n";
+			if (getOption('RSS_album_image')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" />\n";
+			}
 		case "Album":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
+			if (getOption('RSS_album_image')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
+			}
 		case "Collection":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
+			if (getOption('RSS_album_image')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
+			}
 		case "Comments":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" />\n";
+			if (getOption('RSS_comments')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" />\n";
+			}
 		case "Comments-image":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" />\n";
+			if (getOption('RSS_comments')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" />\n";
+			}
 		case "Comments-album":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" />\n";
+			if (getOption('RSS_comments')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" />\n";
+			}
 		case "AlbumsRSS":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."&amp;albumsmode\" />\n";
+			if (getOption('RSS_album_image')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."&amp;albumsmode\" />\n";
+			}
 		
 	}
 }

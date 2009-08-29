@@ -2518,11 +2518,17 @@ function getZenpageRSSHeaderLink($option='', $categorylink='', $linktext='', $la
 	}
 	switch($option) {
 		case "News":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."\" />\n";
+			if (getOption('RSS_articles')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."\" />\n";
+			}
 		case "Category":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."&amp;category=".$categorylink."\" />\n";
+			if (getOption('RSS_articles')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."&amp;category=".$categorylink."\" />\n";
+			}
 		case "NewsWithImages":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" />\n";
+			if (getOption('RSS_articles')) {
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" />\n";
+			}
 	}
 }
 
