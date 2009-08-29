@@ -14,7 +14,7 @@
 	} else {
 		$allalbums = gettext("Gallery index");
 	}
-	printAlbumMenu("list","count","","menu-active","submenu","menu-active",$allalbums,false,false); 
+	printAlbumMenu("list",NULL,"","menu-active","submenu","menu-active",$allalbums,false,false); 
 	?>
 </div>
 <?php } ?>

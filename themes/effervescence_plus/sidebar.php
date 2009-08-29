@@ -14,7 +14,7 @@ if(function_exists("printAllNewsCategories")) {
 		?>
 		<h3><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Visit the photo gallery'); ?>"><?php echo gettext("Gallery"); ?></a></h3>
 		<?php
-		printAlbumMenu("list",'',"","menu-active","submenu","menu-active","");
+		printAlbumMenu("list",NULL,"","menu-active","submenu","menu-active","");
 	} else {
 		?>
 		<h3><?php echo gettext("Gallery"); ?></h3>

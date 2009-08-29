@@ -10,6 +10,31 @@ $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
+$option_interface = new print_album_menu();
+
+/**
+ * Plugin option handling class
+ *
+ */
+class print_album_menu {
+
+	function register_user_options() {
+		setOptionDefault('print_album_menu_showsubs', 0);
+		setOptionDefault('print_album_menu_count', 1);
+	}
+
+	function getOptionsSupported() {
+		return array(	gettext('"List" subalbum level') => array('key' => 'print_album_menu_showsubs', 'type' => OPTION_TYPE_TEXTBOX, 
+										'desc' => gettext('The depth of subalbum levels shown with the <code>printAlbumMenu</code> and <code>printAlbumMenuList</code> "List" option. Note: themes may override this default.')),
+									gettext('Show counts') => array('key' => 'print_album_menu_count', 'type' => OPTION_TYPE_CHECKBOX, 
+										'desc' => gettext('If checked, image and album counts will be included in the list. Note: Themes may override this option.'))
+									);
+	}
+	function handleOption($option, $currentValue) {
+	}
+}
+
+
 /**
  * Prints a list of all albums context sensitive.
  * Since 1.4.3 this is a wrapper function for the separate functions printAlbumMenuList() and printAlbumMenuJump().
@@ -26,23 +51,24 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * 									"list-sub" lists the offspring level of subalbums for the current album
  * 									"jump" dropdown menu of all albums(not context sensitive)
  * 
- * @param string $option2 "count" for a image counter or subalbum count in brackets behind the album name, "" = for no image numbers or leave blank
+ * @param bool $showcount true for a image counter or subalbum count in brackets behind the album name, false for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_class_topactive insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name how you want to call the link to the gallery index (insert "" if you don't use it, it is not printed then)
+ * @param int C Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
  * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
-  * @return html list or drop down jump menu of the albums
+ * @return html list or drop down jump menu of the albums
  * @since 1.2
  */
 
-function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false,$firstimagelink=false) {
+function printAlbumMenu($option,$showcount=NULL,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=NULL,$firstimagelink=false) {
 	if ($option == "jump") {
 		printAlbumMenuJump($option,$indexname,$firstimagelink);
 	} else {
-		printAlbumMenuList($option,$option2,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs,$firstimagelink);
+		printAlbumMenuList($option,$showcount,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs,$firstimagelink);
 	}
 }
 
@@ -58,7 +84,7 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  * 									"list-top" for only the top level albums, 
  * 									"omit-top" same as list, but the first level of albums is omitted
  * 									"list-sub" lists the offspring level of subalbums for the current album
- * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
+ * @param bool $showcount true for a image counter in brackets behind the album name, false for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
@@ -69,7 +95,7 @@ function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$
  * @return html list of the albums
  */
 
-function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false,$firstimagelink=false) {
+function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=NULL,$firstimagelink=false) {
 	global $_zp_gallery, $_zp_current_album, $_zp_gallery_page;
 	
 	// if in search mode don't use the foldout contextsensitiveness and show only toplevel albums
@@ -104,7 +130,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 		$albums = $_zp_gallery->getAlbums();
 	}
 
-	printAlbumMenuListAlbum($albums, $albumpath, $currentfolder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
+	printAlbumMenuListAlbum($albums, $albumpath, $currentfolder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
 
 	echo "</ul>\n";
 
@@ -118,16 +144,18 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
  * @param string $path for createAlbumMenuLink
  * @param string $folder 
  * @param string $option see printAlbumMenuList
- * @param string $option2 see printAlbumMenuList
+ * @param string $showcount see printAlbumMenuList
  * @param int $showsubs see printAlbumMenuList
  * @param string $css_class see printAlbumMenuList
  * @param string $css_class_topactive see printAlbumMenuList
  * @param string $css_class_active see printAlbumMenuList
  * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  */
-function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink) {
+function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink) {
 	global $_zp_gallery;
-	if ($showsubs === true) $showsubs = 9999999999;
+	if (is_null($showcount)) $showcount = getOption('print_album_menu_count');
+	if (is_null($showsubs)) $showsubs = getOption('print_album_menu_showsubs');
+	if ($showsubs && !is_numeric($showsubs)) $showsubs = 9999999999;
 	$pagelevel = count(explode('/', $folder));
 	foreach ($albums as $album) {
 		$level = count(explode('/', $album));
@@ -147,7 +175,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 				$css_class_t = $css_class_active;
 			}
 			$count = "";
-			if($option2 == 'count') {
+			if($showcount) {
 				if($topalbum->getNumImages() > 0) {
 					$topalbumnumimages = $topalbum->getNumImages();
 					$count = "<small>".sprintf(ngettext(' (%u image)', ' (%u images)',$topalbumnumimages),$topalbumnumimages)."</small>";
@@ -175,7 +203,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $sh
 			$subalbums = $topalbum->getSubAlbums();
 			if (!empty($subalbums)) {
 				echo "\n<ul".$css_class.">\n";
-				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
+				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
 				echo "\n</ul>\n";
 
 			}
@@ -235,7 +263,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index",$firstim
  * Handles a single album level for printAlbumMenuJump
  *
  * @param array $albums list of album names
- * @param string $option2 see printAlbumMenuJump
+ * @param string $showcount see printAlbumMenuJump
  * @param string $albumpath path of the page album
  * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  * @param int $level current level
