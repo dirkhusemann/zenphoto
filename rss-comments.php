@@ -55,7 +55,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPhoto Comment RSS Generator</generator>
 <?php
-$comments = getLatestComments($items);
+$comments = getLatestComments($items,$type,$id);
 foreach ($comments as $comment) {
 	if($comment['anon'] === "0") {
 		$author = " ".gettext("by")." ".$comment['name'];
