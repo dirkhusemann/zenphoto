@@ -14,7 +14,7 @@
 	} else {
 		$allalbums = gettext("Gallery index");
 	}
-	printAlbumMenu("list","count","","menu-active","submenu","menu-active",$allalbums); 
+	printAlbumMenu("list","count","","menu-active","submenu","menu-active",$allalbums,false,false); 
 	?>
 </div>
 <?php } ?>
@@ -22,7 +22,7 @@
 <?php if(function_exists("printPageMenu")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("Pages"); ?></h3>
-	<?php printPageMenu("list","","menu-active","submenu","menu-active"); ?>
+	<?php	printPageMenu("list","","menu-active","submenu","menu-active"); ?>
 </div>
 <?php } ?>
 
@@ -48,7 +48,7 @@ if (getOption('RSS_album_image') || getOption('RSS_articles')) {
 		<?php if(!is_null($_zp_current_album)) { ?>
 		<?php printRSSLink('Album', '<li>', gettext('Album RSS'), '</li>'); ?>
 		<?php } ?>
-			<li><?php printRSSLink('Gallery','','Gallery', ''); ?>
+			<?php printRSSLink('Gallery','<li>','Gallery', '</li>'); ?>
 			<?php if(function_exists("printZenpageRSSLink")) { ?>
 			<?php printZenpageRSSLink("News","","<li>",gettext("News"),'</li>'); ?>
 			<?php printZenpageRSSLink("NewsWithImages","","<li>",gettext("News and Gallery"),'</li>'); ?>
