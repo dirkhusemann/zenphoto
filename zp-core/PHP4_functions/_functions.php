@@ -11,7 +11,10 @@
  * @return array
  */
 function read_exif_data_protected($path) {
-	return read_exif_data_raw($path, false);
+	if (DEBUG_EXIF) debugLog("Begin read_exif_data_protected($path)");
+	$rslt = read_exif_data_raw($path, false);
+	if (DEBUG_EXIF) debugLog("End read_exif_data_protected($path)");
+	return $rslt;
 }
 
 function file_put_contents($file, $contents) {

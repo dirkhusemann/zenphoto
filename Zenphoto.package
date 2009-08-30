@@ -258,6 +258,7 @@ zp-core/functions-db.php
 zp-core/functions-filter.php
 zp-core/functions-i18n.php
 zp-core/functions-image.php
+zp-core/functions-rss.php
 zp-core/functions.php
 zp-core/i.php
 zp-core/images/accept.png
