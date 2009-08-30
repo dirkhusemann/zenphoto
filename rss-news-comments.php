@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 require_once(ZENFOLDER . "/template-functions.php");
+require_once(ZENFOLDER . "/functions-rss.php");
+startRSSCache();
 if (!getOption('RSS_article_comments')) {
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
@@ -10,31 +12,12 @@ if (!getOption('RSS_article_comments')) {
 }
 require_once(ZENFOLDER . '/'.PLUGIN_FOLDER. "/zenpage/zenpage-template-functions.php");
 header('Content-Type: application/xml');
-
-$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-
-if(isset($_GET['id'])) {
-	$id = sanitize_numeric($_GET['id']);
-} else {
-	$id = "";
-}
-if(isset($_GET['title'])) {
-	$title = " - ".sanitize($_GET['title']);
-} else {
-	$title = NULL;
-}
-if(isset($_GET['type'])) {
-	$type = sanitize($_GET['type']);
-} else {
-	$type = "all";
-}
-
-if(isset($_GET['lang'])) {
-	$locale = sanitize($_GET['lang']);
-} else {
-	$locale = getOption('locale');
-}
-$validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
+$host = getRSSHost();
+$id = getRSSID();
+$title = getRSSTitle();
+$type = getRSSType();
+$locale = getRSSLocale();
+$validlocale = getRSSLocaleXML();
 $items = getOption("zenpage_rss_items");
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -49,21 +32,18 @@ $items = getOption("zenpage_rss_items");
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPage - A CMS plugin for Zenphoto</generator>
 <?php
-$items = getOption("zenpage_rss_items");
-
-db_connect();
 $comments = getLatestZenpageComments($items,$type,$id);
 $count = 0;
 foreach ($comments as $comment) {
-		if($comment['anon'] === "0") {
-			$author = " ".gettext("by")." ".$comment['name'];
-		} else {
-			$author = "";
-		}
-		$date = $comment['date'];
-		$title = get_language_string($comment['title']);
-		$titlelink = $comment['titlelink'];
-		$website = $comment['website'];
+	if($comment['anon'] === "0") {
+		$author = " ".gettext("by")." ".$comment['name'];
+	} else {
+		$author = "";
+	}
+	$date = $comment['date'];
+	$title = get_language_string($comment['title']);
+	$titlelink = $comment['titlelink'];
+	$website = $comment['website'];
 ?>
 <item>
 <title><?php echo strip_tags($title.$author); ?></title>
@@ -76,4 +56,4 @@ foreach ($comments as $comment) {
 <?php } ?>
 </channel>
 </rss>
-
+<?php endRSSCache();?>

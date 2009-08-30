@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 require_once(ZENFOLDER . "/template-functions.php");
+require_once(ZENFOLDER . "/functions-rss.php");
+startRSSCache();
 if (!getOption('RSS_album_image')) {
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
@@ -10,68 +12,20 @@ if (!getOption('RSS_album_image')) {
 }
 require_once(ZENFOLDER .'/'.PLUGIN_FOLDER . "/image_album_statistics.php");
 header('Content-Type: application/xml');
-
-// rssmode to differ between images and albums rss
-if(isset($_GET['albumsmode'])) {
-	$rssmode = "albums";
-} else {
-	$rssmode = "";
-}
-
-if(isset($_GET['albumname'])) {
-	$albumfolder = sanitize_path($_GET['albumname']);
-	$collection = FALSE;
-} else if(isset($_GET['folder'])) {
-	$albumfolder = sanitize_path($_GET['folder']);
-	$collection = TRUE;
-} else {
-	$albumfolder = NULL;
-	$collection = FALSE;
-}
-
-if(isset($_GET['lang'])) {
-	$locale = sanitize($_GET['lang']);
-} else {
-	$locale = getOption('locale');
-}
-
-$validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
-$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-$uri = htmlentities($_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"], ENT_QUOTES, 'UTF-8');
-
-if(isset($_GET['albumtitle'])) {
-	$albumname = " (".sanitize(urldecode($_GET['albumtitle'])).")";
-} else if ($rssmode === "albums") {
-	$albumname = gettext("Latest Albums");
-} else {
-	$albumname = "";
-}
-
-if(getOption('mod_rewrite')) {
-	$albumpath = "/"; $imagepath = "/";
-	$modrewritesuffix = getOption('mod_rewrite_image_suffix');
-} else  {
-	$albumpath = "/index.php?album=";
-	$imagepath = "&image=";
-	$modrewritesuffix = ""; }
-
-	if(isset($_GET['size'])) {
-		$size = sanitize_numeric($_GET['size']);
-	} else {
-		$size = NULL;
-	}
-	if(is_numeric($size) && !is_null($size) && $size < getOption('feed_imagesize')) {
-		$size = $size;
-	} else {
-		if($rssmode == "albums") {
-			$size = getOption('feed_imagesize_albums'); // uncropped image size
-		} else {
-			$size = getOption('feed_imagesize'); // uncropped image size
-		}
-	}
-	$items = getOption('feed_items'); // # of Items displayed on the feed
-
-	?>
+$rssmode = getRSSAlbumsmode();
+$albumfolder = getRSSAlbumnameAndCollection("albumfolder");
+$collection = getRSSAlbumnameAndCollection("collection");
+$locale = getRSSLocale();
+$validlocale = getRSSLocaleXML();
+$host = getRSSHost();
+$uri = getRSSURI();
+$albumname = getRSSAlbumTitle();
+$albumpath = getRSSImageAndAlbumPaths("albumpath");
+$modrewritesuffix = getRSSImageAndAlbumPaths("modrewritesuffix");
+$imagepath = getRSSImageAndAlbumPaths("imagepath");
+$size = getRSSImageSize();
+$items = getOption('feed_items'); // # of Items displayed on the feed
+?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).' '.strip_tags($albumname); ?></title>
@@ -136,36 +90,7 @@ if(getOption('mod_rewrite')) {
 			}
 			$ext = strtolower(strrchr($thumb->filename, "."));
 		}
-		switch($ext) {
-			case  ".flv":
-				$mimetype = "video/x-flv";
-				break;
-			case ".mp3":
-				$mimetype = "audio/mpeg";
-				break;
-			case ".mp4":
-				$mimetype = "video/mpeg";
-				break;
-			case ".3gp":
-				$mimetype = "video/3gpp";
-				break;
-			case ".mov":
-				$mimetype = "video/quicktime";
-				break;
-			case ".jpg":
-			case ".jpeg":
-				$mimetype = "image/jpeg";
-				break;
-			case ".gif":
-				$mimetype = "image/gif";
-				break;
-			case ".png":
-				$mimetype = "image/png";
-				break;
-			default:
-				$mimetype = "image/jpeg";
-				break;
-		}
+		$mimetype = getMimeType($ext);
 		?>
 <item>
 <title><?php 
@@ -217,3 +142,4 @@ if(getOption("feed_enclosure") AND $rssmode != "albums") { ?>
 <?php } ?>
 </channel>
 </rss>
+<?php endRSSCache(); ?>

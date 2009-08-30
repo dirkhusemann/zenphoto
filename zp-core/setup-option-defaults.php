@@ -129,6 +129,8 @@ function setDefault($option, $default) {
 	setOptionDefault('feed_sortorder_albums', 'latest');
 	setOptionDefault('feed_enclosure', '0');
 	setOptionDefault('feed_mediarss', '0');
+	setOptionDefault('feed_cache', '1');
+	setOptionDefault('feed_cache_expire', 86400);
 	setOptionDefault('search_fields', 32767);
 	$a =							"a => (href =>() title =>() target=>() class=>() id=>())\n" .
 	 									"abbr =>(class=>() id=>() title =>())\n" .

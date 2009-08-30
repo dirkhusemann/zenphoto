@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 require_once(ZENFOLDER . "/template-functions.php");
+require_once(ZENFOLDER . "/functions-rss.php");
+startRSSCache();
 if (!getOption('RSS_comments')) {
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
@@ -9,40 +11,17 @@ if (!getOption('RSS_comments')) {
 	exit();
 }
 header('Content-Type: application/xml');
-
-$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-
-if(isset($_GET['id'])) {
-	$id = sanitize_numeric($_GET['id']);
-} else {
-	$id = "";
-}
-if(isset($_GET['title'])) {
-	$title = " - ".sanitize($_GET['title']);
-} else {
-	$title = NULL;
-}
-if(isset($_GET['type'])) {
-	$type = sanitize($_GET['type']);
-} else {
-	$type = "all";
-}
-
-if(isset($_GET['lang'])) {
-	$locale = sanitize($_GET['lang']);
-} else {
-	$locale = getOption('locale');
-}
-$validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
-
-if(getOption('mod_rewrite')) {
-	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
-} else {
-	$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = "";
-}
+$host = getRSSHost();
+$id = getRSSID() ;
+$title = getRSSTitle();
+$type = getRSSType();
+$locale = getRSSLocale();
+$validlocale = getRSSLocaleXML();
+$albumpath = getRSSImageAndAlbumPaths("albumpath");
+$modrewritesuffix = getRSSImageAndAlbumPaths("modrewritesuffix");
+$imagepath = getRSSImageAndAlbumPaths("imagepath");
 $items = getOption('feed_items'); // # of Items displayed on the feed
 ?>
-
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale))." - ".gettext("latest comments").$title; ?></title>
@@ -87,4 +66,4 @@ foreach ($comments as $comment) {
 <?php } ?>
 </channel>
 </rss>
-
+<?php endRSSCache();?>

@@ -2,6 +2,8 @@
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 require_once(ZENFOLDER . "/template-functions.php");
+require_once(ZENFOLDER . "/functions-rss.php");
+startRSSCache();
 if (!getOption('RSS_articles')) {
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
@@ -13,34 +15,18 @@ require_once(ZENFOLDER . '/'.PLUGIN_FOLDER . "/zenpage/zenpage-functions.php");
 require_once(ZENFOLDER . '/'.PLUGIN_FOLDER . "/zenpage/zenpage-template-functions.php");
 header('Content-Type: application/xml');
 $themepath = THEMEFOLDER;
-
-if(isset($_GET['category'])) {
-	$catlink = sanitize($_GET['category']);
-	$cattitle = htmlspecialchars(getCategoryTitle($catlink));
-	$option = "category";
-} else {
-	$catlink = "";
-	$cattitle = "";
-	$option = "news";
-} 
+$catlink = getRSSNewsCatOptions("catlink");
+$cattitle = getRSSNewsCatOptions("cattitle");
+$option = getRSSNewsCatOptions("option");
 if (isset($_GET['withimages'])) {
 	$option = "withimages";
 }
-$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-$uri = htmlentities($_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"], ENT_QUOTES, 'UTF-8');
-
+$host = getRSSHost();
+$uri = getRSSURI();
 $s = getOption('feed_imagesize'); // uncropped image size
-
-if(isset($_GET['lang'])) {
-	$locale = sanitize($_GET['lang']);
-}
-
-if(empty($locale)) {
-	$locale = getOption('locale'); // for now until zenpage will be multilangual
-} else {
-	$locale = $locale;
-}
-$validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
+$locale = getRSSLocale();
+$validlocale = getRSSLocaleXML();
+$items = getOption("zenpage_rss_items"); // # of Items displayed on the feed
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
@@ -54,8 +40,6 @@ $validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Zenpage - A CMS plugin for ZenPhoto</generator>
 <?php 
-$items = getOption("zenpage_rss_items"); // # of Items displayed on the feed
-db_connect();
 switch ($option) {
 	case "category":
 		$latest = getLatestNews($items,"none",$catlink); 	
@@ -105,39 +89,9 @@ foreach($latest as $item) {
 		$album = $item['category']->getFolder();
 		$fullimagelink = $host.WEBPATH."/albums/".$item['category']->getFolder()."/".$item['filename'];
 		$imagefile = "albums/".$item['category']->getFolder()."/".$item['filename'];
-		switch($ext) {
-			case  ".flv":
-				$mimetype = "video/x-flv";
-				break;
-			case ".mp3":
-				$mimetype = "audio/mpeg";
-				break;
-			case ".mp4":
-				$mimetype = "video/mpeg";
-				break;
-			case ".3gp":
-				$mimetype = "video/3gpp";
-				break;
-			case ".mov":
-				$mimetype = "video/quicktime";
-				break;
-			case ".jpg":
-			case ".jpeg":
-				$mimetype = "image/jpeg";
-				break;
-			case ".gif":
-				$mimetype = "image/gif";
-				break;
-			case ".png":
-				$mimetype = "image/png";
-				break;
-			default:
-				$mimetype = "image/jpeg";
-				break;
-		}
+		$mimetype = getMimeType($ext);
 	}
 	$categories = htmlspecialchars($categories);
-	
 ?>
 <item>
 	<title><?php echo $title." (".$categories.")"; ?></title>
@@ -170,3 +124,4 @@ if($count === $items) {
 } ?>
 </channel>
 </rss>
+<?php endRSSCache();?>

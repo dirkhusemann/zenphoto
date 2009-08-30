@@ -275,8 +275,10 @@ if (isset($_GET['action'])) {
 			setOption('feed_items_albums', sanitize($_POST['feed_items_albums'],3));
 			setOption('feed_imagesize_albums', sanitize($_POST['feed_imagesize_albums'],3));
 			setOption('feed_sortorder_albums', sanitize($_POST['feed_sortorder_albums'],3));
+			setOption('feed_cache_expire', sanitize($_POST['feed_cache_expire'],3));
 			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
 			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
+			setBoolOption('feed_mediarss', isset($_POST['feed_cache']));
 			setBoolOption('RSS_album_image', isset($_POST['RSS_album_image']));
 			setBoolOption('RSS_comments', isset($_POST['RSS_comments']));
 			setBoolOption('RSS_articles', isset($_POST['RSS_articles']));
@@ -1599,6 +1601,16 @@ if (empty($alterrights)) {
 			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_mediarss"
 				value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
 			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("RSS cache"); ?></td>
+			<td>
+				<input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_cache"
+				value="1" <?php echo checked('1', getOption('feed_cache')); ?> /> <label for "feed_cache"><?php echo gettext("Enable RSS cache"); ?></label><br /><br />
+				<input type="text" size="15" id="feed_cache_expire" name="feed_cache_expire"
+				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'));?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br /> 
+				</td>
+			<td><?php echo gettext("Check if you want to enable static RSS feed caching. The cached file will be placed within the <em>cache_html</em> folder.<br /> Cache expire default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec)."); ?></td>
 		</tr>
 		<tr>
 			<td></td>
