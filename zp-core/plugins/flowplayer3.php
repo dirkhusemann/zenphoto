@@ -55,6 +55,7 @@ class flowplayer3 {
 		setOptionDefault('flow_player3_controlsbuttoncolor', '#567890');
 		setOptionDefault('flow_player3_controlsbuttonovercolor', '#999999');
 		setOptionDefault('flow_player3_splashimagescale', 'fit');
+		setOptionDefault('flow_player3_scaling', 'fit');
 	}
 
 
@@ -106,6 +107,9 @@ class flowplayer3 {
 		gettext('Controls hover button color') => array('key' => 'flow_player3_controlsbuttonovercolor', 'type' => OPTION_TYPE_COLOR_PICKER,
 										'desc' => gettext("Button color when the mouse is positioned over them.")),
 		gettext('Splash image scale') => array('key' => 'flow_player3_splashimagescale', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => array(gettext('fit')=>"fit",gettext('half')=>"half", gettext('orig')=>"orig", gettext('scale')=>"scale"),
+										'desc' => gettext("Setting which defines how video is scaled on the video screen. Available options are:<br /><em>fit</em>: Fit to window by preserving the aspect ratio encoded in the file's metadata.<br /><em>half</em>: Half-size (preserves aspect ratio)<br /><em>orig</em>: Use the dimensions encoded in the file. If the video is too big for the available space, the video is scaled using the 'fit' option.<br /><em>scale</em>: Scale the video to fill all available space. This is the default setting.")),
+		gettext('Video scale') => array('key' => 'flow_player3_scaling', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('fit')=>"fit",gettext('half')=>"half", gettext('orig')=>"orig", gettext('scale')=>"scale"),
 										'desc' => gettext("Setting which defines how video is scaled on the video screen. Available options are:<br /><em>fit</em>: Fit to window by preserving the aspect ratio encoded in the file's metadata.<br /><em>half</em>: Half-size (preserves aspect ratio)<br /><em>orig</em>: Use the dimensions encoded in the file. If the video is too big for the available space, the video is scaled using the 'fit' option.<br /><em>scale</em>: Scale the video to fill all available space. This is the default setting."))
 		);
@@ -181,7 +185,8 @@ class flowplayer3 {
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+        	scaling: "'.getOption('flow_player3_scaling').'"
         }
     	},
     	canvas: {
@@ -221,7 +226,8 @@ class flowplayer3 {
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+        	scaling: "'.getOption('flow_player3_scaling').'"
         }
     	},
     	canvas: {

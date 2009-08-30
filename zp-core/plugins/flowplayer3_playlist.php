@@ -172,6 +172,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
         	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+        	scaling: "'.getOption('flow_player3_scaling').'",
         	playlist: true
         }
     	},
