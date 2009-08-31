@@ -9,6 +9,7 @@
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/functions-rss.php');
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
@@ -33,7 +34,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$gallery->clearCache();
 			$msg = gettext('Cache cleared.');
 		}
-
+		
+		/** clear the RSScache ***********************************************************/
+		/******************************************************************************/
+		if($action = "clear_rss_cache") {
+			clearRSScache();
+			$msg = gettext('RSS Cache cleared.');
+		}
+		
 		/** Reset hitcounters ***********************************************************/
 		/********************************************************************************/
 		if ($action == "reset_hitcounters") {
@@ -397,6 +405,15 @@ $buttonlist[gettext("Purge cache")] = array(
 							'title'=>gettext("Clears the image cache. Images will be re-cached as they are viewed."),
 							'alt'=>'',
 							'hidden'=> '<input type="hidden" name="action" value="clear_cache">',
+							'rights'=> ADMIN_RIGHTS
+							);
+$buttonlist[gettext("Purge RSS cache")] = array(
+							'formname'=>'clear_rss_cache',
+							'action'=>'admin.php?action=clear_rss_cache=true',
+							'icon'=>'images/edit-delete.png', 
+							'title'=>gettext("Clears the RSS cache. RSS files will be re-cached as they are viewed."),
+							'alt'=>'',
+							'hidden'=> '<input type="hidden" name="action" value="clear_rss_cache">',
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[gettext("Pre-Cache Images")] = array(

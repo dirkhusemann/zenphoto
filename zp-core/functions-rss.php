@@ -334,4 +334,32 @@ function endRSSCache() {
 }
 
 
+/**
+	 * Cleans out the RSS cache folder
+	 *
+	 * @param string $cachefolder the sub-folder to clean
+	 */
+	function clearRSSCache($cachefolder=NULL) {
+		if (is_null($cachefolder)) {
+			$cachefolder = "../cache_html/rss/";
+		}
+		if (is_dir($cachefolder)) {
+			$handle = opendir($cachefolder);
+			while (false !== ($filename = readdir($handle))) {
+				$fullname = $cachefolder . '/' . $filename;
+				if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+					if (($filename != '.') && ($filename != '..')) {
+						clearRSSCache($fullname);
+						rmdir($fullname);
+					}
+				} else {
+					if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
+						unlink($fullname);
+					}
+				}
+
+			}
+			closedir($handle);
+		}
+	}
 ?>
