@@ -557,18 +557,19 @@ if (!$checked) {
 	
 	function folderCheck($which, $path, $class) {
 		global $const_webpath, $serverpath, $chmod;
+		$path = str_replace('\\', '/', $path);
 		if (!is_dir($path) && $class == 'std') {
-			@mkdir($path, $chmod);
+			mkdir_recursive($path, $chmod);
 		}
 		@chmod($path, $chmod);
-		$folder = basename($path);
-		if (empty($folder)) $folder = basename(basename($path));
+		$serverpath = str_replace('\\', '/', dirname(dirname(__FILE__)));
 		switch ($class) {
 			case 'std':
-				$append = $folder;
+				$append = str_replace($serverpath, '', $path);
+				if (substr($append,-1,1) == '/') $append = substr($append,0, -1);
+				if (substr($append,0,1) == '/') $append = substr($append,1);
 				break;
 			case 'in_webpath':
-				$serverpath = dirname(dirname(__FILE__));
 				if (empty($const_webpath)) {
 					$serverroot = $serverpath;
 				} else {
@@ -582,17 +583,17 @@ if (!$checked) {
 		}
 		$f = '';
 		if (!is_dir($path)) {
-			$msg = " ".sprintf(gettext('You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>.'),$folder,$path);
+			$msg = " ".sprintf(gettext('You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>.'),$append,$path);
 			if ($class != 'std') {
 				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> does not exist]'),$which, $append), $msg);
 			} else {
 				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> does not exist and <strong>setup</strong> could not create it]'),$which, $append), $msg);
 			}
 		} else if (!is_writable($path)) {
-			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$folder,$append);
+			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$which,$append);
 			return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> is not writeable and <strong>setup</strong> could not make it so]'),$which, $append), $msg);
 		} else {
-			if (($folder != $which) || $class != 'std') {
+			if (($append != $which) || $class != 'std') {
 				$f = " (<em>$append</em>)";
 			}
 			return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
@@ -1215,15 +1216,15 @@ if ($debug) {
 		$_zp_conf_vars['album_folder_class'] = 'std';
 	}
 	if (isset($_zp_conf_vars['album_folder'])) {
-		$albumfolder = $_zp_conf_vars['album_folder'];
+		$albumfolder = str_replace('\\', '/', $_zp_conf_vars['album_folder']);
 		switch ($_zp_conf_vars['album_folder_class']) {
 			case 'std':
-				$albumfolder = dirname(dirname(__FILE__)) . $albumfolder;
+				$albumfolder = str_replace('\\', '/', dirname(dirname(__FILE__))) . $albumfolder;
 				break;
 			case 'in_webpath':
-				$root = dirname(dirname(__FILE__));
+				$root = str_replace('\\', '/', dirname(dirname(__FILE__)));
 				if (!empty($const_webpath)) {
-					$root = dirname($root);
+					$root = str_replace('\\', '/', dirname($root));
 				}
 				$albumfolder = $root . $albumfolder;
 				break;
@@ -1239,8 +1240,7 @@ if ($debug) {
 
 	$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
-	$good = folderCheck('cache_html', dirname(dirname(__FILE__)) . '/cache_html/', 'std') && $good;
-	$good = folderCheck('cache_html', dirname(dirname(__FILE__)) . '/cache_html/rss/', 'std') && $good;
+	$good = folderCheck('RSS cache', dirname(dirname(__FILE__)) . '/cache_html/rss/', 'std') && $good;
 	
 	?>
 	</ul>
