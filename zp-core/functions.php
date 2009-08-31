@@ -2036,6 +2036,7 @@ function logTime($tag) {
 function commentsAllowed($type) {
 	return getOption($type) && (!getOption('comment_form_members_only') || zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS));
 }
+
 //load PHP specific functions
 require_once(PHPScript('5.0.0', '_functions.php'));
 

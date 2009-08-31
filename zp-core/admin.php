@@ -380,7 +380,8 @@ if (defined('RELEASE')) {
 <?php
 $buttonlist = array();
 
-$buttonlist[gettext("Check for zenphoto update")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Check for zenphoto update"),
 							'formname'=>'check_updates',
 							'action'=>'admin.php?check_for_update',
 							'icon'=>'images/accept.png', 
@@ -389,7 +390,8 @@ $buttonlist[gettext("Check for zenphoto update")] = array(
 							'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
 							'rights'=> ADMIN_RIGHTS
 							);
-$buttonlist[gettext("Refresh the Database")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Refresh the Database"),
 							'formname'=>'prune_gallery',
 							'action'=>'admin-refresh-metadata.php?prune',
 							'icon'=>'images/refresh.png', 
@@ -398,7 +400,8 @@ $buttonlist[gettext("Refresh the Database")] = array(
 							'hidden'=> '<input type="hidden" name="prune" value="true">',
 							'rights'=> ADMIN_RIGHTS
 							);
-$buttonlist[gettext("Purge cache")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Purge cache"),
 							'formname'=>'clear_cache',
 							'action'=>'admin.php?action=clear_cache=true',
 							'icon'=>'images/edit-delete.png', 
@@ -407,7 +410,8 @@ $buttonlist[gettext("Purge cache")] = array(
 							'hidden'=> '<input type="hidden" name="action" value="clear_cache">',
 							'rights'=> ADMIN_RIGHTS
 							);
-$buttonlist[gettext("Purge RSS cache")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Purge RSS cache"),
 							'formname'=>'clear_rss_cache',
 							'action'=>'admin.php?action=clear_rss_cache=true',
 							'icon'=>'images/edit-delete.png', 
@@ -416,7 +420,8 @@ $buttonlist[gettext("Purge RSS cache")] = array(
 							'hidden'=> '<input type="hidden" name="action" value="clear_rss_cache">',
 							'rights'=> ADMIN_RIGHTS
 							);
-$buttonlist[gettext("Pre-Cache Images")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Pre-Cache Images"),
 							'formname'=>'cache_images',
 							'action'=>'admin-cache-images.php',
 							'icon'=>'images/cache1.png', 
@@ -425,7 +430,8 @@ $buttonlist[gettext("Pre-Cache Images")] = array(
 							'hidden'=> '',
 							'rights'=> ADMIN_RIGHTS
 							);
-$buttonlist[gettext("Refresh Metadata")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Refresh Metadata"),
 							'formname'=>'refresh_metadata',
 							'action'=>'admin-refresh-metadata.php',
 							'icon'=>'images/redo.png', 
@@ -434,7 +440,8 @@ $buttonlist[gettext("Refresh Metadata")] = array(
 							'hidden'=> '',
 							'rights'=> ADMIN_RIGHTS
 							);
-$buttonlist[gettext("Reset hitcounters")] = array(
+$buttonlist[] = array(
+							'button_text'=>gettext("Reset hitcounters"),
 							'formname'=>'reset_hitcounters',
 							'action'=>'admin.php?action=reset_hitcounters=true',
 							'icon'=>'images/reset1.png', 
@@ -463,7 +470,8 @@ foreach ($filelist as $utility) {
 	eval(isolate('$button_icon', $utilityStream));
 	eval(isolate('$button_rights', $utilityStream));
 	
-	$buttonlist[$button_text] = array(
+	$buttonlist[] = array(
+								'button_text'=>$button_text,
 								'formname'=>$utility,
 								'action'=>UTILITIES_FOLDER.'/'.$utility,
 								'icon'=>$button_icon, 
@@ -474,27 +482,27 @@ foreach ($filelist as $utility) {
 								);
 								
 }
-ksort($buttonlist);
+$buttonlist = sortMultiArray($buttonlist, 'button_text', 'asc', true);
 $count = 0;
-foreach ($buttonlist as $name=>$button) {
+foreach ($buttonlist as $key=>$button) {
 	if (zp_loggedin($button['rights'])) {
 		$count ++;
 	} else {
-		unset($buttonlist[$name]);
+		unset($buttonlist[$key]);
 	}
 }
 $count = round($count/2);
 ?>
 	<div id="overview-maint_l">
 	<?php
-	foreach ($buttonlist as $name=>$button) {
+	foreach ($buttonlist as $button) {
 		$button_icon = $button['icon'];
 		?>
 		<form name="<?php echo $button['formname']; ?>"	action="<?php echo $button['action']; ?>">
 			<?php echo $button['hidden']; ?>
 			<div class="buttons" id="home_exif">
 			<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>">
-			<?php if(!empty($button_icon)) echo '<img src="'.$button_icon.'" alt="'.$button['alt'].'" />'; echo $name; ?>
+			<?php if(!empty($button_icon)) echo '<img src="'.$button_icon.'" alt="'.$button['alt'].'" />'; echo $button['button_text']; ?>
 			</button>
 			</div>
 			<br clear="all" />
