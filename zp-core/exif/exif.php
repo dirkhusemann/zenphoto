@@ -158,10 +158,15 @@ function intel2Moto($intel) {
 		return $cache[$intel];
 	}
 
-	$len  = strlen($intel);
 	$cache[$intel] = '';
-	for($i = 0; $i <= $len; $i += 2) {
-		$cache[$intel] .= substr($intel, $len-$i, 2);
+	$len  = strlen($intel);
+	if ($len > 1000) {
+		debugLogBacktrace('intel2Moto called with unreasonable data string: length='.$len);	
+		trigger_error(sprintf(gettext('intel2Moto called with unreasonable data string: length=%s. See debug log for details. (Setting DEBUG_EXIF to true might help locate problem images.)'),$len));
+	} else {
+		for($i = 0; $i <= $len; $i += 2) {		
+			$cache[$intel] .= substr($intel, $len-$i, 2);
+		}
 	}
 	return $cache[$intel];
 }

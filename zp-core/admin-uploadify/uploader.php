@@ -16,8 +16,8 @@ if (!zp_loggedin()) {
 if (!empty($_FILES)) {
 	$name = basename(sanitize($_FILES['Filedata']['name'],3));
 	if (isset($_FILES['Filedata']['error']) && $_FILES['Filedata']['error']) {
-		trigger_error(sprintf(gettext('Uploadify error on %1$s. Review your debug log.'),$name));
 		debugLogArray('Uploadify error:', $_FILES);
+		trigger_error(sprintf(gettext('Uploadify error on %1$s. Review your debug log.'),$name));
 	} else {
 		$tempFile = sanitize($_FILES['Filedata']['tmp_name'],3);
 		$folder = sanitize($_POST['folder'],3);
