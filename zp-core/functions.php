@@ -37,8 +37,8 @@ require_once(dirname(__FILE__).'/functions-i18n.php');
 if (getOption('album_session') && defined(OFFSET_PATH) && OFFSET_PATH==0 && session_id() == '') {
 	session_start();
 }
-require_once(dirname(__FILE__).'/auth_zp.php');
 require_once(dirname(__FILE__).'/class-load.php');
+require_once(dirname(__FILE__).'/auth_zp.php');
 
 
 $_zp_setupCurrentLocale_result = setMainDomain();
@@ -2014,12 +2014,27 @@ function restore_context() {
 	$_zp_current_context = $_zp_current_context_restore;
 }
 
+/**
+ * Logs a time into the debug log
+ *
+ * @param string $tag log annotation
+ */
 function logTime($tag) {
    $mtime = microtime(); 
    $mtime = explode(" ",$mtime); 
    $mtime = $mtime[1] + $mtime[0]; 
    $time = $mtime;
    debugLog($tag.' '.$time);	
+}
+
+/**
+ * Returns true if all the right conditions are set to allow comments for the $type
+ *
+ * @param string $type Which comments
+ * @return bool
+ */
+function commentsAllowed($type) {
+	return getOption($type) && (!getOption('comment_form_members_only') || zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS));
 }
 //load PHP specific functions
 require_once(PHPScript('5.0.0', '_functions.php'));

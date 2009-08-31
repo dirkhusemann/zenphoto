@@ -26,14 +26,6 @@ zp_register_filter('edit_comment_custom_data', 'comment_form_edit_comment');
 zp_register_filter('save_admin_custom_data', 'comment_form_save_admin');
 zp_register_filter('edit_admin_custom_data', 'comment_form_edit_admin', 1);
 
-if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
-	//disable comment post processing for non-members
-	setOption('comment_form_albums',0, false);
-	setOption('comment_form_images', 0, false);
-	setOption('comment_form_articles', 0, false);
-	setOption('comment_form_pages', 0, false);
-}
-
 class comment_form {
 	/**
 	 * class instantiation function
