@@ -1240,6 +1240,7 @@ if ($debug) {
 	$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
 	$good = folderCheck('cache_html', dirname(dirname(__FILE__)) . '/cache_html/', 'std') && $good;
+	$good = folderCheck('cache_html', dirname(dirname(__FILE__)) . '/cache_html/rss/', 'std') && $good;
 	
 	?>
 	</ul>
