@@ -133,7 +133,7 @@ function zp_handle_comment() {
 			$p_anon = isset($_POST['anon']);
 
 			if (isset($_POST['imageid'])) {  //used (only?) by the tricasa hack to know which image the client is working with.
-				$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
+				$activeImage = zp_load_image_from_id(sanitize_numeric($_POST['imageid']));
 				if ($activeImage !== false) {
 					$commentadded = $activeImage->addComment($p_name, $p_email,	$p_website, $p_comment,
 																							$code1, $code2,	$p_server, $p_private, $p_anon);
@@ -506,6 +506,11 @@ function zp_load_image_from_id($id){
 	return $currentImage;
 }
 
+/**
+ * Figures out what is being accessed and calls the appropriate load function
+ *
+ * @return bool
+ */
 function zp_load_request() {
 	list($album, $image) = rewrite_get_album_image('album','image');
 	zp_load_page();
