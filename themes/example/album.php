@@ -4,7 +4,10 @@ $startTime = array_sum(explode(" ",microtime()));
 $themeResult = getTheme($zenCSS, $themeColor, 'light');
 $firstPageImages = normalizeColumns(1, 7);
 ?>
-<?php header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
+<?php
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+header('Content-Type: text/html; charset=' . getOption('charset'));
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>

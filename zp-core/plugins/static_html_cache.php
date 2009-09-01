@@ -7,14 +7,19 @@
  * @author Malte Müller (acrylian)
  * @package plugins
  */
-require_once(dirname(dirname(__FILE__)).'/functions.php');
 
+if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
+require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
+$plugin_is_filter = 5;
 $plugin_description = gettext("Adds static html cache functionality to Zenphoto v1.2 or higher. Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php. This plugin uses the folder <em>cache_html</em> and it's subfolders <em>index, images, albums</em> and <em>pages</em> in Zenphoto's root folder.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---static_html_cache.php.html";
 $option_interface = new staticCache();
 $_zp_HTML_cache = $option_interface; // register as the HTML cache handler
+
+zp_register_filter('admin_utilities_buttons', 'static_cache_html_purgebutton');
 
 // insure that we have the folders available for the cache
 if (!defined('STATIC_CACHE_FOLDER')) {
@@ -37,6 +42,12 @@ foreach($cachesubfolders as $cachesubfolder) {
 	}
 }
 
+if (isset($_GET['action']) && $_GET['action']=='clear_html_cache' && zp_loggedin(ADMIN_RIGHTS)) {
+	$_zp_HTML_cache->clearHTMLCache();
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('HTML cache cleared.'));
+	exit();
+}
+
 /**
  * Plugin option handling class
  *
@@ -46,27 +57,19 @@ class staticCache {
 	var $startmtime;
 	
 	function staticCache() {
-		setOptionDefault('clear_static_cache', '');
 		setOptionDefault('static_cache_expire', 86400);
 		setOptionDefault('static_cache_excludedpages', 'search.php/');
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Clear static html cache') => array('key' => 'clear_static_cache', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext("Clears the static html cache.")),
-		gettext('Static html cache expire') => array('key' => 'static_cache_expire', 'type' => OPTION_TYPE_TEXTBOX,
+		return array(	gettext('Static html cache expire') => array('key' => 'static_cache_expire', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("When the cache should expire in seconds. Default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec).")),
-		gettext('Excluded pages') => array('key' => 'static_cache_excludedpages', 'type' => OPTION_TYPE_TEXTBOX,
+									gettext('Excluded pages') => array('key' => 'static_cache_excludedpages', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The list of pages to excluded from cache generation. Pages that can be excluded are custom theme pages including Zenpage pages (these optionally more specific by titlelink) and the standard theme files image.php (optionally by image file name), album.php (optionally by album folder name) or index.php.<br /> If you want to exclude a page completly enter <em>page-filename.php/</em>. <br />If you want to exclude a page by a specific title,image filename or album folder name enter <em>pagefilename.php/titlelink or image filename or album folder</em>. Separate several entries by comma.")),
 		);
 	}
 
 	function handleOption($option, $currentValue) {
-		if($option=="clear_static_cache") {
-			echo "<div class='buttons'>";
-			echo "<a href='".PLUGIN_FOLDER."/static_html_cache.php?clearcache&height=100&width=250' class='thickbox' title='".gettext("Clear cache")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear cache")."</a>";
-			echo "</div>";
-		}
 	}
 	
 	/**
@@ -274,23 +277,18 @@ class staticCache {
 	}
 } // class
 
-
-// creates the cache folders from the plugins page or clears the cache from the plugin options
-if (isset($_GET['clearcache'])) {
-	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
-	echo "\n<head>";
-	echo "\n  <title>".gettext("zenphoto administration")."</title>";
-	echo "\n  <link rel=\"stylesheet\" href=\"../admin.css\" type=\"text/css\" />";
-	echo "</head>";
-	echo "<body>";
-	$_zp_HTML_cache->clearHTMLCache();
-	echo '<div style="margin-top: 20px; text-align: left;">';
-	echo "<h2><img src='images/pass.png' style='position: relative; top: 3px; margin-right: 5px' />".gettext("Static HTML Cache cleared!")."</h2>";
-	echo "<div class='buttons'><a href='#' onclick='self.parent.tb_remove();'>".gettext('Close')."</a></div>";
-	echo '</div>';
-	echo "</body>";
-	echo "</html>";
-	exit;
+function static_cache_html_purgebutton($buttons) {
+	$buttons[] = array(
+								'button_text'=>gettext('Purge HTML cache'),
+								'formname'=>'clearcache_button',
+								'action'=>PLUGIN_FOLDER.'/static_html_cache.php?action=clear_html_cache',
+								'icon'=>'images/edit-delete.png', 
+								'title'=>gettext('Clear the static HTML cache. HTML pages will be recached as they are viewed.'),
+								'alt'=>'',
+								'hidden'=> '<input type="hidden" name="action" value="clear_html_cache">',
+								'rights'=> ADMIN_RIGHTS
+								);
+	return $buttons;
 }
+
 ?>

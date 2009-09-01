@@ -19,7 +19,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 }
 
 if (!zp_loggedin()) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
 

@@ -8,8 +8,8 @@
 
 
 if (session_id() == '') session_start();
-
 require_once(dirname(__FILE__).'/functions.php');
+	
 $_zp_admin_ordered_taglist = NULL;
 $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
@@ -2561,14 +2561,15 @@ function deleteThemeDirectory($source) {
  * @param string $source the script file incase REQUEST_URI is not available
  */
 function currentRelativeURL($source) {
-	if (isset($_SERVER['REQUEST_URI'])) {
-		$from = PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // full requested URL
-		$from = str_replace( FULLWEBPATH , '', $from); // Make relative to zenphoto installation
-		return urlencode(stripslashes( $from ));
-	} else {
-		$source = str_replace(SERVERPATH, '', $source);
-		return $source;
+	$source = str_replace(SERVERPATH, '', $source);
+	$q = '';
+	if (!empty($_GET)) {
+		foreach ($_GET as $parm=>$value) {
+			$q .= $parm.'='.$value.'&';
+		}
+		$q = '?'.substr($q,0,-1);
 	}
+	return pathurlencode($source.$q);
 }
 
 /**

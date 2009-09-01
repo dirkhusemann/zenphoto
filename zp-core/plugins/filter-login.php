@@ -53,23 +53,7 @@ class admin_login {
 		);
 	}
 
-	/**
-	 * Custom opton handler--creates the clear ratings button
-	 *
-	 * @param string $option
-	 * @param string $currentValue
-	 */
 	function handleOption($option, $currentValue) {
-		if($option=="logger_clear_log") {
-			?>
-			<div class='buttons'>
-				<a href="?logger_clear_log=1&amp;tab=plugin" title="<?php echo gettext("Clear log"); ?>">
-					<img src='images/edit-delete.png' alt='' />
-					<?php echo gettext("Clear log"); ?>
-				</a>
-			</div>
-			<?php
-		}
 	}
 
 }

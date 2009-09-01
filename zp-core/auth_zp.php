@@ -56,7 +56,10 @@ if (!isset($_POST['login'])) {
 		$_zp_loggedin = zp_apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
 		if ($_zp_loggedin) {
 			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath);
-			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . '/'. $redirect); }
+			if (!empty($redirect)) {
+				header("Location: " . FULLWEBPATH . '/'. $redirect);
+				exit();
+			}
 		} else {
 			// Clear the cookie, just in case
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);

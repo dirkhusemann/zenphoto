@@ -42,7 +42,7 @@ function loadAlbum($album) {
 }
 
 if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
 

@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 
 if (!is_null(getOption('admin_reset_date'))) {
 	if (!$_zp_loggedin) { // prevent nefarious access to this page.
-		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 		exit();
 	}
 	if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {

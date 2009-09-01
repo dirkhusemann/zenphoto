@@ -14,7 +14,7 @@ $_zp_sortable_list = new jQuerySortable('js');
 // $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
 if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
 
@@ -30,7 +30,7 @@ if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
 	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
 		if (!isMyAlbum($folder, $_zp_loggedin)) {
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 			exit();
 		}
 	}

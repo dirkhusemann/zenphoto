@@ -68,12 +68,6 @@ class comment_form {
 									);
 	}
 
-	/**
-	 * Custom opton handler--creates the clear ratings button
-	 *
-	 * @param string $option
-	 * @param string $currentValue
-	 */
 	function handleOption($option, $currentValue) {
 	}
 

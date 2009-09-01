@@ -12,7 +12,8 @@
  * @author Stephen Billard (sbillard)and Malte Müller (acrylian)
  * @package plugins
  */
-require_once(dirname(dirname(__FILE__)).'/functions.php');
+if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
+require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 $plugin_is_filter = -5;
 $plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
@@ -22,10 +23,23 @@ $option_interface = new jquery_rating();
 
 zp_register_filter('edit_album_utilities', 'optionVoteStatus');
 zp_register_filter('save_album_utilities_data', 'optionVoteStatusSave');
+zp_register_filter('admin_utilities_buttons', 'rating_purgebutton');
 
 if (getOption('rating_image_individual_control')) {
 	zp_register_filter('edit_image_utilities', 'optionVoteStatus');
 	zp_register_filter('save_image_utilities_data', 'optionVoteStatusSave');
+}
+if (isset($_GET['action']) && $_GET['action']=='clear_rating') {
+	if (!(zp_loggedin(ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) { // prevent nefarious access to this page.
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+		exit();
+	}
+	query('UPDATE '.prefix('images').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
+	query('UPDATE '.prefix('albums').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
+	query('UPDATE '.prefix('zenpage_news').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
+	query('UPDATE '.prefix('zenpage_pages').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('All ratings have been set to <em>unrated</em>.'));
+	exit();
 }
 
 $ME = substr(basename(__FILE__),0,-4);
@@ -76,9 +90,7 @@ class jquery_rating {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Clear ratings') => array('key' => 'clear_rating', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('Sets all images and albums to unrated.')),
-									gettext('Voting state') => array('key' => 'rating_status', 'type' => OPTION_TYPE_RADIO,
+		return array(	gettext('Voting state') => array('key' => 'rating_status', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => $this->ratingstate,
 										'desc' => gettext('<em>Enable</em> state of voting.')),
 									gettext('Split start') =>array('key' => 'rating_split_stars', 'type' => OPTION_TYPE_CHECKBOX,
@@ -91,23 +103,7 @@ class jquery_rating {
 								);
 	}
 
-	/**
-	 * Custom opton handler--creates the clear ratings button
-	 *
-	 * @param string $option
-	 * @param string $currentValue
-	 */
 	function handleOption($option, $currentValue) {
-		if($option=="clear_rating") {
-			?>
-			<div class='buttons'>
-				<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4); ?>/update.php?clear_rating&height=100&width=250" class="thickbox" title="<?php echo gettext("Clear ratings"); ?>">
-					<img src='images/edit-delete.png' alt='' />
-					<?php echo gettext("Clear ratings"); ?>
-				</a>
-			</div>
-			<?php
-		}
 	}
 
 }
@@ -307,5 +303,20 @@ function optionVoteStatus($before, $object, $prefix) {
 function optionVoteStatusSave($object, $prefix) {
 	$object->set('rating_status', sanitize($_POST[$prefix.'rating_status']));
 }
+
+function rating_purgebutton($buttons) {
+	$buttons[] = array(
+								'button_text'=>gettext('Reset all ratings'),
+								'formname'=>'clearrating_button',
+								'action'=>PLUGIN_FOLDER.'/rating.php?action=clear_rating',
+								'icon'=>'images/reset1.png', 
+								'title'=>gettext('Sets all ratings to unrated.'),
+								'alt'=>'',
+								'hidden'=> '<input type="hidden" name="action" value="clear_rating">',
+								'rights'=> ADMIN_RIGHTS
+								);
+	return $buttons;
+}
+
 
 ?>

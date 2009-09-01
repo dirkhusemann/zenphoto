@@ -6,7 +6,7 @@
 
 // force UTF-8 Ø
 
-/* Don't put anything before this line! */
+/* Don't put anything before this line! */	
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/functions-rss.php');
@@ -17,44 +17,94 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php'); 
 }
-
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if ($_zp_loggedin == ADMIN_RIGHTS || $_zp_reset_admin) { // user/password set required.
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
 	}
-
+	
 	$gallery = new Gallery();
 	$gallery->garbageCollect();
 	if (isset($_GET['action'])) {
 		$action = $_GET['action'];
+		if (zp_loggedin(ADMIN_RIGHTS) || $action=='external' || $action=='check_for_update') {
+			switch ($action) {
+				/** clear the cache ***********************************************************/
+				/******************************************************************************/
+				case "clear_cache":
+					$gallery->clearCache();
+					$class = 'messagebox';
+					$msg = gettext('Image cache cleared.');
+					break;
 
-		/** clear the cache ***********************************************************/
-		/******************************************************************************/
-		if ($action == "clear_cache") {
-			$gallery->clearCache();
-			$msg = gettext('Cache cleared.');
+					/** clear the RSScache ***********************************************************/
+					/******************************************************************************/
+				case "clear_rss_cache":
+					clearRSScache();
+					$class = 'messagebox';
+					$msg = gettext('RSS cache cleared.');
+					break;
+
+					/** Reset hitcounters ***********************************************************/
+					/********************************************************************************/
+				case "reset_hitcounters":
+					query('UPDATE ' . prefix('albums') . ' SET `hitcounter`= 0');
+					query('UPDATE ' . prefix('images') . ' SET `hitcounter`= 0');
+					query('UPDATE ' . prefix('zenpage_news') . ' SET `hitcounter`= 0');
+					query('UPDATE ' . prefix('zenpage_pages') . ' SET `hitcounter`= 0');
+					query('UPDATE ' . prefix('zenpage_news_categories') . ' SET `hitcounter`= 0');
+					query('UPDATE ' . prefix('options') . ' SET `value`= 0 WHERE `name` LIKE "Page-Hitcounter-%"');
+
+					$class = 'messagebox';
+					$msg = gettext('All hitcounters have been set to zero');
+					break;
+
+					/** check for update ***********************************************************/
+					/********************************************************************************/
+				case 'check_for_update':
+					$v = checkForUpdate();
+					if (empty($v)) {
+						$class = 'messagebox';
+						$msg = gettext("You are running the latest zenphoto version.");
+					} else {
+						$class = 'errorbox';
+						if ($v == 'X') {
+							$msg = gettext("Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>");
+						} else {
+							$msg =  "<a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a>";
+						}
+					}
+					break;
+					//** external script return
+				case 'external':
+					if (isset($_GET['error'])) {
+						$class = 'errorbox';
+					} else {
+						$class = 'messagebox';
+					}
+					if (isset($_GET['msg'])) {
+						$msg = sanitize($_GET['msg']);
+					} else {
+						$msg = '';
+					}
+					break;
+			}
+		} else {
+			$class = 'errorbox';
+			$actions = array(	'clear_cache'=>gettext('purge Image cache'),
+												'clear_rss_cache'=>gettext('purge RSS cache'),
+												'reset_hitcounters'=>gettext('reset all hitcounters'));
+			$msg = sprintf(gettext('You do not have proper rights to %s.'),$actions[$action]);
 		}
-		
-		/** clear the RSScache ***********************************************************/
-		/******************************************************************************/
-		if($action = "clear_rss_cache") {
-			clearRSScache();
-			$msg = gettext('RSS Cache cleared.');
-		}
-		
-		/** Reset hitcounters ***********************************************************/
-		/********************************************************************************/
-		if ($action == "reset_hitcounters") {
-			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0");
-			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0");
-			$msg = gettext('Hitcounters reset');
-		}		
+	} else if (isset($_GET['from'])) {
+		$class = 'errorbox';
+		$msg = sprintf(gettext('You do not have proper rights to access %s.'),urldecode(sanitize($_GET['from'])));
 	}
-	
+
 /************************************************************************************/
 /** End Action Handling *************************************************************/
 /************************************************************************************/
 
+/*
 	if (isset($_GET['page'])) {
 		$page = sanitize($_GET['page']);
 	} else if (empty($page)) {
@@ -118,7 +168,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			exit();
 		default:
 	}
+	
+*/	
+	
 }
+
 
 // Print our header
 printAdminHeader();
@@ -132,7 +186,12 @@ if (!zp_loggedin()) { ?>
 // If they are not logged in, display the login form and exit
 
 if (!zp_loggedin()) {
-	$from = isset($_GET['from']) ? $_GET['from'] : null;
+	if (isset($_GET['from'])) {
+		$from = sanitize($_GET['from']);
+		$from = urldecode($from);
+	} else {
+		$from = urldecode(currentRelativeURL(__FILE__));
+	}
 	printLoginForm($from);
 	echo "\n</body>";
 	echo "\n</html>";
@@ -142,7 +201,7 @@ if (!zp_loggedin()) {
 	printLogoAndLinks();
 	?>
 <div id="main">
-<?php printTabs($page); ?>
+<?php printTabs('home'); ?>
 <div id="content">
 <?php
 
@@ -150,29 +209,12 @@ if (!zp_loggedin()) {
 /*** HOME ***************************************************************************/
 /************************************************************************************/
 
-$page = "home"; ?>
-<?php
-/** check for update ***********************************************************/
-/********************************************************************************/
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
-	$v = checkForUpdate();
-	if (empty($v)) {
-		$msg = gettext("You are running the latest zenphoto version.");
-	} else {
-		echo '<div class="errorbox" id="fade-message">';
-		if ($v == 'X') {
-			echo  "<h2>".gettext("Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</h2>";
-		} else {
-			echo  "<h2><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></h2>";
-		}
-		echo '</div>';
-	}
-}
-
 if (!empty($msg)) {
-	echo '<div class="messagebox" id="fade-message">';
-	echo  "<h2>$msg</h2>";
-	echo '</div>';
+	?>
+	<div class="<?php echo $class; ?>" id="fade-message">
+		<h2><?php echo $msg; ?></h2>
+	</div>
+	<?php
 }
 ?>
 <div id="overview-leftcolumn">
@@ -383,12 +425,12 @@ $buttonlist = array();
 $buttonlist[] = array(
 							'button_text'=>gettext("Check for zenphoto update"),
 							'formname'=>'check_updates',
-							'action'=>'admin.php?check_for_update',
+							'action'=>'admin.php?action=check_for_update',
 							'icon'=>'images/accept.png', 
 							'title'=>gettext("Queries the Zenphoto web site for the latest version and compares that with the one that is running."),
 							'alt'=>'',
 							'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
-							'rights'=> ADMIN_RIGHTS
+							'rights'=> ALL_RIGHTS
 							);
 $buttonlist[] = array(
 							'button_text'=>gettext("Refresh the Database"),
@@ -401,9 +443,9 @@ $buttonlist[] = array(
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
-							'button_text'=>gettext("Purge cache"),
+							'button_text'=>gettext("Purge Image cache"),
 							'formname'=>'clear_cache',
-							'action'=>'admin.php?action=clear_cache=true',
+							'action'=>'admin.php?action=clear_cache',
 							'icon'=>'images/edit-delete.png', 
 							'title'=>gettext("Clears the image cache. Images will be re-cached as they are viewed."),
 							'alt'=>'',
@@ -413,7 +455,7 @@ $buttonlist[] = array(
 $buttonlist[] = array(
 							'button_text'=>gettext("Purge RSS cache"),
 							'formname'=>'clear_rss_cache',
-							'action'=>'admin.php?action=clear_rss_cache=true',
+							'action'=>'admin.php?action=clear_rss_cache',
 							'icon'=>'images/edit-delete.png', 
 							'title'=>gettext("Clears the RSS cache. RSS files will be re-cached as they are viewed."),
 							'alt'=>'',
@@ -441,11 +483,11 @@ $buttonlist[] = array(
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
-							'button_text'=>gettext("Reset hitcounters"),
+							'button_text'=>gettext("Reset all hitcounters"),
 							'formname'=>'reset_hitcounters',
 							'action'=>'admin.php?action=reset_hitcounters=true',
 							'icon'=>'images/reset1.png', 
-							'title'=>gettext("Sets all album and image hitcounters to zero."),
+							'title'=>gettext("Sets all hitcounters to zero."),
 							'alt'=>'Reset hitcounters',
 							'hidden'=> '<input type="hidden" name="action" value="reset_hitcounters">',
 							'rights'=> ADMIN_RIGHTS
@@ -482,6 +524,7 @@ foreach ($filelist as $utility) {
 								);
 								
 }
+$buttonlist = zp_apply_filter('admin_utilities_buttons', $buttonlist);
 $buttonlist = sortMultiArray($buttonlist, 'button_text', 'asc', true);
 $count = 0;
 foreach ($buttonlist as $key=>$button) {
@@ -502,7 +545,7 @@ $count = round($count/2);
 			<?php echo $button['hidden']; ?>
 			<div class="buttons" id="home_exif">
 			<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>">
-			<?php if(!empty($button_icon)) echo '<img src="'.$button_icon.'" alt="'.$button['alt'].'" />'; echo $button['button_text']; ?>
+			<?php if(!empty($button_icon)) echo '<img src="'.$button_icon.'" alt="'.$button['alt'].'" />'; echo addslashes($button['button_text']); ?>
 			</button>
 			</div>
 			<br clear="all" />

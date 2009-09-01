@@ -13,12 +13,12 @@ if (isset($_GET['album'])) {
 	$folder = '';
 }
 if (!zp_loggedin() || empty($folder) || !isMyAlbum($folder, ALBUM_RIGHTS)) {
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
 $album = new Album(new Gallery(), $folder);
 if ($album->isDynamic()) {
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
 if (isset($_GET['action'])) {

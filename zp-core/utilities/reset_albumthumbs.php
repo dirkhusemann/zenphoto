@@ -14,10 +14,10 @@ chdir(dirname(dirname(__FILE__)));
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
-$button_text = gettext('Reset thumbs');
-$button_hint = gettext('Reset album thumbnails.');
+$button_text = gettext('Reset album thumbs');
+$button_hint = gettext('Reset album thumbnails to either '."'random' or 'most recent''.");
 $button_icon = 'images/burst1.png';
-$button_rights = ADMIN_RIGHTS;
+$button_rights = MANAGE_ALL_ALBUM_RIGHTS;
 
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
@@ -27,8 +27,8 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 
 if (!is_null(getOption('admin_reset_date'))) {
 	if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
-		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
-		exit();
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+	exit();
 	}
 }
 

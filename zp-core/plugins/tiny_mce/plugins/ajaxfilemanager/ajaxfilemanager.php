@@ -3,7 +3,8 @@ define('OFFSET_PATH', 5);
 $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
 include('../../../../admin-functions.php');
 if(!($_zp_loggedin)) {
-  header("Location: ../../../../admin.php"); exit;
+	header('Location: ../../../../admin.php?from=' . currentRelativeURL(__FILE__)); 
+  exit();
 }
 error_reporting(E_ALL^E_NOTICE);
 	/**

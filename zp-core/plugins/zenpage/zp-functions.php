@@ -10,6 +10,6 @@ define("OFFSET_PATH",4);
 include('../../admin-functions.php');
 include ("zenpage-admin-functions.php");
 if(!($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
-  header("Location: ../../admin.php"); exit;
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 }
 ?>

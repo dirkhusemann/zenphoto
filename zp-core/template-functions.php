@@ -3170,7 +3170,7 @@ function getHitcounter($obj=NULL) {
 				break;
 			default:
 				$page = substr($_zp_gallery_page, 0, -4);
-				return getOption('Page_'.$page.'_Hitcounter');
+				return getOption('Page-Hitcounter-'.$page);
 				break;
 		}
 	}
