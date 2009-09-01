@@ -25,8 +25,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	$gallery = new Gallery();
 	$gallery->garbageCollect();
 	if (isset($_GET['action'])) {
+		$rightsneeded = array('external'=>ALL_RIGHTS, 'check_for_update'=>OVERVIEW_RIGHTS);
 		$action = $_GET['action'];
-		if (zp_loggedin(ADMIN_RIGHTS) || $action=='external' || $action=='check_for_update') {
+		$needs = ADMIN_RIGHTS;
+		if (isset($rightsneeded[$action])) {
+			$needs = $rightsneeded[$action] | ADMIN_RIGHTS;
+		}
+		if (zp_loggedin($needs)) {
 			switch ($action) {
 				/** clear the cache ***********************************************************/
 				/******************************************************************************/
@@ -53,7 +58,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					query('UPDATE ' . prefix('zenpage_pages') . ' SET `hitcounter`= 0');
 					query('UPDATE ' . prefix('zenpage_news_categories') . ' SET `hitcounter`= 0');
 					query('UPDATE ' . prefix('options') . ' SET `value`= 0 WHERE `name` LIKE "Page-Hitcounter-%"');
-
 					$class = 'messagebox';
 					$msg = gettext('All hitcounters have been set to zero');
 					break;
@@ -430,7 +434,7 @@ $buttonlist[] = array(
 							'title'=>gettext("Queries the Zenphoto web site for the latest version and compares that with the one that is running."),
 							'alt'=>'',
 							'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
-							'rights'=> ALL_RIGHTS
+							'rights'=> OVERVIEW_RIGHTS
 							);
 $buttonlist[] = array(
 							'button_text'=>gettext("Refresh the Database"),

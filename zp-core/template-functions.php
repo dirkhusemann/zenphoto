@@ -2534,7 +2534,6 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	}
 	if (isImagePhoto()) { //Print images
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
-			' title="' . html_encode($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
@@ -2747,8 +2746,6 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	if (isImagePhoto() || $thumbStandin) {
 		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . 
 			' alt="' . html_encode($alt) . '"' .
-			' title="' . html_encode($alt) . '"' .
-			$class .
 			$id .
 			$sizing .
 			' />';
