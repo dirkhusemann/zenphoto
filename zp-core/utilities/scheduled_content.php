@@ -122,6 +122,17 @@ printAdminHeader($webpath);
 }
 </style>
 <?php
+function unpublishSubalbums($album) {
+	global $gallery;
+	$albums = $album->getSubalbums();
+	foreach ($albums as $albumname) {
+		$subalbum = new Album($gallery, $albumname);
+		$subalbum->setShow(false);
+		$subalbum->save();
+		unpublishSubalbums($subalbum);
+	}
+}
+
 echo '</head>';
 ?>
 
@@ -211,7 +222,9 @@ if (db_connect()) {
 	
 	$albumidlist = '';
 	$albumids = '';
-	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
+	if ($_zp_loggedin & ADMIN_RIGHTS) {
+		$albumlist = $gallery->getAlbums();
+	} else {
 		$albumlist = getManagedAlbumList();
 		$albumIDs = array();
 		foreach ($albumlist as $albumname) {
@@ -235,7 +248,15 @@ if (db_connect()) {
 			$albumidlist = ' AND ('.$albumidlist.')';
 		}
 	}
-
+	if (isset($_GET['propagate_unpublished'])) {
+		foreach ($albumlist as $albumname) {
+			$album = new Album($gallery, $albumname);
+			if (!$album->getShow()) {
+				unpublishSubalbums($album);
+			}
+		}
+	}
+	
 	$mtime = dateTimeConvert(sanitize($requestdate), true);
 	$sql = "SELECT `folder`, `id` FROM ".prefix('albums').' WHERE `show`="0"'.$albumids;
 	$result = query_full_array($sql);
@@ -268,7 +289,6 @@ if (db_connect()) {
 <br clear="all" />
 <br clear="all" />
 </form>
-<br />
 <?php 
 }
 if (count($publish_albums_list) > 0) { 
@@ -286,7 +306,15 @@ if (count($publish_albums_list) > 0) {
 	<br clear="all" />
 	<br clear="all" />
 	</form>
-<?php
+	<p class="buttons">
+		<a href="?propagate_unpublished" alt="<?php echo gettext('Set all subalbums of an unpublished album to unpublished.'); ?>">
+		<img src="<?php echo $webpath; ?>images/redo.png" alt="" />
+			<?php echo gettext('Propagate unpublished state'); ?>
+		</a>
+	</p>
+	<br clear="all" />
+	<br clear="all" />
+	<?php
 	} else {
 		echo '<p>'.gettext('No albums are unpublished.').'</p>';
 	}
