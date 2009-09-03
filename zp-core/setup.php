@@ -174,8 +174,8 @@ $result = true;
 $chmod_defined = false;
 $environ = false;
 $DBcreated = false;
-$createDBErr = '';
 $oktocreate = false;
+$connectDBErr = '';
 if (file_exists(CONFIGFILE)) {
 	require(CONFIGFILE);
 	if (defined('CHMOD_VALUE')) {
@@ -198,7 +198,7 @@ if (file_exists(CONFIGFILE)) {
 		} else {
 			if (!empty($_zp_conf_vars['mysql_database'])) {
 				if (isset($_GET['Create_Database'])) {
-					$sql = 'CREATE DATABASE IF NOT EXISTS '.$_zp_conf_vars['mysql_database'].$collation;
+					$sql = 'CREATE DATABASE IF NOT EXISTS '.'`'.$_zp_conf_vars['mysql_database'].'`'.$collation;
 					$result = @mysql_query($sql);
 					if ($result && @mysql_select_db($_zp_conf_vars['mysql_database'])) {
 						$environ = true;
@@ -207,7 +207,7 @@ if (file_exists(CONFIGFILE)) {
 						if ($result) {
 							$DBcreated = true;
 						} else {
-							$createDBErr = mysql_error();
+							$connectDBErr = mysql_error();
 						}
 					}
 				} else {
@@ -215,6 +215,8 @@ if (file_exists(CONFIGFILE)) {
 				}
 			}
 		}
+	} else {
+		$connectDBErr = mysql_error();
 	}
 }
 if (!function_exists('setOption')) { // setup a primitive environment
@@ -783,6 +785,8 @@ if (!$checked) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
 			$db = $_zp_conf_vars['mysql_database'];
 			$db = @mysql_select_db($db);
+		} else {
+			if (empty($connectDBErr)) $connectDBErr = mysql_error();
 		}
 	}
 	if ($connection) {
@@ -866,17 +870,20 @@ if ($debug) {
 		}
 	}
 	if (!$newconfig && !$connection) {
-		$good = checkMark($connection, gettext("Connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
+		if (empty($_zp_conf_vars['mysql_host']) || empty($_zp_conf_vars['mysql_user']) || empty($_zp_conf_vars['mysql_pass'])) {
+			$connectDBErr = gettext('Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.'); // of course we can't connect!
+		}
+		$good = checkMark($connection, gettext("Connect to MySQL"), gettext("Connect to MySQL [<code>CONNECT</code> query failed]"), $connectDBErr) && $good;
 	}
 	if ($connection) {
 		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
-		if ($DBcreated || !empty($createDBErr)) {
-			if (empty($createDBErr)) {
+		if ($DBcreated || !empty($connectDBErr)) {
+			if (empty($connectDBErr)) {
 				$severity = 1;
 			} else {
 				$severity = 0;
 			}
-			checkMark($severity, sprintf(gettext('Database <code>%s</code> created'), $_zp_conf_vars['mysql_database']),sprintf(gettext('Database <code>%s</code> not created [<code>CREATE DATABASE</code> query failed]'), $_zp_conf_vars['mysql_database']),$createDBErr);
+			checkMark($severity, sprintf(gettext('Database <code>%s</code> created'), $_zp_conf_vars['mysql_database']),sprintf(gettext('Database <code>%s</code> not created [<code>CREATE DATABASE</code> query failed]'), $_zp_conf_vars['mysql_database']),$connectDBErr);
 		}
 		if (empty($_zp_conf_vars['mysql_database'])) {
 			$good = checkmark(0, '', gettext('Connect to the database [You have not provided a database name]'),gettext('Privode the name of your database in the form above.'));
