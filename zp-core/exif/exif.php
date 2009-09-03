@@ -1063,4 +1063,10 @@ function get35mmEquivFocalLength(&$result) {
 	return null;
 }
 
+if (!function_exists('debugLogBacktrace')) {
+	// define this function for stand-alone uses if exifier
+	function debugLogBacktrace($msg) {
+	}
+}
+
 ?>
