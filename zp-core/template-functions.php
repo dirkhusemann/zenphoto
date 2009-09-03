@@ -1418,8 +1418,10 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 	}
 	$class = trim($class);
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)) {
-		echo '<img src="' . htmlspecialchars(getAlbumThumb()) . '" alt="' . html_encode($alt) . '"' .
+		$html = '<img src="' . htmlspecialchars(getAlbumThumb()) . '" alt="' . html_encode($alt) . '"' .
 		(($class) ? ' class="'.$class.'"' : '') . (($id) ? ' id="'.$id.'"' : '') . ' />';
+		$html = zp_apply_filter('standard_album_thumb_html', $html);
+		echo $html;
 	} else {
 		if (getOption('thumb_crop')) {
 			$s = getOption('thumb_size');
@@ -1507,8 +1509,10 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		$sizing = $sizing.' height="'.$height.'"';
 	}
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)){
-		echo '<img src="' . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). '"' . $sizing . ' alt="' . html_encode($alt) . '"' .
+		$html = '<img src="' . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). '"' . $sizing . ' alt="' . html_encode($alt) . '"' .
 		(($class) ? ' class="'.$class.'"' : '') .	(($id) ? ' id="'.$id.'"' : '') . " />";
+		$html = zp_apply_filter('custom_album_thumb_html', $html);
+		echo $html;
 	} else {
 		echo getPasswordProtectImage($sizing);
 	}
@@ -2533,10 +2537,12 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 		$class .= " password_protected";
 	}
 	if (isImagePhoto()) { //Print images
-		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
+		$html = '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
+		$html = zp_apply_filter('standard_image_html', $html);
+		echo $html;
 	} else { // better be a plugin class then
 		echo $_zp_current_image->getBody();
 	}
@@ -2603,10 +2609,12 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 		$w = " width=\"$w\"";
 	}
 	$class = trim($class);
-	echo "<img src=\"" . htmlspecialchars($url) . "\" alt=\"" . html_encode($alt) . "\"" .
+	$html = "<img src=\"" . htmlspecialchars($url) . "\" alt=\"" . html_encode($alt) . "\"" .
 	((getOption('thumb_crop')) ? $w.$h : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . " />";
+	$html = zp_apply_filter('standard_image_thumb_html',$html);
+	echo $html;
 }
 
 /**
@@ -2744,11 +2752,13 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	if ($id) $id = ' id="'.$id.'"';
 	if ($class) $id = ' class="'.$class.'"';
 	if (isImagePhoto() || $thumbStandin) {
-		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . 
+		$html = '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . 
 			' alt="' . html_encode($alt) . '"' .
 			$id .
 			$sizing .
 			' />';
+		$html = zp_apply_filter('custom_image_html', $html, $thumbStandin);
+		echo $html;
 	} else { // better be a plugin
 		echo $_zp_current_image->getBody();
 	}

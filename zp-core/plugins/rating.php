@@ -93,7 +93,7 @@ class jquery_rating {
 		return array(	gettext('Voting state') => array('key' => 'rating_status', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => $this->ratingstate,
 										'desc' => gettext('<em>Enable</em> state of voting.')),
-									gettext('Split start') =>array('key' => 'rating_split_stars', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Split stars') =>array('key' => 'rating_split_stars', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Enable to allow rating stars to show half stars for fractional rating values. May cause performance problems for pages with large numbers of rating elements.')),
 									gettext('Individual image control') =>array('key' => 'rating_image_individual_control', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Enable to allow voting status control on individual images.')),
