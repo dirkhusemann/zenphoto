@@ -30,6 +30,8 @@ class image_reflection {
 		setOptionDefault('reflection_std_album_thumbs',1);
 		setOptionDefault('reflection_custom_image_thumbs',1);
 		setOptionDefault('reflection_custom_album_thumbs',1);
+		setOptionDefault('reflection_height','30');
+		setOptionDefault('reflection_opacity','0.6');
 	}
 
 		/**
@@ -38,7 +40,11 @@ class image_reflection {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Standard images') => array('key' => 'reflection_std_images', 'type' => OPTION_TYPE_CHECKBOX,
+		return array(	gettext('Reflection height') => array('key' => 'reflection_height', 'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext('The height of the <em>reflection</em>. A percentage of the original image&#151;a number between 0 and 100.')),
+									gettext('Reflection opacity') => array('key' => 'reflection_opacity', 'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext('The opacity of the <em>reflection</em>. Must be a decimal fraction between 0 and 1.')),
+									gettext('Standard images') => array('key' => 'reflection_std_images', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Apply <em>reflection</em> to images shown via the <code>printDefaultSizedImage()</code> function.')),
 									gettext('Custom images') =>array('key' => 'reflection_custom_images', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Apply <em>reflection</em> to images shown via the custom image functions.')),
@@ -65,14 +71,15 @@ class image_reflection {
 }
 
 function reflection_insert_class($html) {
+	$reflect = sprintf('reflect rheight%1$u ropacity%2$u',getOption('reflection_height'),getOption('reflection_opacity')*100);
 	$i = strpos($html, 'class=');
 	if ($i === false) {
 		$i = strpos($html, '/>');
-		$html = substr($html, 0, $i).'class="reflect" />';
+		$html = substr($html, 0, $i).'class="'.$reflect.'" />';
 	} else {
 		$quote = substr($html, $i+6,1);
 		$i = strpos($html, $quote, $i+7);
-		$html = substr($html, 0, $i).' reflect'.substr($html,$i);
+		$html = substr($html, 0, $i).' '.$reflect.substr($html,$i);
 	}
 	return $html;
 }
