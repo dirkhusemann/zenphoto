@@ -20,7 +20,7 @@
  * 
  * I have included some typical default text files. Feel free to change them.
  */
-$plugin_description = gettext('Attaches "Effenberger effects" to images and thumbnails. This plugin is intended as an example for the use of the <em>image_html</em> filters. Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. No warranty is made that any particular effect will work with any particular theme.');
+$plugin_description = gettext('Attaches "Effenberger effects" to images and thumbnails. This plugin is intended as an example for the use of the <em>image_html</em> filters.<br />Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>effenberger_effects</code> folder in the plugins folders.<br />All testing was done with the <code>default</code> theme. No warranty is made that any particular effect will work with any particular theme.');
 $plugin_URL = "http://www.netzgesta.de/cvi/";
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
@@ -46,7 +46,6 @@ class image_effenberger {
 	 * @return effenberger
 	 */
 	function image_effenberger() {
-		setOptionDefault('effenberger_effect','corner');
 		setOptionDefault('effenberger_std_images',1);
 		setOptionDefault('effenberger_custom_images',1);
 		setOptionDefault('effenberger_std_image_thumbs',1);
@@ -68,6 +67,7 @@ class image_effenberger {
 		foreach($filelist as $file) {
 			$file = filesystemToInternal(str_replace('.js', '', $file));
 			$list[$file] = $file;
+			setOptionDefault('effenberger_effect',$file);
 			if (file_exists($file.'.txt')) {
 				$default = file_get_contents($file.'.txt');
 				setOptionDefault('effenberger_modifier_'.$file, $default);
