@@ -1294,13 +1294,16 @@ function setupTheme() {
 	if (!is_null($album)) {
 		$parent = getUrAlbum($album);
 		$albumtheme = $parent->getAlbumTheme();
+		if (!empty($albumtheme)) {
+			$theme = $albumtheme;
+		}
 	}
+	$theme = zp_apply_filter('setupTheme', $theme);
 	if (!(false === ($requirePath = getPlugin('themeoptions.php', $theme)))) {
 		require_once($requirePath);
-		$optionHandler = new ThemeOptions(); /* prime the theme options */
+		$optionHandler = new ThemeOptions(); /* prime the default theme options */
 	}
 	if (!empty($albumtheme)) {
-		$theme = $albumtheme;
 		$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
 		//load the album theme options
 		$sql = "SELECT `name`, `value` FROM ".$tbl;
