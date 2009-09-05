@@ -419,9 +419,7 @@ function getImageParameters($args) {
 			$cw = $thumb_crop_width;
 			$ch = $thumb_crop_height;
 		}
-		$size = round($thumb_size);
-		$quality = round($thumb_quality);
-		
+		$size = round($thumb_size);		
 	} else {
 		if ($size == 'default') {
 			$size = $image_default_size;
@@ -431,7 +429,8 @@ function getImageParameters($args) {
 			$size = round($size);
 		}
 	}
-
+	if ($thumb) $quality = round($thumb_quality);
+	
 	// Round each numeric variable, or set it to false if not a number.
 	list($width, $height, $cw, $ch, $quality) =	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $quality));
 	if (!is_null($cx)) {
