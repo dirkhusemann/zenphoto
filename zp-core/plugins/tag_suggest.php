@@ -23,13 +23,11 @@ foreach ($taglist AS $tag) {
 	$c++;
 	$list .= '"'.mysql_real_escape_string(htmlspecialchars(htmlspecialchars_decode($tag), ENT_QUOTES)).'"';
 }
-$js = '<script type="text/javascript">'.
-			'$(function () {'.
-				"$('#search_input').tagSuggest({".
-					'tags: ['.$list.']'.
-				'});'.
-			'});'.
+$js = '<script type="text/javascript">'."\n".
+			'var _tagList = ['.$list.'];'."\n".
+			'$(function () {'."\n".
+				"$('#search_input').tagSuggest({ tags: _tagList});"."\n".
+			'});'."\n".
 		'</script>';
-
 addPluginScript($js);
 ?>
