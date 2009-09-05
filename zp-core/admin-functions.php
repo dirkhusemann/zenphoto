@@ -637,7 +637,9 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * 		OPTION_TYPE_CUSTOM:					handled by $optionHandler->handleOption()
  * 		OPTION_TYPE_TEXTAREA:				a textarea
  * 		OPTION_TYPE_RADIO:					radio buttons (button names are in the 'buttons' index of the supported options array)
- * 		OPTION_TYPE_SELECTOR:				selector (selection list is in the 'selections' index of the supported options array)
+ * 		OPTION_TYPE_SELECTOR:				selector (selection list is in the 'selections' index of the supported options array
+ * 																					null_selection contains the text for the empty selection. If not present there
+ * 																					will be no empty selection)
  * 		OPTION_TYPE_CHECKBOX_ARRAY:	checkbox array (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
  * 		OPTION_TYPE_CHECKBOX_UL:		checkbox UL (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
  * 		OPTION_TYPE_COLOR_PICKER:		Color picker
@@ -766,6 +768,13 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $su
 						<td width="350px">
 							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'selector-'.$key?>" value=0 />
 							<select id="<?php echo $option; ?>" name="<?php echo $key; ?>">
+								<?php
+								if (array_key_exists('null_selection', $row)) {
+									?>
+									<option value=""<?php if (empty($v)) echo "SELECTED"; ?>><?php echo $row['null_selection']; ?></option>
+									<?php
+								}
+								?>
 								<?php generateListFromArray(array($v),$row['selections'], false, true); ?>
 							</select>
 						</td>

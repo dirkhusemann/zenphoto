@@ -32,7 +32,19 @@ zp_register_filter('standard_album_thumb_html', 'effenberger_std_album_thumbs');
 zp_register_filter('standard_image_thumb_html', 'effenberger_std_image_thumbs');
 zp_register_filter('custom_album_thumb_html', 'effenberger_custom_album_thumbs');
 
-addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/effenberger_effects/'.getOption('effenberger_effect').'.js"></script>');
+if (defined('OFFSET_PATH') && OFFSET_PATH == 0) {
+	$selected_effects = array_unique(array(	getOption('effenberger_std_images'), getOption('effenberger_custom_images'),
+	getOption('effenberger_std_album_thumbs'), getOption('effenberger_std_image_thumbs'),
+	getOption('effenberger_custom_album_thumbs')));
+
+	if (count($selected_effects) > 0) {
+		foreach (array_unique($selected_effects) as $effect) {
+			if (!empty($effect)) {
+				addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/effenberger_effects/'.$effect.'.js"></script>');
+			}
+		}
+	}
+}
 
 /**
  * The option handler class
@@ -46,12 +58,6 @@ class image_effenberger {
 	 * @return effenberger
 	 */
 	function image_effenberger() {
-		setOptionDefault('effenberger_std_images',1);
-		setOptionDefault('effenberger_custom_images',1);
-		setOptionDefault('effenberger_std_image_thumbs',1);
-		setOptionDefault('effenberger_std_album_thumbs',1);
-		setOptionDefault('effenberger_custom_image_thumbs',1);
-		setOptionDefault('effenberger_custom_album_thumbs',1);
 	}
 
 		/**
@@ -70,6 +76,12 @@ class image_effenberger {
 			setOptionDefault('effenberger_effect',$file);
 			if (file_exists($file.'.txt')) {
 				$default = file_get_contents($file.'.txt');
+				setOptionDefault('effenberger_std_images',$file);
+				setOptionDefault('effenberger_custom_images',$file);
+				setOptionDefault('effenberger_std_image_thumbs',$file);
+				setOptionDefault('effenberger_std_album_thumbs',$file);
+				setOptionDefault('effenberger_custom_image_thumbs',$file);
+				setOptionDefault('effenberger_custom_album_thumbs',$file);
 				setOptionDefault('effenberger_modifier_'.$file, $default);
 			}							
 			$extra[sprintf(gettext('Modifiers for <em>%s</em>'),$file)] = 
@@ -77,20 +89,27 @@ class image_effenberger {
 												'desc' => sprintf(gettext('Additional parameters for the <em>%s</em> effect.'),$file)
 												);
 		}
-		$std = array(	gettext('Effect') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => $list,
-										'desc' => gettext('Select the effect to be used.')),
-									gettext('Standard images') => array('key' => 'effenberger_std_images', 'type' => OPTION_TYPE_CHECKBOX,
+		if (count($list) == 0) {
+			return array(ettext('No effects') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_CUSTOM,
+										'desc' => $plugin_description));
+		}
+		$std = array(	gettext('Images (standard)') => array('key' => 'effenberger_std_images', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $list, 'null_selection' => gettext('none'),
 										'desc' => gettext('Apply <em>effect</em> to images shown via the <code>printDefaultSizedImage()</code> function.')),
-									gettext('Custom images') =>array('key' => 'effenberger_custom_images', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Images (custom)') =>array('key' => 'effenberger_custom_images', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $list, 'null_selection' => gettext('none'),
 										'desc' => gettext('Apply <em>effect</em> to images shown via the custom image functions.')),
-									gettext('Standard image thumbnails') =>array('key' => 'effenberger_std_image_thumbs', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Image thumbnails (standard)') =>array('key' => 'effenberger_std_image_thumbs', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $list, 'null_selection' => gettext('none'),
 										'desc' => gettext('Apply <em>effect</em> to images shown via the <code>printImageThumb()</code> function.')),
-									gettext('Standard album thumbnails') =>array('key' => 'effenberger_std_album_thumbs', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Album thumbnails (standard)') =>array('key' => 'effenberger_std_album_thumbs', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $list, 'null_selection' => gettext('none'),
 										'desc' => gettext('Apply <em>effect</em> to images shown via the <code>printAlbumThumbImage()</code> function.')),
-									gettext('Custom image thumbnails') =>array('key' => 'effenberger_custom_image_thumbs', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Image thumbnails (custom)') =>array('key' => 'effenberger_custom_image_thumbs', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $list, 'null_selection' => gettext('none'),
 										'desc' => gettext('Apply <em>effect</em> to images shown via the custom image functions when <em>thumbstandin</em> is set.')),
-									gettext('Custom album thumbnails') =>array('key' => 'effenberger_custom_album_thumbs', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Album thumbnails  (custom)') =>array('key' => 'effenberger_custom_album_thumbs', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $list, 'null_selection' => gettext('none'),
 										'desc' => gettext('Apply <em>effect</em> to images shown via the <code>printCustomAlbumThumbImage()</code> function.'))
 								);
 								
@@ -108,8 +127,7 @@ class image_effenberger {
 
 }
 
-function effenberger_insert_class($html) {
-	$effect = getOption('effenberger_effect');
+function effenberger_insert_class($html, $effect) {
 	$reflect = trim($effect.' '.getOption('effenberger_modifier_'.$effect));
 	$i = strpos($html, 'class=');
 	if ($i === false) {
@@ -124,32 +142,32 @@ function effenberger_insert_class($html) {
 }
 
 function effenberger_std_images($html) {
-	if (getOption('effenberger_std_images')) {
-		$html = effenberger_insert_class($html);
+	if ($effect = getOption('effenberger_std_images')) {
+		$html = effenberger_insert_class($html,	$effect);
 	}
 	return $html;
 }
 function effenberger_custom_images($html, $thumbstandin) {
-	if (getOption('effenberger_custom_images') && !$thumbstandin || getOption('effenberger_custom_image_thumbs') && $thumbstandin) {
-		$html = effenberger_insert_class($html);
+	if (($effect = getOption('effenberger_custom_images')) && !$thumbstandin || getOption('effenberger_custom_image_thumbs') && $thumbstandin) {
+		$html = effenberger_insert_class($html,	$effect);
 	}
 	return $html;
 }
 function effenberger_std_album_thumbs($html) {
-	if (getOption('effenberger_std_album_thumbs')) {
-		$html = effenberger_insert_class($html);
+	if ($effect = getOption('effenberger_std_album_thumbs')) {
+		$html = effenberger_insert_class($html,	$effect);
 	}
 	return $html;
 }
 function effenberger_std_image_thumbs($html) {
-	if (getOption('effenberger_std_image_thumbs')) {
-		$html = effenberger_insert_class($html);
+	if ($effect = getOption('effenberger_std_image_thumbs')) {
+		$html = effenberger_insert_class($html,	$effect);
 	}
 	return $html;
 }
 function effenberger_custom_album_thumbs($html) {
-	if (getOption('effenberger_custom_album_thumbs')) {
-		$html = effenberger_insert_class($html);
+	if ($effect = getOption('effenberger_custom_album_thumbs')) {
+		$html = effenberger_insert_class($html,	$effect);
 	}
 	return $html;
 }
