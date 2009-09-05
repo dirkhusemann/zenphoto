@@ -66,6 +66,7 @@ class image_effenberger {
 	 * @return array
 	 */
 	function getOptionsSupported() {
+		global $plugin_description;
 		$curdir = getcwd();
 		chdir($dir = SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/effenberger_effects/');
 		$filelist = safe_glob('*.js');
@@ -90,7 +91,7 @@ class image_effenberger {
 												);
 		}
 		if (count($list) == 0) {
-			return array(ettext('No effects') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_CUSTOM,
+			return array(gettext('No effects') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_CUSTOM,
 										'desc' => $plugin_description));
 		}
 		$std = array(	gettext('Images (standard)') => array('key' => 'effenberger_std_images', 'type' => OPTION_TYPE_SELECTOR,
