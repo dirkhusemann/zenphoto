@@ -45,6 +45,8 @@ class SearchEngine
 	var $zp_search_fields;			// translatable names
 	var $zp_search_fieldnames;	// database field names
 	var $zp_search_all_fields;
+	var $lastimagesort = NULL;  // remember the order for the last album/image sorts
+	var $lastsubalbumsort = NULL;
 	
 	/**
 	 * Constuctor
@@ -388,10 +390,12 @@ class SearchEngine
 	 * @param string $searchstring the search target
 	 * @param string $searchdate the date target
 	 * @param string $tbl the database table to search
+	 * @param string $sorttype what to sort on
+	 * @param string $sortdirection what direction
 	 * @return string
 	 * @since 1.1.3
 	 */
-	function searchDate($searchstring, $searchdate, $tbl) {
+	function searchDate($searchstring, $searchdate, $tbl, $sorttype, $sortdirection) {
 		global $_zp_current_album;
 		$sql = 'SELECT DISTINCT `id`, `show`,`title`,`desc`';
 		if ($tbl=='albums') {
@@ -414,25 +418,30 @@ class SearchEngine
 				$sql .= "`date` >= \"$d1\" AND `date` < \"$d2\"";
 			}
 		}
-
 		if(!zp_loggedin()) { $sql .= ")"; }
+		
 		if ($tbl == 'albums') {
-			if (empty($this->dynalbumname)) {
-				$key = subalbumSortKey(getOption('gallery_sorttype'));
-				if ($key != '`sort_order`') {
-					if (getOption('gallery_sortdirection')) {
-						$key .= " DESC";
+			if (is_null($sorttype)) {
+				if (empty($this->dynalbumname)) {
+					$key = subalbumSortKey(getOption('gallery_sorttype'));
+					if ($key != '`sort_order`') {
+						if (getOption('gallery_sortdirection')) {
+							$key .= " DESC";
+						}
+					}
+				} else {
+					$gallery = new Gallery();
+					$album = new Album($gallery, $this->dynalbumname);
+					$key = $album->getSubalbumSortKey();
+					if ($key != '`sort_order`') {
+						if ($album->getSortDirection('album')) {
+							$key .= " DESC";
+						}
 					}
 				}
 			} else {
-				$gallery = new Gallery();
-				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSubalbumSortKey();
-				if ($key != '`sort_order`') {
-					if ($album->getSortDirection('album')) {
-						$key .= " DESC";
-					}
-				}
+				$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
+				$key = trim($sorttype.' '.$sortdirection);
 			}
 		} else {
 			$hidealbums = getNotViewableAlbums();
@@ -441,26 +450,31 @@ class SearchEngine
 					$sql .= ' AND `albumid`!='.$id;
 				}
 			}
-			if (empty($this->dynalbumname)) {
-				$key = albumSortKey(getOption('image_sorttype'));
-				if ($key != '`sort_order`') {
-					if (getOption('image_sortdirection')) {
-						$key .= " DESC";
+			if (is_null($sorttype)) {
+				if (empty($this->dynalbumname)) {
+					$key = albumSortKey(getOption('image_sorttype'));
+					if ($key != '`sort_order`') {
+						if (getOption('image_sortdirection')) {
+							$key .= " DESC";
+						}
+					}
+				} else {
+					$gallery = new Gallery();
+					$album = new Album($gallery, $this->dynalbumname);
+					$key = $album->getSortKey();
+					if ($key != '`sort_order`') {
+						if ($album->getSortDirection('image')) {
+							$key .= " DESC";
+						}
 					}
 				}
 			} else {
-				$gallery = new Gallery();
-				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSortKey();
-				if ($key != '`sort_order`') {
-					if ($album->getSortDirection('image')) {
-						$key .= " DESC";
-					}
-				}
+				$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
+				$key = trim($sorttype.' '.$sortdirection);
 			}
 		}
 		$sql .= " ORDER BY ".$key;
-		return query_full_array($sql, true);			
+		return query_full_array($sql, true);
 	}
 
 	/**
@@ -469,9 +483,11 @@ class SearchEngine
 	 *
 	 * @param string $searchstring
 	 * @param string $tbl set to 'albums' or 'images'
+	 * @param string $sorttype what to sort on
+	 * @param string $sortdirection what direction
 	 * @return array
 	 */
-	function searchFieldsAndTags($searchstring, $tbl) {
+	function searchFieldsAndTags($searchstring, $tbl, $sorttype, $sortdirection) {
 		$allIDs = null;
 		$idlist = array();
 		$exact = getOption('exact_tag_match');
@@ -681,32 +697,42 @@ class SearchEngine
 		$sql = substr($sql, 0, strlen($sql)-4).')';
 
 		if ($tbl == 'albums') {
-			if (empty($this->dynalbumname)) {
-				$key = subalbumSortKey(getOption('gallery_sorttype'));
-				if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
-			} else {
-				$gallery = new Gallery();
-				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSubalbumSortKey();
-				if ($key != '`sort_order`') {
-					if ($album->getSortDirection('album')) {
-						$key .= " DESC";
-				 }
-				}
-			}
-		} else {
-			if (empty($this->dynalbumname)) {
-				$key = albumSortKey(getOption('image_sorttype'));
-				if (getOption('image_sortdirection')) { $key .= " DESC"; }
-			} else {
-				$gallery = new Gallery();
-				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSortKey();
-				if ($key != '`sort_order`') {
-					if ($album->getSortDirection('image')) {
-						$key .= " DESC";
+			if (is_null($sorttype)) {
+				if (empty($this->dynalbumname)) {
+					$key = subalbumSortKey(getOption('gallery_sorttype'));
+					if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
+				} else {
+					$gallery = new Gallery();
+					$album = new Album($gallery, $this->dynalbumname);
+					$key = $album->getSubalbumSortKey();
+					if ($key != '`sort_order`') {
+						if ($album->getSortDirection('album')) {
+							$key .= " DESC";
+						}
 					}
 				}
+			} else {
+				$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
+				$key = trim($sorttype.' '.$sortdirection);
+			}
+		} else {
+			if (is_null($sorttype)) {
+				if (empty($this->dynalbumname)) {
+					$key = albumSortKey(getOption('image_sorttype'));
+					if (getOption('image_sortdirection')) { $key .= " DESC"; }
+				} else {
+					$gallery = new Gallery();
+					$album = new Album($gallery, $this->dynalbumname);
+					$key = $album->getSortKey();
+					if ($key != '`sort_order`') {
+						if ($album->getSortDirection('image')) {
+							$key .= " DESC";
+						}
+					}
+				}
+			} else {				
+				$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
+				$key = trim($sorttype.' '.$sortdirection);
 			}
 		}
 		$sql .= " ORDER BY ".$key."";
@@ -716,16 +742,18 @@ class SearchEngine
 
 	/**
 	 * Returns an array of albums found in the search
+	 * @param string $sorttype what to sort on
+	 * @param string $sortdirection what direction
 	 *
 	 * @return array
 	 */
-	function getSearchAlbums() {
+	function getSearchAlbums($sorttype, $sortdirection) {
 		if (getOption('search_no_albums')) return array();
 		$albums = array();
 		$searchstring = $this->getSearchString();
 		$albumfolder = getAlbumFolder();
 		if (empty($searchstring)) { return $albums; } // nothing to find
-		$search_results = $this->searchFieldsAndTags($searchstring, 'albums');
+		$search_results = $this->searchFieldsAndTags($searchstring, 'albums', $sorttype, $sortdirection);
 		if (isset($search_results) && is_array($search_results)) {
 			foreach ($search_results as $row) {
 				$albumname = $row['folder'];
@@ -741,7 +769,6 @@ class SearchEngine
 			}
 		}
 		return $albums;
-
 	}
 
 	/**
@@ -749,11 +776,14 @@ class SearchEngine
 	 * If $page is not zero, it returns the current page's albums
 	 *
 	 * @param int $page the page number we are on
+	 * @param string $sorttype what to sort on
+	 * @param string $sortdirection what direction
 	 * @return array
 	 */
-	function getAlbums($page=0) {
-		if (is_null($this->albums)) {
-			$this->albums = $this->getSearchAlbums();
+	function getAlbums($page=0, $sorttype=NULL, $sortdirection=NULL) {
+		if (is_null($this->albums) || $sorttype.$sortdirection !== $this->lastsubalbumsort) {
+			$this->albums = $this->getSearchAlbums($sorttype, $sortdirection);
+			$this->lastsubalbumsort = $sorttype.$sortdirection;
 		}
 		if ($page == 0) {
 			return $this->albums;
@@ -824,7 +854,7 @@ class SearchEngine
 	 *
 	 * @return array
 	 */
-	function getSearchImages() {
+	function getSearchImages($sorttype, $sortdirection) {
 		$hint = '';
 		$images = array();
 		$searchstring = $this->getSearchString();
@@ -832,9 +862,9 @@ class SearchEngine
 		if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
 		$albumfolder = getAlbumFolder();
 		if (empty($searchdate)) {
-			$search_results = $this->searchFieldsAndTags($searchstring, 'images');	
+			$search_results = $this->searchFieldsAndTags($searchstring, 'images', $sorttype, $sortdirection);	
 		} else {	
-			$search_results = $this->SearchDate($searchstring, $searchdate, 'images');
+			$search_results = $this->SearchDate($searchstring, $searchdate, 'images', $sorttype, $sortdirection);
 		}
 		if (isset($search_results) && is_array($search_results)) {
 			foreach ($search_results as $row) {
@@ -860,11 +890,14 @@ class SearchEngine
 	 *
 	 * @param int $page the page number desired
 	 * @param int $firstPageCount count of images that go on the album/image transition page
+	 * @param string $sorttype what to sort on
+	 * @param string $sortdirection what direction
 	 * @return array
 	 */
-	function getImages($page=0, $firstPageCount=0) {
-		if (is_null($this->images)) {
-			$this->images = $this->getSearchImages();
+	function getImages($page=0, $firstPageCount=0, $sorttype=NULL, $sortdirection=NULL) {
+		if (is_null($this->images) || $sorttype.$sortdirection !== $this->lastimagesort) {
+			$this->images = $this->getSearchImages($sorttype, $sortdirection);
+			$this->lastimagesort = $sorttype.$sortdirection;
 		}
 		if ($page == 0) {
 			return $this->images;
@@ -896,7 +929,7 @@ class SearchEngine
 	 */
 	function getImageIndex($album, $filename) {
 		if (is_null($this->images)) {
-			$this->images = $this->getSearchImages();
+			$this->images = $this->getSearchImages(NULL, NULL);
 		}
 		$images = $this->getImages();
 		$c = 0;

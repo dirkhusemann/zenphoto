@@ -1770,12 +1770,12 @@ function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirec
 	if (is_null($_zp_images)) {
 		if (in_context(ZP_SEARCH)) {
 			$searchtype = true;
-			$_zp_images = $_zp_current_search->getImages($all ? 0 : ($imagePage), $firstPageCount);
+			$_zp_images = $_zp_current_search->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype, $sortdirection);
 		} else {
 			if ($_zp_current_album->isDynamic()) {
 				$searchtype = true;
 				$search = $_zp_current_album->getSearchEngine();
-				$_zp_images = $search->getImages($all ? 0 : ($imagePage), $firstPageCount);
+				$_zp_images = $search->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype, $sortdirection);
 			} else {
 				$_zp_images = $_zp_current_album->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype, $sortdirection);
 			}

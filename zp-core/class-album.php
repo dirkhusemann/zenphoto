@@ -511,7 +511,7 @@ class Album extends PersistentObject {
 		if (is_null($this->images) || $sorttype.$sortdirection !== $this->lastimagesort) {
 			if ($this->isDynamic()) {
 				$searchengine = $this->getSearchEngine();
-				$images = $searchengine->getSearchImages();
+				$images = $searchengine->getSearchImages($sorttype, $sortdirection);
 			} else {
 				// Load, sort, and store the images in this Album.
 				$images = $this->loadFileNames();
