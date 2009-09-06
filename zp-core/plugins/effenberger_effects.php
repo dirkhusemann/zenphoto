@@ -66,10 +66,10 @@ class image_effenberger {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		global $plugin_description;
 		$curdir = getcwd();
 		chdir($dir = SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/effenberger_effects/');
 		$filelist = safe_glob('*.js');
+		chdir($curdir);
 		$extra = $list = array();
 		foreach($filelist as $file) {
 			$file = filesystemToInternal(str_replace('.js', '', $file));
@@ -92,7 +92,7 @@ class image_effenberger {
 		}
 		if (count($list) == 0) {
 			return array(gettext('No effects') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => $plugin_description));
+										'desc' => gettext('Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>effenberger_effects</code> folder in the plugins folders.')));
 		}
 		$std = array(	gettext('Images (standard)') => array('key' => 'effenberger_std_images', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => $list, 'null_selection' => gettext('none'),
@@ -124,6 +124,7 @@ class image_effenberger {
 	 * @param mixed $currentValue
 	 */
 	function handleOption($option, $currentValue) {
+		echo gettext('No <em>effects</em> scripts found.');
 	}
 
 }
