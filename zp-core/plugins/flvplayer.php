@@ -3,7 +3,7 @@
  * flvplayer -- plugin support for the flvplayer flash video player v4.5.
  * 
  * Note: 1.1 now incorporates the former separate flv_playlist plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files as a playlist or as separate players with flv player. 
- * Note:</strong> No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.
+ * Note:</strong> No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player*.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.
  * 
  * IMPORTANT: Flash players do not support external albums!
  *
@@ -66,7 +66,7 @@ class flvplayer {
 		global $_flv_player;
 		if (empty($_flv_player)) {
 			return array(gettext('No FLV Player') => array('key' => 'flvplayer', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.')));
+										'desc' => gettext('No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player*.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.')));
 		}
 		
 		$result = array(gettext('flv player width') => array('key' => 'flv_player_width', 'type' => OPTION_TYPE_TEXTBOX,
