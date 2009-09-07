@@ -133,6 +133,12 @@ p {
 	margin-bottom: 0.8em;
 }
 
+code {
+	font-family: Courier, Monaco, monospace;
+	font-size: 1.2em;
+	color: #00816A;
+}
+
 /* Menu
 ------------------------------ */
 .nav {

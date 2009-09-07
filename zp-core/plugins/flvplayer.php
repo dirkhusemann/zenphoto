@@ -1,8 +1,9 @@
 <?php
 /**
- * flvplayer -- plugin support for the flvplayer flash video player. Support for version 3 and 4.
+ * flvplayer -- plugin support for the flvplayer flash video player v4.5.
  * 
- * Note: 1.1 now incorporates the former separate flv_playlist plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files as a playlist or as separate players with flv player. Note:</strong>Currently internally uses FLV player version 3 because of API incompatiblity with version 4.
+ * Note: 1.1 now incorporates the former separate flv_playlist plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files as a playlist or as separate players with flv player. 
+ * Note:</strong> No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.
  * 
  * IMPORTANT: Flash players do not support external albums!
  *
@@ -10,9 +11,9 @@
  * @package plugins
  */
 
-$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext('Enable <strong>FLV</strong> player to handle multimedia files. No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place them in the <code>flvplayer</code> folder in the plugins folders. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br /><strong>Note:</strong> Currently supports only FLV player version 3.');
+$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files. No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time.');
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flvplayer.php.html";
 $plugin_disable = $external;
 
@@ -46,60 +47,65 @@ class flvplayer {
 		setOptionDefault('flv_player_frontcolor', '#000000');
 		setOptionDefault('flv_player_lightcolor', '#000000');
 		setOptionDefault('flv_player_screencolor', '#000000');
-		setOptionDefault('flv_player_displayheight', '240');
 		setOptionDefault('flv_player_autostart', '');
 		setOptionDefault('flv_player_buffer','0');
 		setOptionDefault('flv_player_controlbar','over');
+		setOptionDefault('flv_player_stretching','uniform');
 		//setOptionDefault('flv_player_ignoresize_for_mp3', 'true');
 		
 		// flv_playlist options
 		setOptionDefault('flvplaylist_width', '600');
 		setOptionDefault('flvplaylist_height', '240');
-		setOptionDefault('flvplaylist_displaywidth', '320');
-		setOptionDefault('flvplaylist_displayheight', '240');
+		setOptionDefault('flvplaylist_size', '240');
+		setOptionDefault('flvplaylist_position', 'right');
 		setOptionDefault('flvplaylist_thumbsinplaylist', '');
+		setOptionDefault('flvplaylist_repeat', 'list');
 	}
 
 	function getOptionsSupported() {
 		global $_flv_player;
 		if (empty($_flv_player)) {
 			return array(gettext('No FLV Player') => array('key' => 'flvplayer', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place them in the <code>flvplayer</code> folder in the plugins folders.')));
+										'desc' => gettext('No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.')));
 		}
 		
 		$result = array(gettext('flv player width') => array('key' => 'flv_player_width', 'type' => OPTION_TYPE_TEXTBOX,
 																		'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
 										gettext('flv player height') => array('key' => 'flv_player_height', 'type' => OPTION_TYPE_TEXTBOX,
 																		'desc' => gettext("Player height (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-										gettext('Displayheight') => array('key' => 'flv_player_displayheight', 'type' => OPTION_TYPE_TEXTBOX,
-																		'desc' => gettext("The height of the player display. Generally it should be the same as the height. (ignored for .<em>mp3</em> files if there is no preview image available.)")),
 										gettext('Autostart') => array('key' => 'flv_player_autostart', 'type' => OPTION_TYPE_CHECKBOX,
 																		'desc' => gettext("Should the video start automatically. Yes if selected.")),
 										gettext('BufferSize') => array('key' => 'flv_player_buffer', 'type' => OPTION_TYPE_TEXTBOX,
 																		'desc' => /*xgettext:no-php-format*/ gettext("Size of the buffer in % before the video starts.")),
 										gettext('Controlbar position') => array('key' => 'flv_player_controlbar', 'type' => OPTION_TYPE_SELECTOR,
 																		'selections' => array(gettext('Bottom')=>"bottom", gettext('Over')=>"over", gettext('None')=>"none"),
-																		'desc' => gettext("The position of the controlbar. <em>Player version 4 only!</em>")),
-										gettext('Playlist Width') => array('key' => 'flvplaylist_width', 'type' => OPTION_TYPE_TEXTBOX,
-																		'desc' => gettext("Player width for the playlist")),
-										gettext('Playlist Height') => array('key' => 'flvplaylist_height', 'type' => OPTION_TYPE_TEXTBOX,
-																		'desc' => gettext("Player height for the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-										gettext('Playlist Displaywidth') => array('key' => 'flvplaylist_displaywidth', 'type' => OPTION_TYPE_TEXTBOX,
-																		'desc' => gettext("Display width for the playlist. The display width is needed for the playlist menu to be shown. In this case the 'displaywidth - width = width of the playlist menu'. See the flv player site for more info about these options.")),
-										gettext('Playlist Displayheight') => array('key' => 'flvplaylist_displayheight', 'type' => OPTION_TYPE_TEXTBOX,
-																		'desc' => gettext("Display height for the playlist. If the width is too small to show the playlist menu, you can set the height higher to show it below the actual movie display. See the flv player site for more info about these options.")),
+																		'desc' => gettext("The position of the controlbar.")),
+										gettext('Playlist position') => array('key' => 'flvplaylist_position', 'type' => OPTION_TYPE_SELECTOR,
+																		'selections' => array(gettext('Bottom')=>"bottom", gettext('Over')=>"over", gettext('Right')=>"right",gettext('None')=>"none"),
+																		'desc' => gettext("Position of the playlist (only if using the special <code>flvplaylist()</code> function).")),
+										gettext('Playlist size') => array('key' => 'flvplaylist_size', 'type' => OPTION_TYPE_TEXTBOX,
+																		'desc' => gettext("When <em>playlist</em> is set to <em>below</em> this refers to the height, when <em>right</em> this refers to the width of the playlist (only if using the special <code>flvplaylist()</code> function).")),
+										gettext('Playlist repeat') => array('key' => 'flvplaylist_repeat','type' => OPTION_TYPE_SELECTOR,
+																		'selections' => array(gettext('List')=>"list", gettext('Always')=>"always", gettext('Single')=>"single"),
+																		'desc' => gettext("set to list to play the entire playlist once, to always to continously play the song/video/playlist and to single to continue repeating the selected file in a playlist. (only if using the special <code>flvplaylist()</code> function).")),
+										gettext('flv player width for playlist') => array('key' => 'flvplaylist_width', 'type' => OPTION_TYPE_TEXTBOX,
+																		'desc' => gettext("Player width for use with the playlist (ignored for <em>mp3</em> files.)")),
+										gettext('flv player height for playlist') => array('key' => 'flvplaylist_height', 'type' => OPTION_TYPE_TEXTBOX,
+																		'desc' => gettext("Player height for use with the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)")),
 										gettext('Playlist Thumbs in playlist') => array('key' => 'flvplaylist_thumbsinplaylist', 'type' => OPTION_TYPE_CHECKBOX,
-																		'desc' => gettext("Check if you want that thumbnails of the preview images should be shown in the playlist.")),
+																		'desc' => gettext("Check if you want that thumbnails of the preview images should be shown in the playlist (only if using the special <code>flvplaylist()</code> function).")),
 										gettext('Backcolor') => array('key' => 'flv_player_backcolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-																		'desc' => gettext("Backgroundcolor of the controls, in HEX format. <em>Player version 3 only!</em>")),
+																		'desc' => gettext("Backgroundcolor of the controls, in HEX format.")),
 										gettext('Frontcolor') => array('key' => 'flv_player_frontcolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-																		'desc' => gettext("Texts & buttons color of the controls, in HEX format. <em>Player version 3 only!</em>")),
+																		'desc' => gettext("Texts & buttons color of the controls, in HEX format. ")),
 										gettext('Lightcolor') => array('key' => 'flv_player_lightcolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-																		'desc' => gettext("Rollover color of the controls, in HEX format. <em>Player version 3 only!</em>")),
+																		'desc' => gettext("Rollover color of the controls, in HEX format.")),
 										gettext('Screencolor') => array('key' => 'flv_player_screencolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-																		'desc' => gettext("Color of the display area, in HEX format. <em>Player version 3 only!</em>"))
+																		'desc' => gettext("Color of the display area, in HEX format.")),
+										gettext('Stretching') => array('key' => 'flv_player_stretching', 'type' => OPTION_TYPE_SELECTOR,
+																		'selections' => array(gettext('Exactfit')=>"exactfit", gettext('Uniform')=>"uniform", gettext('Fill')=>"fill", gettext('None')=>"none"),
+																		'desc' => gettext("Defines how to resize images in the display. Can be none (no stretching), exactfit (disproportionate), uniform (stretch with black borders) or fill (uniform, but completely fill the display).")),
 										);
-		
 		return $result;
 	}
 	
@@ -155,7 +161,6 @@ class flvplayer {
 			$output .= 'var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER . '/flvplayer/'.$_flv_player.'","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
 		} else {
 			$output .= 'var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER . '/flvplayer/'.$_flv_player.'","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");'."\n";
-			$output .= 'so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");'."\n";
 		}
 		 
 		$output .= 'so.addVariable("file","' . $moviepath . '&amp;title=' . strip_tags($imagetitle) . '")'."\n";
@@ -167,9 +172,10 @@ class flvplayer {
 		$output .= 'so.addVariable("lightcolor","'.getOption('flv_player_lightcolor').'");'."\n";
 		$output .= 'so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");'."\n";
 		$output .= 'so.addVariable("autostart","' . (getOption('flv_player_autostart') ? 'true' : 'false') . '");'."\n";
-		$output .= 'so.addVariable("overstretch","true");'."\n";
+		$output .= 'so.addVariable("stretching","'.getOption('flv_player_stretching').'");'."\n";
 		$output .= 'so.addVariable("bufferlength","'.getOption('flv_player_buffer').'");'."\n";
 		$output .= 'so.addVariable("controlbar","'.getOption('flv_player_controlbar').'");'."\n";
+		
 		$output .= 'so.addParam("allowfullscreen","true");'."\n";
 		$output .= 'so.write("player'.$count.'");'."\n";
 		$output .= '</script>'."\n";
@@ -231,6 +237,8 @@ class flvplayer {
  * Replace the entire 'next_image()' loop on album.php with this:
  * <?php flvPlaylist("playlist"); ?>
  * 
+ * It uses a xspf file found in 'zp-core/flvplayer/flvplayer/playlist.php' for the playlist that you also can modify. You can also use other XML formats for a playlist See http://developer.longtailvideo.com/trac/wiki/FlashFormats
+ * 
  * b) 'players'
  * Modify the 'next_image()' loop on album.php like this:
  * <?php	
@@ -253,19 +261,25 @@ function flvPlaylist($option='') {
 		$imagetitle = getImageTitle();
 	}
 	$albumid = getAlbumID();
-
+	
 	switch($option) {
 		case "playlist":
-			
+			//temorarily enable mediarss 
+			setOption('feed_enclosure', '1',false);
+			setOption('feed_mediarss', '1',false);
+			$totalitems = $_zp_current_album->getNumImages();
+			setOption('feed_items_albums',$totalitems,false);
+			$rssurl = WEBPATH."/rss.php?albumtitle=".urlencode($_zp_current_album->getTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".getOption('locale');
 			if(getNumImages() != 0) {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
 	<script type="text/javascript">
 		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
-		so.addParam('overstretch','true');
-		so.addVariable('displaywidth', '<?php echo getOption('flvplaylist_displaywidth'); ?>');
-		so.addVariable('displayheight','<?php echo getOption('flvplaylist_displayheight'); ?>');
+		so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
+		so.addVariable('playlist', '<?php echo getOption('flvplaylist_position'); ?>');
+		so.addVariable('playlistsize','<?php echo getOption('flvplaylist_size'); ?>');
+		so.addVariable('repeat','<?php echo getOption('flvplaylist_repeat'); ?>');
 		so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
 		so.addVariable('frontcolor','<?php echo getOption('flv_player_frontcolor'); ?>');
 		so.addVariable('lightcolor','<?php echo getOption('flv_player_lightcolor'); ?>');
@@ -295,13 +309,13 @@ function flvPlaylist($option='') {
 
 		 if(($ext == ".mp3") && empty($videoThumb)) { 
 		 ?> 
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','20','8');
+			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>');
 		<?php } else { ?>
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
+			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>');
 		<?php } ?>
 			so.addParam('allowfullscreen','true');
-			so.addParam('overstretch','true');
-			so.addVariable("image",'<?php echo $videoThumb; ?>');
+			so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
+			so.addVariable('image','<?php echo $videoThumb; ?>');
 			so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
 			so.addVariable('frontcolor','<?php echo getOption('flv_player_frontcolor'); ?>');
 			so.addVariable('lightcolor','<?php echo getOption('flv_player_lightcolor'); ?>');
