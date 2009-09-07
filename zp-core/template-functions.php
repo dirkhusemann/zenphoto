@@ -4186,9 +4186,7 @@ function checkforPassword($silent=false) {
 		}
 		if (!empty($hash)) {
 			if (zp_getCookie($authType) != $hash) {
-				if (!$silent) {
-					printPasswordForm($hint, true, getOption('login_user_field') || $show);
-				}
+				if (!$silent) printPasswordForm($hint, true, getOption('login_user_field') || $show);
 				return true;
 			}
 		}
@@ -4197,10 +4195,8 @@ function checkforPassword($silent=false) {
 		if (checkAlbumPassword($album, $hint)) {
 			return false;
 		} else {
-			if (!$silent) {
-				$alb = new Album($_zp_gallery, $album);
-				printPasswordForm($hint, true,  getOption('login_user_field') || $alb->getUser() != '');
-			}
+			$alb = new Album($_zp_gallery, $album);
+			if (!$silent) printPasswordForm($hint, true,  getOption('login_user_field') || $alb->getUser() != '');
 			return true;
 		}
 	} else {  // other page
@@ -4213,9 +4209,7 @@ function checkforPassword($silent=false) {
 				if (getOption('gallery_page_unprotected_'.substr($_zp_gallery_page, 0, -4))) {
 					return false; // excluded page
 				}
-				if (!$silent) {
-					printPasswordForm($hint, true, getOption('login_user_field') || $show);
-				}
+				if (!$silent) printPasswordForm($hint, true, getOption('login_user_field') || $show);
 				return true;
 			}
 		}
@@ -4223,6 +4217,44 @@ function checkforPassword($silent=false) {
 	return false;
 }
 
+/**
+ * Returns a redirection link for the password form
+ *
+ * @return string
+ */
+function getPageRedirect() {
+	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page,
+					$_zp_current_album, $_zp_current_image;
+	switch($_zp_gallery_page) {
+		case 'index.php':
+			$action = "";
+			break;
+		case 'album.php':
+			$action = '&album='.urlencode($_zp_current_album->name);
+			break;
+		case 'image.php':
+			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
+			break;
+		case 'full-image.php':
+			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename).'&z&p=full-image';
+			break;
+		case 'pages.php':
+			$action = '&p=pages&amp;title='.urlencode(getPageTitlelink());
+			break;
+		case 'news.php':
+			$action = '&p=news';
+			$title = getNewsTitlelink();
+			if (!empty($title)) $action .= '&title='.urlencode(getNewsTitlelink());
+			break;
+		default:
+		if (in_context(ZP_SEARCH)) {
+			$action = "&p=search" . htmlspecialchars($_zp_current_search->getSearchParams());
+		} else {
+			$action = '&p='.substr($_zp_gallery_page, 0, -4);
+		}
+	}
+	return $action;
+}
 /**
  * Prints the album password form
  *
@@ -4233,83 +4265,37 @@ function checkforPassword($silent=false) {
  *
  *@since 1.1.3
  */
-function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect=NULL) {
+function printPasswordForm($_password_hint, $_password_showProtected=true, $_password_showuser=NULL, $_password_redirect=NULL) {
 	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page,
-					$_zp_current_album, $_zp_current_image;
-	if (is_null($showuser)) { $showuser = getOption('login_user_field'); }
-	if ($_zp_password_form_printed) { return; }
+					$_zp_current_album, $_zp_current_image, $theme;
+	if ($_zp_password_form_printed) return;
+	if (is_null($_password_showuser)) $_password_showuser = getOption('login_user_field');
+	if (is_null($_password_redirect)) $_password_redirect = 'index.php?userlog=1'.getPageRedirect();
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
-		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br />".gettext("Check your user and password and try again.")."</div>";
+		?>
+		<div class="errorbox" id="message">
+			<h2><?php echo gettext("There was an error logging in."); ?></h2>
+			<br />
+			<?php echo gettext("Check your user and password and try again."); ?>
+		</div>
+		<?php
 	}
-	switch($_zp_gallery_page) {
-		case 'index.php':
-			$action = "";
-			break;
-		case 'album.php':
-			$action = '&amp;album='.urlencode($_zp_current_album->name);
-			break;
-		case 'image.php':
-			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename);
-			break;
-		case 'full-image.php':
-			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename).'&amp;z&amp;p=full-image';
-			break;
-		case 'pages.php':
-			$action = '&amp;p=pages&amp;title='.urlencode(getPageTitlelink());
-			break;
-		case 'news.php':
-			$action = '&amp;p=news';
-			$title = getNewsTitlelink();
-			if (!empty($title)) $action .= '&amp;title='.urlencode(getNewsTitlelink());
-			break;
-		default:
-		if (in_context(ZP_SEARCH)) {
-			$action = "&amp;p=search" . htmlspecialchars($_zp_current_search->getSearchParams());
-		} else {
-			$action = '&amp;p='.substr($_zp_gallery_page, 0, -4);
-		}
+	if ($_password_showProtected && !$_zp_login_error) {
+		?>
+		<p>
+			<?php echo gettext("The page you are trying to view is password protected."); ?>
+		</p>
+		<?php
 	}
-	if ($showProtected && !$_zp_login_error) {
-		echo "\n<p>".gettext("The page you are trying to view is password protected.")."</p>";
-	}
-	?>
 
-	<form id="passwordform" name="password" action="?userlog=1<?php echo $action; ?>" method="post">
-		<input type="hidden" name="password" value="1" />
-		<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
-	
-		<table class="password">
-		<?php 
-			if ($showuser) {
-				?>
-				<tr>
-				<td class="userlabel"><?php echo gettext("Login"); ?></td>
-				<td class="userinput"><input type="text" name="user" /></td>
-				</tr>
-				<?php
-			}
-			?>
-			<tr>
-			<td class="passwordlabel"><?php echo gettext("Password"); ?></td>
-			<td class="passwordinput"><input type="password" name="pass" /></td>
-			</tr>
-			<tr>
-			<td></td>
-			<td class="submit" ><input class="button" type="submit" value="<?php echo gettext("Submit"); ?>" /></td>
-			</tr>
-			<?php 
-			if (!empty($hint)) {
-				?>
-				<tr>
-				<td class="hint" colspan="2"><?php printf(gettext("Hint: %s"), $hint); ?></td>
-				</tr>
-				<?php
-			}
-			?>
-		</table>
-	</form>
-	<?php
+	$passwordform = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password_form.php';
+	if (file_exists($passwordform)) {
+		include($passwordform);
+	} else {
+		include (SERVERPATH.'/'.ZENFOLDER.'/password_form.php');
+	}
+
 }
 
 /**

@@ -26,7 +26,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		</div>
 
 	<div class="galleryinfo">
-		<?php checkforPassword(); ?>
+		<?php printPasswordForm(NULL, false); ?>
 
 	</div>
 	</div>

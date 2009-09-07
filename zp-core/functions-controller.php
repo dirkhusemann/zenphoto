@@ -312,7 +312,7 @@ function zp_handle_password() {
 		if ($_zp_loggedin) {	// allow Admin user login
 			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
-				header("Location: " . FULLWEBPATH . "/" . sanitize($_POST['redirect'], 3));
+				header("Location: " . FULLWEBPATH . "/" . sanitize_path($_POST['redirect']));
 				exit();
 			}
 		} else {
@@ -323,7 +323,7 @@ function zp_handle_password() {
 				if (DEBUG_LOGIN) debugLog("zp_handle_password: valid credentials");
 				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 				if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
-					header("Location: " . FULLWEBPATH . "/" . sanitize($_POST['redirect'], 3));
+					header("Location: " . FULLWEBPATH . "/" . sanitize_path($_POST['redirect']));
 					exit();
 				}
 			} else {

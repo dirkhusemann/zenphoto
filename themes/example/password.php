@@ -13,11 +13,11 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 <body>
 <div id="main">
 		<div id="gallerytitle">
-			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index'); ?>"><?php echo getGalleryTitle();?></a></span> | <?php echo gettext("A password is required to access this page"); ?></h2>
+			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index'); ?>"><?php echo getGalleryTitle();?></a></span> | <?php echo gettext("A password is required for the page you requested"); ?></h2>
 		</div>
 
 		<hr />
-		<?php checkforPassword(); ?>
+		<?php printPasswordForm(NULL, false); ?>
 		<br /><br />
 	<div id="credit">
 	<?php printZenphotoLink(); ?>

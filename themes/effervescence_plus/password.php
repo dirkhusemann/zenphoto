@@ -37,7 +37,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 				}					
 				?>
 				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | 
-				<?php echo gettext('A password is required to access this page'); ?>
+				<?php echo gettext('A password is required for the page you requested'); ?>
 			</div>
 		</div>
 
@@ -47,7 +47,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 	<div id="content">
 		<small>&nbsp;</small>
 		<div id="main">
-		<?php checkforPassword(); ?>
+		<?php printPasswordForm(NULL, false); ?>
 		</div>
 	</div>
 

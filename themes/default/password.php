@@ -19,12 +19,12 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		<h2>
 		<span>
 		<?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index'); ?>"><?php echo getGalleryTitle();?></a>
-		</span> | <?php echo gettext("A password is required to access this page"); ?>
+		</span> | <?php echo gettext("A password is required for the page you requested"); ?>
 		</h2>
 	</div>
 
 		<div id="padbox">
-		<?php checkforPassword(); ?>
+		<?php printPasswordForm(NULL, false); ?>
 	</div>
 
 </div>

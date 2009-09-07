@@ -21,13 +21,13 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 
 		<div id="content">
 		<div id="breadcrumb">
-	<h2><a href="<?php echo getGalleryIndexURL(); ?>">Index</a> &raquo; <strong><?php echo gettext("A password is required to access this page"); ?></strong></h2>
+	<h2><a href="<?php echo getGalleryIndexURL(); ?>">Index</a> &raquo; <strong><?php echo gettext("A password is required for the page you requested"); ?></strong></h2>
 	</div>
 	
 	<div id="content-error">
 	
 		<div class="errorbox">
-		<?php checkforPassword(); ?>
+		<?php printPasswordForm(NULL, false); ?>
 		</div>
 	
 </div> 
