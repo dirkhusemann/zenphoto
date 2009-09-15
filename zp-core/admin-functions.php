@@ -1355,25 +1355,21 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<td>
 	<?php
 	$showThumb = getOption('thumb_select_images');
-	if ($showThumb) echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
-	echo "\n<select style='width:320px' id=\"\"";
-	if ($showThumb) echo " class=\"thumbselect\" onChange=\"updateThumbPreview(this)\"";
-	echo " name=\"".$prefix."thumb\">";
 	$thumb = $album->get('thumb');
-	echo "\n<option";
-	if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
-	if ($thumb === '1') {
-		echo " selected=\"selected\"";
+	if ($showThumb)  {
+		?>
+		<script type="text/javascript"><?php updateThumbPreview(document.getElementById('thumbselect')); ?></script>
+		<?php
 	}
-	echo ' value="1">'.gettext('most recent');
-	echo '</option>';
-	echo "\n<option";
-	if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
-	if (empty($thumb) && $thumb !== '1') {
-		echo " selected=\"selected\"";
-	}
-	echo ' value="">'.gettext('randomly selected');
-	echo '</option>';
+	?>
+	<select style="width:320px" <?php	if ($showThumb) {	?>class="thumbselect" onChange="updateThumbPreview(this)"	<?php	}	?> name="<?php echo $prefix; ?>thumb">
+		<option <?php if ($showThumb) {	?>class="thumboption" style="background-color:#B1F7B6"<?php		}
+			if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo gettext('most recent'); ?>
+		</option>
+	<option <?php if ($showThumb) { ?>class="thumboption" value="\" style="background-color:#B1F7B6" <?php } ?>
+		<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
+	</option>
+	<?php
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
 		$search = new SearchEngine();
