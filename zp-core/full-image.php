@@ -5,33 +5,64 @@
  */
 
 // force UTF-8 Ø
+define('OFFSET_PATH', 2); // don't need any admin tabs
+require_once(dirname(__FILE__) . "/functions.php");
+require_once(dirname(__FILE__) . "/functions-image.php");
+
+// Check for minimum parameters.
+if (!isset($_GET['a']) || !isset($_GET['i'])) {
+	header("HTTP/1.0 404 Not Found");
+	imageError(gettext("Too few arguments! Image not found."), 'err-imagenotfound.gif');
+}
+list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
+$ralbum = internalToFilesystem($ralbum);
+$rimage = internalToFilesystem($rimage);
+$album = str_replace('..','', sanitize_path($ralbum));
+$image = str_replace(array('/',"\\"),'', sanitize_path($rimage));
+$album8 = filesystemToInternal($album);
+$image8 = filesystemToInternal($image);
+$theme = themeSetup($album); // loads the theme based image options.
 
 /* Prevent hotlinking to the full image from other servers. */
 $server = $_SERVER['SERVER_NAME'];
 if (isset($_SERVER['HTTP_REFERER'])) $test = strpos($_SERVER['HTTP_REFERER'], $server); else $test = true;
 if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are directly requesting the full image. */
-	$image = 'index.php?album='.$_zp_current_album->name . '&image=' . $_zp_current_image->filename;
-	header("Location: {$image}");
+	$i = 'index.php?album='.$album8 . '&image=' . $image8;
+	header("Location: {$i}");
 	exit();
 }
 
-if (checkforPassword(true)) {
-	pageError(403, gettext("Forbidden"));
-	exit();
+if (!(zp_loggedin(VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) { // have to check for passwords
+	$hash = getOption('gallery_password');
+	$authType = zp_gallery_auth;
+	if (empty($hash)) {
+		$hash = getOption('protected_image_password'); 
+		$authType = 'zp_image_auth';
+	}
+	if (!empty($hash) && zp_getCookie($authType) != $hash) {	
+		require_once(dirname(__FILE__) . "/template-functions.php");
+		pageError(403, gettext("Forbidden"));
+		exit();
+	}
 }
-if (!isMyAlbum($_zp_current_album->name, ALL_RIGHTS) && ($hash = getOption('protected_image_password'))) {
+
+
+if (!isMyAlbum($album8, ALL_RIGHTS) && ($hash = getOption('protected_image_password'))) {
 	$authType = 'zp_image_auth';
 	if (zp_getCookie($authType) != $hash) {
+		require_once(dirname(__FILE__) . "/template-functions.php");
 		$hint = get_language_string(getOption('protected_image_hint'));
 		$show = getOption('protected_image_user');
 		printPasswordForm($hint, true, getOption('login_user_field') || $show);
 		exit();
 	}
 }
-require_once(dirname(__FILE__).'/functions-image.php');
-$image_path = $_zp_current_image->localpath;
+
+
+
+$image_path = getAlbumFolder().$album.'/'.$image;
 $suffix = getSuffix($image_path);
-$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
+$cache_file = $album . "/" . substr($image, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 switch ($suffix) {
 	case 'bmp':
 		$suffix = 'wbmp';
@@ -47,25 +78,27 @@ switch ($suffix) {
 		pageError(405, gettext("Method Not Allowed"));
 		exit();
 }
-
 if (getOption('cache_full_image')) {
-	$cache_path = SERVERCACHE . '/' . internalToFilesystem($cache_file);
+	$args = array('FULL', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	$cache_file = getImageCacheFilename($album, $image, $args);
+	$cache_path = SERVERCACHE.$cache_file;
+	mkdir_recursive(dirname($cache_path), CHMOD_VALUE);
 } else {
 	$cache_path = NULL;
 }
+
 $rotate = false;
 if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 	$rotate = getImageRotation($image_path);
 }
 $id = NULL;
-$folder = internalToFilesystem($_zp_current_album->name);
-$watermark_use_image = getAlbumInherited($folder, 'watermark', $id);
+$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
 if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
 
 if (!$watermark_use_image && !$rotate) { // no processing needed
-	if (getOption('album_folder_class') != 'external' && !getOption('protect_full_image') == 'Download') { // local album system, return the image directly
+	if (getOption('album_folder_class') != 'external' && getOption('protect_full_image') != 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
-		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->filename));
+		header('Location: '.getAlbumFolder(FULLWEBPATH).pathurlencode(imgSrcURI($_zp_current_album->name.'/'.$_zp_current_image->filename)), true, 301);
 		exit();
 	} else {  // the web server does not have access to the image, have to supply it
 		$fp = fopen($image_path, 'rb');
@@ -73,7 +106,7 @@ if (!$watermark_use_image && !$rotate) { // no processing needed
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		header("Content-Type: image/$suffix");
 		if (getOption('protect_full_image') == 'Download') {
-			header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
+			header('Content-Disposition: attachment; filename="' . $image . '"');  // enable this to make the image a download
 		}
 		header("Content-Length: " . filesize($image_path));
 		// dump the picture and stop the script
@@ -83,11 +116,11 @@ if (!$watermark_use_image && !$rotate) { // no processing needed
 	}
 }
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-header("content-type: image/$suffix");
+header("Content-Type: image/$suffix");
 $newim = zp_imageGet($image_path);
 
 if (getOption('protect_full_image') == 'Download') {
-	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
+	header('Content-Disposition: attachment; filename="' . $image . '"');  // enable this to make the image a download
 }
 if ($rotate) {
 	$newim = zp_rotateImage($newim, $rotate);
@@ -119,13 +152,12 @@ if ($watermark_use_image) {
 	zp_imageKill($watermark);
 }
 $quality = getOption('full_image_quality');
-zp_imageOutput($newim, $suffix, $cache_path, $quality);
+if (!zp_imageOutput($newim, $suffix, $cache_path, $quality) && DEBUG_IMAGE) {
+	debugLog('full-image failed to create:'.$image);
+}
 
 if (!is_null($cache_path)) {
-	@touch($cache_path);
-	@chmod($cache_path, 0666 & CHMOD_VALUE);
-	header('Content-Type: image/'.$suffix);
-	header('Location: ' . FULLWEBPATH . '/'.CACHEFOLDER.'/' . $cache_file, true, 301);
+	header('Location: ' . FULLWEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file)), true, 301);
 	exit();
 }
 

@@ -61,7 +61,7 @@ class Gallery {
 	 * @return md5
 	 */
 	function getPassword() {
-		return(get_language_string(getOption('gallery_password')));
+		return(getOption('gallery_password'));
 	}
 	
 	/**
@@ -74,7 +74,7 @@ class Gallery {
 	}
 	
 	function getUser() {
-		return(get_language_string(getOption('gallery_user')));
+		return(getOption('gallery_user'));
 	}
 	
 	/**

@@ -74,8 +74,8 @@ switch (OFFSET_PATH) {
 	case 0:	// starts from the root index.php
 		$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
 		break;
-	case 1:  // starts from the zp-core folder
-	case 2:
+	case 1:	// starts from the zp-core folder
+	case 2:	// things which do not need admin tabs (setup, image processor scripts, etc.)
 		$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 		break;
 	case 3: // starts from the plugins folder
@@ -94,7 +94,7 @@ if (!defined('SERVERPATH')) define('SERVERPATH', str_replace("\\", '/', dirname(
 define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
-define('SERVERCACHE', SERVERPATH . '/'.CACHEFOLDER.'/');
+define('SERVERCACHE', SERVERPATH . '/'.CACHEFOLDER);
 
 // Set the version number.
 $_zp_conf_vars['version'] = ZENPHOTO_VERSION;
@@ -360,8 +360,8 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 function getImageCacheFilename($album8, $image8, $args) {
 	// this function works in FILESYSTEM_CHARSET, so convert the file names
 	$album = internalToFilesystem($album8);
-	$image = internalToFilesystem($image8);
 	$suffix = getSuffix($image8);
+	$image = stripSuffix(internalToFilesystem($image8));
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
 	if (empty($album)) {
@@ -374,7 +374,8 @@ function getImageCacheFilename($album8, $image8, $args) {
 			$albumsep = '/';
 		}
 	}
-	return '/' . $album . $albumsep . $image . $postfix . '.'.$suffix;
+	$result = '/' . $album . $albumsep . $image . $postfix . '.'.$suffix;
+	return $result;
 }
 
 /**
@@ -919,6 +920,15 @@ function getSuffix($filename) {
 }
 
 /**
+ * returns a file name sans the suffix
+ *
+ * @param unknown_type $filename
+ * @return unknown
+ */
+function stripSuffix($filename) {
+	return str_replace(strrchr($filename, "."),'',$filename);
+}
+/**
  * Returns the Require string for the appropriate script based on the PHP version
  *
  * @param string $v The version dermarkation
@@ -956,6 +966,71 @@ function getAlbumInherited($folder, $field, &$id) {
 		}
 	}
 	return '';
+}
+
+/**
+ * primitive theme setup for image handling scripts
+ *
+ * we need to conserve memory so loading the classes is out of the question.
+ * 
+ * @param string $album
+ * @return string
+ */
+function themeSetup($album) {
+	// we need to conserve memory in i.php so loading the classes is out of the question.
+	$id = NULL;
+	$theme = getAlbumInherited(filesystemToInternal($album), 'album_theme', $id);
+	if (empty($theme)) {
+		return getOption('current_theme');
+	} else {
+		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`='.$id;
+		$optionlist = query_full_array($sql, true);
+		if ($optionlist !== false) {
+			foreach($optionlist as $option) {
+				setOption($option['name'], $option['value'], false);
+			}
+		}
+		return $theme;
+	}
+}
+
+/**
+ * Checks to see if the loggedin Admin has rights to the album
+ *
+ * @param string $albumfolder the album to be checked
+ * @param int $action what the user wishes to do
+ */
+function isMyAlbum($albumfolder, $action) {
+	global $_zp_loggedin, $_zp_admin_album_list;
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		return $_zp_loggedin & (ADMIN_RIGHTS | $action);
+	}
+	if (empty($albumfolder) || $albumfolder == '/') {
+		return false;
+	}
+	if ($_zp_loggedin & $action) {
+		if (is_null($_zp_admin_album_list)) {
+			getManagedAlbumList();
+		}
+		if (count($_zp_admin_album_list) == 0) {
+			return false;
+		}
+		$desired_folders = explode('/', $albumfolder);
+		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
+			$admin_folders = explode('/', $adminalbum);
+			$found = true;
+			foreach ($admin_folders as $level=>$folder) {
+				if ($level >= count($desired_folders) || $folder != $desired_folders[$level]) {
+					$found = false;
+					break;
+				}
+			}
+			if ($found) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 ?>

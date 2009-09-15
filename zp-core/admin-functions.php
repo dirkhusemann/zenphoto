@@ -26,7 +26,7 @@ $sortby = array(gettext('Filename') => 'filename',
 								gettext('Filemtime') => 'mtime'
 								);
 									
-if (OFFSET_PATH) {									
+if (OFFSET_PATH && OFFSET_PATH != 2) {									
 	// setup sub-tab arrays for use in dropdown
 	$zenphoto_tabs = array();
 	if (($_zp_loggedin & (OVERVIEW_RIGHTS | ADMIN_RIGHTS))) {

@@ -2667,19 +2667,13 @@ function getProtectedImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image, $_zp_current_album;
 	if (is_null($_zp_current_image)) return false;
-	$suffix = strtolower(substr(strrchr($_zp_current_image->filename, "."), 1));
-	$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
-	$cache_path = SERVERCACHE . '/' . $cache_file;
-	if (file_exists(internalToFilesystem($cache_path))) {
-		return WEBPATH . '/'.CACHEFOLDER.'/' . pathurlencode($cache_file);
+	$args = array('FULL', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	$cache_file = getImageCacheFilename($_zp_current_album->name, $_zp_current_image->filename, $args);
+	$cache_path = SERVERCACHE.$cache_file;
+	if (file_exists($cache_path)) {
+		return WEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file));
 	} else {
-		$path = $_zp_current_image->getImageLink();
-		if (getOption('mod_rewrite')) {
-			$path .= "?z&p=full-image";
-		} else {
-			$path .= "&z&p=full-image";
-		}
-		return $path;
+		return WEBPATH.'/'.ZENFOLDER .'/full-image.php?a='.urlencode($_zp_current_album->name).'&i='.urlencode($_zp_current_image->filename);
 	}
 }
 

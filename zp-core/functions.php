@@ -1146,44 +1146,6 @@ function getManagedAlbumList() {
 }
 
 /**
- * Checks to see if the loggedin Admin has rights to the album
- *
- * @param string $albumfolder the album to be checked
- * @param int $action what the user wishes to do
- */
-function isMyAlbum($albumfolder, $action) {
-	global $_zp_loggedin, $_zp_admin_album_list;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		return $_zp_loggedin & (ADMIN_RIGHTS | $action);
-	}
-	if (empty($albumfolder) || $albumfolder == '/') {
-		return false;
-	}
-	if ($_zp_loggedin & $action) {
-		if (is_null($_zp_admin_album_list)) {
-			getManagedAlbumList();
-		}
-		if (count($_zp_admin_album_list) == 0) {
-			return false;
-		}
-		$desired_folders = explode('/', $albumfolder);
-		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
-			$admin_folders = explode('/', $adminalbum);
-			$found = true;
-			foreach ($admin_folders as $level=>$folder) {
-				if ($level >= count($desired_folders) || $folder != $desired_folders[$level]) {
-					$found = false;
-					break;
-				}
-			}
-			if ($found) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-/**
  * Returns  an array of album ids whose parent is the folder
  * @param string $albumfolder folder name if you want a album different >>from the current album
  * @return array

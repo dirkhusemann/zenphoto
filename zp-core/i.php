@@ -27,7 +27,7 @@
 // force UTF-8 Ø
 
 
-define('OFFSET_PATH', 1);
+define('OFFSET_PATH', 2);
 require_once(dirname(__FILE__).'/functions-basic.php');
 require_once(dirname(__FILE__).'/functions-image.php');
 
@@ -57,7 +57,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 
 	// Extract the image parameters from the input variables
 	// This validates the input as well.
-	$args = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	$args = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 	if (isset($_GET['s'])) { //0
 		$args[0] = $_GET['s'];
 	}
@@ -219,26 +219,6 @@ if (!$debug) {
 	exit();
 } else {
 	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename)) ."\" /></p>";
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-function themeSetup($album) {
-	// we need to conserve memory in i.php so loading the classes is out of the question.
-	$id = NULL;
-	$theme = getAlbumInherited(filesystemToInternal($album), 'album_theme', $id);
-	if (empty($theme)) {
-		return getOption('current_theme');
-	} else {
-		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`='.$id;
-		$optionlist = query_full_array($sql, true);
-		if ($optionlist !== false) {
-			foreach($optionlist as $option) {
-				setOption($option['name'], $option['value'], false);
-			}
-		}
-		return $theme;
-	}
 }
 
 ?>
