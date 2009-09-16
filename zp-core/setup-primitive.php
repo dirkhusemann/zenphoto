@@ -16,6 +16,7 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 if (!defined('SERVERPATH')) { define('SERVERPATH', dirname(dirname(__FILE__))); }
+define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
@@ -180,5 +181,11 @@ function generateListFromArray($currentValue, $list, $descending, $localize) {
 function zp_loggedin() {
 	return false;
 }
+
+function mkdir_recursive($pathname, $mode=0777) {
+	if (!is_dir(dirname($pathname))) mkdir_recursive(dirname($pathname), $mode);
+	return is_dir($pathname) || @mkdir($pathname, $mode & CHMOD_VALUE);
+}
+
 
 ?>
