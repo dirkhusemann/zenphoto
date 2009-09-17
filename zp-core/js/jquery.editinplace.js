@@ -229,6 +229,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				$( "#save-" + self.id ).bind( "click", function( e ) {
 					return _saveEdit( self, orig_option_value );
 				} ); // save click
+				
+				if ($('#edit-' + id ).tagSuggest && opt.eip_field == '_update_tags'){
+					$('#edit-' + id ).tagSuggest( { separator:',', tags: _tagList } );
+				}
+				
 			} ); // this fadeOut
 		} // function _editMode
 
