@@ -3018,7 +3018,7 @@ function getCommentBody() {
  */
 function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
 	global $_zp_current_comment;
-	if (zp_loggedin()) {
+	if (zp_loggedin(COMMENT_RIGHTS)) {
 		echo $before;
 		printLink(WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id=' . $_zp_current_comment['id'], $text, $title, $class, $id);
 		echo $after;

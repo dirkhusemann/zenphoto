@@ -140,7 +140,7 @@ if (isset($_REQUEST['logout'])) {
 
 function zp_loggedin($rights=ALL_RIGHTS) {
 	global $_zp_loggedin;
-	return $_zp_loggedin & $rights;
+	return $_zp_loggedin & ($rights | ADMIN_RIGHTS);
 }
 
 ?>

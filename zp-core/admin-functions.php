@@ -1963,7 +1963,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 			$notify = "&mcrerr=3";
 		}
 	} else if ($movecopyrename_action == 'copy') {
-		$dest = sanitize_path($_POST['a'.$prefix.'-albumselect'],3);
+		$dest = sanitize_path($_POST['a'.$prefix.'-albumselect']);
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
