@@ -1563,26 +1563,38 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		
 		
 			<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
-				<?php echo gettext("to"); ?>: <select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
-					<option value="" selected="selected">/</option>
+				<?php echo gettext("to:"); ?>
+				<select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
 					<?php
-						foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
-							$singlefolder = $fullfolder;
-							$saprefix = "";
-							$salevel = 0;
-							$selected = "";
-							if ($album->name == $fullfolder) {
-								continue;
-							}
-							// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
-							while (strstr($singlefolder, '/') !== false) {
-								$singlefolder = substr(strstr($singlefolder, '/'), 1);
-								$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
-								$salevel++;
-							}
-							echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
-							. "$selected>". $saprefix . $singlefolder ."</option>\n";
+					$exclude = $album->name;
+					if (count(explode('/', $exclude))>1 && $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+						?>
+						<option value="" selected="selected">/</option>
+						<?php
+					}
+					foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
+						// don't allow copy in place or to subalbums
+						if ($fullfolder==dirname($exclude) || $fullfolder==$exclude || strpos($fullfolder, $exclude.'/')===0) {
+							$disabled =' disabled';
+						} else {
+							$disabled = '';
 						}
+//						if ($fullfolder == $exclude || strpos($fullfolder, $exclude.'/')===0) { // omit the current album from the list
+//							continue;
+//						}
+						// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
+						$singlefolder = $fullfolder;
+						$saprefix = '';
+						$salevel = 0;
+						
+						while (strstr($singlefolder, '/') !== false) {
+							$singlefolder = substr(strstr($singlefolder, '/'), 1);
+							$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
+							$salevel++;
+						}
+						echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
+						. "$disabled>". $saprefix . $singlefolder ."</option>\n";
+					}
 					?>
 				</select>
 				<br clear: all /><br />
@@ -1591,7 +1603,8 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				</p>
 			</div>
 			<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
-				<?php echo gettext("to"); ?>: <input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
+				<?php echo gettext("to:"); ?>
+				<input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
 				<br clear: all />
 				<p class="buttons">
 				<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
