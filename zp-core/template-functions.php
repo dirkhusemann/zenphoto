@@ -2380,7 +2380,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
  */
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {
 	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image, $_zp_flash_player;
+	global $_zp_current_album, $_zp_current_image, $_zp_flash_player;
 	if (is_null($_zp_current_image)) return false;
 	$h = $_zp_current_image->getHeight();
 	$w = $_zp_current_image->getWidth();
@@ -2392,8 +2392,8 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	$side = getOption('image_use_side'); 
 	$us = getOption('image_allow_upscale');
 
-	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
+	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null),$_zp_current_album->name);
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $passedWM, $adminrequest, $gray) = $args;
 	if (!empty($size)) {
 		$dim = $size;
 		$width = $height = false;
@@ -2673,7 +2673,13 @@ function getProtectedImageURL() {
 	if (file_exists($cache_path)) {
 		return WEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file));
 	} else {
-		return WEBPATH.'/'.ZENFOLDER .'/full-image.php?a='.urlencode($_zp_current_album->name).'&i='.urlencode($_zp_current_image->filename);
+		$params = '&q='.getOption('full_image_quality');
+		$watermark_use_image = getAlbumInherited($_zp_current_album->name, 'watermark', $id);
+		if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
+		if (!empty($watermark_use_image)) {
+			$params .= '&wmk='.$watermark_use_image;
+		}
+		return WEBPATH.'/'.ZENFOLDER .'/full-image.php?a='.urlencode($_zp_current_album->name).'&i='.urlencode($_zp_current_image->filename).$params;
 	}
 }
 
@@ -4224,30 +4230,27 @@ function getPageRedirect() {
 			$action = "";
 			break;
 		case 'album.php':
-			$action = '&album='.urlencode($_zp_current_album->name);
+			$action = '/index.php?userlog=1&album='.urlencode($_zp_current_album->name);
 			break;
 		case 'image.php':
-			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
+			$action = '/index.php?userlog=1&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
 			break;
-		case 'full-image.php':
-			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename).'&z&p=full-image';
+		case ZENPAGE_PAGES.'.php':
+			$action = '/index.php?userlog=1&p='.ZENPAGE_PAGES.'&amp;title='.urlencode(getPageTitlelink());
 			break;
-		case 'pages.php':
-			$action = '&p=pages&amp;title='.urlencode(getPageTitlelink());
-			break;
-		case 'news.php':
-			$action = '&p=news';
+		case ZENPAGE_NEWS.'.php':
+			$action = '/index.php?userlog=1&p='.ZENPAGE_NEWS;
 			$title = getNewsTitlelink();
 			if (!empty($title)) $action .= '&title='.urlencode(getNewsTitlelink());
 			break;
 		default:
 		if (in_context(ZP_SEARCH)) {
-			$action = "&p=search" . htmlspecialchars($_zp_current_search->getSearchParams());
+			$action = '/index.php?userlog=1&p=search' . htmlspecialchars($_zp_current_search->getSearchParams());
 		} else {
-			$action = '&p='.substr($_zp_gallery_page, 0, -4);
+			$action = '/index.php?userlog=1&p='.substr($_zp_gallery_page, 0, -4);
 		}
 	}
-	return $action;
+	return WEBPATH.$action;
 }
 /**
  * Prints the album password form
@@ -4264,7 +4267,7 @@ function printPasswordForm($_password_hint, $_password_showProtected=true, $_pas
 					$_zp_current_album, $_zp_current_image, $theme;
 	if ($_zp_password_form_printed) return;
 	if (is_null($_password_showuser)) $_password_showuser = getOption('login_user_field');
-	if (is_null($_password_redirect)) $_password_redirect = 'index.php?userlog=1'.getPageRedirect();
+	if (is_null($_password_redirect)) $_password_redirect = getPageRedirect();
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
 		?>

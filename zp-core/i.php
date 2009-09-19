@@ -87,16 +87,16 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	if (isset($_GET['t'])) { //10
 		$args[10] = $_GET['t'];
 	}
-	if (isset($_GET['wmt']) && !$adminrequest) { //11
-		$args[11] = $_GET['wmt'];
+	if (isset($_GET['wmk']) && !$adminrequest) { //11
+		$args[11] = $_GET['wmk'];
 	}
 	$args [12] = $adminrequest; //12
 	if (isset($_GET['gray'])) {
 		$args[12] = $_GET['gray'];
 	}
-	$args = getImageParameters($args);
-	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
-	if (DEBUG_IMAGE) debugLog("i.php($ralbum, $rimage): \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$thumbstandin=$thumbstandin, \$thumbWM=$thumbWM, \$adminrequest=$adminrequest, \$gray=$gray");
+	$args = getImageParameters($args,filesystemToInternal($album));
+	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $passedWM, $adminrequest, $gray) = $args;
+	if (DEBUG_IMAGE) debugLog("i.php($ralbum, $rimage): \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$thumbstandin=$thumbstandin, \$passedWM=$passedWM, \$adminrequest=$adminrequest, \$gray=$gray");
 	
 	$allowWatermark = !$thumb && !$adminrequest;
 } else {

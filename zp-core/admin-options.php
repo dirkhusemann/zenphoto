@@ -1940,14 +1940,19 @@ if (empty($alterrights)) {
 					</tr>
 					<tr class="passwordextrahide" style="display:none">
 						<td style="margin:0; padding:0">
-						<?php echo gettext("password:"); ?><br />
-						&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+							<?php echo gettext("password:"); ?>
 						</td>
 						<td style="margin:0; padding:0">
-						<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
-						<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" />
-						<br />
-						<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
+							<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
+							<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" />
+						</td>
+					</tr>
+					<tr class="passwordextrahide" style="display:none">
+						<td style="margin:0; padding:0 text-align:left">
+							<?php echo gettext("(repeat)"); ?>
+						</td>
+						<td style="margin:0; padding:0">
+							<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
 						</td>
 					</tr>
 					<tr class="passwordextrahide" style="display:none">

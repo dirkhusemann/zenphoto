@@ -124,7 +124,7 @@ function propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim
  * @param string $album the album containing the image
  */
 function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme, $album) {
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $passedWM, $adminrequest, $gray) = $args;
 	// Set the config variables for convenience.
 	$image_use_side = getOption('image_use_side');
 	$upscale = getOption('image_allow_upscale');
@@ -315,11 +315,9 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			zp_imageUnsharpMask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
 		}
 		$watermark_image = false;
-		if ($thumbWM) {
-			if ($thumb || !$allow_watermark) {
-				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($thumbWM).'.png';
-				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
-			}
+		if ($passedWM) {
+			$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($passedWM).'.png';
+			if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 		} else {
 			if ($allow_watermark) {
 				$watermark_image = $watermark_use_image;

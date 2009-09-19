@@ -1936,6 +1936,10 @@ if (file_exists(CONFIGFILE)) {
 				query($sql);
 			}
 		}
+		// cache file names changed in Changeset 4455
+		if ($prevRel < 4455) {
+			$gallery->clearCache();
+		}
 		
 		echo "<h3>";
 		if ($taskDisplay[substr($task,0,8)] == 'create') {

@@ -385,7 +385,7 @@ function getImageCacheFilename($album8, $image8, $args) {
  * @return string
  */
 function getImageCachePostfix($args) {
-	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbStandin, $thumbWM, $adminrequest, $gray) = $args;
+	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbStandin, $passedWM, $adminrequest, $gray) = $args;
 	$postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "")
 	. ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "")
 	. (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "")
@@ -402,7 +402,7 @@ function getImageCachePostfix($args) {
  * @param array $args cropping arguments
  * @return array
  */
-function getImageParameters($args) {
+function getImageParameters($args, $album=NULL) {
 	$thumb_crop = getOption('thumb_crop');
 	$thumb_size = getOption('thumb_size');
 	$thumb_crop_width = getOption('thumb_crop_width');
@@ -412,9 +412,9 @@ function getImageParameters($args) {
 	$quality = getOption('image_quality');
 	// Set up the parameters
 	$thumb = $crop = false;
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $WM, $adminrequest, $gray) = $args;
 	$thumb = $thumbstandin;
-	if ($size == 'thumb') {
+	if ($size == 'thumb') { 
 		$thumb = true;
 		if ($thumb_crop) {
 			$cw = $thumb_crop_width;
@@ -430,7 +430,6 @@ function getImageParameters($args) {
 			$size = round($size);
 		}
 	}
-	if ($thumb) $quality = round($thumb_quality);
 	
 	// Round each numeric variable, or set it to false if not a number.
 	list($width, $height, $cw, $ch, $quality) =	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $quality));
@@ -445,11 +444,60 @@ function getImageParameters($args) {
 	} else {
 		$crop = true;
 	}
-	if (empty($quality)) $quality = getOption('image_quality');
+	if (is_null($gray)) {
+		if ($thumb) {
+			$gray = getOption('thumb_gray');
+		} else {
+			$gray = getOption('image_gray');
+		}
+	}
+	if (empty($quality)) {
+		if ($thumb) {
+			$quality = round($thumb_quality);
+		} else {
+			$quality = getOption('image_quality');
+		}
+	}
+	if (empty($WM)) {
+		if (!$thumb) {
+			if (!empty($album)) {
+				$WM = getAlbumInherited($album, 'watermark', $id);
+			}
+			if (empty($WM)) {
+				$WM = getOption('fullimage_watermark');
+			}
+		}
+	}
 
 	// Return an array of parameters used in image conversion.
-	$args =  array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray);
+	$args =  array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $WM, $adminrequest, $gray);
 	return $args;
+}
+
+/**
+ * forms the i.php parameter list for an image.
+ *
+ * @param array $args
+ * @param string $album the album name
+ * @param string $image the image name
+ * @return string
+ */
+function getImageProcessorURI($args, $album, $image) {
+	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $passedWM, $adminrequest, $gray) = $args;
+	$uri = WEBPATH.'/'.ZENFOLDER.'/i.php?a='.urlencode($album).'&i='.urlencode($image);
+	if (!empty($size)) $uri .= '&s='.$size;
+	if (!empty($width)) $uri .= '&w='.$width;
+	if (!empty($height)) $uri .= '&h='.$height;
+	if (!is_null($cw)) $uri .= '&cw='.$cw;
+	if (!is_null($ch)) $uri .= '&ch='.$ch;
+	if (!is_null($cx)) $uri .= '&cx='.$cx;
+	if (!is_null($cy)) $uri .= '&cy='.$cy;
+	if (!empty($quality)) $uri .= '&q='.$quality;
+	if ($thumb || $thumbstandin) $uri .= '&t=1';
+	if (!empty($passedWM)) $uri .= '&wmk='.$passedWM;
+	if (!empty($adminrequest)) $uri .= '&admin';
+	if (!empty($gray)) $uri .= '&gray='.$gray;
+	return $uri;
 }
 
 /** Takes user input meant to be used within a path to a file or folder and

@@ -153,24 +153,15 @@ class TextObject extends _Image {
 		if ($this->objectsThumb == NULL) {
 			$filename = makeSpecialImageName($this->getThumbImageFile());
 			if (!getOption('textobject_watermark_default_images')) $wmt = '';
-			$special = true;
 		} else {
 			$filename = $this->objectsThumb;
-			$special = false;
 		}
-		if ($wmt) $wmt = '&wmt='.$wmt;
-		$cachefilename = getImageCacheFilename($alb = $this->album->name, $this->filename, getImageParameters(array('thumb')));
+		$args = getImageParameters(array('thumb', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, $wmt, NULL, NULL), $this->album->name);
+		$cachefilename = getImageCacheFilename($alb = $this->album->name, $this->filename, $args);
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
-			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb) && !$special) {
-				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
-			} else {
-				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
-				if ($type !== 'image') $path .= '&'.$type.'=true';
-			}
-			if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-			return WEBPATH . "/" . $path;
+			return getImageProcessorURI($args, $this->album->name, $filename); 
 		}
 	}
 
@@ -202,31 +193,18 @@ class TextObject extends _Image {
 	 * @return string
 	 */
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {
+		$args = getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, Option('TextObject_watermark'), NULL, $gray), $this->album->name);
 		if ($thumbStandin) {
 			if ($this->objectsThumb == NULL) {
 				$filename = makeSpecialImageName($this->getThumbImageFile());
-				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename);
-				return WEBPATH . "/" . $path
-				. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
-				. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-				. (is_null($cropx) ? "" : "&cx=$cropx"). (is_null($cropy) ? "" : "&cy=$cropy")
-				. "&t=true";
+				return getImageProcessorURI($args, $this->album->name, $filename); 
 			} else {
 				$filename = $this->objectsThumb;
-				$wmt = getOption('TextObject_watermark');
-				if ($wmt) $wmt = '&wmt='.$wmt;
-				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
-													getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL)));
+				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, $args);
 				if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 					return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 				} else {
-					$path = ZENFOLDER . '/i.php?a=' . urlencode($alb) . '&i=' . urlencode($filename);
-					if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-					return WEBPATH . "/" . $path
-												. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
-												. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-												. (is_null($cropx) ? "" : "&cx=$cropx"). (is_null($cropy) ? "" : "&cy=$cropy")
-												. "&t=true".$wmt;
+					return getImageProcessorURI($args, $this->album->name, $filename); 		
 				}
 			}
 		} else {

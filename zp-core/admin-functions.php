@@ -1579,9 +1579,6 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						} else {
 							$disabled = '';
 						}
-//						if ($fullfolder == $exclude || strpos($fullfolder, $exclude.'/')===0) { // omit the current album from the list
-//							continue;
-//						}
 						// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
 						$singlefolder = $fullfolder;
 						$saprefix = '';

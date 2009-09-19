@@ -32,28 +32,34 @@ if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are d
 	exit();
 }
 
-if (!(zp_loggedin(VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) { // have to check for passwords
+// have to check for passwords
+if (!(zp_loggedin(VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) {
 	$hash = getOption('gallery_password');
-	$authType = zp_gallery_auth;
-	if (empty($hash)) {
-		$hash = getOption('protected_image_password'); 
-		$authType = 'zp_image_auth';
-	}
-	if (!empty($hash) && zp_getCookie($authType) != $hash) {	
+	if (!empty($hash) && zp_getCookie('zp_gallery_auth') != $hash) {
 		require_once(dirname(__FILE__) . "/template-functions.php");
 		pageError(403, gettext("Forbidden"));
 		exit();
+	} else { // maybe there was a login screen posted
+		zp_handle_password('zp_image_auth', getOption('protected_image_password'), getOption('protected_image_user'));
 	}
 }
 
-
-if (!isMyAlbum($album8, ALL_RIGHTS) && ($hash = getOption('protected_image_password'))) {
+if (!isMyAlbum($album8, ALL_RIGHTS)) {
+	$hash = getOption('protected_image_password'); 
 	$authType = 'zp_image_auth';
 	if (zp_getCookie($authType) != $hash) {
 		require_once(dirname(__FILE__) . "/template-functions.php");
 		$hint = get_language_string(getOption('protected_image_hint'));
 		$show = getOption('protected_image_user');
-		printPasswordForm($hint, true, getOption('login_user_field') || $show);
+		$parms = '';
+		if (isset($_GET['wmk'])) {
+			$parms = '&wmk='.$_GET['wmk'];
+		}
+		if (isset($_GET['q'])) {
+			$parms .= '&q='.sanitize_numeric($_GET['q']);
+		}
+		$action = WEBPATH.'/'.ZENFOLDER.'/full-image.php?userlog=1&a='.urlencode($album8).'&i='.urlencode($image8).$parms;
+		printPasswordForm($hint, true, getOption('login_user_field') || $show, $action);
 		exit();
 	}
 }
@@ -92,8 +98,18 @@ if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 	$rotate = getImageRotation($image_path);
 }
 $id = NULL;
-$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
-if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
+$watermark_use_image = '';
+if (isset($_GET['wmk'])) {
+	$watermark_use_image = $_GET['wmk'];
+} else {
+	$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
+	if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
+}
+if (isset($_GET['q'])) {
+	$quality = sanitize_numeric($_GET['q']);
+} else {
+	$quality = getOption('full_image_quality');
+}
 
 if (!$watermark_use_image && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && getOption('protect_full_image') != 'Download') { // local album system, return the image directly
@@ -151,7 +167,6 @@ if ($watermark_use_image) {
 	zp_copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
 	zp_imageKill($watermark);
 }
-$quality = getOption('full_image_quality');
 if (!zp_imageOutput($newim, $suffix, $cache_path, $quality) && DEBUG_IMAGE) {
 	debugLog('full-image failed to create:'.$image);
 }

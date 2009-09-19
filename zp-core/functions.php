@@ -1993,6 +1993,101 @@ function logTime($tag) {
 }
 
 /**
+ * checks password posting
+ * 
+ * @param string $authType override of athorization type
+ */
+function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
+	global $_zp_loggedin, $_zp_login_error, $_zp_current_album;
+	if (zp_loggedin()) { return; } // who cares, we don't need any authorization
+	$cookiepath = WEBPATH;
+	if (WEBPATH == '') { $cookiepath = '/'; }
+	if (empty($authType)) { // not supplied by caller
+		$check_auth = '';
+		if (isset($_GET['z']) && $_GET['p'] == 'full-image' || isset($_GET['p']) && $_GET['p'] == '*full-image') {
+			$authType = 'zp_image_auth';
+			$check_auth = getOption('protected_image_password');
+			$check_user = getOption('protected_image_user');
+		} else if (in_context(ZP_SEARCH)) {  // search page
+			$authType = 'zp_search_auth';
+			$check_auth = getOption('search_password');
+			$check_user = getOption('search_user');
+		} else if (in_context(ZP_ALBUM)) { // album page
+			$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
+			$check_auth = $_zp_current_album->getPassword();
+			$check_user = $_zp_current_album->getUser();
+			if (empty($check_auth)) {
+				$parent = $_zp_current_album->getParent();
+				while (!is_null($parent)) {
+					$check_auth = $parent->getPassword();
+					$check_user = $parent->getUser();
+					$authType = "zp_album_auth_" . cookiecode($parent->name);
+					if (!empty($check_auth)) { break; }
+					$parent = $parent->getParent();
+				}
+			}
+		}
+		if (empty($check_auth)) { // anything else is controlled by the gallery credentials
+			$authType = 'zp_gallery_auth';
+			$check_auth = getOption('gallery_password');
+			$check_user = getOption('gallery_user');
+		}
+	}
+	// Handle the login form.
+	if (DEBUG_LOGIN) debugLog("zp_handle_password: \$authType=$authType; \$check_auth=$check_auth; \$check_user=$check_user; ");
+	if (isset($_POST['password']) && isset($_POST['pass'])) {
+		if (isset($_POST['user'])) {
+			$post_user = $_POST['user'];
+		} else {
+			$post_user = '';
+		}
+		$post_pass = $_POST['pass'];
+		$auth = passwordHash($post_user, $post_pass);
+		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
+		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
+		if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
+		if ($_zp_loggedin) {	// allow Admin user login
+			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
+			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
+				header("Location: " . FULLWEBPATH . "/" . sanitize_path($_POST['redirect']));
+				exit();
+			}
+		} else {
+			$success = ($auth == $check_auth) && $post_user == $check_user;
+			$success = zp_apply_filter('guest_login_attempt', $success, $post_user, $post_pass, $authType);;
+			if ($success) {
+				// Correct auth info. Set the cookie.
+				if (DEBUG_LOGIN) debugLog("zp_handle_password: valid credentials");
+				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
+				if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
+					header("Location: " . FULLWEBPATH . "/" . sanitize_path($_POST['redirect']));
+					exit();
+				}
+			} else {
+				// Clear the cookie, just in case
+				if (DEBUG_LOGIN) debugLog("zp_handle_password: invalid credentials");
+				zp_setcookie($authType, "", time()-368000, $cookiepath);
+				$_zp_login_error = true;
+			}
+		}
+		return;
+	}
+	if (empty($check_auth)) { //no password on record
+		return;
+	}
+	if (($saved_auth = zp_getCookie($authType)) != '') {
+		if ($saved_auth == $check_auth) {
+			if (DEBUG_LOGIN) debugLog("zp_handle_password: valid cookie");
+			return;
+		} else {
+			// Clear the cookie
+			if (DEBUG_LOGIN) debugLog("zp_handle_password: invalid cookie");
+			zp_setcookie($authType, "", time()-368000, $cookiepath);
+		}
+	}
+}
+
+/**
  * Returns true if all the right conditions are set to allow comments for the $type
  *
  * @param string $type Which comments
