@@ -389,9 +389,8 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 		case "image":
 			switch($mode) {
 				case "latestimages-sizedimage":
-					$actualclass = strtolower(get_class($_zp_current_zenpage_news));
 					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
-					if ($actualclass == '_image' || $actualclass == 'transientimage') {
+					if (isImagePhoto($_zp_current_zenpage_news)) {
 						echo "<img src='".$_zp_current_zenpage_news->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					} else {
 						echo "<img src='".$_zp_current_zenpage_news->getThumbImageFile(WEBPATH)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
