@@ -145,8 +145,8 @@ function printRating($vote=3, $object=NULL, $text=true) {
 						$vote = 0;
 					}
 					break;
-				case 'pages.php':
-				case 'news.php':
+				case ZENPAGE_PAGES.'.php':
+				case ZENPAGE_NEWS.'.php':
 					if (!zp_loggedin()) { // no guest password
 						$vote = 0;
 					}

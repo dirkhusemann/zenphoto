@@ -196,7 +196,7 @@ function printFooter() {
 			case 'image.php':
 				$page = gettext('image');
 				break;
-			case 'news.php':
+			case ZENPAGE_NEWS.'.php':
 				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 					$page = gettext('category');
 				} else {

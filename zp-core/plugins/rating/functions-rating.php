@@ -50,9 +50,9 @@ function getCurrentPageObject() {
 			return $_zp_current_album;
 		case 'image.php':
 			return $_zp_current_image;
-		case 'news.php':
+		case ZENPAGE_NEWS.'.php':
 			return $_zp_current_zenpage_news;
-		case 'pages.php':
+		case ZENPAGE_PAGES.'.php':
 			return $_zp_current_zenpage_page;
 		default:
 			die(sprintf(gettext('%s is not a valid getRating() context'), $_zp_gallery_page));

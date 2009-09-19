@@ -314,12 +314,12 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			$comments_open = OpenedForComments('IMAGE');
 			$formname = '/comment_form.php';
 			break;
-		case 'pages.php':
+		case ZENPAGE_PAGES.'.php':
 			if (!getOption('comment_form_pages')) return;
 			$comments_open = zenpageOpenedForComments();
 			$formname = '/comment_form.php';
 			break;
-		case 'news.php':
+		case ZENPAGE_NEWS.'.php':
 			if (!getOption('comment_form_articles')) return;
 			$comments_open = zenpageOpenedForComments();
 			$formname = '/comment_form.php';
