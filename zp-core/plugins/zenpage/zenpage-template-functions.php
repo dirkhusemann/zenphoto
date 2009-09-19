@@ -107,7 +107,7 @@ function getNewsType() {
 			$newstype = "news";
 			break;
 		default:
-			$newstype = "image";
+			$newstype = 'image';
 			break;
 	}
  return $newstype;
@@ -294,15 +294,15 @@ function getNewsTitleLink() {
 	if(!is_null($_zp_current_zenpage_news)) {
 		$type = getNewsType();
 		switch($type) {
-			case "image":
-			case "video":
-				$link = $_zp_current_zenpage_news->getImageLink();
-				break;
 			case "album":
 				$link = $_zp_current_zenpage_news->getAlbumLink();
 				break;
 			case "news":
 				$link = $_zp_current_zenpage_news->getTitlelink();
+				break;
+			case "image":
+			case "video":
+				$link = $_zp_current_zenpage_news->getImageLink();
 				break;
 		}
 		return $link;
@@ -389,7 +389,14 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 		case "image":
 			switch($mode) {
 				case "latestimages-sizedimage":
-					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$actualclass = strtolower(get_class($_zp_current_zenpage_news));
+					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
+					if ($actualclass == '_image' || $actualclass == 'transientimage') {
+						echo "<img src='".$_zp_current_zenpage_news->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+					} else {
+						echo "<img src='".$_zp_current_zenpage_news->getThumbImageFile(WEBPATH)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+					}
+					echo "</a><br />";
 					break;
 				case "latestimages-thumbnail":
 					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";

@@ -744,11 +744,17 @@ class _Image extends PersistentObject {
 
 	/**
 	 * Returns the image file name for the thumbnail image.
+	 * 
+	 * @param string $path override path 
 	 *
-	 * @return string
+	 * @return s
 	 */
-	function getThumbImageFile() {
-		return $this->localpath;
+	function getThumbImageFile($path=NULL) {
+		$local = $this->localpath;
+		if (!is_null($path)) {
+			$local = $path.str_replace(SERVERPATH,$local);
+		}
+		return $local;
 	}
 
 	/**

@@ -124,16 +124,19 @@ class Video extends _Image {
 
 	/**
 	 * Returns the image file name for the thumbnail image.
+	 * 
+	 * @param string $path override path 
 	 *
-	 * @return string
+	 * @return s
 	 */
-	function getThumbImageFile() {
+	function getThumbImageFile($path=NULL) {
+		if (is_null($path)) $path = SERVERPATH;
 		if ($this->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$this->album->name.'/'.$this->objectsThumb;
 		} else {
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
+			$imgfile = $path . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
 			if (!file_exists($imgfile)) {
-				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . substr(basename(__FILE__), 0, -4). '/multimediaDefault.png';
+				$imgfile = $path . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . substr(basename(__FILE__), 0, -4). '/multimediaDefault.png';
 			}
 		}
 		return $imgfile;

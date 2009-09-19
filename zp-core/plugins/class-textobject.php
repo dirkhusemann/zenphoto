@@ -127,16 +127,19 @@ class TextObject extends _Image {
 
 	/**
 	 * Returns the image file name for the thumbnail image.
+	 * 
+	 * @param string $path override path 
 	 *
 	 * @return s
 	 */
-	function getThumbImageFile() {
+	function getThumbImageFile($path=NULL) {
+		if (is_null($path)) $path = SERVERPATH;
 		if ($this->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$this->album->name.'/'.$this->objectsThumb;
 		} else {
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
+			$imgfile = $path . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
 			if (!file_exists($imgfile)) {
-				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER .'/'. substr(basename(__FILE__), 0, -4). '/textDefault.png';
+				$imgfile = $path . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER .'/'. substr(basename(__FILE__), 0, -4). '/textDefault.png';
 			}
 		}
 	return $imgfile;
@@ -193,7 +196,7 @@ class TextObject extends _Image {
 	 * @return string
 	 */
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {
-		$args = getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, Option('TextObject_watermark'), NULL, $gray), $this->album->name);
+		$args = getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, getOption('TextObject_watermark'), NULL, $gray), $this->album->name);
 		if ($thumbStandin) {
 			if ($this->objectsThumb == NULL) {
 				$filename = makeSpecialImageName($this->getThumbImageFile());
