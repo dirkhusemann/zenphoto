@@ -431,6 +431,12 @@ ul.pagelist li.next {
 	font-size: 0.7em;
 }
 
+#image div {
+	line-height: 1.6em;
+	text-align: left;
+	font-size: 1.6em;
+	}
+
 /* centering flowplayer 3 on image.php */
 #image .flowplayer {
 	margin: 0 auto;
@@ -919,4 +925,6 @@ table.password td.hint{
 	padding: 2px;
 }
 
+/* text objects
+----------------------/
 
