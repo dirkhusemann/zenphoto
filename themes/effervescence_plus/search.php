@@ -273,8 +273,8 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 <?php printThemeInfo(); ?>
 <?php printZenphotoLink(); ?>
 <?php
-if (function_exists('printUserLogout')) {
-	printUserLogout('<br />', '', true);
+if (function_exists('printUserLogin_out')) {
+	printUserLogin_out('<br />', '', true);
 }
 ?>
 

@@ -1,17 +1,17 @@
 <?php
 /**
- * Provides a link so that users who have logged into zenphoto can logout.
+ * Provides users then means to  log in or out from the theme pages.
  *
- * Place a call on printUserLogout() where you want the logout link to appear.
+ * Place a call on printUserLogin_out() where you want the logout link to appear.
  *
  * @author Stephen Billard (sbillard)
  * @package plugins
  */
 
-$plugin_description = gettext("Provides a means for placing a user logout link on your theme pages.");
+$plugin_description = gettext("Provides a means for placing a user login form or logout link on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.6';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_logout.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_login-out.php.html";
 $option_interface = new user_logout_options();
 
 /**
@@ -81,7 +81,7 @@ if (!OFFSET_PATH) {
  * @param string $after after text
  * @param bool $showLoginForm set to true to display a login form if no one is logged in
  */
-function printUserLogout($before='', $after='', $showLoginForm=false) {
+function printUserLogin_out($before='', $after='', $showLoginForm=false) {
 	global $cookies, $__redirect;
 	if ($showLoginForm || getOption('user_logout_login_form')) {
 		$showLoginForm = !checkforPassword(true);

@@ -211,8 +211,8 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 			<?php printZenphotoLink(); ?>
 		</p>
 		<?php
-		if (function_exists('printUserLogout')) {
-			printUserLogout("");
+		if (function_exists('printUserLogin_out')) {
+			printUserLogin_out("");
 		}
 		?>
 	</div>

@@ -100,8 +100,8 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 <div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 
 <?php printZenphotoLink(); ?>
 <?php
-if (function_exists('printUserLogout')) {
-	printUserLogout(" | ");
+if (function_exists('printUserLogin_out')) {
+	printUserLogin_out(" | ");
 }
 ?>
 </div>

@@ -235,7 +235,7 @@ function printFooter() {
 		<?php printThemeInfo(); ?>
 		<?php printZenphotoLink(); ?>
 		<?php if ($page == 'gallery') { printRSSLink('Gallery','<br />', 'Gallery RSS', ''); } ?>
-		<?php	if (function_exists('printUserLogout') && $page != 'password') printUserLogout('<br />', '', true); ?>
+		<?php	if (function_exists('printUserLogin_out') && $page != 'password') printUserLogin_out('<br />', '', true); ?>
 		<?php	if (function_exists('printContactForm') && ($page != 'password' || getOption('gallery_page_unprotected_contact'))) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
 		<?php if (!zp_loggedin() && function_exists('printRegistrationForm') && ($page != 'password' || getOption('gallery_page_unprotected_register'))) printCustomPageURL(gettext('Register for this site'), 'register', '', '<br />');	?>
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>

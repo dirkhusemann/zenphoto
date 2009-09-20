@@ -152,7 +152,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 						<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 				<?php } ?>
 				</p>
-				<?php if (function_exists('printUserLogout')) { printUserLogout(""); } ?>
+				<?php if (function_exists('printUserLogin_out')) { printUserLogin_out(""); } ?>
 			</div>
 		</div>
 

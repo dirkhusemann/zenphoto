@@ -155,7 +155,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 
 		<div id="footer">
 			<hr />
-			<?php if (function_exists('printUserLogout')) { printUserLogout(""); } ?>
+			<?php if (function_exists('printUserLogin_out')) { printUserLogin_out(""); } ?>
 			<p>
 				<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.'); ?>
 				<?php printZenphotoLink(); ?>

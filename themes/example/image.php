@@ -86,8 +86,8 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 			<?php printZenphotoLink(); ?>
 			 | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
 			<?php
-			if (function_exists('printUserLogout')) {
-				printUserLogout(" | ");
+			if (function_exists('printUserLogin_out')) {
+				printUserLogin_out(" | ");
 			}
 			?>
 			<br />

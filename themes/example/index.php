@@ -43,8 +43,8 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<div id="credit">
 		<?php
-		if (function_exists('printUserLogout')) {
-			printUserLogout('', ' | ', true);
+		if (function_exists('printUserLogin_out')) {
+			printUserLogin_out('', ' | ', true);
 		}
 		?>
 		<?php printRSSLink('Gallery','','RSS', ' | '); ?> 

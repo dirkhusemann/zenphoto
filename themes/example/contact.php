@@ -31,8 +31,8 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		<div id="credit"> 
 		<?php printZenphotoLink(); ?>
 		<?php
-		if (function_exists('printUserLogout')) {
-			printUserLogout(' | ', '', true);
+		if (function_exists('printUserLogin_out')) {
+			printUserLogin_out(' | ', '', true);
 		}
 		?>
 		</div>

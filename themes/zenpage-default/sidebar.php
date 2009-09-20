@@ -96,7 +96,7 @@ if (getOption('RSS_album_image') || getOption('RSS_articles')) {
 	}
 	?>
 	<?php
-	if(function_exists("printUserLogout")) {
+	if(function_exists("printUserLogin_out")) {
 		?>
 		<?php
 		if (zp_loggedin()) {
@@ -106,7 +106,7 @@ if (getOption('RSS_album_image') || getOption('RSS_articles')) {
 					<li>
 			<?php
 		}
-		printUserLogout("","");
+		printUserLogin_out("","");
 		if (zp_loggedin()) {
 			?>
 				</li>
