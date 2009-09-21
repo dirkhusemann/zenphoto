@@ -938,8 +938,8 @@ define ('COMMENT_EMAIL_REQUIRED', 1);
 define ('COMMENT_NAME_REQUIRED', 2);
 define ('COMMENT_WEB_REQUIRED', 4);
 define ('USE_CAPTCHA', 8);
-define ('COMMENT_BODY_REQUIRED', 18);
-define ('COMMENT_SEND_EMAIL', 18);
+define ('COMMENT_BODY_REQUIRED', 16);
+define ('COMMENT_SEND_EMAIL', 32);
 /**
  * Generic comment adding routine. Called by album objects or image objects
  * to add comments.
@@ -1101,21 +1101,23 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$commentobj->id);
 			$emails = array();
 			$admin_users = getAdministrators();
-			foreach ($admin_users as $admin) {  // mail anyone else with full rights
-				if (($admin['rights'] & ADMIN_RIGHTS) && ($admin['rights'] & COMMENT_RIGHTS) && !empty($admin['email'])) {
+			foreach ($admin_users as $admin) {  // mail anyone with full rights
+				if (($admin['rights'] & ADMIN_RIGHTS) && !empty($admin['email'])) {
 					$emails[] = $admin['email'];
 					unset($admin_users[$admin['id']]);
 				}
 			}
-			// take out for zenpage comments since there are no album admins
-			if($type === "images" OR $type === "albums") {
+			if($type === "images" OR $type === "albums") { // mail to album admins
 				$id = $ur_album->getAlbumID();
 				$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
 				$result = query_full_array($sql);
 				foreach ($result as $anadmin) {
-					$admin = $admin_users[$anadmin['adminid']];
-					if (!empty($admin['email'])) {
-						$emails[] = $admin['email'];
+					$id = $anadmin['adminid'];
+					if (array_key_exists($id,$admin_users)) {
+						$admin = $admin_users[$id];
+						if (($admin['rights'] & COMMENT_RIGHTS) && !empty($admin['email'])) {
+							$emails[] = $admin['email'];
+						}
 					}
 				}
 			}
