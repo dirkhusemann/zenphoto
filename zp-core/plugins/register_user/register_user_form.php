@@ -17,10 +17,18 @@
 			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo $user; ?>" size="22" /></td>
 		</tr>
 		<tr>
-			<td valign="top" ><?php echo gettext("Password:"); ?></td>
+			<td valign="top"><?php echo gettext("Password:"); ?></td>
 			<td width=400 valign="top">
 				<p style="line-height: 1em;">
 					<input type="password" id="adminpass" name="adminpass"	value="" size="23" />
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top"><?php echo gettext("re-enter:"); ?></td>
+			<td>
+				<p style="line-height: 1em;">
+					<input type="password" id="adminpass_2" name="adminpass_2"	value="" size="23" />
 					<?php
 					$msg = passwordNote();
 					if (!empty($msg)) {
@@ -32,10 +40,6 @@
 					?>
 				</p>
 			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("re-enter:"); ?></td>
-			<td><input type="password" id="adminpass_2" name="adminpass_2"	value="" size="23" /></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Email:"); ?></td>

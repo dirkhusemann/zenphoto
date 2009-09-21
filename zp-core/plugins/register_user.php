@@ -32,22 +32,48 @@ $option_interface = new register_user_options();
 class register_user_options {
 
 	function register_user_options() {
+		saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
 		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
 		setOptionDefault('register_user_captcha', 0);
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Default user rights') => array('key' => 'register_user_rights', 'type' => OPTION_TYPE_RADIO,
+		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
+												'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
+											gettext('User registration page') => array('key' => 'user_registration_page', 'type' => OPTION_TYPE_CUSTOM, 
+												'desc' => gettext('If this option is not empty, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
+											gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX, 
+												'desc' => gettext('If checked, captcha validation will be required for user registration.'))
+											);
+		$admins = getAdministrators();
+		$ordered = array();
+		$groups = array();
+		$adminordered = array();
+		$nullselection = '';
+		foreach ($admins as $key=>$admin) {
+			if (!$admin['valid']) {
+				$ordered[$admin['user']] = $admin['user'];
+				if ($admin['rights'] == NO_RIGHTS) {
+					$nullselection = $admin['user'];
+				}
+			}
+		}
+		asort($ordered);
+		if (function_exists('user_groups_admin_tabs') && !empty($ordered)) {
+			$default =  array('key' => 'register_user_rights', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => $ordered,
+										'desc' => gettext("Initial group assignment for the new user."));
+			if (!empty($nullselection)) {
+				$default['null_selection'] = $nullselection;
+			}
+			$options[gettext('Default user group')] = $default;
+		} else {
+			$options[gettext('Default user rights')] = array('key' => 'register_user_rights', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEW_ALL_RIGHTS | NO_RIGHTS),
-										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified.")),
-									gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
-										'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
-									gettext('User registration page') => array('key' => 'user_registration_page', 'type' => OPTION_TYPE_CUSTOM, 
-										'desc' => gettext('If this option is not empty, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
-									gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX, 
-										'desc' => gettext('If checked, captcha validation will be required for user registration.'))
-									);
+										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified."));
+		}
+		return $options;
 	}
 	function handleOption($option, $currentValue) {
 		global $gallery;
@@ -93,15 +119,19 @@ if (!OFFSET_PATH) { // handle form post
 		$currentadmins = getAdministrators();
 		$params = unserialize(pack("H*", $_GET['verify']));
 		$adminuser = NULL;
+		$rights = getOption('register_user_rights');
+		$group = NULL;
 		foreach ($currentadmins as $admin) {
 			if ($admin['user'] == $params['user'] && $admin['email'] == $params['email']) {
 				$adminuser = $admin;
-				break;
+			}
+			if ($admin['user'] == $rights) {
+				if ($admin['name'] != 'template') $group = $rights;;
+				$rights = $admin['rights'];
 			}
 		}
 		if (!is_null($adminuser)) {
-			$rights = getOption('register_user_rights');
-			saveAdmin($adminuser['user'], NULL, $admin_n = $adminuser['name'], $admin_e = $adminuser['email'], $rights, NULL);
+			saveAdmin($adminuser['user'], NULL, $admin_n = $adminuser['name'], $admin_e = $adminuser['email'], $rights, NULL, NULL, $group);
 			if (getOption('register_user_notify')) {
 				zp_mail(gettext('Zenphoto Gallery registration'),
 									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$admin_n, $adminuser['user'], $admin_e));

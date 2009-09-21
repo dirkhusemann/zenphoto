@@ -5,7 +5,7 @@
  */
 
 // force UTF-8 Ø
-define('OFFSET_PATH', 2); // don't need any admin tabs
+if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 2); // don't need any admin tabs
 require_once(dirname(__FILE__) . "/functions.php");
 require_once(dirname(__FILE__) . "/functions-image.php");
 
