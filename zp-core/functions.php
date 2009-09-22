@@ -1268,15 +1268,7 @@ function setupTheme() {
 		$optionHandler = new ThemeOptions(); /* prime the default theme options */
 	}
 	if (!empty($albumtheme)) {
-		$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
-		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".$tbl;
-		$optionlist = query_full_array($sql, true);
-		if ($optionlist !== false) {
-			foreach($optionlist as $option) {
-				$_zp_options[$option['name']] = $option['value'];
-			}
-		}
+		loadLocalOptions($parent->id,$theme);
 	}
 	$_zp_themeroot = WEBPATH . "/".THEMEFOLDER."/$theme";
 	return $theme;

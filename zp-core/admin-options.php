@@ -398,23 +398,23 @@ if (isset($_GET['action'])) {
 			} else {
 				$cw = getThemeOption($table, 'thumb_crop_width');
 				$ch = getThemeOption($table, 'thumb_crop_height');
-				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', sanitize($_POST['image_size'],3));
+				if (isset($_POST['image_size'])) setThemeOption('image_size', sanitize($_POST['image_size'],3), $table);
 				setOption('image_use_side', sanitize($_POST['image_use_side']));
-				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', sanitize($_POST['thumb_size'],3));
-				setBoolThemeOption($table, 'thumb_crop', isset($_POST['thumb_crop']));
-				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', $ncw = sanitize($_POST['thumb_crop_width'],3));
-				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', $nch = sanitize($_POST['thumb_crop_height'],3));
-				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', sanitize($_POST['albums_per_page'],3));
-				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
-				if (isset($_POST['custom_index_page'])) setThemeOption($table, 'custom_index_page', sanitize($_POST['custom_index_page'], 3));
-				if (isset($_POST['user_registration_page'])) setThemeOption($table, 'user_registration_page', sanitize($_POST['user_registration_page'], 3));
-				if (isset($_POST['user_registration_text'])) setThemeOption($table, 'user_registration_text', process_language_string_save('user_registration_text', 3));
-				if (isset($_POST['user_registration_tip'])) setThemeOption($table, 'user_registration_tip', process_language_string_save('user_registration_tip', 3));
+				if (isset($_POST['thumb_size'])) setThemeOption('thumb_size', sanitize($_POST['thumb_size'],3), $table);
+				setBoolThemeOption('thumb_crop', isset($_POST['thumb_crop']), $table);
+				if (isset($_POST['thumb_crop_width'])) setThemeOption('thumb_crop_width', $ncw = sanitize($_POST['thumb_crop_width'],3), $table);
+				if (isset($_POST['thumb_crop_height'])) setThemeOption('thumb_crop_height', $nch = sanitize($_POST['thumb_crop_height'],3), $table);
+				if (isset($_POST['albums_per_page'])) setThemeOption('albums_per_page', sanitize($_POST['albums_per_page'],3), $table);
+				if (isset($_POST['images_per_page'])) setThemeOption('images_per_page', sanitize($_POST['images_per_page'],3), $table);
+				if (isset($_POST['custom_index_page'])) setThemeOption('custom_index_page', sanitize($_POST['custom_index_page'], 3), $table);
+				if (isset($_POST['user_registration_page'])) setThemeOption('user_registration_page', sanitize($_POST['user_registration_page'], 3), $table);
+				if (isset($_POST['user_registration_text'])) setThemeOption('user_registration_text', process_language_string_save('user_registration_text', 3), $table);
+				if (isset($_POST['user_registration_tip'])) setThemeOption('user_registration_tip', process_language_string_save('user_registration_tip', 3), $table);
 				$otg = getThemeOption($table, 'thumb_gray');
-				setBoolThemeOption($table, 'thumb_gray', isset($_POST['thumb_gray']));
+				setBoolThemeOption('thumb_gray', isset($_POST['thumb_gray']), $table);
 				if ($otg = getThemeOption($table, 'thumb_gray')) $wmo = 99; // force cache clear
 				$oig = getThemeOption($table, 'image_gray');
-				setBoolThemeOption($table, 'image_gray', isset($_POST['image_gray']));
+				setBoolThemeOption('image_gray', isset($_POST['image_gray']), $table);
 				if ($oig = getThemeOption($table, 'image_gray')) $wmo = 99; // force cache clear
 				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
 					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
@@ -460,7 +460,7 @@ if (isset($_GET['action'])) {
 							}
 							break;
 					}
-					setThemeOption($table, $key, $value);
+					setThemeOption($key, $value, $table);
 				}
 			}
 		}
@@ -2334,7 +2334,7 @@ if (empty($alterrights)) {
 						?>
 					</select>
 				</td>
-				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This frees up the <code>index.php</code> so that you can create a customized <em>Home</em> page script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
+				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This frees up the <code>index.php</code> script so that you can create a customized <em>Home</em> page script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
 			</tr>
 			<?php
 			}

@@ -572,51 +572,82 @@ function displayDeleted() {
 	}
 }
 
-function setThemeOption($album, $key, $value) {
+/**
+ * Set options local to theme and/or album
+ *
+ * @param string $key
+ * @param string $value
+ * @param object $album
+ */
+function setThemeOption($key, $value, $album=NULL) {
+	global $gallery;
 	if (is_null($album)) {
-		setOption($key, $value);
+		$id = 0;
+		$theme = '';
 	} else {
 		$id = $album->id;
-		$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id, true);
-		if ($exists) {
-			if (is_null($value)) {
-				$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `id`=" . $exists['id'];
-			} else {
-				$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `id`=" . $exists['id'];
-			}
-		} else {
-			if (is_null($value)) {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "',NULL,$id)";
-			} else {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "',$id)";
-			}
-		}
-		$result = query($sql);
+		$theme = $album->getAlbumTheme();
 	}
+	if (empty($theme)) {
+		$theme = $gallery->getCurrentTheme();
+	}
+	$theme = "'".mysql_real_escape_string($theme)."'";
+
+	$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id.' AND `theme`='.$theme, true);
+	if ($exists) {
+		if (is_null($value)) {
+			$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `id`=" . $exists['id'];
+		} else {
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `id`=" . $exists['id'];
+		}
+	} else {
+		if (is_null($value)) {
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . mysql_real_escape_string($key) . "',NULL,$id,$theme)";
+		} else {
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "',$id,$theme)";
+		}
+	}	
+	$result = query($sql);
 }
 
-function setBoolThemeOption($album, $key, $bool) {
+function setBoolThemeOption($key, $bool, $album=NULL) {
 	if ($bool) {
 		$value = 1;
 	} else {
 		$value = 0;
 	}
-	setThemeOption($album, $key, $value);
+	setThemeOption($key, $value, $album);
 }
 
 function getThemeOption($album, $option) {
+	global $gallery;
 	if (is_null($album)) {
-		return getOption($option);
+		$theme = '';
+		$id = 0;
+	} else {
+		$id = $album->id;
+		$theme = $album->getAlbumTheme();
 	}
-	$alb = 'options';
-	$where = ' AND `ownerid`='.$album->id;
-	if (empty($alb)) {
-		return getOption($option);
+	if (empty($theme)) {
+		$theme = $gallery->getCurrentTheme();
 	}
-	$sql = "SELECT `value` FROM " . prefix($alb) . " WHERE `name`='" . mysql_real_escape_string($option) . "'".$where;
+	$theme = "'".mysql_real_escape_string($theme)."'";
+
+	// album-theme
+	$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=".$theme;
 	$db = query_single_row($sql);
 	if (!$db) {
-		return getOption($option);
+		// raw theme option
+		$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=0 AND `theme`=".$theme;
+		$db = query_single_row($sql);
+		if (!$db) {
+			// raw album option
+			$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=NULL";
+			$db = query_single_row($sql);
+			if (!$db) {
+				return getOption($option);
+			}
+		}
 	}
 	return $db['value'];
 }

@@ -112,6 +112,7 @@ function printSlideShowLink($linktext='') {
 		}
 		if (in_context(ZP_SEARCH_LINKED)) {
 			$albumnr = -getAlbumID();
+			$slideshowhidden = '<input type="hidden" name="preserve_search_params" value="'.$_zp_current_search->getSearchParams().'" />';
 		} else {
 			$albumnr = getAlbumID();
 		}
@@ -120,20 +121,18 @@ function printSlideShowLink($linktext='') {
 	$numberofimages = getNumImages();
 	if($numberofimages != 0) {
 		?>
-<form name="slideshow_<?php echo $slideshow_instance; ?>" method="post"
-	action="<?php echo $slideshowlink; ?>"><?php echo $slideshowhidden; ?>
-<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" /> <input
-	type="hidden" name="albumid" value="<?php echo $albumnr;?>" /> <input
-	type="hidden" name="numberofimages"
-	value="<?php echo $numberofimages;?>" /> <input type="hidden"
-	name="imagenumber" value="<?php echo $imagenumber;?>" /> <input
-	type="hidden" name="imagefile"
-	value="<?php echo html_encode($imagefile);?>" /> <a
-	id="slideshowlink_<?php echo $slideshow_instance; ?>"
-	href="javascript:document.slideshow_<?php echo $slideshow_instance; ?>.submit()"><?php echo $linktext; ?></a>
-</form>
-		<?php }
-		$slideshow_instance ++;
+		<form name="slideshow_<?php echo $slideshow_instance; ?>" method="post"	action="<?php echo $slideshowlink; ?>">
+			<?php echo $slideshowhidden; ?>
+			<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
+			<input type="hidden" name="albumid" value="<?php echo $albumnr;?>" />
+			<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
+			<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" /> 
+			<input type="hidden" name="imagefile" value="<?php echo html_encode($imagefile);?>" /> 
+			<a id="slideshowlink_<?php echo $slideshow_instance; ?>" 	href="javascript:document.slideshow_<?php echo $slideshow_instance; ?>.submit()"><?php echo $linktext; ?></a>
+		</form>
+		<?php
+	}
+	$slideshow_instance ++;
 }
 
 /**

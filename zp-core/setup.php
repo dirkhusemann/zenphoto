@@ -1773,7 +1773,12 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `watermark` varchar(255)';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
-	
+	//v1.2.7
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `album_theme` `album_theme` varchar(127) DEFAULT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `theme` varchar(127) DEFAULT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `name` `name` varchar(191) DEFAULT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `unique_option`";
+	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`, `theme`)";
 	
 	
 	
@@ -1847,7 +1852,7 @@ if (file_exists(CONFIGFILE)) {
 				$result = query_full_array($sql, true);
 				if (is_array($result)) {
 					foreach ($result as $row) {
-						setThemeOption($album, $row['name'], $row['value']);
+						setThemeOption($row['name'], $row['value'], $album);
 					}
 				}
 				query('DROP TABLE '.$tbl, true);
@@ -1938,6 +1943,7 @@ if (file_exists(CONFIGFILE)) {
 		}
 		// cache file names changed in Changeset 4455
 		if ($prevRel < 4455) {
+			$gallery = new Gallery();
 			$gallery->clearCache();
 		}
 		

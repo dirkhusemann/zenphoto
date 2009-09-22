@@ -1031,14 +1031,41 @@ function themeSetup($album) {
 	if (empty($theme)) {
 		return getOption('current_theme');
 	} else {
-		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`='.$id;
-		$optionlist = query_full_array($sql, true);
-		if ($optionlist !== false) {
-			foreach($optionlist as $option) {
-				setOption($option['name'], $option['value'], false);
-			}
-		}
+		loadLocalOptions($id, $theme);
 		return $theme;
+	}
+}
+
+/**
+ * Loads option table with album/theme options
+ *
+ * @param int $albumid
+ * @param string $theme
+ */
+function loadLocalOptions($albumid, $theme) {
+	//raw album options
+	$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `theme`=NULL AND ownerid`='.$albumid;
+	$optionlist = query_full_array($sql, true);
+	if ($optionlist !== false) {
+		foreach($optionlist as $option) {
+			setOption($option['name'], $option['value'], false);
+		}
+	}
+	//raw theme options
+	$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`=0 AND theme`='.$theme;
+	$optionlist = query_full_array($sql, true);
+	if ($optionlist !== false) {
+		foreach($optionlist as $option) {
+			setOption($option['name'], $option['value'], false);
+		}
+	}
+	//album-theme options
+	$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `theme`="'.$theme.'" AND ownerid`='.$albumid;
+	$optionlist = query_full_array($sql, true);
+	if ($optionlist !== false) {
+		foreach($optionlist as $option) {
+			setOption($option['name'], $option['value'], false);
+		}
 	}
 }
 
