@@ -578,12 +578,13 @@ function displayDeleted() {
  * @param string $key
  * @param string $value
  * @param object $album
+ * @param bool $default set to true for setting default theme options (does not set the option if it already exists)
  */
-function setThemeOption($key, $value, $album=NULL) {
+function setThemeOption($key, $value, $album=NULL, $default=false) {
 	global $gallery;
 	if (is_null($album)) {
 		$id = 0;
-		$theme = '';
+		$theme = $default;
 	} else {
 		$id = $album->id;
 		$theme = $album->getAlbumTheme();
@@ -595,6 +596,7 @@ function setThemeOption($key, $value, $album=NULL) {
 
 	$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id.' AND `theme`='.$theme, true);
 	if ($exists) {
+		if ($default) return; // don't update if setting the default
 		if (is_null($value)) {
 			$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `id`=" . $exists['id'];
 		} else {
@@ -608,6 +610,23 @@ function setThemeOption($key, $value, $album=NULL) {
 		}
 	}	
 	$result = query($sql);
+}
+
+/**
+ * Used to set default values for theme specific options
+ *
+ * @param string $key
+ * @param mixed $value
+ */
+function setThemeOptionDefault($key, $value) {
+	$bt = @debug_backtrace();
+	if (is_array($bt)) {
+		$b = array_shift($bt);
+		$theme = basename(dirname($b['file']));
+		setThemeOption($key, $value, NULL, $theme);
+	} else {
+		setOptionDefault($key, $value); // can't determine the theme.
+	}
 }
 
 function setBoolThemeOption($key, $bool, $album=NULL) {

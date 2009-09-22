@@ -12,14 +12,14 @@ require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 class ThemeOptions {
 
 	function ThemeOptions() {
-		setOptionDefault('Theme_logo', '');
-		setOptionDefault('Allow_search', true);
-		setOptionDefault('enable_album_zipfile', false);
-		setOptionDefault('Slideshow', true);
-		setOptionDefault('Graphic_logo', 'logo');
-		setOptionDefault('Watermark_head_image', true);
-		setOptionDefault('Theme_personality', 'Image page');
-		setOptionDefault('Theme_colors', 'effervescence');
+		setThemeOptionDefault('Theme_logo', '');
+		setThemeOptionDefault('Allow_search', true);
+		setThemeOptionDefault('enable_album_zipfile', false);
+		setThemeOptionDefault('Slideshow', true);
+		setThemeOptionDefault('Graphic_logo', 'logo');
+		setThemeOptionDefault('Watermark_head_image', true);
+		setThemeOptionDefault('Theme_personality', 'Image page');
+		setThemeOptionDefault('Theme_colors', 'effervescence');
 	}
 
 	function getOptionsSupported() {

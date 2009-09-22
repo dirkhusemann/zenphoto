@@ -11,8 +11,8 @@ require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 class ThemeOptions {
 	
 	function ThemeOptions() {
-		setOptionDefault('Allow_search', true);
-		setOptionDefault('Theme_colors', 'light'); 
+		setThemeOptionDefault('Allow_search', true);
+		setThemeOptionDefault('Theme_colors', 'light'); 
 	}
 	
 	function getOptionsSupported() {

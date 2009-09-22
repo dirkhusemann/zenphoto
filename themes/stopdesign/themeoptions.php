@@ -4,10 +4,10 @@ class ThemeOptions {
 
 	function ThemeOptions() {
 		/* put any setup code needed here */
-		setOptionDefault('Allow_search', true);
-		setOptionDefault('Mini_slide_selector', 'Recent images');
-		setOptionDefault('Gallery_image_crop_width', '210');
-		setOptionDefault('Gallery_image_crop_height', '60');
+		setThemeOptionDefault('Allow_search', true);
+		setThemeOptionDefault('Mini_slide_selector', 'Recent images');
+		setThemeOptionDefault('Gallery_image_crop_width', '210');
+		setThemeOptionDefault('Gallery_image_crop_height', '60');
 	}
 	
 	function getOptionsSupported() {

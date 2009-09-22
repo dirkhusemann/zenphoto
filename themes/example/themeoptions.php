@@ -5,9 +5,9 @@ class ThemeOptions {
 	
 	function ThemeOptions() {
 		/* put any setup code needed here */
-		setOptionDefault('Allow_search', true);
-		setOptionDefault('Use_flv_playlist', false);
-		setOptionDefault('flv_playlist_option', false);
+		setThemeOptionDefault('Allow_search', true);
+		setThemeOptionDefault('Use_flv_playlist', false);
+		setThemeOptionDefault('flv_playlist_option', false);
 	}
 	
 	function getOptionsSupported() {
