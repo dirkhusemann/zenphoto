@@ -3173,6 +3173,7 @@ function getHitcounter($obj=NULL) {
 					return $hc["hitcounter"];
 				} else {
 					$obj = $_zp_current_zenpage_news;
+					if (is_null($obj)) return 0;
 				}
 				break;
 			default:

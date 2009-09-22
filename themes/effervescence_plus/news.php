@@ -55,10 +55,8 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		<small>&nbsp;</small>
 		<div id="main2">
 			<div id="content-left">
-<?php 
-if (!checkForPassword()) {
-// single news article
-	if(is_NewsArticle()) {  
+	<?php 
+	if(is_NewsArticle()) { // single news article 
 		?>  
 	  <?php if(getPrevNewsURL()) { ?><div class="singlenews_prev"><?php printPrevNewsLink(); ?></div><?php } ?>
 	  <?php if(getPrevNewsURL()) { ?><div class="singlenews_next"><?php printNextNewsLink(); ?></div><?php } ?>
@@ -98,40 +96,19 @@ if (!checkForPassword()) {
 		</div>
 		<?php
 		} // comments allowed - end
-	} else {
-	// news article loop
-	  while (next_news()) {?> 
-	 <div class="newsarticle"> 
-	    <h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
-	        <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span>
-	<?php
-	if(is_GalleryNewsType()) {
-		echo gettext("Album:")."<a href='".getNewsAlbumURL()."' title='".getBareNewsAlbumTitle()."'> ".getNewsAlbumTitle()."</a>";
-	} else {
-		printNewsCategories(", ",gettext("Categories: "),"newscategories");
-	}
-	?>
-	</div>
-	    <?php printCodeblock(1); ?>
-	    <?php printNewsContent(); ?>
-	    <?php printCodeblock(2); ?>
-	    <p><?php printNewsReadMoreLink(); ?></p>
-	    
-	    </div>	
-	<?php
-	  } 
-	  printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
+	} else { 	// news article loop
+		commonNewsLoop();
 	} 
-}?> 
+	?> 
 
-			</div><!-- content left-->
-			<div id="sidebar">
-			<?php include("sidebar.php"); ?>
-			</div><!-- sidebar -->
-			<br style="clear:both" />
-		</div> <!-- main2 -->
+	</div><!-- content left-->
+	<div id="sidebar">
+		<?php include("sidebar.php"); ?>
+	</div><!-- sidebar -->
+	<br style="clear:both" />
+	</div> <!-- main2 -->
 		
-	</div> <!-- content -->
+</div> <!-- content -->
 
 <?php printFooter(); ?>
 

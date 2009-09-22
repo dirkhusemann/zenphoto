@@ -71,41 +71,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		<small>&nbsp;</small>
 		<div id="main2">
 			<div id="content-left">
-			<?php 
-			while (next_news()) { ;?> 
- 				<div class="newsarticle"> 
-    			<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
-					<div class="newsarticlecredit">
-						<span class="newsarticlecredit-left">
-						<?php 
-							$count = getCommentCount();
-							$cat = getNewsCategories();
-							printNewsDate();
-							if ($count > 0) {
-								echo ' | ';
-						 		printf(gettext("Comments: %d"),  $count);  
-							}
-							if (!empty($cat)) {
-								echo ' | ';
-							}
-							?>
-						</span>
-
-						<?php
-						if (!empty($cat)) {
-							printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
-						}
-						?>
-					</div> <!-- newsarticlecredit -->
-	   			<?php printCodeblock(1); ?>
-    			<?php printNewsContent(); ?>
-    			<?php printCodeblock(2); ?>
-    			<p><?php printNewsReadMoreLink(); ?></p>
-    			</div>	
-			<?php
-			} 
-  		printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
-			?> 
+			<?php commonNewsLoop(); ?>	
 			</div><!-- content left-->
 			
 			<div id="sidebar">

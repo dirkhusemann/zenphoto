@@ -183,7 +183,8 @@ function annotateImage() {
 }
 
 function printFooter() {
-	global $_zp_themeroot, $_zp_gallery_page;
+	global $_zp_themeroot, $_zp_gallery_page, $_zp_current_zenpage_news;
+	$h = NULL;
 	?>
 	<!-- Footer -->
 	<div class="footlinks">
@@ -192,22 +193,27 @@ function printFooter() {
 		switch ($_zp_gallery_page) {
 			case 'album.php':
 				$page = gettext('album');
+				$h = getHitcounter();
 				break;
 			case 'image.php':
 				$page = gettext('image');
+				$h = getHitcounter();
 				break;
 			case ZENPAGE_NEWS.'.php':
 				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 					$page = gettext('category');
+				$h = getHitcounter();
 				} else {
-					$page = gettext('article');
+					if (!is_null($_zp_current_zenpage_news)) {
+						$page = gettext('article');
+						$h = getHitcounter();
+					}
 				}
 				break;
 			default:
 				break;
 		}
-		$h = getHitcounter();
-		if (!is_null($h) && $page != 'password') {
+		if (!is_null($h)) {
 			?>
 			<p>
 			<?php printf(ngettext('%1$u hit on this %2$s','%1$u hits on this %2$s',$h),$h, $page); ?>
@@ -243,5 +249,47 @@ function printFooter() {
 	<!-- Administration Toolbox -->
 	<?php
 	printAdminToolbox();
+}
+
+function commonNewsLoop() {
+	while (next_news()) {
+	?> 
+ 		<div class="newsarticle"> 
+    	<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
+			<div class="newsarticlecredit">
+				<span class="newsarticlecredit-left">
+					<?php 
+					$count = getCommentCount();
+					$cat = getNewsCategories();
+					printNewsDate();
+					if ($count > 0) {
+						echo ' | ';
+				 		printf(gettext("Comments: %d"),  $count);  
+					}
+					if (!empty($cat)) {
+						echo ' | ';
+					}
+					?>
+				</span>
+
+				<?php
+				if(is_GalleryNewsType()) {
+					echo ' | '.gettext("Album:")." <a href='".getNewsAlbumURL()."' title='".getBareNewsAlbumTitle()."'>".getNewsAlbumTitle()."</a>";
+				} else {
+					if (!empty($cat)) {
+						echo ' | ';
+						printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
+					}
+				}
+				?>
+			</div> <!-- newsarticlecredit -->
+   		<?php printCodeblock(1); ?>
+    	<?php printNewsContent(); ?>
+    	<?php printCodeblock(2); ?>
+    	<p><?php printNewsReadMoreLink(); ?></p>
+    	</div>	
+	<?php
+	} 
+  printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 }
 ?>
