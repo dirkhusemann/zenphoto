@@ -1255,11 +1255,13 @@ function setupTheme() {
 		$album = $_zp_current_album;
 	}
 	$theme = $_zp_gallery->getCurrentTheme();
+	$id = 0;
 	if (!is_null($album)) {
 		$parent = getUrAlbum($album);
 		$albumtheme = $parent->getAlbumTheme();
 		if (!empty($albumtheme)) {
 			$theme = $albumtheme;
+			$id = $parent->id;
 		}
 	}
 	$theme = zp_apply_filter('setupTheme', $theme);
@@ -1267,9 +1269,7 @@ function setupTheme() {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions(); /* prime the default theme options */
 	}
-	if (!empty($albumtheme)) {
-		loadLocalOptions($parent->id,$theme);
-	}
+	loadLocalOptions($id,$theme);
 	$_zp_themeroot = WEBPATH . "/".THEMEFOLDER."/$theme";
 	return $theme;
 }
