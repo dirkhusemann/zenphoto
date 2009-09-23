@@ -689,8 +689,16 @@ color: #E7B681; /*disabled next/prev in single image view*/
 }
 
 .error { 
-color: #950b42;  /*Error message when a visitor forgets a field.*/
-font-weight: bold; 
+	padding: 20px;
+	background-color: #FDD;
+	border-top: 1px solid #FAA;
+	border-left: 1px solid #FAA;
+	border-right: 1px solid #FAA;
+	border-bottom: 5px solid #FAA;
+	margin-bottom: 10px;
+	font-size: 130%;
+	font-weight: bold;
+	color: #DD6666;
 }
 
 

@@ -51,6 +51,7 @@ if (isset($_GET['action'])) {
 		$wmchange = false;
 		$notify = '';
 		$returntab = '';
+		$themeoptions = false;
 
 		/*** admin options ***/
 		if (isset($_POST['saveadminoptions'])) {
@@ -382,6 +383,7 @@ if (isset($_GET['action'])) {
 		}
 		/*** Theme options ***/
 		if (isset($_POST['savethemeoptions'])) {
+			$themeoptions = true;
 			$returntab = "&tab=theme";
 			// all theme specific options are custom options, handled below
 			if (!empty($_POST['themealbum'])) {
@@ -460,7 +462,11 @@ if (isset($_GET['action'])) {
 							}
 							break;
 					}
-					setThemeOption($key, $value, $table);
+					if ($themeoptions) {
+						setThemeOption($key, $value, $table);
+					} else {
+						setOption($key, $value);
+					}
 				}
 			}
 		}

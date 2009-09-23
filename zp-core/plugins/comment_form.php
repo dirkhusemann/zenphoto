@@ -274,8 +274,7 @@ function getCommentErrors() {
 			case  -3: return gettext("You must supply an WEB page URL.");
 			case  -4: return gettext("Captcha verification failed.");
 			case  -5: return gettext("You must enter something in the comment text.");
-			case   1: return gettext("Your comment failed the SPAM filter check.");
-			case   2: return gettext("Your comment has been marked for moderation.");
+			case   2: return sprintf(gettext('Your comment has been marked for moderation by the <em>%s</em> SPAM filter.'),getOption('spam_filter'));
 			case	 3: return sprintf(gettext('Your comment was rejected by the <em>%s</em> SPAM filter.'),getOption('spam_filter'));
 			default: return sprintf(gettext('Comment error "%d" not defined.'), $_zp_comment_error);
 		}
@@ -291,7 +290,11 @@ function getCommentErrors() {
 function printCommentErrors($class = 'error') {
 	$s = getCommentErrors();
 	if ($s) {	
-		echo '<div class="'.$class.'">'.$s.'</div>';
+		?>
+		<div class="<?php echo $class ?>">
+		<?php echo $s; ?>
+		</div>
+		<?php
 	}
 }
 
