@@ -404,6 +404,54 @@ function zp_graphicsLibInfo() {
 	return $lib;
 }
 
+/**
+ * Returns a list of available fonts
+ *
+ * @return array
+ */
+function zp_getFonts() {
+	$fonts = array();
+	$curdir = getcwd();
+	chdir(SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/');
+	$filelist = safe_glob('*.gdf');
+	foreach($filelist as $file) {
+		$file = str_replace('.gdf', '', $file);
+		$fonts[] = filesystemToInternal($file);
+	}
+	chdir($curdir);
+	return $fonts;
+}
+/**
+ * Loads a font and returns its font id
+ *
+ * @param string $font
+ * @return int
+ */
+function zp_imageloadfont($font) {
+	$path = SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/'.$font.'.gdf';
+	return imageloadfont($path);
+}
+
+/**
+ * Returns the font width in pixels
+ *
+ * @param int $font
+ * @return int
+  */
+function zp_imagefontwidth($font) {
+	return imagefontwidth($font);
+}
+
+/**
+ * Returns the font height in pixels
+ *
+ * @param int $font
+ * @return int
+ */
+function zp_imagefontheight($font) {
+	return imagefontheight($font);
+}
+
 require_once(PHPScript('5.1.0', '_functions_GD.php'));
 
 ?>

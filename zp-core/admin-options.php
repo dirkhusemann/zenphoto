@@ -2357,7 +2357,7 @@ if (empty($alterrights)) {
 				<td><em><?php printf(gettext('The following are options specifically implemented by %s.'),$theme['name']); ?></em></td>
 			</tr>
 				<?php
-					customOptions($optionHandler, '', $album, false, $supportedOptions);
+					customOptions($optionHandler, '', $album, false, $supportedOptions, $themename);
 				}
 			}
 		

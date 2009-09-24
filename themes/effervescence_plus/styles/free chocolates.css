@@ -269,7 +269,7 @@ margin-bottom: 20px;
 }
 
 .commentinfo {
-color: #ECEBE1; /*datum of a comment*/
+color: #62675f; /*datum of a comment*/
 font-style: italic;
 border-bottom: 1px solid #0E1433 ;  /*seperator between comment info and comment text.*/
 padding: 5px 0 3px;
@@ -280,10 +280,10 @@ display: inline;
 font-style: italic;
 font-weight: bold;
 font: 14px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
-color: #ECEBE1; /*the author name*/
+color: #62675f; /*the author name*/
 }
 .commentinfo h4 a {
-color: #ECEBE1; /*author name if they've given a link to their homepage*/
+color: #62675f; /*author name if they've given a link to their homepage*/
 border: none;
 font-style: normal; 
 font-weight: bold;
@@ -294,7 +294,7 @@ border: none;
 font-weight: bold;
 }
 .commentinfo a {
-color: #ECEBE1; /*links in commentingo (EDIT-link)*/
+color: #62675f; /*links in commentingo (EDIT-link)*/
 border: none;
 font-style: normal; 
 font-weight: bold;
@@ -302,12 +302,13 @@ font-weight: bold;
 .commenttext {
 margin-top: 5px;
 padding: 0 5px;
-color: #ECEBE1; /*comment text color*/
+color: #62675f; /*comment text color*/
 }
 /* Comment Form
 ------------------------------ */
 #commentform {
 margin-top: 10px;
+color: #62675f;
 }
 #commentbox input {
 font: 12px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;

@@ -72,9 +72,11 @@
 		<?php } ?>
 		<?php if(getOption("contactform_captcha") && !$_processing_post) { $captchaCode=generateCaptcha($img); ?>
  		<tr>
- 			<td><label for="code"><?php echo gettext("Enter Captcha<strong>*</strong>:"); ?>
- 				<img src=<?php echo "\"$img\"";?> alt="Code" align="bottom"/>
- 					</label></td>
+ 			<td>
+ 				<label for="code"><?php echo gettext("Enter Captcha<strong>*</strong>:"); ?>
+ 					<img src=<?php echo "\"$img\"";?> alt="Code" align="middle" />
+ 				</label>
+ 			</td>
  			<td><input type="text" id="code" name="code" size="50" />
  					<input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  		</tr>

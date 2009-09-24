@@ -196,8 +196,8 @@
  								<tr>
 	 								<td>
 	 									<label for="code">
-	 									<?php echo gettext("Enter Captcha:"); ?>
-	 									<img src=<?php echo "\"$img\"";?> alt="Code" align="bottom" />
+		 									<?php echo gettext("Enter Captcha:"); ?>
+		 									<img src=<?php echo "\"$img\"";?> alt="Code" align="middle" />
 	 									</label>
 	 								</td>
 	 								<td>

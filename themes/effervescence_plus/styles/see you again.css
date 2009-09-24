@@ -279,7 +279,7 @@ display: inline;
 font-style: italic;
 font-weight: bold;
 font: 14px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
-color: #98958f; /*the author name*/
+color: #f7f4ed; /*the author name*/
 }
 .commentinfo h4 a {
 color: #ECEBE1; /*author name if they've given a link to their homepage*/
@@ -288,7 +288,7 @@ font-style: normal;
 font-weight: bold;
 }
 .commentinfo h4 a:hover {
-color: #505756; /*... master of the obvious.*/
+color: #f0f0f0; /*... master of the obvious.*/
 border: none;
 font-weight: bold;
 }

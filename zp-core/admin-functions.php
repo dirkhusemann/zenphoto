@@ -348,13 +348,15 @@ function printLoginForm($redirect=null, $logo=true) {
 	<?php
 	if ($star == '*') {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
-		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
+		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"middle\"/></label>";
 		?>
-	<tr>
-		<td colspan="2"><?php echo "\n		".sprintf(gettext("*Enter %s to email a password reset."), $html); ?>
-		</td>
-	</tr>
-	<?php } ?>
+		<tr>
+			<td align="left"><?php echo gettext("*Enter captcha in place of <em>Password</em> to request a password reset."); ?></td>
+			<td><?php echo $html; ?></td>
+		</tr>
+		<?php
+	}
+	?>
 	<tr><td></td><td colspan="2">
 	<div class="buttons">
 	<button type="submit" value="<?php echo gettext("Log in"); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Log in"); ?></button>
@@ -608,7 +610,7 @@ define('OPTION_TYPE_CHECKBOX_UL',7);
 define('OPTION_TYPE_COLOR_PICKER',8);
 define('OPTION_TYPE_CLEARTEXT',9);
 
-function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $supportedOptions=NULL) {
+function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $supportedOptions=NULL, $theme=false) {
 	$whom = get_class($optionHandler);
 	if (is_null($supportedOptions)) $supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
@@ -635,22 +637,16 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $su
 				$key = $option;
 				$option = str_replace('_', ' ', $option);
 			}
-			if (is_null($album)) {
-				$db = false;
+			if ($theme) {
+				$v = getThemeOption($album, $key);				
 			} else {
-				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($key) .
-										"' AND `ownerid`=".$album->id;
-
-				$db = query_single_row($sql);
-			}
-			if (!$db) {
 				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($key) . "';";
 				$db = query_single_row($sql);
-			}
-			if ($db) {
-				$v = $db['value'];
-			} else {
-				$v = 0;
+				if ($db) {
+					$v = $db['value'];
+				} else {
+					$v = NULL;
+				}
 			}
 
 			if ($hide) {
