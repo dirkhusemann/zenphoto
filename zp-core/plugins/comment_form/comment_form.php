@@ -7,8 +7,10 @@
 						<table border="0">
 							<tr>
 								<td>
-									<label for="name"><?php echo gettext("Name:"); ?></label>
+									<?php echo gettext("Name:"); ?>
+										<label>
 										(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)
+										</label>
 								</td>
 								<td>
 									<?php
@@ -208,8 +210,10 @@
 							?>
 							<tr>
 								<td colspan="2">
+									<label>
 									<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> />
-									<?php echo gettext("Private (don't publish)"); ?>
+									<?php echo gettext("Private comment (don't publish)"); ?>
+									</label>
 								</td>
 							</tr>
 						</table>

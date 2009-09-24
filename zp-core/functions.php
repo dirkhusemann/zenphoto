@@ -2082,6 +2082,105 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 }
 
 /**
+ * Set options local to theme and/or album
+ *
+ * @param string $key
+ * @param string $value
+ * @param object $album
+ * @param bool $default set to true for setting default theme options (does not set the option if it already exists)
+ */
+function setThemeOption($key, $value, $album=NULL, $default=false) {
+	global $gallery;
+	if (is_null($album)) {
+		$id = 0;
+		$theme = $default;
+	} else {
+		$id = $album->id;
+		$theme = $album->getAlbumTheme();
+	}
+	if (empty($theme)) {
+		$theme = $gallery->getCurrentTheme();
+	}
+	$theme = "'".mysql_real_escape_string($theme)."'";
+
+	$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id.' AND `theme`='.$theme, true);
+	if ($exists) {
+		if ($default) return; // don't update if setting the default
+		if (is_null($value)) {
+			$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `id`=" . $exists['id'];
+		} else {
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `id`=" . $exists['id'];
+		}
+	} else {
+		if (is_null($value)) {
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . mysql_real_escape_string($key) . "',NULL,$id,$theme)";
+		} else {
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "',$id,$theme)";
+		}
+	}	
+	$result = query($sql);
+}
+
+/**
+ * Used to set default values for theme specific options
+ *
+ * @param string $key
+ * @param mixed $value
+ */
+function setThemeOptionDefault($key, $value) {
+	$bt = @debug_backtrace();
+	if (is_array($bt)) {
+		$b = array_shift($bt);
+		$theme = basename(dirname($b['file']));
+		setThemeOption($key, $value, NULL, $theme);
+	} else {
+		setOptionDefault($key, $value); // can't determine the theme.
+	}
+}
+
+function setBoolThemeOption($key, $bool, $album=NULL) {
+	if ($bool) {
+		$value = 1;
+	} else {
+		$value = 0;
+	}
+	setThemeOption($key, $value, $album);
+}
+
+function getThemeOption($album, $option) {
+	global $gallery;
+	if (is_null($album)) {
+		$theme = '';
+		$id = 0;
+	} else {
+		$id = $album->id;
+		$theme = $album->getAlbumTheme();
+	}
+	if (empty($theme)) {
+		$theme = $gallery->getCurrentTheme();
+	}
+	$theme = "'".mysql_real_escape_string($theme)."'";
+
+	// album-theme
+	$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=".$theme;
+	$db = query_single_row($sql);
+	if (!$db) {
+		// raw theme option
+		$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=0 AND `theme`=".$theme;
+		$db = query_single_row($sql);
+		if (!$db) {
+			// raw album option
+			$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=NULL";
+			$db = query_single_row($sql);
+			if (!$db) {
+				return getOption($option);
+			}
+		}
+	}
+	return $db['value'];
+}
+
+/**
  * Returns true if all the right conditions are set to allow comments for the $type
  *
  * @param string $type Which comments

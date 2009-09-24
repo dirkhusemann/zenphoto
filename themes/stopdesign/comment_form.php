@@ -12,7 +12,7 @@
 			<input type="hidden" name="remember" value="1" />
 			<table cellspacing="0">
 				<tr valign="top" align="left" id="row-name">
-					<th><label for="name"><?php echo gettext('Name:'); ?></label></th>
+					<th><?php echo gettext('Name:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['name']) {
@@ -26,11 +26,13 @@
 							<?php
 						}
 						?>
+						<label>
 						(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext('<em>anonymous</em>'); ?>)
+						</label>
 					</td>
 				</tr>
 				<tr valign="top" align="left" id="row-email">
-					<th><label for="email"><?php echo gettext('Email:'); ?></label></th>
+					<th><?php echo gettext('Email:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['email']) {
@@ -48,7 +50,7 @@
 					</td>
 				</tr>
 				<tr valign="top" align="left">
-					<th><label for="website"><?php echo gettext('URL:'); ?></label></th>
+					<th><?php echo gettext('URL:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['website']) {
@@ -66,16 +68,18 @@
 				</tr>
 				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha').' ', ":</label></th><td>", "</td></tr>\n", 8); ?>
 				<tr valign="top" align="left">
-					<th><label for="private"><?php echo gettext('Private comment:'); ?></label></th>
+					<th><?php echo gettext('Private comment:'); ?></th>
 					<td>
-						<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?>
+						<label>
+						<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("(don't publish)"); ?>
+						</label>
 					</td>
 				</tr>
 			<?php
 			if (getOption('comment_form_addresses')) {
 				?>
 				<tr>
-					<th><label for="0-comment_form_street"><?php echo gettext('street:'); ?></label></th>
+					<th><?php echo gettext('street:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['street']) {
@@ -92,7 +96,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="0-comment_form_city"><?php echo gettext('city:'); ?></label></th>
+					<th><?php echo gettext('city:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['city']) {
@@ -109,7 +113,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="0-comment_form_state"><?php echo gettext('state:'); ?></label></th>
+					<th><?php echo gettext('state:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['state']) {
@@ -126,7 +130,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="0-comment_form_country"><?php echo gettext('country:'); ?></label></th>
+					<th><?php echo gettext('country:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['country']) {
@@ -143,7 +147,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th><label for="0-comment_form_postal"><?php echo gettext('postal code:'); ?></label></th>
+					<th><?php echo gettext('postal code:'); ?></th>
 					<td>
 						<?php 
 						if ($disabled['postal']) {
@@ -163,7 +167,7 @@
 				}
 				?>
 				<tr valign="top" align="left">
-					<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
+					<th><?php echo gettext('Comment'); ?>:</th>
 					<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"><?php echo $stored['comment']; ?></textarea></td>
 				</tr>
 				<tr valign="top" align="left">
