@@ -17,13 +17,20 @@ $_zp_extra_filetypes = array(); // contains file extensions and the handler clas
  */
 function newImage(&$album, $filename) {
 	global $_zp_extra_filetypes;
-	if (!is_object($album) || strtoLower(get_class($album)) != 'album' || !$album->exists) return NULL;
+	if (!is_object($album) || strtoLower(get_class($album)) != 'album' || !$album->exists) {
+		debugLogBacktrace('Bad album object parameter to newImage()');			
+		return NULL;
+	}
 	if ($ext = is_valid_other_type($filename)) {
 		$object = $_zp_extra_filetypes[$ext];
 		return New $object($album, $filename);
 	} else {
-		return New _Image($album, $filename);
+		if (is_valid_image($filename)) {
+			return New _Image($album, $filename);
+		}
 	}
+	debugLogBacktrace('Bad filename suffix in newImage()');			
+	return NULL;
 }
 
 /**
