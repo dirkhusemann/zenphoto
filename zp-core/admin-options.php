@@ -56,6 +56,7 @@ if (isset($_GET['action'])) {
 		/*** admin options ***/
 		if (isset($_POST['saveadminoptions'])) {
 			$nouser = true;
+			$newuser = false;
 			for ($i = 0; $i < $_POST['totaladmins']; $i++) {
 				$pass = trim($_POST[$i.'-adminpass']);
 				$user = trim($_POST[$i.'-adminuser']);
@@ -87,6 +88,9 @@ if (isset($_GET['action'])) {
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
 						$msg = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
 						if (empty($msg)) {
+							if (isset($_POST[$i.'-newuser'])) {
+								$newuser = $user;
+							}
 							if ($i == 0) {
 								setOption('admin_reset_date', '1');
 							}
@@ -102,6 +106,10 @@ if (isset($_GET['action'])) {
 				$notify = '?mismatch=nothing';
 			}
 			$returntab = "&page=users&tab=users";
+			if (!empty($newuser)) {
+				$returntab .= '&show_'.$newuser;
+				unset($_POST['show_']);
+			}
 		}
 		
 		/*** General options ***/
@@ -467,10 +475,14 @@ if (isset($_GET['action'])) {
 					} else {
 						setOption($key, $value);
 					}
+				} else {
+					if (strpos($postkey, 'show_') === 0) {
+						if ($value) $returntab .= '&'.$postkey;
+					}
 				}
 			}
 		}
-
+		
 		if (($woh != getOption('watermark_h_offset')) ||
 					($wow != getOption('watermark_w_offset'))  ||
 					($ws != getOption('watermark_scale')) ||
@@ -628,7 +640,8 @@ if ($subtab == 'users') {
 	
 ?> 
 <form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&ticket='.$_zp_ticket.'&user='.$post_user; ?>" method="post" AUTOCOMPLETE=OFF>
-<input type="hidden" name="saveadminoptions" value="yes" /> 
+<input type="hidden" name="saveadminoptions" value="yes" />
+<input type="hidden" name="show__all" id="show__all" value="0" />
 <?php			
 if (empty($alterrights)) {
 	?>
@@ -640,15 +653,28 @@ if (empty($alterrights)) {
 	<tr>
 		<th>
 			<span style="font-weight: normal">
-			<a href="javascript:toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
+			<a href="javascript:$('#show__all').val(1);toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
 			| 
-			<a href="javascript:toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a>
+			<a href="javascript:$('#show__all').val(0);toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a>
 			</span>
 		</th>
 	</tr>
 	<?php
 	$id = 0;
 	$albumlist = $gallery->getAlbums();
+	if ($_zp_null_account) {
+		$current = true;
+	} else {
+		foreach ($_GET as $param=>$value) {
+			if (strpos($param, 'show_') === 0) {
+				$current = false;
+				break;
+			}
+			$current = true;
+		}
+	}
+	$showall = isset($_GET['show__all']);
+	$background = '';
 	foreach($admins as $user) {
 		if ($user['valid']) {
 			$local_alterrights = $alterrights;
@@ -674,11 +700,13 @@ if (empty($alterrights)) {
 					$ismaster = true;
 				}
 			}
-			$current = ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
-			if (count($admins) > 1) {
-				$background = ($current) ? " background-color: #ECF1F2;" : "";
+			if ($showall || isset($_GET['show_'.$userid])) {
+				$current = true;
+			}
+			if ($background) {
+				$background = "";
 			} else {
-				$background = '';
+				$background = " background-color: #ECF1F2;";
 			}
 			
 			?>
@@ -688,6 +716,7 @@ if (empty($alterrights)) {
 			<?php $custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current); ?>
 			<!-- finished with filters -->
 			<tr>
+				<input type="hidden" name="show_<?php echo $userid; ?>" id="show_<?php echo $userid; ?>" value="<?php echo ($current && !$showall);?>" /> 
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
 				<!-- individual admin table -->
 				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
@@ -703,10 +732,13 @@ if (empty($alterrights)) {
 					}
 					?>
 						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
-							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
+							<a href="javascript:$('#show_<?php echo $userid; ?>').val(1);toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
 								<?php
 								if (empty($userid)) {
-									echo '<em>'.gettext("Add New User").'</em>';
+									?>
+									<input type="hidden" name="<?php echo $id ?>-newuser" value="1" />
+									<em><?php echo gettext("Add New User"); ?></em>
+									<?php
 								} else {
 									?>
 									<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
@@ -717,7 +749,7 @@ if (empty($alterrights)) {
 							</a>
 						</span>
 						<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
-							<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
+							<a href="javascript:$('#show_<?php echo $userid; ?>').val(0);toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
 								<?php 
 								if (empty($userid)) {
 									echo '<em>'.gettext("Add New User").'</em>';
@@ -730,7 +762,7 @@ if (empty($alterrights)) {
 					</td>
 					<td width="345" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 					<?php 
-						if (empty($userid)) {
+					if (empty($userid)) {
 							?>
 							<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
 								onclick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
@@ -843,6 +875,7 @@ if (empty($alterrights)) {
 		</td>
 		</tr>
 		<?php
+		$current = false;
 		$id++;
 	}
 }
@@ -1077,7 +1110,10 @@ if (empty($alterrights)) {
 					<td><?php echo gettext('Captcha generator:'); ?></td>
 					<td>
 						<select id="captcha" name="captcha">
-						<?php generateListFromFiles(getOption('captcha'), SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . '/captcha', '.php'); ?>
+						<?php
+						$captchas = getPluginFiles('php','captcha');
+						generateListFromArray(array(getOption('captcha')), array_keys($captchas),false,false);
+						?>
 						</select>
 					</td>
 					<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
@@ -1828,7 +1864,10 @@ if (empty($alterrights)) {
 					<td style="margin:0; padding:0">
 						<select id="fullimage_watermark" name="fullimage_watermark">
 							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">none</option>
-							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+							<?php
+							$watermarks = getWatermarks();
+							generateListFromArray(array($current), $watermarks, false, false);
+							?>
 						</select>
 					</td>
 				</tr>
@@ -1845,7 +1884,10 @@ if (empty($alterrights)) {
 						<td style="margin:0; padding:0">
 							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
 							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">none</option>
-							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+							<?php
+							$watermarks = getWatermarks();
+							generateListFromArray(array($current), $watermarks, false, false);
+							?>
 							</select>
 						</td>
 					</tr>
@@ -1875,7 +1917,7 @@ if (empty($alterrights)) {
 				<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image."); ?></p>
 				<p><?php echo gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></p>
 				<p><?php echo gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></p>
-				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?></p>
+				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>/%s/watermarks/</code> folder.'), PLUGIN_FOLDER); ?></p>
 			</td>
 												           
 		</tr>
@@ -2052,15 +2094,15 @@ if (empty($alterrights)) {
 			<td><select id="spam_filter" name="spam_filter">
 				<?php
 			$currentValue = getOption('spam_filter');
-			$pluginroot = SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/spamfilters";
-			generateListFromFiles($currentValue, $pluginroot , '.php');
+			$filters = getPluginFiles('php','spamfilters');
+			generateListFromArray(array($currentValue), array_keys($filters),false,false);
 			?>
 			</select></td>
 			<td><?php echo gettext("The SPAM filter plug-in you wish to use to check comments for SPAM"); ?></td>
 		</tr>
 		<?php
 		/* procss filter based options here */
-		if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').'.php', false)))) {
+		if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').'.php')))) {
 			require_once($requirePath);
 			$optionHandler = new SpamFilter();
 			customOptions($optionHandler, "&nbsp;&nbsp;&nbsp;-&nbsp;");
@@ -2133,8 +2175,8 @@ if (empty($alterrights)) {
 	</table>
 	</form>
 	</div>
-	<?php } ?>
 	<!-- end of tab_comments div -->
+	<?php } ?>
 	<?php if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) { ?>
 	<div id="tab_theme" class="tabbox">
 	<?php
@@ -2382,15 +2424,20 @@ if (empty($alterrights)) {
 	<?php
 	if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 		$_zp_plugin_count = 0;
+		$showall = isset($_GET['show__all']);
 		?>
 		<div id="tab_plugin" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savepluginoptions" value="yes" />
+		<input type="hidden" name="show__all" id="show__all" value="0" />
 		<table class="bordered">
 		<tr>
 			<th colspan="3" style="text-align:center">
-				<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
-			| <a href="javascript:toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a></span>
+				<span style="font-weight: normal">
+					<a href="javascript:$('#show__all').val(1);toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
+					|
+					<a href="javascript:$('#show__all').val(0);toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a>
+				</span>
 			</th>
 		</tr>
 		<tr>
@@ -2399,27 +2446,40 @@ if (empty($alterrights)) {
 		$plugins = array_keys(getEnabledPlugins());
 		natcasesort($plugins);
 		foreach ($plugins as $extension) {
-			$ext = substr($extension, 0, strlen($extension)-4);
 			$option_interface = NULL;
 			if (array_key_exists($extension, $class_optionInterface)) {
 				$option_interface = $class_optionInterface[$extension];
 			}
-			require_once(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
+			require_once(getPlugin($extension.'.php'));
 			if (!is_null($option_interface)) {
 				$_zp_plugin_count++;
 				?>
-	<!-- <?php echo $extension; ?> -->
-				<table class="bordered" style="border: 0" id="plugin-<?php echo $ext; ?>">
+				<!-- <?php echo $extension; ?> -->
+				<table class="bordered" style="border: 0" id="plugin-<?php echo $extension; ?>">
 					<tr>
+					<input type="hidden" name="show_<?php echo $extension;?>" id="show_<?php echo $extension;?>" value="0" />
+					<?php
+					if (isset($_GET['show_'.$extension]) || $showall) {
+						$show_show = 'none';
+						$show_hide = 'block';
+					} else {
+						$show_show = 'block';
+						$show_hide = 'none';
+					}
+					?>
 					<th colspan="3" style="text-align:left">
-						<span class="pluginextrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
-						<span style="display:none;" class="pluginextrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
+						<span style="display:<?php echo $show_show; ?>;" class="pluginextrashow">
+							<a href="javascript:$('#show_<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
+						</span>
+						<span style="display:<?php echo $show_hide; ?>;" class="pluginextrahide">
+							<a href="javascript:$('#show_<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
+						</span>
 					</th>
 				</tr>
 				<?php
 				$supportedOptions = $option_interface->getOptionsSupported();
 				if (count($supportedOptions) > 0) {
-					customOptions($option_interface, '', NULL, 'plugin', $supportedOptions);
+					customOptions($option_interface, '', NULL, 'plugin', $supportedOptions, NULL, $show_hide);
 				}
 			?>
 			</table>

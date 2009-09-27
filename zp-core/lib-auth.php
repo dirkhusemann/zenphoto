@@ -7,7 +7,7 @@
  * At least in theory one should be able to replace this script with
  * an alternate to change how Admin users are validated and stored.
  * 
- * Name the new script lib-auth_custom.php. It then will be automatically loaded 
+ * Place the new script in the <ZENFOLDER>/plugins/alt/ folder. It then will be automatically loaded 
  * in place of this script.
  * 
  * The global $_zp_current_admin is referenced throuought Zenphoto, so the 

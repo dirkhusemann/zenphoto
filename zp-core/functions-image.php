@@ -316,13 +316,13 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 		$watermark_image = false;
 		if ($passedWM) {
-			$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($passedWM).'.png';
+			$watermark_image = getWatermarkPath($passedWM);
 			if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 		} else {
 			if ($allow_watermark) {
 				$watermark_image = $watermark_use_image;
 				if ($watermark_image) {
-					$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_image).'.png';
+					$watermark_image = getWatermarkPath($watermark_image);
 					if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 				}
 			}

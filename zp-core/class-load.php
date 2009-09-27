@@ -21,7 +21,7 @@ $class_optionInterface = array();
 foreach (getEnabledPlugins() as $extension => $class) {
 	if (($class > 1) || (OFFSET_PATH && $class < 0)) {
 		$option_interface = NULL;
-		require_once(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
+		require_once(getPlugin($extension.'.php'));
 		if (!is_null($option_interface)) {
 			$class_optionInterface[$extension] = $option_interface;
 		}

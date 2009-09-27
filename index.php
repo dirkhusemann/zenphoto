@@ -86,7 +86,7 @@ if (isset($_GET['p'])) {
 if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 	foreach (getEnabledPlugins() as $extension=>$loadtype) {
 		$_zp_loaded_plugins[] = $extension;
-		require_once(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . $extension);
+		require_once(getPlugin($extension.'.php'));
 	}
 
 	if (checkforPassword(true)) { // password protected object

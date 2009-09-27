@@ -265,6 +265,12 @@ zp-core/functions-i18n.php
 zp-core/functions-image.php
 zp-core/functions-rss.php
 zp-core/functions.php
+zp-core/gd_fonts/addlg10.gdf
+zp-core/gd_fonts/anonymous.gdf
+zp-core/gd_fonts/automatic.gdf
+zp-core/gd_fonts/azimov.gdf
+zp-core/gd_fonts/bubblebath.gdf
+zp-core/gd_fonts/cry.gdf
 zp-core/i.php
 zp-core/images/accept.png
 zp-core/images/action.png
@@ -1487,7 +1493,7 @@ zp-core/plugins/tiny_mce/utils/mctabs.js
 zp-core/plugins/tiny_mce/utils/validate.js
 zp-core/plugins/user_groups/user_groups-tab.php
 zp-core/plugins/user_groups.php
-zp-core/plugins/user_logout.php
+zp-core/plugins/user_login-out.php
 zp-core/plugins/viewer_size_image.php
 zp-core/plugins/zenpage/admin-categories.php
 zp-core/plugins/zenpage/admin-edit.php

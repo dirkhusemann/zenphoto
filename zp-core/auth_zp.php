@@ -6,8 +6,8 @@
 
 // force UTF-8 Ø
 
-if (file_exists(dirname(__FILE__).'/lib-auth_custom.php')) { // load a custom authroization package if it is present
-	require_once(dirname(__FILE__).'/lib-auth_custom.php');
+if (file_exists(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/alt/lib-auth.php')) { // load a custom authroization package if it is present
+	require_once(dirname(__FILE__).'/lib-auth.php');
 } else {
 	require_once(dirname(__FILE__).'/lib-auth.php');
 }

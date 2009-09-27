@@ -12,6 +12,7 @@ $_zp_plugin_scripts = array();
 $_zp_loaded_plugins = array();
 $_zp_flash_player = NULL;
 $_zp_HTML_cache = NULL;
+$_zp_themeroot = NULL;
 
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
@@ -29,12 +30,14 @@ require_once(dirname(__FILE__).'/functions-filter.php');
 
 $_zp_captcha = getOption('captcha');
 if (empty($_zp_captcha)) 	$_zp_captcha = 'zenphoto';
-require_once(dirname(__FILE__). '/'.PLUGIN_FOLDER . '/captcha/'.$_zp_captcha.'.php');
+require_once(getPlugin('/captcha/'.$_zp_captcha.'.php'));
 $_zp_captcha = new Captcha();
 
 //setup session before checking for logon cookie
 require_once(dirname(__FILE__).'/functions-i18n.php');
-if (getOption('album_session') && defined(OFFSET_PATH) && OFFSET_PATH==0 && session_id() == '') {
+
+//TODO: is the test on OFFSET_PATH needed/desirable?
+if (getOption('album_session') && session_id() == '') {
 	session_start();
 }
 require_once(dirname(__FILE__).'/class-load.php');
@@ -77,14 +80,6 @@ $_zp_exifvars = array(
 	'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               false),
 	'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
 	);
-
-$_zp_supported_images = zp_graphicsLibInfo();
-unset($_zp_supported_images['Library']);
-foreach ($_zp_supported_images as $key=>$type) {
-	unset($_zp_supported_images[$key]);
-	if ($type) $_zp_supported_images[strtolower($key)] = true;
-}
-$_zp_supported_images = array_keys($_zp_supported_images);
 
 /**
  * initializes the $_zp_exifvars array display state
@@ -630,6 +625,36 @@ function printLargeFileContents($dest) {
 }
 
 /**
+ * Returns a consolidated list of plugins
+ * The array structure is key=plugin name, value=plugin path
+ *
+ * @param string $ext file extension to match on
+ * @param string $folder subfolder within the plugin folders to search
+ * @return array
+ */
+function getPluginFiles($ext, $folder='') {
+	if (!empty($folder) && substr($folder, -1) != '/') $folder .= '/';
+	$list = array();
+	$l = strlen($ext)+1;
+	$curdir = getcwd();
+	$basepath = SERVERPATH."/".PLUGIN_FOLDER.'/'.$folder;
+	if (is_dir($basepath)) {
+		chdir($basepath);
+		$filelist = safe_glob('*.'.$ext);
+		foreach ($filelist as $file) {
+			$list[filesystemToInternal(substr(basename($file),0,-$l))] = $basepath.$file;
+		}
+	}
+	chdir($basepath = SERVERPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$folder);
+	$filelist = safe_glob('*.'.$ext);
+	foreach ($filelist as $file) {
+		$list[filesystemToInternal(substr(basename($file),0,-$l))] = $basepath.$file;
+	}
+	chdir($curdir);
+	return $list;
+}
+
+/**
  * Returns the fully qualified "require" file name of the plugin file.
  *
  * @param  string $plugin is the name of the plugin file, typically something.php
@@ -639,18 +664,28 @@ function printLargeFileContents($dest) {
  *
  * @return string
  */
-function getPlugin($plugin, $inTheme) {
+function getPlugin($plugin, $inTheme=false, $path=SERVERPATH) {
 	global $_zp_themeroot;
-	$_zp_themeroot = WEBPATH . '/' . THEMEFOLDER . '/'. $inTheme;
 	if ($inTheme) {
-		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. internalToFilesystem($inTheme . '/' . $plugin);
+		$_zp_themeroot = WEBPATH.'/'. THEMEFOLDER.'/'.$inTheme;
+		$pluginFile = $path.'/'.THEMEFOLDER.'/'.internalToFilesystem($inTheme.'/'.$plugin);
+		if (file_exists($pluginFile)) {
+			return $pluginFile;
+		} else {
+			return false;
+		}
 	} else {
-		$pluginFile = SERVERPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . internalToFilesystem($plugin);
-	}
-	if (file_exists($pluginFile)) {
-		return $pluginFile;
-	} else {
-		return false;
+		$pluginFile = $path.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
+		if (file_exists($pluginFile)) {
+			return $pluginFile;
+		} else {
+			$pluginFile = $path.'/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
+			if (file_exists($pluginFile)) {
+				return $pluginFile;
+			} else {
+				return false;
+			}
+		}
 	}
 }
 
@@ -661,13 +696,9 @@ function getPlugin($plugin, $inTheme) {
  */
 function getEnabledPlugins() {
 	$pluginlist = array();
-	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/');
-	$filelist = safe_glob('*'.'php');
-	chdir($curdir);
-	foreach ($filelist as $extension) {
-		$extension = filesystemToInternal($extension);
-		$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
+	$filelist = getPluginFiles('php');
+	foreach ($filelist as $extension=>$path) {
+		$opt = 'zp_plugin_'.$extension;
 		if ($option = getOption($opt)) {
 			$pluginlist[$extension] = $option;
 		}

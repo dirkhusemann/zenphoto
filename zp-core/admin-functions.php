@@ -582,6 +582,9 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * @param string $indent used to indent the option for nested options
  * @param object $album if not null, the album to which the option belongs
  * @param bool $hide set to true to hide the output (used by the plugin-options folding
+ * $paran array $supportedOptions pass these in if you already have them
+ * @param bool $theme set true if dealing with theme options
+ * @param string $initial initila show/hide state
  *
  * There are four type of custom options:
  * 		OPTION_TYPE_TEXTBOX:				a textbox
@@ -610,7 +613,7 @@ define('OPTION_TYPE_CHECKBOX_UL',7);
 define('OPTION_TYPE_COLOR_PICKER',8);
 define('OPTION_TYPE_CLEARTEXT',9);
 
-function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $supportedOptions=NULL, $theme=false) {
+function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false, $supportedOptions=NULL, $theme=false, $initial='none') {
 	$whom = get_class($optionHandler);
 	if (is_null($supportedOptions)) $supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
@@ -649,9 +652,9 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false, $su
 				}
 			}
 
-			if ($hide) {
+			if ($showhide) {
 				?>
-				<tr id="<?php echo $optionID; ?>_tr" class="<?php echo $hide; ?>extrainfo" style="display:none">
+				<tr id="<?php echo $optionID; ?>_tr" class="<?php echo $showhide; ?>extrainfo" style="display:<?php echo $initial; ?>">
 				<?php
 			} else {
 				?>
@@ -1292,7 +1295,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
   	<td>
 			<select id="album_watermark" name="album_watermark">
 				<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">not set</option>
-				<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+				<?php
+				$watermarks = getWatermarks();
+				generateListFromArray(array($current), $watermarks, false, false);
+				?>
 			</select>
   	</td>
   </tr>
@@ -2745,4 +2751,29 @@ function standardScripts() {
 	return $standardlist;
 }
 
+/**
+ * Returns a merged list of available watermarks
+ *
+ * @return array
+ */
+function getWatermarks() {
+	$list = array();
+	$curdir = getcwd();
+	chdir($basepath = SERVERPATH."/".ZENFOLDER.'/watermarks/');
+	$filelist = safe_glob('*.png');
+	foreach ($filelist as $file) {
+		$list[filesystemToInternal(substr(basename($file),0,-4))] = $basepath.$file;
+	}
+	$basepath = SERVERPATH."/".PLUGIN_FOLDER.'/watermarks/';
+	if (is_dir($basepath)) {
+		chdir($basepath);
+		$filelist = safe_glob('*.png');
+		foreach ($filelist as $file) {
+			$list[filesystemToInternal(substr(basename($file),0,-4))] = $basepath.$file;
+		}
+	}
+	chdir($curdir);
+	$watermarks = array_keys($list);
+	return $watermarks;
+}
 ?>

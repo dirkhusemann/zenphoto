@@ -142,7 +142,7 @@ if ($rotate) {
 	$newim = zp_rotateImage($newim, $rotate);
 }
 if ($watermark_use_image) {
-	$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_use_image).'.png';
+	$watermark_image = getWatermarkPath($watermark_use_image);
 	if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;

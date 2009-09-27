@@ -26,13 +26,10 @@ $_GET['page'] = 'plugins';
 $saved = false;
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'saveplugins') {
-		$curdir = getcwd();
-		chdir(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/');
-		$filelist = safe_glob('*'.'php');
-		chdir($curdir);
-		foreach ($filelist as $extension) {
+		$filelist = getPluginFiles('php');
+		foreach ($filelist as $extension=>$path) {
 			$extension = filesystemToInternal($extension);
-			$opt = 'zp_plugin_'.substr($extension, 0, -4);
+			$opt = 'zp_plugin_'.$extension;
 			if (isset($_POST[$opt]) || !is_null(getOption($opt))) { // don't create any options until plugin is selected at least once
 				if (isset($_POST[$opt])) {
 					$value = sanitize_numeric($_POST[$opt]);
@@ -61,12 +58,8 @@ if ($saved) {
 	echo '</div>';
 }
 
-$curdir = getcwd();
-chdir(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/');
-$filelist = safe_glob('*'.'php');
-foreach ($filelist as $key=>$plugin) {
-	$filelist[$key] = filesystemToInternal($plugin);
-}
+$paths = getPluginFiles('php');
+$filelist = array_keys($paths);
 natcasesort($filelist);
 
 echo "<h1>Plugins</h1>\n";
@@ -94,11 +87,9 @@ echo "<table class=\"bordered\" width=\"100%\">\n";
 </tr>
 <?php
 foreach ($filelist as $extension) {
-	
-	$ext = substr($extension, 0, strlen($extension)-4);
-	$opt = 'zp_plugin_'.$ext;
-	
-	$pluginStream = file_get_contents(internalToFilesystem($extension));
+	$opt = 'zp_plugin_'.$extension;
+	$third_party_plugin = strpos($paths[$extension],ZENFOLDER) === false;
+	$pluginStream = file_get_contents($paths[$extension]);
 	$parserr = 0;
 	$str = isolate('$plugin_description', $pluginStream);
 	if (false === $str) {
@@ -171,7 +162,7 @@ foreach ($filelist as $extension) {
 					echo 'CHECKED="CHECKED"';
 				}
 			} ?> />
-		<strong><?php echo $ext; ?></strong>
+		<span<?php if (!$third_party_plugin) echo ' style="font-weight:bold"' ?>><?php echo $extension; ?></span>
 	</label>
 	<?php
 	if (!empty($plugin_version)) {
@@ -208,7 +199,6 @@ echo "</table>\n";
 </p><br />
 <?php
 echo "</form>\n";
-chdir($curdir);
 
 echo "\n" . '</div>';  //content
 printAdminFooter();

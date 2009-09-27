@@ -11,7 +11,7 @@
  * @package plugins
  */
 
-$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files. No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time.');
+$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files. No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>/plugins/flvplayer/</code> folder. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time.');
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flvplayer.php.html";
@@ -22,16 +22,18 @@ if ($external) {
 } else {
 	$option_interface = new flvplayer();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flvplayer/swfobject.js"></script>');
+	addPluginScript('<script type="text/javascript" src="'.getPlugin('flvplayer/swfobject.js'.WEBPATH).'"></script>');
 }
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
 // load the script needed
+$_playerlist = getPluginFiles('swf','flvplayer');
+if (count($_playerlist) > 0) {
+	$_playerlist = array_keys($_playerlist);
+	$_flv_player = array_shift($_playerlist).'.swf';
+} else {
+	$_flv_player = '';
+}
 
-$curdir = getcwd();
-chdir($dir = SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/flvplayer/');
-$_playerlist = safe_glob('player*.swf');
-if (count($_playerlist) > 0) $_flv_player = array_shift($_playerlist); else $_flv_player = '';
-chdir($curdir);
 
 
 /**
@@ -66,7 +68,7 @@ class flvplayer {
 		global $_flv_player;
 		if (empty($_flv_player)) {
 			return array(gettext('No FLV Player') => array('key' => 'flvplayer', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player*.swf" and "swobjects.js" in the <code>zp-core/plugins/flvplayer/flvplayer</code> folder.')));
+										'desc' => gettext('No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player*.swf" and "swobjects.js" in a folder named <code>flvplayer</code> in the global plugins folder.')));
 		}
 		
 		$result = array(gettext('flv player width') => array('key' => 'flv_player_width', 'type' => OPTION_TYPE_TEXTBOX,
@@ -158,9 +160,9 @@ class flvplayer {
 		$output .= '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
 			<script type="text/javascript">'."\n";
 		if($ext === ".mp3" AND !isset($videoThumb)) {
-			$output .= 'var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER . '/flvplayer/'.$_flv_player.'","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
+			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
 		} else {
-			$output .= 'var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER . '/flvplayer/'.$_flv_player.'","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");'."\n";
+			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");'."\n";
 		}
 		 
 		$output .= 'so.addVariable("file","' . $moviepath . '&amp;title=' . strip_tags($imagetitle) . '")'."\n";
@@ -274,7 +276,7 @@ function flvPlaylist($option='') {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
 	<script type="text/javascript">
-		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
+		var so = new SWFObject('<?php echo getPlugin('flvplayer/'.$_flv_player,false,WEBPATH); ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
 		so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
 		so.addVariable('playlist', '<?php echo getOption('flvplaylist_position'); ?>');
@@ -309,9 +311,9 @@ function flvPlaylist($option='') {
 
 		 if(($ext == ".mp3") && empty($videoThumb)) { 
 		 ?> 
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>');
+			var so = new SWFObject('<?php echo getPlgin('flvplayer/'.$_flv_player,WEBPATH); ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>');
 		<?php } else { ?>
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/<?php echo $_flv_player; ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>');
+			var so = new SWFObject('<?php echo getPlgin('flvplayer/'.$_flv_player,WEBPATH); ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>');
 		<?php } ?>
 			so.addParam('allowfullscreen','true');
 			so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');

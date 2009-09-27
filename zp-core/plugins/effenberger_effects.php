@@ -10,7 +10,7 @@
  * 
  * No effects are distributed with this plugin to conform with CVI licensing constraints.
  * To add an effect to the plugin, download the zip file from the site. Extract the effect
- * Javascript and place it in the effenberger_effects folder (in the plugins folder.) 
+ * Javascript and place it in the effenberger_effects folder (in the global plugins folder.) 
  * For instance, to add the Reflex effect, download reflex.zip, unzip it, and place reflex.js
  * in the folder.
  * 
@@ -20,7 +20,7 @@
  * 
  * I have included some typical default text files. Feel free to change them.
  */
-$plugin_description = gettext('Attaches "Effenberger effects" to images and thumbnails. This plugin is intended as an example for the use of the <em>image_html</em> filters.<br />Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>effenberger_effects</code> folder in the plugins folders.<br />All testing was done with the <code>default</code> theme. No warranty is made that any particular effect will work with any particular theme.');
+$plugin_description = gettext('Attaches "Effenberger effects" to images and thumbnails. This plugin is intended as an example for the use of the <em>image_html</em> filters.<br />Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>effenberger_effects</code> folder in the global plugins folders.<br />All testing was done with the <code>default</code> theme. No warranty is made that any particular effect will work with any particular theme.');
 $plugin_URL = "http://www.netzgesta.de/cvi/";
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
@@ -40,7 +40,7 @@ if (defined('OFFSET_PATH') && OFFSET_PATH == 0) {
 	if (count($selected_effects) > 0) {
 		foreach (array_unique($selected_effects) as $effect) {
 			if (!empty($effect)) {
-				addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/effenberger_effects/'.$effect.'.js"></script>');
+				addPluginScript('<script type="text/javascript" src="'.getPlugin('effenberger_effects/'.$effect.'.js',false,WEBPATH).'"></script>');
 			}
 		}
 	}
@@ -66,17 +66,13 @@ class image_effenberger {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		$curdir = getcwd();
-		chdir($dir = SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/effenberger_effects/');
-		$filelist = safe_glob('*.js');
-		chdir($curdir);
+		$effectlist = getPluginFiles('js','effenberger_effects');
 		$extra = $list = array();
-		foreach($filelist as $file) {
-			$file = filesystemToInternal(str_replace('.js', '', $file));
+		foreach($effectlist as $file=>$path) {
 			$list[$file] = $file;
 			setOptionDefault('effenberger_effect',$file);
-			if (file_exists($file.'.txt')) {
-				$default = file_get_contents($file.'.txt');
+			if (file_exists($txt = getPlugin('effenberger_effects/'.internalToFilesystem($file).'.txt'))) {
+				$default = file_get_contents($txt);
 				setOptionDefault('effenberger_std_images',$file);
 				setOptionDefault('effenberger_custom_images',$file);
 				setOptionDefault('effenberger_std_image_thumbs',$file);
@@ -92,7 +88,7 @@ class image_effenberger {
 		}
 		if (count($list) == 0) {
 			return array(gettext('No effects') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>effenberger_effects</code> folder in the plugins folders.')));
+										'desc' => gettext('Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to a folder named <code>effenberger_effects</code> in the golbal plugins folder.')));
 		}
 		$std = array(	gettext('Images (standard)') => array('key' => 'effenberger_std_images', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => $list, 'null_selection' => gettext('none'),
