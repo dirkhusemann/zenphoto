@@ -18,7 +18,7 @@ $_zp_extra_filetypes = array(); // contains file extensions and the handler clas
 function newImage(&$album, $filename) {
 	global $_zp_extra_filetypes;
 	if (!is_object($album) || strtoLower(get_class($album)) != 'album' || !$album->exists) {
-		debugLogBacktrace('Bad album object parameter to newImage()');			
+		debugLogBacktrace('Bad album object parameter to newImage($filename)');			
 		return NULL;
 	}
 	if ($ext = is_valid_other_type($filename)) {
@@ -29,7 +29,7 @@ function newImage(&$album, $filename) {
 			return New _Image($album, $filename);
 		}
 	}
-	debugLogBacktrace('Bad filename suffix in newImage()');			
+	debugLogBacktrace('Bad filename suffix in newImage($filename)');			
 	return NULL;
 }
 
