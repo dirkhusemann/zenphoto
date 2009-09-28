@@ -14,7 +14,6 @@ zp_register_filter('admin_tabs', 'user_groups_admin_tabs');
 zp_register_filter('admin_alterrights', 'user_groups_admin_alterrights');
 zp_register_filter('save_admin_custom_data', 'user_groups_save_admin');
 zp_register_filter('edit_admin_custom_data', 'user_groups_edit_admin');
-require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
 /**
  * Saves admin custom data

@@ -6,6 +6,7 @@
  */
 define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 $gallery = new Gallery();
 if (isset($_GET['album'])) {
 	$folder = sanitize($_GET['album'],3);

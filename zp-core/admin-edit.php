@@ -9,6 +9,7 @@
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/class-sortable.php');
 $_zp_sortable_list = new jQuerySortable('js');
 // $_zp_sortable_list->debug(); // Uncomment this line to display serialized object

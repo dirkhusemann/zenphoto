@@ -6,7 +6,6 @@
  * If it is not present, no theme options are displayed.
  * 
 */
-require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 
 class ThemeOptions {
 	

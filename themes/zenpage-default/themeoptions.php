@@ -7,8 +7,6 @@
  * 
  */
 
-require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
-
 class ThemeOptions {
 	
 	function ThemeOptions() {

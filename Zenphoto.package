@@ -214,6 +214,7 @@ zp-core/admin-comments.php
 zp-core/admin-dynamic-album.php
 zp-core/admin-edit.php
 zp-core/admin-functions.php
+zp-core/admin-globals.php
 zp-core/admin-options.php
 zp-core/admin-plugins.php
 zp-core/admin-refresh-metadata.php

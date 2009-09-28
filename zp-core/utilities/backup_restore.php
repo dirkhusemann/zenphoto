@@ -16,6 +16,7 @@ define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
 $button_text = gettext('Backup/Restore');

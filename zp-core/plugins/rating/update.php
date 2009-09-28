@@ -5,10 +5,8 @@
  * @package plugins
  */
 
-$zp = dirname(dirname(dirname(__FILE__)));
 define ('OFFSET_PATH', 4);
-require_once($zp.'/admin-functions.php'); // you have to be loged in to do this
-require($zp.'/template-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/template-functions.php');
 require_once('functions-rating.php');
 
 
@@ -17,7 +15,7 @@ $table = sanitize($_POST['table'],3);
 $dbtable = prefix($table);
 $ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 $unique = '_'.$table.'_'.$id;
-  $split_stars = getOption('rating_split_stars')+1;
+$split_stars = getOption('rating_split_stars')+1;
 $rating = max(0, min(5, round(sanitize_numeric($_POST['star_rating-value'.$unique])/$split_stars)));
 $IPlist = query_single_row("SELECT * FROM $dbtable WHERE id= $id");
 if (is_array($IPlist)) {

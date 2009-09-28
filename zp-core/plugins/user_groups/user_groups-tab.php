@@ -4,9 +4,9 @@
  * @author Stephen Billard (sbillard)
   * @package plugins
  */
-$zp = dirname(dirname(dirname(__FILE__)));
 define ('OFFSET_PATH', 4);
-require_once($zp.'/admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 
 $admins = getAdministrators();
 $ordered = array();

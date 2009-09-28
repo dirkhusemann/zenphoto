@@ -9,7 +9,7 @@
  */
 
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
-require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/functions.php');
 
 $plugin_is_filter = 5;
 $plugin_description = gettext("Adds static html cache functionality to Zenphoto v1.2 or higher. Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php. This plugin uses the folder <em>cache_html</em> and it's subfolders <em>index, images, albums</em> and <em>pages</em> in Zenphoto's root folder.");

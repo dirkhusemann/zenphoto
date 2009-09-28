@@ -14,6 +14,7 @@ define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
 }

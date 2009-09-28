@@ -20,7 +20,6 @@ $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---contact_form.php.html";
 $option_interface = new contactformOptions();
 
-require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 /**
  * Plugin option handling class
  *

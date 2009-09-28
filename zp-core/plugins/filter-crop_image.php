@@ -51,6 +51,7 @@ function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
 
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 require_once(dirname(dirname(__FILE__)).'/functions-image.php');
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {

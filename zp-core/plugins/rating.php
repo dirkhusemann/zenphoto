@@ -13,7 +13,6 @@
  * @package plugins
  */
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
-require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 $plugin_is_filter = -5;
 $plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
@@ -21,6 +20,7 @@ $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
 $option_interface = new jquery_rating();
 
+require_once(dirname(dirname(__FILE__)).'/functions.php');
 zp_register_filter('edit_album_utilities', 'optionVoteStatus');
 zp_register_filter('save_album_utilities_data', 'optionVoteStatusSave');
 zp_register_filter('admin_utilities_buttons', 'rating_purgebutton');
