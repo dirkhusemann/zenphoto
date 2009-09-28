@@ -22,7 +22,7 @@ if ($external) {
 } else {
 	$option_interface = new flvplayer();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
-	addPluginScript('<script type="text/javascript" src="'.getPlugin('flvplayer/swfobject.js'.WEBPATH).'"></script>');
+	addPluginScript('<script type="text/javascript" src="'.getPlugin('flvplayer/swfobject.js',false,WEBPATH).'"></script>');
 }
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
 // load the script needed
@@ -160,25 +160,25 @@ class flvplayer {
 		$output .= '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
 			<script type="text/javascript">'."\n";
 		if($ext === ".mp3" AND !isset($videoThumb)) {
-			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
+			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'",'.getOption('flv_player_width').','.FLV_PLAYER_MP3_HEIGHT.',7);'."\n";
 		} else {
 			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");'."\n";
 		}
 		 
-		$output .= 'so.addVariable("file","' . $moviepath . '&amp;title=' . strip_tags($imagetitle) . '")'."\n";
+		$output .= 'so.addVariable("file","' . $moviepath . '&amp;title=' . strip_tags($imagetitle) . '");'."\n";
 		if (!empty($videoThumb)) {
 			$output .= 'so.addVariable("image","' . $videoThumb . '");'."\n";
 		}
-		$output .= 'so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");'."\n";
-		$output .= 'so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");'."\n";
-		$output .= 'so.addVariable("lightcolor","'.getOption('flv_player_lightcolor').'");'."\n";
-		$output .= 'so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");'."\n";
-		$output .= 'so.addVariable("autostart","' . (getOption('flv_player_autostart') ? 'true' : 'false') . '");'."\n";
+		$output .= 'so.addVariable("backcolor",'.getOptionColor('flv_player_backcolor').');'."\n";
+		$output .= 'so.addVariable("frontcolor",'.getOptionColor('flv_player_frontcolor').');'."\n";
+		$output .= 'so.addVariable("lightcolor",'.getOptionColor('flv_player_lightcolor').');'."\n";
+		$output .= 'so.addVariable("screencolor",'.getOptionColor('flv_player_screencolor').');'."\n";
+		$output .= 'so.addVariable("autostart",' . (getOption('flv_player_autostart') ? 'true' : 'false') . ');'."\n";
 		$output .= 'so.addVariable("stretching","'.getOption('flv_player_stretching').'");'."\n";
-		$output .= 'so.addVariable("bufferlength","'.getOption('flv_player_buffer').'");'."\n";
+		$output .= 'so.addVariable("bufferlength",'.getOption('flv_player_buffer').');'."\n";
 		$output .= 'so.addVariable("controlbar","'.getOption('flv_player_controlbar').'");'."\n";
 		
-		$output .= 'so.addParam("allowfullscreen","true");'."\n";
+		$output .= 'so.addParam("allowfullscreen",true);'."\n";
 		$output .= 'so.write("player'.$count.'");'."\n";
 		$output .= '</script>'."\n";
 		return $output;
@@ -282,14 +282,14 @@ function flvPlaylist($option='') {
 		so.addVariable('playlist', '<?php echo getOption('flvplaylist_position'); ?>');
 		so.addVariable('playlistsize','<?php echo getOption('flvplaylist_size'); ?>');
 		so.addVariable('repeat','<?php echo getOption('flvplaylist_repeat'); ?>');
-		so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
-		so.addVariable('frontcolor','<?php echo getOption('flv_player_frontcolor'); ?>');
-		so.addVariable('lightcolor','<?php echo getOption('flv_player_lightcolor'); ?>');
-		so.addVariable('screencolor','<?php echo getOption('flv_player_screencolor'); ?>');
+		so.addVariable('backcolor',<?php echo getOptionColor('flv_player_backcolor'); ?>);
+		so.addVariable('frontcolor',<?php echo getOptionColor('flv_player_frontcolor'); ?>);
+		so.addVariable('lightcolor',<?php echo getOptionColor('flv_player_lightcolor'); ?>);
+		so.addVariable('screencolor',<?php echo getOptionColor('flv_player_screencolor'); ?>);
 		so.addVariable('file','<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/playlist.php?albumid=<?php echo $albumid; ?>');
 		so.addVariable('javascriptid','jstest');
-		so.addVariable('enablejs','true');
-		so.addVariable('thumbsinplaylist','<?php echo (getOption('flvplaylist_thumbsinplaylist') ? 'true' : 'false') ?>');
+		so.addVariable('enablejs',true);
+		so.addVariable('thumbsinplaylist',<?php echo (getOption('flvplaylist_thumbsinplaylist') ? 'true' : 'false') ?>);
 		so.write('flvplaylist');
 	</script>
 	<?php }
@@ -318,18 +318,33 @@ function flvPlaylist($option='') {
 			so.addParam('allowfullscreen','true');
 			so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
 			so.addVariable('image','<?php echo $videoThumb; ?>');
-			so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
-			so.addVariable('frontcolor','<?php echo getOption('flv_player_frontcolor'); ?>');
-			so.addVariable('lightcolor','<?php echo getOption('flv_player_lightcolor'); ?>');
-			so.addVariable('screencolor','<?php echo getOption('flv_player_screencolor'); ?>');
+			so.addVariable('backcolor',<?php echo getOptionColor('flv_player_backcolor'); ?>);
+			so.addVariable('frontcolor',<?php echo getOptionColor('flv_player_frontcolor'); ?>);
+			so.addVariable('lightcolor',<?php echo getOptionColor('flv_player_lightcolor'); ?>);
+			so.addVariable('screencolor',<?php echo getOptionColor('flv_player_screencolor'); ?>);
 			so.addVariable('file','<?php echo $moviepath; ?>');
 			so.addVariable('javascriptid','jstest');
-			so.addVariable('enablejs','true');
+			so.addVariable('enablejs',true';
 			so.write('flvplaylist-<?php echo mysql_real_escape_string($imagetitle); ?>');
 	<?php	} ?>
 		</script>
 	<?php
 	break;
 	}
-} // password check end
+}
+
+/**
+ * Returns the "color" setting of the option after converting it to connical form
+ *
+ * @param string $option
+ * @return string
+ */
+function getOptionColor($option) {
+	$color = getOption($option);
+	if (substr($color,0,1) == '#') {
+		$color = '0x'.strtoupper(substr($color,1));
+	}
+	return $color;
+}
+
 ?>

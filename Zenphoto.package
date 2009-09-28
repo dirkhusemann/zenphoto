@@ -1,6 +1,5 @@
 .htaccess
 index.php
-License.txt
 lighttpd_rules.conf
 rss-comments.php
 rss-news-comments.php

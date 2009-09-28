@@ -668,20 +668,20 @@ function getPlugin($plugin, $inTheme=false, $path=SERVERPATH) {
 	global $_zp_themeroot;
 	if ($inTheme) {
 		$_zp_themeroot = WEBPATH.'/'. THEMEFOLDER.'/'.$inTheme;
-		$pluginFile = $path.'/'.THEMEFOLDER.'/'.internalToFilesystem($inTheme.'/'.$plugin);
-		if (file_exists($pluginFile)) {
-			return $pluginFile;
+		$pluginFile = '/'.THEMEFOLDER.'/'.internalToFilesystem($inTheme.'/'.$plugin);
+		if (file_exists(SERVERPATH.$pluginFile)) {
+			return $path.$pluginFile;
 		} else {
 			return false;
 		}
 	} else {
-		$pluginFile = $path.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
-		if (file_exists($pluginFile)) {
-			return $pluginFile;
+		$pluginFile = '/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
+		if (file_exists(SERVERPATH.$pluginFile)) {
+			return $path.$pluginFile;
 		} else {
-			$pluginFile = $path.'/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
-			if (file_exists($pluginFile)) {
-				return $pluginFile;
+			$pluginFile = '/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
+			if (file_exists(SERVERPATH.$pluginFile)) {
+				return $path.$pluginFile;
 			} else {
 				return false;
 			}
@@ -1057,7 +1057,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		$commentobj->setInModeration(-6);
 		$goodMessage = false;
 	}
-	if ($goodMessage && !(false === ($requirePath = getPlugin('spamfilters/'.internalToFilesystem(getOption('spam_filter')).".php", false)))) {
+	if ($goodMessage && !(false === ($requirePath = getPlugin('spamfilters/'.internalToFilesystem(getOption('spam_filter')).".php")))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
 		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, isImageClass($receiver)?$receiver->getFullImage():NULL, $ip);
