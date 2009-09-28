@@ -107,8 +107,8 @@ if (isset($_GET['action'])) {
 			}
 			$returntab = "&page=users&tab=users";
 			if (!empty($newuser)) {
-				$returntab .= '&show_'.$newuser;
-				unset($_POST['show_']);
+				$returntab .= '&_show-'.$newuser;
+				unset($_POST['_show-']);
 			}
 		}
 		
@@ -476,7 +476,7 @@ if (isset($_GET['action'])) {
 						setOption($key, $value);
 					}
 				} else {
-					if (strpos($postkey, 'show_') === 0) {
+					if (strpos($postkey, '_show-') === 0) {
 						if ($value) $returntab .= '&'.$postkey;
 					}
 				}
@@ -641,7 +641,6 @@ if ($subtab == 'users') {
 ?> 
 <form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&ticket='.$_zp_ticket.'&user='.$post_user; ?>" method="post" AUTOCOMPLETE=OFF>
 <input type="hidden" name="saveadminoptions" value="yes" />
-<input type="hidden" name="show__all" id="show__all" value="0" />
 <?php			
 if (empty($alterrights)) {
 	?>
@@ -653,9 +652,9 @@ if (empty($alterrights)) {
 	<tr>
 		<th>
 			<span style="font-weight: normal">
-			<a href="javascript:$('#show__all').val(1);toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
+			<a href="javascript:setShow(1);toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
 			| 
-			<a href="javascript:$('#show__all').val(0);toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a>
+			<a href="javascript:setShow(0);toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a>
 			</span>
 		</th>
 	</tr>
@@ -666,19 +665,20 @@ if (empty($alterrights)) {
 		$current = true;
 	} else {
 		foreach ($_GET as $param=>$value) {
-			if (strpos($param, 'show_') === 0) {
+			if (strpos($param, '_show-') === 0) {
 				$current = false;
 				break;
 			}
 			$current = true;
 		}
 	}
-	$showall = isset($_GET['show__all']);
 	$background = '';
+	$showlist = array();
 	foreach($admins as $user) {
 		if ($user['valid']) {
 			$local_alterrights = $alterrights;
 			$userid = $user['user'];
+			$showlist[] = '#_show-'.$userid;
 			$userobj = new Administrator($userid);
 			if (empty($userid)) {
 				$userobj->setGroup($user['group']);
@@ -700,7 +700,7 @@ if (empty($alterrights)) {
 					$ismaster = true;
 				}
 			}
-			if ($showall || isset($_GET['show_'.$userid])) {
+			if (isset($_GET['_show-'.$userid])) {
 				$current = true;
 			}
 			if ($background) {
@@ -716,7 +716,7 @@ if (empty($alterrights)) {
 			<?php $custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current); ?>
 			<!-- finished with filters -->
 			<tr>
-				<input type="hidden" name="show_<?php echo $userid; ?>" id="show_<?php echo $userid; ?>" value="<?php echo ($current && !$showall);?>" /> 
+				<input type="hidden" name="_show-<?php echo $userid; ?>" id="_show-<?php echo $userid; ?>" value="<?php echo ($current);?>" /> 
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
 				<!-- individual admin table -->
 				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
@@ -732,7 +732,7 @@ if (empty($alterrights)) {
 					}
 					?>
 						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
-							<a href="javascript:$('#show_<?php echo $userid; ?>').val(1);toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
+							<a href="javascript:$('#_show-<?php echo $userid; ?>').val(1);toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
 								<?php
 								if (empty($userid)) {
 									?>
@@ -749,7 +749,7 @@ if (empty($alterrights)) {
 							</a>
 						</span>
 						<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
-							<a href="javascript:$('#show_<?php echo $userid; ?>').val(0);toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
+							<a href="javascript:$('#_show-<?php echo $userid; ?>').val(0);toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
 								<?php 
 								if (empty($userid)) {
 									echo '<em>'.gettext("Add New User").'</em>';
@@ -888,6 +888,18 @@ if (empty($alterrights)) {
 <button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 </p>
 </form>
+<script language="javascript" type="text/javascript">
+	function setShow(v) {
+		<?php
+		foreach ($showlist as $show) {
+			?>
+			$('<?php echo $show; ?>').val(v);
+			<?php
+		}
+		?>
+	}
+</script>
+
 <br clear: all />
 <br />
 </div>
@@ -2424,25 +2436,24 @@ if (empty($alterrights)) {
 	<?php
 	if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 		$_zp_plugin_count = 0;
-		$showall = isset($_GET['show__all']);
 		?>
 		<div id="tab_plugin" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savepluginoptions" value="yes" />
-		<input type="hidden" name="show__all" id="show__all" value="0" />
 		<table class="bordered">
 		<tr>
 			<th colspan="3" style="text-align:center">
 				<span style="font-weight: normal">
-					<a href="javascript:$('#show__all').val(1);toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
+					<a href="javascript:setShow(1);toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
 					|
-					<a href="javascript:$('#show__all').val(0);toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a>
+					<a href="javascript:setShow(0);toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a>
 				</span>
 			</th>
 		</tr>
 		<tr>
 		<td style="padding: 0;margin:0" colspan="3">
 		<?php
+		$showlist = array();
 		$plugins = array_keys(getEnabledPlugins());
 		natcasesort($plugins);
 		foreach ($plugins as $extension) {
@@ -2452,14 +2463,15 @@ if (empty($alterrights)) {
 			}
 			require_once(getPlugin($extension.'.php'));
 			if (!is_null($option_interface)) {
+				$showlist[] = '#_show-'.$extension;
 				$_zp_plugin_count++;
 				?>
 				<!-- <?php echo $extension; ?> -->
 				<table class="bordered" style="border: 0" id="plugin-<?php echo $extension; ?>">
 					<tr>
-					<input type="hidden" name="show_<?php echo $extension;?>" id="show_<?php echo $extension;?>" value="0" />
+					<input type="hidden" name="_show-<?php echo $extension;?>" id="_show-<?php echo $extension;?>" value="0" />
 					<?php
-					if (isset($_GET['show_'.$extension]) || $showall) {
+					if (isset($_GET['_show-'.$extension])) {
 						$show_show = 'none';
 						$show_hide = 'block';
 					} else {
@@ -2469,10 +2481,10 @@ if (empty($alterrights)) {
 					?>
 					<th colspan="3" style="text-align:left">
 						<span style="display:<?php echo $show_show; ?>;" class="pluginextrashow">
-							<a href="javascript:$('#show_<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
+							<a href="javascript:$('#_show-<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
 						</span>
 						<span style="display:<?php echo $show_hide; ?>;" class="pluginextrahide">
-							<a href="javascript:$('#show_<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
+							<a href="javascript:$('#_show-<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
 						</span>
 					</th>
 				</tr>
@@ -2483,6 +2495,7 @@ if (empty($alterrights)) {
 				}
 			?>
 			</table>
+			
 			<?php
 			}
 		}
@@ -2503,6 +2516,17 @@ if (empty($alterrights)) {
 		}
 		?>
 		</form>
+		<script language="javascript" type="text/javascript">
+			function setShow(v) {
+				<?php
+				foreach ($showlist as $show) {
+					?>
+					$('<?php echo $show; ?>').val(v);
+					<?php
+				}
+				?>
+			}
+		</script>
 	<?php
 	}
 } // end of null account lockout
