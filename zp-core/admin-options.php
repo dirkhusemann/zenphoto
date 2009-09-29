@@ -649,7 +649,13 @@ if (empty($alterrights)) {
 	<?php 
 }
 ?>
+<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					<br clear=all /><br />
 <table class="bordered"> <!-- main table -->
+
 	<tr>
 		<th>
 			<span style="font-weight: normal">
@@ -916,14 +922,12 @@ if (empty($alterrights)) {
 			<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
 				<tr>
-					<td></td>
-					<td>
+				 <td colspan="3">
 					<p class="buttons">
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 					</td>
-					<td></td>
 				</tr>
 				<tr>
 					<td width="175"><?php echo gettext("Server protocol:"); ?></td>
@@ -1150,14 +1154,12 @@ if (empty($alterrights)) {
 					</td>
 				</tr>			
 				<tr>
-					<td></td>
-					<td>
+					<td colspan="3">
 					<p class="buttons">
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 					</td>
-					<td></td>
 				</tr>
 				<?php zp_apply_filter('admin_general_data'); ?>
 			</table>
@@ -1174,14 +1176,12 @@ if (empty($alterrights)) {
 			<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
 			<table class="bordered">
 				<tr>
-					<td></td>
-					<td>
+					<td colspan="3">
 					<p class="buttons">
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 					</td>
-					<td></td>
 				</tr>
 				<tr>
 					<td width="175"><?php echo gettext("Gallery title:"); ?></td>
@@ -1422,14 +1422,12 @@ if (empty($alterrights)) {
 					</td>
 				</tr>
 				<tr>
-					<td></td>
-					<td>
+					<td colspan="3">
 					<p class="buttons">
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 					</td>
-					<td></td>
 				</tr>
 			</table>
 		</form>
@@ -1445,14 +1443,12 @@ if (empty($alterrights)) {
 			<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
 			<table class="bordered">
 				<tr>
-					<td></td>
-					<td>
+					<td colspan="3">
 					<p class="buttons">
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 					</td>
-					<td></td>
 				</tr>
 				<tr class="passwordextrashow">
 					<td width="175" style="background-color: #ECF1F2;">
@@ -1549,14 +1545,12 @@ if (empty($alterrights)) {
 					</td>
 				</tr>
 				<tr>
-					<td></td>
-					<td>
+					<td colspan="3">
 					<p class="buttons">
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
 					</td>
-					<td></td>
 				</tr>
 			</table>
 		</form>
@@ -1571,14 +1565,12 @@ if (empty($alterrights)) {
 		<input	type="hidden" name="saverssoptions" value="yes" />
 	<table class="bordered">
 		<tr>
-			<td></td>
-			<td>
+			<td colspan="3">
 			<p class="buttons">
 			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 			</p>
 			</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("RSS feeds enabled:"); ?></td>
@@ -1668,14 +1660,12 @@ if (empty($alterrights)) {
 			<td><?php echo gettext("Check if you want to enable static RSS feed caching. The cached file will be placed within the <em>cache_html</em> folder.<br /> Cache expire default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec)."); ?></td>
 		</tr>
 		<tr>
-			<td></td>
-			<td>
+			<td colspan="3">
 			<p class="buttons">
 			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 			</p>
 			</td>
-			<td></td>
 		</tr>
 	</table>
 	</form>
@@ -1706,6 +1696,14 @@ if (empty($alterrights)) {
 	</p>
 
 	<table class="bordered">
+		<tr>
+					<td colspan="3">
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+				</tr>
 		<tr>
 			<td><?php echo gettext("Sort images by:"); ?></td>
 			<td>
@@ -2074,14 +2072,12 @@ if (empty($alterrights)) {
 		}
 		?>
 		<tr>
-			<td></td>
-			<td>
+			<td colspan="3">
 			<p class="buttons">
 			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 			</p>
 			</td>
-			<td></td>
 		</tr>
 	</table>
 	</form>
@@ -2095,6 +2091,14 @@ if (empty($alterrights)) {
 	<input 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 		?>
 	<table class="bordered">
+	<tr>
+					<td colspan="3">
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+				</tr>
 		<tr>
 			<td><?php echo gettext("Enable comment notification:"); ?></td>
 			<td><input type="checkbox" name="email_new_comments" value="1"
@@ -2176,14 +2180,12 @@ if (empty($alterrights)) {
 			<td><?php echo gettext("Checked fields must be valid in a comment posting."); ?></td>
 		</tr>
 		<tr>
-			<td></td>
-			<td>
+			<td colspan="3">
 			<p class="buttons">
 			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 			</p>
 			</td>
-			<td></td>
 		</tr>
 	</table>
 	</form>
@@ -2236,6 +2238,7 @@ if (empty($alterrights)) {
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savethemeoptions" value="yes" />
 		<table class='bordered'>
+		
 		<?php
 		if (count($themelist) == 0) {
 			?>
@@ -2245,6 +2248,7 @@ if (empty($alterrights)) {
 			<h2><?php echo gettext("There are no themes for which you have rights to administer.");?></h2>
 			</div>
 			</th>
+			
 			<?php
 		} else {
 			/* handle theme options */
@@ -2263,12 +2267,19 @@ if (empty($alterrights)) {
 			}
 			echo "</th></tr>\n";
 			?>
-		
+			<tr>
+					<td colspan="3">
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+				</tr>
 			<tr class="alt1">
-				<td colspan="2" align="left">
+				<td align="left">
 					<?php echo gettext('<strong>Standard options</strong>') ?>
 				</td>
-				<td><em><?php echo gettext('These image and album presentation options provided by the Zenphoto core for all themes. However, please note that some themes might override these options for design reasons'); ?></em></td>
+				<td colspan="2" ><em><?php echo gettext('These image and album presentation options provided by the Zenphoto core for all themes. However, please note that some themes might override these options for design reasons'); ?></em></td>
 			</tr>
 			<tr>
 				<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
@@ -2406,10 +2417,10 @@ if (empty($alterrights)) {
 				if (count($supportedOptions) > 0) {
 				?>
 			<tr class="alt1" >
-				<td colspan="2" align="left">
+				<td align="left">
 					<?php echo gettext('<strong>Custom theme options</strong>') ?>
 				</td>
-				<td><em><?php printf(gettext('The following are options specifically implemented by %s.'),$theme['name']); ?></em></td>
+				<td colspan="2"><em><?php printf(gettext('The following are options specifically implemented by %s.'),$theme['name']); ?></em></td>
 			</tr>
 				<?php
 					customOptions($optionHandler, '', $album, false, $supportedOptions, $themename);
@@ -2418,14 +2429,13 @@ if (empty($alterrights)) {
 		
 			?>
 			<tr>
-			<td></td>
-			<td>
+			<td colspan="3">
 			<p class="buttons">
 			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 			</p>
 			</td>
-			<td></td>
+			</tr>
 			<?php
 			}
 		?>
@@ -2442,6 +2452,14 @@ if (empty($alterrights)) {
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savepluginoptions" value="yes" />
 		<table class="bordered">
+			<tr>
+					<td colspan="3">
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+			</tr>
 		<tr>
 			<th colspan="3" style="text-align:center">
 				<span style="font-weight: normal">
