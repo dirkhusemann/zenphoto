@@ -11,7 +11,7 @@
  * @package plugins
  */
 
-$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files. No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>/plugins/flvplayer/</code> folder. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time.');
+$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files. <strong>No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files and place the files "player.swf" and "swobjects.js" in the <code>/plugins/flvplayer/</code> folder.</strong> <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time.');
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flvplayer.php.html";
@@ -169,10 +169,10 @@ class flvplayer {
 		if (!empty($videoThumb)) {
 			$output .= 'so.addVariable("image","' . $videoThumb . '");'."\n";
 		}
-		$output .= 'so.addVariable("backcolor",'.getOptionColor('flv_player_backcolor').');'."\n";
-		$output .= 'so.addVariable("frontcolor",'.getOptionColor('flv_player_frontcolor').');'."\n";
-		$output .= 'so.addVariable("lightcolor",'.getOptionColor('flv_player_lightcolor').');'."\n";
-		$output .= 'so.addVariable("screencolor",'.getOptionColor('flv_player_screencolor').');'."\n";
+		$output .= 'so.addVariable("backcolor","'.getOptionColor('flv_player_backcolor').'");'."\n";
+		$output .= 'so.addVariable("frontcolor","'.getOptionColor('flv_player_frontcolor').'");'."\n";
+		$output .= 'so.addVariable("lightcolor","'.getOptionColor('flv_player_lightcolor').'");'."\n";
+		$output .= 'so.addVariable("screencolor","'.getOptionColor('flv_player_screencolor').'");'."\n";
 		$output .= 'so.addVariable("autostart",' . (getOption('flv_player_autostart') ? 'true' : 'false') . ');'."\n";
 		$output .= 'so.addVariable("stretching","'.getOption('flv_player_stretching').'");'."\n";
 		$output .= 'so.addVariable("bufferlength",'.getOption('flv_player_buffer').');'."\n";
@@ -282,10 +282,10 @@ function flvPlaylist($option='') {
 		so.addVariable('playlist', '<?php echo getOption('flvplaylist_position'); ?>');
 		so.addVariable('playlistsize','<?php echo getOption('flvplaylist_size'); ?>');
 		so.addVariable('repeat','<?php echo getOption('flvplaylist_repeat'); ?>');
-		so.addVariable('backcolor',<?php echo getOptionColor('flv_player_backcolor'); ?>);
-		so.addVariable('frontcolor',<?php echo getOptionColor('flv_player_frontcolor'); ?>);
-		so.addVariable('lightcolor',<?php echo getOptionColor('flv_player_lightcolor'); ?>);
-		so.addVariable('screencolor',<?php echo getOptionColor('flv_player_screencolor'); ?>);
+		so.addVariable('backcolor','<?php echo getOptionColor('flv_player_backcolor'); ?>');
+		so.addVariable('frontcolor','<?php echo getOptionColor('flv_player_frontcolor'); ?>');
+		so.addVariable('lightcolor','<?php echo getOptionColor('flv_player_lightcolor'); ?>');
+		so.addVariable('screencolor','<?php echo getOptionColor('flv_player_screencolor'); ?>');
 		so.addVariable('file','<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/playlist.php?albumid=<?php echo $albumid; ?>');
 		so.addVariable('javascriptid','jstest');
 		so.addVariable('enablejs',true);
@@ -318,10 +318,10 @@ function flvPlaylist($option='') {
 			so.addParam('allowfullscreen','true');
 			so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
 			so.addVariable('image','<?php echo $videoThumb; ?>');
-			so.addVariable('backcolor',<?php echo getOptionColor('flv_player_backcolor'); ?>);
-			so.addVariable('frontcolor',<?php echo getOptionColor('flv_player_frontcolor'); ?>);
-			so.addVariable('lightcolor',<?php echo getOptionColor('flv_player_lightcolor'); ?>);
-			so.addVariable('screencolor',<?php echo getOptionColor('flv_player_screencolor'); ?>);
+			so.addVariable('backcolor','<?php echo getOptionColor('flv_player_backcolor'); ?>');
+			so.addVariable('frontcolor','<?php echo getOptionColor('flv_player_frontcolor'); ?>');
+			so.addVariable('lightcolor','<?php echo getOptionColor('flv_player_lightcolor'); ?>');
+			so.addVariable('screencolor','<?php echo getOptionColor('flv_player_screencolor'); ?>');
 			so.addVariable('file','<?php echo $moviepath; ?>');
 			so.addVariable('javascriptid','jstest');
 			so.addVariable('enablejs',true';
