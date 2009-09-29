@@ -1,7 +1,7 @@
 <?php if(function_exists("printAllNewsCategories")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("News articles"); ?></h3>
-	<?php printAllNewsCategories("All news",TRUE,"","menu-active"); ?>
+	<?php printAllNewsCategories(gettext("All news"),TRUE,"","menu-active"); ?>
 </div>
 <?php } ?>
 
