@@ -1134,7 +1134,7 @@ function isMyAlbum($albumfolder, $action) {
 function getWatermarkPath($wm) {
 	$path = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($wm).'.png';
 	if (!file_exists($path)) {
-		$path = SERVERPATH . '/' . PLUGIN_FOLDER . '/watermarks/' . internalToFilesystem($wm).'.png';
+		$path = SERVERPATH . '/' . USER_PLUGIN_FOLDER . '/watermarks/' . internalToFilesystem($wm).'.png';
 	}
 	return $path;
 }

@@ -1248,8 +1248,8 @@ if ($debug) {
 	$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
 	$good = folderCheck('RSS cache', dirname(dirname(__FILE__)) . '/cache_html/rss/', 'std') && $good;
-	$good = folderCheck('Third party plugins', dirname(dirname(__FILE__)) . '/'.PLUGIN_FOLDER.'/', 'std') && $good;
-	$good = folderCheck('watermarks', dirname(dirname(__FILE__)) . '/'.PLUGIN_FOLDER.'/watermarks/', 'std') && $good;
+	$good = folderCheck('Third party plugins', dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std') && $good;
+	$good = folderCheck('watermarks', dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/watermarks/', 'std') && $good;
 	
 	?>
 	</ul>

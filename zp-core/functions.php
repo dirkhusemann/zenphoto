@@ -637,7 +637,7 @@ function getPluginFiles($ext, $folder='') {
 	$list = array();
 	$l = strlen($ext)+1;
 	$curdir = getcwd();
-	$basepath = SERVERPATH."/".PLUGIN_FOLDER.'/'.$folder;
+	$basepath = SERVERPATH."/".USER_PLUGIN_FOLDER.'/'.$folder;
 	if (is_dir($basepath)) {
 		chdir($basepath);
 		$filelist = safe_glob('*.'.$ext);
@@ -679,7 +679,7 @@ function getPlugin($plugin, $inTheme=false, $path=SERVERPATH) {
 		if (file_exists(SERVERPATH.$pluginFile)) {
 			return $path.$pluginFile;
 		} else {
-			$pluginFile = '/'.PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
+			$pluginFile = '/'.USER_PLUGIN_FOLDER.'/'.internalToFilesystem($plugin);
 			if (file_exists(SERVERPATH.$pluginFile)) {
 				return $path.$pluginFile;
 			} else {

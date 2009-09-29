@@ -67,7 +67,7 @@ echo "<h1>Plugins</h1>\n";
 echo '<p>';
 echo gettext("Plugins provide optional functionality for Zenphoto.").' ';
 echo gettext("They may be provided as part of the Zenphoto distribution or as offerings from third parties.").' ';
-echo gettext("Plugins are placed in the <code>zp-core/plugins</code> folder and are automatically discovered.").' ';
+echo sprintf(gettext("Third party plugins are placed in the <code>%s</code> folder and are automatically discovered."),USER_PLUGIN_FOLDER).' ';
 echo gettext("If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
 echo "</p>\n";
 echo "<p>".gettext("<strong>Note</strong>: Not all themes are setup with support for all plugins! You may need to add the plugin theme functions of some of them yourself.");
