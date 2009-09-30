@@ -19,6 +19,7 @@ $locale = getRSSLocale();
 $validlocale = getRSSLocaleXML();
 $host = getRSSHost();
 $uri = getRSSURI();
+$serverprotocol = getOption("server_protocol");
 $albumname = getRSSAlbumTitle();
 $albumpath = getRSSImageAndAlbumPaths("albumpath");
 $modrewritesuffix = getRSSImageAndAlbumPaths("modrewritesuffix");
@@ -29,8 +30,8 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).' '.strip_tags($albumname); ?></title>
-<link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $uri; ?>" rel="self"	type="application/rss+xml" />
+<link><?php echo $serverprotocol."://".$host.WEBPATH; ?></link>
+<atom:link href="<?php echo $serverprotocol; ?>://<?php echo $uri; ?>" rel="self"	type="application/rss+xml" />
 <description><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -50,9 +51,9 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 			$itemlink = $host.WEBPATH.$albumpath.pathurlencode($albumobj->name).$imagepath.pathurlencode($item->filename).$modrewritesuffix;
 			$fullimagelink = $host.WEBPATH."/albums/".$albumobj->name."/".$item->filename;
 			$imagefile = "albums/".$albumobj->name."/".$item->filename;
-			$thumburl = '<img border="0" src="http://'.$host.$item->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($item->get("title"),$locale) .'" />';
-			$itemcontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.get_language_string($albumobj->get("title"),$locale).'" href="http://'.$itemlink.'">'.$thumburl.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
-			$videocontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.$albumobj->getTitle().'" href="http://'.$itemlink.'">'. $item->filename.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
+			$thumburl = '<img border="0" src="'.$serverprotocol.'://'.$host.$item->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($item->get("title"),$locale) .'" />';
+			$itemcontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.get_language_string($albumobj->get("title"),$locale).'" href="'.$serverprotocol.'://'.$itemlink.'">'.$thumburl.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
+			$videocontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.$albumobj->getTitle().'" href="'.$serverprotocol.'://'.$itemlink.'">'. $item->filename.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
 			$datecontent = '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$item->get('mtime')).']]>';
 		} else {
 			$galleryobj = new Gallery();
@@ -74,7 +75,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 				} else {
 					$imagenumber = sprintf(gettext('(%1$s: %2$s new images)'),$title,$count);
 				}
-				$itemcontent = '<![CDATA[<a title="'.$title.'" href="http://'.$itemlink.'">'.$thumburl.'</a>'.
+				$itemcontent = '<![CDATA[<a title="'.$title.'" href="'.$serverprotocol.'://'.$itemlink.'">'.$thumburl.'</a>'.
 						'<p><br />'.$imagenumber.'</p>'.
 						'<p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
 				$datecontent = '<![CDATA['.sprintf(gettext("Last update: %s"),zpFormattedDate(getOption('date_format'),$filechangedate)).']]>';
@@ -84,7 +85,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 				} else {
 					$imagenumber = sprintf(gettext('(%1$s: %2$s images)'),$title,$totalimages);
 				}
-				$itemcontent = '<![CDATA[<a title="'.$title.'" href="http://'.$itemlink.'">'.$thumburl.'</a>'.
+				$itemcontent = '<![CDATA[<a title="'.$title.'" href="'.$serverprotocol.'://'.$itemlink.'">'.$thumburl.'</a>'.
 						'<p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
 				$datecontent = '<![CDATA['.sprintf(gettext("Date: %s"),zpFormattedDate(getOption('date_format'),$albumitem->get('mtime'))).']]>';
 			}
@@ -101,7 +102,7 @@ if($rssmode != "albums") {
 }
 ?></title>
 <link>
-<?php echo '<![CDATA[http://'.$itemlink. ']]>';?>
+<?php echo '<![CDATA['.$serverprotocol.'://'.$itemlink. ']]>';?>
 </link>
 <description>
 <?php
@@ -114,7 +115,7 @@ if ((($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp
 </description>
 <?php // enables download of embeded content like images or movies in some rss clients. just for testing, shall become a real option
 if(getOption("feed_enclosure") AND $rssmode != "albums") { ?>
-<enclosure url="http://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile);?>" />
+<enclosure url="<?php echo $serverprotocol; ?>://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile);?>" />
 <?php  } ?>
 <category>
 	<?php
@@ -125,10 +126,10 @@ if(getOption("feed_enclosure") AND $rssmode != "albums") { ?>
 	} ?>
 </category>
 <?php if(getOption("feed_mediarss") AND $rssmode != "albums") { ?>
-<media:content url="http://<?php echo $fullimagelink; ?>" type="image/jpeg" />
-<media:thumbnail url="http://<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>"	height="<?php echo $size; ?>" />
+<media:content url="<?php echo $serverprotocol; ?>://<?php echo $fullimagelink; ?>" type="image/jpeg" />
+<media:thumbnail url="<?php echo $serverprotocol; ?>://<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>"	height="<?php echo $size; ?>" />
 <?php } ?>
-<guid><?php echo '<![CDATA[http://'.$itemlink.']]>';?></guid>
+<guid><?php echo '<![CDATA['.$serverprotocol.'://'.$itemlink.']]>';?></guid>
 <pubDate>
 	<?php
 	if($rssmode != "albums") {

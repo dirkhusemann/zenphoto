@@ -13,6 +13,7 @@ if (!getOption('RSS_article_comments')) {
 require_once(ZENFOLDER . '/'.PLUGIN_FOLDER. "/zenpage/zenpage-template-functions.php");
 header('Content-Type: application/xml');
 $host = getRSSHost();
+$serverprotocol = getOption("server_protocol");
 $id = getRSSID();
 $title = getRSSTitle();
 $type = getRSSType();
@@ -23,8 +24,8 @@ $items = getOption("zenpage_rss_items");
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale))." - ".gettext("latest news and pages comments"); ?></title>
-<link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss-news-comments.php" rel="self" type="application/rss+xml" />
+<link><?php echo $serverprotocol."://".$host.WEBPATH; ?></link>
+<atom:link href="<?php echo $serverprotocol; ?>://<?php echo $host.WEBPATH; ?>/rss-news-comments.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -47,10 +48,10 @@ foreach ($comments as $comment) {
 ?>
 <item>
 <title><?php echo strip_tags($title.$author); ?></title>
-<link><?php echo '<![CDATA[http://'.$host.getNewsURL($titlelink)."#".$comment['id'].']]>';?></link>
+<link><?php echo '<![CDATA['.$serverprotocol.'://'.$host.getNewsURL($titlelink)."#".$comment['id'].']]>';?></link>
 <description><?php echo $comment['comment']; ?></description>
 <category><?php echo ""; ?></category>
-<guid><?php echo '<![CDATA[http://'.$host.getNewsURL($titlelink)."#".$comment['id'].']]>';?></guid>
+<guid><?php echo '<![CDATA['.$serverprotocol.'://'.$host.getNewsURL($titlelink)."#".$comment['id'].']]>';?></guid>
 <pubDate><?php echo date("r",strtotime($date)); ?></pubDate>
 </item>
 <?php } ?>

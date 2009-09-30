@@ -12,6 +12,7 @@ if (!getOption('RSS_comments')) {
 }
 header('Content-Type: application/xml');
 $host = getRSSHost();
+$serverprotocol = getOption("server_protocol");
 $id = getRSSID() ;
 $title = getRSSTitle();
 $type = getRSSType();
@@ -25,8 +26,8 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale))." - ".gettext("latest comments").$title; ?></title>
-<link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss-comments.php" rel="self" type="application/rss+xml" />
+<link><?php echo $serverprotocol."://".$host.WEBPATH; ?></link>
+<atom:link href="<?php echo $serverprotocol; ?>://<?php echo $host.WEBPATH; ?>/rss-comments.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -57,10 +58,10 @@ foreach ($comments as $comment) {
 ?>
 <item>
 <title><?php echo strip_tags($albumtitle.$title.$author); ?></title>
-<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag."#".$comment['id'].']]>';?></link>
+<link><?php echo '<![CDATA['.$serverprotocol.'://'.$host.WEBPATH.$albumpath.$album.$imagetag."#".$comment['id'].']]>';?></link>
 <description><?php echo $comment['comment']; ?></description>
 <category><?php echo strip_tags($albumtitle); ?></category>
-<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag."#".$comment['id'].']]>';?></guid>
+<guid><?php echo '<![CDATA['.$serverprotocol.'://'.$host.WEBPATH.$albumpath.$album.$imagetag."#".$comment['id'].']]>';?></guid>
 <pubDate><?php echo date("r",strtotime($date)); ?></pubDate>
 </item>
 <?php } ?>

@@ -22,6 +22,7 @@ if (isset($_GET['withimages'])) {
 	$option = "withimages";
 }
 $host = getRSSHost();
+$serverprotocol = getOption("server_protocol");
 $uri = getRSSURI();
 $s = getOption('feed_imagesize'); // uncropped image size
 $locale = getRSSLocale();
@@ -31,8 +32,8 @@ $items = getOption("zenpage_rss_items"); // # of Items displayed on the feed
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><?php echo get_language_string(getOption('gallery_title'), $locale)." - News "; ?><?php if(!empty($cattitle)) { echo $cattitle ; } ?></title>
-<link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $uri; ?>" rel="self" type="application/rss+xml" />
+<link><?php echo $serverprotocol."://".$host.WEBPATH; ?></link>
+<atom:link href="<?php echo $serverprotocol; ?>://<?php echo $uri; ?>" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -95,14 +96,14 @@ foreach($latest as $item) {
 ?>
 <item>
 	<title><?php echo $title." (".$categories.")"; ?></title>
-	<link><?php echo '<![CDATA[http://'.$host.$link.']]>';?></link>
+	<link><?php echo '<![CDATA['.$serverprotocol.'://'.$host.$link.']]>';?></link>
 	<description>
 	<?php 
 	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
-		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="http://'.$host.$link.'">'. $title.$ext.'</a><p>' . $content . '</p>]]>';
+		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'">'. $title.$ext.'</a><p>' . $content . '</p>]]>';
 	}
 	if (($ext == ".jpeg") || ($ext == ".jpg") || ($ext == ".gif") ||  ($ext == ".png")) {
-		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="http://'.$host.$link.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
+		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
 	}
 	if (empty($ext)) {
 		echo '<![CDATA[<p>'.$content.'</p>]]>';
@@ -110,11 +111,11 @@ foreach($latest as $item) {
 	?>
 </description>
 <?php if(getOption("feed_enclosure") AND !empty($item['thumb'])) { ?>
-	<enclosure url="http://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile); ?>" />
+	<enclosure url="<?php echo $serverprotocol; ?>://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile); ?>" />
 <?php } ?>
     <category><?php echo $categories; ?>
     </category>
-	<guid><?php echo '<![CDATA[http://'.$host.$link.']]>';?></guid>
+	<guid><?php echo '<![CDATA['.$serverprotocol.'://'.$host.$link.']]>';?></guid>
 	<pubDate><?php echo date("r",strtotime($item['date'])); ?></pubDate> 
 </item>
 <?php
