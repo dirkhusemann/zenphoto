@@ -58,6 +58,9 @@ if (!isMyAlbum($album8, ALL_RIGHTS)) {
 		if (isset($_GET['q'])) {
 			$parms .= '&q='.sanitize_numeric($_GET['q']);
 		}
+		if (isset($_GET['dsp'])) {
+			$parms .= '&dsp='.sanitize_numeric($_GET['dsp']);
+		}
 		$action = WEBPATH.'/'.ZENFOLDER.'/full-image.php?userlog=1&a='.urlencode($album8).'&i='.urlencode($image8).$parms;
 		printPasswordForm($hint, true, getOption('login_user_field') || $show, $action);
 		exit();
@@ -110,6 +113,11 @@ if (isset($_GET['q'])) {
 } else {
 	$quality = getOption('full_image_quality');
 }
+if (isset($_GET['dsp'])) {
+	$disposal = sanitize($_GET['dsp']);
+} else {
+	$disposal = getOption('protect_full_image');
+}
 
 if (!$watermark_use_image && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && getOption('protect_full_image') != 'Download') { // local album system, return the image directly
@@ -121,7 +129,7 @@ if (!$watermark_use_image && !$rotate) { // no processing needed
 		// send the right headers
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		header("Content-Type: image/$suffix");
-		if (getOption('protect_full_image') == 'Download') {
+		if ($disposal == 'Download') {
 			header('Content-Disposition: attachment; filename="' . $image . '"');  // enable this to make the image a download
 		}
 		header("Content-Length: " . filesize($image_path));
@@ -133,46 +141,59 @@ if (!$watermark_use_image && !$rotate) { // no processing needed
 }
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header("Content-Type: image/$suffix");
-$newim = zp_imageGet($image_path);
-
-if (getOption('protect_full_image') == 'Download') {
+if ($disposal == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $image . '"');  // enable this to make the image a download
 }
-if ($rotate) {
-	$newim = zp_rotateImage($newim, $rotate);
-}
-if ($watermark_use_image) {
-	$watermark_image = getWatermarkPath($watermark_use_image);
-	if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
-	$offset_h = getOption('watermark_h_offset') / 100;
-	$offset_w = getOption('watermark_w_offset') / 100;
-	$watermark = zp_imageGet($watermark_image);
-	$watermark_width = zp_imageWidth($watermark);
-	$watermark_height = zp_imageHeight($watermark);
-	$imw = zp_imageWidth($newim);
-	$imh = zp_imageHeight($newim);
-	$percent = getOption('watermark_scale')/100;
-	$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
-	if (!getOption('watermark_allow_upscale')) {
-		$r = min(1, $r);
+
+if (is_null($cache_path) || !file_exists($cache_path)) { //process the image
+	$newim = zp_imageGet($image_path);
+	if ($rotate) {
+		$newim = zp_rotateImage($newim, $rotate);
 	}
-	$nw = round($watermark_width * $r);
-	$nh = round($watermark_height * $r);
-	if (($nw != $watermark_width) || ($nh != $watermark_height)) {
-		$watermark = zp_imageResizeAlpha($watermark, $nw, $nh);
+	if ($watermark_use_image) {
+		$watermark_image = getWatermarkPath($watermark_use_image);
+		if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
+		$offset_h = getOption('watermark_h_offset') / 100;
+		$offset_w = getOption('watermark_w_offset') / 100;
+		$watermark = zp_imageGet($watermark_image);
+		$watermark_width = zp_imageWidth($watermark);
+		$watermark_height = zp_imageHeight($watermark);
+		$imw = zp_imageWidth($newim);
+		$imh = zp_imageHeight($newim);
+		$percent = getOption('watermark_scale')/100;
+		$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
+		if (!getOption('watermark_allow_upscale')) {
+			$r = min(1, $r);
+		}
+		$nw = round($watermark_width * $r);
+		$nh = round($watermark_height * $r);
+		if (($nw != $watermark_width) || ($nh != $watermark_height)) {
+			$watermark = zp_imageResizeAlpha($watermark, $nw, $nh);
+		}
+		// Position Overlay in Bottom Right
+		$dest_x = max(0, floor(($imw - $nw) * $offset_w));
+		$dest_y = max(0, floor(($imh - $nh) * $offset_h));
+		zp_copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
+		zp_imageKill($watermark);
 	}
-	// Position Overlay in Bottom Right
-	$dest_x = max(0, floor(($imw - $nw) * $offset_w));
-	$dest_y = max(0, floor(($imh - $nh) * $offset_h));
-	zp_copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
-	zp_imageKill($watermark);
-}
-if (!zp_imageOutput($newim, $suffix, $cache_path, $quality) && DEBUG_IMAGE) {
-	debugLog('full-image failed to create:'.$image);
+	if (!zp_imageOutput($newim, $suffix, $cache_path, $quality) && DEBUG_IMAGE) {
+		debugLog('full-image failed to create:'.$image);
+	}
 }
 
 if (!is_null($cache_path)) {
-	header('Location: ' . FULLWEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file)), true, 301);
+	if ($disposal == 'Download') {
+		$fp = fopen($cache_path, 'rb');
+		// send the right headers
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+		header("Content-Type: image/$suffix");
+		header("Content-Length: " . filesize($image_path));
+		// dump the picture and stop the script
+		fpassthru($fp);
+		fclose($fp);
+	} else {
+		header('Location: ' . FULLWEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file)), true, 301);
+	}
 	exit();
 }
 

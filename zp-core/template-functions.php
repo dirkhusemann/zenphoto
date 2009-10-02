@@ -2627,7 +2627,7 @@ function getFullImageURL() {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return false;
 	$outcome = getOption('protect_full_image');
-	if ($outcome == 'No access') return null;
+	if ($outcome == 'No access') return NULL;
 	$url = getUnprotectedImageURL();
 	if (is_valid_video($url)) {  // Download, Protected View, and Unprotected access all allowed
 		$album = $_zp_current_image->getAlbum();
@@ -2661,25 +2661,35 @@ function getUnprotectedImageURL() {
 /**
  * Returns an url to the password protected/watermarked current image
  *
+ * @param object $image optional image object overrides the current image
+ * @param string $disposal set to override the 'protect_full_image' option
  * @return string
  **/
-function getProtectedImageURL() {
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image, $_zp_current_album;
-	if (is_null($_zp_current_image)) return false;
+function getProtectedImageURL($image=NULL, $disposal=NULL) {
+	global $_zp_current_image;
+	if ($disposal == 'No access') return NULL;
+	if (is_null($image)) {
+		if(!in_context(ZP_IMAGE)) return false;
+		if (is_null($_zp_current_image)) return false;
+		$image = $_zp_current_image;
+	}
+	$album = $image->getAlbum();
 	$args = array('FULL', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	$cache_file = getImageCacheFilename($_zp_current_album->name, $_zp_current_image->filename, $args);
+	$cache_file = getImageCacheFilename($album->name, $image->filename, $args);
 	$cache_path = SERVERCACHE.$cache_file;
-	if (file_exists($cache_path)) {
+	if (empty($disposal) && file_exists($cache_path)) {
 		return WEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file));
 	} else {
 		$params = '&q='.getOption('full_image_quality');
-		$watermark_use_image = getAlbumInherited($_zp_current_album->name, 'watermark', $id);
+		$watermark_use_image = getAlbumInherited($album->name, 'watermark', $id);
 		if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
 		if (!empty($watermark_use_image)) {
 			$params .= '&wmk='.$watermark_use_image;
 		}
-		return WEBPATH.'/'.ZENFOLDER .'/full-image.php?a='.urlencode($_zp_current_album->name).'&i='.urlencode($_zp_current_image->filename).$params;
+		if ($disposal) {
+			$params .= '&dsp='.$disposal;
+		}
+		return WEBPATH.'/'.ZENFOLDER .'/full-image.php?a='.urlencode($album->name).'&i='.urlencode($image->filename).$params;
 	}
 }
 
