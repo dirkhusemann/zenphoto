@@ -107,74 +107,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 /************************************************************************************/
 /** End Action Handling *************************************************************/
-/************************************************************************************/
-
-/*
-	if (isset($_GET['page'])) {
-		$page = sanitize($_GET['page']);
-	} else if (empty($page)) {
-		$page = "home";
-	}
-
-	switch ($page) {
-		case 'comments':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) $page = '';
-			break;
-		case 'upload':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS))) $page = '';
-			break;
-		case 'edit':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) $page = '';
-			break;
-		case 'themes':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) $page = '';
-			break;
-		case 'pages':
-		case 'articles':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) $page = '';
-			break;
-			case 'plugins':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS))) $page = '';
-			break;
-		case 'home':
-			if (!($_zp_loggedin & (ADMIN_RIGHTS | OVERVIEW_RIGHTS))) {
-				$page='users';
-			}
-			break;
-	}
-
-	
-	$q = '?page='.$page;
-	foreach ($_GET as $opt=>$value) {
-		if ($opt != 'page') {
-			$q .= '&'.$opt.'='.$value;
-		}
-	}
-	switch ($page) {
-		case 'editcomment':
-		case 'comments':
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php".$q);
-			exit();
-		case 'edit':
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-edit.php".$q);
-			exit();
-		case 'upload':
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-upload.php".$q);
-			exit();
-		case 'themes':
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php".$q);
-			exit();
-		case 'plugins':
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php".$q);
-			exit();
-		case 'options':
-		case 'users':
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php".$q);
-			exit();
-		default:
-	}
-	
-*/	
+/************************************************************************************/	
 	
 }
 

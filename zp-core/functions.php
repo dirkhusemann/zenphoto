@@ -904,60 +904,61 @@ function fetchComments($number) {
 		$limit = '';
 	}
 
-	global $_zp_loggedin;
 	$comments = array();
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$sql = "SELECT *, (date + 0) AS date FROM ".prefix('comments') . " ORDER BY id DESC$limit";
-		$comments = query_full_array($sql);
-	} else if ($_zp_loggedin & (COMMENT_RIGHTS)) {
-		$albumlist = getManagedAlbumList();
-		$albumIDs = array();
-		foreach ($albumlist as $albumname) {
-			$subalbums = getAllSubAlbumIDs($albumname);
-			foreach($subalbums as $ID) {
-				$albumIDs[] = $ID['id'];
+	if (zp_loggedin(COMMENT_RIGHTS)) {
+		if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+			$sql = "SELECT *, (date + 0) AS date FROM ".prefix('comments') . " ORDER BY id DESC$limit";
+			$comments = query_full_array($sql);
+		} else {
+			$albumlist = getManagedAlbumList();
+			$albumIDs = array();
+			foreach ($albumlist as $albumname) {
+				$subalbums = getAllSubAlbumIDs($albumname);
+				foreach($subalbums as $ID) {
+					$albumIDs[] = $ID['id'];
+				}
 			}
-		}
-		if (count($albumIDs) > 0) {
-			$sql = "SELECT  *, (`date` + 0) AS date FROM ".prefix('comments')." WHERE ";
+			if (count($albumIDs) > 0) {
+				$sql = "SELECT  *, (`date` + 0) AS date FROM ".prefix('comments')." WHERE ";
 
-			$sql .= " (`type`='albums' AND (";
-			$i = 0;
-			foreach ($albumIDs as $ID) {
-				if ($i>0) { $sql .= " OR "; }
-				$sql .= "(".prefix('comments').".ownerid=$ID)";
-				$i++;
-			}
-			$sql .= ")) ";
-			$sql .= " ORDER BY id DESC$limit";
-			$albumcomments = query_full_array($sql);
-			foreach ($albumcomments as $comment) {
-				$comments[$comment['id']] = $comment;
-			}
-			$sql = "SELECT *, ".prefix('comments').".id as id, ".
-							prefix('comments').".name as name, (".prefix('comments').".date + 0) AS date, ".
-							prefix('images').".`albumid` as albumid,".
-							prefix('images').".`id` as imageid".
+				$sql .= " (`type`='albums' AND (";
+				$i = 0;
+				foreach ($albumIDs as $ID) {
+					if ($i>0) { $sql .= " OR "; }
+					$sql .= "(".prefix('comments').".ownerid=$ID)";
+					$i++;
+				}
+				$sql .= ")) ";
+				$sql .= " ORDER BY id DESC$limit";
+				$albumcomments = query_full_array($sql);
+				foreach ($albumcomments as $comment) {
+					$comments[$comment['id']] = $comment;
+				}
+				$sql = "SELECT *, ".prefix('comments').".id as id, ".
+				prefix('comments').".name as name, (".prefix('comments').".date + 0) AS date, ".
+				prefix('images').".`albumid` as albumid,".
+				prefix('images').".`id` as imageid".
 							" FROM ".prefix('comments').",".prefix('images')." WHERE ";
-			
-			$sql .= "(`type` IN (".zp_image_types("'").") AND (";
-			$i = 0;
-			foreach ($albumIDs as $ID) {
-				if ($i>0) { $sql .= " OR "; }
-				$sql .= "(".prefix('comments').".ownerid=".prefix('images').".id AND ".prefix('images')
-				.".albumid=$ID)";
-				$i++;
-			}
-			$sql .= "))";
-			$sql .= " ORDER BY ".prefix('images').".`id` DESC$limit";
-			$imagecomments = query_full_array($sql);
-			foreach ($imagecomments as $comment) {
-				$comments[$comment['id']] = $comment;
-			}
-			krsort($comments);
-			if ($number) {
-				if ($number < count($comments)) {
-					$comments = array_slice($comments, 0, $number);
+					
+				$sql .= "(`type` IN (".zp_image_types("'").") AND (";
+				$i = 0;
+				foreach ($albumIDs as $ID) {
+					if ($i>0) { $sql .= " OR "; }
+					$sql .= "(".prefix('comments').".ownerid=".prefix('images').".id AND ".prefix('images')
+					.".albumid=$ID)";
+					$i++;
+				}
+				$sql .= "))";
+				$sql .= " ORDER BY ".prefix('images').".`id` DESC$limit";
+				$imagecomments = query_full_array($sql);
+				foreach ($imagecomments as $comment) {
+					$comments[$comment['id']] = $comment;
+				}
+				krsort($comments);
+				if ($number) {
+					if ($number < count($comments)) {
+						$comments = array_slice($comments, 0, $number);
+					}
 				}
 			}
 		}
@@ -1168,12 +1169,16 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 function getManagedAlbumList() {
 	global $_zp_admin_album_list, $_zp_current_admin;
 	$_zp_admin_album_list = array();
-	$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-	prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-	$_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+	if (zp_loggedin(MANAGE_ALL_ALBUMS)) {
+		$sql = "SELECT `folder` FROM ".prefix('albums').' WHERE `parentid` IS NULL';
+	} else {
+		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+						$_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+	}
 	$albums = query_full_array($sql);
 	foreach($albums as $album) {
-		$_zp_admin_album_list[] =$album['folder'];
+		$_zp_admin_album_list[] = $album['folder'];
 	}
 	return $_zp_admin_album_list;
 }
