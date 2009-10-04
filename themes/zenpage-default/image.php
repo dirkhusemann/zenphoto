@@ -63,7 +63,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 			$tburl = htmlspecialchars(getUnprotectedImageURL());
 		} else {
 			$thickboxclass = "";
-			$tburl = htmlspecialchars(getProtectedImageURL());
+			$tburl = htmlspecialchars(getFullImageURL());
 		}
 		if (isImagePhoto()) {
 			?>
