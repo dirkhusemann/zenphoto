@@ -101,6 +101,8 @@ function updatePage() {
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
+	$lastchange = sanitize($_POST['lastchange']);
+	$lastchangeauthor = sanitize($_POST['lastchangeauthor']);
 	$expiredate = getExpiryDatePost();
 	$commentson = getCheckboxState('commentson');
 	$permalink = getCheckboxState('permalink');
@@ -136,6 +138,8 @@ function updatePage() {
 	$page->set('codeblock',$codeblock);
 	$page->set('author',$author);
 	$page->set('date',$date);
+	$page->set('lastchange',$lastchange);
+	$page->set('lastchangeauthor',$lastchangeauthor);
 	$page->set('commentson',$commentson);
 	$page->set('permalink',$permalink);
 	$page->set('locked',$locked);
@@ -366,7 +370,6 @@ function addArticle() {
 	$date = sanitize($_POST['date']);
 	$expiredate = getExpiryDatePost();
 	$permalink = getCheckboxState('permalink');
-	$lastchange = getCheckboxState('lastchange');
 	$commentson = getCheckboxState('commentson');
 	$codeblock1 = sanitize($_POST['codeblock1'], 0);
 	$codeblock2 = sanitize($_POST['codeblock2'], 0);
@@ -388,7 +391,6 @@ function addArticle() {
 	$article->set('commentson',$commentson);
 	$article->set('codeblock',$codeblock);
 	$article->set('author',$author);
-	$article->set('lastchange',$lastchange);
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
@@ -426,7 +428,8 @@ function updateArticle() {
 	$date = sanitize($_POST['date']);
 	$expiredate = getExpiryDatePost();
 	$permalink = getCheckboxState('permalink');
-	$lastchange = getCheckboxState('lastchange');
+	$lastchange = sanitize($_POST['lastchange']);
+	$lastchangeauthor = sanitize($_POST['lastchangeauthor']);
 	$commentson = getCheckboxState('commentson');
 	$codeblock1 = sanitize($_POST['codeblock1'], 0);
 	$codeblock2 = sanitize($_POST['codeblock2'], 0);
@@ -463,6 +466,7 @@ function updateArticle() {
 	$article->set('codeblock',$codeblock);
 	$article->set('author',$author);
 	$article->set('lastchange',$lastchange);
+	$article->set('lastchangeauthor',$lastchangeauthor);
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
