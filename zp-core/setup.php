@@ -268,7 +268,7 @@ body {
 	background: none;
 	background-color: #f4f4f8;
 	font-family: Arial, Helvetica, Verdana, sans-serif;
-	font-size: 10pt;
+	font-size: 12px;
 }
 
 li {
@@ -282,7 +282,7 @@ li {
 
 h1 {
 	font-weight: normal;
-	font-size: 24pt;
+	font-size: 24px;
 }
 
 h1,h2,h3,h4,h5 {
@@ -316,12 +316,13 @@ a:hover, a:active {
 
 code {
 	color: #090;
+	font-size: 14px;
 }
 
 cite {
 	color: #09C;
 	font-style: normal;
-	font-size: 8pt;
+	font-size: 8px;
 }
 
 .bug,a.bug {
@@ -371,11 +372,7 @@ cite {
 	color: red;
 	font-weight : bold;
 }
-.sqlform p {
-	text-align: left;
-	color: black;
-	font-weight : normal;
-}
+
 .sqlform .inputform {
 	text-align: left;
 	color: black;
@@ -392,11 +389,6 @@ cite {
 	color: red;
 	font-weight : bold;
 }
-.error p {
-	text-align: left;
-	color: black;
-	font-weight : normal;
-}
 
 .warning {
 	line-height: 1;
@@ -407,11 +399,6 @@ cite {
 	padding: 2px 8px 0px 8px;
 	color: #FF6600;
 	font-weight : bold;
-}
-.warning p {
-	text-align: left;
-	color: black;
-	font-weight : normal;
 }
 
 .notice {
@@ -424,10 +411,15 @@ cite {
 	color: #009966;
 	font-weight : bold;
 }
+
+.sqlform p,
+.warning p,
+.error p,
 .notice p {
 	text-align: left;
 	color: black;
 	font-weight : normal;
+	line-height: 18px;
 }
 
 h4 {
