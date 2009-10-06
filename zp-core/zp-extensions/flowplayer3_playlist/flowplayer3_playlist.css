@@ -2,16 +2,14 @@
 
 .flowplayer3_playlist {
 	float: left;
-
 	}
 
 /*{{{ general playlist settings, light gray */
 div.playlist {
 	position:relative;
 	overflow:hidden;	 	
-	height:182px !important;
-	border: 1px solid darkgray;
- 	margin-bottom: 10px;
+	height:180px !important;
+	border-right: 1px solid darkgray;
 }
 
 div.playlist div.clips {	
@@ -145,43 +143,60 @@ div.clips.low a.paused {
 
 a.up {
 	display:block;
-	width:18px;
-	height:18px;
+	width:300px;
+	height:28px;
 	background:url(images/arrow_top_gray.png) no-repeat;
+	background-position: center;
 	cursor:pointer;
 	position: relative;
-	margin-bottom: 10px;clear: both;
-	left: 150px;
-
-}
+	padding-bottom: 0px;
+	clear: both;
+	left: 0px;
+	border-top: 1px solid darkgray;
+	border-bottom: 1px solid darkgray;
+	border-right: 1px solid darkgray;
+	background-color: lightgray;
+	}
 
 a.up:hover {
 	background:url(images/arrow_top_blue.png) no-repeat;		
+	background-position: center;
+	background-color: lightgray;
 }
 
 
 a.down:hover {
-	background:url(images/arrow_bottom_blue.png) no-repeat;			
+	background:url(images/arrow_bottom_blue.png) no-repeat;		
+	background-position: center;
+	background-color: lightgray;
 }
 
 a.down {
 	display:block;
-	width:18px;
+	width:300px;
 	height:28px;
 	background:url(images/arrow_bottom_gray.png) no-repeat;
+	background-position: center;
 	cursor:pointer;
 	position: relative; 
-	left: 150px;
+	left: 0px;
 	clear: both;
-			
+	border-top: 1px solid darkgray;
+	border-bottom: 1px solid darkgray;
+	border-right: 1px solid darkgray;		
+	background-color: lightgray;
 }
 
 div.petrol a.up {
 		background:url(images/arrow_top_blue.png) no-repeat;		
+		background-position: center;
+		background-color: lightgray;
 }
 
 div.petrol a.down {
 		background:url(images/arrow_bottom_blue.png) no-repeat;	
+		background-position: center;
+		background-color: lightgray;
 }
 
 a.go.disabled {
