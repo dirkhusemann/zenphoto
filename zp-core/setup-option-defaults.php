@@ -274,7 +274,7 @@ function setDefault($option, $default) {
 		}
 	}
 	if (empty($result)) {
-		$list = array('administrators','viewers','user'=>'bozos','album managers', 'default');
+		$list = array('administrators','viewers','user'=>'bozos','album managers', 'default','newuser');
 	} else {
 		$list = array();
 		foreach ($result as $group) {
@@ -296,6 +296,9 @@ function setDefault($option, $default) {
 	}
 	if (in_array('default',$list)) {
 		saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
+	}
+	if (in_array('newuser',$list)) {
+		saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
 	}
 	
 	if (getOption('Allow_comments') || getOption('zenpage_comments_allowed')) {

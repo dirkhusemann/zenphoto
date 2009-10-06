@@ -32,7 +32,6 @@ $option_interface = new register_user_options();
 class register_user_options {
 
 	function register_user_options() {
-		saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
 		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
 		setOptionDefault('register_user_captcha', 0);

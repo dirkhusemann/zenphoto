@@ -69,6 +69,7 @@ if (!OFFSET_PATH) {
 			$_zp_pre_authorization = array();
 			if (!empty($__redirect)) $__redirect = '?'.substr($__redirect, 1);
 			header("Location: " . FULLWEBPATH . '/index.php'. $__redirect);
+			exit();
 		}
 	}
 }

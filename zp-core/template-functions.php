@@ -4279,6 +4279,20 @@ function printPasswordForm($_password_hint, $_password_showProtected=true, $_pas
 	if ($_zp_password_form_printed) return;
 	if (is_null($_password_showuser)) $_password_showuser = getOption('login_user_field');
 	if (is_null($_password_redirect)) $_password_redirect = getPageRedirect();
+	if (is_null($_password_hint)) {
+		switch($_zp_gallery_page) {
+			case 'album.php':
+			case 'image.php':
+				$_password_hint = $_zp_current_album->getPasswordHint();
+				break;
+			case 'search.php':
+				$_password_hint = getOption('search_hint');
+				break;
+			default:
+				$_password_hint = getOption('gallery_hint');
+				break;
+		}
+	}
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
 		?>
