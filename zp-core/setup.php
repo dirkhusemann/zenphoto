@@ -9,14 +9,17 @@
 define('OFFSET_PATH', 2);
 
 require_once(dirname(__FILE__).'/folder-definitions.php');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header ('Content-Type: text/html; charset=UTF-8');
+
 define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
 define('HTACCESS_VERSION', '1.2.2.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 
 $debug = isset($_REQUEST['debug']);
 
-$checked = isset($_GET['checked']);
+$setup_checked = isset($_GET['checked']);
 $upgrade = false;
+
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
@@ -38,7 +41,7 @@ if (!file_exists($en_US)) {
 }
 
 function setupLog($message, $anyway=false, $reset=false) {
-  global $debug;
+  global $debug;  
 	if ($debug || $anyway) {
 		if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
 			@mkdir(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
@@ -49,6 +52,7 @@ function setupLog($message, $anyway=false, $reset=false) {
 		fclose($f);
 	}
 }
+
 function updateItem($item, $value) {
 	global $zp_cfg;
 	$i = strpos($zp_cfg, $item);
@@ -82,6 +86,7 @@ function getOptionTableName($albumname) {
 	}
 	return $albumname.'_options';
 }
+
 if (!file_exists(CONFIGFILE)) {
 	if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
 		@mkdir(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
@@ -97,10 +102,6 @@ if (!file_exists(CONFIGFILE)) {
 } else {
 	$newconfig = false;
 }
-if ($checked) {
-	setupLog("Completed system check");
-}
-
 
 $zp_cfg = @file_get_contents(CONFIGFILE);
 $updatezp_config = false;
@@ -170,6 +171,7 @@ if ($updatezp_config) {
 		fclose($handle);
 	}
 }
+
 $result = true;
 $chmod_defined = false;
 $environ = false;
@@ -225,8 +227,23 @@ if (!function_exists('setOption')) { // setup a primitive environment
 	require_once(dirname(__FILE__).'/functions-i18n.php');
 }
 
-if (!$checked) {
-	if (!isset($_POST['mysql'])) {
+if ($setup_checked) {
+	setupLog("Completed system check", true);
+	if (isset($_COOKIE['setup_test_cookie'])) {
+		$setup_cookie = $_COOKIE['setup_test_cookie'];
+	} else {
+		$setup_cookie = '';
+	}
+	if ($setup_cookie == ZENPHOTO_RELEASE) {
+		setupLog('Setup cookie test successful', true);
+		setcookie('setup_test_cookie', '', time()-368000, '/');
+	} else {
+		setupLog('Setup cookie test unsuccessful', true); 
+	}
+} else {
+	if (isset($_POST['mysql'])) {
+		setupLog("Post of MySql credentials", true);
+	} else {
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true, true);  // initialize the log file
 	}
 	if ($environ) {
@@ -237,8 +254,7 @@ if (!$checked) {
 			setupLog("Query error: ".mysql_error(), true);
 		}
 	}
-} else {
-	setupLog("Checked");
+	setcookie('setup_test_cookie', ZENPHOTO_RELEASE, time()+3600, '/');
 }
 
 if (!isset($_zp_setupCurrentLocale_result) || empty($_zp_setupCurrentLocale_result)) {
@@ -461,7 +477,7 @@ li {
 <div id="content">
 <?php
 $warn = false;
-if (!$checked) {
+if (!$setup_checked) {
 	?>
 	<p>
 		<?php

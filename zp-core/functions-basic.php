@@ -13,10 +13,14 @@ include(dirname(__FILE__).'/version.php'); // Include the version info.
 
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', !defined('RELEASE')); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_ERROR', !defined('RELEASE')); // set to true to supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 define('DEBUG_404', false); // set to true to log 404 error processing debug information.
 define('DEBUG_EXIF', false); // set to true to log start/finish of exif processing. Useful to find problematic images.
+
+if (DEBUG_LOGIN || DEBUG_IMAGE || DEBUG_404 || DEBUG_EXIF) {
+	debugLog("Zenphoto v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']');
+}
 
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 	error_reporting(0);
