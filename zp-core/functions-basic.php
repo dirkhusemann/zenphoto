@@ -179,7 +179,7 @@ function getOption($key, $db=false) {
 		}
 	} else {
 		if ($db) {
-			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0";
+			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=0";
 			$optionlist = query_single_row($sql);
 			return $optionlist['value'];
 		}

@@ -562,21 +562,7 @@ function getPageURL($page, $total=null) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search, $_zp_gallery_page;
 	if (is_null($total)) { $total = getTotalPages(); }
 	if (in_context(ZP_SEARCH)) {
-		$search = $_zp_current_search->getSearchString();
-		foreach ($search as $key=>$item) {
-			switch ($item) {
-				case '&':
-					$search[$key] = 'AND';
-					break;
-				case '!':
-					$search[$key] = 'NOT';
-					break;
-				case '|':
-					$search[$key] = 'OR';
-					break;
-			}
-		}
-		$searchwords = implode(' ', $search);
+		$searchwords = $_zp_current_search->codifySearchString();
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->getFields();
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list);
@@ -3991,36 +3977,8 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
  */
 function getSearchWords() {
 	global $_zp_current_search;
-	if (!in_context(ZP_SEARCH)) { return ''; }
-	$opChars = array ('('=>2, '&'=>1, '|'=>1, '!'=>1, ','=>1);
-	$searchstring = $_zp_current_search->getSearchString();
-	$sanitizedwords = '';
-	if (is_array($searchstring)) {
-		foreach($searchstring as $singlesearchstring){
-			switch ($singlesearchstring) {
-				case '&':
-					$sanitizedwords .= " &amp; ";
-					break;
-				case '!':
-				case '|':
-				case '(':
-				case ')':
-					$sanitizedwords .= " $singlesearchstring ";
-					break;
-				default:
-					$setQuote = false;
-					foreach ($opChars as $char => $value) {
-						if ((strpos($singlesearchstring, $char) !== false)) $setQuote = true;
-					}
-					if ($setQuote) {
-						$sanitizedwords .= '&quot;'.sanitize($singlesearchstring, 3).'&quot;';
-					} else {
-						$sanitizedwords .= ' '.sanitize($singlesearchstring, 3).' ';
-					}
-			}
-		}
-	}
-	return $sanitizedwords;
+	if (!in_context(ZP_SEARCH)) return '';
+	return $_zp_current_search->codifySearchString('&quot;');
 }
 
 /**

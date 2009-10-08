@@ -85,7 +85,7 @@ genAlbumUploadList($albumlist);
 $params = trim(zp_getCookie('zenphoto_image_search_params'));
 $search->setSearchParams($params);
 $fields = $search->fields;
-$words = trim($search->words);
+$albumname = $words = $search->codifySearchString();
 $images = $search->getImages(0);
 foreach ($images as $image) {
 	$folder = $image['folder'];
@@ -96,10 +96,6 @@ $subalbums = $search->getAlbums(0);
 foreach ($subalbums as $folder) {
 	getSubalbumImages($folder);
 }
-$albumname = trim($words);
-$albumname = str_replace('!', ' NOT ', $albumname);
-$albumname = str_replace('&', ' AND ', $albumname);
-$albumname = str_replace('|', ' OR ', $albumname);
 $albumname = sanitize_path($albumname);
 $albumname = seoFriendlyURL($albumname);
 $old = '';

@@ -244,7 +244,7 @@ if ($setup_checked) {
 	if (isset($_POST['mysql'])) {
 		setupLog("Post of MySql credentials", true);
 	} else {
-		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true, true);  // initialize the log file
+		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.'] '.date('r'), true, true);  // initialize the log file
 	}
 	if ($environ) {
 		setupLog("Full environment");

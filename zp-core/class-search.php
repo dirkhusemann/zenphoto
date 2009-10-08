@@ -137,7 +137,7 @@ class SearchEngine
 	function getSearchParams() {
 		global $_zp_page;
 		$r = '';
-		$w = urlencode(trim($this->words));
+		$w = urlencode(trim($this->codifySearchString()));
 		if (!empty($w)) { $r .= '&words=' . $w; }
 		$d = trim($this->dates);
 		if (!empty($d)) { $r .= '&date=' . $d; }
@@ -232,6 +232,9 @@ class SearchEngine
 		$searchstring = trim($this->words);
 		$space_is_OR = getOption('search_space_is_or');
 		$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, '('=>2);
+		if ($space_is_OR) {
+			$opChars[' '] = 1;
+		}
 		$c1 = ' ';
 		$result = array();
 		$target = "";
@@ -261,13 +264,35 @@ class SearchEngine
 					if (!empty($target)) {
 						$r = trim($target);
 						if (!empty($r)) {
-							$result[] = $r;
+							switch ($r) {
+								case 'AND':
+									$r = '&';
+									break;
+								case 'OR':
+									$r = '|';
+									break;
+								case 'NOT':
+									$r = '!';
+									break;
+							}
+							$last = $result[] = $r;
 							$target = '';
 						}
 					}
 					$c2 = substr($searchstring, $i+1, 1);
-					if (!(isset($opChars[$c2]) || isset($opChars[$c1]))) {
-						$result[] = '|';
+					switch ($c2) {
+						case 'A':
+							if (substr($searchstring, $i+1, 4) == 'AND ') $c2 = '&';
+							break;
+						case 'O':
+							if (substr($searchstring, $i+1, 3) == 'OR ') $c2 = '|';
+							break;
+						case 'N':
+							if (substr($searchstring, $i+1, 4) == 'NOT ') $c2 = '!';
+							break;
+					}
+					if (!((isset($opChars[$c2])&&$opChars[$c2]==1) || (isset($opChars[$last])&&$opChars[$last]==1))) {
+						$last = $result[] = '|';
 						$c1 = $c;
 					}
 					break;
@@ -279,13 +304,13 @@ class SearchEngine
 					if (!empty($target)) {
 						$r = trim($target);
 						if (!empty($r)) {
-							$result[] = $r;
+							$last = $result[] = $r;
 							$target = '';
 						}
 					}
 					$c1 = $c;
 					$target = '';
-					$result[] = $c;
+					$last = $result[] = $c;
 					break;
 				case 'A':
 					if (substr($searchstring, $i, 4) == 'AND ') {
@@ -293,13 +318,13 @@ class SearchEngine
 						if (!empty($target)) {
 							$r = trim($target);
 							if (!empty($r)) {
-								$result[] = $r;
+								$last = $result[] = $r;
 								$target = '';
 							}
 						}
 						$c1 = $c;
 						$target = '';
-						$result[] = '&';
+						$last = $result[] = '&';
 						break;
 					}
 				case 'O':
@@ -308,13 +333,13 @@ class SearchEngine
 						if (!empty($target)) {
 							$r = trim($target);
 							if (!empty($r)) {
-								$result[] = $r;
+								$last = $result[] = $r;
 								$target = '';
 							}
 						}
 						$c1 = $c;
 						$target = '';
-						$result[] = '|';
+						$last = $result[] = '|';
 						break;
 					}
 				case 'N':
@@ -323,13 +348,13 @@ class SearchEngine
 						if (!empty($target)) {
 							$r = trim($target);
 							if (!empty($r)) {
-								$result[] = $r;
+								$last = $result[] = $r;
 								$target = '';
 							}
 						}
 						$c1 = $c;
 						$target = '';
-						$result[] = '!';
+						$last = $result[] = '!';
 						break;
 					}
 					default:
@@ -338,7 +363,7 @@ class SearchEngine
 					break;
 			}
 		} while ($i++ < strlen($searchstring));
-		if (!empty($target)) { $result[] = trim($target); }
+		if (!empty($target)) { $last = $result[] = trim($target); }
 		$lasttoken = '';
 		if ($space_is_OR) {
 			foreach ($result as $key=>$token) {
@@ -349,6 +374,58 @@ class SearchEngine
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * recodes the search words replacing the boolean operators with text versions
+	 * 
+	 * @param string $quote how to represent quoted strings
+	 * 
+	 * @return string
+	 *
+	 */
+	function codifySearchString($quote='"') {
+		$opChars = array ('('=>2, '&'=>1, '|'=>1, '!'=>1, ','=>1);
+		$searchstring = $this->getSearchString();
+		$sanitizedwords = '';
+		if (is_array($searchstring)) {
+			foreach($searchstring as $singlesearchstring){
+				switch ($singlesearchstring) {
+					case '&':
+						$sanitizedwords .= " AND ";
+						break;
+					case '|':
+						$sanitizedwords .= " OR ";
+						break;
+					case '!':
+						$sanitizedwords .= " NOT ";
+						break;
+					case '!':
+					case '|':
+					case '(':
+					case ')':
+						$sanitizedwords .= " $singlesearchstring ";
+						break;
+					default:
+						$sanitizedword = sanitize($singlesearchstring, 3);
+						$setQuote = $sanitizedword != $singlesearchstring;
+						if (!$setQuote) {
+							foreach ($opChars as $char => $value) {
+								if ((strpos($singlesearchstring, $char) !== false)) {
+									$setQuote = true;
+									break;
+								}
+							}
+						}
+						if ($setQuote) {
+							$sanitizedwords .= $quote.$singlesearchstring.$quote;
+						} else {
+							$sanitizedwords .= ' '.sanitize($singlesearchstring, 3).' ';
+						}
+				}
+			}
+		}
+		return trim($sanitizedwords);
 	}
 
 	/**
@@ -612,7 +689,7 @@ class SearchEngine
 								}
 								break;
 							case '!':
-								break; // what to do with initial NOT?
+								break; // Paren followed by NOT is nonsensical?
 							case '&!':
 								if (is_array($objectid)) {
 									$idlist = array_diff($idlist, $objectid);
