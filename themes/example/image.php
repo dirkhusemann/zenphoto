@@ -35,11 +35,12 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 
 				<div id="image_data">
 						<?php
-						if (isImagePhoto()) {
+						$fullimage = getFullImageURL();
+						if (!empty($fullimage)) {
 							?>
 							<div id="fullsize_download_link">
 								<em>
-								<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext("Original Size:"); ?>
+								<a href="<?php echo htmlspecialchars($fullimage);?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext("Original Size:"); ?>
 									<?php echo getFullWidth() . "x" . getFullHeight(); ?>
 								</a>
 								</em>

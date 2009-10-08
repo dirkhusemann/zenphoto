@@ -122,7 +122,7 @@ if (isset($_GET['dsp'])) {
 if (!$watermark_use_image && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && getOption('protect_full_image') != 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
-		header('Location: '.getAlbumFolder(FULLWEBPATH).pathurlencode(imgSrcURI($_zp_current_album->name.'/'.$_zp_current_image->filename)), true, 301);
+		header('Location: '.getAlbumFolder(FULLWEBPATH).pathurlencode(imgSrcURI($album8.'/'.$image8)), true, 301);
 		exit();
 	} else {  // the web server does not have access to the image, have to supply it
 		$fp = fopen($image_path, 'rb');

@@ -60,19 +60,19 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 	<div id="image">
 		<?php if(getOption("Use_thickbox")) {
 			$thickboxclass = " class=\"thickbox\"";
-			$tburl = htmlspecialchars(getUnprotectedImageURL());
+			$tburl = getUnprotectedImageURL();
 		} else {
 			$thickboxclass = "";
-			$tburl = htmlspecialchars(getFullImageURL());
+			$tburl = getFullImageURL();
 		}
-		if (isImagePhoto()) {
+		if (!empty($tburl)) {
 			?>
-			<a href="<?php echo $tburl; ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
+			<a href="<?php echo htmlspecialchars($tburl); ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
 			<?php
 		}
 		printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
 		<?php
-		if (isImagePhoto()) {
+		if (!empty($tburl)) {
 			?>
 	  	</a>
 	  	<?php

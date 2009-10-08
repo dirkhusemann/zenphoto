@@ -2659,7 +2659,7 @@ function getWatermarks() {
 	foreach ($filelist as $file) {
 		$list[filesystemToInternal(substr(basename($file),0,-4))] = $basepath.$file;
 	}
-	$basepath = SERVERPATH."/".PLUGIN_FOLDER.'/watermarks/';
+	$basepath = SERVERPATH."/".USER_PLUGIN_FOLDER.'/watermarks/';
 	if (is_dir($basepath)) {
 		chdir($basepath);
 		$filelist = safe_glob('*.png');

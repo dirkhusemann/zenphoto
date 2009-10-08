@@ -49,9 +49,10 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 	<div id="image">
 		<strong>
 		<?php
-		if (isImagePhoto()) {
+		$fullimage = getFullImageURL();
+		if (!empty($fullimage)) {
 			?>
-			<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>">
+			<a href="<?php echo htmlspecialchars($fullimage);?>" title="<?php echo getBareImageTitle();?>">
 			<?php
 		}
 		if (function_exists('printUserSizeImage') && isImagePhoto()) {
@@ -59,7 +60,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 		} else {
 			printDefaultSizedImage(getImageTitle());
 		}
-		if (isImagePhoto()) {
+		if (!empty($fullimage)) {
 			?>
 			</a>
 			<?php

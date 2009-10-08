@@ -79,9 +79,10 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 						printImageMetadata('', false);
 						if (isImagePhoto()) echo "&nbsp;/&nbsp;";
 					}
-					if (isImagePhoto()) {
+					$fullimage = getFullImageURL();
+					if (!empty($fullimage)) {
 						?>
-						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+						<a href="<?php echo htmlspecialchars($fullimage);?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
 						<?php
 					}
 					?>

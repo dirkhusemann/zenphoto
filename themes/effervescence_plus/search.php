@@ -13,7 +13,6 @@ if (isset($_GET['noflash'])) {
 	}
 	*/
 
-if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 require_once ('customfunctions.php');
 
 // Change the configuration here
@@ -285,19 +284,3 @@ if (function_exists('printUserLogin_out')) {
 
 </body>
 </html>
-<?php
-} else {
-header ('Content-Type: application/xml');
-
-$path = '..';
-
-echo '<?xml version="1.0" encoding="UTF-8"?>
-<simpleviewerGallery title=""  maxImageWidth="'.$maxImageWidth.'" maxImageHeight="'.$maxImageHeight.
-'" textColor="'.$textColor.'" frameColor="'.$frameColor.'" frameWidth="'.$frameWidth.'" stagePadding="'.
-$stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumbnailRows.'" navPosition="'.
-$navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
-'" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
-
-<?php while (next_image(true)): ?><image><filename><?php echo htmlspecialchars(getFullImageURL());?></filename><caption><![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open in a new window'); ?>">
-<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
-<br></font><?php echo getImageDesc() ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>

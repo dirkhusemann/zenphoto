@@ -2615,7 +2615,7 @@ function getFullImageURL() {
 	$outcome = getOption('protect_full_image');
 	if ($outcome == 'No access') return NULL;
 	$url = getUnprotectedImageURL();
-	if (is_valid_video($url)) {  // Download, Protected View, and Unprotected access all allowed
+	if (isImageVideo()) {  // Download, Protected View, and Unprotected access all allowed
 		$album = $_zp_current_image->getAlbum();
 		$folder = $album->getFolder();
 		$original = checkVideoOriginal(getAlbumFolder() . $folder, $_zp_current_image->getFileName());
@@ -2624,13 +2624,14 @@ function getFullImageURL() {
 		} else {
 			return $url;
 		}
-	} else { // normal image
+	} else if (isImagePhoto()) { // normal image
 		if ($outcome == 'Unprotected') {
 			return $url;
 		} else {
 			return getProtectedImageURL();
 		}
 	}
+	return NULL;
 }
 
 /**
