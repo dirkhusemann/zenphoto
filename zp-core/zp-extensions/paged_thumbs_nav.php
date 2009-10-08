@@ -158,14 +158,15 @@ class pagedThumbsNav {
 			if($_zp_current_search->getNumImages() === 0) {
 				$this->searchimages = false;
 			}	else {
-				$this->searchimages = true;
+				$this->searchimages = true; 
 			}
 		} else {
-			$this->searchimages = false;
+			$this->searchimages = false; 
 		}
 	
 		if(in_context(ZP_SEARCH_LINKED) AND $this->searchimages) {
 			$this->images = $_zp_current_search->getImages();
+			//echo "<pre>"; print_r($this->images); echo "</pre>";
 			$this->totalimages = $_zp_current_search->getNumImages();
 			$getimagenumber = 0;
 			foreach($this->images as $image) {
@@ -245,18 +246,17 @@ class pagedThumbsNav {
 		global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
 		$number = $this->startimg[$this->currentpage] - 2;
 		$thumbs = array();
-		for ($nr = 1;$nr <= $this->imagesperpage; $nr++) {
+		$nr = 1;
+		foreach($this->images as $item) {
 			$number++;
 			if($number == $this->totalimages) {
 				break;
 			}
 			if(in_context(ZP_SEARCH_LINKED) AND $this->searchimages) {
-				$albumobj = new Album($_zp_gallery,$this->images[$number]['folder']);
-				$image = newImage($albumobj,$this->images[$number]['filename']);
+				$thumbs[$number] = newImage(new Album($_zp_gallery,$item['folder']),$item['filename']);
 			} else {
-				$image = newImage($_zp_current_album,$this->images[$number]);
+				$thumbs[$number] = newImage($_zp_current_album,$item);
 			}
-			$thumbs[$number] = $image;
 			if ($number == $this->endimg[$this->currentpage]) {
 				break;
 			}
