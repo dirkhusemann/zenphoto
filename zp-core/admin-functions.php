@@ -1206,7 +1206,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	$thumb = $album->get('thumb');
 	if ($showThumb)  {
 		?>
-		<script type="text/javascript"><?php updateThumbPreview(document.getElementById('thumbselect')); ?></script>
+		<script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
 		<?php
 	}
 	?>
