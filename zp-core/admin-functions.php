@@ -407,13 +407,13 @@ function setAlbumSubtabs($album) {
 	global $zenphoto_tabs;
 	$albumlink = '?page=edit&album='.urlencode($album->name);
 	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
-	if (count($album->getImages())) {
+	if (!$album->isDynamic() && count($album->getImages())) {
 		$zenphoto_tabs['edit']['subtabs'] = array_merge(
 																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),
 																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&page=edit&tab=sort'),
 																					$zenphoto_tabs['edit']['subtabs']);
 	}
-	if (count($album->getSubalbums()) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
+	if (!$album->isDynamic() && count($album->getSubalbums()) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
 	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 }
 
@@ -1183,21 +1183,24 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		</tr>
 	<?php
 	}
-	$current = $album->get('watermark');
-  ?>
-  <tr>
-  	<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
-  	<td>
-			<select id="album_watermark" name="album_watermark">
-				<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">not set</option>
-				<?php
-				$watermarks = getWatermarks();
-				generateListFromArray(array($current), $watermarks, false, false);
-				?>
-			</select>
-  	</td>
-  </tr>
-  
+	if (!$album->isDynamic()) {
+		$current = $album->get('watermark');
+		?>
+	  <tr>
+	  	<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
+	  	<td>
+				<select id="album_watermark" name="album_watermark">
+					<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">not set</option>
+					<?php
+					$watermarks = getWatermarks();
+					generateListFromArray(array($current), $watermarks, false, false);
+					?>
+				</select>
+	  	</td>
+	  </tr>
+	  <?php
+	}
+	?>
   <tr>
 	<td align="left" valign="top" width="150"><?php echo gettext("Thumbnail:"); ?> </td>
 	<td>

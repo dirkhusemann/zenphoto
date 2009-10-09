@@ -1301,12 +1301,27 @@ function setupTheme() {
 		}
 	}
 	$theme = zp_apply_filter('setupTheme', $theme);
-	if (!(false === ($requirePath = getPlugin('themeoptions.php', $theme)))) {
+	$requirePath = getPlugin('themeoptions.php', $theme);
+	if (empty($theme) || empty($requirePath)) {
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+		header('Content-Type: text/html; charset=' . getOption('charset'));
+		?>
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+		</head>
+		<body>
+			<strong><?php printf(gettext('Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation.'),THEMEFOLDER); ?></strong>
+		</body>
+		</html>		
+		<?php
+		exit();
+	} else {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions(); /* prime the default theme options */
+		loadLocalOptions($id,$theme);
+		$_zp_themeroot = WEBPATH . "/".THEMEFOLDER."/$theme";
 	}
-	loadLocalOptions($id,$theme);
-	$_zp_themeroot = WEBPATH . "/".THEMEFOLDER."/$theme";
 	return $theme;
 }
 

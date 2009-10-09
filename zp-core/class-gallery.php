@@ -244,10 +244,14 @@ class Gallery {
 	 * @return string
 	 */
 	function getCurrentTheme() {
+		$theme = NULL;
 		if (empty($this->theme)) {
 			$theme = getOption('current_theme');
-			if (empty($theme)) {
-				$theme = "default";
+			if (empty($theme) || !file_exists(SERVERPATH."/".THEMEFOLDER."/$theme")) {
+				$themes = array_keys($this->getThemes());
+				if (!empty($themes)) {
+					$theme = array_shift($themes);
+				}
 			}
 			$this->theme = $theme;
 		}
