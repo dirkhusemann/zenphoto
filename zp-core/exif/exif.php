@@ -932,7 +932,10 @@ if ($result['ValidJpeg'] == 1) {
 	}
 	
 	// Add the 35mm equivalent focal length:
-	$result['SubIFD']['FocalLength35mmEquiv'] = get35mmEquivFocalLength($result);
+	if (!isset($result['SubIFD']['FocalLengthIn35mmFilm'])) {
+		$result['SubIFD']['FocalLengthIn35mmFilm'] = get35mmEquivFocalLength($result);
+	}
+	$result['SubIFD']['FocalLength35mmEquiv'] = $result['SubIFD']['FocalLengthIn35mmFilm']; // TODO: should be deprecated
 	
 	// Check for IFD1
 	if (!isset($result['IFD1Offset']) || $result['IFD1Offset'] == 0) {
@@ -1028,7 +1031,7 @@ function ConvertToFraction($v, &$n, &$d) {
 //================================================================================================
 function get35mmEquivFocalLength(&$result) {
 	if (isset($result['SubIFD']['ExifImageWidth'])) {
-	$width = $result['SubIFD']['ExifImageWidth'];
+		$width = $result['SubIFD']['ExifImageWidth'];
 	} else {
 		$width = 0;
 	}
@@ -1054,7 +1057,7 @@ function get35mmEquivFocalLength(&$result) {
 	} else {
 		$fl = 0;
 	}
-	
+
 	if (($width != 0) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
 		$ccdwidth = ($width * $unitfactor) / $xres;
 		$equivfl = $fl / $ccdwidth*36+0.5;
