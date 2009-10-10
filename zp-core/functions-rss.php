@@ -311,6 +311,9 @@ function startRSSCache() {
 			echo file_get_contents($cachefilepath); // PHP >= 4.3
 			exit();
 		} else {
+			if(file_exists($cachefilepath)) {
+				@unlink($cachefilepath);
+			}
 			ob_start();
 		}
 	}

@@ -142,6 +142,7 @@ class staticCache {
 				echo "\n<!-- ".sprintf(gettext("Cached content served by static_html_cache in %u seconds"),$final)." -->";
 				exit();
 			} else {
+				$this->deleteStaticCacheFile($cachefilepath);
 				ob_start();
 			}
 		}
