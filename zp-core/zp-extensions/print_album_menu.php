@@ -66,7 +66,7 @@ class print_album_menu {
 
 function printAlbumMenu($option,$showcount=NULL,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=NULL,$firstimagelink=false) {
 	if ($option == "jump") {
-		printAlbumMenuJump($option,$indexname,$firstimagelink);
+		printAlbumMenuJump($showcount,$indexname,$firstimagelink);
 	} else {
 		printAlbumMenuList($option,$showcount,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs,$firstimagelink);
 	}
