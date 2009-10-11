@@ -1030,7 +1030,7 @@ $alb = removeParentAlbumNames($album);
 						<td>
 						<?php
 							$data = '';
-							$exif = $image->getExifData();
+							$exif = $image->getMetaData();
 							if (false !== $exif) {
 								foreach ($exif as $field => $value) {
 									if (!empty($value)) {

@@ -75,7 +75,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 					<li class="tags"><?php echo getAlbumPlace(); ?></li>
 					<li class="exif">
 				<?php
-					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
+					if (getImageMetaData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
 						printImageMetadata('', false);
 						if (isImagePhoto()) echo "&nbsp;/&nbsp;";
 					}

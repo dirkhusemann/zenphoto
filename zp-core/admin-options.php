@@ -2042,7 +2042,8 @@ if (empty($alterrights)) {
 			<td>
 			<ul class="searchchecklist">
 			<?php
-			foreach ($_zp_exifvars as $key=>$item) {
+			$exifstuff = sortMultiArray($_zp_exifvars,2,'asc',true);
+			foreach ($exifstuff as $key=>$item) {
 				echo '<li><label"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
 				if ($item[3]) {
 					echo ' checked="checked" ';

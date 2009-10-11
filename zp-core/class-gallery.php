@@ -468,76 +468,13 @@ class Gallery {
 				$row = query_single_row($sql);
 				$imageName = internalToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
 				if (file_exists($imageName)) {
-
 					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it
 						$imageobj = new _Image(new Album($this, $row['folder']), $image['filename']);
-						
-						$imageobj->getExifData(); // prime the exif fields
 						$imageobj->updateDimensions(); // update the width/height & account for rotation
-								
-						/* check metadata */
-						$metadata = getImageMetadata($imageName);
-
-						/* title */
-						$defaultTitle = substr($image['filename'], 0, strrpos($image['filename'], '.'));
-						if (empty($defaultTitle )) {
-							$defaultTitle = $image['filename'];
-						}
-						if ($defaultTitle == $image['title']) { /* default title */
-							if (isset($metadata['title'])) {
-								$set = ',`title`="' . mysql_real_escape_string($metadata['title']) . '"';
-							}
-						}
-
-						/* description */
-						if (!isset($row['desc'])) {
-							if (isset($metadata['desc'])) {
-								$imageobj->set('desc', $metadata['desc']);
-							}
-						}
-
-						/* tags */
-						if (isset($metadata['tags'])) {
-							$tags = $metadata['tags'];
-							storeTags($tags, $image['id'], 'images');
-						}
-
-
-						/* location, city, state, and country */
-						if (isset($metadata['location'])) {
-							$imageobj->set('location', $metadata['location']);
-						}
-						if (isset($metadata['city'])) {
-							$imageobj->set('city', $metadata['city']);
-						}
-						if (isset($metadata['state'])) {
-							$imageobj->set('state', $metadata['state']);
-						}
-						if (isset($metadata['country'])) {
-							$imageobj->set('country', $metadata['country']);
-						}
-						/* credit & copyright */
-						if (isset($metadata['credit'])) {
-							$imageobj->set('credit', $metadata['credit']);
-						}
-						if (isset($metadata['copyright'])) {
-							$imageobj->set('copyright', $metadata['copyright']);
-						}
-
-						/* date (for sorting) */
-						$newDate = strftime('%Y-%m-%d %T', filemtime($imageName));
-						if (isset($metadata['date'])) {
-							$dt = dateTimeConvert($metadata['date']);
-							if ($dt !== false) { // flaw in exif/iptc data?
-								$newDate = $dt;
-							}
-						}
-						$imageobj->set('date', $newDate);
-						
+						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
 						zp_apply_filter('image_refresh', $imageobj);
 						/* update DB is necessary */
 						$imageobj->save();
-
 					}
 				} else {
 					$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';

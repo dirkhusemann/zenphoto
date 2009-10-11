@@ -2297,10 +2297,10 @@ function printImageDiv() {
  *
  * @return array
  */
-function getImageEXIFData() {
+function getImageMetaData() {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return false;
-	return $_zp_current_image->getExifData();
+	return $_zp_current_image->getMetaData();
 }
 
 /**
@@ -2317,7 +2317,7 @@ function getImageEXIFData() {
  */
 function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $class=null, $editable = false, $editclass='', $messageIfEmpty = '') {
 
-	if (false === ($exif = getImageEXIFData()))
+	if (false === ($exif = getImageMetaData()))
 		return;
 
 	global $_zp_exifvars, $_zp_current_image;
@@ -2325,8 +2325,8 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 	if (is_null($title))
 		$title = gettext('Image Info');
 	
-	// EXIF values will be editable only with sufficient privileges and if values are stored in the database
-	$editable = ( $editable && zp_loggedin() && ( $_zp_current_image->get('EXIFValid') == 1 ) );
+	// EXIF values will be editable only with sufficient privileges
+	$editable = ( $editable && zp_loggedin());
 
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No data)');

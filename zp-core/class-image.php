@@ -101,62 +101,17 @@ class _Image extends PersistentObject {
 		// This is where the magic happens...
 		$album_name = $album->name;
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
-		$this->getExifData(); // prime the exif fields
 		$mtime = filemtime($this->localpath);
 		if ($new || ($mtime != $this->get('mtime'))) {
 			$this->set('mtime', $mtime);
-			$this->updateDimensions();
-			$metadata = getImageMetadata($this->localpath);
-			$this->set('EXIFValid', 1);
-			$newDate = '';
-			if (isset($metadata['date'])) {
-				$dt = dateTimeConvert($metadata['date']);
-				if ($dt !== false) { // flaw in exif/iptc data?
-					$newDate = $dt;
-				}
-			}
-			if (empty($newDate)) {
-				$newDate = strftime('%Y-%m-%d %T', $this->get('mtime'));
-			}
-			$this->setDateTime($newDate);
+			$this->updateDimensions();		// deal with rotation issues
+			$this->updateMetaData();			// extract info from image
 			$alb = $this->album;
 			if (!is_null($alb)) {
 				if (is_null($alb->getDateTime()) || getOption('album_use_new_image_date')) {
-					$this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
+					$this->album->setDateTime($this->get('date'));   //  not necessarily the right one, but will do. Can be changed in Admin
 					$this->album->save();
 				}
-			}
-
-			if (isset($metadata['title'])) {
-				$title = $metadata['title'];
-			} else {
-				$title = $this->getDefaultTitle();
-			}
-			$this->set('title', sanitize($title, 2));
-
-			if (isset($metadata['desc'])) {
-				$this->set('desc', sanitize($metadata['desc'], 1));
-			}
-			if (isset($metadata['tags'])) {
-				$this->setTags(sanitize($metadata['tags'], 3));
-			}
-			if (isset($metadata['location'])) {
-				$this->setLocation(sanitize($metadata['location'], 3));
-			}
-			if (isset($metadata['city'])) {
-				$this->setCity(sanitize($metadata['city'], 3));
-			}
-			if (isset($metadata['state'])) {
-				$this->setState(sanitize($metadata['state'], 3));
-			}
-			if (isset($metadata['country'])) {
-				$this->setCountry(sanitize($metadata['country'], 3));
-			}
-			if (isset($metadata['credit'])) {
-				$this->setCredit(sanitize($metadata['credit'], 1));
-			}
-			if (isset($metadata['copyright'])) {
-				$this->setCopyright(sanitize($metadata['copyright'], 1));
 			}
 			zp_apply_filter('new_image', $this);
 			$this->save();
@@ -224,11 +179,27 @@ class _Image extends PersistentObject {
 	 *
 	 * @return array
 	 */
-	function getExifData() {
+	function getMetaData() {
 		require_once(dirname(__FILE__).'/exif/exif.php');
 		global $_zp_exifvars;
 		$exif = array();
-		if (is_null($v = $this->get('EXIFValid')) || ($v != 1) || $this->fileChanged()) {
+		// Put together an array of EXIF data to return
+		foreach($_zp_exifvars as $field => $exifvar) {
+			$exif[$field] = $this->get($field);
+		}
+		return $exif;
+	}
+
+	/**
+	 * Parces Exit/IPTC data
+	 *
+	 */
+	function updateMetaData() {
+		require_once(dirname(__FILE__).'/exif/exif.php');
+		global $_zp_exifvars;
+		$result = array();
+		zp_imageGetInfo($this->localpath, $imageInfo);
+		if (is_array($imageInfo)) {
 			$exifraw = read_exif_data_protected($this->localpath);
 			if (isset($exifraw['ValidEXIFData'])) {
 				foreach($_zp_exifvars as $field => $exifvar) {
@@ -237,25 +208,161 @@ class _Image extends PersistentObject {
 						$this->set($field, $exif[$field]);
 					}
 				}
-				$this->set('EXIFValid', 1);
-			} else {
-				$this->set('EXIFValid', 0);
-			}
-			$this->set('mtime', $this->filemtime);
-			$this->save();
-		} else {
-			// Put together an array of EXIF data to return
-			if ($this->get('EXIFValid') == 1) {
-				foreach($_zp_exifvars as $field => $exifvar) {
-					$exif[$field] = $this->get($field);
+
+				if (isset($exifraw['SubIFD'])) {
+					$subIFD = $exifraw['SubIFD'];
+				} else {
+					$subIFD = array();
 				}
-			} else {
-				return false;
+
+				/* check IPTC data */
+				if (isset($imageInfo["APP13"])) {
+					$iptc = iptcparse($imageInfo["APP13"]);
+					if ($iptc) {
+						$characterset = $this->getIPTCTag('1#090', $iptc);
+						if (!$characterset) {
+							$characterset = getOption('IPTC_encoding');
+						} else if (substr($characterset, 0, 1) == chr(27)) { // IPTC escape encoding
+							$characterset = substr($characterset, 1);
+							if ($characterset == '%G') {
+								$characterset = 'UTF-8';
+							} else { // we don't know, need to understand the IPTC standard here. In the mean time, default it.
+								$characterset = getOption('IPTC_encoding');
+							}
+						} else if ($characterset == 'UTF8') {
+							$characterset = 'UTF-8';
+						}
+
+						// Extract IPTC fields of interest
+						foreach ($_zp_exifvars as $field=>$exifvar) {
+							if ($exifvar[0]=='IPTC') {
+								$datum = $this->getIPTCTag($exifvar[1], $iptc);
+								$this->set($field, $this->prepIPTCString($datum, $characterset));
+							}
+						}
+						/* iptc date */
+						$date = $this->get('IPTCDateCreated');
+						if (!empty($date)) {
+							$date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
+						}
+						/* EXIF date */
+						if (empty($date)) {
+							$date = $this->get('EXIFDateTime');
+						}
+						if (empty($date)) {
+							$date = $this->get('EXIFDateTimeOriginal');
+						}
+						if (empty($date)) {
+							$date = $this->get('EXIFDateTimeDigitized');
+						}
+						if (empty($date)) {
+							$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
+						} else {
+							$this->set('date', $date);
+						}
+						
+						/* iptc title */
+						$title = $this->get('IPTCObjectName');
+						if (empty($title)) {
+							$title = $this->get('IPTCImageHeadline');
+						}
+						//EXIF title [sic]
+						if (empty($title)) {
+							$title = $this->get('EXIFImageDescription');
+						}
+						if (empty($title)) {
+							$this->set('title',$this->getDefaultTitle());
+						} else {
+							$this->set('title',$title);
+						}
+						
+						/* iptc description */
+						$this->set('desc', $this->get('IPTCImageCaption'));
+
+						/* iptc location, state, country */
+						$this->set('location', $this->get('IPTCSubLocation'));
+						$this->set('city', $this->get('IPTCCity'));
+						$this->set('state', $this->get('IPTCState'));
+						$this->set('country', $this->get('IPTCLocationName'));
+
+						/* iptc credit */
+						$credit = $this->get('IPTCImageCredit');
+						if (empty($credit)) {
+							$credit = $this->get('IPTCSource');
+						}
+						$this->set('credit', $credit);
+
+						/* iptc copyright */
+						$this->set('copyright', $this->get('Copyright'));
+
+						/* iptc keywords (tags) */
+						$datum = $this->getIPTCTagArray('2#025', $iptc);
+						if (is_array($datum)) {
+							$tags = array();
+							$result['tags'] = array();
+							foreach ($datum as $item) {
+								$tags[] = $this->prepIPTCString($item, $characterset);;
+							}
+							$this->setTags($tags);
+						}
+					}
+				}
 			}
 		}
-		return $exif;
 	}
 
+	/**
+	 * For internal use--fetches a single tag from IPTC data
+	 *
+	 * @param string $tag the metadata tag sought
+	 * @return string
+	 */
+	function getIPTCTag($tag, $iptc) {
+		if (isset($iptc[$tag])) {
+			$iptcTag = $iptc[$tag];
+			$r = "";
+			$ct = count($iptcTag);
+			for ($i=0; $i<$ct; $i++) {
+				$w = $iptcTag[$i];
+				if (!empty($r)) { $r .= ", "; }
+				$r .= $w;
+			}
+			return trim($r);
+		}
+		return '';
+	}
+	
+	/**
+	 * For internal use--fetches the IPTC array for a single tag.
+	 *
+	 * @param string $tag the metadata tag sought
+	 * @return array
+	 */
+	function getIPTCTagArray($tag, $iptc) {
+		if (array_key_exists($tag, $iptc)) {
+			return $iptc[$tag];
+		}
+		return NULL;
+	}
+	
+	/**
+	 * Returns the IPTC data converted into UTF8
+	 *
+	 * @param string $iptcstring the IPTC data
+	 * @param string $characterset the internal encoding of the data
+	 * @return string
+	 */
+	function prepIPTCString($iptcstring, $characterset) {
+		global $_zp_UTF8;
+		// Remove null byte at the end of the string if it exists.
+		if (substr($iptcstring, -1) === 0x0) {
+			$iptcstring = substr($iptcstring, 0, -1);
+		}
+		$outputset = getOption('charset');
+		if ($characterset == $outputset) return $iptcstring;
+		$iptcstring = $_zp_UTF8->convert($iptcstring, $characterset, $outputset);
+		return trim(sanitize($iptcstring));
+	}
 	/**
 	 * Update this object's values for width and height.
 	 *
@@ -363,7 +470,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getLocation() {
-		return get_language_string($this->get('location'));
+		return get_language_string($this->get('Location'));
 	}
 
 	/**
@@ -371,7 +478,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $location text for the location
 	 */
-	function setLocation($location) { $this->set('location', $location); }
+	function setLocation($location) { $this->set('Location', $location); }
 
 	/**
 	 * Returns the city field of the image
@@ -379,7 +486,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCity() {
-		return get_language_string($this->get('city'));
+		return get_language_string($this->get('City'));
 	}
 
 	/**
@@ -387,7 +494,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $city text for the city
 	 */
-	function setCity($city) { $this->set('city', $city); }
+	function setCity($city) { $this->set('City', $city); }
 
 	/**
 	 * Returns the state field of the image
@@ -395,7 +502,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getState() {
-		return get_language_string($this->get('state'));
+		return get_language_string($this->get('State'));
 	}
 
 	/**
@@ -403,7 +510,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $state text for the state
 	 */
-	function setState($state) { $this->set('state', $state); }
+	function setState($state) { $this->set('State', $state); }
 
 	/**
 	 * Returns the country field of the image
@@ -411,7 +518,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCountry() {
-		return get_language_string($this->get('country'));
+		return get_language_string($this->get('Ccountry'));
 	}
 
 	/**
@@ -419,7 +526,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $country text for the country filed
 	 */
-	function setCountry($country) { $this->set('country', $country); }
+	function setCountry($country) { $this->set('Ccountry', $country); }
 
 	/**
 	 * Returns the credit field of the image
@@ -427,7 +534,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCredit() {
-		return get_language_string($this->get('credit'));
+		return get_language_string($this->get('IPTCCredit'));
 	}
 
 	/**
@@ -435,7 +542,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $credit text for the credit field
 	 */
-	function setCredit($credit) { $this->set('credit', $credit); }
+	function setCredit($credit) { $this->set('IPTCCredit', $credit); }
 
 	/**
 	 * Returns the copyright field of the image
@@ -443,7 +550,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCopyright() {
-		return get_language_string($this->get('copyright'));
+		return get_language_string($this->get('IPTCCopyrightNotice'));
 	}
 
 	/**
@@ -451,7 +558,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $copyright text for the copyright field
 	 */
-	function setCopyright($copyright) { $this->set('copyright', $copyright); }
+	function setCopyright($copyright) { $this->set('IPTCCopyrightNotice', $copyright); }
 
 	/**
 	 * Returns the tags of the image

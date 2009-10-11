@@ -726,6 +726,9 @@ if (!$setup_checked) {
 	                    "<br />".gettext("The unsupported image types will not be viewable in your albums.").
 	                    "<br />".$mandate);
 				}
+				if (!zp_imageCanRotate()) {
+					checkMark(-1, '', gettext('Graphics Library rotation support [is not present]'), gettext('The graphics support library does not provide support for image rotation.'));
+				}
 			}
 		} else {
 			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Check your install files.'));
@@ -1497,7 +1500,6 @@ if (file_exists(CONFIGFILE)) {
 		`thumbW` int(10) unsigned default NULL,
 		`thumbH` int(10) unsigned default NULL,
 		`mtime` int(32) default NULL,
-		`EXIFValid` int(1) unsigned default NULL,
 		`hitcounter` int(11) unsigned default 0,
 		`total_value` int(11) unsigned default '0',
 		`total_votes` int(11) unsigned default '0',
@@ -1618,11 +1620,8 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `copyright` tinytext;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `date` datetime default NULL;";
 //v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `tags` text;";
-	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `EXIFValid` int(1) UNSIGNED default NULL;";
+//v1.2.7 omits	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `EXIFValid` int(1) UNSIGNED default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `hitcounter` int(11) UNSIGNED default 0;";
-	foreach (array_keys($_zp_exifvars) as $exifvar) {
-		$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `$exifvar` varchar(52) default NULL;";
-	}
 
 	//v1.1.1
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `image_sortdirection` int(1) UNSIGNED default '0';";
@@ -1712,7 +1711,6 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";
-	
 	//v1.2.2
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbX` int(10) UNSIGNED default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbY` int(10) UNSIGNED default NULL;";
@@ -1785,11 +1783,22 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
 	//v1.2.7
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `album_theme` `album_theme` varchar(127) DEFAULT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `unique_option`";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `theme` varchar(127) DEFAULT NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `name` `name` varchar(191) DEFAULT NULL";
-	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `unique_option`";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`, `theme`)";
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' DROP COLUMN `EXIFValid`';
 	
+	// do this last incase there are any field changes of like names!
+	foreach ($_zp_exifvars as $key=>$exifvar) {
+		$s = $exifvar[4];
+		if ($s<255) {
+			$size = "varchar($s)";
+		} else {
+			$size = 'MEDIUMTEXT';
+		}
+		$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `$key` $size default NULL";
+	}
 	
 	
 	/**************************************************************************************

@@ -51,7 +51,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 
 					<div id="meta_link">
 						<?php
-							if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a>";
+							if (getImageMetaData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a>";
 								printImageMetadata('', false);
 							}
 					?>

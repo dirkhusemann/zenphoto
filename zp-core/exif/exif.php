@@ -212,7 +212,7 @@ function lookup_tag($tag) {
 		case '8827': $tag = 'ISOSpeedRatings'; break;          // integer 0-65535
 		case '9000': $tag = 'ExifVersion'; break;              // ??
 		case '9003': $tag = 'DateTimeOriginal'; break;         // YYYY:MM:DD HH:MM:SS
-		case '9004': $tag = 'DateTimedigitized'; break;        // YYYY:MM:DD HH:MM:SS
+		case '9004': $tag = 'DateTimeDigitized'; break;        // YYYY:MM:DD HH:MM:SS
 		case '9101': $tag = 'ComponentsConfiguration'; break;  // ??
 		case '9102': $tag = 'CompressedBitsPerPixel'; break;   // positive rational number
 		case '9201': $tag = 'ShutterSpeedValue'; break;        // seconds or fraction of seconds 1/x

@@ -108,7 +108,7 @@ if($apiKey = getOption('gmaps_apikey')){
  */
 function hasMapData() {
 	if(getOption('gmaps_apikey') != ''){
-		$exif = getImageEXIFData();
+		$exif = getImageMetaData();
 		if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 			return true;
 		}
@@ -171,7 +171,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 
-		$exif = getImageEXIFData();
+		$exif = getImageMetaData();
 		if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 
 			$defaultmaptype = setupAllowedMaps($defaultmaptype, $mapselections);
@@ -287,7 +287,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 		}
 		resetCurrentAlbum(); // start from scratch
 		while (next_image(getOption('gmaps_show_all_album_points'), $firstPageImages)) {
-			$exif = getImageEXIFData();
+			$exif = getImageMetaData();
 			if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 				$foundLocation = true;
 				$lat = $exif['EXIFGPSLatitude'];

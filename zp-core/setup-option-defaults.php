@@ -226,7 +226,6 @@ function setDefault($option, $default) {
 	setOptionDefault('EXIFExposureTime', 1);
 	setOptionDefault('EXIFFNumber', 1);
 	setOptionDefault('EXIFFocalLength', 1);
-	setOptionDefault('EXIFFocalLength35mm', 1);
 	setOptionDefault('EXIFISOSpeedRatings', 1);
 	setOptionDefault('EXIFDateTimeOriginal', 1);
 	setOptionDefault('EXIFExposureBiasValue', 1);

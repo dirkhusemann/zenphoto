@@ -256,4 +256,17 @@ function my_truncate_string($string, $length) {
 	}
 }
 
+/**
+ * Returns the EXIF infromation from the current image
+ *
+ * @return array
+ */
+function getImageEXIFData() {
+	trigger_error(gettext('getImageEXIFData is deprecated. Use getImageMetaData().'), E_USER_NOTICE);
+	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
+	return $_zp_current_image->getMetaData();
+}
+
+
 ?>

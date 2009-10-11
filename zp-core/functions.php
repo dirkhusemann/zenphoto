@@ -46,40 +46,66 @@ require_once(dirname(__FILE__).'/auth_zp.php');
 
 $_zp_setupCurrentLocale_result = setMainDomain();
 
-
-// Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
-//   run or the new data won't be stored (but existing fields will still work; nothing breaks).
+/*
+ * Note: If fields are added or deleted, setup.php should be run or the new data won't be stored 
+ * (but existing fields will still work; nothing breaks).
+ *
+ * This array should be ordered by logical associations as it will be the order that EXIF information
+ * is displayed
+ */
 $_zp_exifvars = array(
-	// Database Field       		=> array('IFDX', 	 'ExifKey',          		'ZP Display Text',        				 	 										Display?)
-	'EXIFOrientation'       		=> array('IFD0',   'Orientation',       		gettext('Orientation'),            										false),
-	'EXIFMake'              		=> array('IFD0',   'Make',              		gettext('Camera Maker'),           										true),
-	'EXIFModel'             		=> array('IFD0',   'Model',             		gettext('Camera Model'),           										true),
-	'EXIFDescription'       		=> array('IFD0',   'ImageDescription',  		gettext('Image Title'), 	         										false),
-	'EXIFArtist'			      		=> array('IFD0',   'Artist', 								gettext('Artist'), 	     					 										false),
-	'EXIFCopyright'			    		=> array('IFD0',   'Copyright', 						gettext('Copyright Holder'), 			 										false),
-	'EXIFExposureTime'      		=> array('SubIFD', 'ExposureTime',      		gettext('Shutter Speed'),          										true),
-	'EXIFFNumber'           		=> array('SubIFD', 'FNumber',           		gettext('Aperture'),               										true),
-	'EXIFFocalLength'       		=> array('SubIFD', 'FocalLength',       		gettext('Focal Length'),           										true),
-	'EXIFFocalLength35mm'   		=> array('SubIFD', 'FocalLength35mmEquiv',	gettext('35mm Equivalent Focal Length (deprecated)'),	false), //deprecated
-	'EXIFFocalLengthIn35mmFilm'	=> array('SubIFD', 'FocalLengthIn35mmFilm',	gettext('Focal Length Equivalent in 35mm Film'),			false),
-	'EXIFISOSpeedRatings'   		=> array('SubIFD', 'ISOSpeedRatings',   		gettext('ISO Sensitivity'),        										true),
-	'EXIFDateTimeOriginal'  		=> array('SubIFD', 'DateTimeOriginal',  		gettext('Time Taken'),            										true),
-	'EXIFExposureBiasValue' 		=> array('SubIFD', 'ExposureBiasValue', 		gettext('Exposure Compensation'), 										true),
-	'EXIFMeteringMode'      		=> array('SubIFD', 'MeteringMode',      		gettext('Metering Mode'),         										true),
-	'EXIFFlash'             		=> array('SubIFD', 'Flash',             		gettext('Flash Fired'),         											true),
-	'EXIFImageWidth'        		=> array('SubIFD', 'ExifImageWidth',    		gettext('Original Width'),														false),
-	'EXIFImageHeight'       		=> array('SubIFD', 'ExifImageHeight',   		gettext('Original Height'),      											false),
-	'EXIFContrast'          		=> array('SubIFD', 'Contrast',          		gettext('Contrast Setting'),      										false),
-	'EXIFSharpness'         		=> array('SubIFD', 'Sharpness',         		gettext('Sharpness Setting'),     										false),
-	'EXIFSaturation'        		=> array('SubIFD', 'Saturation',        		gettext('Saturation Setting'),    										false),
-	'EXIFWhiteBalance'					=> array('SubIFD', 'WhiteBalance',					gettext('White Balance'),															false),
-	'EXIFSubjectDistance'				=> array('SubIFD', 'SubjectDistance',				gettext('Subject Distance'),													false),
-	'EXIFGPSLatitude'       		=> array('GPS',    'Latitude',          		gettext('Latitude'),              										false),
-	'EXIFGPSLatitudeRef'    		=> array('GPS',    'Latitude Reference',		gettext('Latitude Reference'),    										false),
-	'EXIFGPSLongitude'      		=> array('GPS',    'Longitude',         		gettext('Longitude'),             										false),
-	'EXIFGPSLongitudeRef'   		=> array('GPS',    'Longitude Reference',		gettext('Longitude Reference'),  											false),
-	'EXIFGPSAltitude'       		=> array('GPS',    'Altitude',          		gettext('Altitude'),              										false),
-	'EXIFGPSAltitudeRef'    		=> array('GPS',    'Altitude Reference',		gettext('Altitude Reference'),  											false)
+	// Database Field       		=> array('IFDX', 	 'Metadata Key',     			'ZP Display Text',        				 	 									Display?	size)
+	'EXIFMake'              		=> array('IFD0',   'Make',              		gettext('Camera Maker'),           										true,				52),
+	'EXIFModel'             		=> array('IFD0',   'Model',             		gettext('Camera Model'),           										true,				52),
+	'EXIFDescription'       		=> array('IFD0',   'ImageDescription',  		gettext('Image Title'), 	         										false,			52),
+	'IPTCImageCaption' 					=> array('IPTC',	 '2#120',									gettext('Image caption'),															false,			2000),
+	'IPTCImageCaptionWriter' 		=> array('IPTC',	 '2#122',									gettext('Image caption writer'),											false,			32),
+	'EXIFDateTime'  						=> array('SubIFD', 'DateTime', 				 			gettext('Time Taken'),            										true,				52),
+	'EXIFDateTimeOriginal'  		=> array('SubIFD', 'DateTimeOriginal',  		gettext('Oritinal Time Taken'),        								true,				52),
+	'EXIFDateTimeDigitized'  		=> array('SubIFD', 'DateTimeDigitized',  		gettext('Time Digitized'),            								true,				52),
+	'IPTCDateCreated'					  => array('IPTC',	 '2#055',									gettext('Date created'),															false,			8),
+	'IPTCTimeCreated' 					=> array('IPTC',	 '2#060',									gettext('Time created'),															false,			11),
+	'IPTCDigitizeDate' 					=> array('IPTC',	 '2#062',									gettext('Digital Creation Date'),											false,			8),
+	'IPTCDigitizeTime' 					=> array('IPTC',	 '2#063',									gettext('Digital Creation Time'),											false,			11),
+	'EXIFArtist'			      		=> array('IFD0',   'Artist', 								gettext('Artist'), 	     					 										false,			52),
+	'IPTCImageCredit'						=> array('IPTC',	 '2#110',									gettext('Image Credit'),															false,			32),
+	'IPTCByLine' 								=> array('IPTC',	 '2#080',									gettext('ByLine'),																		false,			32),
+	'IPTCByLineTitle' 					=> array('IPTC',	 '2#085',									gettext('ByLine Title'),															false,			32),
+	'IPTCImageSource'						=> array('IPTC',	 '2#115',									gettext('Image source'),															false,			32),
+	'IPTCContact' 							=> array('IPTC',	 '2#118',									gettext('Contact'),																		false,			129),
+	'EXIFCopyright'			    		=> array('IFD0',   'Copyright', 						gettext('Copyright Holder'), 			 										false,			1),
+	'IPTCCopyrightNotice'				=> array('IPTC',	 '2#116',									gettext('Copyright Notice'),													false,			128),
+	'EXIFExposureTime'      		=> array('SubIFD', 'ExposureTime',      		gettext('Shutter Speed'),          										true,				52),
+	'EXIFFNumber'           		=> array('SubIFD', 'FNumber',           		gettext('Aperture'),               										true,				52),
+	'EXIFISOSpeedRatings'   		=> array('SubIFD', 'ISOSpeedRatings',   		gettext('ISO Sensitivity'),        										true,				52),
+	'EXIFExposureBiasValue' 		=> array('SubIFD', 'ExposureBiasValue', 		gettext('Exposure Compensation'), 										true,				52),
+	'EXIFMeteringMode'      		=> array('SubIFD', 'MeteringMode',      		gettext('Metering Mode'),         										true,				52),
+	'EXIFFlash'             		=> array('SubIFD', 'Flash',             		gettext('Flash Fired'),         											true,				52),
+	'EXIFImageWidth'        		=> array('SubIFD', 'ExifImageWidth',    		gettext('Original Width'),														false,			52),
+	'EXIFImageHeight'       		=> array('SubIFD', 'ExifImageHeight',   		gettext('Original Height'),      											false,			52),
+	'EXIFOrientation'       		=> array('IFD0',   'Orientation',       		gettext('Orientation'),            										false,			52),
+	'EXIFContrast'          		=> array('SubIFD', 'Contrast',          		gettext('Contrast Setting'),      										false,			52),
+	'EXIFSharpness'         		=> array('SubIFD', 'Sharpness',         		gettext('Sharpness Setting'),     										false,			52),
+	'EXIFSaturation'        		=> array('SubIFD', 'Saturation',        		gettext('Saturation Setting'),    										false,			52),
+	'EXIFWhiteBalance'					=> array('SubIFD', 'WhiteBalance',					gettext('White Balance'),															false,			52),
+	'EXIFSubjectDistance'				=> array('SubIFD', 'SubjectDistance',				gettext('Subject Distance'),													false,			52),
+	'EXIFFocalLength'       		=> array('SubIFD', 'FocalLength',       		gettext('Focal Length'),           										true,				52),
+	'EXIFFocalLength35mm'   		=> array('SubIFD', 'FocalLength35mmEquiv',	gettext('35mm Equivalent Focal Length (deprecated)'),	false,			52), //deprecated
+	'EXIFFocalLengthIn35mmFilm'	=> array('SubIFD', 'FocalLengthIn35mmFilm',	gettext('Focal Length Equivalent in 35mm Film'),			false,			52),
+	'IPTCCity' 									=> array('IPTC',	 '2#090',									gettext('City'),																			false,			32),
+	'IPTCSubLocation' 					=> array('IPTC',	 '2#092',									gettext('Sublocation'),																false,			32),
+	'IPTCState' 								=> array('IPTC',	 '2#095',									gettext('Province/State'),														false,			32),
+	'IPTCLocationCode' 					=> array('IPTC',	 '2#100',									gettext('Country/Primary Location Code'),							false,			3),
+	'IPTCLocationName' 					=> array('IPTC',	 '2#101',									gettext('Country/Primary Location Name'),							false,			64),
+	'IPTCImageHeadline'  				=> array('IPTC',	 '2#105',									gettext('Image headline'),														false,			256),
+	'EXIFGPSLatitude'       		=> array('GPS',    'Latitude',          		gettext('Latitude'),              										false,			52),
+	'EXIFGPSLatitudeRef'    		=> array('GPS',    'Latitude Reference',		gettext('Latitude Reference'),    										false,			52),
+	'EXIFGPSLongitude'      		=> array('GPS',    'Longitude',         		gettext('Longitude'),             										false,			52),
+	'EXIFGPSLongitudeRef'   		=> array('GPS',    'Longitude Reference',		gettext('Longitude Reference'),  											false,			52),
+	'EXIFGPSAltitude'       		=> array('GPS',    'Altitude',          		gettext('Altitude'),              										false,			52),
+	'EXIFGPSAltitudeRef'    		=> array('GPS',    'Altitude Reference',		gettext('Altitude Reference'),  											false,			52),
+	'IPTCOriginatingProgram'		=> array('IPTC',	 '2#065',									gettext('Originating Program '),											false,			32),
+	'IPTCProgramVersion'			 	=> array('IPTC',	 '2#070',									gettext('Program version'),														false,			10)
 	);
 
 /**
@@ -706,190 +732,6 @@ function getEnabledPlugins() {
 	}
 	arsort($pluginlist);
 	return $pluginlist;
-}
-
-/**
- * For internal use--fetches a single tag from IPTC data
- *
- * @param string $tag the metadata tag sought
- * @return string
- */
-function getIPTCTag($tag) {
-	global $iptc;
-	if (isset($iptc[$tag])) {
-		$iptcTag = $iptc[$tag];
-		$r = "";
-		$ct = count($iptcTag);
-		for ($i=0; $i<$ct; $i++) {
-			$w = $iptcTag[$i];
-			if (!empty($r)) { $r .= ", "; }
-			$r .= $w;
-		}
-		return trim($r);
-	}
-	return '';
-}
-
-/**
- * For internal use--fetches the IPTC array for a single tag.
- *
- * @param string $tag the metadata tag sought
- * @return array
- */
-function getIPTCTagArray($tag) {
-	global $iptc;
-	if (array_key_exists($tag, $iptc)) {
-		return $iptc[$tag];
-	}
-	return NULL;
-}
-
-/**
- * Returns the IPTC data converted into UTF8
- *
- * @param string $iptcstring the IPTC data
- * @param string $characterset the internal encoding of the data
- * @return string
- */
-function prepIPTCString($iptcstring, $characterset) {
-	global $_zp_UTF8;
-	// Remove null byte at the end of the string if it exists.
-	if (substr($iptcstring, -1) === 0x0) {
-		$iptcstring = substr($iptcstring, 0, -1);
-	}
-	$outputset = getOption('charset');
-	if ($characterset == $outputset) return $iptcstring;
-	$iptcstring = $_zp_UTF8->convert($iptcstring, $characterset, $outputset);
-	return $iptcstring;
-}
-
-/**
- * Parces IPTC data and returns those tags zenphoto is interested in
- * folds multiple tags into single zp data items based on precedence.
- *
- * @param string $imageName the name of the image
- * @return array
- */
-function getImageMetadata($imageName) {
-	require_once(dirname(__FILE__).'/exif/exif.php');
-	global $iptc;
-
-	$result = array();
-	zp_imageGetInfo($imageName, $imageInfo);
-	if (is_array($imageInfo)) {
-		$exifraw = read_exif_data_protected($imageName);
-		if (isset($exifraw['SubIFD'])) {
-			$subIFD = $exifraw['SubIFD'];
-		} else {
-			$subIFD = array();
-		}
-		
-		/* EXIF date */
-		if (isset($subIFD['DateTime'])) {
-			$date = trim($subIFD['DateTime']);
-		} else {
-			$date = '';
-		}
-		if (empty($date) && isset($subIFD['DateTimeOriginal'])) {
-			$date = trim($subIFD['DateTimeOriginal']);
-		}
-		if (empty($date)  && isset($subIFD['DateTimeDigitized'])) {
-			$date = trim($subIFD['DateTimeDigitized']);
-		}
-		if (!empty($date)) {
-			$result['date'] = $date;
-		}
-		//EXIF title [sic]
-		if (isset($sufIFD['ImageDescription'])) {
-			$title = trim($sufIFD['ImageDescription']);
-			if (!empty($title)) $result['title'] = $title;
-		}
-
-		/* check IPTC data */
-		if (isset($imageInfo["APP13"])) {
-			$iptc = iptcparse($imageInfo["APP13"]);
-			if ($iptc) {
-				$characterset = getIPTCTag('1#090');
-				if (!$characterset) {
-					$characterset = getOption('IPTC_encoding');
-				} else if (substr($characterset, 0, 1) == chr(27)) { // IPTC escape encoding
-					$characterset = substr($characterset, 1);
-					if ($characterset == '%G') {
-						$characterset = 'UTF-8';
-					} else { // we don't know, need to understand the IPTC standard here. In the mean time, default it.
-						$characterset = getOption('IPTC_encoding');
-					}
-				} else if ($characterset == 'UTF8') {
-					$characterset = 'UTF-8';
-				}
-				/* iptc date */
-				$date = getIPTCTag('2#055');
-				if (!empty($date)) {
-					$result['date'] = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
-				}
-				/* iptc title */
-				$title = getIPTCTag('2#005');   /* Option Name */
-				if (empty($title)) {
-					$title = getIPTCTag('2#105'); /* Headline */
-				}
-				if (!empty($title)) {
-					$result['title'] = prepIPTCString($title, $characterset);
-				}
-
-				/* iptc description */
-				$caption= getIPTCTag('2#120');
-				if (!empty($caption)) {
-					$result['desc'] = prepIPTCString($caption, $characterset);
-				}
-
-				/* iptc location, state, country */
-				$location = getIPTCTag('2#092');
-				if (!empty($location)) {
-					$result['location'] = prepIPTCString($location, $characterset);
-				}
-				$city = getIPTCTag('2#090');
-				if (!empty($city)) {
-					$result['city'] = prepIPTCString($city, $characterset);
-				}
-				$state = getIPTCTag('2#095');
-				if (!empty($state)) {
-					$result['state'] = prepIPTCString($state, $characterset);
-				}
-				$country = getIPTCTag('2#101');
-				if (!empty($country)) {
-					$result['country'] = prepIPTCString($country, $characterset);
-				}
-				/* iptc credit */
-				$credit= getIPTCTag('2#080'); /* by-line */
-				if (empty($credit)) {
-					$credit = getIPTCTag('2#110'); /* credit */
-				}
-				if (empty($credit)) {
-					$credit = getIPTCTag('2#115'); /* source */
-				}
-				if (!empty($credit)) {
-					$result['credit'] = prepIPTCString($credit, $characterset);
-				}
-
-				/* iptc copyright */
-				$copyright= getIPTCTag('2#116');
-				if (!empty($copyright)) {
-					$result['copyright'] = prepIPTCString($copyright, $characterset);
-				}
-
-				/* iptc keywords (tags) */
-				$keywords = getIPTCTagArray('2#025');
-				if (is_array($keywords)) {
-					$taglist = array();
-					foreach($keywords as $keyword) {
-						$taglist[] = prepIPTCString(trim($keyword), $characterset);
-					}
-					$result['tags'] = $taglist;
-				}
-			}
-		}
-	}
-	return $result;
 }
 
 /**
