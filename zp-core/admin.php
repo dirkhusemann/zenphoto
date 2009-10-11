@@ -285,7 +285,6 @@ if (defined('RELEASE')) {
 		if ($c > 0) {
 			natcasesort($plugins);
 			foreach ($plugins as $extension) {
-				$ext = substr($extension, 0, strlen($extension)-4);
 				$pluginStream = file_get_contents(getPlugin($extension.'.php'));
 				$str =  $pluginStream;
 				$i = strpos($str, '$plugin_version');
@@ -299,7 +298,7 @@ if (defined('RELEASE')) {
 				} else {
 					$version = '';
 				}
-				echo "<li>".$ext.$version."</li>";
+				echo "<li>".$extension.$version."</li>";
 			}
 		} else {
 			echo '<li>'.gettext('<em>none</em>').'</li>';

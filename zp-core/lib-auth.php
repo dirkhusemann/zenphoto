@@ -149,7 +149,7 @@ function passwordNote() {
 		}
 	} else {
 		if ($l > 0) {
-			$msg = sprintf(gettext('<strong>Note</strong>: ptasswords must be at least %u characters long.'), $l);
+			$msg = sprintf(gettext('<strong>Note</strong>: passwords must be at least %u characters long.'), $l);
 		} else {
 			$msg = '';
 		}
@@ -506,7 +506,7 @@ class lib_auth_options {
 										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication. <strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.')),
 									gettext('Minimum password length:') => array('key' => 'min_password_lenght', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext('Minimum number of characters a password must contain.')),
-									gettext('Password charcters:') => array('key' => 'password_pattern', 'type' => OPTION_TYPE_CLEARTEXT,
+									gettext('Password characters:') => array('key' => 'password_pattern', 'type' => OPTION_TYPE_CLEARTEXT,
 										'desc' => gettext('Passwords must contain at least one of the characters from each of the groups. Groups are separated by "|". (Use "\|" to represent the "|" character in the groups.)'))
 		);
 	}

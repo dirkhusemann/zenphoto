@@ -1552,7 +1552,7 @@ function printAlbumButtons($album) {
 		</form>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
-		<input type="hidden" name=\return" value="<?php echo urlencode($album->name); ?>">
+		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
 		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/redo.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
 	  </div>	
@@ -1654,7 +1654,7 @@ function printAlbumEditRow($album) {
 		<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
 	</td>
 	<td style="text-align:center;" width="<?php echo $wide; ?>";>
-		<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;eturn=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
+		<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
 		<img src="images/redo1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh image metadata in the album %s'), $album->name); ?>" /></a>
 	</td>
 	<td style="text-align:center;" width="<?php echo $wide; ?>">

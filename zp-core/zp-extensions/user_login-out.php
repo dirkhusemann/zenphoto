@@ -81,9 +81,11 @@ if (!OFFSET_PATH) {
  * @param string $before before text
  * @param string $after after text
  * @param bool $showLoginForm set to true to display a login form if no one is logged in
+ * @param string $logouttext optional replacement text for "Logout"
  */
-function printUserLogin_out($before='', $after='', $showLoginForm=false) {
+function printUserLogin_out($before='', $after='', $showLoginForm=false, $logouttext=NULL) {
 	global $cookies, $__redirect;
+	if (is_null($logouttext)) $logouttext = gettext("Logout");
 	if ($showLoginForm || getOption('user_logout_login_form')) {
 		$showLoginForm = !checkforPassword(true);
 	}
@@ -98,7 +100,7 @@ function printUserLogin_out($before='', $after='', $showLoginForm=false) {
 			<?php
 		}
 	} else {
-		echo $before.'<a href="?userlog=0'.$__redirect.'" title="'.gettext("logout").'" >'.gettext("logout").'</a>'.$after;
+		echo $before.'<a href="?userlog=0'.$__redirect.'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
 	}
 }
 

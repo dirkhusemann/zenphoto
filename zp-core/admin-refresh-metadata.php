@@ -41,7 +41,7 @@ if (isset($_GET['prune'])) {
 } else {
 	$type = '';
 	$title = gettext('Refresh Metadata');
-	$finished = gettext('Finished refershing the metadata');
+	$finished = gettext('Finished refreshing the metadata');
 	$incomplete = gettext('Metadata refresh is incomplete');
 	$allset = gettext("We're all set to refresh the metadata");
 	$continue = gettext('Continue refreshing the metadata.');
