@@ -295,7 +295,7 @@ function getNewsTitleLink() {
 		$type = getNewsType();
 		switch($type) {
 			case "album":
-				$link = $_zp_current_zenpage_news->getAlbumLink();
+				$link = getNewsAlbumURL();
 				break;
 			case "news":
 				$link = $_zp_current_zenpage_news->getTitlelink();
@@ -451,7 +451,13 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 			switch($mode) {
 				case "latestalbums-sizedimage":
 					$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
-					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$albumthumbobj->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$class = get_class($albumthumbobj);
+					if($class != "_Image") {
+						$imgurl = $_zp_current_zenpage_news->getAlbumThumb();
+					} else {
+						$imgurl = $albumthumbobj->getSizedImage($size);
+					}
+					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestalbums-thumbnail":
 					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
@@ -599,6 +605,8 @@ function getNewsAlbumName() {
 		if(!is_NewsType("album")) {
 			$albumobj = $_zp_current_zenpage_news->getAlbum();
 			return $albumobj->getFolder();	
+		} else {
+			return $_zp_current_zenpage_news->getFolder();
 		}
 	} else {
 		return false;
