@@ -22,7 +22,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 	</div>
 
 		<div id="padbox">
-
+		<?php printGalleryDesc(); ?>
 		<div id="albums">
 			<?php while (next_album()): ?>
 			<div class="album">

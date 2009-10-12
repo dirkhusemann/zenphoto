@@ -18,6 +18,7 @@ body {
 	margin: 0px;
 	padding: 0px 0px 50px;
 	text-align: center;
+
 }
 #main {
 	text-align: left;
@@ -72,6 +73,7 @@ a:hover, a:focus { text-decoration: underline; color: #94c2e5; }
 body {
 	font: normal 82%/200% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
 	color: #888;
+	line-height: 1.4em;
 }
 h2 {
 	font: 115% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;

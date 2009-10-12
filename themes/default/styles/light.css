@@ -72,6 +72,7 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 body {
 	font: normal 82%/200% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
 	color: #5A5A4B;
+	line-height: 1.5em;
 }
 h2 {
 	font: 115% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;

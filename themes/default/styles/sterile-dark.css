@@ -13,6 +13,7 @@ body {
 	padding: 0;
 	text-align: center;
 	font: 76% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+
 }
 #main {
 	text-align: left;
@@ -67,6 +68,7 @@ body {
 body {
 	font: normal 11px Verdana, Arial, Helvetica, sans-serif;
 	color: #888;
+	line-height: 1.6em;
 }
 h1, h2, h3, h4{ font-family: "Trebuchet MS",Verdana,Sans-Serif;}
 h1 {
