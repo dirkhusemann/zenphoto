@@ -446,7 +446,7 @@ function formatData($type,$tag,$intel,$data) {
 			else if ($data == 4)    $data = gettext('Shutter Priority');
 			else if ($data == 5)    $data = gettext('Program Creative');
 			else if ($data == 6)    $data = gettext('Program Action');
-			else if ($data == 7)    $data = gettext('Portrat');
+			else if ($data == 7)    $data = gettext('Portrait');
 			else if ($data == 8)    $data = gettext('Landscape');
 			else                    $data = gettext('Unknown').': '.$data;
 			
