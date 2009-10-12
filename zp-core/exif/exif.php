@@ -932,6 +932,9 @@ if ($result['ValidJpeg'] == 1) {
 	}
 	
 	// Add the 35mm equivalent focal length:
+	if (isset($result['IFD0']['FocalLengthIn35mmFilm']) && !isset($result['SubIFD']['FocalLengthIn35mmFilm'])) { // found in the wrong place
+		$result['SubIFD']['FocalLengthIn35mmFilm'] = $result['IFD0']['FocalLengthIn35mmFilm'];
+	}
 	if (!isset($result['SubIFD']['FocalLengthIn35mmFilm'])) {
 		$result['SubIFD']['FocalLengthIn35mmFilm'] = get35mmEquivFocalLength($result);
 	}
