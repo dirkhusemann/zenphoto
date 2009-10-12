@@ -414,9 +414,15 @@ if (ini_get('safe_mode')) { ?>
 ?>
 							'displayData': 'speed',
 							'simUploadLimit': 3,
-							'onAllComplete':	function() {
-																  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
-																},
+							<?php
+							if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+								?>
+								'onAllComplete':	function() {
+																	  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
+																	},
+								<?php
+								}
+							?>
 							'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
 							'fileExt': '<?php echo $extensions.'|*.*'; ?>'
 						});

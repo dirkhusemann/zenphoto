@@ -1012,7 +1012,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 function getManagedAlbumList() {
 	global $_zp_admin_album_list, $_zp_current_admin;
 	$_zp_admin_album_list = array();
-	if (zp_loggedin(MANAGE_ALL_ALBUMS)) {
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$sql = "SELECT `folder` FROM ".prefix('albums').' WHERE `parentid` IS NULL';
 	} else {
 		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
