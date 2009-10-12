@@ -53,7 +53,7 @@ function albumSwitch(sel, unchecknewalbum, msg1, msg2) {
 		titlebox.value = selected.text;
 		exists.value = true;
 	}
-	validateFolder(folder, msg1, msg2);
+	return validateFolder(folder, msg1, msg2);
 }
 
 
@@ -104,7 +104,7 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
 		}
 	}
 	folder.value = parentfolder + fname + fnamesuffix;
-	validateFolder(folder, msg1, msg2);
+	return validateFolder(folder, msg1, msg2);
 }
 
 function validateFolder(folderObj, msg1, msg2) {
@@ -136,11 +136,12 @@ function toggleAutogen(fieldID, nameID, checkbox) {
 	if (checkbox.checked) {
 		window.folderbackup = field.value;
 		field.disabled = true;
-		updateFolder(name, fieldID, checkbox.id);
+		return updateFolder(name, fieldID, checkbox.id);
 	} else {
 		if (window.folderbackup && window.folderbackup != "")
 			field.value = window.folderbackup;
 			field.disabled = false;
+		return true;
 	}
 }
 

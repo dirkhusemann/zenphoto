@@ -236,7 +236,8 @@ if (ini_get('safe_mode')) { ?>
 }
 ?>
 
-<form name="uploadform" enctype="multipart/form-data" action="?action=upload&uploadtype=http" method="POST" onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
+<form name="uploadform" enctype="multipart/form-data" action="?action=upload&uploadtype=http" method="POST"
+												onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" /> 
 	<input type="hidden" name="existingfolder" value="false" />
 
@@ -252,9 +253,16 @@ if (ini_get('safe_mode')) { ?>
 		}
 		?>
 		<script type="text/javascript">
+			function buttonstate(good) {
+				if (good) {
+					$('#fileUploadbuttons').show();
+				} else {
+					$('#fileUploadbuttons').hide();
+				}
+			}
 			function albumSelect() {	
 				var sel = document.getElementById('albumselectmenu');
-				albumSwitch(sel, 	true, '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');
+				buttonstate(albumSwitch(sel, true, '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));
 			}
 		</script>
 		<select id="albumselectmenu" name="albumselect" onChange="albumSelect()">
@@ -329,12 +337,16 @@ if (ini_get('safe_mode')) { ?>
 		</div>
 		
 		<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?>
-			<input id="albumtitle" size="42" type="text" name="albumtitle"  onKeyUp="updateFolder(this, 'folderdisplay', 'autogen', '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
+			<input id="albumtitle" size="42" type="text" name="albumtitle"
+										onKeyUp="buttonstate(updateFolder(this, 'folderdisplay', 'autogen','<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));" />
 		
 			<div style="position: relative; margin-top: 4px;"><?php echo gettext("with the folder name:"); ?>
 				<div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
-				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="DISABLED" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
-				<label><input type="checkbox" name="autogenfolder" id="autogen" CHECKED="CHECKED" onclick="toggleAutogen('folderdisplay', 'albumtitle', this);" /><?php echo gettext("Auto-generate"); ?></label>
+				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="DISABLED" 
+											onKeyUp="buttonstate(validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));" />
+				<label><input type="checkbox" name="autogenfolder" id="autogen" CHECKED="CHECKED" 
+											onclick="buttonstate(toggleAutogen('folderdisplay', 'albumtitle', this));" />
+											<?php echo gettext("Auto-generate"); ?></label>
 				<br />
 				<br />
 			</div>
@@ -426,43 +438,14 @@ if (ini_get('safe_mode')) { ?>
 							'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
 							'fileExt': '<?php echo $extensions.'|*.*'; ?>'
 						});
-					if($('#folderdisplay').val() == "") {
-						$('#fileUploadbuttons').hide();
-					} else {
-						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
-						$('#fileUploadbuttons').show();
-					}
-					$('#albumselectmenu').change(function(){
-						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
-						if($('#folderdisplay').val() == "") {
-							$('#fileUploadbuttons').hide();
-						} else {
-							$('#fileUploadbuttons').show();
-						}
-					});
-					$('#albumtitle').change(function(){
-						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
-						if($('#folderdisplay').val() == "") {
-							$('#fileUploadbuttons').hide();
-						} else {
-							$('#fileUploadbuttons').show();
-						}
-					});
-					$('#folderdisplay').change(function(){
-						$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());
-						if($('#folderdisplay').val() == "") {
-							$('#fileUploadbuttons').hide();
-						} else {
-							$('#fileUploadbuttons').show();
-						}
-					});
+					buttonstate($('#folderdisplay').val() != "");
 				});
 				</script>
 				<div id="fileUpload">
 					<?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?>
 				</div>
 				<p class="buttons" id="fileUploadbuttons" style="display: none;">
-					<a href="javascript:$('#fileUpload').uploadifyUpload()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
+					<a href="javascript:$('#fileUpload').uploadifySettings('folder','/'+$('#folderdisplay').val());$('#fileUpload').uploadifyUpload()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
 					<a href="javascript:$('#fileUpload').uploadifyClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
 				<br clear: all /><br />
 				</p>
@@ -486,7 +469,7 @@ if (ini_get('safe_mode')) { ?>
 				<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
 				
 				
-				<p class="buttons">
+				<p id="fileUploadbuttons" class="buttons">
 					<button type="submit" value="<?php echo gettext('Upload'); ?>"
 						onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button">
 						<img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?>
@@ -527,6 +510,7 @@ if (ini_get('safe_mode')) { ?>
 					if($uploadtype == 'http') {
 						?>
 						$('#uploadboxes').show();
+						buttonstate(true);
 						<?php
 					}
 					?>
@@ -541,10 +525,12 @@ if (ini_get('safe_mode')) { ?>
 					if($uploadtype == 'http') {
 						?>
 						$('#uploadboxes').show();
+						buttonstate(true);
 						<?php
 					}
 					?>
 					$('#foldererror').hide();
+					buttonstate(false);
 				}
 				<?php
 			}
