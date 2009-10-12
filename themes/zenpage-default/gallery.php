@@ -32,6 +32,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 
 	<div id="content-left">	
 	<?php if(!getOption("zenpage_zp_index_news") OR !function_exists("printNewsPageListWithNav")) { ?>
+	<?php printGalleryDesc(); ?> 
 			<div id="albums">
 				<?php while (next_album()): ?>
 					<div class="album">

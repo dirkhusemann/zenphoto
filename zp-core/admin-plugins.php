@@ -150,49 +150,70 @@ foreach ($filelist as $extension) {
 			}
 		}
 	}
+	$optionlink = isolate('$option_interface', $pluginStream);
+	if (!empty($optionlink)) {
+		$optionlink = FULLWEBPATH.'/'.ZENFOLDER.'/admin-options.php?page=options&tab=plugin&_show-'.$extension;
+	}
 	?>
 	<tr>
-	<td width="30%">
-	<label>
-		<input type="checkbox" name="<?php echo $opt; ?>" value="<?php echo $loadtype; ?>"
+		<td width="30%">
+		<label>
+			<input type="checkbox" name="<?php echo $opt; ?>" value="<?php echo $loadtype; ?>"
+				<?php
+				if ($parserr || $plugin_disable) {
+					echo 'DISABLED';
+				} else {
+					if (getOption($opt)) {
+						echo 'CHECKED="CHECKED"';
+					}
+				} ?> />
+			<span<?php if (!$third_party_plugin) echo ' style="font-weight:bold"' ?>><?php echo $extension; ?></span>
+		</label>
+		<?php
+		if (!empty($plugin_version)) {
+			echo ' v'.$plugin_version;
+		}
+		?>
+		</td>
+		<td>
+		<?php
+		echo $plugin_description;
+		if (!empty($plugin_URL)) {
+			?>
+			<br />
 			<?php
-			if ($parserr || $plugin_disable) {
-				echo 'DISABLED';
+			if ($parserr & 8) {
+				echo $plugin_URL;
 			} else {
-				if (getOption($opt)) {
-					echo 'CHECKED="CHECKED"';
-				}
-			} ?> />
-		<span<?php if (!$third_party_plugin) echo ' style="font-weight:bold"' ?>><?php echo $extension; ?></span>
-	</label>
-	<?php
-	if (!empty($plugin_version)) {
-		echo ' v'.$plugin_version;
-	}
-	?>
-	</td>
-	<td>
-	<?php
-	echo $plugin_description;
-	if (!empty($plugin_URL)) {
-		if ($parserr & 8) {
-			echo '<br />'.$plugin_URL;
-		} else {
-			echo '<br /><a href="'.$plugin_URL.'"><strong>'.gettext("Usage information").'</strong></a>';
+				?>
+				<a href="<?php echo $plugin_URL; ?>"><strong><?php echo gettext("Usage information"); ?></strong></a>
+				<?php
+			}
 		}
-	}
-	if (!empty($plugin_author)) {
-		echo '<br />';
-		if (!($parserr & 2)) {
-			echo '<strong>'.gettext("Author").'</strong>: ';
+		if (!empty($plugin_author)) {
+			?>
+			<br />
+			<?php
+			if (!($parserr & 2)) {
+				?>
+				<strong><?php echo gettext("Author"); ?></strong>
+				<?php
+			}
+			echo $plugin_author;
 		}
-		echo $plugin_author;
+		if ($optionlink) {
+			?>
+			<br />
+			<a href="<?php echo $optionlink; ?>" ><?php echo gettext("Change plugin options"); ?></a>
+			<?php
+		}
+		?>
+		</td>
+	</tr>
+	<?php
 	}
-	echo '</td>';
-	echo "</tr>\n";
-}
-echo "</table>\n";
 ?>
+</table>
 <br />
 <p class="buttons">
 <button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
