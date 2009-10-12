@@ -4197,7 +4197,7 @@ function getPageRedirect() {
 					$_zp_current_album, $_zp_current_image;
 	switch($_zp_gallery_page) {
 		case 'index.php':
-			$action = "";
+			$action = '/index.php';
 			break;
 		case 'album.php':
 			$action = '/index.php?userlog=1&album='.urlencode($_zp_current_album->name);

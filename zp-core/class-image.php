@@ -197,6 +197,57 @@ class _Image extends PersistentObject {
 	function updateMetaData() {
 		require_once(dirname(__FILE__).'/exif/exif.php');
 		global $_zp_exifvars;
+		$IPTCtags = array(
+											'SKIP'								=>	'2#000',	//	Record Version										Size:64		
+											'ObjectType'					=>	'2#003',	//	Object Type	Ref										Size:67	
+											'ObjectAttr'					=>	'2#004',	//	Object Attribute Ref							Size:67	
+											'ObjectName'					=>	'2#005',	//	Object name												Size:64		
+											'EditStatus'					=>	'2#007',	//	Edit Status												Size:64		
+											'EditorialUpdate'			=>	'2#008',	//	Editorial Update									Size:2		
+											'Urgency'							=>	'2#010',	//	Urgency														Size:1			
+											'SubRef'							=>	'2#012',	//	Subject	Reference									Size:236		
+											'Category'						=>	'2#015',	//	Category 													Size:3			
+											'SuppCategory'				=>	'2#020',	//	Supplemental category							Size:32		
+											'FixtureID'						=>	'2#022',	//	Fixture	ID 												Size:32		
+											'Keywords'						=>	'2#025',	//	Keywords 													Size:64			
+											'ContentLocCode'			=>	'2#026',	//	Content	Location Code							Size:3
+											'ContentLocName'			=>	'2#027',	//	Content	Location Name							Size:64
+											'ReleaseDate'					=>	'2#030',	//	Release	Date 											Size:8		
+											'ReleaseTime'					=>	'2#035',	//	Release	Time											Size:11		
+											'ExpireDate'					=>	'2#037',	//	Expiration Date										Size:8	
+											'ExpireTime'					=>	'2#038',	//	Expiration Time										Size:11	
+											'SpecialInstru'				=>	'2#040',	//	Special Instructions							Size:256	
+											'ActionAdvised'				=>	'2#042',	//	Action Advised										Size:2	
+											'RefService'					=>	'2#045',	//	Reference Service									Size:10	
+											'RefDate'							=>	'2#047',	//	Reference Date										Size:8	
+											'RefNumber'						=>	'2#050',	//	Reference Number									Size:8	
+											'DateCreated'					=>	'2#055',	//	Date created											Size:8	
+											'TimeCreated'					=>	'2#060',	//	Time created											Size:11	
+											'DigitizeDate'				=>	'2#062',	//	Digital Creation Date							Size:8
+											'DigitizeTime'				=>	'2#063',	//	Digital Creation Time							Size:11
+											'OriginatingProgram'	=>	'2#065',	//	Originating Program								Size:32
+											'ProgramVersion'			=>	'2#070',	//	Program version										Size:10
+											'ObjectCycle'					=>	'2#075',	//	Object Cycle											Size:1	
+											'ByLine'							=>	'2#080',	//	ByLine 														Size:32		
+											'ByLineTitle'					=>	'2#085',	//	ByLine Title											Size:32	
+											'City'								=>	'2#090',	//	City															Size:32			
+											'SubLocation'					=>	'2#092',	//	Sublocation												Size:32			
+											'State'								=>	'2#095',	//	Province/State										Size:32			
+											'LocationCode'				=>	'2#100',	//	Country/Primary	Location Code			Size:3
+											'LocationName'				=>	'2#101',	//	Country/Primary	Location Name			Size:64
+											'TransmissionRef'			=>	'2#103',	//	Original Transmission Reference		Size:32
+											'ImageHeadline'				=>	'2#105',	//	Image headline										Size:256		
+											'ImageCredit'					=>	'2#110',	//	Image credit											Size:32		
+											'Source'							=>	'2#115',	//	Source														Size:32			
+											'Copyright'						=>	'2#116',	//	Copyright Notice									Size:128		
+											'Contact'							=>	'2#118',	//	Contact														Size:128			
+											'ImageCaption'				=>	'2#120',	//	Image caption											Size:2000		
+											'ImageCaptionWriter'	=>	'2#122',	//	Image caption writer							Size:32	
+											'ImageType'						=>	'2#130',	//	Image type												Size:2		
+											'Orientation'					=>	'2#131',	//	Image	 rientation									Size:1		
+											'LangID'							=>	'2#135',	//	Language ID												Size:3		
+											'Subfile'							=>	'8#010'		//	Subfile														Size:2
+										);
 		$result = array();
 		zp_imageGetInfo($this->localpath, $imageInfo);
 		if (is_array($imageInfo)) {
@@ -236,7 +287,7 @@ class _Image extends PersistentObject {
 						// Extract IPTC fields of interest
 						foreach ($_zp_exifvars as $field=>$exifvar) {
 							if ($exifvar[0]=='IPTC') {
-								$datum = $this->getIPTCTag($exifvar[1], $iptc);
+								$datum = $this->getIPTCTag($IPTCtags[$exifvar[1]], $iptc);
 								$this->set($field, $this->prepIPTCString($datum, $characterset));
 							}
 						}
