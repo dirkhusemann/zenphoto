@@ -456,7 +456,7 @@ function formatData($type,$tag,$intel,$data) {
 			else if ($data == 2)    $data = gettext('Center Weighted Average');
 			else if ($data == 3)    $data = gettext('Spot');
 			else if ($data == 4)    $data = gettext('Multi-Spot');
-			else if ($data == 5)    $data = gettext('Multi-Segment');
+			else if ($data == 5)    $data = gettext('Pattern');
 			else if ($data == 6)    $data = gettext('Partial');
 			else if ($data == 255)  $data = gettext('Other');
 			else                    $data = gettext('Unknown').': '.$data;
