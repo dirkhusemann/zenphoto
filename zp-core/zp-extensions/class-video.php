@@ -88,6 +88,9 @@ class Video extends _Image {
 
 			$title = $this->getDefaultTitle();
 			$this->set('title', sanitize($title, 2));
+			if (!is_null($this->objectsThumb)) {
+				$this->updateMetaData();
+			}
 			zp_apply_filter('new_image', $this);
 			$this->save();
 		}

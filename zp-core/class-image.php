@@ -191,8 +191,8 @@ class _Image extends PersistentObject {
 	}
 
 	/**
-	 * Parces Exit/IPTC data
-	 *
+	 * Parses Exif/IPTC data
+	 * 
 	 */
 	function updateMetaData() {
 		require_once(dirname(__FILE__).'/exif/exif.php');
@@ -249,9 +249,14 @@ class _Image extends PersistentObject {
 											'Subfile'							=>	'8#010'		//	Subfile														Size:2
 										);
 		$result = array();
-		zp_imageGetInfo($this->localpath, $imageInfo);
+		if (get_class($this)=='_Image') {
+			$localpath = $this->localpath;
+		} else {
+			$localpath = $this->getThumbImageFile();
+		}
+		zp_imageGetInfo($localpath, $imageInfo);
 		if (is_array($imageInfo)) {
-			$exifraw = read_exif_data_protected($this->localpath);
+			$exifraw = read_exif_data_protected($localpath);
 			if (isset($exifraw['ValidEXIFData'])) {
 				foreach($_zp_exifvars as $field => $exifvar) {
 					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {

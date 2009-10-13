@@ -469,7 +469,7 @@ class Gallery {
 				$imageName = internalToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
 				if (file_exists($imageName)) {
 					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it
-						$imageobj = new _Image(new Album($this, $row['folder']), $image['filename']);
+						$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
 						$imageobj->updateDimensions(); // update the width/height & account for rotation
 						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
 						zp_apply_filter('image_refresh', $imageobj);
