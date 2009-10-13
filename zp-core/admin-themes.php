@@ -198,73 +198,80 @@ foreach($themes as $theme => $themeinfo) {
 	?>
 	<tr>
 		<td style="margin: 0px; padding: 0px;"><?php
-		if (file_exists("$themedir/theme.png")) $themeimage = "$themeweb/theme.png";
-		else if (file_exists("$themedir/theme.gif")) $themeimage = "$themeweb/theme.gif";
-		else if (file_exists("$themedir/theme.jpg")) $themeimage = "$themeweb/theme.jpg";
-		else $themeimage = false;
-		if ($themeimage) { ?> <img height="150" width="150"
-			src="<?php echo $themeimage; ?>" alt="Theme Screenshot" /> <?php } ?>
+			if (file_exists("$themedir/theme.png")) $themeimage = "$themeweb/theme.png";
+			else if (file_exists("$themedir/theme.gif")) $themeimage = "$themeweb/theme.gif";
+			else if (file_exists("$themedir/theme.jpg")) $themeimage = "$themeweb/theme.jpg";
+			else $themeimage = false;
+			if ($themeimage) { ?> <img height="150" width="150"
+				src="<?php echo $themeimage; ?>" alt="Theme Screenshot" /> <?php } ?>
 		</td>
-		<td <?php echo $style; ?>><strong><?php echo $themeinfo['name']; ?></strong><br />
-		<?php echo $themeinfo['author']; ?><br />
-		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
-		<?php echo $themeinfo['desc']; ?></td>
+		<td <?php echo $style; ?>>
+			<strong><?php echo $themeinfo['name']; ?></strong>
+			<br />
+			<?php echo $themeinfo['author']; ?>
+			<br />
+			Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?>
+			<br />
+			<?php echo $themeinfo['desc']; ?>
+			<br /><br />
+			<a href="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/admin-options.php?page=options&amp;tab=theme&amp;optiontheme=<?php echo $theme; ?>" ><?php echo sprintf(gettext('Set <em>%s</em> theme options'),$themeinfo['name']); ?></a>
+		</td>
 		<td width="20%" <?php echo $style; ?>>
-		<ul class="theme_links">
-		<?php
-		if ($theme != $current_theme) {
-			?>
-			<li>
-			<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
-			<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?>
-			</a></p><br />
-		  </li>
-		<?php
-		} else {
-			if ($gallerydefault) {
+			<ul class="theme_links">
+			<?php
+			if ($theme != $current_theme) {
 				?>
 				<li>
-				<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
-				<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
-				</a></p><br />	
+				<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
+				<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?>
+				</a></p><br />
 			  </li>
-				<?php
+			<?php
 			} else {
-				echo "<li><strong>".gettext("Current Theme")."</strong></li>";
+				if ($gallerydefault) {
+					?>
+					<li>
+					<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
+					<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
+					</a></p><br />	
+				  </li>
+					<?php
+				} else {
+					echo "<li><strong>".gettext("Current Theme")."</strong></li>";
+				}
 			}
-		}
-		
-		if (themeIsEditable($theme, $themes)) {
-			?>
-			<li>
-			<p class="buttons">
-			<a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
-			<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?></a>
-			</p><br />	
-		  </li>
-		  <?php
-		  if ($theme != $current_theme) {
-		  	?>
+			
+			if (themeIsEditable($theme, $themes)) {
+				?>
 				<li>
 				<p class="buttons">
-				<a href="?action=deletetheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Delete this theme"); ?>">
-				<img src="images/edit-delete.png" alt="" /><?php echo gettext("Delete"); ?></a>
+				<a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
+				<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?></a>
+				</p><br />	
+			  </li>
+			  <?php
+			  if ($theme != $current_theme) {
+			  	?>
+					<li>
+					<p class="buttons">
+					<a href="?action=deletetheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Delete this theme"); ?>">
+					<img src="images/edit-delete.png" alt="" /><?php echo gettext("Delete"); ?></a>
+					</p>	
+				  </li>
+					<?php
+			  }
+			} else {
+			
+				?>
+				<li class="zp_copy_theme">
+				<p class="buttons">
+				<a href="?" title="<?php echo $theme; ?>">
+				<img src="images/page_white_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
 				</p>	
 			  </li>
 				<?php
-		  }
-		} else {
-		
+			}
 			?>
-			<li class="zp_copy_theme">
-			<p class="buttons">
-			<a href="?" title="<?php echo $theme; ?>">
-			<img src="images/page_white_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
-			</p>	
-		  </li>
-			<?php
-		}
-		?>
 		</td>
 	</tr>
 

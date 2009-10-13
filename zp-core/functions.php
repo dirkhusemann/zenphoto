@@ -2032,19 +2032,36 @@ function setThemeOptionDefault($key, $value) {
 	}
 }
 
-function setBoolThemeOption($key, $bool, $album=NULL) {
+/**
+ * Sets value for a boolena theme option
+ * insures that the value is either zero or one
+ *
+ * @param string $key Option key
+ * @param bool $bool value to be set
+ * @param object $album album object
+ * @param string $default theme name
+ */
+function setBoolThemeOption($key, $bool, $album=NULL, $default=false) {
 	if ($bool) {
 		$value = 1;
 	} else {
 		$value = 0;
 	}
-	setThemeOption($key, $value, $album);
+	setThemeOption($key, $value, $album, $default);
 }
 
-function getThemeOption($album, $option) {
+/**
+ * Returns the value of a theme option
+ *
+ * @param string $option option key
+ * @param object $album
+ * @param string $default theme name
+ * @return mixed
+ */
+function getThemeOption($option, $album=NULL, $default=false) {
 	global $gallery;
 	if (is_null($album)) {
-		$theme = '';
+		$theme = $default;
 		$id = 0;
 	} else {
 		$id = $album->id;

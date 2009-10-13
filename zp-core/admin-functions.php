@@ -536,7 +536,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 				$option = str_replace('_', ' ', $option);
 			}
 			if ($theme) {
-				$v = getThemeOption($album, $key);				
+				$v = getThemeOption($key, $album, $theme);				
 			} else {
 				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($key) . "';";
 				$db = query_single_row($sql);
