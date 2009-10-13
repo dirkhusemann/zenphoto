@@ -10,9 +10,9 @@
  * @package plugins 
  */
 
-$plugin_description = gettext("A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
+$plugin_description = gettext("A plugin to print the most common html meta tags (except the charset one which is standard to all theme files anyway) to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
 
@@ -32,7 +32,6 @@ class htmlmetatags {
 		setOptionDefault('htmlmeta_http-equiv-language', '1');
 		setOptionDefault('htmlmeta_name-language', '1');
 		setOptionDefault('htmlmeta_htmlmeta_tags', '1');
-		setOptionDefault('htmlmeta_http-equiv-content-type', '');
 		setOptionDefault('htmlmeta_http-equiv-cache-control', '1');
 		setOptionDefault('htmlmeta_http-equiv-pragma', '1');
 		setOptionDefault('htmlmeta_http-equiv-content-style-type','1');
@@ -71,7 +70,6 @@ class htmlmetatags {
 												"http-equiv='language'" => "htmlmeta_http-equiv-language",
 												"name = 'language'"=>  "htmlmeta_name-language",
 												"content-language" => "htmlmeta_name-content-language",
-												"http-equiv-content-type/charset" => "htmlmeta_http-equiv-content-type",
 												"http-equiv='imagetoolbar' ('false')" => "htmlmeta_http-equiv-imagetoolbar",
 												"http-equiv='cache-control'" => "htmlmeta_http-equiv-cache-control",
 												"http-equiv='pragma'" => "htmlmeta_http-equiv-pragma",
@@ -172,7 +170,6 @@ function getHTMLMetaData() {
 	if(getOption('htmlmeta_http-equiv-language')) { $meta .= '<meta http-equiv="language" content="'.$locale.'" />'."\n"; }
 	if(getOption('htmlmeta_name-language')) { $meta .= '<meta name="language" content="'.$locale.'" />'."\n"; }
 	if(getOption('htmlmeta_name-content-language')) { $meta .= '<meta name="content-language" content="'.$locale.'" />'."\n"; }
-	if(getOption('htmlmeta_http-equiv-content-type')) { $meta .= '<meta http-equiv="content-type" content="text/html; charset='.getOption("charset").'" />'."\n"; }
 	if(getOption('htmlmeta_http-equiv-imagetoolbar')) { $meta .= '<meta http-equiv="imagetoolbar" content="false" />'."\n"; }
 	if(getOption('htmlmeta_http-equiv-cache-control')) { $meta .= '<meta http-equiv="cache-control" content="'.getOption("htmlmeta_cache_control").'" />'."\n"; }
 	if(getOption('htmlmeta_http-equiv-pragma')) { $meta .= '<meta http-equiv="pragma" content="'.getOption("htmlmeta_pragma").'" />'."\n"; }
