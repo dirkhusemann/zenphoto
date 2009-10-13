@@ -1,15 +1,13 @@
 <?php
 require_once ('customfunctions.php');
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-?>
-<?php
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-header('Content-Type: text/html; charset=' . getOption('charset'));
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title><?php echo getBareGalleryTitle(); ?></title>
+	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<?php zenJavascript(); ?>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/slideshow.css" type="text/css" />

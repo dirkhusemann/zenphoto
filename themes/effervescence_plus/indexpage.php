@@ -2,16 +2,15 @@
 define('ALBUMCOLUMNS', 3);
 define('IMAGECOLUMNS', 5);
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
-<?php
+normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-header('Content-Type: text/html; charset=' . getOption('charset'));
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
 	<title><?php $mainsite = getMainSiteName(); echo (empty($mainsite))?gettext("zenphoto gallery"):$mainsite; ?></title>
+	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
