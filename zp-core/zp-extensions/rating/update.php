@@ -13,7 +13,7 @@ require_once('functions-rating.php');
 $id = sanitize_numeric($_POST['id']);
 $table = sanitize($_POST['table'],3);
 $dbtable = prefix($table);
-$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
+$ip = getUserIP();
 $unique = '_'.$table.'_'.$id;
 $split_stars = getOption('rating_split_stars')+1;
 $rating = max(0, min(5, round(sanitize_numeric($_POST['star_rating-value'.$unique])/$split_stars)));

@@ -121,7 +121,7 @@ function zp_handle_comment() {
 			} else {
 				$p_comment = '';
 			}
-			$p_server = sanitize($_SERVER['REMOTE_ADDR'], 3);
+			$p_server = getUserIP();
 			if (isset($_POST['code'])) {
 				$code1 = sanitize($_POST['code'], 3);
 				$code2 = sanitize($_POST['code_h'], 3);

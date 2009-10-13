@@ -165,7 +165,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
   $votes = $object->get('total_votes');
 	$id = $object->get('id');
 	$unique = '_'.$table.'_'.$id;
-	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
+	$ip = getUserIP();
 	$recast = getOption('rating_recast');
   $split_stars = getOption('rating_split_stars')+1;  
 	$oldrating = getRatingByIP($ip,$object->get('used_ips'), $object->get('rating'));

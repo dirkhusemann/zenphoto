@@ -130,7 +130,7 @@ function adminLoginLogger($success, $user, $pass) {
 	} else {
 		$name = '';
 	}
-	loginLogger($success, $user, $pass, $name, sanitize($_SERVER['REMOTE_ADDR'], 0), 'backend', 'zp_admin_auth');
+	loginLogger($success, $user, $pass, $name, getUserIP(), 'backend', 'zp_admin_auth');
 	return $success;
 }
 
@@ -145,7 +145,7 @@ function adminLoginLogger($success, $user, $pass) {
  * @return bool
  */
 function guestLoginLogger($success, $user, $pass, $athority) {
-	loginLogger($success, $user, $pass, '', sanitize($_SERVER['REMOTE_ADDR'], 0), 'frontend', $athority);
+	loginLogger($success, $user, $pass, '', getUserIP(), 'frontend', $athority);
 	return $success;
 }
 

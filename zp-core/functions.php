@@ -2084,6 +2084,20 @@ function commentsAllowed($type) {
 	return getOption($type) && (!getOption('comment_form_members_only') || zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS));
 }
 
+/**
+ * Returns the viewer's IP address
+ * Deals with transparent proxies
+ *
+ * @return string
+ */
+function getUserIP() {
+	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		return sanitize($_SERVER['HTTP_X_FORWARDED_FOR'], 0);
+	} else {
+		return sanitize($_SERVER['REMOTE_ADDR'], 0);
+	}
+}
+
 //load PHP specific functions
 require_once(PHPScript('5.0.0', '_functions.php'));
 
