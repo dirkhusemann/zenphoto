@@ -574,7 +574,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCountry() {
-		return get_language_string($this->get('Ccountry'));
+		return get_language_string($this->get('country'));
 	}
 
 	/**
@@ -582,7 +582,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $country text for the country filed
 	 */
-	function setCountry($country) { $this->set('Ccountry', $country); }
+	function setCountry($country) { $this->set('country', $country); }
 
 	/**
 	 * Returns the credit field of the image
@@ -590,7 +590,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCredit() {
-		return get_language_string($this->get('IPTCCredit'));
+		return get_language_string($this->get('credit'));
 	}
 
 	/**
@@ -598,7 +598,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $credit text for the credit field
 	 */
-	function setCredit($credit) { $this->set('IPTCCredit', $credit); }
+	function setCredit($credit) { $this->set('credit', $credit); }
 
 	/**
 	 * Returns the copyright field of the image
@@ -606,7 +606,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCopyright() {
-		return get_language_string($this->get('IPTCCopyrightNotice'));
+		return get_language_string($this->get('copyright'));
 	}
 
 	/**
@@ -614,7 +614,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $copyright text for the copyright field
 	 */
-	function setCopyright($copyright) { $this->set('IPTCCopyrightNotice', $copyright); }
+	function setCopyright($copyright) { $this->set('copyright', $copyright); }
 
 	/**
 	 * Returns the tags of the image

@@ -1520,7 +1520,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<?php
 		}
 		?>
-		<a href="?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>" title="<?php echo gettext('View Album'); ?>" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></a>
+		<a href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>" title="<?php echo gettext('View Album'); ?>" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></a>
 	</p>
 <br clear="all" />
 <?php

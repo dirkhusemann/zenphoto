@@ -110,7 +110,16 @@ function printAdminToolbox($id='admin') {
 		$dataid = $id . '_data';
 		$page = getCurrentPage();
 		$redirect = '';
-		
+		?>
+		<script type="text/javascript">
+			function newAlbum(folder,albumtab) {
+				var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
+				if (album) {
+					window.location = '<?php echo $zf; ?>/admin-edit.php?action=newalbum&album='+encodeURIComponent(folder)+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
+				}
+			}
+		</script>
+		<?php
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		
@@ -152,9 +161,11 @@ function printAdminToolbox($id='admin') {
 			}
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				// admin has upload rights, provide an upload link for a new album
-				echo "<li>";
-				printLink($zf . '/admin-upload.php', gettext("New album"), NULL, NULL, NULL);
-				echo "</li>\n";
+				?>
+				<li>
+					<a href="javascript:newAlbum('',true);" ><?php echo gettext("New Album"); ?></a>
+				</li>
+				<?php
 			}
 			zp_apply_filter('admin_toolbox_gallery');
 		} else if ($_zp_gallery_page === 'album.php') { 
@@ -177,12 +188,14 @@ function printAdminToolbox($id='admin') {
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
-				echo "<li>";
-				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
-				echo "</li>\n";
-				echo "<li>";
-				printLink($zf . '/admin-upload.php?new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
-				echo "</li>\n";
+				?>
+				<li>
+					<?php echo printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL); ?>
+				</li>
+				<li>
+					<a href="javascript:newAlbum('<?php echo pathurlencode($albumname); ?>',true);" ><?php echo gettext("New Album Here"); ?></a>
+				</li>
+				<?php
 			}
 			// set the return to this album/page
 			zp_apply_filter('admin_toolbox_album', $albumname);
