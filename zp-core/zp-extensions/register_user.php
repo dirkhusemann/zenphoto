@@ -130,12 +130,20 @@ if (!OFFSET_PATH) { // handle form post
 			}
 		}
 		if (!is_null($adminuser)) {
-			saveAdmin($adminuser['user'], NULL, $admin_n = $adminuser['name'], $admin_e = $adminuser['email'], $rights, NULL, NULL, $group);
-			if (getOption('register_user_notify')) {
-				zp_mail(gettext('Zenphoto Gallery registration'),
-									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$admin_n, $adminuser['user'], $admin_e));
+			$userobj = new Administrator(''); // get a transient object
+			$userobj->setUser($adminuser['user']);
+			$userobj->setPass(NULL);
+			$userobj->setName($admin_n = $adminuser['name']);
+			$userobj->setEmail($admin_e = $adminuser['email']);
+			$userobj->setRights($rights | NO_RIGHTS);
+			$userobj->setGroup($group);
+			zp_apply_filter('register_user_verified', $userobj);
+			$notify = saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
+			if (getOption('register_user_notify') && !$notify) {
+				$notify = zp_mail(gettext('Zenphoto Gallery registration'),
+									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$userobj->getName(), $adminuser['user'], $admin_e));
 			}
-			$notify = 'verified';
+			if (empty($notify)) $notify = 'verified';
 		} else {
 			$notify = 'not_verified';
 		}
@@ -174,12 +182,22 @@ if (!OFFSET_PATH) { // handle form post
 					}
 				}
 				if (empty($notify)) {
-					$notify = saveAdmin($user, $pass, $admin_n, $admin_e, 0, NULL, '', '');
+					$userobj = new Administrator(''); // get a transient object
+					$userobj->setUser($user);
+					$userobj->setPass(NULL);
+					$userobj->setName($admin_n);
+					$userobj->setEmail($admin_e);
+					$userobj->setRights(0);
+					$userobj->setAlbums(NULL);
+					$userobj->setGroup('');
+					$userobj->setCustomData('');
+					zp_apply_filter('register_user_registered', $userobj);
+					$notify = saveAdmin($user, NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
 						$message = sprintf(gettext('You have received this email because you registered on the site. To complete your registration visit %s.'), $link);
-						zp_mail(gettext('Registration confirmation'), $message, NULL, NULL, array($user=>$admin_e));
-						$notify = 'accepted';
+						$notify = zp_mail(gettext('Registration confirmation'), $message, NULL, NULL, array($user=>$admin_e));
+						if (empty($notify)) $notify = 'accepted';
 					}
 				}
 			} else {
@@ -224,7 +242,7 @@ function printRegistrationForm($thanks=NULL) {
 				</p>
 			</div>
 			<?php
-			if (function_exists('printUserLogout') && $notify == 'verified') {
+			if (function_exists('printUserLogin_out') && $notify == 'verified') {
 				?>
 				<p><?php echo gettext('You may now log onto the site.'); ?></p>
 				<?php

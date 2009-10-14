@@ -46,6 +46,8 @@
 			<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" size="22" /></td>
 		</tr>
 		<?php
+		$html = zp_apply_filter('register_user_form', '');
+		if (!empty($html)) echo $html;
 		if (getOption('register_user_captcha')) {
 			?>
 			<tr>
