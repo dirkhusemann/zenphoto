@@ -75,7 +75,12 @@ function datepickerJS($path) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printAdminHeader($path='', $tinyMCE=true) {
+function printAdminHeader($path='', $tinyMCE=NULL) {
+	global $_tinyMCEPresent;
+	$_tinyMCEPresent = $tinyMCE;
+	if (is_null($tinyMCE)) {
+		$_tinyMCEPresent = $tinyMCE = getOption('TinyMCEPresent');
+	}
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	header('Content-Type: text/html; charset=' . getOption('charset'));
 	?>
@@ -103,38 +108,14 @@ function printAdminHeader($path='', $tinyMCE=true) {
 			});
 	</script>
 	<?php
-/* enable for drop-down tabs (not working as yet)
-	<script type="text/javascript">
-	var timeout         = 500;
-	var closetimer		= 0;
-	var ddmenuitem      = 0;
-	
-	function jsddm_open()
-	{	jsddm_canceltimer();
-		jsddm_close();
-		ddmenuitem = $(this).find('ul').eq(0).css('visibility', 'visible');}
-	
-	function jsddm_close()
-	{	if(ddmenuitem) ddmenuitem.css('visibility', 'hidden');}
-	
-	function jsddm_timer()
-	{	closetimer = window.setTimeout(jsddm_close, timeout);}
-	
-	function jsddm_canceltimer()
-	{	if(closetimer)
-		{	window.clearTimeout(closetimer);
-			closetimer = null;}}
-	
-	$(document).ready(function()
-	{	$('#jsddm > li').bind('mouseover', jsddm_open);
-		$('#jsddm > li').bind('mouseout',  jsddm_timer);});
-	
-	document.onclick = jsddm_close;
-	</script>
-*/
-	?>
-	<?php
-	if ($tinyMCE && file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');
+	if ($tinyMCE) {
+		if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) {
+			require_once(dirname(__FILE__).'/js/editor_config.js.php');
+			if (!getOption('TinyMCEPresent')) $_tinyMCEPresent = -1;
+		} else {
+			$_tinyMCEPresent = -1;
+		}
+	}
 }
 
 /**

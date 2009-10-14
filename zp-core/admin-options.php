@@ -140,6 +140,7 @@ if (isset($_GET['action'])) {
 			setOption('time_offset', $offset);
 			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
 			setOption('charset', sanitize($_POST['charset']),3);
+			setBoolOption('tinyMCEPresent', isset($_POST['tinyMCEPresent']));
 			
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
@@ -1150,11 +1151,30 @@ if (empty($alterrights)) {
 						</p>
 					</td>
 					<td>
-					<p><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?></p>
-					<p><?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></p>
-					<p><?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?></p>
+						<p><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?></p>
+						<p><?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></p>
+						<p><?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?></p>
 					</td>
 				</tr>			
+				<tr>
+					<td><?php echo gettext("TinyMCE editing:"); ?></td>
+					<td>
+						<label>
+							<input type="checkbox" name="TinyMCEPresent" <?php if ($_tinyMCEPresent>=0) {echo 'value="'.$_tinyMCEPresent.'"'; if ($_tinyMCEPresent) echo ' CHECKED';} else { echo 'DISABLED value= "0"';} ?> />
+							<?php echo gettext('enabled'); ?>
+						</label>
+					<td>
+						<?php
+						if ($_tinyMCEPresent>=0) {
+							echo gettext('Enable TinyMCE for use in back-end editing.');
+						} else {
+							echo gettext('TinyMCE is not available.');
+						}
+						?>
+					</td>
+					</td>
+				</tr>
+				<?php zp_apply_filter('admin_general_data'); ?>
 				<tr>
 					<td colspan="3">
 					<p class="buttons">
@@ -1163,7 +1183,6 @@ if (empty($alterrights)) {
 					</p>
 					</td>
 				</tr>
-				<?php zp_apply_filter('admin_general_data'); ?>
 			</table>
 		</form>
 	</div>
