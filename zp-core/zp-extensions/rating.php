@@ -18,17 +18,8 @@ $plugin_description = gettext("Adds several theme functions to enable images, al
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
 $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
-$option_interface = new jquery_rating();
 
 require_once(dirname(dirname(__FILE__)).'/functions.php');
-zp_register_filter('edit_album_utilities', 'optionVoteStatus');
-zp_register_filter('save_album_utilities_data', 'optionVoteStatusSave');
-zp_register_filter('admin_utilities_buttons', 'rating_purgebutton');
-
-if (getOption('rating_image_individual_control')) {
-	zp_register_filter('edit_image_utilities', 'optionVoteStatus');
-	zp_register_filter('save_image_utilities_data', 'optionVoteStatusSave');
-}
 if (isset($_GET['action']) && $_GET['action']=='clear_rating') {
 	if (!(zp_loggedin(ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
@@ -40,6 +31,17 @@ if (isset($_GET['action']) && $_GET['action']=='clear_rating') {
 	query('UPDATE '.prefix('zenpage_pages').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('All ratings have been set to <em>unrated</em>.'));
 	exit();
+}
+
+$option_interface = new jquery_rating();
+
+zp_register_filter('edit_album_utilities', 'optionVoteStatus');
+zp_register_filter('save_album_utilities_data', 'optionVoteStatusSave');
+zp_register_filter('admin_utilities_buttons', 'rating_purgebutton');
+
+if (getOption('rating_image_individual_control')) {
+	zp_register_filter('edit_image_utilities', 'optionVoteStatus');
+	zp_register_filter('save_image_utilities_data', 'optionVoteStatusSave');
 }
 
 $ME = substr(basename(__FILE__),0,-4);

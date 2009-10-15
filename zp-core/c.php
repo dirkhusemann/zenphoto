@@ -16,7 +16,11 @@ $key = getOption('zenphoto_captcha_key');
 $string = rc4($key, pack("H*", $cypher));
 $len = strlen($string);
 
-$fontname = getOption('zenphoto_captcha_font');
+if (isset($_GET['f'])) {
+	$fontname = sanitize($_GET['f'],3);
+} else {
+	$fontname = getOption('zenphoto_captcha_font');
+}
 if (empty($fontname)) {
 	$font = 5;
 } else {

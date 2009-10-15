@@ -27,17 +27,38 @@ class captcha {
 	function getOptionsSupported() {
 		return array(
 								gettext('Hash key') => array('key' => 'zenphoto_captcha_key', 'type' => OPTION_TYPE_TEXTBOX, 
+												'order'=> 2,
 												'desc' => gettext('The key used in hashing the Captcha string. Note: this key will change with each successful Captcha verification.')),
 								gettext('Allowed characters') => array('key' => 'zenphoto_captcha_string', 'type' => OPTION_TYPE_TEXTBOX, 
+												'order'=> 1,
 												'desc' => gettext('The characters which may appear in the Captcha string.')),
 								gettext('Captcha length') => array('key' => 'zenphoto_captcha_length', 'type' => OPTION_TYPE_RADIO, 
+												'order'=> 0,
 												'buttons' => array(gettext('3')=>3, gettext('4')=>4, gettext('5')=>5, gettext('6')=>6),
 												'desc' => gettext('The number of characters in the Captcha.')),
 								gettext('Captcha font') => array('key' => 'zenphoto_captcha_font', 'type' => OPTION_TYPE_SELECTOR,
+												'order'=> 3,
 												'selections' => zp_getFonts(),
 												'null_selection' => '',
-												'desc' => gettext('The font to use for captcha characters. Leave empty to use the system font.'))
+												'desc' => gettext('The font to use for captcha characters. Leave empty to use the system font.')),
+								gettext('Sample') => array('key' => 'zenphoto_captcha_image', 'type' => OPTION_TYPE_CUSTOM,
+												'order' => 4,
+												'desc' => Gettext('This how the captcha will look.'))
 								);
+	}
+	function handleOption($key, $cv) {
+		$captchaCode = $this->generateCaptcha($img);
+		?>
+		<script type="text/javascript">
+			$(document).ready(function() { 	
+					$('#zenphoto_captcha_font').change(function(){
+						var imgsrc = '<img src="<?php echo $img; ?>&f='+$('#zenphoto_captcha_font').val()+'" />';
+						$('#zenphoto_captcha_image_loc').html(imgsrc);
+					});	
+			});
+		</script>
+		<span id="zenphoto_captcha_image_loc"><img src="<?php echo $img; ?>" /></span>
+		<?php
 	}
 
 	

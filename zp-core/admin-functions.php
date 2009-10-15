@@ -113,6 +113,7 @@ function printAdminHeader($path='', $tinyMCE=NULL) {
 			require_once(dirname(__FILE__).'/js/editor_config.js.php');
 			if (!getOption('tinyMCEPresent')) $_tinyMCEPresent = -1;
 		} else {
+			setOption('tinyMCEPresent',0);
 			$_tinyMCEPresent = -1;
 		}
 	}
@@ -493,8 +494,15 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 	$whom = get_class($optionHandler);
 	if (is_null($supportedOptions)) $supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
-		$options = array_keys($supportedOptions);
-		natcasesort($options);
+		$options = $supportedOptions;
+		$option = array_shift($options);
+		if (array_key_exists('order', $option)) {
+			$options = sortMultiArray($supportedOptions, 'order');
+			$options = array_keys($options);
+		} else {
+			$options = array_keys($supportedOptions);
+			natcasesort($options);
+		}
 		foreach($options as $option) {
 			$optionID = $whom.'_'.$option;
 			$row = $supportedOptions[$option];

@@ -302,7 +302,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 	foreach ($langs as $lang) {
 		// parsing language preference instructions
 		// 2_digit_code[-longer_code][;q=coefficient]
-		ereg('([A-Za-z]{1,2})(-([A-Za-z0-9]+))?(;q=([0-9\.]+))?',$lang,$found);
+		preg_match('/([A-Za-z]{1,2})(-([A-Za-z0-9]+))?(;q=([0-9\.]+))?/',$lang,$found);
 		// 2 digit lang code
 		$code=$found[1];
 		// lang code complement
@@ -310,7 +310,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 		// full lang code
 		$fullcode=$morecode?$code.'_'.$morecode:$code;
 		// coefficient
-		$coef=sprintf('%3.1f',$found[5]?$found[5]:'1');
+		$coef=sprintf('%3.1f',array_key_exists(5,$found)?$found[5]:'1');
 		// for sorting by coefficient
 		$key=$coef.'-'.$code;
 		// adding
