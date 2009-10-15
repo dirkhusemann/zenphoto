@@ -141,7 +141,6 @@ if (isset($_GET['action'])) {
 			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
 			setOption('charset', sanitize($_POST['charset']),3);
 			setBoolOption('tinyMCEPresent', isset($_POST['tinyMCEPresent']));
-			
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
 			if ($newloc != $oldloc) {
@@ -1160,7 +1159,7 @@ if (empty($alterrights)) {
 					<td><?php echo gettext("TinyMCE editing:"); ?></td>
 					<td>
 						<label>
-							<input type="checkbox" name="TinyMCEPresent" <?php if ($_tinyMCEPresent>=0) {echo 'value="'.$_tinyMCEPresent.'"'; if ($_tinyMCEPresent) echo ' CHECKED';} else { echo 'DISABLED value= "0"';} ?> />
+							<input type="checkbox" name="tinyMCEPresent" <?php if ($_tinyMCEPresent>=0) {echo 'value="1"'; if ($_tinyMCEPresent) echo ' CHECKED';} else { echo 'DISABLED value= "0"';} ?> />
 							<?php echo gettext('enabled'); ?>
 						</label>
 					<td>

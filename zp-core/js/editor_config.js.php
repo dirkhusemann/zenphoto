@@ -30,6 +30,6 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tin
 	</script>
 	<?php
 } else {
-	setOption('TinyMCEPresent', 0);
+	setOption('tinyMCEPresent', 0);
 }
 ?>

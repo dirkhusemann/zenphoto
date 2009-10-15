@@ -79,7 +79,7 @@ function printAdminHeader($path='', $tinyMCE=NULL) {
 	global $_tinyMCEPresent;
 	$_tinyMCEPresent = $tinyMCE;
 	if (is_null($tinyMCE)) {
-		$_tinyMCEPresent = $tinyMCE = getOption('TinyMCEPresent');
+		$_tinyMCEPresent = $tinyMCE = getOption('tinyMCEPresent');
 	}
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	header('Content-Type: text/html; charset=' . getOption('charset'));
@@ -111,7 +111,7 @@ function printAdminHeader($path='', $tinyMCE=NULL) {
 	if ($tinyMCE) {
 		if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) {
 			require_once(dirname(__FILE__).'/js/editor_config.js.php');
-			if (!getOption('TinyMCEPresent')) $_tinyMCEPresent = -1;
+			if (!getOption('tinyMCEPresent')) $_tinyMCEPresent = -1;
 		} else {
 			$_tinyMCEPresent = -1;
 		}
