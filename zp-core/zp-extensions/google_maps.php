@@ -44,7 +44,7 @@ class google_mapsOptions {
 		setOptionDefault('gmaps_maptype_sat', 1);
 		setOptionDefault('gmaps_control_maptype', 1);
 		setOptionDefault('gmaps_control', 'None');
-		setOptionDefault('gmaps_background', '');
+		setOptionDefault('gmaps_background', '#000000');
 		setOptionDefault('gmaps_starting_map', 'G_SATELLITE_MAP');
 	}
 

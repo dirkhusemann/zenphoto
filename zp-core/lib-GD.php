@@ -75,6 +75,30 @@ function zp_createImage($w, $h) {
 }
 
 /**
+ * Fills an image area
+ *
+ * @param image $image
+ * @param int $x
+ * @param int $y
+ * @param color $color
+ * @return bool
+ */
+function  zp_imagefill($image, $x, $y, $color) {
+	return imagefill($image, $x, $y, $color);
+}
+
+/**
+ * Sets the transparency color
+ *
+ * @param image $image
+ * @param color $color
+ * @return bool
+ */
+function zp_imagecolortransparent($image, $color)  {
+	return imagecolortransparent($image, $color);
+}
+
+/**
  * copies an image canvas
  *
  * @param image $imgCanvas source canvas
@@ -415,8 +439,8 @@ function zp_getFonts() {
 	chdir(SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/');
 	$filelist = safe_glob('*.gdf');
 	foreach($filelist as $file) {
-		$file = str_replace('.gdf', '', $file);
-		$fonts[] = filesystemToInternal($file);
+		$file = filesystemToInternal(str_replace('.gdf', '', $file));
+		$fonts[$file] = $file;
 	}
 	chdir($curdir);
 	return $fonts;

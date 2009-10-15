@@ -104,8 +104,8 @@ while ($old != $albumname) {
 	$albumname = str_replace('--', '-', $albumname);
 }
 ?>
-<form action="?savealbum" method="post"><input type="hidden"
-	name="savealbum" value="yes" />
+<form action="?savealbum" method="post">
+<input type="hidden" name="savealbum" value="yes" />
 <table>
 	<tr>
 		<td><?php echo gettext("Album name:"); ?></td>

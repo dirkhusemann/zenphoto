@@ -558,7 +558,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 								print_language_string_list($v, $key, $type, NULL, $editor);
 							} else {
 								?>
-								<input type="text" size="40" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo html_encode($v); ?>">
+								<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo html_encode($v); ?>">
 								<?php
 							}
 							?>
@@ -569,7 +569,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						?>
 						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$key; ?>" value=0 />
 						<td width="350px">
-							<input type="checkbox" name="<?php echo $key; ?>" value="1" <?php echo checked('1', $v); ?> />
+							<input type="checkbox" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="1" <?php echo checked('1', $v); ?> />
 						</td>
 						<?php
 						break;
@@ -593,7 +593,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						?>
 						<td width="350px">
 							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'selector-'.$key?>" value=0 />
-							<select id="<?php echo $option; ?>" name="<?php echo $key; ?>">
+							<select id="<?php echo $key; ?>" name="<?php echo $key; ?>">
 								<?php
 								if (array_key_exists('null_selection', $row)) {
 									?>
@@ -624,7 +624,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 								
 								<span style="white-space:nowrap">
 									<label>
-										<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
+										<input type="checkbox" id="<?php echo $checkbox; ?>" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
 										<?php echo($display); ?>
 									</label>
 								</span>
@@ -658,17 +658,18 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						<?php
 						break;
 					case OPTION_TYPE_COLOR_PICKER:
+						if (empty($v)) $v = '#000000';
 						?>
 						<td width="350px" style="margin:0; padding:0">
 						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value=0 />
 						<script type="text/javascript">
 					  	$(document).ready(function() {
-					    	$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>_color');
+					    	$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
 					  	});
 						</script>
 						<table style="margin:0; padding:0" >
 							<tr>
-								<td><input type="text" id="<?php echo $key; ?>_color" name="<?php echo $key; ?>"	value="<?php echo $v; ?>"style="height:100px; width:100px; float:right;" /></td>
+								<td><input type="text" id="<?php echo $key; ?>" name="<?php echo $key; ?>"	value="<?php echo $v; ?>"style="height:100px; width:100px; float:right;" /></td>
 								<td><div id="<?php echo $key; ?>_colorpicker"></div></td>
 							</tr>
 						</table>

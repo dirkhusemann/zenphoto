@@ -259,8 +259,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	</div>
 	<?php } ?>
 
-<form name="comments" action="?action=deletecomments"
-	method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
+<form name="comments" action="?action=deletecomments" method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
 <input type="hidden" name="subpage" value="<?php echo $pagenum ?>">
 <table class="bordered">
 	<tr>

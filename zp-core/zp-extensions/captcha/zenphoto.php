@@ -33,20 +33,11 @@ class captcha {
 								gettext('Captcha length') => array('key' => 'zenphoto_captcha_length', 'type' => OPTION_TYPE_RADIO, 
 												'buttons' => array(gettext('3')=>3, gettext('4')=>4, gettext('5')=>5, gettext('6')=>6),
 												'desc' => gettext('The number of characters in the Captcha.')),
-								gettext('Captcha font') => array('key' => 'zenphoto_captcha_font', 'type' => OPTION_TYPE_CUSTOM,
+								gettext('Captcha font') => array('key' => 'zenphoto_captcha_font', 'type' => OPTION_TYPE_SELECTOR,
+												'selections' => zp_getFonts(),
+												'null_selection' => '',
 												'desc' => gettext('The font to use for captcha characters. Leave empty to use the system font.'))
 								);
-	}
-	function handleOption($option, $currentValue) {
-		?>
-		<select id="themeselect" name="<?php echo $option; ?>">
-			<option value="" <?php if (empty($currentValue)) echo ' SELECTED'; ?>></option>
-			<?php
-			$fonts = zp_getFonts();
-			generateListFromArray(array($currentValue), $fonts, false, false);
-			?>
-		</select>
-		<?php
 	}
 
 	
