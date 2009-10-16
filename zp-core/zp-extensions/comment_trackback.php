@@ -314,12 +314,12 @@ class Trackback {
 		// ---------------------------------------
 		// RegExp to look for (0=>link, 4=>host in 'replace')
 		$reg_exp = "/(http)+(s)?:(\\/\\/)((\\w|\\.)+)(\\/)?(\\S+)?/i";
-		// Make sure each link ends with [sapce]
-		$text = eregi_replace("www.", "http://www.", $text);
-		$text = eregi_replace("http://http://", "http://", $text);
-		$text = eregi_replace("\"", " \"", $text);
-		$text = eregi_replace("'", " '", $text);
-		$text = eregi_replace(">", " >", $text);
+		// Make sure each link ends with [space]
+		$text = preg_replace("#www.#i", "http://www.", $text);
+		$text = preg_replace("#http://http://#i", "http://", $text);
+		$text = preg_replace("#\"#", " \"", $text);
+		$text = preg_replace("#'#", " '", $text);
+		$text = preg_replace("#>#", " >", $text);
 		// Create an array with unique links
 		$uri_array = array();
 		if (preg_match_all($reg_exp, strip_tags($text, "<a>"), $array, PREG_PATTERN_ORDER)) {

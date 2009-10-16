@@ -764,13 +764,13 @@ function getRootPath() {
                 $regExps = explode(',', $pattern);
                 foreach ($regExps as $regExp => $value)
                 {
-                    if(eregi($value, $string))
+                    if(preg_match(':'.$value.':i', $string))
                     {
                         return true;
                     }
                 }               
             }
-            else if(eregi($pattern, $string))
+            else if(preg_match(':'.$pattern.':i', $string))
             {
                 return true;
             }
@@ -797,13 +797,13 @@ function getRootPath() {
                 $regExps = explode(',', $pattern);
                 foreach ($regExps as $regExp => $value)
                 {
-                    if(eregi($value, $string))
+                    if(preg_match(':'.$value.':i', $string))
                     {
                         return true;
                     }
                 }               
             }
-            else if(eregi($pattern, $string))
+            else if(preg_match(':'.$pattern.':i', $string))
             {
                 return true;
             }
