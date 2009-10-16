@@ -192,7 +192,7 @@ if (!OFFSET_PATH) { // handle form post
 					$userobj->setGroup('');
 					$userobj->setCustomData('');
 					zp_apply_filter('register_user_registered', $userobj);
-					$notify = saveAdmin($user, NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
+					$notify = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
 						$message = sprintf(gettext('You have received this email because you registered on the site. To complete your registration visit %s.'), $link);
