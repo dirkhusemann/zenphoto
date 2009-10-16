@@ -76,9 +76,9 @@ class pagedThumbsNav {
 	var $totalpages;
 	var $images;
 	var $currentpage;
+	var $currentfloor;
+	var $currentciel;
 	var $currentimgnr;
-	var $startimg = array();
-	var $endimg = array();
 	var $searchimages;
 	var $prevpageimage;
 	var $nextpageimage;
@@ -98,7 +98,7 @@ class pagedThumbsNav {
 	 * @param unknown_type $pagelistlength
 	 * @return pagedThumbsNav
 	 */
-	function pagedThumbsNav($imagesperpage="", $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL,$placeholders=NULL, $showpagelist=false, $pagelistprevnext=false, $pagelistlength=6) {
+	function pagedThumbsNav($imagesperpage=0, $counter=false, $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL,$placeholders=NULL, $showpagelist=false, $pagelistprevnext=false, $pagelistlength=6) {
 		global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
 		if(is_null($crop)) {
 			$this->crop = getOption("pagedthumbs_crop");
@@ -164,39 +164,17 @@ class pagedThumbsNav {
 			$this->searchimages = false; 
 		}
 	
-		if(in_context(ZP_SEARCH_LINKED) AND $this->searchimages) {
+		if(in_context(ZP_SEARCH_LINKED) && $this->searchimages) {
 			$this->images = $_zp_current_search->getImages();
-			//echo "<pre>"; print_r($this->images); echo "</pre>";
-			$this->totalimages = $_zp_current_search->getNumImages();
-			$getimagenumber = 0;
-			foreach($this->images as $image) {
-				$getimagenumber++;
-				if($_zp_current_image->filename === $image['filename'] AND $_zp_current_album->name === $image['folder']) {
-					$this->currentimgnr = $getimagenumber;
-				}
-			}
 		} else {
-			$this->totalimages = getNumImages();
 			$this->images = $_zp_current_album->getImages();
-			$this->currentimgnr = imageNumber();
 		}
-		//echo $this->totalimages." / ".$this->imagesperpage;
+		$this->currentimgnr = imageNumber();
+		$this->totalimages = count($this->images);
 		$this->totalpages = ceil($this->totalimages / $this->imagesperpage);
-		for ($nr = 1;$nr <= $this->totalpages; $nr++)	{
-			$this->startimg[$nr] = $nr*$this->imagesperpage - ($this->imagesperpage - 1); // get start image number for thumb pagination
-			$this->endimg[$nr] = $nr * $this->imagesperpage; // get end image number for thumb pagination
-		}
-
-		// get current page number
-		for ($nr = 1;$nr <= $this->totalpages; $nr++)	{
-			if ($this->startimg[$nr] <= $this->currentimgnr) {
-				$this->currentpage = $nr;
-			}
-			if ($this->endimg[$nr] >= $this->currentimgnr) {
-				$this->currentpage = $nr;
-				break;
-			}
-		}
+		$this->currentpage = floor(($this->currentimgnr-1) / $this->imagesperpage)+1;
+		$this->currentciel = $this->currentpage*$this->imagesperpage-1;
+		$this->currentfloor = $this->currentciel-$this->imagesperpage+1;
 
 	} // constructor end
 
@@ -244,21 +222,13 @@ class pagedThumbsNav {
 	 */
 	function getThumbs() {
 		global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
-		$number = $this->startimg[$this->currentpage] - 2;
+		$curimages = array_slice($this->images,$this->currentfloor,$this->imagesperpage);
 		$thumbs = array();
-		$nr = 1;
-		foreach($this->images as $item) {
-			$number++;
-			if($number == $this->totalimages) {
-				break;
-			}
+		foreach($curimages as $item) {
 			if(in_context(ZP_SEARCH_LINKED) AND $this->searchimages) {
-				$thumbs[$number] = newImage(new Album($_zp_gallery,$item['folder']),$item['filename']);
+				$thumbs[] = newImage(new Album($_zp_gallery,$item['folder']),$item['filename']);
 			} else {
-				$thumbs[$number] = newImage($_zp_current_album,$item);
-			}
-			if ($number == $this->endimg[$this->currentpage]) {
-				break;
+				$thumbs[] = newImage($_zp_current_album,$item);
 			}
 		}
 		return $thumbs;
@@ -273,12 +243,7 @@ class pagedThumbsNav {
 		echo "<div id='pagedthumbsimages'>";
 		$thumbs = $this->getThumbs();
 		//$thcount = count($thumbs); echo "thcount:".$thcount;
-		$number = "";
 		foreach ($thumbs as $image) {
-			$number++;
-			/*if($number == $this->totalimages) {
-				break;
-			} */
 			if($image->id === getImageID()) {
 				$css = " id='pagedthumbsnav-active' ";
 			} else {
@@ -295,9 +260,6 @@ class pagedThumbsNav {
 				echo "<img src=\"".$image->getCustomImage(NULL, $maxwidth, $maxheight, NULL, NULL, NULL, NULL, false)."\" alt=\"".strip_tags($image->getTitle())."\" />";
 			}
 			echo "</a>\n";
-			if ($number == $this->endimg[$this->currentpage]) {
-				break;
-			}
 		}
 		if($this->placeholders) {
 			if($number != $this->imagesperpage) {
@@ -352,11 +314,11 @@ class pagedThumbsNav {
 	 *
 	 */
 	function getCounter() {
-		$fromimage = $this->startimg[$this->currentpage];
-		if($this->totalimages < $this->endimg[$this->currentpage]) {
+		$fromimage = $this->currentfloor;
+		if($this->totalimages < $this->currentciel) {
 			$toimage = $this->totalimages;
 		} else {
-			$toimage = $this->endimg[$this->currentpage];
+			$toimage = $this->currentciel;
 		}
 		$counter = array("fromimage"=>$fromimage,"toimage"=>$toimage);
 		return $counter;
@@ -499,7 +461,7 @@ class pagedThumbsNav {
  * @param int $navlen How many page links should be shown (not that there will be dotted ransition links like this: 1 2 3 4 ... 30).
  * 
  */
-function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL,$placeholders=NULL, $showpagelist=false, $pagelistprevnext=false, $pagelistlength=6) {
+function printPagedThumbsNav($imagesperpage='', $counter=false, $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL,$placeholders=NULL, $showpagelist=false, $pagelistprevnext=false, $pagelistlength=6) {
 	$pagedthumbsobj = new pagedThumbsNav($imagesperpage, $counter, $prev, $next, $width, $height, $crop, $placeholders, $showpagelist, $pagelistprevnext, $pagelistlength);
 	echo "<div id=\"pagedthumbsnav\">\n";
 	//$thumbs = $pagedthumbsobj->getThumbs();

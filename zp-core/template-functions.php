@@ -1879,11 +1879,12 @@ function imageNumber() {
 	global $_zp_current_image, $_zp_current_search, $_zp_current_album;
 	$name = $_zp_current_image->getFileName();
 	if (in_context(ZP_SEARCH)  || (in_context(ZP_SEARCH_LINKED) && !in_context(ZP_ALBUM_LINKED))) {
+		$folder = $_zp_current_album->name;
 		$images = $_zp_current_search->getImages();
 		$c = 0;
 		foreach ($images as $image) {
 			$c++;
-			if ($name == $image['filename']) {
+			if ($name == $image['filename'] && $folder == $image['folder']) {
 				return $c;
 			}
 		}
