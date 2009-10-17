@@ -796,18 +796,8 @@ function makeAlbumCurrent($album) {
  */
 function getAlbumTitle() {
 	if(!in_context(ZP_ALBUM)) return false;
-	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH_LINKED)) {
-		$dynamic_album = $_zp_current_search->dynalbumname;
-		if (empty($dynamic_album)) {
-			return false;
-		} else {
-			$album = new Album($_zp_gallery, $dynamic_album);
-		}
-	} else {
-		$album = $_zp_current_album;
-	}
-	return $album->getTitle();
+	global $_zp_current_album;
+	return $_zp_current_album->getTitle();
 }
 
 /**
