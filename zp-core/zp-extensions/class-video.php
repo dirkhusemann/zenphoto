@@ -130,16 +130,40 @@ class Video extends _Image {
 	 * 
 	 * @param string $path override path 
 	 *
-	 * @return s
+	 * @return string
 	 */
 	function getThumbImageFile($path=NULL) {
 		if (is_null($path)) $path = SERVERPATH;
 		if ($this->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$this->album->name.'/'.$this->objectsThumb;
 		} else {
-			$imgfile = $path . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
-			if (!file_exists($imgfile)) {
-				$imgfile = $path . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . substr(basename(__FILE__), 0, -4). '/multimediaDefault.png';
+			$suffix = getSuffix($this->filename);
+			switch($suffix) {
+				case "mp3":
+					$img = '/mp3Default.png';
+					break;
+				case "mp4":
+					$img = '/mp4Default.png';
+					break;
+				case "flv":
+					$img = '/flvDefault.png';
+					break;
+				case "mov":
+					$img = '/movDefault.png';
+					break;
+				case "3gp":
+					$img = '/3gpDefault.png';
+					break;
+				default: // just in case we extend and are lazy...
+					$img = '/multimediaDefault.png';
+					break;
+			}
+			$imgfile = $path . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images'.$img;
+			if (!file_exists($imgfile)) {  // first check if the theme has adefault image
+				$imgfile = $path . '/' . THEMEFOLDER . '/' . internalToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
+				if (!file_exists($imgfile)) { // if theme has a generic default image use it otherwise use the Zenphoto image
+					$imgfile = $path . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER.'/' . substr(basename(__FILE__), 0, -4).$img;
+				}
 			}
 		}
 		return $imgfile;

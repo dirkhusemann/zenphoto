@@ -463,6 +463,11 @@ zp-core/zp-config.php.source
 zp-core/zp-extensions/captcha/zenphoto.php
 zp-core/zp-extensions/class-textobject/textDefault.png
 zp-core/zp-extensions/class-textobject.php
+zp-core/zp-extensions/class-video/3gpDefault.png
+zp-core/zp-extensions/class-video/flvDefault.png
+zp-core/zp-extensions/class-video/movDefault.png
+zp-core/zp-extensions/class-video/mp3Default.png
+zp-core/zp-extensions/class-video/mp4Default.png
 zp-core/zp-extensions/class-video/multimediaDefault.png
 zp-core/zp-extensions/class-video.php
 zp-core/zp-extensions/comment_form/comment_form.php
