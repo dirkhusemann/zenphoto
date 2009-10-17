@@ -306,7 +306,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 		// 2 digit lang code
 		$code=$found[1];
 		// lang code complement
-		$morecode=$found[3];
+		$morecode=array_key_exists(3,$found)?$found[3]:false;
 		// full lang code
 		$fullcode=$morecode?$code.'_'.$morecode:$code;
 		// coefficient
