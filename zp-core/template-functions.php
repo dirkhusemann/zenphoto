@@ -796,8 +796,18 @@ function makeAlbumCurrent($album) {
  */
 function getAlbumTitle() {
 	if(!in_context(ZP_ALBUM)) return false;
-	global $_zp_current_album;
-	return $_zp_current_album->getTitle();
+	global $_zp_current_album, $_zp_current_search;
+	if (in_context(ZP_SEARCH_LINKED)) {
+		$dynamic_album = $_zp_current_search->dynalbumname;
+		if (empty($dynamic_album)) {
+			return false;
+		} else {
+			$album = new Album($_zp_gallery, $dynamic_album);
+		}
+	} else {
+		$album = $_zp_current_album;
+	}
+	return $album->getTitle();
 }
 
 /**
@@ -1879,7 +1889,7 @@ function imageNumber() {
 	global $_zp_current_image, $_zp_current_search, $_zp_current_album;
 	$name = $_zp_current_image->getFileName();
 	if (in_context(ZP_SEARCH)  || (in_context(ZP_SEARCH_LINKED) && !in_context(ZP_ALBUM_LINKED))) {
-		$folder = $_zp_current_album->name;
+		$folder = $_zp_current_image->album->name;
 		$images = $_zp_current_search->getImages();
 		$c = 0;
 		foreach ($images as $image) {
