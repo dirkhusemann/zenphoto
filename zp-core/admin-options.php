@@ -669,7 +669,15 @@ if (empty($alterrights)) {
 	</tr>
 	<?php
 	$id = 0;
-	$albumlist = $gallery->getAlbums();
+	$albumlist = array();
+	foreach ($gallery->getAlbums() as $folder) {
+		if (hasDyanmicAlbumSuffix($folder)) {
+			$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
+		} else {
+			$name = $folder;
+		}
+		$albumlist[$name] = $folder;
+	}
 	if ($_zp_null_account) {
 		$current = true;
 	} else {

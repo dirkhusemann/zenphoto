@@ -47,8 +47,13 @@ if (isset($_GET['p'])) {
 	handleSearchParms('image', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
-	//update hit counter
-	if (!isMyALbum($_zp_current_album->name, ALL_RIGHTS)) {
+	if (in_context(ZP_SEARCH_LINKED)) { // if we are in a dynamic album set $_zp_current_album to it
+		$dynamic_album = $_zp_current_search->dynalbumname;
+		if (!empty($dynamic_album)) {
+			$_zp_current_album = new Album($_zp_gallery, $dynamic_album);
+		}
+	}	
+	if (!isMyALbum($_zp_current_album->name, ALL_RIGHTS)) { //update hit counter
 		$hc = $_zp_current_image->get('hitcounter')+1;
 		$_zp_current_image->set('hitcounter', $hc);
 		$_zp_current_image->save();

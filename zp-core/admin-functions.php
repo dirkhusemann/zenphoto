@@ -2546,7 +2546,13 @@ function populateManagedAlbumList($id) {
 					$id." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
 	$currentvalues = query_full_array($sql);
 	foreach($currentvalues as $albumitem) {
-		$cv[] = $albumitem['folder'];
+		$folder = $albumitem['folder'];
+		if (hasDyanmicAlbumSuffix($folder)) {
+			$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
+		} else {
+			$name = $folder;
+		}
+		$cv[$name] = $folder;
 	}
 	return $cv;
 }
@@ -2571,9 +2577,9 @@ function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
 		<div id="<?php echo $prefix ?>managed_albums" style="display:none" >
 			<ul class="albumchecklist">
 				<?php
-				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
+				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true);
 				if (empty($alterrights)) {
-					generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
+					generateUnorderedListFromArray(array(), $rest, $prefix, false, true, true);
 				}
 				?>
 			</ul>
