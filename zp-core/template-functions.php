@@ -202,23 +202,24 @@ function printAdminToolbox($id='admin') {
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
 			
 		} else if ($_zp_gallery_page === 'image.php') {
-		// script is image.php
-			$albumname = $_zp_current_album->name;
-			$imagename = $_zp_current_image->filename;
-			if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
-				// if admin has edit rights on this album, provide a delete link for the image.
-				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
-				urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
-				echo "</li>\n";
-				
-				echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode($albumname).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo#IT" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
+			// script is image.php
+			if (!$_zp_current_album->isDynamic()) { // don't provide links when it is a dynamic album
+				$albumname = $_zp_current_album->name;
+				$imagename = $_zp_current_image->filename;
+				if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
+					// if admin has edit rights on this album, provide a delete link for the image.
+					echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
+					urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+					echo "</li>\n";
+
+					echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode($albumname).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo#IT" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
+				}
+				// set return to this image page
+				zp_apply_filter('admin_toolbox_image', $albumname, $imagename);
+				$redirect = "&amp;album=".urlencode($albumname)."&amp;image=".urlencode($imagename);
 			}
-			// set return to this image page
-			zp_apply_filter('admin_toolbox_image', $albumname, $imagename);
-			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=".urlencode($imagename);
-			
 		} else if (($_zp_gallery_page === 'search.php') && !empty($_zp_current_search->words)) {
-		// script is search.php with a search string
+			// script is search.php with a search string
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				// if admin has edit rights allow him to create a dynamic album from the search
 				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
@@ -1094,7 +1095,7 @@ function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true)
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No place...)');
 	}
-	printEditable('album', 'place', $editable, $editclass, $messageIfEmpty, true);
+	printEditable('album', 'place', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
 
 /**
@@ -1129,7 +1130,7 @@ function printAlbumDesc($editable=false, $editclass='', $messageIfEmpty = true )
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No description...)');
 	}
-	printEditable('album', 'desc', $editable, $editclass, $messageIfEmpty, true);
+	printEditable('album', 'desc', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
 
 
@@ -1223,7 +1224,7 @@ function printAlbumCustomData($editable = false, $editclass='', $messageIfEmpty 
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No data...)');
 	}
-	printEditable('album', 'custom_data', $editable, $editclass, $messageIfEmpty, true);
+	printEditable('album', 'custom_data', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
 
 /**
@@ -2035,7 +2036,7 @@ function printImageDesc($editable=false, $editclass='', $messageIfEmpty = true) 
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No description...)');
 	}
-	printEditable('image', 'desc', $editable, $editclass, $messageIfEmpty, true);
+	printEditable('image', 'desc', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
 
 /**
