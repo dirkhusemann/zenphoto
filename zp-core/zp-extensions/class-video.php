@@ -14,6 +14,7 @@ $plugin_disable = $disable;
 
 if ($plugin_disable) {
 	setOption('zp_plugin_class-video',0);
+	
 } else {
 	addPluginType('flv', 'Video');
 	addPluginType('3gp', 'Video');
@@ -23,10 +24,10 @@ if ($plugin_disable) {
 	$option_interface = new VideoObject_Options();
 }
 
-define('DEFAULT_MOV_HEIGHT', 496);
-define('DEFAULT_MOV_WIDTH', 640);
-define('DEFAULT_3GP_HEIGHT', 304);
-define('DEFAULT_3GP_WIDTH', 352);
+define('DEFAULT_MOV_HEIGHT', 390);
+define('DEFAULT_MOV_WIDTH', 520);
+define('DEFAULT_3GP_HEIGHT', 390);
+define('DEFAULT_3GP_WIDTH', 520);
 
 /**
  * Option class for video objects
@@ -34,6 +35,13 @@ define('DEFAULT_3GP_WIDTH', 352);
  */
 class VideoObject_Options {
 	
+	
+	function VideoObject_Options() {
+		setOption('zp_plugin_class-video_mov_w',520);
+		setOption('zp_plugin_class-video_mov_h',390);
+		setOption('zp_plugin_class-video_3gp_w',520);
+		setOption('zp_plugin_class-video_3gp_h',390);
+	}
 	/**
 	 * Standard option interface
 	 *
@@ -41,7 +49,16 @@ class VideoObject_Options {
 	 */
 	function getOptionsSupported() {
 		return array(gettext('Watermark default images') => array ('key' => 'video_watermark_default_images', 'type' => OPTION_TYPE_CHECKBOX,
-																	'desc' => gettext('Check to place watermark image on default thumbnail images.')));
+																	'desc' => gettext('Check to place watermark image on default thumbnail images.')),
+		gettext('Quicktime video width') => array ('key' => 'zp_plugin_class-video_mov_w', 'type' => OPTION_TYPE_TEXTBOX,
+																	'desc' => gettext(' ')),
+		gettext('Quicktime video height') => array ('key' => 'zp_plugin_class-video_mov_h', 'type' => OPTION_TYPE_TEXTBOX,
+																	'desc' => gettext(' ')),
+		gettext('3gp video width') => array ('key' => 'zp_plugin_class-video_3gp_w', 'type' => OPTION_TYPE_TEXTBOX,
+																	'desc' => gettext(' ')),
+		gettext('3gp video height') => array ('key' => 'zp_plugin_class-video_3gp_h', 'type' => OPTION_TYPE_TEXTBOX,
+																	'desc' => gettext(' '))
+		);
 	}
 	
 }
@@ -106,16 +123,16 @@ class Video extends _Image {
 		if (is_null($_zp_flash_player) || $ext == '.3gp' || $ext == '.mov') {
 			switch ($ext) {
 				case '.3gp':
-					$h = DEFAULT_3GP_HEIGHT;
-					$w = DEFAULT_3GP_WIDTH;
+					$h = getOption('zp_plugin_class-video_3gp_h');;
+					$w = getOption('zp_plugin_class-video_3gp_w');
 					break;
 				case '.mov':
-					$h = DEFAULT_MOV_HEIGHT;
-					$w = DEFAULT_MOV_WIDTH;
+					$h = getOption('zp_plugin_class-video_mov_h');
+					$w = getOption('zp_plugin_class-video_mov_w');
 					break;
 				default:
-					$h = 240;
-					$w = 320;
+					$h = 320;
+					$w = 480;
 			}
 		} else {
 			$h = $_zp_flash_player->getVideoHeigth($this);
@@ -251,18 +268,6 @@ class Video extends _Image {
 				}
 				break;
 			case '.3gp':
-				return '</a>
-				<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.
-					$w.'" height="'.$h.
-					'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-					<param name="src" value="' . $this->getFullImage() . '"/>
-					<param name="autoplay" value="false" />
-					<param name="type" value="video/quicktime" />
-					<param name="controller" value="true" />
-					<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" autoplay="false" controller"true" type="video/quicktime"
-						pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-						</object><a>';
-				break;
 			case '.mov':
 				return '</a>
 			 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$w.'" height="'.$h.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
@@ -270,7 +275,7 @@ class Video extends _Image {
 				 	<param name="autoplay" value="false" />
 				 	<param name="type" value="video/quicktime" />
 				 	<param name="controller" value="true" />
-				 	<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" autoplay="false" controller"true" type="video/quicktime"
+				 	<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" scale="aspect" autoplay="false" controller"true" type="video/quicktime"
 				 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 					</object><a>';
 				break;
