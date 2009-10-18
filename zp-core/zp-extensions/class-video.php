@@ -9,12 +9,11 @@
 $plugin_is_filter = 9;
 $plugin_description = ($disable = (ZENPHOTO_RELEASE < 3112))? gettext('class-image is not compatible with this zenphoto release.') : gettext('Video and MP3/4 handling for Zenphoto.');
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_disable = $disable;
 
 if ($plugin_disable) {
 	setOption('zp_plugin_class-video',0);
-	
 } else {
 	addPluginType('flv', 'Video');
 	addPluginType('3gp', 'Video');
@@ -23,11 +22,6 @@ if ($plugin_disable) {
 	addPluginType('mp4', 'Video');
 	$option_interface = new VideoObject_Options();
 }
-
-define('DEFAULT_MOV_HEIGHT', 390);
-define('DEFAULT_MOV_WIDTH', 520);
-define('DEFAULT_3GP_HEIGHT', 390);
-define('DEFAULT_3GP_WIDTH', 520);
 
 /**
  * Option class for video objects
