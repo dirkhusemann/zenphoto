@@ -21,7 +21,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -536,6 +536,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 	</div>
 </div>
 	<?php
+	restore_context(); // needed if the slideshow is for example called directly via album object before the next_album loop on index.php
 }
 
 
