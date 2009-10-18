@@ -117,7 +117,7 @@ class Video extends _Image {
 		if (is_null($_zp_flash_player) || $ext == '.3gp' || $ext == '.mov') {
 			switch ($ext) {
 				case '.3gp':
-					$h = getOption('zp_plugin_class-video_3gp_h');;
+					$h = getOption('zp_plugin_class-video_3gp_h');
 					$w = getOption('zp_plugin_class-video_3gp_w');
 					break;
 				case '.mov':
