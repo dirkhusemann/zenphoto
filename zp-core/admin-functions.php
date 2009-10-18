@@ -546,7 +546,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 				<?php
 			}
 				?>
-				<td width="175"><?php echo $indent . $option; ?></td>
+				<td width="175"><?php if ($option) echo $indent . $option; ?></td>
 				<?php
 				switch ($type) {
 					case OPTION_TYPE_CLEARTEXT:

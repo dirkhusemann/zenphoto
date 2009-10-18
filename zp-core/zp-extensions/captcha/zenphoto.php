@@ -41,9 +41,9 @@ class captcha {
 												'selections' => zp_getFonts(),
 												'null_selection' => '',
 												'desc' => gettext('The font to use for captcha characters. Leave empty to use the system font.')),
-								gettext('Sample') => array('key' => 'zenphoto_captcha_image', 'type' => OPTION_TYPE_CUSTOM,
+								gettext('') => array('key' => 'zenphoto_captcha_image', 'type' => OPTION_TYPE_CUSTOM,
 												'order' => 4,
-												'desc' => Gettext('This how the captcha will look.'))
+												'desc' => gettext('Sample cpatcha'))
 								);
 	}
 	function handleOption($key, $cv) {
