@@ -412,17 +412,14 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					if (is_null($_zp_flash_player)) {
 						echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
 					} else {
-						$newalbum = new Album($_zp_gallery,getNewsAlbumName());
-						$_zp_current_image = newImage($newalbum,$_zp_current_zenpage_news->filename);
+						$_zp_current_image = $_zp_current_zenpage_news;
 						$_zp_flash_player->printPlayerConfig();
 					}
 					echo getNewsContent($shorten);
 					break;
 				case '.3gp':
 				case '.mov':
-					$albobj = new Album($_zp_gallery,getNewsAlbumName());
-					$vidobj = new Video($albobj,$_zp_current_zenpage_news->filename);
-					echo $vidobj->getBody();
+					echo $_zp_current_zenpage_news->getBody();
 					echo getNewsContent($shorten);
 					break;
 			}
