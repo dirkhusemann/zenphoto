@@ -412,36 +412,18 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					if (is_null($_zp_flash_player)) {
 						echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
 					} else {
+						$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 						$newalbum = new Album($_zp_gallery,getNewsAlbumName());
 						$_zp_current_image = newImage($newalbum,$_zp_current_zenpage_news->filename);
-						$_zp_flash_player->printPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
+						$_zp_flash_player->printPlayerConfig();
 					}
 					echo getNewsContent($shorten);
 					break;
 				case '.3gp':
-					echo '</a>
-					<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.
-					DEFAULT_3GP_WIDTH.'" height="'.DEFAULT_3GP_HEIGHT.
-					'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-					<param name="src" value="' . getFullNewsImageURL() . '"/>
-					<param name="autoplay" value="false" />
-					<param name="type" value="video/quicktime" />
-					<param name="controller" value="true" />
-					<embed src="' . getFullNewsImageURL() . '" width="'.DEFAULT_3GP_WIDTH.'" height="'.DEFAULT_3GP_HEIGHT.'" autoplay="false" controller"true" type="video/quicktime"
-						pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-						</object><a>';
-					echo getNewsContent($shorten);
-				break;
 				case '.mov':
-					echo '</a>
-			 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.DEFAULT_MOV_WIDTH.'" height="'.DEFAULT_MOV_HEIGHT.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-				 	<param name="src" value="' . getFullNewsImageURL() . '"/>
-				 	<param name="autoplay" value="false" />
-				 	<param name="type" value="video/quicktime" />
-				 	<param name="controller" value="true" />
-				 	<embed src="' . getFullNewsImageURL() . '" width="'.DEFAULT_MOV_WIDTH.'" height="'.DEFAULT_MOV_HEIGHT.'" autoplay="false" controller"true" type="video/quicktime"
-				 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-					</object><a>';
+					$albobj = new Album($_zp_gallery,getNewsAlbumName());
+					$vidobj = new Video($albobj,$_zp_current_zenpage_news->filename);
+					echo $vidobj->getBody();
 				echo getNewsContent($shorten);
 				break;
 			}

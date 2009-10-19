@@ -12,7 +12,7 @@
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3.php.html";
 $plugin_disable = $external;
 
@@ -132,6 +132,7 @@ class flowplayer3 {
 			$moviepath = pathurlencode($moviepath);
 			$ext = strtolower(strrchr($moviepath, "."));
 		}
+		echo $moviepath;
 		if(!empty($count)) {
 			$count = "-".$count;
 		}
@@ -159,56 +160,15 @@ class flowplayer3 {
 		} else {
 			$autohide = "false";
 		}
-		if($ext === ".mp3") {
-			if(empty($videoThumb)) {
+			if($ext == ".mp3" && empty($videoThumb)) {
 				$height = FLOW_PLAYER_MP3_HEIGHT;
 			} else {
 				$height = getOption('flow_player3_height');
 			}
+			$width = getOption('flow_player3_width');
 				// inline css is kind of ugly but since we need to style dynamically there is no other way
 			$playerconfig = '
-			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.$height.'px;">
-			</span>
-			<script>
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
-			plugins: { 
-        controls: {
-        	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
-        	autoHide: '.$autohide.',
-        	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
-        	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
-        	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
-        	progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
-        	bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
-        	bufferGradient:	 "'.getOption('flow_player3_controlsbuffergradient').'",
-        	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
-        	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
-        	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
-        	scaling: "'.getOption('flow_player3_scaling').'"
-        }
-    	},
-    	canvas: {
-    		backgroundColor: "'.getOption('flow_player3_backgroundcolor').'",
-    		backgroundGradient: "'.getOption('flow_player3_backgroundcolorgradient').'"
-    	},
-			playlist: [ 
-				{
-					url:"'.$videoThumb.'",
-					scaling: "'.getOption('flow_player3_splashimagescale').'"
-				},
-				{
-					url:"' . $moviepath. '",
-					autoPlay: '.$autoplay.',
-					autoBuffering: true
-				}
-			]
-			}); 
-			</script>';
-			} else {
-			$playerconfig = '
-			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.getOption('flow_player3_height').'px;">
+			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.$width.'px; height: '.$height.'px;">
 			</span>
 			<script>
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
@@ -259,8 +219,6 @@ class flowplayer3 {
 			</script>';
 			}
 			$playerconfig = $playerconfig.$playerconfigadd;
-			}
-			
 			return $playerconfig;
 		}
 	
