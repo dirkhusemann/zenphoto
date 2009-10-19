@@ -243,6 +243,7 @@ class pagedThumbsNav {
 		echo "<div id='pagedthumbsimages'>";
 		$thumbs = $this->getThumbs();
 		//$thcount = count($thumbs); echo "thcount:".$thcount;
+		$number = 0;
 		foreach ($thumbs as $image) {
 			if($image->id === getImageID()) {
 				$css = " id='pagedthumbsnav-active' ";
@@ -260,6 +261,7 @@ class pagedThumbsNav {
 				echo "<img src=\"".$image->getCustomImage(NULL, $maxwidth, $maxheight, NULL, NULL, NULL, NULL, false)."\" alt=\"".strip_tags($image->getTitle())."\" />";
 			}
 			echo "</a>\n";
+			$number++;
 		}
 		if($this->placeholders) {
 			if($number != $this->imagesperpage) {
