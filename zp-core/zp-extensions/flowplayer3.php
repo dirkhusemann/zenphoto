@@ -132,7 +132,6 @@ class flowplayer3 {
 			$moviepath = pathurlencode($moviepath);
 			$ext = strtolower(strrchr($moviepath, "."));
 		}
-		echo $moviepath;
 		if(!empty($count)) {
 			$count = "-".$count;
 		}

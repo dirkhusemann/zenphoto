@@ -412,7 +412,6 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					if (is_null($_zp_flash_player)) {
 						echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
 					} else {
-						$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 						$newalbum = new Album($_zp_gallery,getNewsAlbumName());
 						$_zp_current_image = newImage($newalbum,$_zp_current_zenpage_news->filename);
 						$_zp_flash_player->printPlayerConfig();
@@ -424,8 +423,8 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					$albobj = new Album($_zp_gallery,getNewsAlbumName());
 					$vidobj = new Video($albobj,$_zp_current_zenpage_news->filename);
 					echo $vidobj->getBody();
-				echo getNewsContent($shorten);
-				break;
+					echo getNewsContent($shorten);
+					break;
 			}
 			break;
 		case "album":
