@@ -154,11 +154,6 @@ class flowplayer3 {
 		} else {
 			$autoplay = "false";
 		}
-		if(getOption("flow_player3_autohide") == 1) {
-			$autohide = "true";
-		} else {
-			$autohide = "false";
-		}
 			if($ext == ".mp3" && empty($videoThumb)) {
 				$height = FLOW_PLAYER_MP3_HEIGHT;
 			} else {
@@ -175,7 +170,7 @@ class flowplayer3 {
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
-        	autoHide: '.$autohide.',
+        	autoHide: '.getOption('flow_player3_autohide').',
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",

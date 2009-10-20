@@ -16,7 +16,7 @@
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3. Important: The Flowplayer 3 plugin needs to be activated to use this plugin.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3_playlist.php.html";
 $plugin_disable = $external;
 
@@ -61,7 +61,8 @@ class flowplayer3_playlist {
 										'desc' => gettext("Player height (Note this refers to the player window. The playlist display itself is styled via CSS.)")),
 		gettext('Autoplay') => array('key' => 'flow_player3_playlistautoplay', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Should the video start automatically. Yes if selected. (NOTE: Probably because of a flowplayer bug mp3s are always autoplayed.)")),
-		gettext('Controls autohide') => array('key' => 'flow_player3_playlistautohide', 'type' => OPTION_TYPE_CHECKBOX,
+		gettext('Controls autohide') => array('key' => 'flow_player3_playlistautohide', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => array(gettext('never')=>"never", gettext('always')=>"always", gettext('fullscreen')=>"fullscreen"),
 										'desc' => gettext("Specifies whether the controlbar should be hidden when the user is not actively using the player.")),
 		gettext('Splash image') => array('key' => 'flow_player3_playlistsplashimage', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to display the videothumb of the first playlist entry as a splash/cover image. It will be cropped to the fit the width and height of the player window and will dissapear on starting the playlist."))
@@ -127,11 +128,6 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				} else {
 					$autoplay = "false";
 				}
-				if(getOption("flow_player3_playlistautohide") == 1) {
-					$autohide = "true";
-				} else {
-					$autohide = "false";
-				}
 				$playlist = $album->getImages();
 				//$videoThumb = checkObjectsThumb(getAlbumFolder().$albumname, $playlist[0]);
 				
@@ -161,7 +157,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			plugins: { 
 				controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	autoHide: '.$autohide.',
+        	autoHide: '.getOption('flow_player3_playlistautohide').',
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
