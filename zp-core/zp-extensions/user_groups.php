@@ -55,6 +55,7 @@ function user_groups_save_admin($discard, $userobj, $i) {
  * @return string
  */
 function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
+	global $_admin_rights;
 	$group = $userobj->getGroup();
 	$admins = getAdministrators();
 	$ordered = array();
@@ -72,8 +73,38 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	}
 	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
-		$grouppart = '<select name="'.$i.'group" onchange="javascript: $(\'#hint'.$i.'\').html(this.options[this.selectedIndex].title);">'."\n";
-		$grouppart .= '<option title="'.gettext('no group affiliation').'"></option>'."\n";
+		$rights = $user['rights'];
+		$grouppart =	'
+									<script type="text/javascript">
+										function groupchange'.$i.'(obj) {
+											var disable = obj.value != \'\';';
+		$grouppart .= '
+											switch (obj.value) {';
+		foreach ($groups as $user) {
+			$grouppart .= '
+												case \''.$user['user'].'\':
+													target = '.$user['rights'].';
+											 		break;';
+		}
+		$grouppart .= '
+											}';
+		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
+			$grouppart .= '
+											if ($(\'#'.$i.'-'.$rightselement.'\').val()&target) {
+												$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'checked\');
+											} else {
+												$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'\');
+											}
+											$(\'#'.$i.'-'.$rightselement.'\').attr(\'disabled\',disable);
+											';		
+		}
+		
+		$grouppart .= '
+											$(\'#hint'.$i.'\').html(obj.options[obj.selectedIndex].title);
+										}
+									</script>';
+		$grouppart .= '<select name="'.$i.'group" onchange="javascript: groupchange'.$i.'(this);">'."\n";
+		$grouppart .= '<option value="" title="'.gettext('no group affiliation').'"></option>'."\n";
 		$selected_hint = gettext('no group affiliation');
 		foreach ($groups as $user) {
 			if ($user['name']=='template') {
@@ -88,7 +119,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 				} else {
 				$selected = '';
 			}
-			$grouppart .= '<option'.$selected.' title="'.$hint.'">'.$user['user'].'</option>'."\n";
+			$grouppart .= '<option'.$selected.' value="'.$user['user'].'" title="'.$hint.'">'.$user['user'].'</option>'."\n";
 		}
 		$grouppart .= '</select>'."\n";
 		$grouppart .= '<span class="hint'.$i.'" id="hint'.$i.'" style="width:15em;">'.$selected_hint."</span>\n";

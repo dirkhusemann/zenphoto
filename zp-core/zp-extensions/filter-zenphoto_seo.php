@@ -8,8 +8,40 @@ $plugin_description = gettext("Filter applied to filenames to translate accented
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-seo.php.html";
+$option_interface = new filter_zenphoto_seo();
 
 zp_register_filter('seoFriendlyURL', 'filterAccentedCharacters');
+zp_register_filter('seoFriendlyURL_js', 'filterAccentedCharacters_js');
+
+/**
+ * Option handler class
+ *
+ */
+class filter_zenphoto_seo {
+	/**
+	 * class instantiation function
+	 *
+	 * @return filter_zenphoto_seo
+	 */
+	function filter_zenphoto_seo() {
+		setOptionDefault('zenphoto_seo_lowercase', 1);
+	}
+
+
+	/**
+	 * Reports the supported options
+	 *
+	 * @return array
+	 */
+	function getOptionsSupported() {
+		return array(	gettext('Lowercase only') => array('key' => 'zenphoto_seo_lowercase', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('When set, all characters are converted to lower case.')));
+	}
+
+	function handleOption($option, $currentValue) {
+	}
+
+}
 
 /**
  * translates accented characters to unaccented ones
@@ -594,9 +626,43 @@ function filterAccentedCharacters($string) {
 	";"=>"-",
 	" "=>"-");
 	$string = strtr($string,$specialchars);
+	if (getOption('zenphoto_seo_lowercase')) $string = strtolower($string);
 	$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
 	$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
 	$string = str_replace(array('---','--'),'-', $string);
 	return $string; 
 } 
+function filterAccentedCharacters_js($string) {
+	$js = "
+	<script type=\"text/javascript\">
+		function soejs(fname) {
+			fname = fname.replace(/[ÃÃÃÃÃÃÃ Ã¡Ã¢Ã£Ã¥]/g, 'a');
+			fname = fname.replace(/[ÃÃ§]/g, 'c');
+			fname = fname.replace(/[ÃÃÃÃÃ¨Ã©ÃªÃ«]/g, 'e');
+			fname = fname.replace(/[ÃÃÃÃÃ¬Ã­Ã®Ã¯]/g, 'i');
+			fname = fname.replace(/[ÃÃÃÃÃÃ²Ã³Ã´ÃµÃ¸]/g, 'o');
+			fname = fname.replace(/[ÅÅÃÃ¶]/g, 'oe');
+			fname = fname.replace(/[Å Å¡]/g, 's');
+			fname = fname.replace(/[ÃÃÃÃ¹ÃºÃ»]/g, 'u');
+			fname = fname.replace(/[ÃÃ¼]/g, 'ue');
+			fname = fname.replace(/[ÃÅ¸Ã½Ã¿]/g, 'y');
+			fname = fname.replace(/Ã/g, 'ss');
+			fname = fname.replace(/[ï¿½?Ã¦Ã¤]/g, 'ae');
+			fname = fname.replace(/[ÃÃ°ÃÃ¾]/g, 'd');
+			fname = fname.replace(/[ÃÃ±]/g, 'n');";
+	
+	if (getOption('zenphoto_seo_lowercase')) {
+		$js .= "
+		fname = fname.toLowerCase();";
+	}
+	$js .= "		
+			fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
+			fname = fname.replace(/^\s+|\s+$/g, '');
+			fname = fname.replace(/[^a-zA-Z0-9]/g, '-');
+			fname = fname.replace(/--*/g, '-');
+			return fname;
+		}
+	</script>";
+	return $js;
+}
 ?>

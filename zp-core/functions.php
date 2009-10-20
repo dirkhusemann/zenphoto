@@ -104,7 +104,7 @@ $_zp_exifvars = array(
 	'EXIFGPSLongitudeRef'   		=> array('GPS',    'Longitude Reference',		gettext('Longitude Reference'),  											false,			52),
 	'EXIFGPSAltitude'       		=> array('GPS',    'Altitude',          		gettext('Altitude'),              										false,			52),
 	'EXIFGPSAltitudeRef'    		=> array('GPS',    'Altitude Reference',		gettext('Altitude Reference'),  											false,			52),
-	'IPTCOriginatingProgram'		=> array('IPTC',	 'OriginatingProgram',			gettext('Originating Program '),											false,			32),
+	'IPTCOriginatingProgram'		=> array('IPTC',	 'OriginatingProgram',		gettext('Originating Program '),											false,			32),
 	'IPTCProgramVersion'			 	=> array('IPTC',	 'ProgramVersion',				gettext('Program version'),														false,			10)
 	);
 
@@ -1144,8 +1144,8 @@ function setupTheme() {
 		}
 	}
 	$theme = zp_apply_filter('setupTheme', $theme);
-	$requirePath = getPlugin('themeoptions.php', $theme);
-	if (empty($theme) || empty($requirePath)) {
+	$themeindex = getPlugin('index.php', $theme);
+	if (empty($theme) || empty($themeindex)) {
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		header('Content-Type: text/html; charset=' . getOption('charset'));
 		?>
@@ -1160,8 +1160,11 @@ function setupTheme() {
 		<?php
 		exit();
 	} else {
-		require_once($requirePath);
-		$optionHandler = new ThemeOptions(); /* prime the default theme options */
+		$requirePath = getPlugin('themeoptions.php', $theme);
+		if (!empty($requirePath)) {
+			require_once($requirePath);
+			$optionHandler = new ThemeOptions(); /* prime the default theme options */
+		}
 		loadLocalOptions($id,$theme);
 		$_zp_themeroot = WEBPATH . "/".THEMEFOLDER."/$theme";
 	}

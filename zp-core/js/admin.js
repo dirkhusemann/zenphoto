@@ -66,47 +66,6 @@ function contains(arr, key) {
 	return false;
 }
 
-function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
-	var autogen = document.getElementById(checkboxID).checked;
-	var folder = document.getElementById(folderID);
-	var parentfolder = document.getElementById('albumselectmenu').value;
-	if (parentfolder != '') parentfolder += '/';
-	var name = nameObj.value;
-	var fname = "";
-	var fnamesuffix = "";
-	var count = 1;
-	if (autogen && name != "") {
-		fname = name;
-
-		fname = fname.replace(/[ÀÁÂÄÃÅàáâãå]/g, 'a');
-		fname = fname.replace(/[Çç]/g, 'c');
-		fname = fname.replace(/[ÈÉÊËèéêë]/g, 'e');
-		fname = fname.replace(/[ÌÍÎÏìíîï]/g, 'i');
-		fname = fname.replace(/[ÒÓÔÕØòóôõø]/g, 'o');
-		fname = fname.replace(/[ŒœÖö]/g, 'oe');
-		fname = fname.replace(/[Šš]/g, 's');
-		fname = fname.replace(/[ÙÚÛùúû]/g, 'u');
-		fname = fname.replace(/[Üü]/g, 'ue');
-		fname = fname.replace(/[ÝŸýÿ]/g, 'y');
-		fname = fname.replace(/ß/g, 'ss');
-		fname = fname.replace(/[�?æä]/g, 'ae');
-		fname = fname.replace(/[ÐðÞþ]/g, 'd');
-		fname = fname.replace(/[Ññ]/g, 'n');
-
-		fname = fname.toLowerCase();
-		fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, "");
-		fname = fname.replace(/^\s+|\s+$/g, "");
-		fname = fname.replace(/[^a-zA-Z0-9]/g, "-");
-		fname = fname.replace(/--*/g, "-");
-		while (contains(albumArray, parentfolder + fname + fnamesuffix)) {
-			fnamesuffix = "-"+count;
-			count++;
-		}
-	}
-	folder.value = parentfolder + fname + fnamesuffix;
-	return validateFolder(folder, msg1, msg2);
-}
-
 function validateFolder(folderObj, msg1, msg2) {
 	var errorDiv = document.getElementById("foldererror");
 	var exists = document.uploadform.existingfolder.value != "false";

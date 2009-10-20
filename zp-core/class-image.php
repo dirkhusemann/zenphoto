@@ -314,7 +314,7 @@ class _Image extends PersistentObject {
 						if (empty($date)) {
 							$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
 						} else {
-							$this->set('date', $date);
+							$this->setDateTime($date);
 						}
 						
 						/* iptc title */
@@ -329,27 +329,27 @@ class _Image extends PersistentObject {
 						if (empty($title)) {
 							$this->set('title',$this->getDefaultTitle());
 						} else {
-							$this->set('title',$title);
+							$this->setTitle($title);
 						}
 						
 						/* iptc description */
-						$this->set('desc', $this->get('IPTCImageCaption'));
+						$this->setDesc($this->get('IPTCImageCaption'));
 
 						/* iptc location, state, country */
-						$this->set('location', $this->get('IPTCSubLocation'));
-						$this->set('city', $this->get('IPTCCity'));
-						$this->set('state', $this->get('IPTCState'));
-						$this->set('country', $this->get('IPTCLocationName'));
+						$this->setLocation($this->get('IPTCSubLocation'));
+						$this->setCity($this->get('IPTCCity'));
+						$this->setState($this->get('IPTCState'));
+						$this->setCountry($this->get('IPTCLocationName'));
 
 						/* iptc credit */
 						$credit = $this->get('IPTCImageCredit');
 						if (empty($credit)) {
 							$credit = $this->get('IPTCSource');
 						}
-						$this->set('credit', $credit);
+						$this->setCredit($credit);
 
 						/* iptc copyright */
-						$this->set('copyright', $this->get('Copyright'));
+						$this->setCopyright($this->get('Copyright'));
 
 						/* iptc keywords (tags) */
 						$datum = $this->getIPTCTagArray('2#025', $iptc);
@@ -526,7 +526,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getLocation() {
-		return get_language_string($this->get('Location'));
+		return get_language_string($this->get('location'));
 	}
 
 	/**
@@ -534,7 +534,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $location text for the location
 	 */
-	function setLocation($location) { $this->set('Location', $location); }
+	function setLocation($location) { $this->set('location', $location); }
 
 	/**
 	 * Returns the city field of the image
@@ -542,7 +542,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCity() {
-		return get_language_string($this->get('City'));
+		return get_language_string($this->get('city'));
 	}
 
 	/**
@@ -550,7 +550,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $city text for the city
 	 */
-	function setCity($city) { $this->set('City', $city); }
+	function setCity($city) { $this->set('city', $city); }
 
 	/**
 	 * Returns the state field of the image
@@ -558,7 +558,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getState() {
-		return get_language_string($this->get('State'));
+		return get_language_string($this->get('state'));
 	}
 
 	/**
@@ -566,7 +566,7 @@ class _Image extends PersistentObject {
 	 *
 	 * @param string $state text for the state
 	 */
-	function setState($state) { $this->set('State', $state); }
+	function setState($state) { $this->set('state', $state); }
 
 	/**
 	 * Returns the country field of the image

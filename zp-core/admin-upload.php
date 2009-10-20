@@ -251,6 +251,32 @@ if (ini_get('safe_mode')) { ?>
 		} else {
 			$checked = '';
 		}
+		$defaultjs = "
+			<script type=\"text/javascript\">
+				function soejs(fname) {
+					fname = fname.replace(/[ÃÃÃÃÃÃÃ Ã¡Ã¢Ã£Ã¥]/g, 'a');
+					fname = fname.replace(/[ÃÃ§]/g, 'c');
+					fname = fname.replace(/[ÃÃÃÃÃ¨Ã©ÃªÃ«]/g, 'e');
+					fname = fname.replace(/[ÃÃÃÃÃ¬Ã­Ã®Ã¯]/g, 'i');
+					fname = fname.replace(/[ÃÃÃÃÃÃ²Ã³Ã´ÃµÃ¸]/g, 'o');
+					fname = fname.replace(/[ÅÅÃÃ¶]/g, 'oe');
+					fname = fname.replace(/[Å Å¡]/g, 's');
+					fname = fname.replace(/[ÃÃÃÃ¹ÃºÃ»]/g, 'u');
+					fname = fname.replace(/[ÃÃ¼]/g, 'ue');
+					fname = fname.replace(/[ÃÅ¸Ã½Ã¿]/g, 'y');
+					fname = fname.replace(/Ã/g, 'ss');
+					fname = fname.replace(/[ï¿½?Ã¦Ã¤]/g, 'ae');
+					fname = fname.replace(/[ÃÃ°ÃÃ¾]/g, 'd');
+					fname = fname.replace(/[ÃÃ±]/g, 'n');
+					fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
+					fname = fname.replace(/^\s+|\s+$/g, '');
+					fname = fname.replace(/[^a-zA-Z0-9]/g, '-');
+					fname = fname.replace(/--*/g, '-');
+					return fname;
+				}
+			</script>
+		";
+		echo zp_apply_filter('seoFriendlyURL_js', $defaultjs);
 		?>
 		<script type="text/javascript">
 			function buttonstate(good) {
@@ -260,9 +286,30 @@ if (ini_get('safe_mode')) { ?>
 					$('#fileUploadbuttons').hide();
 				}
 			}
+
 			function albumSelect() {	
 				var sel = document.getElementById('albumselectmenu');
 				buttonstate(albumSwitch(sel, true, '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));
+			}
+			
+			function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
+				var autogen = document.getElementById(checkboxID).checked;
+				var folder = document.getElementById(folderID);
+				var parentfolder = document.getElementById('albumselectmenu').value;
+				if (parentfolder != '') parentfolder += '/';
+				var name = nameObj.value;
+				var fname = "";
+				var fnamesuffix = "";
+				var count = 1;
+				if (autogen && name != "") {
+					fname = soejs(name);
+					while (contains(albumArray, parentfolder + fname + fnamesuffix)) {
+						fnamesuffix = "-"+count;
+						count++;
+					}
+				}
+				folder.value = parentfolder + fname + fnamesuffix;
+				return validateFolder(folder, msg1, msg2);
 			}
 		</script>
 		<select id="albumselectmenu" name="albumselect" onChange="albumSelect()">
@@ -335,7 +382,6 @@ if (ini_get('safe_mode')) { ?>
 				</label>
 			</div>
 		</div>
-		
 		<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?>
 			<input id="albumtitle" size="42" type="text" name="albumtitle"
 										onKeyUp="buttonstate(updateFolder(this, 'folderdisplay', 'autogen','<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));" />
