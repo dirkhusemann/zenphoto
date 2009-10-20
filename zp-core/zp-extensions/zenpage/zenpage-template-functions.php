@@ -413,7 +413,7 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 						echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
 					} else {
 						$_zp_current_image = $_zp_current_zenpage_news;
-						$_zp_flash_player->printPlayerConfig();
+						$_zp_flash_player->printPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
 					}
 					echo getNewsContent($shorten);
 					break;
