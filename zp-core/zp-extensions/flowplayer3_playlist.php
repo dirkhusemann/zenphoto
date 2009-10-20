@@ -157,7 +157,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			plugins: { 
 				controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	autoHide: '.getOption('flow_player3_playlistautohide').',
+        	autoHide: "'.getOption('flow_player3_playlistautohide').'",
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",

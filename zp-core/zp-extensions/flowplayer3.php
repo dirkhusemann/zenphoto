@@ -170,7 +170,7 @@ class flowplayer3 {
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
-        	autoHide: '.getOption('flow_player3_autohide').',
+        	autoHide: "'.getOption('flow_player3_controlsautohide').'",
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
