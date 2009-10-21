@@ -700,7 +700,10 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
  */
 function postIndexEncode($str) {
 	$str = urlencode($str);
-	return str_replace('.','%2E', $str);
+	$str = str_replace('.','__2E__', $str);
+	$str = str_replace('+', '_-_', $str);
+	$str = str_replace('%', '_--_', $str);
+	return $str;
 }
 
 /**
@@ -710,7 +713,9 @@ function postIndexEncode($str) {
  * @return string
  */
 function postIndexDecode($str) {
-	$str = str_replace('%2E', '.', sanitize($str,0));
+	$str = str_replace('__2E__', '.', sanitize($str,0));
+	$str = str_replace('_-_', '+', $str);
+	$str = str_replace('_--_', '%', $str);
 	return urldecode($str);
 }
 
@@ -2578,9 +2583,7 @@ function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
 			<ul class="albumchecklist">
 				<?php
 				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true);
-				if (empty($alterrights)) {
-					generateUnorderedListFromArray(array(), $rest, $prefix, false, true, true);
-				}
+				generateUnorderedListFromArray(array(), $rest, $prefix, $alterrights, true, true);
 				?>
 			</ul>
 		</div>

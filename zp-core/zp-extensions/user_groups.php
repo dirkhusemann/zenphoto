@@ -55,14 +55,16 @@ function user_groups_save_admin($discard, $userobj, $i) {
  * @return string
  */
 function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
-	global $_admin_rights;
+	global $_admin_rights, $gallery;
 	$group = $userobj->getGroup();
 	$admins = getAdministrators();
 	$ordered = array();
 	$groups = array();
+	$hisgroup = NULL;
 	$adminordered = array();
 	foreach ($admins as $key=>$admin) {
 		$ordered[$key] = $admin['user'];
+		if ($group == $admin['user']) $hisgroup = $admin;
 	}
 	asort($ordered);
 	foreach ($ordered as $key=>$user) {
@@ -73,37 +75,89 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	}
 	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
-		$rights = $user['rights'];
+		$albumlist = array();
+		foreach ($gallery->getAlbums() as $folder) {
+			if (hasDyanmicAlbumSuffix($folder)) {
+				$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
+			} else {
+				$name = $folder;
+			}
+			$albumlist[$name] = $folder;
+		}
 		$grouppart =	'
 									<script type="text/javascript">
 										function groupchange'.$i.'(obj) {
 											var disable = obj.value != \'\';';
-		$grouppart .= '
-											switch (obj.value) {';
-		foreach ($groups as $user) {
+			foreach ($albumlist as $albumid) {
+				$grouppart .= '
+											$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'disabled\',disable);';
+			}
 			$grouppart .= '
-												case \''.$user['user'].'\':
-													target = '.$user['rights'].';
-											 		break;';
+											if (disable) {';
+			foreach ($albumlist as $albumid) {
+				$grouppart .= '
+												$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
+			}
+			$grouppart .= '
+												switch (obj.value) {';
+			foreach ($groups as $user) {
+				$cv = populateManagedAlbumList($user['id']);
+				$grouppart .= '
+													case \''.$user['user'].'\':
+														target = '.$user['rights'].';';
+				foreach ($albumlist as $albumid) {
+					if (in_array($albumid,$cv)) {
+						$grouppart .= '
+														$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'checked\');';
+					} else {
+						$grouppart .= '
+														$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
+					}
+				}
+				$grouppart .= '
+														break;';
+		}
+		$grouppart .= '
+												}';
+		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
+				$grouppart .= '
+												if ($(\'#'.$i.'-'.$rightselement.'\').val()&target) {
+													$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'checked\');
+												} else {
+													$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'\');
+												}';		
 		}
 		$grouppart .= '
 											}';
 		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-			$grouppart .= '
-											if ($(\'#'.$i.'-'.$rightselement.'\').val()&target) {
-												$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'checked\');
-											} else {
-												$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'\');
-											}
-											$(\'#'.$i.'-'.$rightselement.'\').attr(\'disabled\',disable);
-											';		
+			$grouppart .= '	
+											$(\'#'.$i.'-'.$rightselement.'\').attr(\'disabled\',disable);';		
 		}
 		
 		$grouppart .= '
 											$(\'#hint'.$i.'\').html(obj.options[obj.selectedIndex].title);
-										}
+										}';
+		if (is_array($hisgroup)) {
+			$grouppart .= '
+										window.onload = function() {';
+			$cv = populateManagedAlbumList($hisgroup['id']);
+			foreach ($albumlist as $albumid) {
+				if (in_array($albumid,$cv)) {
+					$grouppart .= '
+											$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'checked\');';
+				} else {
+					$grouppart .= '
+											$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
+				}
+			}
+			$grouppart .= '
+										}';
+		}
+		
+		$grouppart .= '
 									</script>';
-		$grouppart .= '<select name="'.$i.'group" onchange="javascript: groupchange'.$i.'(this);">'."\n";
+		
+		$grouppart .= '<select name="'.$i.'group" onchange="javascript: groupchange'.$i.'(this);"'.'>'."\n";
 		$grouppart .= '<option value="" title="'.gettext('no group affiliation').'"></option>'."\n";
 		$selected_hint = gettext('no group affiliation');
 		foreach ($groups as $user) {
