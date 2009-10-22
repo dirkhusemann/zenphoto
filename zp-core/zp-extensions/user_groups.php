@@ -76,6 +76,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$albumlist = array();
+		$all = array();
 		foreach ($gallery->getAlbums() as $folder) {
 			if (hasDyanmicAlbumSuffix($folder)) {
 				$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
@@ -83,79 +84,95 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 				$name = $folder;
 			}
 			$albumlist[$name] = $folder;
+			$allo[] = "'#managed_albums_".$i.'_'.postIndexEncode($folder)."'";
+		}
+		$rights = array();
+		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
+			$rights[] = "'#".$i.'-'.$rightselement."'";
 		}
 		$grouppart =	'
-									<script type="text/javascript">
-										function groupchange'.$i.'(obj) {
-											var disable = obj.value != \'\';';
-			foreach ($albumlist as $albumid) {
-				$grouppart .= '
-											$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'disabled\',disable);';
-			}
-			$grouppart .= '
-											if (disable) {';
-			foreach ($albumlist as $albumid) {
-				$grouppart .= '
-												$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
-			}
-			$grouppart .= '
-												switch (obj.value) {';
-			foreach ($groups as $user) {
-				$cv = populateManagedAlbumList($user['id']);
-				$grouppart .= '
-													case \''.$user['user'].'\':
-														target = '.$user['rights'].';';
-				foreach ($albumlist as $albumid) {
-					if (in_array($albumid,$cv)) {
-						$grouppart .= '
-														$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'checked\');';
-					} else {
-						$grouppart .= '
-														$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
+			<script type="text/javascript">
+				function groupchange'.$i.'(obj) {
+					var disable = obj.value != \'\';
+					var albdisable = false;
+					var checkedalbums = [];
+					var checked = 0;
+					var uncheckedalbums = [];
+					var unchecked = 0;
+					var allalbums = ['.implode(',', $allo).'];
+					var allc = '.count($allo).';
+					var rights = ['.implode(',',$rights).'];
+					var rightsc = '.count($_admin_rights).';
+					for (i=0;i<rightsc;i++) {
+						$(rights[i]).attr(\'disabled\',disable);
 					}
-				}
-				$grouppart .= '
-														break;';
+					for (i=0;i<allc;i++) {
+						$(allalbums[i]).attr(\'disabled\',disable);
+					}
+					$(\'#hint'.$i.'\').html(obj.options[obj.selectedIndex].title);
+					if (disable) {
+						switch (obj.value) {';
+		foreach ($groups as $user) {
+			$cv = populateManagedAlbumList($user['id']);
+			$xv = array_diff($albumlist, $cv);
+			$cvo = array();
+			foreach ($cv as $albumid) {
+				$cvo[] = "'#managed_albums_".$i.'_'.postIndexEncode($albumid)."'";
+			}
+			$xvo = array();
+			foreach ($xv as $albumid) {
+				$xvo[] = "'#managed_albums_".$i.'_'.postIndexEncode($albumid)."'";
+			}
+			if ($user['name']=='template') {
+				$albdisable = 'false';
+			} else {
+				$albdisable = 'true';
+			}
+			$grouppart .= '
+							case \''.$user['user'].'\':
+								target = '.$user['rights'].';
+								checkedalbums = ['.implode(',',$cvo).'];
+								checked = '.count($cvo).';
+								uncheckedalbums = ['.implode(',',$xvo).'];
+								unchecked = '.count($xvo).';
+								break;';
 		}
 		$grouppart .= '
-												}';
-		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-				$grouppart .= '
-												if ($(\'#'.$i.'-'.$rightselement.'\').val()&target) {
-													$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'checked\');
-												} else {
-													$(\'#'.$i.'-'.$rightselement.'\').attr(\'checked\',\'\');
-												}';		
-		}
-		$grouppart .= '
-											}';
-		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-			$grouppart .= '	
-											$(\'#'.$i.'-'.$rightselement.'\').attr(\'disabled\',disable);';		
-		}
-		
-		$grouppart .= '
-											$(\'#hint'.$i.'\').html(obj.options[obj.selectedIndex].title);
-										}';
+							}
+						for (i=0;i<checked;i++) {
+							$(checkedalbums[i]).attr(\'checked\',\'checked\');
+						}
+						for (i=0;i<unchecked;i++) {
+							$(uncheckedalbums[i]).attr(\'checked\',\'\');
+						}
+						for (i=0;i<rightsc;i++) {
+							if ($(rights[i]).val()&target) {
+								$(rights[i]).attr(\'checked\',\'checked\');
+							} else {
+								$(rights[i]).attr(\'checked\',\'\');
+							}		
+						}
+					}
+				}';
 		if (is_array($hisgroup)) {
 			$grouppart .= '
-										window.onload = function() {';
+				window.onload = function() {';
 			$cv = populateManagedAlbumList($hisgroup['id']);
 			foreach ($albumlist as $albumid) {
 				if (in_array($albumid,$cv)) {
 					$grouppart .= '
-											$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'checked\');';
+					$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'checked\');';
 				} else {
 					$grouppart .= '
-											$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
+					$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
 				}
 			}
 			$grouppart .= '
-										}';
+				}';
 		}
 		
 		$grouppart .= '
-									</script>';
+			</script>';
 		
 		$grouppart .= '<select name="'.$i.'group" onchange="javascript: groupchange'.$i.'(this);"'.'>'."\n";
 		$grouppart .= '<option value="" title="'.gettext('no group affiliation').'"></option>'."\n";
