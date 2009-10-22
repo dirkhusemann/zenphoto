@@ -1645,7 +1645,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''";
 
 	//v1.1.5
-	$sql_statements[] = " ALTER TABLE `zp_comments` DROP FOREIGN KEY `comments_ibfk1`";
+	$sql_statements[] = " ALTER TABLE $tbl_comments DROP FOREIGN KEY `comments_ibfk1`";
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
   //	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
 	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."comments`";
