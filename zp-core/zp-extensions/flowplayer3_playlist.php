@@ -34,8 +34,7 @@ if ($external) {
 			$css = WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3_playlist/flowplayer3_playlist.css';
 		}
 		addPluginScript('
-			<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.mousewheel.pack.js"></script>
-			<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.scrollable.pack.js"></script>
+			<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.tools.min.js"></script>
 			<link rel="stylesheet" type="text/css" href="' . $css . '" />
 			');
 	}

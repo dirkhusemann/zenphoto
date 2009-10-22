@@ -22,8 +22,8 @@ if ($external) {
 	$option_interface = new flowplayer3();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
 	// register the scripts needed
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.js"></script>
-	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist.pack.js"></script>');
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.1.4.min.js"></script>
+	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist.3.0.7.min.js"></script>');
 }
 
 
@@ -165,7 +165,7 @@ class flowplayer3 {
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.$width.'px; height: '.$height.'px;">
 			</span>
 			<script>
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
+			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.4.swf", {
 			plugins: { 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
