@@ -34,43 +34,45 @@
 require_once(dirname(__FILE__).'/classes.php');
 
 define('LIBAUTH_VERSION', 1);
-define('NO_RIGHTS', 2);
-$_admin_rights = array();
-define('ALL_RIGHTS', defineRights());
+$_admin_rights = array(	'OVERVIEW_RIGHTS' => 4,
+												'VIEW_ALL_RIGHTS' => 8,
+												'UPLOAD_RIGHTS' => 16,
+												'POST_COMMENT_RIGHTS'=>32,
+												'COMMENT_RIGHTS' => 64,
+												'ALBUM_RIGHTS' => 256,
+												'MANAGE_ALL_ALBUM_RIGHTS' => 512,
+												'THEMES_RIGHTS' => 1024,
+												'ZENPAGE_RIGHTS' => 2048,
+												'TAGS_RIGHTS' => 4096,
+												'OPTIONS_RIGHTS' => 8192,
+												'ADMIN_RIGHTS' => 65536);
+arsort($_admin_rights);
+$allrights = 0;
 foreach ($_admin_rights as $right=>$value) {
+	$allrights = $allrights | $value;
 	define($right, $value);
 }
+define('NO_RIGHTS', 2);
+define('ALL_RIGHTS', $allrights | NO_RIGHTS);
+unset($allrights);
 define('DEFAULT_RIGHTS', OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | POST_COMMENT_RIGHTS);
+$_admin_rights_names = array(	OVERVIEW_RIGHTS => gettext('Overview'),
+															VIEW_ALL_RIGHTS => gettext('View all'),
+															UPLOAD_RIGHTS => gettext('Upload'),
+															POST_COMMENT_RIGHTS => gettext('Post comments'),
+															COMMENT_RIGHTS => gettext('Comments'),
+															ALBUM_RIGHTS => gettext('Album'),
+															MANAGE_ALL_ALBUM_RIGHTS => gettext('Manage all albums'),
+															THEMES_RIGHTS => gettext('Themes'),
+															ZENPAGE_RIGHTS => gettext('Zenpage'),
+															TAGS_RIGHTS => gettext('Tags'),
+															OPTIONS_RIGHTS => gettext('Options'),
+															ADMIN_RIGHTS => gettext('Admin'));
 
 //admin user handling
 $_zp_current_admin = null;
 $_zp_admin_users = null;
 
-/**
- * Sets the rights array for the above definition loop
- * Returns the value for ALL_RIGHTS
- *
- * @return bit
- */
-function defineRights() {
-	global $_admin_rights;
-	$_admin_rights = array(	'OVERVIEW_RIGHTS' => 4,
-													'VIEW_ALL_RIGHTS' => 8,
-													'UPLOAD_RIGHTS' => 16,
-													'POST_COMMENT_RIGHTS'=>32,
-													'COMMENT_RIGHTS' => 64,
-													'ALBUM_RIGHTS' => 256,
-													'MANAGE_ALL_ALBUM_RIGHTS' => 512,
-													'THEMES_RIGHTS' => 1024,
-													'ZENPAGE_RIGHTS' => 2048,
-													'TAGS_RIGHTS' => 4096,
-													'OPTIONS_RIGHTS' => 8192,
-													'ADMIN_RIGHTS' => 65536);
-	$allrights = 0;
-	arsort($_admin_rights);
-	foreach ($_admin_rights as $right) $allrights = $allrights | $right;
-	return $allrights | NO_RIGHTS;
-}
 
 $_lib_auth_extratext = getOption('extra_auth_hash_text');
 /**

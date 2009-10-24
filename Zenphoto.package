@@ -497,9 +497,9 @@ zp-core/zp-extensions/filter-zenphoto_seo.php
 zp-core/zp-extensions/flag_thumbnail.php
 zp-core/zp-extensions/flowplayer3/controls.css
 zp-core/zp-extensions/flowplayer3/flowplayer-3.1.4.min.js
-zp-core/zp-extensions/flowplayer3/flowplayer-3.1.4.swf
+zp-core/zp-extensions/flowplayer3/flowplayer-3.1.5.swf
 zp-core/zp-extensions/flowplayer3/flowplayer.audio-3.1.2.swf
-zp-core/zp-extensions/flowplayer3/flowplayer.controls-3.1.4.swf
+zp-core/zp-extensions/flowplayer3/flowplayer.controls-3.1.5.swf
 zp-core/zp-extensions/flowplayer3/flowplayer.playlist-3.0.7.min.js
 zp-core/zp-extensions/flowplayer3/LICENSE.txt
 zp-core/zp-extensions/flowplayer3.php
@@ -1496,6 +1496,7 @@ zp-core/zp-extensions/user_groups/user_groups-tab.php
 zp-core/zp-extensions/user_groups.php
 zp-core/zp-extensions/user_login-out.php
 zp-core/zp-extensions/viewer_size_image.php
+zp-core/zp-extensions/xmpMetadata.php
 zp-core/zp-extensions/zenpage/admin-categories.php
 zp-core/zp-extensions/zenpage/admin-edit.php
 zp-core/zp-extensions/zenpage/admin-news-articles.php

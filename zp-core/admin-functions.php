@@ -2492,7 +2492,7 @@ function removeParentAlbumNames($album) {
  * @param bit $rights rights of the admin
  */
 function printAdminRightsTable($id, $background, $alterrights, $rights) {
-	global $_admin_rights;
+	global $_admin_rights, $_admin_rights_names;
 	?>
 	<table class="checkboxes" > <!-- checkbox table -->
 		<tr>
@@ -2503,8 +2503,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 		<?php
 		$element = 3;
 		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-			$name = strtolower(str_replace('_', ' ', str_replace('_RIGHTS', '', $rightselement)));
-			$name[0] = strtoupper($name[0]);
+			$name = $_admin_rights_names[$rightsvalue];
 			if ($element>2) {
 				$element = 0;
 				?>
