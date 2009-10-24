@@ -212,11 +212,12 @@ $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $_zp_supported_images));
 $s2 = strtoupper(implode(', ', $types));
 printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s, %s, and %s.'), $s1, $s2, $last);
-echo '<br />'.gettext('You can also upload ZIP files containing files of these types.')
+echo '<br />'.gettext('You can also upload ZIP files containing files of these types.');
+$maxupload = ini_get('upload_max_filesize');
 ?>
 </p>
 <p>
-<?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), ini_get('upload_max_filesize')); ?>
+<?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload); ?>
 <?php echo gettext(' Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'); ?>
 </p>
 
@@ -472,6 +473,7 @@ if (ini_get('safe_mode')) { ?>
 ?>
 							'displayData': 'speed',
 							'simUploadLimit': 3,
+							'sizeLimit': <?php echo parse_size($maxupload); ?>,
 							<?php
 							if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 								?>

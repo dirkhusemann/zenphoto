@@ -15,6 +15,10 @@
  * NOTE: dynamic albums have an ".alb" suffix. Append ".xmp" to that name so
  * that the dynamic album sidecar would be named <album>.alb.xmp
  * 
+ * There is one option for this plugin--to enable searching within the actual image file for
+ * an xmp block. This is disabled by default as it can add considerably to the processing time
+ * for a new image.
+ * 
  * All functions within this plugin are for internal use. The plugin does not present any 
  * theme interface.
  * 
@@ -27,11 +31,41 @@ $plugin_description = gettext('Extracts EXIF metadata from images and xmp sideca
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---xmpMetadata.html";
 $plugin_version = '1.2.7';
+$option_interface = new xmpMetadata_options();
 
 zp_register_filter('new_album', 'xmpMetadata_new_album');
 zp_register_filter('album_refresh', 'xmpMetadata_new_album');
 zp_register_filter('new_image', 'xmpMetadata_new_image');
 zp_register_filter('image_refresh', 'xmpMetadata_new_image');
+
+/**
+ * Plugin option handling class
+ *
+ */
+class xmpMetadata_options {
+
+	function xmpMetadata_options() {
+	}
+
+	function getOptionsSupported() {
+		global $_zp_supported_images, $_zp_extra_filetypes;
+		natcasesort($_zp_supported_images);
+		$types = array_keys($_zp_extra_filetypes);
+		natcasesort($types);
+		$list = array_merge($_zp_supported_images, $types);
+		$listi = array();
+		foreach ($list as $suffix) {
+			$listi[$suffix] = 'xmpMetadata_examine_images_'.$suffix;
+		}
+		return array(	gettext('Process extensions.') => array('key' => 'xmpMetadata_examine_imagefile', 'type' => OPTION_TYPE_CHECKBOX_UL,
+										'checkboxes' => $listi,
+										'desc' => gettext('If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive.'))
+		);
+	}
+	function handleOption($option, $currentValue) {
+	}
+}
+
 
 function xmpMetadata_extract($xmpdata) {
 	$desiredtags = array(
@@ -90,7 +124,7 @@ function xmpMetadata_extract($xmpdata) {
 					$meta = substr($meta,$e+1);
 					if (strpos($tag,'rdf:li') !== false) {
 						$e = strpos($meta,'</rdf:li>');
-						$elements[] = substr($meta, 0, $e);
+						$elements[] = trim(substr($meta, 0, $e));
 						$meta = substr($meta,$e+9);
 					}
 				}
@@ -105,7 +139,7 @@ function xmpMetadata_to_string($meta) {
 	if (is_array($meta)) {
 		$meta = implode(',',$meta);
 	}
-	return $meta;
+	return trim($meta);
 }
 
 function xmpMetadata_new_album($album) {
@@ -135,11 +169,11 @@ function xmpMetadata_new_album($album) {
 
 function xmpMetadata_new_image($image) {
 	global $_zp_exifvars;
+	$source = '';
 	$metadata_path = substr($image->localpath, 0, strrpos($image->localpath, '.')).'.xmp';
 	if (file_exists($metadata_path)) {
 		$source = file_get_contents($metadata_path);
-	} else {
-		$source = '';
+	} else if (getOption('xmpMetadata_examine_images_'.strtolower(substr(strrchr($image->localpath, "."), 1)))) {
 		$f = file_get_contents($image->localpath);
 		$l = filesize($image->localpath);
 		for ($i=0;$i<$l;$i=$i+2) {
@@ -162,29 +196,27 @@ function xmpMetadata_new_image($image) {
 	if (!empty($source)) {
 		$metadata = xmpMetadata_extract($source);
 		foreach ($metadata as $field=>$element) {
+			$v = xmpMetadata_to_string($element); 
 			switch ($field) {
 				case 'EXIFDateTimeOriginal':
 					$image->setDateTime($element);
 					break;
 				case 'IPTCImageCaption':
-					$image->setDesc($v = xmpMetadata_to_string($element));
+					$image->setDesc($v);
 					break;
 				case 'IPTCCity':
-					$image->setCity($v = $element);
+					$image->setCity($v);
 					break;
 				case 'IPTCState':
-					$image->setState($v = $element);
+					$image->setState($v);
 					break;
 				case 'IPTCLocationName':
-					$image->setCountry($v = $element);
+					$image->setCountry($v);
 					break;
-				case 'IPTCCopyright':
-					$image->setCopyright($v = xmpMetadata_to_string($element));
+				case 'IPTCSubLocation':
+					$image->setLocation($v);
 					break;
-				case 'IPTCSource':
-					$image->setCredit($v = xmpMetadata_to_string($element));
-					break;
-				case 'EXIFAperatureValue':
+					case 'EXIFAperatureValue':
 					$v = 'f'.$element;
 					break;
 				case 'EXIFExposureTime':
@@ -204,9 +236,6 @@ function xmpMetadata_new_image($image) {
 					break;
 				case 'IPTCKeywords':
 					$image->setTags($element);
-					break;
-				default:
-					$v = xmpMetadata_to_string($element);
 					break;
 			}
 			if (array_key_exists($field,$_zp_exifvars)) {

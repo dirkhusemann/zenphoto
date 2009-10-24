@@ -342,7 +342,10 @@ class _Image extends PersistentObject {
 						$this->setCountry($this->get('IPTCLocationName'));
 
 						/* iptc credit */
-						$credit = $this->get('IPTCImageCredit');
+						$credit = $this->get('IPTCByLine');
+						if (empty($credit)) {
+							$credit = $this->get('IPTCImageCredit');
+						}
 						if (empty($credit)) {
 							$credit = $this->get('IPTCSource');
 						}
