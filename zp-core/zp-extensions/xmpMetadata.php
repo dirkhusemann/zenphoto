@@ -33,15 +33,7 @@ zp_register_filter('album_refresh', 'xmpMetadata_new_album');
 zp_register_filter('new_image', 'xmpMetadata_new_image');
 zp_register_filter('image_refresh', 'xmpMetadata_new_image');
 
-function xmpMetadata_extract($filename) {
-	$source = file_get_contents($filename);
-
-	$xmpdata_start = strpos($source,"<x:xmpmeta");
-	$xmpdata_end = strpos($source,"</x:xmpmeta>");
-	$xmplenght = $xmpdata_end-$xmpdata_start;
-	$xmpdata = substr($source,$xmpdata_start,$xmplenght+12);
-	$xmp_parsed = array();
-
+function xmpMetadata_extract($xmpdata) {
 	$desiredtags = array(
 		'EXIFLensInfo'					=>	'<aux:Lens>',
 		'EXIFArtist'						=>	'<dc:creator>',
@@ -119,18 +111,22 @@ function xmpMetadata_to_string($meta) {
 function xmpMetadata_new_album($album) {
 	$metadata_path = $album->localpath.'.xmp';
 	if (file_exists($metadata_path)) {
-		$metadata = xmpMetadata_extract($metadata_path);
+		$source = file_get_contents($metadata_path);
+		$metadata = xmpMetadata_extract($source);
 		if (array_key_exists('EXIFDescription',$metadata)) {
-			$album->setDesc(xmpMetadata_to_string($metadata['EXIFDescription']['value']));
+			$album->setDesc(xmpMetadata_to_string($metadata['EXIFDescription']));
 		}
 		if (array_key_exists('IPTCImageHeadline',$metadata)) {
-			$album->setTitle(xmpMetadata_to_string($metadata['IPTCImageHeadline']['value']));
+			$album->setTitle(xmpMetadata_to_string($metadata['IPTCImageHeadline']));
 		}
 		if (array_key_exists('IPTCLocationName',$metadata)) {
-			$album->setPlace(xmpMetadata_to_string($metadata['IPTCLocationName']['value']));
+			$album->setPlace(xmpMetadata_to_string($metadata['IPTCLocationName']));
 		}
 		if (array_key_exists('IPTCKeywords',$metadata)) {
-			$album->setTags(xmpMetadata_to_string($metadata['IPTCKeywords']['value']));
+			$album->setTags(xmpMetadata_to_string($metadata['IPTCKeywords']));
+		}
+		if (array_key_exists('EXIFDateTimeOriginal',$metadata)) {
+			$album->setDateTime($metadata['EXIFDateTimeOriginal']);
 		}
 	}
 	$album->save();
@@ -140,82 +136,104 @@ function xmpMetadata_new_album($album) {
 function xmpMetadata_new_image($image) {
 	global $_zp_exifvars;
 	$metadata_path = substr($image->localpath, 0, strrpos($image->localpath, '.')).'.xmp';
-	if (!file_exists($metadata_path)) {
-		$metadata_path = $image->localpath; // no sidecar, maybe there is xmp metadate in the image file itself
-	}
-	$metadata = xmpMetadata_extract($metadata_path);
-	foreach ($metadata as $field=>$element) {
-		switch ($field) {
-			case 'EXIFDateTimeOriginal':
-				$image->setDateTime($element);
-				break;
-			case 'IPTCImageCaption':
-				$image->setDesc($v = xmpMetadata_to_string($element));
-				break;
-			case 'IPTCCity':
-				$image->setCity($v = $element);
-				break;
-			case 'IPTCState':
-				$image->setState($v = $element);
-				break;
-			case 'IPTCLocationName':
-				$image->setCountry($v = $element);
-				break;
-			case 'IPTCCopyright':
-				$image->setCopyright($v = xmpMetadata_to_string($element));
-				break;
-			case 'IPTCSource':
-				$image->setCredit($v = xmpMetadata_to_string($element));
-				break;
-			case 'EXIFAperatureValue':
-				$v = 'f'.$element;
-				break;
-			case 'EXIFExposureTime':
-				$v = sprintf(gettext('%s sec'),$element);
-				break;
-			case 'EXIFFocalLength':
-			case 'EXIFFNumber':
-			case 'EXIFExposureBiasValue':
-				// deal with the fractional representation
-				$n = explode('/',$element);
-				$v = sprintf('%f', $n[0]/$n[1]);
-				for ($i=strlen($v)-1;$i>1;$i--) {
-					if (substr($v,$i,1) != '0') break;
+	if (file_exists($metadata_path)) {
+		$source = file_get_contents($metadata_path);
+	} else {
+		$source = '';
+		$f = file_get_contents($image->localpath);
+		$l = filesize($image->localpath);
+		for ($i=0;$i<$l;$i=$i+2) {
+			$tag = bin2hex(substr($f,$i,2));
+			$size = bin2hex(substr($f,$i+2,2));
+			if ($tag == 'fffe') {
+				$i = $i+6+hexdec($size);
+				for ($j=$i;$j<$l;$j++) {
+					$meta = substr($f, $j, 5);
+					if ($meta == '<xmp:') {
+						$k = strpos($f, '</xmp:',$j);
+						$source = '...'.substr($f, $j, $k+14-$j).'...';
+						break;
+					}
 				}
-				if (substr($v,$i,1)=='.') $i--;
-				$v = substr($v,0,$i+1);
 				break;
-			case 'IPTCKeywords':
-				$image->setTags($element);
-				break;
-			default:
-				$v = xmpMetadata_to_string($element);
-				break;
-		}
-		if (array_key_exists($field,$_zp_exifvars)) {
-			$image->set($field, $v);
+			}
 		}
 	}
-	/* iptc title */
-	$title = $image->get('IPTCObjectName');
-	if (empty($title)) {
-		$title = $image->get('IPTCImageHeadline');
+	if (!empty($source)) {
+		$metadata = xmpMetadata_extract($source);
+		foreach ($metadata as $field=>$element) {
+			switch ($field) {
+				case 'EXIFDateTimeOriginal':
+					$image->setDateTime($element);
+					break;
+				case 'IPTCImageCaption':
+					$image->setDesc($v = xmpMetadata_to_string($element));
+					break;
+				case 'IPTCCity':
+					$image->setCity($v = $element);
+					break;
+				case 'IPTCState':
+					$image->setState($v = $element);
+					break;
+				case 'IPTCLocationName':
+					$image->setCountry($v = $element);
+					break;
+				case 'IPTCCopyright':
+					$image->setCopyright($v = xmpMetadata_to_string($element));
+					break;
+				case 'IPTCSource':
+					$image->setCredit($v = xmpMetadata_to_string($element));
+					break;
+				case 'EXIFAperatureValue':
+					$v = 'f'.$element;
+					break;
+				case 'EXIFExposureTime':
+					$v = sprintf(gettext('%s sec'),$element);
+					break;
+				case 'EXIFFocalLength':
+				case 'EXIFFNumber':
+				case 'EXIFExposureBiasValue':
+					// deal with the fractional representation
+					$n = explode('/',$element);
+					$v = sprintf('%f', $n[0]/$n[1]);
+					for ($i=strlen($v)-1;$i>1;$i--) {
+						if (substr($v,$i,1) != '0') break;
+					}
+					if (substr($v,$i,1)=='.') $i--;
+					$v = substr($v,0,$i+1);
+					break;
+				case 'IPTCKeywords':
+					$image->setTags($element);
+					break;
+				default:
+					$v = xmpMetadata_to_string($element);
+					break;
+			}
+			if (array_key_exists($field,$_zp_exifvars)) {
+				$image->set($field, $v);
+			}
+		}
+		/* iptc title */
+		$title = $image->get('IPTCObjectName');
+		if (empty($title)) {
+			$title = $image->get('IPTCImageHeadline');
+		}
+		//EXIF title [sic]
+		if (empty($title)) {
+			$title = $image->get('EXIFImageDescription');
+		}
+		if (!empty($title)) {
+			$image->setTitle($title);
+		}
+		/* iptc credit */
+		$credit = $image->get('IPTCImageCredit');
+		if (empty($credit)) {
+			$credit = $image->get('IPTCSource');
+		}
+		$image->setCredit($credit);
+
+		$image->save();
 	}
-	//EXIF title [sic]
-	if (empty($title)) {
-		$title = $image->get('EXIFImageDescription');
-	}
-	if (!empty($title)) {
-		$image->setTitle($title);
-	}
-	/* iptc credit */
-	$credit = $image->get('IPTCImageCredit');
-	if (empty($credit)) {
-		$credit = $image->get('IPTCSource');
-	}
-	$image->setCredit($credit);
-	
-	$image->save();
 	return $image;
 }
 
