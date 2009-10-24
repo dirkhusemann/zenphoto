@@ -272,7 +272,7 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 
 <head>
 
-<title>zenphoto <?php echo $upgrade ? "upgrade" : "setup" ; ?></title>
+<title>zenphoto <?php echo $upgrade ? gettext("upgrade") : gettext("setup") ; ?></title>
 <link rel="stylesheet" href="admin.css" type="text/css" />
 
 <script src="js/jquery.js" type="text/javascript"></script>
@@ -867,7 +867,7 @@ if ($debug) {
 	<tr>
 		<td></td>
 		<td>
-			<input type="submit" value="save" />
+			<input type="submit" value="<?php echo gettext('save'); ?>" />
 		</td>
 	</tr>
 </table>
