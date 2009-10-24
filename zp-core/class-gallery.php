@@ -449,6 +449,8 @@ class Gallery {
 							$album->garbageCollect(true);
 							$album->preLoad();
 						}
+						$album->save();
+						zp_apply_filter('album_refresh', $album);
 					}
 				}
 			}
@@ -472,10 +474,9 @@ class Gallery {
 						$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
 						$imageobj->updateDimensions(); // update the width/height & account for rotation
 						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
-						zp_apply_filter('image_refresh', $imageobj);
-						/* update DB is necessary */
 						$imageobj->save();
-					}
+						zp_apply_filter('image_refresh', $imageobj);
+						}
 				} else {
 					$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
 					$result = query($sql);

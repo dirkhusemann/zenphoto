@@ -85,7 +85,7 @@ class Video extends _Image {
 		// This is where the magic happens...
 		$album_name = $album->name;
 		$this->updateDimensions();  // TODO: figure out how to know if this should change. I.e. old videos, changes of the flash player.
-		if ( parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name))) {
+		if (parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name))) {
 			$this->set('mtime', $ts = filemtime($this->localpath));
 			$newDate = strftime('%Y-%m-%d %T', $ts);
 			$this->setDateTime($newDate);
@@ -102,8 +102,8 @@ class Video extends _Image {
 			if (!is_null($this->objectsThumb)) {
 				$this->updateMetaData();
 			}
-			zp_apply_filter('new_image', $this);
 			$this->save();
+			zp_apply_filter('new_image', $this);
 		}
 	}
 

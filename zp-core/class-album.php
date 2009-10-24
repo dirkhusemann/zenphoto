@@ -257,7 +257,7 @@ class Album extends PersistentObject {
 	/**
 	 * Stores tag information of an album
 	 *
-	 * @param string $tags the tag string
+	 * @param string $tags the tag list
 	 */
 	function setTags($tags) {
 		if (!is_array($tags)) {

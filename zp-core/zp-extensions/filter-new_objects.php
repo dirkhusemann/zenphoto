@@ -6,7 +6,7 @@
  * 
  * @package plugins
  */
-$plugin_is_filter = 5;
+$plugin_is_filter = -5;
 $plugin_description = gettext('Adds admin user who uploaded image to the description of the image (and to the album description if the album did not already exist.)').' '.
 											gettext('For this to work with ZIP files you must have ZZIPlib configured in your PHP.').
 											(function_exists('zip_open') ? '':' '.gettext('<strong>You do not have ZZIPlib configured.</strong>'));
@@ -33,6 +33,7 @@ function updateAlbum($album) {
 			}
 		}
 	}
+	$album->save();
 	return $album;
 }
 
@@ -58,6 +59,7 @@ function updateImage($image) {
 			}
 		}
 	}
+	$image->save();
 	return $image;
 }
 ?>

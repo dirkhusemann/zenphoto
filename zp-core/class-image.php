@@ -113,8 +113,8 @@ class _Image extends PersistentObject {
 					$this->album->save();
 				}
 			}
-			zp_apply_filter('new_image', $this);
 			$this->save();
+			if ($new) zp_apply_filter('new_image', $this);
 		}
 	}
 	
@@ -349,7 +349,7 @@ class _Image extends PersistentObject {
 						$this->setCredit($credit);
 
 						/* iptc copyright */
-						$this->setCopyright($this->get('Copyright'));
+						$this->setCopyright($this->get('IPTCCopyright'));
 
 						/* iptc keywords (tags) */
 						$datum = $this->getIPTCTagArray('2#025', $iptc);
@@ -628,7 +628,7 @@ class _Image extends PersistentObject {
 	/**
 	 * Sets the tags of the image
 	 *
-	 * @param string $tags the tag string
+	 * @param string $tags the tag list
 	 */
 	function setTags($tags) {
 		if (!is_array($tags)) {

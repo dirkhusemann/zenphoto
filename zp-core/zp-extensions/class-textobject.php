@@ -123,8 +123,8 @@ class TextObject extends _Image {
 			if (!is_null($this->objectsThumb)) {
 				$this->updateMetaData();
 			}
-			zp_apply_filter('new_image', $this);
 			$this->save();
+			zp_apply_filter('new_image', $this);
 		}
 	}
 
