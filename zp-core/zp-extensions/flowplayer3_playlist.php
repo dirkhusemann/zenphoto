@@ -152,7 +152,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				next:"a.down",
 				prev:"a.up"
 			});
-			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer.swf", {
+			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.5.swf", {
 			plugins: { 
 				controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
