@@ -176,20 +176,29 @@ function xmpMetadata_new_image($image) {
 	} else if (getOption('xmpMetadata_examine_images_'.strtolower(substr(strrchr($image->localpath, "."), 1)))) {
 		$f = file_get_contents($image->localpath);
 		$l = filesize($image->localpath);
-		for ($i=0;$i<$l;$i=$i+2) {
+		$abort = 0;
+		$i = 0;
+		while ($i<$l && $abort<200) {
 			$tag = bin2hex(substr($f,$i,2));
-			$size = bin2hex(substr($f,$i+2,2));
-			if ($tag == 'fffe') {
-				$i = $i+6+hexdec($size);
-				for ($j=$i;$j<$l;$j++) {
-					$meta = substr($f, $j, 5);
-					if ($meta == '<xmp:') {
-						$k = strpos($f, '</xmp:',$j);
-						$source = '...'.substr($f, $j, $k+14-$j).'...';
-						break;
+			$size = hexdec(bin2hex(substr($f,$i+2,2)));
+			switch ($tag) {
+				case 'ffe1': // EXIF
+				case 'ffe2': // EXIF extension
+					$j = strpos($f, '<xmp:');
+					if ($j !== false) {
+						$k = strpos($f, '</xmp:',$j+4);
+						$source = substr($f, $j, $k+14-$j);
+						$l = 0;;
 					}
-				}
-				break;
+				case 'fffe': // COM
+				case 'ffe0': // IPTC marker
+					$i = $i + $size+2;
+					$abort = 0;
+					break;
+				default:
+					$i=$i+2;
+					$abort++;
+					break;
 			}
 		}
 	}
