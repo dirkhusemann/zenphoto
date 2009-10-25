@@ -44,15 +44,33 @@ zp_register_filter('image_refresh', 'xmpMetadata_new_image');
  */
 class xmpMetadata_options {
 
+	/**
+	 * Class instantiation function
+	 *
+	 * @return xmpMetadata_options
+	 */
 	function xmpMetadata_options() {
 	}
 
+	/**
+	 * Option interface
+	 *
+	 * @return array
+	 */
 	function getOptionsSupported() {
 		global $_zp_supported_images, $_zp_extra_filetypes;
-		natcasesort($_zp_supported_images);
-		$types = array_keys($_zp_extra_filetypes);
+		$list = $_zp_supported_images;
+		foreach (array('gif','bmp') as $suffix) {
+			$key = array_search($suffix, $list);
+			if ($key !== false)	unset($list[$key]);
+		}
+		natcasesort($list);
+		$types = array();
+		foreach ($_zp_extra_filetypes as $suffix=>$type) {
+			if ($type == 'Video') $types[] = $suffix;
+		}
 		natcasesort($types);
-		$list = array_merge($_zp_supported_images, $types);
+		$list = array_merge($list, $types);
 		$listi = array();
 		foreach ($list as $suffix) {
 			$listi[$suffix] = 'xmpMetadata_examine_images_'.$suffix;
@@ -62,11 +80,23 @@ class xmpMetadata_options {
 										'desc' => gettext('If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive.'))
 		);
 	}
+	
+	/**
+	 * Custom option handler
+	 *
+	 * @param string $option
+	 * @param mixed $currentValue
+	 */
 	function handleOption($option, $currentValue) {
 	}
 }
 
-
+/**
+ * Parses xmp metadata for interesting tags
+ *
+ * @param string $xmpdata
+ * @return array
+ */
 function xmpMetadata_extract($xmpdata) {
 	$desiredtags = array(
 		'EXIFLensInfo'					=>	'<aux:Lens>',
@@ -135,6 +165,12 @@ function xmpMetadata_extract($xmpdata) {
 	return ($xmp_parsed);
 }
 
+/**
+ * insures that the metadata is a string
+ *
+ * @param mixed $meta
+ * @return string
+ */
 function xmpMetadata_to_string($meta) {
 	if (is_array($meta)) {
 		$meta = implode(',',$meta);
@@ -142,6 +178,12 @@ function xmpMetadata_to_string($meta) {
 	return trim($meta);
 }
 
+/**
+ * Filter for handling album objects
+ *
+ * @param object $album
+ * @return object
+ */
 function xmpMetadata_new_album($album) {
 	$metadata_path = $album->localpath.'.xmp';
 	if (file_exists($metadata_path)) {
@@ -167,36 +209,58 @@ function xmpMetadata_new_album($album) {
 	return $album;
 }
 
+/**
+ * Finds and returns xmp metadata
+ *
+ * @param int $j
+ * @return string
+ */
+function extractXMP($f) {
+	if (preg_match('~<.+?:xmpmeta~',$f, $m)) {
+		$open = $m[0];
+		$close = str_replace('<','</',$open);
+		$j = strpos($f, $open);
+		if ($j !== false) {
+			$k = strpos($f, $close,$j+4);
+			$meta = substr($f, $j, $k+14-$j);
+			$l = 0;
+			return $meta;
+		}
+	}
+	return false;
+}
+
+/**
+ * Filter for handling image objects
+ *
+ * @param object $image
+ * @return object
+ */
 function xmpMetadata_new_image($image) {
 	global $_zp_exifvars;
 	$source = '';
 	$metadata_path = substr($image->localpath, 0, strrpos($image->localpath, '.')).'.xmp';
 	if (file_exists($metadata_path)) {
-		$source = file_get_contents($metadata_path);
+		$source = extractXMP(file_get_contents($metadata_path));		
 	} else if (getOption('xmpMetadata_examine_images_'.strtolower(substr(strrchr($image->localpath, "."), 1)))) {
 		$f = file_get_contents($image->localpath);
 		$l = filesize($image->localpath);
 		$abort = 0;
 		$i = 0;
-		while ($i<$l && $abort<200) {
+		while ($i<$l && $abort<400 && !$source) {
 			$tag = bin2hex(substr($f,$i,2));
 			$size = hexdec(bin2hex(substr($f,$i+2,2)));
+			$source = extractXMP($f);
 			switch ($tag) {
 				case 'ffe1': // EXIF
 				case 'ffe2': // EXIF extension
-					$j = strpos($f, '<xmp:');
-					if ($j !== false) {
-						$k = strpos($f, '</xmp:',$j+4);
-						$source = substr($f, $j, $k+14-$j);
-						$l = 0;;
-					}
 				case 'fffe': // COM
 				case 'ffe0': // IPTC marker
 					$i = $i + $size+2;
 					$abort = 0;
 					break;
 				default:
-					$i=$i+2;
+					$i=$i+1;
 					$abort++;
 					break;
 			}

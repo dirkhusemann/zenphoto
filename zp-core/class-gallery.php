@@ -470,8 +470,9 @@ class Gallery {
 				$row = query_single_row($sql);
 				$imageName = internalToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
 				if (file_exists($imageName)) {
-					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it
+					if ($image['mtime'] != $mtime = filemtime($imageName)) { // file has changed since we last saw it
 						$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
+						$imageobj->set('mtime', $mtime);
 						$imageobj->updateDimensions(); // update the width/height & account for rotation
 						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
 						$imageobj->save();
