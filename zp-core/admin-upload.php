@@ -477,8 +477,12 @@ if (ini_get('safe_mode')) { ?>
 							<?php
 							if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 								?>
-								'onAllComplete':	function() {
-																	  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
+								'onAllComplete':	function(event, data) {
+																		if (data.errors) {
+																			return false;
+																		} else {
+																	  	window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
+																	  }
 																	},
 								<?php
 								}
