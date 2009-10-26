@@ -95,9 +95,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 	}
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
-	$folder = '';
-	$id = '';
-	$r = "";
+	$folder = $albumwhere = $imagewhere = $id = $r = '';
 	if ($type !== 'prune&') {
 		if (isset($_REQUEST['album'])) {
 			if (isset($_POST['album'])) {
@@ -113,21 +111,18 @@ if (isset($_GET['refresh']) && db_connect()) {
 			}
 		}
 		if (!empty($id)) {
-			$id = "WHERE `albumid`=$id";
+			$imagewhere = "WHERE `albumid`=$id";
 			$r = " $folder";
-		} else {
-			$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 WHERE `dynamic`='1';";
-			query($sql);
+			$albumwhere = "WHERE `parentid`=$id";
 		}
+		$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 $albumwhere";
+		query($sql);
+		$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $imagewhere;";
+		query($sql);
 	}
 	if (!empty($folder) && empty($id)) {
 		echo "<p> ".sprintf(gettext("<em>%s</em> not found"),$folder)."</p>";
 	} else {
-		if ($type !== 'prune&') {
-			$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $id;";
-			query($sql);
-		}
-
 		if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
 		if (empty($r)) {
 			echo "<p>".$allset."</p>";

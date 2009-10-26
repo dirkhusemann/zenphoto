@@ -8,23 +8,23 @@
  * see “IPTC Core” Schema for XMP http://xml.coverpages.org/IPTC-CoreSchema200503-XMPSchema8.pdf
  * for xmp metadata description. This plugin attempts to map the xmp metadata to IPTC fields
  * 
- * If a sidecar file exists, it will take precidence (the image file will not be
- * examined.) The sidecar file should have the same prefix name as the image (album) and the 
- * suffix ".xmp". Thus, the sidecar for <image>.jpg would be named <image>.xmp.
+ * If a sidecar file exists, it will take precedence (the image file will not be
+ * examined.) The sidecar file should reside in the same folder, have the same prefix name as the
+ * image (album), and the suffix ".xmp". Thus, the sidecar for <image>.jpg would be named <image>.xmp.
  * 
  * NOTE: dynamic albums have an ".alb" suffix. Append ".xmp" to that name so
  * that the dynamic album sidecar would be named <album>.alb.xmp
  * 
  * There is one option for this plugin--to enable searching within the actual image file for
- * an xmp block. This is disabled by default as it can add considerably to the processing time
- * for a new image.
+ * an xmp block. This is disabled by default scanning image files can add considerably to the
+ * processing time.
  * 
  * All functions within this plugin are for internal use. The plugin does not present any 
  * theme interface.
  * 
  * @author Stephen Billard (sbillard)
  * @package plugins
-  */
+ */
 
 $plugin_is_filter = 9;
 $plugin_description = gettext('Extracts EXIF metadata from images and xmp sidecar files.');
@@ -132,6 +132,7 @@ function xmpMetadata_extract($xmpdata) {
 		'EXIFImageWidth'				=>	'<tiff:ImageWidth>',
 		'EXIFImageHeight'				=>	'<tiff:ImageLength>'
 	);
+	$xmp_parsed = array();
 	while (!empty($xmpdata)) {
 		$s = strpos($xmpdata, '<');
 		$e = strpos($xmpdata,'>',$s);
@@ -185,7 +186,7 @@ function xmpMetadata_to_string($meta) {
  * @return object
  */
 function xmpMetadata_new_album($album) {
-	$metadata_path = $album->localpath.'.xmp';
+	$metadata_path = dirname($album->localpath).'/'.basename($album->localpath).'.xmp';
 	if (file_exists($metadata_path)) {
 		$source = file_get_contents($metadata_path);
 		$metadata = xmpMetadata_extract($source);
@@ -236,7 +237,7 @@ function extractXMP($f) {
  * @param object $image
  * @return object
  */
-function xmpMetadata_new_image($image) {
+function xmpMetadata_new_image($image) {	
 	global $_zp_exifvars;
 	$source = '';
 	$metadata_path = substr($image->localpath, 0, strrpos($image->localpath, '.')).'.xmp';
@@ -260,7 +261,9 @@ function xmpMetadata_new_image($image) {
 					$abort = 0;
 					break;
 				default:
-					if (substr($f,$i,1)=='<') $source = extractXMP($f);
+					if (substr($f,$i,1)=='<') {
+						$source = extractXMP($f);
+					}
 					$i=$i+1;
 					$abort++;
 					break;

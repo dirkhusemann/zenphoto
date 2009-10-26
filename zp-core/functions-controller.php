@@ -83,6 +83,7 @@ function fix_path_redirect() {
 		if (strlen($sfx) > 0 && in_context(ZP_IMAGE) && substr($request_uri, -strlen($sfx)) != $sfx ) {
 			$redirecturl = zpurl(true, NULL, NULL, NULL, $params);
 			header("HTTP/1.0 301 Moved Permanently");
+			header("Status: 301 Moved Permanently");
 			header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
 			exit();
 		}

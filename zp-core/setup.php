@@ -1020,9 +1020,9 @@ if ($debug) {
  											"<br />".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 			if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
-				if (!empty($tableslist)) {
-					$fields = 0;
-					$fieldlist = array();
+				$fields = 0;
+				$fieldlist = array();
+				if (strpos($tableslist,$_zp_conf_vars['mysql_prefix'].'images') !== false) {
 					$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'images`';
 					$result1 = @mysql_query($sql, $mysql_connection);
 					if ($result1) {
@@ -1035,6 +1035,8 @@ if ($debug) {
 					} else {
 						$fields = 4;
 					}
+				}
+				if (strpos($tableslist,$_zp_conf_vars['mysql_prefix'].'albums') !== false) {
 					$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
 					$result2 = @mysql_query($sql, $mysql_connection);
 					if ($result2) {
@@ -1047,27 +1049,27 @@ if ($debug) {
 					} else {
 						$fields = 4;
 					}
-					$err = -1;
-					switch ($fields) {
-						case 0: // all is well
-							$msg2 = '';
-							$err = 1;
-							break;
-						case 1:
-							$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
-							break;
-						case 2:
-							$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
-							break;
-						case 3:
-							$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
-							break;
-						default:
-							$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
-							break;
-					}
-					checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
 				}
+				$err = -1;
+				switch ($fields) {
+					case 0: // all is well
+						$msg2 = '';
+						$err = 1;
+						break;
+					case 1:
+						$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
+						break;
+					case 2:
+						$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
+						break;
+					case 3:
+						$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
+						break;
+					default:
+						$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
+						break;
+				}
+				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
 			} else {
 				checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
 			}

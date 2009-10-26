@@ -383,38 +383,44 @@ class Gallery {
 
 		if ($complete) {
 			if (empty($restart)) {
-				/* refresh 'metadata' of dynamic albums */
+				/* refresh 'metadata' albums */
 				$albumfolder = getAlbumFolder();
-				$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
-				foreach ($albumids as $album) {
-					if (($mtime=filemtime($albumfolder.internalToFilesystem($album['folder']))) > $album['mtime']) {  // refresh
-						$data = file_get_contents($albumfolder.internalToFilesystem($album['folder']));
-						while (!empty($data)) {
-							$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
-							if ($i === false) {
-								$data1 = $data;
-								$data = '';
-							} else {
-								$data = substr($data, $i + 1);
-							}
-							if (strpos($data1, 'WORDS=') !== false) {
-								$words = "words=".urlencode(substr($data1, 6));
-							}
-							if (strpos($data1, 'THUMB=') !== false) {
-								$thumb = trim(substr($data1, 6));
-							}
-							if (strpos($data1, 'FIELDS=') !== false) {
+				$albumids = query_full_array("SELECT `id`, `mtime`, `folder`, `dynamic` FROM " . prefix('albums'));
+				foreach ($albumids as $analbum) {
+					if (($mtime=filemtime($albumfolder.internalToFilesystem($analbum['folder']))) > $analbum['mtime']) {  // refresh
+						$album = new Album($this, $analbum['folder']);
+						$album->set('mtime', $mtime);
+						if ($album->isDynamic()) {
+							$data = file_get_contents($album->localpath);
+							while (!empty($data)) {
+								$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
+								if ($i === false) {
+									$data1 = $data;
+									$data = '';
+								} else {
+									$data = substr($data, $i + 1);
+								}
+								if (strpos($data1, 'WORDS=') !== false) {
+									$words = "words=".urlencode(substr($data1, 6));
+								}
+								if (strpos($data1, 'THUMB=') !== false) {
+									$thumb = trim(substr($data1, 6));
+								}
+								if (strpos($data1, 'FIELDS=') !== false) {
 
-								$fields = "&searchfields=".trim(substr($data1, 7));
+									$fields = "&searchfields=".trim(substr($data1, 7));
+								}
 							}
-						}
-						if (!empty($words)) {
-							if (empty($fields)) {
-								$fields = '&searchfields=4';
+							if (!empty($words)) {
+								if (empty($fields)) {
+									$fields = '&searchfields=4';
+								}
 							}
+							$album->set('search_params',$words.$fields);
+							$album->set('thumb',$thumb);
 						}
-						$sql = "UPDATE ".prefix('albums')."SET `search_params`=\"$words.$fields\", `thumb`=\"$thumb\", `mtime`=\"$mtime\" WHERE `id`=\"".$album['id']."\"";
-						query($sql);
+						$album->save();
+						zp_apply_filter('album_refresh',$album);
 					}
 				}
 					

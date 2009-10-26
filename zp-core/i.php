@@ -36,6 +36,7 @@ $debug = isset($_GET['debug']);
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
 	imageError(gettext("Too few arguments! Image not found."), 'err-imagenotfound.gif');
 }
 
@@ -160,6 +161,7 @@ if (!file_exists($imgfile)) {
 	} 
 	if (!file_exists($imgfile)) {	
 		header("HTTP/1.0 404 Not Found");
+		header("Status: 404 Not Found");
 		imageError(gettext("Image not found; file does not exist."), 'err-imagenotfound.gif');
 	}
 }

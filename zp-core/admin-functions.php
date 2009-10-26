@@ -1527,7 +1527,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
  * @param object $album is the album being emitted
  */
 function printAlbumButtons($album) {
-	if ($album->getNumImages() > 0) {
+	if ($imagcount = $album->getNumImages() > 0) {
 		?>
 		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
 		<input type="hidden" name="action" value="clear_cache">
@@ -1545,13 +1545,6 @@ function printAlbumButtons($album) {
 		<?php echo gettext("Pre-Cache Images"); ?></button>
 		</div>
 		</form>
-		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
-		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
-		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/redo.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
-	  </div>	
-		</form>
 		<form name="reset_hitcounters" action="?action=reset_hitcounters" method="post">
 		<input type="hidden" name="action" value="reset_hitcounters">
 		<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>">
@@ -1560,9 +1553,22 @@ function printAlbumButtons($album) {
 		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Resets all hitcounters in the album."); ?>"><img src="images/reset1.png" style="border: 0px;" /> <?php echo gettext("Reset hitcounters"); ?></button>
 		</div>
 		</form>
-		<br /><br />
 	<?php		
 	}
+	if ($imagcount || count($album->getSubalbums())>0) {
+	?>
+		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
+		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
+		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
+		<div class="buttons">
+		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/redo.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
+	  </div>	
+		</form>
+	<?php
+	}
+	?>		
+	<br /><br />
+	<?php
 }
 /**
  * puts out a row in the edit album table
@@ -1633,28 +1639,52 @@ function printAlbumEditRow($album) {
 		echo '<a title="'.gettext('Password protected').'"><img src="images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
 	}
  ?>
-	</td><td style="text-align:center;" width="<?php echo $wide;?>">
+	</td>
+	<td style="text-align:center;" width="<?php echo $wide;?>">
 	<?php
-	if ($album->getShow()) { ?>
+	if ($album->getShow()) {
+		?>
 		<a class="publish" href="?action=publish&value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
 		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('Published'); ?>" /></a>
 		
- <?php	} else { ?>
+	 <?php
+	} else {
+		?>
 		<a class="publish" href="?action=publish&amp;value=1&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>">
 		<img src="images/action.png" style="border: 0px;" alt="Publish the album <?php echo $album->name; ?>" /></a>
- <?php	} ?>
+	 <?php
+	}
+	?>
 	</td>
 	<td style="text-align:center;" width="<?php echo $wide; ?>">
-		<a class="cache" href="admin-cache-images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?> " title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
-		<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
+		<?php
+		if (!$album->isDynamic()) {
+			?>
+			<a class="cache" href="admin-cache-images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?> " title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
+			<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
+			<?php
+			}
+		?>
 	</td>
 	<td style="text-align:center;" width="<?php echo $wide; ?>";>
-		<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
-		<img src="images/redo1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh image metadata in the album %s'), $album->name); ?>" /></a>
+		<?php
+		if (!$album->isDynamic()) {
+			?>
+			<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
+			<img src="images/redo1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh metadata in the album %s'), $album->name); ?>" /></a>
+			<?php
+			}
+		?>
 	</td>
 	<td style="text-align:center;" width="<?php echo $wide; ?>">
-		<a class="reset" href="?action=reset_hitcounters&amp;albumid=<?php echo $album->getAlbumID(); ?>&amp;album=<?php echo urlencode($album->name);?>&amp;subalbum=true" title="<?php echo sprintf(gettext('Reset hitcounters for album %s'), $album->name); ?>">
-		<img src="images/reset.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Reset hitcounters for the album %s'), $album->name); ?>" /></a>
+		<?php
+		if (!$album->isDynamic()) {
+			?>
+			<a class="reset" href="?action=reset_hitcounters&amp;albumid=<?php echo $album->getAlbumID(); ?>&amp;album=<?php echo urlencode($album->name);?>&amp;subalbum=true" title="<?php echo sprintf(gettext('Reset hitcounters for album %s'), $album->name); ?>">
+			<img src="images/reset.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Reset hitcounters for the album %s'), $album->name); ?>" /></a>
+			<?php
+			}
+		?>
 	</td>
 	<td style="text-align:center;" width="<?php echo $wide; ?>">
 		<a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this entire album?")); ?>','<?php echo js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">

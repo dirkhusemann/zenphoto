@@ -12,6 +12,7 @@ require_once(dirname(__FILE__) . "/functions-image.php");
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
 	imageError(gettext("Too few arguments! Image not found."), 'err-imagenotfound.gif');
 }
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
