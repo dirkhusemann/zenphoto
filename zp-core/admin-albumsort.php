@@ -96,7 +96,7 @@ if ($parent == '/' || $parent == '.' || empty($parent)) {
 	<p class="buttons">
 		<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
 		<button type="submit" title="<?php echo gettext("Save order"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
-		<a href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>" title="<?php echo gettext('View Album'); ?>" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></a>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 	</p>
 	<br clear="all"/><br />
 <p><?php echo gettext("Set the image order by dragging them to the positions you desire."); ?></p>
@@ -114,9 +114,9 @@ foreach ($images as $image) {
 		<?php $_zp_sortable_list->printHiddenInputs();?>
 		<input type="hidden" name="sortableListsSubmitted" value="true">
 		<p class="buttons">
-			<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
+			<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
 			<button type="submit" title="<?php echo gettext("Save order"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
-			<a href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>" title="<?php echo gettext('View Album'); ?>" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></a>
+			<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 		</p>
 	</form>
 	<br clear="all"/>

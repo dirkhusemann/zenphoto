@@ -879,7 +879,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			$parent = '&album='.$parent.'&tab=subalbuminfo';
 		}
 		?>
-		<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
+		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 		<?php
@@ -889,7 +889,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<?php
 		}
 		?>
-		<a href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>" title="<?php echo gettext('View Album'); ?>" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></a>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 	</p>
 <br clear="all" /><br />
 	<table>
@@ -1505,7 +1505,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 <br clear="all" />
 	<p class="buttons">
-		<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
+		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
 		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
 		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
 		<?php
@@ -1515,7 +1515,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<?php
 		}
 		?>
-		<a href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>" title="<?php echo gettext('View Album'); ?>" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></a>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
 	</p>
 <br clear="all" />
 <?php
