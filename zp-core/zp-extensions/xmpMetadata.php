@@ -216,7 +216,7 @@ function xmpMetadata_new_album($album) {
  * @return string
  */
 function extractXMP($f) {
-	if (preg_match('~<.+?:xmpmeta~',$f, $m)) {
+	if (preg_match('~<.*?xmpmeta~',$f, $m)) {
 		$open = $m[0];
 		$close = str_replace('<','</',$open);
 		$j = strpos($f, $open);
@@ -247,19 +247,20 @@ function xmpMetadata_new_image($image) {
 		$l = filesize($image->localpath);
 		$abort = 0;
 		$i = 0;
-		while ($i<$l && $abort<400 && !$source) {
+		while ($i<$l && $abort<200 && !$source) {
 			$tag = bin2hex(substr($f,$i,2));
 			$size = hexdec(bin2hex(substr($f,$i+2,2)));
-			$source = extractXMP($f);
 			switch ($tag) {
 				case 'ffe1': // EXIF
 				case 'ffe2': // EXIF extension
 				case 'fffe': // COM
 				case 'ffe0': // IPTC marker
+					$source = extractXMP($f);
 					$i = $i + $size+2;
 					$abort = 0;
 					break;
 				default:
+					if (substr($f,$i,1)=='<') $source = extractXMP($f);
 					$i=$i+1;
 					$abort++;
 					break;
