@@ -693,6 +693,51 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 	}
 }
 
+function processCustomOptionSave($returntab, $themename=NULL) {
+	foreach ($_POST as $postkey=>$value) {
+		if (preg_match('/^'.CUSTOM_OPTION_PREFIX.'/', $postkey)) { // custom option!
+			$key = substr($postkey, strpos($postkey, '-')+1);
+			$switch = substr($postkey, strlen(CUSTOM_OPTION_PREFIX), -strlen($key)-1);
+			switch ($switch) {
+				case 'text':
+					$value = process_language_string_save($key, 1);
+					break;
+				case 'cleartext':
+					if (isset($_POST[$key])) {
+						$value = sanitize($_POST[$key], 0);
+					} else {
+						$value = '';
+					}
+					break;
+				case 'chkbox':
+					if (isset($_POST[$key])) {
+						$value = sanitize($_POST[$key], 1);
+					} else {
+						$value = 0;
+					}
+					break;
+				default:
+					if (isset($_POST[$key])) {
+						$value = sanitize($_POST[$key], 1);
+					} else {
+						$value = '';
+					}
+					break;
+			}
+			if ($themename) {
+				setThemeOption($key, $value, $table, $themename);
+			} else {
+				setOption($key, $value);
+			}
+		} else {
+			if (strpos($postkey, '_show-') === 0) {
+				if ($value) $returntab .= '&'.$postkey;
+			}
+		}
+	}
+	return $returntab;
+}
+
 /**
  * Encodes for use as a $_POST index
  *

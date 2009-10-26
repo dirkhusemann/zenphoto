@@ -20,7 +20,7 @@ if(getOption('zp_plugin_zenpage')) {
 }
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if ($_zp_loggedin == ADMIN_RIGHTS || $_zp_reset_admin) { // user/password set required.
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php");
 	}
 	
 	$gallery = new Gallery();

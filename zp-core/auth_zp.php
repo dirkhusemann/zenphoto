@@ -106,7 +106,7 @@ if (!isset($_POST['login'])) {
 				$req = getOption('admin_reset_date');
 				$ref = md5($req . $adm . $pas);
 				$msg = "\n".$requestor.
-						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-options.php?ticket=$ref&user=$adm") .
+						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-users.php?ticket=$ref&user=$adm") .
 						"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
 				$err_msg = zp_mail(gettext("The Zenphoto information you requested"),  $msg, NULL, NULL, $mails);
 				if (empty($err_msg)) {

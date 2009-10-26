@@ -209,12 +209,12 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 }
 
 function user_groups_admin_tabs($tabs, $current) {
-	$subtabs = array(	gettext('users')=>'admin-options.php?page=users&tab=users',
+	$subtabs = array(	gettext('users')=>'admin-users.php?page=users',
 										gettext('assignments')=>PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&amp;tab=assignments',
 										gettext('groups')=>PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&amp;tab=groups');
 	if ((zp_loggedin(ADMIN_RIGHTS))) {
 		$tabs['users'] = array(	'text'=>gettext("admin"),
-														'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=users&tab=users',
+														'link'=>WEBPATH."/".ZENFOLDER.'/admin-users.php?page=users',
 														'subtabs'=>$subtabs,
 														'default'=>'users');
 	}

@@ -1994,9 +1994,9 @@ if (file_exists(CONFIGFILE)) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
-					echo "<p>".gettext("You may <a href=\"admin-options.php?page=users&amp;tab=users\">set your admin user and password</a> or <a href=\"".UTILITIES_FOLDER."/backup_restore.php\">run backup-restore</a>")."</p>";
+					echo "<p>".gettext("You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"".UTILITIES_FOLDER."/backup_restore.php\">run backup-restore</a>")."</p>";
 				} else {
-					echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
+					echo "<p>".gettext("You need to <a href=\"admin-users.php\">set your admin user and password</a>")."</p>";
 				}				
 			} else {
 				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>")."</p>";
