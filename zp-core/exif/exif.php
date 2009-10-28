@@ -686,10 +686,10 @@ function read_entry(&$result,$in,$seek,$intel,$ifd_name,$globalOffset) {
 			require_once(dirname(__FILE__).'/makers/sanyo.php');
 			parseSanyo($data,$result,$seek,$globalOffset);
 			$result[$ifd_name]['KnownMaker'] = 1;
-	} else if (preg_match('/Panasonic/i',$make)) { 
-		require_once(dirname(__FILE__).'/makers/panasonic.php'); 
-		parsePanasonic($data,$result,$seek,$globalOffset); 
-		$result[$ifd_name]['KnownMaker'] = 1; 
+		} else if (preg_match('/Panasonic/i',$make)) { 
+			require_once(dirname(__FILE__).'/makers/panasonic.php'); 
+			parsePanasonic($data,$result,$seek,$globalOffset); 
+			$result[$ifd_name]['KnownMaker'] = 1; 
 		} else {
 			$result[$ifd_name]['KnownMaker'] = 0;
 		}
@@ -709,9 +709,9 @@ function read_entry(&$result,$in,$seek,$intel,$ifd_name,$globalOffset) {
 				$data = bin2hex($data);
 				if ($intel == 1) $data = intel2Moto($data);
 			}
-			$result[$ifd_name][$tag_name.'_Verbose']['RawData'] = $data;
+		$result[$ifd_name][$tag_name.'_Verbose']['RawData'] = $data;
 		$result[$ifd_name][$tag_name.'_Verbose']['Type'] = $type;
-			$result[$ifd_name][$tag_name.'_Verbose']['Bytes'] = $bytesofdata;
+		$result[$ifd_name][$tag_name.'_Verbose']['Bytes'] = $bytesofdata;
 		}
 	}
 }

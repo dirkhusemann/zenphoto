@@ -40,6 +40,7 @@ function lookup_Canon_tag($tag) {
 		case "0009": $tag = "OwnerName";break;
 		case "000c": $tag = "CameraSerialNumber";break;	
 		case "000f": $tag = "CustomFunctions";break;	
+		case "0095": $tag = "LensInfo";break;	
 		
 		default: $tag = "unknown:".$tag;break;
 	}
@@ -377,20 +378,18 @@ function parseCanon($block,&$result,$seek, $globalOffset) {
 			//2 byte type
 		$type = bin2hex(substr($block,$place,2));$place+=2;
 		if($intel==1) $type = intel2Moto($type);
-		lookup_type($type,$size);
+		lookup_type($type,$size);		
 		
 			//4 byte count of number of data units
 		$count = bin2hex(substr($block,$place,4));$place+=4;
 		if($intel==1) $count = intel2Moto($count);
 		$bytesofdata = $size*hexdec($count);
-	
 		if($bytesofdata<=0) {
 			return; //if this value is 0 or less then we have read all the tags we can
 		}
 		
 			//4 byte value of data or pointer to data
 		$value = substr($block,$place,4);$place+=4;
-		
 		if($bytesofdata<=4) {
 			$data = $value;
 		} else {

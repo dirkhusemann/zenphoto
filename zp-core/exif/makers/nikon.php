@@ -81,37 +81,66 @@ function lookup_Nikon_tag($tag,$model) {
 	return $tag;
 }
 
+function unRational($data,$intel) {
+	$data = bin2hex($data);
+	if($intel==1) $data = intel2Moto($data);
+	$top = hexdec(substr($data,8,8));
+	$bottom = hexdec(substr($data,0,8));
+	if($bottom!=0)
+		$data=$top/$bottom;
+	else
+		if($top==0)
+			$data = 0;
+		else
+			$data=$top."/".$bottom;
+	return $data;
+}
+
+function nikonRational($data,$intel) {
+	$data = bin2hex($data);
+	if($intel==1) $data = intel2Moto($data);
+	$top = hexdec(substr($data,0,8));
+	$bottom = hexdec(substr($data,8,8));
+	if($bottom!=0)
+		$data=$top/$bottom;
+	else
+		if($top==0)
+			$data = 0;
+		else
+			$data=$top."/".$bottom;
+	return $data;
+}
+
 //=================
 // Formats Data for the data type
 //====================================================================
 function formatNikonData($type,$tag,$intel,$model,$data) {
 
 	if($type=="ASCII") {
-		
-		
+
+
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-		$top = hexdec(substr($data,8,8));
-		$bottom = hexdec(substr($data,0,8));
-		if($bottom!=0) $data=$top/$bottom;
-		else if($top==0) $data = 0;
-		else $data=$top."/".$bottom;
-		
- 				if($tag=="0085" && $model==1) { //ManualFocusDistance
-			$data=$data." m";
-		} 
+		if ($tag=='0084') { // LensInfo
+			$minFL = nikonRational(substr($data,0,8),$intel);
+			$maxFL = nikonRational(substr($data,8,8),$intel);
+			$minSP = nikonRational(substr($data,16,8),$intel);
+			$maxSP = nikonRational(substr($data,24,8),$intel);
+			$data = sprintf('%0.1f-%0.1fmm f/%0.1f-%0.1f',$minFL,$maxFL,$minSP,$maxSP);
+		}
+		if($tag=="0085" && $model==1) { //ManualFocusDistance
+			$data=unRational($data)." m";
+		}
 		if($tag=="0086" && $model==1) { //DigitalZoom
-			$data=$data."x";
-		} 
+			$data=unRational($data)."x";
+		}
 		if($tag=="000a" && $model==0) { //DigitalZoom
-			$data=$data."x";
-		} 
+			$data=unRational($data)."x";
+		}
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
 		$data = bin2hex($data);
 		if($intel==1) $data = intel2Moto($data);
 		$data=hexdec($data);
-		
+
 		if($tag=="0003" && $model==0) { //Quality
 			if($data == 1) $data = gettext("VGA Basic");
 			else if($data == 2) $data = gettext("VGA Normal");
@@ -157,7 +186,7 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 			else $data = gettext("Unknown").": ".$data;
 		}
 	} else if($type=="UNDEFINED") {
-		
+
 		if($tag=="0001" && $model==1) { //Unknown (Version?)
 			$data=$data/100;
 		}
@@ -171,22 +200,25 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 			$data = str_replace("00","",$data);
 			if(strlen($data)==0) $data = $temp;
 		}
-		
+
 	} else {
 		$data = bin2hex($data);
 		if($intel==1) $data = intel2Moto($data);
-		
+
 		if($tag=="0083" && $model==1) { //Lens Type
-				$data = hexdec(substr($data,0,2));
-			if($data == 0) $data = gettext("AF non D");
-			else if($data == 1) $data = gettext("Manual");
-			else if($data == 2) $data = "AF-D or AF-S";
-			else if($data == 6) $data = "AF-D G";
-			else if($data == 10) $data = "AF-D VR";
-			else $data = gettext("Unknown").": ".$data;
+			$data = hexdec(substr($data,0,2));
+			switch ($data) {
+				case 0: $data = gettext("AF non D"); break;
+				case 1: $data = gettext("Manual"); break;
+				case 2: $data = "AF-D or AF-S"; break;
+				case 6: $data = "AF-D G"; break;
+				case 10: $data = "AF-D VR"; break;
+				case 14: $data = "AF-D G VR"; break;
+				default: $data = gettext("Unknown").": ".$data; break;
+			}
 		}
 		if($tag=="0087" && $model==1) { //Flash type
-				$data = hexdec(substr($data,0,2));
+			$data = hexdec(substr($data,0,2));
 			if($data == 0) $data = gettext("Did Not Fire");
 			else if($data == 4) $data = gettext("Unknown");
 			else if($data == 7) $data = gettext("External");
@@ -194,7 +226,7 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 			else $data = gettext("Unknown").": ".$data;
 		}
 	}
-	
+
 	return $data;
 }
 

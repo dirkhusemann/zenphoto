@@ -1800,6 +1800,7 @@ if (file_exists(CONFIGFILE)) {
 			$size = 'MEDIUMTEXT';
 		}
 		$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `$key` $size default NULL";
+		$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `$key` `$key` $size default NULL";
 	}
 	
 	
