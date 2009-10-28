@@ -251,5 +251,3 @@ function toggle_passwords(id, pwd_enable) {
 		jQuery('#'+id+'password_enabled').val('0');
 	}
 }
-
-

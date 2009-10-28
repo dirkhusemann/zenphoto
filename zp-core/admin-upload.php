@@ -406,7 +406,7 @@ if (ini_get('safe_mode')) { ?>
 		<script type="text/javascript">
 			function switchUploader(url) {
 				var urlx = url+'&album='+$('#albumselectmenu').val()+'&publishalbum='+$('#publishalbum').attr("checked")+
-												'&albumtitle='+$('#albumtitle').val()+'&folderdisplay='+$('#folderdisplay').val()+
+												'&albumtitle='+encodeURIComponent($('#albumtitle').val())+'&folderdisplay='+encodeURIComponent($('#folderdisplay').val())+
 												'&autogen='+$('#autogen').attr("checked");
 				if ($('#newalbumcheckbox').attr("checked")) urlx = urlx+'&new';		
 				window.location = urlx;
@@ -481,7 +481,7 @@ if (ini_get('safe_mode')) { ?>
 																		if (data.errors) {
 																			return false;
 																		} else {
-																	  	window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
+																	  	window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+encodeURIComponent($('#folderdisplay').val());
 																	  }
 																	},
 								<?php

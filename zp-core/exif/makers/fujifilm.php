@@ -44,7 +44,6 @@ function lookup_Fujifilm_tag($tag) {
 		case "1021": $tag = "FocusMode";break;	
 		case "1030": $tag = "SlowSync";break;	
 		case "1031": $tag = "PictureMode";break;	
-		case "1032": $tag = "Unknown";break;	
 		case "1100": $tag = "ContinuousTakingBracket";break;	
 		case "1200": $tag = "Unknown";break;	
 		case "1300": $tag = "BlurWarning";break;	
