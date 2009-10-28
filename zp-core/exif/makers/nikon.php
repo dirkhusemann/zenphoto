@@ -125,16 +125,20 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 			$maxFL = nikonRational(substr($data,8,8),$intel);
 			$minSP = nikonRational(substr($data,16,8),$intel);
 			$maxSP = nikonRational(substr($data,24,8),$intel);
-			$data = sprintf('%0.1f-%0.1fmm f/%0.1f-%0.1f',$minFL,$maxFL,$minSP,$maxSP);
+			if ($minFL == $maxFL) {
+				$data = sprintf('%0.0f f/%0.0f',$minFL,$minSP);
+			} else {
+				$data = sprintf('%0.0f-%0.0fmm f/%0.1f-%0.1f',$minFL,$maxFL,$minSP,$maxSP);
+			}
 		}
 		if($tag=="0085" && $model==1) { //ManualFocusDistance
-			$data=unRational($data)." m";
+			$data=unRational($data, $intel)." m";
 		}
 		if($tag=="0086" && $model==1) { //DigitalZoom
-			$data=unRational($data)."x";
+			$data=unRational($data, $intel)."x";
 		}
 		if($tag=="000a" && $model==0) { //DigitalZoom
-			$data=unRational($data)."x";
+			$data=unRational($data, $intel)."x";
 		}
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
 		$data = bin2hex($data);
