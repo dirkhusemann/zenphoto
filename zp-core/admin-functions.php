@@ -527,7 +527,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 			if ($theme) {
 				$v = getThemeOption($key, $album, $theme);				
 			} else {
-				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($key) . "';";
+				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($key) . "';";
 				$db = query_single_row($sql);
 				if ($db) {
 					$v = $db['value'];

@@ -10,14 +10,6 @@
 
 $mysql_connection = null;
 
-// Fix mysql_real_escape_string for PHP < 4.3.0
-if (!function_exists('mysql_real_escape_string')) {
-	function mysql_real_escape_string($string) {
-		mysql_escape_string($string);
-	}
-}
-
-
 /**
  * Connect to the database server and select the database.
  *@return true if successful connection
@@ -154,7 +146,7 @@ function getWhereClause($unique_set) {
 	$where = ' WHERE';
 	foreach($unique_set as $var => $value) {
 		if ($i > 0) $where .= ' AND';
-		$where .= ' `' . $var . '` = \'' . mysql_real_escape_string($value) . '\'';
+		$where .= ' `' . $var . '` = \'' . zp_escape_string($value) . '\'';
 		$i++;
 	}
 	return $where;
@@ -173,10 +165,15 @@ function getSetClause($new_unique_set) {
 	$set = ' SET';
 	foreach($new_unique_set as $var => $value) {
 		if ($i > 0) $set .= ', ';
-		$set .= ' `' . $var . '`=\'' . mysql_real_escape_string($value) . '\'';
+		$set .= ' `' . $var . '`=\'' . zp_escape_string($value) . '\'';
 		$i++;
 	}
 	return $set;
+}
+
+function zp_escape_string($string) {
+	global $mysql_connection;
+	return mysql_real_escape_string($string,$mysql_connection);
 }
 
 ?>

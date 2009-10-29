@@ -105,7 +105,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 			}
 			$folder = sanitize_path($alb);
 			if (!empty($folder)) {
-				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
+				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".zp_escape_string($folder)."\";";
 				$row = query_single_row($sql);
 				$id = $row['id'];
 			}

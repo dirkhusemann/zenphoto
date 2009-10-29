@@ -941,8 +941,8 @@ class Album extends PersistentObject {
 		}
 		if ($this->isDynamic()) {
 			if (@rename($this->localpath, $dest))	{
-				$oldf = mysql_real_escape_string($oldfolder);
-				$sql = "UPDATE " . prefix('albums') . " SET folder='" . mysql_real_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
+				$oldf = zp_escape_string($oldfolder);
+				$sql = "UPDATE " . prefix('albums') . " SET folder='" . zp_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
 				$success = query($sql);
 				$this->updateParent($newfolder);
 				if ($success) {
@@ -958,13 +958,13 @@ class Album extends PersistentObject {
 				$cacherename = @rename(SERVERCACHE . '/' . $oldfolder, SERVERCACHE . '/' . $newfolder);
 				// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
 				// Get the subalbums.
-				$oldf = mysql_real_escape_string($oldfolder);
+				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT id, folder FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
 				$result = query_full_array($sql);
 				foreach ($result as $subrow) {
 					$newsubfolder = $subrow['folder'];
 					$newsubfolder = $newfolder . substr($newsubfolder, strlen($oldfolder));
-					$newsubfolder = mysql_real_escape_string($newsubfolder);
+					$newsubfolder = zp_escape_string($newsubfolder);
 					$sql = "UPDATE ".prefix('albums'). " SET folder='$newsubfolder' WHERE id=".$subrow['id'];
 					$subresult = query($sql);
 					// Handle result here.
@@ -1010,7 +1010,7 @@ class Album extends PersistentObject {
 			if (is_null($value)) {
 				$sql .= "NULL";
 			} else {
-				$sql .= "'" . mysql_real_escape_string($value) . "'";
+				$sql .= "'" . zp_escape_string($value) . "'";
 			}
 			$i++;
 		}
@@ -1031,7 +1031,7 @@ class Album extends PersistentObject {
 	function replicateDBRow($subrow, $oldfolder, $newfolder, $owner_row) {
 		$newsubfolder = $subrow['folder'];
 		$newsubfolder = $newfolder . substr($newsubfolder, strlen($oldfolder));
-		$newsubfolder = mysql_real_escape_string($newsubfolder);
+		$newsubfolder = zp_escape_string($newsubfolder);
 		$subrow['folder'] = $newsubfolder;
 
 		if ($owner_row) {
@@ -1070,7 +1070,7 @@ class Album extends PersistentObject {
 		}
 		if ($this->isDynamic()) {
 			if (@copy($this->localpath, $dest)) {
-				$oldf = mysql_real_escape_string($oldfolder);
+				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
 				$subrow = query_single_row($sql);
 				$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, true);
@@ -1084,7 +1084,7 @@ class Album extends PersistentObject {
 				// Make the move (rename).
 				$num = dircopy($this->localpath, $dest);
 				// Get the subalbums.
-				$oldf = mysql_real_escape_string($oldfolder);
+				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
 				$result = query_full_array($sql);
 
@@ -1172,7 +1172,7 @@ class Album extends PersistentObject {
 		}
 
 		// Get all sub-albums and make sure they exist.
-		$result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . mysql_real_escape_string($this->name) . "/%'");
+		$result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . zp_escape_string($this->name) . "/%'");
 		$dead = array();
 		$live = array();
 		// Does the dirname from the db row exist on disk?

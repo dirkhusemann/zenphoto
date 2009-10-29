@@ -1045,7 +1045,7 @@ function getAllSubAlbumIDs($albumfolder='') {
 			return null;
 		}
 	}
-	$query = "SELECT `id`,`folder`, `show` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+	$query = "SELECT `id`,`folder`, `show` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . zp_escape_string($albumfolder) . "%'";
 	$subIDs = query_full_array($query);
 	return $subIDs;
 }
@@ -1359,10 +1359,10 @@ function storeTags($tags, $id, $tbl) {
 	}
 	$tags = array_flip(array_diff($tagsLC, $existing)); // new tags for the object
 	foreach ($tags as $tag) {
-		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".mysql_real_escape_string($tag)."'");
+		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
-			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . mysql_real_escape_string($tag) . "')");
-			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".mysql_real_escape_string($tag)."'");
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')");
+			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
 	}
@@ -2004,21 +2004,21 @@ function setThemeOption($key, $value, $album=NULL, $default=false) {
 	if (empty($theme)) {
 		$theme = $gallery->getCurrentTheme();
 	}
-	$theme = "'".mysql_real_escape_string($theme)."'";
+	$theme = "'".zp_escape_string($theme)."'";
 
-	$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id.' AND `theme`='.$theme, true);
+	$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".zp_escape_string($key)."' AND `ownerid`=".$id.' AND `theme`='.$theme, true);
 	if ($exists) {
 		if ($default) return; // don't update if setting the default
 		if (is_null($value)) {
 			$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `id`=" . $exists['id'];
 		} else {
-			$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `id`=" . $exists['id'];
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . zp_escape_string($value) . "' WHERE `id`=" . $exists['id'];
 		}
 	} else {
 		if (is_null($value)) {
-			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . mysql_real_escape_string($key) . "',NULL,$id,$theme)";
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . zp_escape_string($key) . "',NULL,$id,$theme)";
 		} else {
-			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "',$id,$theme)";
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . zp_escape_string($key) . "','" . zp_escape_string($value) . "',$id,$theme)";
 		}
 	}	
 	$result = query($sql);
@@ -2079,18 +2079,18 @@ function getThemeOption($option, $album=NULL, $default=false) {
 	if (empty($theme)) {
 		$theme = $gallery->getCurrentTheme();
 	}
-	$theme = "'".mysql_real_escape_string($theme)."'";
+	$theme = "'".zp_escape_string($theme)."'";
 
 	// album-theme
-	$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=".$theme;
+	$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=".$theme;
 	$db = query_single_row($sql);
 	if (!$db) {
 		// raw theme option
-		$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=0 AND `theme`=".$theme;
+		$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($option) . "' AND `ownerid`=0 AND `theme`=".$theme;
 		$db = query_single_row($sql);
 		if (!$db) {
 			// raw album option
-			$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . mysql_real_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=NULL";
+			$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($option) . "' AND `ownerid`=".$id." AND `theme`=NULL";
 			$db = query_single_row($sql);
 			if (!$db) {
 				return getOption($option);

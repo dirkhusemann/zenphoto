@@ -21,7 +21,7 @@ $list = '';
 foreach ($taglist AS $tag) {
 	if ($c>0) $list .= ',';
 	$c++;
-	$list .= '"'.mysql_real_escape_string(htmlspecialchars(htmlspecialchars_decode($tag), ENT_QUOTES)).'"';
+	$list .= '"'.zp_escape_string(htmlspecialchars(htmlspecialchars_decode($tag), ENT_QUOTES)).'"';
 }
 $js = '<script type="text/javascript">'."\n".
 			'var _tagList = ['.$list."];\n".

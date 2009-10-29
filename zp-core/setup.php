@@ -1918,7 +1918,7 @@ if (file_exists(CONFIGFILE)) {
 			}
 			$alltags = array_merge($taglist);
 			foreach ($alltags as $tag) {
-				query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . mysql_real_escape_string($tag) . "')", true);
+				query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')", true);
 			}
 			$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
 			$result = query_full_array($sql);
@@ -1950,7 +1950,7 @@ if (file_exists(CONFIGFILE)) {
 		if (is_array($result)) {
 			foreach ($result as $row) {
 				$codeblock = base64_decode($row['codeblock']);
-				$sql = 'UPDATE '.prefix('zenpage_news').' SET `codeblock`="'.mysql_real_escape_string($codeblock).'" WHERE `id`='.$row['id'];
+				$sql = 'UPDATE '.prefix('zenpage_news').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
 				query($sql);
 			}
 		}
@@ -1959,7 +1959,7 @@ if (file_exists(CONFIGFILE)) {
 		if (is_array($result)) {
 			foreach ($result as $row) {
 				$codeblock = base64_decode($row['codeblock']);
-				$sql = 'UPDATE '.prefix('zenpage_pages').' SET `codeblock`="'.mysql_real_escape_string($codeblock).'" WHERE `id`='.$row['id'];
+				$sql = 'UPDATE '.prefix('zenpage_pages').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
 				query($sql);
 			}
 		}

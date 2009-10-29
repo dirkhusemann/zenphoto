@@ -3327,7 +3327,7 @@ function getRandomImagesAlbum($rootAlbum=null,$showunpublished=false) {
 
 		$query = "SELECT id FROM " . prefix('albums') . " WHERE ";
 		if ($albumInWhere) $query .= $albumInWhere.' AND '; 
-		$query .= "folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+		$query .= "folder LIKE '" . zp_escape_string($albumfolder) . "%'";
 		$result = query_full_array($query);
 		if (is_array($result) && count($result) > 0) {
 			$albumInWhere = prefix('albums') . ".id in (";

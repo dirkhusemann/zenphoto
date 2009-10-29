@@ -585,9 +585,9 @@ class SearchEngine
 					default:
 						$targetfound = true;
 						if ($exact) {
-							$tagsql .= '`name` = "'.mysql_real_escape_string($singlesearchstring).'" OR ';
+							$tagsql .= '`name` = "'.zp_escape_string($singlesearchstring).'" OR ';
 						} else {
-							$tagsql .= '`name` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
+							$tagsql .= '`name` LIKE "%'.zp_escape_string($singlesearchstring).'%" OR ';
 						}
 				}
 			}
@@ -620,7 +620,7 @@ class SearchEngine
 						break;
 					default:
 						$targetfound = true;
-						query('SET @serachtarget="'.mysql_real_escape_string($singlesearchstring).'"');
+						query('SET @serachtarget="'.zp_escape_string($singlesearchstring).'"');
 						$fieldsql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE (';
 	
 						foreach ($this->zp_search_fieldnames as $fieldname=>$value) {
@@ -635,7 +635,7 @@ class SearchEngine
 								$fieldname = strtolower($fieldname);
 							}
 							if (($value & $fields) && in_array($fieldname, $columns)) {
-								$fieldsql .= ' `'.$fieldname.'` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
+								$fieldsql .= ' `'.$fieldname.'` LIKE "%'.zp_escape_string($singlesearchstring).'%" OR ';
 							}
 						}
 						$fieldsql = substr($fieldsql, 0, strlen($fieldsql)-4).') ORDER BY `id`';

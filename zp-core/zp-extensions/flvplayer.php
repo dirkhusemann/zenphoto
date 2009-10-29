@@ -325,7 +325,7 @@ function flvPlaylist($option='') {
 			so.addVariable('file','<?php echo $moviepath; ?>');
 			so.addVariable('javascriptid','jstest');
 			so.addVariable('enablejs',true';
-			so.write('flvplaylist-<?php echo mysql_real_escape_string($imagetitle); ?>');
+			so.write('flvplaylist-<?php echo zp_escape_string($imagetitle); ?>');
 	<?php	} ?>
 		</script>
 	<?php

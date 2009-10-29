@@ -59,7 +59,7 @@ function addPage() {
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
-	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
+	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
 		$titlelink .= '_'.seoFriendlyURL($date); // force unique so that data may be saved.
 	}
@@ -124,7 +124,7 @@ function updatePage() {
 	$rslt = true;
 	$oldtitlelink = sanitize($_POST['titlelink-old']);
 	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
-		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.mysql_real_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
+		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.zp_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
 			$titlelink = $oldtitlelink; // force old link so data gets saved
 		}
@@ -377,7 +377,7 @@ function addArticle() {
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getCheckboxState('locked');
 
-	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"',true);
+	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
 		$titlelink .= '_'.seoFriendlyURL($date); // force unique so that data may be saved.
 	}
@@ -450,7 +450,7 @@ function updateArticle() {
 	$rslt = true;
 	$oldtitlelink = sanitize($_POST['titlelink-old']);
 	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
-		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.mysql_real_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
+		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.zp_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
 			$titlelink = $oldtitlelink; // force old link so data gets saved
 		}
@@ -798,8 +798,8 @@ function addCategory() {
 	if(empty($catlink) OR empty($catname)) {
 		echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
 	} else {
-		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink) VALUES ('".mysql_real_escape_string($catname)."', '".
-		mysql_real_escape_string(seoFriendlyURL($catlink))."','".getCheckboxState('permalink')."')", true)) {
+		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink) VALUES ('".zp_escape_string($catname)."', '".
+		zp_escape_string(seoFriendlyURL($catlink))."','".getCheckboxState('permalink')."')", true)) {
 			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$catlink)."</p>";
@@ -815,7 +815,7 @@ function addCategory() {
 function updateCategory() {
 	global $_zp_current_zenpage_news;
 	$result['id'] = sanitize($_POST['id']);
-	$result['cat_name'] = mysql_real_escape_string(process_language_string_save("category",2));
+	$result['cat_name'] = zp_escape_string(process_language_string_save("category",2));
 	$result['permalink'] = getCheckboxState('permalink');
 	if($result['permalink']) {
 		$result['cat_link'] = sanitize($_POST['catlink-old']);
@@ -825,7 +825,7 @@ function updateCategory() {
 	}
 	if(!$result['permalink'] AND !getCheckboxState('edittitlelink')) {
 		$result['cat_link'] = process_language_string_save("category",2);
-		$result['cat_link'] = mysql_real_escape_string(seoFriendlyURL(get_language_string($result['cat_link'])));
+		$result['cat_link'] = zp_escape_string(seoFriendlyURL(get_language_string($result['cat_link'])));
 	}
 	// update the category in the category table
 	if(query("UPDATE ".prefix('zenpage_news_categories')." SET cat_name = '".$result['cat_name']."', cat_link = '".$result['cat_link']."', permalink = '".$result['permalink']."' WHERE id = ".$result['id'],true)) {
@@ -851,7 +851,7 @@ function deleteCategory() {
   if(isset($_GET['delete'])) {
     // check if the category is in use, don't delete
     $count = countArticles(sanitize($_GET['cat_link'],3),false);
-    $delete = mysql_real_escape_string(sanitize($_GET['delete'],3));
+    $delete = zp_escape_string(sanitize($_GET['delete'],3));
     if ($count != 0) {
 			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = '{$delete}'");
     } 

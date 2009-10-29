@@ -45,7 +45,7 @@ printLogoAndLinks();
 			if (isset($_GET['newtags'])) {
 				foreach ($_POST as $value) {
 					if (!empty($value)) {
-						$value = mysql_real_escape_string(sanitize($value, 3));
+						$value = zp_escape_string(sanitize($value, 3));
 						$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
 						if (!is_array($result)) { // it really is a new tag
 							query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . $value . '")');
@@ -62,7 +62,7 @@ printLogoAndLinks();
 				if (count($kill) > 0) {
 					$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
 					foreach ($kill as $tag) {
-						$sql .= "`name`='".(mysql_real_escape_string($tag))."' OR ";
+						$sql .= "`name`='".(zp_escape_string($tag))."' OR ";
 					}
 					$sql = substr($sql, 0, strlen($sql)-4);
 					$dbtags = query_full_array($sql);
@@ -86,8 +86,8 @@ printLogoAndLinks();
 						$newName = sanitize($newName, 3);
 						$key = postIndexDecode($key);
 						$key = substr($key, 2); // strip off the 'R_'
-						$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($newName).'"');
-						$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($key).'"');
+						$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.zp_escape_string($newName).'"');
+						$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.zp_escape_string($key).'"');
 						if (is_array($newtag)) { // there is an existing tag of the same name
 							$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
 						} else {
@@ -97,7 +97,7 @@ printLogoAndLinks();
 							query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
 							query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
 						} else {
-							query('UPDATE '.prefix('tags').' SET `name`="'.mysql_real_escape_string($newName).'" WHERE `id`='.$oldtag['id']);
+							query('UPDATE '.prefix('tags').' SET `name`="'.zp_escape_string($newName).'" WHERE `id`='.$oldtag['id']);
 						}
 					}
 				}

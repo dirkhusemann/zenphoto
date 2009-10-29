@@ -81,14 +81,14 @@ if (isset($_GET['action'])) {
 			exit();
 		}
 		$id = sanitize_numeric($_POST['id']);
-		$name = mysql_real_escape_string(sanitize($_POST['name'], 3));
-		$email = mysql_real_escape_string(sanitize($_POST['email'], 3));
-		$website = mysql_real_escape_string(sanitize($_POST['website'], 3));
-		$date = mysql_real_escape_string(sanitize($_POST['date'], 3));
-		$comment = mysql_real_escape_string(sanitize($_POST['comment'], 1));
+		$name = zp_escape_string(sanitize($_POST['name'], 3));
+		$email = zp_escape_string(sanitize($_POST['email'], 3));
+		$website = zp_escape_string(sanitize($_POST['website'], 3));
+		$date = zp_escape_string(sanitize($_POST['date'], 3));
+		$comment = zp_escape_string(sanitize($_POST['comment'], 1));
 		$custom = zp_apply_filter('save_comment_custom_data', '');
 		if (!empty($custom)) {
-			$custom = ", `custom_data`='".mysql_real_escape_string($custom)."'";
+			$custom = ", `custom_data`='".zp_escape_string($custom)."'";
 		}
 
 		$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment'".$custom." WHERE id = $id";

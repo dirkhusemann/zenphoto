@@ -185,27 +185,27 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $g
 		if (is_null($pass)) {
 			$password = '';
 		} else {
-			$password = "`pass`='" . mysql_real_escape_string(passwordHash($user, $pass))."', ";
+			$password = "`pass`='" . zp_escape_string(passwordHash($user, $pass))."', ";
 		}
 		if (is_null($rights)) {
 			$rightsset = '';
 		} else {
-			$rightsset = "`rights`='" . mysql_real_escape_string($rights)."', ";
+			$rightsset = "`rights`='" . zp_escape_string($rights)."', ";
 		}
-		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . mysql_real_escape_string($name)."', " . $password .
- 					"`email`='" . mysql_real_escape_string($email)."', " . $rightsset . "`custom_data`='".mysql_real_escape_string($custom)."', `valid`=".$valid.", `group`='".
-					mysql_real_escape_string($group)."' WHERE `id`='" . $id ."'";
+		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . zp_escape_string($name)."', " . $password .
+ 					"`email`='" . zp_escape_string($email)."', " . $rightsset . "`custom_data`='".zp_escape_string($custom)."', `valid`=".$valid.", `group`='".
+					zp_escape_string($group)."' WHERE `id`='" . $id ."'";
 		$result = query($sql);
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
 	} else {
 		$passupdate = 'NULL';
 		if (!is_null($pass)) {
-			$passupdate = "'".mysql_real_escape_string(passwordHash($user, $pass))."'";
+			$passupdate = "'".zp_escape_string(passwordHash($user, $pass))."'";
 		}
 		$sql = "INSERT INTO " . prefix('administrators') . " (`user`, `pass`, `name`, `email`, `rights`, `custom_data`, `valid`, `group`) VALUES ('" .
-				mysql_real_escape_string($user) . "'," . $passupdate . ",'" . mysql_real_escape_string($name) . "','" . 
-				mysql_real_escape_string($email) . "'," . $rights . ", '".mysql_real_escape_string($custom)."', ".$valid.", '".
-				mysql_real_escape_string($group)."')";
+				zp_escape_string($user) . "'," . $passupdate . ",'" . zp_escape_string($name) . "','" . 
+				zp_escape_string($email) . "'," . $rights . ", '".zp_escape_string($custom)."', ".$valid.", '".
+				zp_escape_string($group)."')";
 		$result = query($sql);
 		$id = mysql_insert_id();
 		if (DEBUG_LOGIN) { debugLog("saveAdmin: inserting[$id]:$result"); }
@@ -470,7 +470,7 @@ function updateAdminField($field, $value, $constraints) {
 	$where = '';
 	foreach ($constraints as $field=>$clause) {
 		if (!empty($where)) $where .= ' AND ';
-		$where .= '`'.$field.'`="'.mysql_real_escape_string($clause).'" ';
+		$where .= '`'.$field.'`="'.zp_escape_string($clause).'" ';
 	}
 	if (is_null($value)) {
 		$value = 'NULL';

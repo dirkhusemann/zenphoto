@@ -133,7 +133,7 @@ class captcha {
 		$cypher = bin2hex(rc4($key, $string));
 		$code=md5($cypher);
 		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
-		query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . mysql_real_escape_string(time()) . "','" . mysql_real_escape_string($code) . "')", true);
+		query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . zp_escape_string(time()) . "','" . zp_escape_string($code) . "')", true);
 		$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 		return $code;
 	}

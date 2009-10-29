@@ -256,8 +256,8 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 							$values .= 'NULL,';
 							$updates .= '`'.$key.'`=NULL,';
 						} else {
-							$values .= '"'.mysql_real_escape_string($element).'",';
-							$updates .= '`'.$key.'`="'.mysql_real_escape_string($element).'",';
+							$values .= '"'.zp_escape_string($element).'",';
+							$updates .= '`'.$key.'`="'.zp_escape_string($element).'",';
 						}
 					}
 

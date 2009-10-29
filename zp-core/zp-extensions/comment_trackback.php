@@ -602,25 +602,25 @@ class Trackback {
 		$query = "";
 		switch($tb_type) {
 			case "albums":
-				$query = query_single_row('SELECT `folder` FROM '.prefix('albums').' WHERE `id`="'.mysql_real_escape_string($tb_id).'"',true);
+				$query = query_single_row('SELECT `folder` FROM '.prefix('albums').' WHERE `id`="'.zp_escape_string($tb_id).'"',true);
 				$object = new Album($gallery,$query['folder']);
 				$allowed = commentsAllowed('comment_form_albums');
 				break;
 			case "images":
-				$query = query_single_row('SELECT `filename`,`albumid` FROM '.prefix('images').' WHERE `id`="'.mysql_real_escape_string($tb_id).'"',true);
+				$query = query_single_row('SELECT `filename`,`albumid` FROM '.prefix('images').' WHERE `id`="'.zp_escape_string($tb_id).'"',true);
 				$albumid = $query['albumid'];
-				$query2 = query_single_row('SELECT `folder` FROM '.prefix('albums').' WHERE `id`="'.mysql_real_escape_string($albumid).'"',true);
+				$query2 = query_single_row('SELECT `folder` FROM '.prefix('albums').' WHERE `id`="'.zp_escape_string($albumid).'"',true);
 				$albobject = new Album($gallery,$query2['folder']);
 				$object = newImage($albobject,$query['filename']);
 				$allowed = commentsAllowed('comment_form_images');
 				break;
 			case "pages":
-				$query = query_single_row('SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`="'.mysql_real_escape_string($tb_id).'"',true);
+				$query = query_single_row('SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`="'.zp_escape_string($tb_id).'"',true);
 				$object = new ZenpagePage($query['titlelink']);
 				$allowed = commentsAllowed('comment_form_pages');
 				break;
 			case "news":
-				$query = query_single_row('SELECT `titlelink` FROM '.prefix('zenpage_news').' WHERE `id`="'.mysql_real_escape_string($tb_id).'"',true);
+				$query = query_single_row('SELECT `titlelink` FROM '.prefix('zenpage_news').' WHERE `id`="'.zp_escape_string($tb_id).'"',true);
 				$object = new ZenpageNews($query['titlelink']);
 				$allowed = commentsAllowed('comment_form_articles');
 				break;
@@ -638,10 +638,10 @@ class Trackback {
 			exit();
 		} 
 		$sql = 'SELECT `id` FROM '.prefix('comments').' WHERE `ownerid`='.$tb_id	
-																.' AND `comment`="'.mysql_real_escape_string($tb_excerpt)
-																.'" AND `website`="'.mysql_real_escape_string($tb_url)
-																.'" AND `type`="'.mysql_real_escape_string($tb_type)
-																.'" AND `name`="'.mysql_real_escape_string($tb_blogname)
+																.' AND `comment`="'.zp_escape_string($tb_excerpt)
+																.'" AND `website`="'.zp_escape_string($tb_url)
+																.'" AND `type`="'.zp_escape_string($tb_type)
+																.'" AND `name`="'.zp_escape_string($tb_blogname)
 																.'"';
 		$dbcheck = query_single_row($sql); 
 		if($dbcheck){

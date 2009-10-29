@@ -194,7 +194,7 @@ class PersistentObject {
 				if ($value == '') {
 					$sql .= 'NULL';
 				} else {
-					$sql .= "'" . mysql_real_escape_string($value) . "'";
+					$sql .= "'" . zp_escape_string($value) . "'";
 				}
 				$i++;
 			}
@@ -301,7 +301,7 @@ class PersistentObject {
 				if (is_null($value)) {
 					$sql .= "NULL";
 				} else {
-					$sql .= "'". mysql_real_escape_string($value) . "'";
+					$sql .= "'". zp_escape_string($value) . "'";
 				}
 				$i++;
 			}
@@ -329,7 +329,7 @@ class PersistentObject {
 					if (is_null($value)) {
 						$sql .= " `$col` = NULL";
 					} else {
-						$sql .= " `$col` = '". mysql_real_escape_string($value) . "'";
+						$sql .= " `$col` = '". zp_escape_string($value) . "'";
 					}
 					$this->data[$col] = $value;
 					$i++;
