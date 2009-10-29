@@ -565,6 +565,30 @@ if (!$setup_checked) {
 		return $check;
 	}
 	
+	function folderPermissions($folder) {
+		global $chmod;
+		$curdir = getcwd();
+		chdir($folder);
+		$files = safe_glob('*.*');
+		chdir($curdir);
+		$result = true;
+		foreach ($files as $file) {
+			$path = $folder.'/'.$file;
+			if (is_dir($path)) {
+				@chmod($path,$chmod);
+				if(fileperms($path)==$chmod) {
+					$result = folderPermissions($path);
+				} else {
+					$result = false;
+				}
+			} else {
+				@chmod($path,0666&$chmod);
+				if (fileperms($path)!=(0666&$chmod)) $result = false;
+			}
+		}
+		return $result;
+	}
+	
 	function folderCheck($which, $path, $class) {
 		global $const_webpath, $serverpath, $chmod;
 		$path = str_replace('\\', '/', $path);
@@ -606,9 +630,14 @@ if (!$setup_checked) {
 			if (($append != $which) || $class != 'std') {
 				$f = " (<em>$append</em>)";
 			}
-			return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
+			if (folderPermissions($path)) {
+				return checkMark(-1,'',sprintf(gettext('<em>%1$s</em>%2$s folder [permissions not correct]'),$which,$f),gettext('Setup could not set the folder permissions correctly. You will have to do this manually.'));
+			} else {
+				return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
+			}
 		}
 	}
+	
 	
 	function versionCheck($required, $desired, $found) {
 		$nr = explode(".", $required . '.0.0.0');
@@ -770,7 +799,7 @@ if (!$setup_checked) {
  							' Place the file in the %s folder.'),DATA_FOLDER).
  							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
  	if ($cfg) {
- 		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.');
+ 		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on others to resolve problems.');
  		$msg2 = gettext('You must be logged in to change this.');
  		if ($chmod == 0777 || !$chmod_defined) {
 	 		checkMark(-1, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is not in effect]'),
@@ -1076,6 +1105,7 @@ if ($debug) {
 		}
 	}
 
+	$permissions = 0;
 	$cum_mean = filemtime(SERVERPATH.'/'.ZENFOLDER.'/version.php');
 	$hours = 3600;
 	$lowset = $cum_mean - $hours;
@@ -1085,7 +1115,12 @@ if ($debug) {
 	$installed_files = explode("\n", trim($package));
 	foreach ($installed_files as $key=>$value) {
 		$component = SERVERPATH.'/'.$value;
+		$folder = dirname($component);
+		@chmod($folder, $chmod);
+		if (fileperms($folder)!=$chmod) $permissions = 1;
 		if (file_exists($component)) {
+			@chmod($component,0666 & $chmod);
+			if (fileperms($component)!=(0666 & $chmod)) $permissions = 1;
 			$t = filemtime($component);
 			if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
 				unset($installed_files[$key]);
@@ -1114,7 +1149,8 @@ if ($debug) {
 	}
 	
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
-
+	checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the file/folder permissions of the Zenphoto package. You will need to change them manually.'));
+	
 	$msg = gettext("<em>.htaccess</em> file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
 		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."), "", "");
