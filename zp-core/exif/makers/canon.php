@@ -58,13 +58,7 @@ function formatCanonData($type,$tag,$intel,$data,$exif,&$result) {
 	if($type=="ASCII") {
 		$result = $data = str_replace("\0", "", $data);
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-		$top = hexdec(substr($data,8,8));
-		$bottom = hexdec(substr($data,0,8));
-		if($bottom!=0) $data=$top/$bottom;
-		else if($top==0) $data = 0;
-		else $data=$top."/".$bottom;
+		$data = unRational($data,$type,$intel);
 	
 		if($tag=="0204") { //DigitalZoom
 			$data=$data."x";
@@ -72,7 +66,7 @@ function formatCanonData($type,$tag,$intel,$data,$exif,&$result) {
 		
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
 		
-		$data = bin2hex($data);
+		$data = rational($data,$type,$intel);
 		$result['RAWDATA'] = $data;
 	
 		if($tag=="0001") { //first chunk

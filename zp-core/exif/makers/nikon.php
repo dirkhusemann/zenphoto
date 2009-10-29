@@ -81,35 +81,6 @@ function lookup_Nikon_tag($tag,$model) {
 	return $tag;
 }
 
-function unRational($data,$intel) {
-	$data = bin2hex($data);
-	if($intel==1) $data = intel2Moto($data);
-	$top = hexdec(substr($data,8,8));
-	$bottom = hexdec(substr($data,0,8));
-	if($bottom!=0)
-		$data=$top/$bottom;
-	else
-		if($top==0)
-			$data = 0;
-		else
-			$data=$top."/".$bottom;
-	return $data;
-}
-
-function nikonRational($data,$intel) {
-	$data = bin2hex($data);
-	if($intel==1) $data = intel2Moto($data);
-	$top = hexdec(substr($data,0,8));
-	$bottom = hexdec(substr($data,8,8));
-	if($bottom!=0)
-		$data=$top/$bottom;
-	else
-		if($top==0)
-			$data = 0;
-		else
-			$data=$top."/".$bottom;
-	return $data;
-}
 
 //=================
 // Formats Data for the data type
@@ -117,14 +88,13 @@ function nikonRational($data,$intel) {
 function formatNikonData($type,$tag,$intel,$model,$data) {
 
 	if($type=="ASCII") {
-
-
+		// do nothing!
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
 		if ($tag=='0084') { // LensInfo
-			$minFL = nikonRational(substr($data,0,8),$intel);
-			$maxFL = nikonRational(substr($data,8,8),$intel);
-			$minSP = nikonRational(substr($data,16,8),$intel);
-			$maxSP = nikonRational(substr($data,24,8),$intel);
+			$minFL = unRational(substr($data,0,8),$type,$intel);
+			$maxFL = unRational(substr($data,8,8),$type,$intel);
+			$minSP = unRational(substr($data,16,8),$type,$intel);
+			$maxSP = unRational(substr($data,24,8),$type,$intel);
 			if ($minFL == $maxFL) {
 				$data = sprintf('%0.0f f/%0.0f',$minFL,$minSP);
 			} else {
@@ -132,18 +102,16 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 			}
 		}
 		if($tag=="0085" && $model==1) { //ManualFocusDistance
-			$data=unRational($data, $intel)." m";
+			$data=unRational($data,$type,$intel)." m";
 		}
 		if($tag=="0086" && $model==1) { //DigitalZoom
-			$data=unRational($data, $intel)."x";
+			$data=unRational($data,$type,$intel)."x";
 		}
 		if($tag=="000a" && $model==0) { //DigitalZoom
-			$data=unRational($data, $intel)."x";
+			$data=unRational($data,$type,$intel)."x";
 		}
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-		$data=hexdec($data);
+		$data = rational($data,$type,$intel);
 
 		if($tag=="0003" && $model==0) { //Quality
 			if($data == 1) $data = gettext("VGA Basic");

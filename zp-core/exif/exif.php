@@ -348,6 +348,48 @@ function lookup_type(&$type,&$size) {
 }
 
 //================================================================================================
+// processes a irrational number
+//================================================================================================
+function unRational($data, $type, $intel) {
+		$data = bin2hex($data);
+		if ($intel == 1) {
+			$data = intel2Moto($data);
+			$top = hexdec(substr($data,8,8));   // intel stores them bottom-top
+			$bottom = hexdec(substr($data,0,8));  // intel stores them bottom-top
+		} else {
+			$top = hexdec(substr($data,0,8));        // motorola stores them top-bottom
+			$bottom = hexdec(substr($data,8,8));      // motorola stores them top-bottom
+		}
+		
+		if ($type == 'SRATIONAL' && $top > 2147483647) $top = $top - 4294967296;    // this makes the number signed instead of unsigned
+		if ($bottom != 0)
+			$data=$top/$bottom;
+		else 
+			if ($top == 0)
+				$data = 0;
+			else
+				$data = $top.'/'.$bottom;
+	return $data;
+}
+
+//================================================================================================
+// processes a rational number
+//================================================================================================
+function rational($data,$type,$intel) {
+	if (($type == 'USHORT' || $type == 'SSHORT')) {
+		$data = substr($data,0,2);
+	}
+	$data = bin2hex($data);
+	if ($intel == 1) {
+		$data = intel2Moto($data);
+	}
+	$data = hexdec($data);
+	if ($type == 'SSHORT' && $data > 32767)     $data = $data - 65536;  // this makes the number signed instead of unsigned
+	if ($type == 'SLONG' && $data > 2147483647) $data = $data - 4294967296;  // this makes the number signed instead of unsigned
+	return $data;
+}
+
+//================================================================================================
 // Formats Data for the data type
 //================================================================================================
 function formatData($type,$tag,$intel,$data) {
@@ -361,28 +403,11 @@ function formatData($type,$tag,$intel,$data) {
 		if ($tag == '010f') $data = ucwords(strtolower(trim($data)));
 
 	} else if ($type == 'URATIONAL' || $type == 'SRATIONAL') {
-		$data = bin2hex($data);
-		if ($intel == 1) $data = intel2Moto($data);
+		$data = unRational($data,$type,$intel);
 		
-		if ($intel == 1) $top = hexdec(substr($data,8,8));   // intel stores them bottom-top
-		else  $top = hexdec(substr($data,0,8));        // motorola stores them top-bottom
-		
-		if ($intel == 1) $bottom = hexdec(substr($data,0,8));  // intel stores them bottom-top
-		else  $bottom = hexdec(substr($data,8,8));      // motorola stores them top-bottom
-		
-		if ($type == 'SRATIONAL' && $top > 2147483647) $top = $top - 4294967296;    // this makes the number signed instead of unsigned
-		if ($bottom != 0) $data=$top/$bottom;
-		else if ($top == 0) $data = 0;
-		else $data = $top.'/'.$bottom;
-		
-		if (($tag == '011a' || $tag == '011b') && $bottom == 1) { // XResolution YResolution
-			$data = $top.' dots per ResolutionUnit';
+		if (($tag == '011a' || $tag == '011b')) { // XResolution YResolution
+			$data = round($data).' dots per ResolutionUnit';
 		} else if ($tag == '829a') { // Exposure Time
-			if ($bottom != 0) {
-				$data = $top / $bottom;
-			} else {
-				$data = 0;
-			}
 			$data = formatExposure($data);
 		} else if ($tag == '829d') { // FNumber
 			$data = 'f/'.$data;
@@ -408,17 +433,12 @@ function formatData($type,$tag,$intel,$data) {
 		} 
 		
 	} else if ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
-		$data = bin2hex($data);
-		if ($intel == 1) $data = intel2Moto($data);
-		if ($intel == 0 && ($type == 'USHORT' || $type == 'SSHORT')) $data = substr($data,0,4);
-		$data = hexdec($data);
-		
-		if ($type == 'SSHORT' && $data > 32767)     $data = $data - 65536;  // this makes the number signed instead of unsigned
-		if ($type == 'SLONG' && $data > 2147483647) $data = $data - 4294967296;  // this makes the number signed instead of unsigned
+		$data = rational($data,$type,$intel);
 		
 		if ($tag == '0112') { // Orientation
 			// Example of how all of these tag formatters should be...
 			switch ($data) {
+				case 0	:		// not set, presume normal
 				case 1  :   $data = gettext('1: Normal (0 deg)');      break;
 				case 2  :   $data = gettext('2: Mirrored');            break;
 				case 3  :   $data = gettext('3: Upsidedown');          break;
@@ -427,7 +447,7 @@ function formatData($type,$tag,$intel,$data) {
 				case 6  :   $data = gettext('6: 90 deg CCW');          break;
 				case 7  :   $data = gettext('7: 90 deg CCW Mirrored'); break;
 				case 8  :   $data = gettext('8: 90 deg CW');           break;
-				default :   $data = gettext('Unknown').': '.$data;
+				default :   $data = sprintf(gettext('%d: Unknown'),$data);	break;
 			}
 			
 		} else if ($tag == '0128' || $tag == 'a210' || $tag == '0128') {  // ResolutionUnit and FocalPlaneResolutionUnit and ThumbnailResolutionUnit

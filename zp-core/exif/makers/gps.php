@@ -73,23 +73,6 @@ function lookup_GPS_tag($tag) {
 }
 
 //=================
-// Formats a rational number
-//====================================================================
-function GPSRational($data, $intel) {
-
-	if($intel==1) $top = hexdec(substr($data,8,8)); 	//intel stores them bottom-top
-	else  $top = hexdec(substr($data,0,8));				//motorola stores them top-bottom
-	
-	if($intel==1) $bottom = hexdec(substr($data,0,8));	//intel stores them bottom-top
-	else  $bottom = hexdec(substr($data,8,8));			//motorola stores them top-bottom
-	
-	if($bottom!=0) $data=$top/$bottom;
-	else if($top==0) $data = 0;
-	else $data=$top."/".$bottom;
-	
-	return $data;
-}
-//=================
 // Formats Data for the data type
 //====================================================================
 function formatGPSData($type,$tag,$intel,$data) {
@@ -100,49 +83,32 @@ function formatGPSData($type,$tag,$intel,$data) {
 		}
 
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-
-		if($intel==1) $top = hexdec(substr($data,8,8)); 	//intel stores them bottom-top
-		else  $top = hexdec(substr($data,0,8));				//motorola stores them top-bottom
-
-		if($intel==1) $bottom = hexdec(substr($data,0,8));	//intel stores them bottom-top
-		else  $bottom = hexdec(substr($data,8,8));			//motorola stores them top-bottom
-
-		if($type=="SRATIONAL" && $top>2147483647) $top = $top - 4294967296;		//this makes the number signed instead of unsigned
-
-		if($tag=="0002" || $tag=="0004") { //Latitude, Longitude
+		if($tag=="0002" || $tag=="0004" || $tag=='0007') { //Latitude, Longitude, Time
 			$datum = array();
-			for ($i=0;$i<strlen($data);$i=$i+16) {
+			for ($i=0;$i<strlen($data);$i=$i+8) {
 				if ($intel==1) {
-					array_unshift($datum,substr($data, $i, 16));
+					array_unshift($datum,substr($data, $i, 8));
 				} else {
-					array_push($datum,substr($data, $i, 16));
+					array_push($datum,substr($data, $i, 8));
 				}
 			}
-			$hour = GPSRational($datum[0],$intel);
-			$minutes = GPSRational($datum[1],$intel);
-			$seconds = GPSRational($datum[2],$intel);
-			$data = $hour+$minutes/60+$seconds/3600;
-		} else if($tag=="0007") { //Time
-			$seconds = GPSRational(substr($data,0,16),$intel);
-			$minutes = GPSRational(substr($data,16,16),$intel);
-			$hour = GPSRational(substr($data,32,16),$intel);
-				
-			$data = $hour.":".$minutes.":".$seconds;
+			$hour = unRational($datum[0],$type,$intel);
+			$minutes = unRational($datum[1],$type,$intel);
+			$seconds = unRational($datum[2],$type,$intel);
+			if($tag=="0007") { //Time
+				$data = $hour.":".$minutes.":".$seconds;
+			} else {
+				$data = $hour+$minutes/60+$seconds/3600;
+			}
 		} else {
-			if($bottom!=0) $data=$top/$bottom;
-			else if($top==0) $data = 0;
-			else $data=$top."/".$bottom;
-
+			$data = unRational($data,$type,$intel);
+			
 			if($tag=="0006"){
 				$data .= 'm';
 			}
 		}
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-		$data=hexdec($data);
+		$data = rational($data,$type,$intel);
 
 
 	} else if($type=="UNDEFINED") {
