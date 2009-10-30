@@ -86,11 +86,7 @@ function formatGPSData($type,$tag,$intel,$data) {
 		if($tag=="0002" || $tag=="0004" || $tag=='0007') { //Latitude, Longitude, Time
 			$datum = array();
 			for ($i=0;$i<strlen($data);$i=$i+8) {
-				if ($intel==1) {
-					array_unshift($datum,substr($data, $i, 8));
-				} else {
-					array_push($datum,substr($data, $i, 8));
-				}
+				array_push($datum,substr($data, $i, 8));
 			}
 			$hour = unRational($datum[0],$type,$intel);
 			$minutes = unRational($datum[1],$type,$intel);

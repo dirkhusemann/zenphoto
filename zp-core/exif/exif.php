@@ -160,13 +160,11 @@ function intel2Moto($intel) {
 
 	$cache[$intel] = '';
 	$len  = strlen($intel);
-	if ($len > 1000) {
-		debugLogBacktrace('intel2Moto called with unreasonable data string: length='.$len);	
-		trigger_error(sprintf(gettext('intel2Moto called with unreasonable data string: length=%s. See debug log for details. (Setting DEBUG_EXIF to true might help locate problem images.)'),$len));
-	} else {
-		for($i = 0; $i <= $len; $i += 2) {		
-			$cache[$intel] .= substr($intel, $len-$i, 2);
-		}
+	if ($len > 1000) { // an unreasonable length, override it.
+		$len = 1000;
+	}
+	for($i = 0; $i <= $len; $i += 2) {		
+		$cache[$intel] .= substr($intel, $len-$i, 2);
 	}
 	return $cache[$intel];
 }
@@ -403,33 +401,33 @@ function formatData($type,$tag,$intel,$data) {
 		if ($tag == '010f') $data = ucwords(strtolower(trim($data)));
 
 	} else if ($type == 'URATIONAL' || $type == 'SRATIONAL') {
-		$data = unRational($data,$type,$intel);
+		$datum = unRational($data,$type,$intel);
 		
 		if (($tag == '011a' || $tag == '011b')) { // XResolution YResolution
-			$data = round($data).' dots per ResolutionUnit';
+			$data = round($datum).' dots per ResolutionUnit';
 		} else if ($tag == '829a') { // Exposure Time
-			$data = formatExposure($data);
+			$data = formatExposure($datum);
 		} else if ($tag == '829d') { // FNumber
-			$data = 'f/'.$data;
+			$data = 'f/'.$datum;
 		} else if ($tag == '9204') { // ExposureBiasValue
-			$data = round($data, 2) . ' EV';
+			$data = round($datum, 2) . ' EV';
 		} else if ($tag == '9205' || $tag == '9202') { // ApertureValue and MaxApertureValue
 			// ApertureValue is given in the APEX Mode. Many thanks to Matthieu Froment for this code
 			// The formula is : Aperture = 2*log2(FNumber) <=> FNumber = e((Aperture.ln(2))/2)
-			$data = exp(($data*log(2))/2);
-			$data = round($data, 1);// Focal is given with a precision of 1 digit.
-			$data='f/'.$data; 
+			$datum = exp(($datum*log(2))/2);
+			$data = round($datum, 1);// Focal is given with a precision of 1 digit.
+			$data='f/'.$datum; 
 		} else if ($tag == '920a') { // FocalLength
-			$data = $data.' mm';
+			$data = $datum.' mm';
 		} else if ($tag == '9201') { // ShutterSpeedValue
 			// The ShutterSpeedValue is given in the APEX mode. Many thanks to Matthieu Froment for this code
 			// The formula is : Shutter = - log2(exposureTime) (Appendix C of EXIF spec.)
 			// Where shutter is in APEX, log2(exposure) = ln(exposure)/ln(2)
 			// So final formula is : exposure = exp(-ln(2).shutter)
 			// The formula can be developed : exposure = 1/(exp(ln(2).shutter))
-			$data = exp($data * log(2));
-			if ($data != 0) $data = 1/$data;
-			$data = formatExposure($data);
+			$datum = exp($datum * log(2));
+			if ($datum != 0) $datum = 1/$datum;
+			$data = formatExposure($datum);
 		} 
 		
 	} else if ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
@@ -619,7 +617,7 @@ function formatData($type,$tag,$intel,$data) {
 }
 
 function formatExposure($data) {
-	if ($data > 0) {
+	if (strpos($data,'/')===false) {
 		if ($data > 1) {
 			return round($data, 2).' '.gettext('sec');
 		} else {
@@ -1087,12 +1085,6 @@ function get35mmEquivFocalLength(&$result) {
 		return $equivfl;
 	}
 	return null;
-}
-
-if (!function_exists('debugLogBacktrace')) {
-	// define this function for stand-alone uses if exifier
-	function debugLogBacktrace($msg) {
-	}
 }
 
 ?>
