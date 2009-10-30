@@ -428,6 +428,8 @@ function formatData($type,$tag,$intel,$data) {
 			$datum = exp($datum * log(2));
 			if ($datum != 0) $datum = 1/$datum;
 			$data = formatExposure($datum);
+		} else {
+			$data = $datum;
 		} 
 		
 	} else if ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
