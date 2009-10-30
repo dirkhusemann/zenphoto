@@ -446,6 +446,7 @@ zp-core/PHP5_functions/_zenpage_template_functions.php
 zp-core/setup-option-defaults.php
 zp-core/setup-primitive.php
 zp-core/setup.php
+zp-core/setup_permissions_changer.php
 zp-core/setup_set-mod_rewrite.php
 zp-core/template-functions.php
 zp-core/upgrade.php

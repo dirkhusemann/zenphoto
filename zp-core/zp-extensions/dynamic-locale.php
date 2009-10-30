@@ -34,23 +34,29 @@ function printLanguageSelector($class='') {
 	if (isset($_POST['dynamic-locale'])) {
 		$locale = sanitize($_POST['dynamic-locale'], 0);
 		if (getOption('locale') != $locale) {
-			echo '<div class="errorbox">';
-			echo '<h2>'.sprintf(gettext('<em>%s</em> is not available.'),$_zp_languages[$locale]).
-					 ' '.sprintf(gettext('The locale %s is not supported on your server.').
-					 '<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'), $locale);
-			echo '</h2>';
-			echo '</div>';
+			?>
+			<div class="errorbox">
+				<h2>
+					<?php printf(gettext('<em>%s</em> is not available.'),$_zp_languages[$locale]); ?>
+					<?php printf(gettext('The locale %s is not supported on your server.'), $locale); ?>
+					<br />
+					<?php echo gettext('See the troubleshooting guide on zenphoto.org for details.'); ?>
+				</h2>
+			</div>
+			<?php
 		}
 	}
 	if (!empty($class)) { $class = " class='$class'"; }
-	echo "\n<div$class>\n";
-	echo '<form action="#" method="post">'."\n";
-	echo '<input type="hidden" name="oldlocale" value="'.getOption('locale').'" />';
-	echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-	generateLanguageOptionList(false);
-	echo "</select>\n";
-	echo "</form>\n";
-	echo "</div>\n";
+	?>
+	<div<?php echo $class; ?>$class>
+		<form action="#" method="post">
+			<input type="hidden" name="oldlocale" value="<?php echo getOption('locale'); ?>" />
+			<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">
+			<?php generateLanguageOptionList(false); ?>
+			</select>
+		</form>
+	</div>
+	<?php
 }
 
 ?>

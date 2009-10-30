@@ -10,14 +10,14 @@
 require_once(dirname(__FILE__).'/functions-basic.php');
 $mod_rewrite = getOption('mod_rewrite');
 if (is_null($mod_rewrite)) {
-	$msg = 'The Zenphoto option "mod_rewrite" will be set to "enabled".';
+	$msg = gettext('The Zenphoto option "mod_rewrite" will be set to "enabled".');
 	setOption('mod_rewrite', 1);
 } else if ($mod_rewrite) {
-	$msg = 'The Zenphoto option "mod_rewrite" is "enabled".';
+	$msg = gettext('The Zenphoto option "mod_rewrite" is "enabled".');
 } else {
-	$msg = 'The Zenphoto option "mod_rewrite" is "disabled".';
+	$msg = gettext('The Zenphoto option "mod_rewrite" is "disabled".');
 }
 $f = fopen(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . '/setup_log.txt', 'a');
-fwrite($f, 'Notice: "Module mod_rewrite" is working. ' . $msg . "\n");
+fwrite($f, gettext('Notice: "Module mod_rewrite" is working.').' '.$msg."\n");
 fclose($f);
 ?>

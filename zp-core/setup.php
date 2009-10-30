@@ -9,6 +9,8 @@
 define('OFFSET_PATH', 2);
 
 require_once(dirname(__FILE__).'/folder-definitions.php');
+header("HTTP/1.0 200 OK");
+header("Status: 200 OK");
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header ('Content-Type: text/html; charset=UTF-8');
 
@@ -120,7 +122,7 @@ if ($i !== false) {
 }
 
 if (isset($_POST['mysql'])) { //try to update the zp-config file
-	setupLog("MySQL POST handling");
+	setupLog(gettext("MySQL POST handling"));
 	$updatezp_config = true;
 	if (isset($_POST['mysql_user'])) {
 		updateItem('mysql_user', $_POST['mysql_user']);
@@ -164,7 +166,7 @@ if ($updatezp_config) {
 	if (is_writeable(CONFIGFILE)) {
 		if ($handle = fopen(CONFIGFILE, 'w')) {
 			if (fwrite($handle, $zp_cfg)) {
-				setupLog("Updated zp-config.php");
+				setupLog(gettext("Updated zp-config.php"));
 				$base = true;
 			}
 		}
@@ -228,30 +230,30 @@ if (!function_exists('setOption')) { // setup a primitive environment
 }
 
 if ($setup_checked) {
-	setupLog("Completed system check", true);
+	setupLog(gettext("Completed system check"), true);
 	if (isset($_COOKIE['setup_test_cookie'])) {
 		$setup_cookie = $_COOKIE['setup_test_cookie'];
 	} else {
 		$setup_cookie = '';
 	}
 	if ($setup_cookie == ZENPHOTO_RELEASE) {
-		setupLog('Setup cookie test successful', true);
+		setupLog(gettext('Setup cookie test successful'), true);
 		setcookie('setup_test_cookie', '', time()-368000, '/');
 	} else {
-		setupLog('Setup cookie test unsuccessful', true); 
+		setupLog(gettext('Setup cookie test unsuccessful'), true); 
 	}
 } else {
 	if (isset($_POST['mysql'])) {
-		setupLog("Post of MySql credentials", true);
+		setupLog(gettext("Post of MySql credentials"), true);
 	} else {
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.'] '.date('r'), true, true);  // initialize the log file
 	}
 	if ($environ) {
-		setupLog("Full environment");
+		setupLog(gettext("Full environment"));
 	} else {
-		setupLog("Primitive environment");
+		setupLog(gettext("Primitive environment"));
 		if ($result) {
-			setupLog("Query error: ".mysql_error(), true);
+			setupLog(sprintf(gettext("Query error: %s"),mysql_error()), true);
 		}
 	}
 	setcookie('setup_test_cookie', ZENPHOTO_RELEASE, time()+3600, '/');
@@ -565,30 +567,6 @@ if (!$setup_checked) {
 		return $check;
 	}
 	
-	function folderPermissions($folder) {
-		global $chmod;
-		$curdir = getcwd();
-		chdir($folder);
-		$files = safe_glob('*.*');
-		chdir($curdir);
-		$result = true;
-		foreach ($files as $file) {
-			$path = $folder.'/'.$file;
-			if (is_dir($path)) {
-				@chmod($path,$chmod);
-				if(fileperms($path)==$chmod) {
-					$result = folderPermissions($path);
-				} else {
-					$result = false;
-				}
-			} else {
-				@chmod($path,0666&$chmod);
-				if (fileperms($path)!=(0666&$chmod)) $result = false;
-			}
-		}
-		return $result;
-	}
-	
 	function folderCheck($which, $path, $class) {
 		global $const_webpath, $serverpath, $chmod;
 		$path = str_replace('\\', '/', $path);
@@ -630,9 +608,19 @@ if (!$setup_checked) {
 			if (($append != $which) || $class != 'std') {
 				$f = " (<em>$append</em>)";
 			}
-			if (folderPermissions($path)) {
-				return checkMark(-1,'',sprintf(gettext('<em>%1$s</em>%2$s folder [permissions not correct]'),$which,$f),gettext('Setup could not set the folder permissions correctly. You will have to do this manually.'));
+			@chmod($path,$chmod);
+			if ((fileperms($path)&0777)!=$chmod) {
+				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Seup could not set the proper folder permissions. You will have to set them manually.'));
 			} else {
+				?>
+				<script type="text/javascript">
+					$.ajax({   
+						type: 'POST',   
+						url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
+						data: '<?php if ($chmod=0755) echo "strict=1&"; ?>folder=<?php echo $path; ?>'
+					});
+				</script>				
+				<?php
 				return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
 			}
 		}
@@ -1310,18 +1298,8 @@ if ($debug) {
 	} else {
 		echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
 		if ($noxlate > 0) {
-			echo "\n</div>";
-			echo "\n<div>\n";
-			echo '<form action="#'.'" method="post">'."\n";
-			if ($debug) {
-				echo '<input type="hidden" name="debug" />';
-			}
-			echo gettext("Select a language:").' ';
-			echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-			generateLanguageOptionList(false);
-			echo "</select>\n";
-			echo "</form>\n";
-			echo "</div>\n";
+			require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
+			printLanguageSelector();
 		}
 		printadminfooter();
 		echo "</div>";
@@ -1332,7 +1310,6 @@ if ($debug) {
 } else {
 	$dbmsg = gettext("database connected");
 } // system check
-
 if (file_exists(CONFIGFILE)) {
 
 	require(CONFIGFILE);
@@ -1854,36 +1831,36 @@ if (file_exists(CONFIGFILE)) {
 		} else {
 			echo "<h3>".gettext("About to update tables")."...</h3>";
 		}
-		setupLog("Begin table creation");
+		setupLog(gettext("Begin table creation"));
 		foreach($db_schema as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
 				$createTables = false;
-				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
+				setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
 				echo '<div class="error">';
-				echo gettext('Table creation failure: ').mysql_error();
+				echo sprintf(gettext('Table creation failure: %s'),mysql_error());
 				echo '</div>';
 			} else {
-				setupLog("MySQL Query"." ( $sql ) "."Success.");
+				setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
 			}
 		}
 		// always run the update queries to insure the tables are up to current level
-		setupLog("Begin table updates");
+		setupLog(gettext("Begin table updates"));
 		foreach($sql_statements as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
-				setupLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error:").' '.mysql_error());
+				setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
 			} else {
-				setupLog("MySQL Query"." ( $sql ) ".gettext("Success."));
+				setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
 			}
 		}
 
 		// set defaults on any options that need it
-		setupLog("Done with database creation and update");
+		setupLog(gettext("Done with database creation and update"));
 
 		$prevRel = getOption('zenphoto_release');
 
-		setupLog("Previous Release was $prevRel");
+		setupLog(sprintf(gettext("Previous Release was %s"),$prevRel));
 
 		$_zp_gallery = new Gallery();
 		require(dirname(__FILE__).'/setup-option-defaults.php');
@@ -2135,27 +2112,10 @@ if (file_exists(CONFIGFILE)) {
 ?>
 </div>
 <?php
-if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
-	?>
-	<div>
-		<form action="#'.'" method="post">
-			<input type="hidden" name="oldlocale" value="<?php echo getOption('locale'); ?>" />
-			<?php
-			if ($debug) {
-				?>
-				<input type="hidden" name="debug" />
-				<?php
-			}
-			echo gettext("Select a language:");
-			?>
-			<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">
-			<?php
-			generateLanguageOptionList(false);
-			?>
-			</select>
-		</form>
-	</div>
-	<?php
+if ($noxlate > 0) {
+//if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
+	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
+	printLanguageSelector();
 }
 printAdminFooter();
 ?>

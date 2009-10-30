@@ -171,9 +171,4 @@ function getSetClause($new_unique_set) {
 	return $set;
 }
 
-function zp_escape_string($string) {
-	global $mysql_connection;
-	return mysql_real_escape_string($string,$mysql_connection);
-}
-
 ?>

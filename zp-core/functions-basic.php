@@ -1142,4 +1142,17 @@ function getWatermarkPath($wm) {
 	}
 	return $path;
 }
+
+/**
+ * mysql_real_escape_string standin that insures the DB connection is passed.
+ *
+ * @param string $string
+ * @return string
+ */
+function zp_escape_string($string) {
+	global $mysql_connection;
+	return mysql_real_escape_string($string,$mysql_connection);
+}
+
+
 ?>
