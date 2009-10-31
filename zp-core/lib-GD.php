@@ -420,6 +420,7 @@ function zp_graphicsLibInfo() {
 		$imgtypes = imagetypes();
 		$lib['GIF'] = $imgtypes & IMG_GIF;
 		$lib['JPG'] = $imgtypes & IMG_JPG;
+		$lib['JPEG'] = $imgtypes & IMG_JPG;
 		$lib['PNG'] = $imgtypes & IMG_PNG;
 		$lib['BMP'] = $imgtypes & IMG_WBMP;
 	} else {
