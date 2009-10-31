@@ -343,7 +343,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			} else if ($slashpos !== false) {
 				$ralbum = substr($path, 0, $slashpos);
 				$rimage = substr($path, $slashpos+1);
-				if ((is_dir(getAlbumFolder() . internalToFilesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
+				if ((is_dir(getAlbumFolder() . internalToFilesystem($ralbum . '/' . $rimage)) || hasDynamicAlbumSuffix($rimage))) {
 					$ralbum = $ralbum . '/' . $rimage;
 					$rimage = null;
 				}
