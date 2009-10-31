@@ -128,7 +128,7 @@ echo '</head>'."\n";
 						$gallery = new Gallery();
 						$albumlist = array();
 						foreach ($gallery->getAlbums() as $folder) {
-							if (hasDyanmicAlbumSuffix($folder)) {
+							if (hasDynamicAlbumSuffix($folder)) {
 								$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
 							} else {
 								$name = $folder;

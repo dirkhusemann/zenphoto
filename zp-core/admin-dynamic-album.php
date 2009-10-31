@@ -20,7 +20,7 @@ $imagelist = array();
 
 function getSubalbumImages($folder) {
 	global $imagelist, $gallery;
-	if (hasDyanmicAlbumSuffix($folder)) { return; }
+	if (hasDynamicAlbumSuffix($folder)) { return; }
 	$album = new Album($gallery, $folder);
 	$images = $album->getImages();
 	foreach ($images as $image) {

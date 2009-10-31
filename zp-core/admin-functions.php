@@ -2626,7 +2626,7 @@ function populateManagedAlbumList($id) {
 	$currentvalues = query_full_array($sql);
 	foreach($currentvalues as $albumitem) {
 		$folder = $albumitem['folder'];
-		if (hasDyanmicAlbumSuffix($folder)) {
+		if (hasDynamicAlbumSuffix($folder)) {
 			$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
 		} else {
 			$name = $folder;

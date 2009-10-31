@@ -1088,7 +1088,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		if (!is_null($album)) {
 			$albumname = $album->name;
 			zp_setCookie('zenphoto_last_album', $albumname, time()+COOKIE_PESISTENCE, $cookiepath);
-			if (hasDyanmicAlbumSuffix($albumname)) $albumname = substr($albumname, 0, -4); // strip off the .alb as it will not be reflected in the search path
+			if (hasDynamicAlbumSuffix($albumname)) $albumname = substr($albumname, 0, -4); // strip off the .alb as it will not be reflected in the search path
 			$_zp_search_album_list = $_zp_current_search->getAlbums(0);
 			foreach ($_zp_search_album_list as $searchalbum) {	
 				if (strpos($albumname, $searchalbum) !== false) {
@@ -1181,7 +1181,7 @@ function setupTheme() {
  * @param string $path
  * @return bool
  */
-function hasDyanmicAlbumSuffix($path) {
+function hasDynamicAlbumSuffix($path) {
 	return strtolower(substr(strrchr($path, "."), 1)) == 'alb';
 }
 

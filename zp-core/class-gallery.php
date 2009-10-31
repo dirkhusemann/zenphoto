@@ -156,7 +156,7 @@ class Gallery {
 
 		while ($dirname = readdir($dir)) {
 			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.')) ||
-								hasDyanmicAlbumSuffix($dirname)) {
+								hasDynamicAlbumSuffix($dirname)) {
 				$albums[] = filesystemToInternal($dirname);
 			}
 		}
@@ -342,7 +342,7 @@ class Gallery {
 			// Load the albums from disk
 			$albumfolder = getAlbumFolder();
 			while($row = mysql_fetch_assoc($result)) {
-				$valid = file_exists($albumpath = $albumfolder.internalToFilesystem($row['folder'])) && (hasDyanmicAlbumSuffix($albumpath) || is_dir($albumpath));
+				$valid = file_exists($albumpath = $albumfolder.internalToFilesystem($row['folder'])) && (hasDynamicAlbumSuffix($albumpath) || is_dir($albumpath));
 				if (!$valid || in_array($row['folder'], $live)) {
 					$dead[] = $row['id'];
 					if ($row['album_theme'] !== '') {  // orphaned album theme options table

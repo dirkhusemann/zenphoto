@@ -50,12 +50,12 @@ class Album extends PersistentObject {
 			$this->exists = false;
 			return;
 		}
-		if (hasDyanmicAlbumSuffix($folder8)) {
+		if (hasDynamicAlbumSuffix($folder8)) {
 			$localpath = substr($localpath, 0, -1);
 		}
 
 		// Must be a valid (local) folder:
-		$valid = file_exists($localpath) && (hasDyanmicAlbumSuffix($localpath) || is_dir($localpath));
+		$valid = file_exists($localpath) && (hasDynamicAlbumSuffix($localpath) || is_dir($localpath));
 		if(!$valid || strpos($localpath, '..') !== false) {
 			$this->exists = false;
 			return;
@@ -64,7 +64,7 @@ class Album extends PersistentObject {
 		$this->name = $folder8;
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder8));
 		
-		if (hasDyanmicAlbumSuffix($folder8)) {
+		if (hasDynamicAlbumSuffix($folder8)) {
 			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
 				$data = file_get_contents($this->localpath);
 				while (!empty($data)) {
@@ -1248,7 +1248,7 @@ class Album extends PersistentObject {
 
 		while (false !== ($file = readdir($dir))) {
 			$file8 = filesystemToInternal($file);
-			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') || hasDyanmicAlbumSuffix($file))) {
+			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') || hasDynamicAlbumSuffix($file))) {
 				$files[] = $file8;
 			} else if (!$dirs && is_file($albumdir.$file)) {
 				if (is_valid_other_type($file)) {
