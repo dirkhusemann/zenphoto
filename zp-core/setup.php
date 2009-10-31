@@ -29,6 +29,7 @@ if(!function_exists("gettext")) {
 } else {
 	$noxlate = 1;
 }
+
 require_once(dirname(__FILE__).'/lib-utf8.php');
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 $const_webpath = str_replace("\\", '/', $const_webpath);
@@ -575,11 +576,36 @@ if (!$setup_checked) {
 		}
 		@chmod($path, $chmod);
 		$serverpath = str_replace('\\', '/', dirname(dirname(__FILE__)));
+		$severity = 1;
 		switch ($class) {
 			case 'std':
 				$append = str_replace($serverpath, '', $path);
 				if (substr($append,-1,1) == '/') $append = substr($append,0, -1);
 				if (substr($append,0,1) == '/') $append = substr($append,1);
+				if (($append != $which)) {
+					$f = " (<em>$append</em>)";
+				} else {
+					$f = '';
+				}
+				@chmod($path,$chmod);
+				if (($perms = fileperms($path)&0777)!=$chmod) {
+					if (($perms&0755)==0755) {
+						$severity = -1;
+					} else {
+						$severity = 0;
+					}
+					return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
+				} else {
+					?>
+					<script type="text/javascript">
+						$.ajax({   
+							type: 'POST',   
+							url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
+							data: '<?php if ($chmod==0755) echo "strict=1&"; ?>folder=<?php echo $path; ?>'
+						});
+					</script>				
+					<?php
+				}
 				break;
 			case 'in_webpath':
 				if (empty($const_webpath)) {
@@ -588,12 +614,13 @@ if (!$setup_checked) {
 					$serverroot = substr($serverpath, 0, strpos($serverpath, $const_webpath));
 				}
 				$append = substr($path, strlen($serverroot));
+				$f = " (<em>$append</em>)";
 				break;
 			case 'external':
 				$append = $path;
+				$f = " (<em>$append</em>)";
 				break;
 		}
-		$f = '';
 		if (!is_dir($path)) {
 			$msg = " ".sprintf(gettext('You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>.'),$append,$path);
 			if ($class != 'std') {
@@ -605,27 +632,7 @@ if (!$setup_checked) {
 			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$which,$append);
 			return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> is not writeable and <strong>setup</strong> could not make it so]'),$which, $append), $msg);
 		} else {
-			if (($append != $which) || $class != 'std') {
-				$f = " (<em>$append</em>)";
-			}
-			@chmod($path,$chmod);
-			if (($perms = fileperms($path)&0777)!=$chmod) {
-				if (($perms&0755)==0755) {
-					$severity = -1;
-				} else {
-					$severity = 0;
-				}
-				return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
-			} else {
-				?>
-				<script type="text/javascript">
-					$.ajax({   
-						type: 'POST',   
-						url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
-						data: '<?php if ($chmod=0755) echo "strict=1&"; ?>folder=<?php echo $path; ?>'
-					});
-				</script>				
-				<?php
+			if ($severity) {
 				return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
 			}
 		}
@@ -843,7 +850,7 @@ if (!$setup_checked) {
 <p>
 <?php echo gettext("Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
 </p>
-<form action="#" method="post">
+<form action="setup.php" method="post">
 <input type="hidden" name="mysql"	value="yes" />
 <?php
 if ($debug) {
@@ -901,12 +908,13 @@ if ($debug) {
 			$good = checkMark(!$adminstuff, gettext("MySQL setup in <em>zp-config.php</em>"), '',
 											gettext("You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.")) && $good;
 		}
+	} else {
+		$good = checkMark($connection, gettext("Connect to MySQL"), gettext("Connect to MySQL [<code>CONNECT</code> query failed]"), $connectDBErr) && $good;
 	}
 	if (!$newconfig && !$connection) {
 		if (empty($_zp_conf_vars['mysql_host']) || empty($_zp_conf_vars['mysql_user']) || empty($_zp_conf_vars['mysql_pass'])) {
 			$connectDBErr = gettext('Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.'); // of course we can't connect!
 		}
-		$good = checkMark($connection, gettext("Connect to MySQL"), gettext("Connect to MySQL [<code>CONNECT</code> query failed]"), $connectDBErr) && $good;
 	}
 	if ($connection) {
 		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
@@ -1106,29 +1114,47 @@ if ($debug) {
 
 	$package = file_get_contents(SERVERPATH.'/Zenphoto.package');
 	$installed_files = explode("\n", trim($package));
+	$base = dirname(dirname(__FILE__)).'/';
+	$folders = array();
 	foreach ($installed_files as $key=>$value) {
-		$component = SERVERPATH.'/'.$value;
-		$folder = dirname($component);
-		@chmod($folder, $chmod);
-		if ($permissions==1 && ($perms = fileperms($folder)&0777)!=$chmod) {
-			if (($perms&0755) != 0755) { // could not set them, but they will work.
-				$permissions = 0;
-			} else {
-				$permissions = -1;
-			}
+		$component = $base.$value;
+		$folder = dirname($value);
+		if (!empty($folder) && $folder!='.' && $folder!='/') {
+			$folders[$folder] = $base.$folder;
 		}
 		if (file_exists($component)) {
-			@chmod($component,0666 & $chmod);
-			if ($permissions==1 && ($perms = fileperms($component)&0777)!=(0666 & $chmod)) {
-				if (($perms&0666) != 0666) { // could not set them, but they will work.
+			@chmod($component,0666&$chmod);
+			if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
+				if (($perms&0644) != 0644) { // could not set them, but they will work.
 					$permissions = 0;
 				} else {
 					$permissions = -1;
 				}
-			}
+			}	
 			$t = filemtime($component);
 			if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
 				unset($installed_files[$key]);
+			}
+		}
+	}
+	if (count($folders)>0) {
+		foreach ($folders as $key=>$folder) {
+			if ((fileperms($folder)&0777) != 0755) { // need to set them?.
+
+$before=sprintf('%o',$perms=fileperms($folder));
+
+				@chmod($folder, $chmod);
+
+echo "<br/>folder::".$key."<".sprintf('%o',$chmod).">($before=>".sprintf('%o',fileperms($folder)).")";
+
+
+				if ($permissions==1 && ($perms = fileperms($folder)&0777)!=$chmod) {
+					if (($perms&0755) != 0755) { // could not set them, but they will work.
+						$permissions = 0;
+					} else {
+						$permissions = -1;
+					}
+				}
 			}
 		}
 	}
@@ -1229,7 +1255,7 @@ if ($debug) {
 		}
 		$f = '';
 		if (!$base) { // try and fix it
-			@chmod($htfile, 0666 & $chmod);
+			@chmod($htfile, 0666&$chmod);
 			if (is_writeable($htfile)) {
 				$ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
 				if ($handle = fopen($htfile, 'w')) {
