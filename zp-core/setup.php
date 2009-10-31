@@ -609,8 +609,13 @@ if (!$setup_checked) {
 				$f = " (<em>$append</em>)";
 			}
 			@chmod($path,$chmod);
-			if ((fileperms($path)&0777)!=$chmod) {
-				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Seup could not set the proper folder permissions. You will have to set them manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a>.'));
+			if (($perms = fileperms($path)&0777)!=$chmod) {
+				if (($perms&0755)==0755) {
+					$severity = -1;
+				} else {
+					$severity = 0;
+				}
+				return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 			} else {
 				?>
 				<script type="text/javascript">
@@ -1093,7 +1098,7 @@ if ($debug) {
 		}
 	}
 
-	$permissions = 0;
+	$permissions = 1;
 	$cum_mean = filemtime(SERVERPATH.'/'.ZENFOLDER.'/version.php');
 	$hours = 3600;
 	$lowset = $cum_mean - $hours;
@@ -1105,10 +1110,22 @@ if ($debug) {
 		$component = SERVERPATH.'/'.$value;
 		$folder = dirname($component);
 		@chmod($folder, $chmod);
-		if (fileperms($folder)!=$chmod) $permissions = 1;
+		if ($permissions==1 && ($perms = fileperms($folder)&0777)!=$chmod) {
+			if (($perms&0755) != 0755) { // could not set them, but they will work.
+				$permissions = 0;
+			} else {
+				$permissions = -1;
+			}
+		}
 		if (file_exists($component)) {
 			@chmod($component,0666 & $chmod);
-			if (fileperms($component)!=(0666 & $chmod)) $permissions = 1;
+			if ($permissions==1 && ($perms = fileperms($component)&0777)!=(0666 & $chmod)) {
+				if (($perms&0666) != 0666) { // could not set them, but they will work.
+					$permissions = 0;
+				} else {
+					$permissions = -1;
+				}
+			}
 			$t = filemtime($component);
 			if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
 				unset($installed_files[$key]);
@@ -1137,7 +1154,7 @@ if ($debug) {
 	}
 	
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
-	checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the file/folder permissions of the Zenphoto package. You will have to set them manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a>.'));
+	checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	
 	$msg = gettext("<em>.htaccess</em> file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
