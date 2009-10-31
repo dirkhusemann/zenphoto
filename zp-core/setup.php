@@ -610,7 +610,7 @@ if (!$setup_checked) {
 			}
 			@chmod($path,$chmod);
 			if ((fileperms($path)&0777)!=$chmod) {
-				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Seup could not set the proper folder permissions. You will have to set them manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a>'));
+				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Seup could not set the proper folder permissions. You will have to set them manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a>.'));
 			} else {
 				?>
 				<script type="text/javascript">
@@ -1137,7 +1137,7 @@ if ($debug) {
 	}
 	
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
-	checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the file/folder permissions of the Zenphoto package. You will need to change them manually.'));
+	checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the file/folder permissions of the Zenphoto package. You will have to set them manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a>.'));
 	
 	$msg = gettext("<em>.htaccess</em> file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
