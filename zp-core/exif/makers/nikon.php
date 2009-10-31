@@ -86,119 +86,162 @@ function lookup_Nikon_tag($tag,$model) {
 // Formats Data for the data type
 //====================================================================
 function formatNikonData($type,$tag,$intel,$model,$data) {
-
-	if($type=="ASCII") {
-		// do nothing!
-	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
-		if ($tag=='0084') { // LensInfo
-			$minFL = unRational(substr($data,0,8),$type,$intel);
-			$maxFL = unRational(substr($data,8,8),$type,$intel);
-			$minSP = unRational(substr($data,16,8),$type,$intel);
-			$maxSP = unRational(substr($data,24,8),$type,$intel);
-			if ($minFL == $maxFL) {
-				$data = sprintf('%0.0f f/%0.0f',$minFL,$minSP);
-			} else {
-				$data = sprintf('%0.0f-%0.0fmm f/%0.1f-%0.1f',$minFL,$maxFL,$minSP,$maxSP);
+	switch ($type) {
+		case "ASCII":
+			break;	// do nothing!
+		case "URATIONAL":
+		case"SRATIONAL":
+			switch ($tag) {
+				case '0084':	// LensInfo
+					$minFL = unRational(substr($data,0,8),$type,$intel);
+					$maxFL = unRational(substr($data,8,8),$type,$intel);
+					$minSP = unRational(substr($data,16,8),$type,$intel);
+					$maxSP = unRational(substr($data,24,8),$type,$intel);
+					if ($minFL == $maxFL) {
+						$data = sprintf('%0.0f f/%0.0f',$minFL,$minSP);
+					} else {
+						$data = sprintf('%0.0f-%0.0fmm f/%0.1f-%0.1f',$minFL,$maxFL,$minSP,$maxSP);
+					}
+					break;
+				case "0085":
+					if ($model==1) $data=unRational($data,$type,$intel)." m";	//ManualFocusDistance
+					break;
+				case "0086":
+					if ($model==1) $data=unRational($data,$type,$intel)."x";	//DigitalZoom
+					break;
+				case "000a":
+					if ($model==0) $data=unRational($data,$type,$intel)."x";	//DigitalZoom
+					break;
 			}
-		}
-		if($tag=="0085" && $model==1) { //ManualFocusDistance
-			$data=unRational($data,$type,$intel)." m";
-		}
-		if($tag=="0086" && $model==1) { //DigitalZoom
-			$data=unRational($data,$type,$intel)."x";
-		}
-		if($tag=="000a" && $model==0) { //DigitalZoom
-			$data=unRational($data,$type,$intel)."x";
-		}
-	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
-		$data = rational($data,$type,$intel);
-
-		if($tag=="0003" && $model==0) { //Quality
-			if($data == 1) $data = gettext("VGA Basic");
-			else if($data == 2) $data = gettext("VGA Normal");
-			else if($data == 3) $data = gettext("VGA Fine");
-			else if($data == 4) $data = gettext("SXGA Basic");
-			else if($data == 5) $data = gettext("SXGA Normal");
-			else if($data == 6) $data = gettext("SXGA Fine");
-			else $data = gettext("Unknown").": ".$data;
-		}
-		if($tag=="0004" && $model==0) { //Color
-			if($data == 1) $data = gettext("Color");
-			else if($data == 2) $data = gettext("Monochrome");
-			else $data = gettext("Unknown").": ".$data;
-		}
-		if($tag=="0005" && $model==0) { //Image Adjustment
-			if($data == 0) $data = gettext("Normal");
-			else if($data == 1) $data = gettext("Bright+");
-			else if($data == 2) $data = gettext("Bright-");
-			else if($data == 3) $data = gettext("Contrast+");
-			else if($data == 4) $data = gettext("Contrast-");
-			else $data = gettext("Unknown").": ".$data;
-		}
-		if($tag=="0006" && $model==0) { //CCD Sensitivity
-			if($data == 0) $data = "ISO-80";
-			else if($data == 2) $data = "ISO-160";
-			else if($data == 4) $data = "ISO-320";
-			else if($data == 5) $data = "ISO-100";
-			else $data = gettext("Unknown").": ".$data;
-		}
-		if($tag=="0007" && $model==0) { //White Balance
-			if($data == 0) $data = gettext("Auto");
-			else if($data == 1) $data = gettext("Preset");
-			else if($data == 2) $data = gettext("Daylight");
-			else if($data == 3) $data = gettext("Incandescense");
-			else if($data == 4) $data = gettext("Flourescence");
-			else if($data == 5) $data = gettext("Cloudy");
-			else if($data == 6) $data = gettext("SpeedLight");
-			else $data = gettext("Unknown").": ".$data;
-		}
-		if($tag=="000b" && $model==0) { //Converter
-			if($data == 0) $data = gettext("None");
-			else if($data == 1) $data = gettext("Fisheye");
-			else $data = gettext("Unknown").": ".$data;
-		}
-	} else if($type=="UNDEFINED") {
-
-		if($tag=="0001" && $model==1) { //Unknown (Version?)
-			$data=$data/100;
-		}
-		if($tag=="0088" && $model==1) { //AF Focus Position
-			$temp = gettext("Center");
+			break;
+		case "USHORT":
+		case $type=="SSHORT":
+		case $type=="ULONG":
+		case $type=="SLONG":
+		case $type=="FLOAT":
+		case $type=="DOUBLE":
+			$data = rational($data,$type,$intel);
+			switch ($tag) {
+				case "0003":
+					if ($model==0) { //Quality
+						switch ($data) {
+							case 1:		$data = gettext("VGA Basic");	break;
+							case 2:		$data = gettext("VGA Normal");	break;
+							case 3:		$data = gettext("VGA Fine");	break;
+							case 4:		$data = gettext("SXGA Basic");	break;
+							case 5:		$data = gettext("SXGA Normal");	break;
+							case 6:		$data = gettext("SXGA Fine");	break;
+							default:	$data = gettext("Unknown").": ".$data;	break;
+						}
+					}
+					break;
+				case "0004":
+					if ($model==0) { //Color
+						switch ($data) {
+							case 1:		$data = gettext("Color");	break;
+							case 2:		$data = gettext("Monochrome");	break;
+							default:	$data = gettext("Unknown").": ".$data;	break;
+						}
+					}
+					break;
+				case "0005":
+					if ($model==0) { //Image Adjustment
+						switch ($data) {
+							case 0:		$data = gettext("Normal");	break;
+							case 1:		$data = gettext("Bright+");	break;
+							case 2:		$data = gettext("Bright-");	break;
+							case 3:		$data = gettext("Contrast+");	break;
+							case 4:		$data = gettext("Contrast-");	break;
+							default:	$data = gettext("Unknown").": ".$data;	break;
+						}
+					}
+					break;
+				case "0006":
+					if ($model==0) { //CCD Sensitivity
+						switch($data) {
+							case 0:		$data = "ISO-80";	break;
+							case 2:		$data = "ISO-160";	break;
+							case 4:		$data = "ISO-320";	break;
+							case 5:		$data = "ISO-100";	break;
+							default:	$data = gettext("Unknown").": ".$data;	break;
+						}
+					}
+					break;
+				case "0007":
+					if ($model==0) { //White Balance
+						switch ($data) {
+							case 0:		 $data = gettext("Auto");	break;
+							case 1:		$data = gettext("Preset");	break;
+							case 2:		$data = gettext("Daylight");	break;
+							case 3:		$data = gettext("Incandescense");	break;
+							case 4:		$data = gettext("Flourescence");	break;
+							case 5:		$data = gettext("Cloudy");	break;
+							case 6:		$data = gettext("SpeedLight");	break;
+							default:	$data = gettext("Unknown").": ".$data;	break;
+						}
+					}
+					break;
+				case "000b":
+					if ($model==0) { //Converter
+						switch ($data) {
+							case 0:	$data = gettext("None");	break;
+							case 1:	$data = gettext("Fisheye");	break;
+							default:	$data = gettext("Unknown").": ".$data;	break;
+						}
+					}
+					break;
+			}
+			break;
+		case "UNDEFINED":
+			switch ($tag) {
+				case "0001":
+					if ($model==1) $data=$data/100;	break;	//Unknown (Version?)
+					break;
+				case "0088":
+					if ($model==1) { //AF Focus Position
+						$temp = gettext("Center");
+						$data = bin2hex($data);
+						$data = str_replace("01","Top",$data);
+						$data = str_replace("02","Bottom",$data);
+						$data = str_replace("03","Left",$data);
+						$data = str_replace("04","Right",$data);
+						$data = str_replace("00","",$data);
+						if(strlen($data)==0) $data = $temp;
+					}
+					break;
+			}
+			break;
+		default:
 			$data = bin2hex($data);
-			$data = str_replace("01","Top",$data);
-			$data = str_replace("02","Bottom",$data);
-			$data = str_replace("03","Left",$data);
-			$data = str_replace("04","Right",$data);
-			$data = str_replace("00","",$data);
-			if(strlen($data)==0) $data = $temp;
-		}
-
-	} else {
-		$data = bin2hex($data);
-		if($intel==1) $data = intel2Moto($data);
-
-		if($tag=="0083" && $model==1) { //Lens Type
-			$data = hexdec(substr($data,0,2));
-			switch ($data) {
-				case 0: $data = gettext("AF non D"); break;
-				case 1: $data = gettext("Manual"); break;
-				case 2: $data = "AF-D or AF-S"; break;
-				case 6: $data = "AF-D G"; break;
-				case 10: $data = "AF-D VR"; break;
-				case 14: $data = "AF-D G VR"; break;
-				default: $data = gettext("Unknown").": ".$data; break;
+			if($intel==1) $data = intel2Moto($data);
+				switch ($tag) {
+				case "0083":
+					if ($model==1) { //Lens Type
+						$data = hexdec(substr($data,0,2));
+						switch ($data) {
+							case 0: $data = gettext("AF non D"); break;
+							case 1: $data = gettext("Manual"); break;
+							case 2: $data = "AF-D or AF-S"; break;
+							case 6: $data = "AF-D G"; break;
+							case 10: $data = "AF-D VR"; break;
+							case 14: $data = "AF-D G VR"; break;
+							default: $data = gettext("Unknown").": ".$data; break;
+						}
+					}
+					break;
+				case "0087":
+					if ($model==1) { //Flash type
+						$data = hexdec(substr($data,0,2));
+						if($data == 0) $data = gettext("Did Not Fire");
+						else if($data == 4) $data = gettext("Unknown");
+						else if($data == 7) $data = gettext("External");
+						else if($data == 9) $data = gettext("On Camera");
+						else $data = gettext("Unknown").": ".$data;
+					}
+					break;
 			}
-		}
-		if($tag=="0087" && $model==1) { //Flash type
-			$data = hexdec(substr($data,0,2));
-			if($data == 0) $data = gettext("Did Not Fire");
-			else if($data == 4) $data = gettext("Unknown");
-			else if($data == 7) $data = gettext("External");
-			else if($data == 9) $data = gettext("On Camera");
-			else $data = gettext("Unknown").": ".$data;
-		}
+			break;
 	}
-
 	return $data;
 }
 
