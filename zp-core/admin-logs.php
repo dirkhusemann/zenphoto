@@ -5,8 +5,8 @@
  * @package plugins
  */
 define ('OFFSET_PATH', 4);
-require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
-require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
+require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/admin-globals.php');
 if (!zp_loggedin(ADMIN_RIGHTS)) {
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
@@ -44,9 +44,6 @@ if (isset($_GET['action'])) {
 // Print our header
 $page = 'logs';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
-?>
-<link rel="stylesheet" href="log.css" type="text/css" />
-<?php
 echo "\n</head>";
 ?>
 
@@ -93,7 +90,7 @@ echo "\n</head>";
 					<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
 					<div class="log_buttons">
 						<button type="submit" class="tooltip" id="delete_log" title="<?php printf(gettext("Delete <em>%s</em>"),$logfiletext);?>">
-							<img src="../../images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Delete");?>
+							<img src="images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Delete");?>
 						</button>
 					</div>
 				</form>
@@ -105,7 +102,7 @@ echo "\n</head>";
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
 						<div class="log_buttons">
 							<button type="submit" class="tooltip" id="clear_log" title="<?php printf(gettext("Reset <em>%s</em>"),$logfiletext);?>">
-								<img src="../../images/refresh.png" style="border: 0px;" /> <?php echo gettext("Reset");?>
+								<img src="images/refresh.png" style="border: 0px;" /> <?php echo gettext("Reset");?>
 							</button>
 						</div>
 					</form>
@@ -115,7 +112,7 @@ echo "\n</head>";
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
 						<div class="log_buttons">
 							<button type="submit" class="tooltip" id="download_log" title="<?php printf(gettext("Download <em>%s</em> zipfile"),$logfiletext);?>">
-								<img src="down.png" style="border: 0px;" /> <?php echo gettext("Download");?>
+								<img src="images/down.png" style="border: 0px;" /> <?php echo gettext("Download");?>
 							</button>
 						</div>
 					</form>

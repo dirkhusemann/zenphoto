@@ -36,7 +36,12 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 $serverpath = str_replace("\\", '/', dirname(dirname(__FILE__)));
 
-$chmod = 0755;
+if ((fileperms(dirname(__FILE__))&0777)==0755) {
+	$chmod = 0755;
+} else {
+	$chmod = 0777;
+}
+
 $en_US = dirname(__FILE__).'/locale/en_US/';
 if (!file_exists($en_US)) {
 	@mkdir(dirname(__FILE__).'/locale/', $chmod);
@@ -148,32 +153,30 @@ if (isset($_GET['strict_chmod'])) {
 	} else {
 		$chmod = 0777;
 	}
-	$i = strpos($zp_cfg, "define('CHMOD_VALUE',");
-	if ($i === false) {
-		$i = strpos($zp_cfg, "define('SERVERPATH',");
-		$i = strpos($zp_cfg, ';', $i);
-		$i = strpos($zp_cfg, '/', $i);
-		$zp_cfg = substr($zp_cfg, 0, $i)."if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', ".sprintf('0%o', $chmod)."); }\n".substr($zp_cfg, $i);
-	} else {
-		$i = $i +21;
-		$j = strpos($zp_cfg, ")", $i);
-		$zp_cfg = substr($zp_cfg, 0, $i) . sprintf('0%o',$chmod) . substr($zp_cfg, $j);
-	}
-	$updatezp_config = true;
+}
+$i = strpos($zp_cfg, "define('CHMOD_VALUE',");
+if ($i === false) {
+	$i = strpos($zp_cfg, "define('SERVERPATH',");
+	$i = strpos($zp_cfg, ';', $i);
+	$i = strpos($zp_cfg, '/**', $i);
+	$zp_cfg = substr($zp_cfg, 0, $i)."if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', ".sprintf('0%o', $chmod)."); }\n".substr($zp_cfg, $i);
+} else {
+	$i = $i +21;
+	$j = strpos($zp_cfg, ")", $i);
+	$zp_cfg = substr($zp_cfg, 0, $i) . sprintf('0%o',$chmod) . substr($zp_cfg, $j);
 }
 
-if ($updatezp_config) {
-	@chmod(CONFIGFILE, 0666 & $chmod);
-	if (is_writeable(CONFIGFILE)) {
-		if ($handle = fopen(CONFIGFILE, 'w')) {
-			if (fwrite($handle, $zp_cfg)) {
-				setupLog(gettext("Updated zp-config.php"));
-				$base = true;
-			}
+@chmod(CONFIGFILE, 0666 & $chmod);
+if (is_writeable(CONFIGFILE)) {
+	if ($handle = fopen(CONFIGFILE, 'w')) {
+		if (fwrite($handle, $zp_cfg)) {
+			setupLog(gettext("Updated zp-config.php"));
+			$base = true;
 		}
-		fclose($handle);
 	}
+	fclose($handle);
 }
+
 
 $result = true;
 $chmod_defined = false;
@@ -568,7 +571,7 @@ if (!$setup_checked) {
 		return $check;
 	}
 	
-	function folderCheck($which, $path, $class) {
+	function folderCheck($which, $path, $class, $relaxation=true) {
 		global $const_webpath, $serverpath, $chmod;
 		$path = str_replace('\\', '/', $path);
 		if (!is_dir($path) && $class == 'std') {
@@ -587,24 +590,25 @@ if (!$setup_checked) {
 				} else {
 					$f = '';
 				}
-				@chmod($path,$chmod);
-				if (($perms = fileperms($path)&0777)!=$chmod) {
-					if (($perms&0755)==0755) {
-						$severity = -1;
+				if (($chmod==0755) || $relaxation) {
+					@chmod($path,$chmod);
+					if (($perms = fileperms($path)&0777)!=$chmod) {
+						if (($perms&0755)==0755) {
+							$severity = -1;
+						} else {
+							$severity = 0;
+						}
+						return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
+
 					} else {
-						$severity = 0;
-					}
-					return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
-				} else {
-					?>
-					<script type="text/javascript">
+						?> <script type="text/javascript">
 						$.ajax({   
 							type: 'POST',   
 							url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
 							data: '<?php if ($chmod==0755) echo "strict=1&"; ?>folder=<?php echo $path; ?>'
 						});
-					</script>				
-					<?php
+					</script> <?php
+					}
 				}
 				break;
 			case 'in_webpath':
@@ -801,7 +805,7 @@ if (!$setup_checked) {
  	if ($cfg) {
  		$msg = gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on others to resolve problems.');
  		$msg2 = gettext('You must be logged in to change this.');
- 		if ($chmod == 0777 || !$chmod_defined) {
+ 		if ($chmod == 0777) {
 	 		checkMark(-1, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is not in effect]'),
 	 							gettext('When this option is not in effect, file and folder permissions are relaxed. '.
 	 							'This could constitute a security risk so it is recommended that you enable '.
@@ -1120,7 +1124,9 @@ if ($debug) {
 		$component = $base.$value;
 		$folder = dirname($value);
 		if (!empty($folder) && $folder!='.' && $folder!='/') {
-			$folders[$folder] = $base.$folder;
+			if (file_exists($folder)) {
+				$folders[$folder] = $base.$folder;
+			}
 		}
 		if (file_exists($component)) {
 			@chmod($component,0666&$chmod);
@@ -1140,14 +1146,7 @@ if ($debug) {
 	if (count($folders)>0) {
 		foreach ($folders as $key=>$folder) {
 			if ((fileperms($folder)&0777) != 0755) { // need to set them?.
-
-$before=sprintf('%o',$perms=fileperms($folder));
-
 				@chmod($folder, $chmod);
-
-echo "<br/>folder::".$key."<".sprintf('%o',$chmod).">($before=>".sprintf('%o',fileperms($folder)).")";
-
-
 				if ($permissions==1 && ($perms = fileperms($folder)&0777)!=$chmod) {
 					if (($perms&0755) != 0755) { // could not set them, but they will work.
 						$permissions = 0;
@@ -1328,7 +1327,7 @@ echo "<br/>folder::".$key."<".sprintf('%o',$chmod).">($before=>".sprintf('%o',fi
 	$good = folderCheck(gettext('uploaded'), dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
 	$good = folderCheck(gettext('RSS cache'), dirname(dirname(__FILE__)) . '/cache_html/rss/', 'std') && $good;
-	$good = folderCheck(gettext('Third party plugins'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std') && $good;
+	$good = folderCheck(gettext('Third party plugins'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std', false) && $good;
 	$good = folderCheck(gettext('watermarks'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/watermarks/', 'std') && $good;
 	
 	?>

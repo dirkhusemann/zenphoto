@@ -195,6 +195,7 @@ zp-core/admin-dynamic-album.php
 zp-core/admin-edit.php
 zp-core/admin-functions.php
 zp-core/admin-globals.php
+zp-core/admin-logs.php
 zp-core/admin-options.php
 zp-core/admin-plugins.php
 zp-core/admin-refresh-metadata.php
@@ -269,6 +270,7 @@ zp-core/images/cache.png
 zp-core/images/cache1.png
 zp-core/images/calendar.png
 zp-core/images/captcha_background.png
+zp-core/images/down.png
 zp-core/images/drag_handle.png
 zp-core/images/drag_handle_flag.png
 zp-core/images/edit-delete.png
@@ -490,9 +492,6 @@ zp-core/zp-extensions/filter-comments.php
 zp-core/zp-extensions/filter-crop_image.php
 zp-core/zp-extensions/filter-custom_data.php
 zp-core/zp-extensions/filter-file_searches.php
-zp-core/zp-extensions/filter-login/down.png
-zp-core/zp-extensions/filter-login/log.css
-zp-core/zp-extensions/filter-login/view_log_tab.php
 zp-core/zp-extensions/filter-login.php
 zp-core/zp-extensions/filter-new_objects.php
 zp-core/zp-extensions/filter-zenphoto_seo.php

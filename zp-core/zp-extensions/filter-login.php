@@ -18,7 +18,6 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-a
 $option_interface = new admin_login();
 
 if (getOption('logger_log_admin')) zp_register_filter('admin_login_attempt', 'adminLoginLogger');
-zp_register_filter('admin_tabs', 'filter_login_admin_tabs');
 if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'guestLoginLogger');
 
 /**
@@ -147,15 +146,6 @@ function adminLoginLogger($success, $user, $pass) {
 function guestLoginLogger($success, $user, $pass, $athority) {
 	loginLogger($success, $user, $pass, '', getUserIP(), 'frontend', $athority);
 	return $success;
-}
-
-function filter_login_admin_tabs($tabs, $current) {
-	if ((zp_loggedin(ADMIN_RIGHTS))) {
-		$tabs['logs'] = array(	'text'=>gettext("Logs"),
-														'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/filter-login/view_log_tab.php?page=logs',
-														'subtabs'=>NULL);
-	}
-	return $tabs;
 }
 
 ?>

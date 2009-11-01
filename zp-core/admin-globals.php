@@ -107,4 +107,14 @@ if (($_zp_loggedin & ADMIN_RIGHTS)) {
 							'link'=>WEBPATH."/".ZENFOLDER.'/admin-plugins.php',
 							'subtabs'=>NULL);
 }
+
+if (($_zp_loggedin & ADMIN_RIGHTS)) {
+	$filelist = safe_glob(SERVERPATH . "/" . DATA_FOLDER . '/*.txt');
+	if (count($filelist)>0) {
+		$zenphoto_tabs['logs'] = array(	'text'=>gettext("Logs"),
+													'link'=>WEBPATH."/".ZENFOLDER.'/admin-logs.php?page=logs',
+													'subtabs'=>NULL);
+	}
+	unset($filelist);
+}
 ?>
