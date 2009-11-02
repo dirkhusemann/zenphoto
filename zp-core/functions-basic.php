@@ -933,15 +933,15 @@ function getAlbumArray($albumstring, $includepaths=false) {
 }
 
 /**
- * Returns true if the file is a video file
+ * Returns true if the file is a valid 'other' type
  *
  * @param string $filename the name of the target
  * @return bool
  */
-function is_valid_video($filename) {
+function is_valid_other($filename) {
 	global $_zp_extra_filetypes;
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
-	return isset($_zp_extra_filetypes[$ext]) && $_zp_extra_filetypes[$ext] == 'Video';
+	return isset($_zp_extra_filetypes[$ext]);
 }
 
 /**

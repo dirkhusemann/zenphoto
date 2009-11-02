@@ -35,6 +35,7 @@
  * to the registration function for each extension that it handles.
  * 
  * The rest is the object class for handling these files.
+ * 
  * The code of the object instantiation function is mostly required. Plugin "images" follow the lead of videos in that
  * if there is a real image file with the same name save the suffix, it will be considered the thumb image of the object.
  * This image is fetched by the call on checkObjectsThumb(). There is also code in the getThumb() method to deal with 
@@ -49,9 +50,9 @@
  * plugin folder. 
  * 
  * @author Stephen Billard (sbillard)
-  * @package plugins
+ * @package plugins
  * 
- * */
+ */
 
 $plugin_is_filter = 9;
 $plugin_description = ($disable = (ZENPHOTO_RELEASE < 2492))? gettext('class-textobject requires Zenphoto v 1.2.1 or greater.') : gettext('Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file.');
@@ -85,7 +86,7 @@ class TextObject_Options {
 }
 
 class TextObject extends _Image {
-
+	
 	/**
 	 * creates a textobject (image standin)
 	 *

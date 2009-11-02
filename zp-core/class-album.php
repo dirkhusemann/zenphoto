@@ -748,11 +748,11 @@ class Album extends PersistentObject {
 					}
 				}
 			}
-			//jordi-kun - no images, no subalbums, check for videos
+			// no images, no subalbums, check for standins
 			$dp = @opendir($albumdir);
 			if ($dp) {
 				while ($thumb = readdir($dp)) {
-					if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
+					if (is_file($albumdir.$thumb) && is_valid_other($thumb)) {
 						$othersThumb = checkObjectsThumb($albumdir, $thumb);
 						if (!empty($othersThumb)) {
 							$thumb = newImage($this, $othersThumb);

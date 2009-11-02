@@ -1024,32 +1024,37 @@ $alb = removeParentAlbumNames($album);
 						<td><?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
 						</td>
 					</tr>
-								
-					<tr class="imageextrainfo" style="display: none">
-						<td valign="top"><?php echo gettext("EXIF information:"); ?></td>
-						<td>
-						<?php
-							$data = '';
-							$exif = $image->getMetaData();
-							if (false !== $exif) {
-								foreach ($exif as $field => $value) {
-									if (!empty($value)) {
-										$display = $_zp_exifvars[$field][3];
-										if ($display) {
-											$label = $_zp_exifvars[$field][2];
-											$data .= "<tr><td align=\"right\">$label: </td> <td>$value</td></tr>\n";
+					<?php
+					if ($image->get('hasMetadata')) {
+						?>						
+						<tr class="imageextrainfo" style="display: none">
+							<td valign="top"><?php echo gettext("Metadata:"); ?></td>
+							<td>
+							<?php
+								$data = '';
+								$exif = $image->getMetaData();
+								if (false !== $exif) {
+									foreach ($exif as $field => $value) {
+										if (!empty($value)) {
+											$display = $_zp_exifvars[$field][3];
+											if ($display) {
+												$label = $_zp_exifvars[$field][2];
+												$data .= "<tr><td align=\"right\" >$label: </td> <td>$value</td></tr>\n";
+											}
 										}
 									}
 								}
-							}
-							if (empty($data)) {
-								echo gettext('None');
-							} else {
-								echo '<table>'.$data.'</table>';
-							}
-							?>
-						</td>
-					</tr>
+								if (empty($data)) {
+									echo gettext('None selected for display');
+								} else {
+									echo '<table class="metadata_table" >'.$data.'</table>';
+								}
+								?>
+							</td>
+						</tr>
+						<?php
+					}
+					?>
 					<tr>
 						<td colspan="2">
 						<span style="display: block" class="imageextrashow">

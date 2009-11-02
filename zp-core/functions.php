@@ -161,70 +161,30 @@ function is_valid_image($filename) {
 	return in_array($ext, $_zp_supported_images);
 }
 
-//ZenVideo: Video utility functions
-
-/**
- * Check if the image is a video thumb
- *
- * @param string $album folder path for the album
- * @param string $filename name of the target
- * @return bool
- *
- * Note: this function is inefficient and slows down the image file loop a lot.
- * Don't use it in a loop!
- */
-function is_objectsThumb($album, $filename){
-	global $_zp_extra_filetypes;
-	$types = array_keys($_zp_extra_filetypes);
-	$ext = strtolower(substr($fext = strrchr($filename, "."), 1));
-	if (in_array($ext, $types)) {
-		return str_replace($fext, '', $filename);
-	}
-	return false;
-}
-
 /**
  * Search for a thumbnail for the image
  *
  * @param string $album folder path of the album
- * @param string $video name of the target
+ * @param string $image name of the target
  * @return string
  */
-function checkObjectsThumb($album, $video){
-	global $_zp_supported_images;
-	$video = is_objectsThumb($album, $video);
-	if($video) {
-		foreach($_zp_supported_images as $ext) {
-			if(file_exists(internalToFilesystem($album."/".$video.'.'.$ext))) {
-				return $video.'.'.$ext;
-			} else {
-				$ext = strtoupper($ext);
-				if(file_exists(internalToFilesystem($album."/".$video.'.'.$ext))) {
-					return $video.'.'.$ext;
-				}
-			}
+function checkObjectsThumb($album, $image){
+	global $_zp_supported_images;	
+	$image = substr($image, 0, strrpos($image,'.'));
+	$candidates = safe_glob($album.$image.'.*');
+	foreach ($candidates as $file) {
+		$ext = substr($file,strrpos($file,'.')+1);
+		if (in_array(strtolower($ext),$_zp_supported_images)) {
+			return $image.'.'.$ext;
 		}
 	}
-	return NULL;
-}
-
-/**
- * Search for a high quality version of the video
- *
- * @param string $album folder path of the album
- * @param string $video name of the target
- * @return string
- */
-function checkVideoOriginal($album, $video){
-	$video = is_objectsThumb($album, $video);
-	if ($video) {
-		$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
-		foreach($extTab as $ext) {
-			if(file_exists(internalToFilesystem($album."/".$video.$ext))) {
-				return $video.$ext;
-			}
+/* save incase the above becomes a performance issue.
+	foreach($_zp_supported_images as $ext) {
+		if(file_exists(internalToFilesystem($album."/".$image.'.'.$ext))) {
+			return $image.'.'.$ext;
 		}
 	}
+*/
 	return NULL;
 }
 

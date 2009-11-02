@@ -1611,4 +1611,10 @@ button.positive,.log_buttons a.positive {
 	text-align: left;
 }
 
+.metadata_table {
+	table-layout:fixed;
+	width:320px;
+	border:1px solid #BAC9CF;
+	word-wrap:break-word;
+	}
 

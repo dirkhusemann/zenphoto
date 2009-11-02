@@ -144,7 +144,7 @@ class flowplayer3 {
 			$album = $_zp_current_image->getAlbum();
 			$albumfolder = $album->name;
 			$filename = $_zp_current_image->filename;
-			$videoThumb = checkObjectsThumb(getAlbumFolder().$albumfolder, $filename);
+			$videoThumb = $_zp_current_image->objectsThumb;
 			if (!empty($videoThumb)) {
 				$videoThumb = getAlbumFolder(WEBPATH).pathurlencode($albumfolder.'/'.$videoThumb);
 			}

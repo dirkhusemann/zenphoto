@@ -2308,18 +2308,20 @@ function printImageDiv() {
 }
 
 /**
- * Returns the EXIF infromation from the current image
+ * Returns the Metadata infromation from the current image
  *
+ * @param $image optional image object
  * @return array
  */
-function getImageMetaData() {
+function getImageMetaData($image=NULL) {
 	global $_zp_current_image;
-	if (is_null($_zp_current_image)) return false;
-	return $_zp_current_image->getMetaData();
+	if (is_null($image)) $image = $_zp_current_image;
+	if (is_null($image) || !$image->get('hasMetadata')) return false;
+	return $image->getMetaData();
 }
 
 /**
- * Prints the EXIF data of the current image, and make each value editable in place if applicable
+ * Prints the Metadata data of the current image, and make each value editable in place if applicable
  *
  * @param string $title title tag for the class
  * @param bool $toggle set to true to get a javascript toggle on the display of the data
@@ -2340,7 +2342,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 	if (is_null($title))
 		$title = gettext('Image Info');
 	
-	// EXIF values will be editable only with sufficient privileges
+	// Metadata values will be editable only with sufficient privileges
 	$editable = ( $editable && zp_loggedin());
 
 	if ( $messageIfEmpty === true ) {
@@ -2629,19 +2631,21 @@ function getFullImageURL() {
 	if (is_null($_zp_current_image)) return false;
 	$outcome = getOption('protect_full_image');
 	if ($outcome == 'No access') return NULL;
-	$url = getUnprotectedImageURL();
-	if (isImageVideo()) {  // Download, Protected View, and Unprotected access all allowed
+	if (isImageVideo()) {		// Download, Protected View, and Unprotected access all allowed
+		// Search for a high quality version of the video
 		$album = $_zp_current_image->getAlbum();
 		$folder = $album->getFolder();
-		$original = checkVideoOriginal(getAlbumFolder() . $folder, $_zp_current_image->getFileName());
-		if ($original) {
-			return getAlbumFolder(WEBPATH) .  $folder . "/" .$original;
-		} else {
-			return $url;
+		$video = $_zp_current_image->getFileName();
+		$video = substr($video, 0, strrpos($video,'.'));
+		foreach(array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV") as $ext) {
+			if(file_exists(internalToFilesystem(getAlbumFolder().$folder."/".$video.$ext))) {
+				return getAlbumFolder(WEBPATH). $folder."/".$video.$ext;
+			}
 		}
+		return getUnprotectedImageURL();
 	} else if (isImagePhoto()) { // normal image
 		if ($outcome == 'Unprotected') {
-			return $url;
+			return getUnprotectedImageURL();
 		} else {
 			return getProtectedImageURL();
 		}

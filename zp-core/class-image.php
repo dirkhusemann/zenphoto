@@ -57,18 +57,18 @@ function isImageClass($image=NULL) {
  */
 class _Image extends PersistentObject {
 
-	var $filename;      // true filename of the image.
-	var $exists = true; // Does the image exist?
-	var $webpath;       // The full URL path to the original image.
-	var $localpath;     // Latin1 full SERVER path to the original image.
-	var $displayname;   // $filename with the extension stripped off.
-	var $album;         // An album object for the album containing this image.
-	var $comments;      // Image comment array.
-	var $commentcount;  // The number of comments on this image.
-	var $index;         // The index of the current image in the album array.
-	var $sortorder;     // The position that this image should be shown in the album
-	var $filemtime;     // Last modified time of this image
-
+	var $filename;      			// true filename of the image.
+	var $exists = true; 			// Does the image exist?
+	var $webpath;       			// The full URL path to the original image.
+	var $localpath;     			// Latin1 full SERVER path to the original image.
+	var $displayname;   			// $filename with the extension stripped off.
+	var $album;         			// An album object for the album containing this image.
+	var $comments;      			// Image comment array.
+	var $commentcount;  			// The number of comments on this image.
+	var $index;         			// The index of the current image in the album array.
+	var $sortorder;     			// The position that this image should be shown in the album
+	var $filemtime;     			// Last modified time of this image
+	
 	
 	// Plugin handler support
 	var $objectsThumb = NULL; // Thumbnail image for the object
@@ -248,6 +248,7 @@ class _Image extends PersistentObject {
 											'LangID'							=>	'2#135',	//	Language ID												Size:3		
 											'Subfile'							=>	'8#010'		//	Subfile														Size:2
 										);
+		$this->set('hasMetadata',0);
 		$result = array();
 		if (get_class($this)=='_Image') {
 			$localpath = $this->localpath;
@@ -258,6 +259,7 @@ class _Image extends PersistentObject {
 		if (is_array($imageInfo)) {
 			$exifraw = read_exif_data_protected($localpath);
 			if (isset($exifraw['ValidEXIFData'])) {
+				$this->set('hasMetadata',1);
 				foreach($_zp_exifvars as $field => $exifvar) {
 					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
 						$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
@@ -272,6 +274,7 @@ class _Image extends PersistentObject {
 				if (isset($imageInfo["APP13"])) {
 					$iptc = iptcparse($imageInfo["APP13"]);
 					if ($iptc) {
+						$this->set('hasMetadata',1);
 						$characterset = $this->getIPTCTag('1#090', $iptc);
 						if (!$characterset) {
 							$characterset = getOption('IPTC_encoding');

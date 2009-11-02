@@ -151,7 +151,7 @@ class flvplayer {
 			$album = $_zp_current_image->getAlbum();
 			$albumfolder = $album->name;
 			$filename = $_zp_current_image->filename;
-			$videoThumb = checkObjectsThumb(getAlbumFolder().$albumfolder, $filename);
+			$videoThumb = $_zp_current_image->objectsThumb;
 			if (!empty($videoThumb)) {
 				$videoThumb = getAlbumFolder(WEBPATH).$albumfolder.'/'.$videoThumb;
 			}
@@ -301,7 +301,7 @@ function flvPlaylist($option='') {
 					
 				// check if an image/videothumb is available - this shouldn't be hardcoded...
 				$album = $_zp_current_image->getAlbum();
-				$videoThumb = checkObjectsThumb($album->localpath, $_zp_current_image->filename);
+				$videoThumb = $_zp_current_image->objectsThumb;
 				if (!empty($videoThumb)) {
 					$videoThumb = getAlbumFolder(WEBPATH).$album->name.'/'.$videoThumb;
 				}										

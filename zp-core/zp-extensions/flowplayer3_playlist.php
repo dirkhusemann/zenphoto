@@ -128,16 +128,13 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 					$autoplay = "false";
 				}
 				$playlist = $album->getImages();
-				//$videoThumb = checkObjectsThumb(getAlbumFolder().$albumname, $playlist[0]);
 				
 				// slash image fetching 
 				$videoobj = new Video($_zp_current_album,$playlist[0]);
 				$albumfolder = $album->name;
-				$videoThumb = checkObjectsThumb(getAlbumFolder().$albumfolder, $playlist[0]);
+				$videoThumb = $videoobj->objectsThumb;
 				if (!empty($videoThumb) AND getOption('flow_player3_playlistsplashimage')) {
 					$videoThumb = "<img src=\"".WEBPATH.'/'.ZENFOLDER."/i.php?i=".$videoThumb."&amp;a=".$_zp_current_album->name."&amp;w=".getOption('flow_player3_playlistwidth')."&amp;h=".getOption('flow_player3_playlistheight')."&amp;cw=".getOption('flow_player3_playlistwidth')."&amp;ch=".getOption('flow_player3_playlistheight')."\" />";
-				} else {
-					$videoThumb = "";
 				}
 			if($album->getNumImages() != 0) {
 			echo '<div class="flowplayer3_playlistwrapper">

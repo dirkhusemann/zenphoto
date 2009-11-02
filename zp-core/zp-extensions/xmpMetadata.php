@@ -272,6 +272,7 @@ function xmpMetadata_new_image($image) {
 	}
 	if (!empty($source)) {
 		$metadata = xmpMetadata_extract($source);
+		$image->set('hasMetadata',count($metadata>0));
 		foreach ($metadata as $field=>$element) {
 			$v = xmpMetadata_to_string($element); 
 			switch ($field) {

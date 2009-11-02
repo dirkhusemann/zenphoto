@@ -68,7 +68,7 @@ echo "\n</head>";
 				$log = substr(basename($logfile), 0, -4);
 				$logfiletext = str_replace('_', ' ',$log);
 				$logfiletext = strtoupper(substr($logfiletext, 0, 1)).substr($logfiletext, 1);
-				$subtabs = array_merge($subtabs, array($logfiletext => PLUGIN_FOLDER.'/filter-login/view_log_tab.php?page=logs&amp;tab='.$log));
+				$subtabs = array_merge($subtabs, array($logfiletext => 'admin-logs.php?page=logs&amp;tab='.$log));
 				if (filesize($logfile) > 0 && empty($default)) $default = $log;
 			}
 			$zenphoto_tabs['logs']['subtabs'] = $subtabs;
