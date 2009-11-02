@@ -197,6 +197,11 @@ function checkObjectsThumb($album, $video){
 		foreach($_zp_supported_images as $ext) {
 			if(file_exists(internalToFilesystem($album."/".$video.'.'.$ext))) {
 				return $video.'.'.$ext;
+			} else {
+				$ext = strtoupper($ext);
+				if(file_exists(internalToFilesystem($album."/".$video.'.'.$ext))) {
+					return $video.'.'.$ext;
+				}
 			}
 		}
 	}

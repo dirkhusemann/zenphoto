@@ -8,17 +8,18 @@
  * 
  */
 require_once(dirname(__FILE__).'/functions.php');
+define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
+$chmod = CHMOD_VALUE;
+$f = fopen(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . '/setup_log.txt', 'a');
 if (!isset($_POST['folder'])) exit();
 $folder = sanitize($_POST['folder'],3);
 if (substr($folder,-1,1) == '/') $folder = substr($folder,0,-1);
-if (isset($_POST['strict'])) {
-	$chmod = 0755;
+if ($_POST['key']==md5(filemtime(CONFIGFILE).file_get_contents(CONFIGFILE))) {
+	if (!folderPermissions($folder)) {
+		fwrite($f, sprintf(gettext('Notice: failed setting permissions for %s.'), basename($folder)) . "\n");
+	}
 } else {
-	$chmod = 0777;
-}
-$f = fopen(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . '/setup_log.txt', 'a');
-if (!folderPermissions($folder)) {
-	fwrite($f, sprintf(gettext('Notice: failed setting permissions for %s.'), basename($folder)) . "\n");
+	fwrite($f, sprintf(gettext('Notice: illegal call for permissions setting for %s.'), basename($folder)) . "\n");
 }
 fclose($f);
 

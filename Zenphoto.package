@@ -1,4 +1,3 @@
-.htaccess
 index.php
 lighttpd_rules.conf
 rss-comments.php
@@ -253,6 +252,7 @@ zp-core/gd_fonts/automatic.gdf
 zp-core/gd_fonts/azimov.gdf
 zp-core/gd_fonts/bubblebath.gdf
 zp-core/gd_fonts/cry.gdf
+zp-core/htaccess
 zp-core/i.php
 zp-core/images/accept.png
 zp-core/images/action.png

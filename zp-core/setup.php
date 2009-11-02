@@ -106,6 +106,9 @@ if (!file_exists(CONFIGFILE)) {
 	} else {
 		$newconfig = true;
 		@copy('zp-config.php.source', CONFIGFILE);
+		if (!file_exists(dirname(dirname(__FILE__)).'/.htaccess')) {
+			copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
+		}
 	}
 } else {
 	$newconfig = false;
@@ -572,7 +575,7 @@ if (!$setup_checked) {
 	}
 	
 	function folderCheck($which, $path, $class, $relaxation=true) {
-		global $const_webpath, $serverpath, $chmod;
+		global $const_webpath, $serverpath, $chmod, $_zp_loggedin;
 		$path = str_replace('\\', '/', $path);
 		if (!is_dir($path) && $class == 'std') {
 			mkdir_recursive($path, $chmod);
@@ -590,7 +593,7 @@ if (!$setup_checked) {
 				} else {
 					$f = '';
 				}
-				if (($chmod==0755) || $relaxation) {
+				if (($_zp_loggedin&ADMIN_RIGHTS) && (($chmod==0755) || $relaxation)) {
 					@chmod($path,$chmod);
 					if (($perms = fileperms($path)&0777)!=$chmod) {
 						if (($perms&0755)==0755) {
@@ -601,13 +604,15 @@ if (!$setup_checked) {
 						return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 
 					} else {
-						?> <script type="text/javascript">
-						$.ajax({   
-							type: 'POST',   
-							url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
-							data: '<?php if ($chmod==0755) echo "strict=1&"; ?>folder=<?php echo $path; ?>'
-						});
-					</script> <?php
+						?>
+						<script type="text/javascript">
+							$.ajax({   
+								type: 'POST',   
+								url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
+								data: 'folder=<?php echo $path; ?>&key=<?php echo md5(filemtime(CONFIGFILE).file_get_contents(CONFIGFILE)); ?>'
+							});
+						</script>
+						<?php
 					}
 				}
 				break;
@@ -1123,20 +1128,20 @@ if ($debug) {
 	foreach ($installed_files as $key=>$value) {
 		$component = $base.$value;
 		$folder = dirname($value);
-		if (!empty($folder) && $folder!='.' && $folder!='/') {
+		if (($_zp_loggedin&ADMIN_RIGHTS) && !empty($folder) && $folder!='.' && $folder!='/') {
 			if (file_exists($folder)) {
 				$folders[$folder] = $base.$folder;
 			}
 		}
 		if (file_exists($component)) {
 			@chmod($component,0666&$chmod);
-			if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
+			if (($_zp_loggedin&ADMIN_RIGHTS) && $permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
 				if (($perms&0644) != 0644) { // could not set them, but they will work.
 					$permissions = 0;
 				} else {
 					$permissions = -1;
 				}
-			}	
+			}
 			$t = filemtime($component);
 			if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
 				unset($installed_files[$key]);
@@ -1179,7 +1184,7 @@ if ($debug) {
 	}
 	
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
-	checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
+	if ($_zp_loggedin&ADMIN_RIGHTS) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	
 	$msg = gettext("<em>.htaccess</em> file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
@@ -1392,7 +1397,7 @@ if (file_exists(CONFIGFILE)) {
 		}
 
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
-			if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
+			if (!($_zp_loggedin&ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
 				if (!empty($mod)) $mod = '?'.substr($mod, 1);
 				if ($_zp_loggedin) { echo "<br /><br />".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
 				printLoginForm("/" . ZENFOLDER . "/setup.php$mod", false);
