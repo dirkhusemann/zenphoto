@@ -435,17 +435,30 @@ function zp_graphicsLibInfo() {
  * @return array
  */
 function zp_getFonts() {
-	$fonts = array();
-	$curdir = getcwd();
-	chdir(SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/');
-	$filelist = safe_glob('*.gdf');
-	foreach($filelist as $file) {
-		$file = filesystemToInternal(str_replace('.gdf', '', $file));
-		$fonts[$file] = $file;
+	global $_gd_fontlist;
+	if (!is_array($_gd_fontlist)) {
+		$_gd_fontlist = array();
+		$curdir = getcwd();
+		$basefile = SERVERPATH.'/'.USER_PLUGIN_FOLDER.'/gd_fonts/';
+		if (is_dir($basefile)) {
+			chdir($basefile);
+			$filelist = safe_glob('*.gdf');
+			foreach($filelist as $file) {
+				$key = filesystemToInternal(str_replace('.gdf', '', $file));
+				$_gd_fontlist[$key] = $key;
+			}
+		}
+		chdir($basefile = SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/');
+		$filelist = safe_glob('*.gdf');
+		foreach($filelist as $file) {
+			$key = filesystemToInternal(str_replace('.gdf', '', $file));
+			$_gd_fontlist[$key] = $key;
+		}
+		chdir($curdir);
 	}
-	chdir($curdir);
-	return $fonts;
+	return $_gd_fontlist;
 }
+
 /**
  * Loads a font and returns its font id
  *
@@ -453,8 +466,13 @@ function zp_getFonts() {
  * @return int
  */
 function zp_imageloadfont($font) {
-	$path = SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/'.$font.'.gdf';
-	return imageloadfont($path);
+	if (file_exists($file = SERVERPATH.'/'.USER_PLUGIN_FOLDER.'/gd_fonts/'.$font.'.gdf')) {
+		return imageloadfont($file);
+	}
+	if (file_exists($file = SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/'.$font.'.gdf')) {
+		return imageloadfont($file);
+	}
+	return false;
 }
 
 /**
