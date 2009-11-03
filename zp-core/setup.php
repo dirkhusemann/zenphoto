@@ -1851,7 +1851,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`, `theme`)";
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' DROP COLUMN `EXIFValid`';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `hasMetadata` int(1) default 0';
-	$sql_statements[] = "UPDATE " . prefix('images') . " SET `mtime`=0;
+	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `mtime`=0'; // force metadata refresh
 	
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {
