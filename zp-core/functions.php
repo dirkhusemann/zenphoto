@@ -624,27 +624,34 @@ function printLargeFileContents($dest) {
  * Returns a consolidated list of plugins
  * The array structure is key=plugin name, value=plugin path
  *
- * @param string $ext file extension to match on
+ * @param string $ext file extension strip off. (will be the pattern to match of $pattern is NULL)
  * @param string $folder subfolder within the plugin folders to search
+ * @param string $pattern File system wildcard matching pattern to limit the search
  * @return array
  */
-function getPluginFiles($ext, $folder='') {
+function getPluginFiles($ext, $folder='', $pattern=NULL) {
 	if (!empty($folder) && substr($folder, -1) != '/') $folder .= '/';
+	if (is_null($pattern)) $pattern = '*.'.$ext;
 	$list = array();
-	$l = strlen($ext)+1;
+	if (empty($ext)) {
+		$l = 9999999;
+	} else { // set up to strip extension off the key
+		$l = -strlen($ext)-1;
+	}
+	
 	$curdir = getcwd();
 	$basepath = SERVERPATH."/".USER_PLUGIN_FOLDER.'/'.$folder;
 	if (is_dir($basepath)) {
 		chdir($basepath);
-		$filelist = safe_glob('*.'.$ext);
+		$filelist = safe_glob($pattern);
 		foreach ($filelist as $file) {
-			$list[filesystemToInternal(substr(basename($file),0,-$l))] = $basepath.$file;
+			$list[filesystemToInternal(substr(basename($file),0,$l))] = $basepath.$file;
 		}
 	}
 	chdir($basepath = SERVERPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$folder);
-	$filelist = safe_glob('*.'.$ext);
+	$filelist = safe_glob($pattern);
 	foreach ($filelist as $file) {
-		$list[filesystemToInternal(substr(basename($file),0,-$l))] = $basepath.$file;
+		$list[filesystemToInternal(substr(basename($file),0,$l))] = $basepath.$file;
 	}
 	chdir($curdir);
 	return $list;
