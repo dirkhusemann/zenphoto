@@ -14,9 +14,9 @@
  */
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
 $plugin_is_filter = -5;
-$plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
+$plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rated by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
 
 require_once(dirname(dirname(__FILE__)).'/functions.php');

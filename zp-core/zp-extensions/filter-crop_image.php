@@ -8,9 +8,9 @@
  */
 
 $plugin_is_filter = 5;
-$plugin_description = gettext("An image crop tool for the admin toolbox on your theme pages.");
+$plugin_description = gettext("An image crop tool. Places an image crop button in the image utilities box of the images tab.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---crop_image.php.html";
 
 if (!isset($_REQUEST['performcrop'])) {

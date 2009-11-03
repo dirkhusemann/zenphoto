@@ -26,7 +26,7 @@ if ($external) {
 }
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
 // load the script needed
-$_playerlist = getPluginFiles('swf','flvplayer');
+$_playerlist = getPluginFiles('*.swf','flvplayer');
 if (count($_playerlist) > 0) {
 	$_playerlist = array_keys($_playerlist);
 	$_flv_player = array_shift($_playerlist).'.swf';

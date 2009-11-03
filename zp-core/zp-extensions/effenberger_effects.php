@@ -66,7 +66,7 @@ class image_effenberger {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		$effectlist = getPluginFiles('js','effenberger_effects');
+		$effectlist = getPluginFiles('*.js','effenberger_effects');
 		$extra = $list = array();
 		foreach($effectlist as $file=>$path) {
 			$list[$file] = $file;

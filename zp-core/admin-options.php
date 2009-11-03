@@ -656,7 +656,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td>
 						<select id="captcha" name="captcha">
 						<?php
-						$captchas = getPluginFiles('php','captcha');
+						$captchas = getPluginFiles('*.php','captcha');
 						generateListFromArray(array(getOption('captcha')), array_keys($captchas),false,false);
 						?>
 						</select>
@@ -1656,7 +1656,7 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			<td><select id="spam_filter" name="spam_filter">
 				<?php
 			$currentValue = getOption('spam_filter');
-			$filters = getPluginFiles('php','spamfilters');
+			$filters = getPluginFiles('*.php','spamfilters');
 			generateListFromArray(array($currentValue), array_keys($filters),false,false);
 			?>
 			</select></td>

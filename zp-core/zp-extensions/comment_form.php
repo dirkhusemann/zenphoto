@@ -16,7 +16,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides a unified comment handling facility.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---comment_form.php.html";
 $option_interface = new comment_form();
 

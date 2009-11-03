@@ -27,7 +27,7 @@ $_GET['page'] = 'plugins';
 $saved = false;
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'saveplugins') {
-		$filelist = getPluginFiles('php');
+		$filelist = getPluginFiles('*.php');
 		foreach ($filelist as $extension=>$path) {
 			$extension = filesystemToInternal($extension);
 			$opt = 'zp_plugin_'.$extension;
@@ -59,7 +59,7 @@ if ($saved) {
 	echo '</div>';
 }
 
-$paths = getPluginFiles('php');
+$paths = getPluginFiles('*.php');
 $filelist = array_keys($paths);
 natcasesort($filelist);
 

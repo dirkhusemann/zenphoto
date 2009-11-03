@@ -12,7 +12,7 @@
 
 $plugin_description = gettext("Support for providing Google Maps based on EXIF latitude and longitude in the images.");
 $plugin_author = 'Dustin Brewer (mankind), Stephen Billard (sbillard), Eric Bayard (babar)';
-$plugin_version = '1.2.6';
+$plugin_version = '1.2.7';
 $plugin_URL = "";
 $option_interface = new google_mapsOptions();
 
