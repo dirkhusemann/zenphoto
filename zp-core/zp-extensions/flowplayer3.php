@@ -23,7 +23,7 @@ if ($external) {
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
 	// register the scripts needed
 	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.1.4.min.js"></script>
-	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist.3.0.7.min.js"></script>');
+	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist-3.0.7.min.js"></script>');
 }
 
 

@@ -19,7 +19,7 @@
  * @package plugins
  */
 
-$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
+$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer3 if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
 $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slideshow.php.html";
@@ -472,19 +472,13 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			if ($heading) {
 				echo "<span class='slideimage'><h4><strong>".$albumtitle."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
 			}
-			echo "<span id='slideshow'></span>";
+			echo "<span id='slideshow' style='display: block; margin: 0 auto; width:".getOption('slideshow_flow_player_width')."px; height: ".getOption('slideshow_flow_player_height')."px'></span>";
 			?> 
 			<script type="text/javascript">
-			$("#slideshow").flashembed({
-			      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flowplayer/FlowPlayerLight.swf',
-			      width:<?php echo getOption("slideshow_flow_player_width"); ?>,
-			      height:<?php echo getOption("slideshow_flow_player_height"); ?>
-			    },
-			    {config: {
-			      autoPlay: true,
-			      useNativeFullScreen: true,
-			      playList: [
-											<?php
+			flowplayer('slideshow','<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer-3.1.5.swf', {
+			
+	 	 playlist: [
+	 	<?php 
 											echo "\n";
 											$count = 0;
 											foreach($images as $animage) {
@@ -508,27 +502,25 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 														$duration = ", duration: ".getOption("slideshow_speed")/10;
 													}
 													if($count > 0) { echo ",\n"; }
-													echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."'".$duration." }";
+													echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."'".$duration.", scaling: 'fit', autoBuffering: true }";
 													$count++;
 												}
 											}
-											echo "\n";
+											echo "\n"; 
 											?>
-									    ],
-			      showPlayListButtons: true,
-			      showStopButton: true,
-			      controlBarBackgroundColor: 0,
-			     	showPlayListButtons: true,
-			     	controlsOverVideo: 'ease',
-			     	controlBarBackgroundColor: '<?php echo getOption('flow_player_controlbarbackgroundcolor'); ?>',
-			      controlsAreaBorderColor: '<?php echo getOption('flow_player_controlsareabordercolor'); ?>'
-			    }}
-		  );
-			</script> 
+	 	],
+    plugins:  { 
+        controls: { 
+            playlist: true, 
+            autoHide: 'always'
+        }  
+    }     
+										});	
+		</script> 
 			<?php
 			echo "</span>";
 			echo "<p>";
-			printf (gettext("Click on %s on the right in the player control bar to view full size."), "<img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER.'/'.PLUGIN_FOLDER."/slideshow/flowplayerfullsizeicon.png' />");
+			echo gettext("Click on the right in the player control bar to view full size.");
 			echo "</p>";
 			break;
 	}
@@ -548,13 +540,13 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
  */
 function printSlideShowJS() {
 	?>
-<script
-	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER ?>/slideshow/jquery.cycle.all.js"
-	type="text/javascript"></script>
-<script
-	type="text/javascript"
-	src="<?php echo WEBPATH . "/" . ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flowplayer/flashembed-0.34.pack.js"></script>
-	<?php
+<script	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER ?>/slideshow/jquery.cycle.all.js" type="text/javascript"></script>
+<?php 
+if(!getOption('zp_plugin_flowplayer3')) {;?>
+<script type="text/javascript" src="<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3/flowplayer-3.1.4.min.js"></script>
+<?php } ?>
+<script type="text/javascript" src="<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer.playlist-3.0.7.min.js"></script>
+	<?php 
 }
 
 ?>
