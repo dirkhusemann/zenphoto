@@ -24,7 +24,6 @@ $gallery = new Gallery();
 $_GET['page'] = 'plugins';
 
 /* handle posts */
-$saved = false;
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'saveplugins') {
 		$filelist = getPluginFiles('*.php');
@@ -40,9 +39,11 @@ if (isset($_GET['action'])) {
 				setOption($opt, $value);
 			}
 		}
-		$saved = true;
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php?saved");
+		exit();
 	}
 }
+$saved = isset($_GET['saved']);
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";

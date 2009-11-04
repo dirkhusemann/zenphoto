@@ -147,7 +147,6 @@ code {
 	_padding: 0 0 0 30px;
 	margin: 0 0 0 30px;
 	height: 30px;
-	width: 85em; /* changed from 95% to prevent linebreaks of the tabs if using languages with longer text on smaller screens */
 }
 
 .nav li {
@@ -236,7 +235,6 @@ code {
 	_padding: 0 0 0 30px;
 	margin: 0 0 0 30px;
 	height: 30px;
-	width: 80em; /* changed from 95% to prevent linebreaks of the tabs if using languages with longer text on smaller screens */	width: 80em;
 }
 
 .subnav li {

@@ -293,8 +293,13 @@ function printLogoAndLinks() {
 function printTabs($currenttab) {
 	global $_zp_loggedin, $subtabs, $zenphoto_tabs;
 	$zenphoto_tabs = zp_apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
+	$space = 0;
+	foreach ($zenphoto_tabs as $atab) {
+		$space = $space + strlen($atab['text'])*0.65; // per character
+	}
+	$space = round($space+count($zenphoto_tabs)*2.2); // 8px margin, 2*12px padding
 	?>
-	<ul class="nav" id="jsddm">
+	<ul class="nav" id="jsddm" style="width: <?php echo $space; ?>em">
 	<?php
 	foreach ($zenphoto_tabs as $key=>$atab) {
 		?>
@@ -360,8 +365,13 @@ function printSubtabs($tab, $default=NULL) {
 
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
+	$space = 0;
+	foreach ($tabs as $key=>$link) {
+		$space = $space + strlen($key)*0.65; // px per character
+	}
+	$space = round($space+count($tabs)*2.2); // 8px margin, 2*12px padding
 	?>
-	<ul class="subnav">
+	<ul class="subnav" style="width: <?php echo $space; ?>em">
 	<?php
 	foreach ($tabs as $key=>$link) {
 		$i = strrpos($link, 'tab=');

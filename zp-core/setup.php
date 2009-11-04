@@ -574,7 +574,7 @@ if (!$setup_checked) {
 		return $check;
 	}
 	
-	function folderCheck($which, $path, $class, $relaxation=true) {
+	function folderCheck($which, $path, $class, $relaxation=true, $subfolders=NULL) {
 		global $const_webpath, $serverpath, $chmod, $_zp_loggedin;
 		$path = str_replace('\\', '/', $path);
 		if (!is_dir($path) && $class == 'std') {
@@ -592,6 +592,17 @@ if (!$setup_checked) {
 					$f = " (<em>$append</em>)";
 				} else {
 					$f = '';
+				}
+				if (!is_null($subfolders)) {
+					$subfolderfailed = '';
+					foreach ($subfolders as $subfolder) {
+						if (!mkdir_recursive($path.$subfolder, $chmod)) {
+							$subfolderfailed .= ', <code>'.$subfolder.'</code>';
+						}
+					}
+					if (!empty($subfolderfailed)) {
+						return checkMark(-1, '', sprintf(gettext('<em>%1$s</em> folder%2$s [subfolder creation failure]'),$which, $f), sprintf(gettext('Setup could not create the followin subfolders:<br />%s'),substr($subfolderfailed,2)));
+					}
 				}
 				if (($_zp_loggedin&ADMIN_RIGHTS) && (($chmod==0755) || $relaxation)) {
 					@chmod($path,$chmod);
@@ -1127,24 +1138,25 @@ if ($debug) {
 	$folders = array();
 	foreach ($installed_files as $key=>$value) {
 		$component = $base.$value;
-		$folder = dirname($value);
-		if (($_zp_loggedin&ADMIN_RIGHTS) && !empty($folder) && $folder!='.' && $folder!='/') {
-			if (file_exists($folder)) {
-				$folders[$folder] = $base.$folder;
-			}
-		}
 		if (file_exists($component)) {
-			@chmod($component,0666&$chmod);
-			if (($_zp_loggedin&ADMIN_RIGHTS) && $permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
-				if (($perms&0644) != 0644) { // could not set them, but they will work.
-					$permissions = 0;
+			if (($_zp_loggedin&ADMIN_RIGHTS)) {
+				if (is_dir($component)) {
+					$folders[$component] = $component;
+					unset($installed_files[$key]);
 				} else {
-					$permissions = -1;
+					@chmod($component,0666&$chmod);
+					if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
+						if (($perms&0644) != 0644) { // could not set them, but they will work.
+							$permissions = 0;
+						} else {
+							$permissions = -1;
+						}
+					}
+					$t = filemtime($component);
+					if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
+						unset($installed_files[$key]);
+					}
 				}
-			}
-			$t = filemtime($component);
-			if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
-				unset($installed_files[$key]);
 			}
 		}
 	}
@@ -1162,7 +1174,28 @@ if ($debug) {
 			}
 		}
 	}
-
+	$plugin_subfolders = array();
+	$Cache_html_subfolders = array();
+	foreach ($installed_files as $key=>$component) {
+		$folders = explode('/',$component);
+		$folder = array_shift($folders);
+		switch ($folder) {
+			case 'albums':
+			case 'cache':
+			case 'zp-data':
+			case 'uploaded':
+				unset($installed_files[$key]);
+				break;
+			case 'plugins':
+				$plugin_subfolders[] = implode('/',$folders);
+				unset($installed_files[$key]); // this will be taken care of later
+				break;
+			case 'locale':
+				$Cache_html_subfolders[] = implode('/',$folders);
+				unset($installed_files[$key]);
+				break;
+		}
+	}
 	$filelist = implode("<br />", $installed_files);
 	if (count($installed_files) > 0) {
 		if (!defined("RELEASE")) {
@@ -1326,14 +1359,11 @@ if ($debug) {
 	}
 
 	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", 'std') && $good;
-
 	$good = checkmark(file_exists($en_US), gettext('<em>locale</em> folders'), gettext('<em>locale</em> folders [Are not complete]'), gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
-
 	$good = folderCheck(gettext('uploaded'), dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
-	$good = folderCheck(gettext('RSS cache'), dirname(dirname(__FILE__)) . '/cache_html/rss/', 'std') && $good;
-	$good = folderCheck(gettext('Third party plugins'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std', false) && $good;
-	$good = folderCheck(gettext('watermarks'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/watermarks/', 'std') && $good;
+	$good = folderCheck(gettext('HTML cache'), dirname(dirname(__FILE__)) . '/cache_html/', 'std', true, $Cache_html_subfolders) && $good;
+	$good = folderCheck(gettext('Third party plugins'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std', false, $plugin_subfolders) && $good;
 	
 	?>
 	</ul>

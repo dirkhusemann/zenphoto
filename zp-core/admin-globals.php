@@ -111,7 +111,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS)) {
 if (($_zp_loggedin & ADMIN_RIGHTS)) {
 	$filelist = safe_glob(SERVERPATH . "/" . DATA_FOLDER . '/*.txt');
 	if (count($filelist)>0) {
-		$zenphoto_tabs['logs'] = array(	'text'=>gettext("Logs"),
+		$zenphoto_tabs['logs'] = array(	'text'=>gettext("logs"),
 													'link'=>WEBPATH."/".ZENFOLDER.'/admin-logs.php?page=logs',
 													'subtabs'=>NULL);
 	}
