@@ -150,7 +150,7 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 	}
 }
 
-if (isset($_REQUEST['chmod_permissions'])) {
+if ($updatechmod = isset($_REQUEST['chmod_permissions'])) {
 	switch ($_REQUEST['chmod_permissions']) {
 		case 2:
 			$chmod = 0755;
@@ -162,6 +162,8 @@ if (isset($_REQUEST['chmod_permissions'])) {
 			$chmod = 0777;
 			break;
 	}
+}
+if ($updatechmod || $newconfig) {
 	$i = strpos($zp_cfg, "define('CHMOD_VALUE',");
 	if ($i === false) {
 		$i = strpos($zp_cfg, "define('SERVERPATH',");
