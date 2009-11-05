@@ -264,41 +264,33 @@ function setDefault($option, $default) {
 	if (getOption('zp_plugin_rating') == 1) setOption('zp_plugin_rating', 5);
 
 	// default groups
-	$result = array();
-	$_zp_admin_users = NULL; // be sure we get a fresh, updated copy!
-	$admins = getAdministrators();
-	foreach ($admins as $admin) {
-		if ($admin['valid']==0) {
-			$result[] = $admin;
-		}
-	}
-	if (empty($result)) {
-		$list = array('administrators','viewers','user'=>'bozos','album managers', 'default','newuser');
-	} else {
-		$list = array();
-		foreach ($result as $group) {
-			$list[] = $group['user'];
-		}
-	}
-	if (in_array('administrators',$list)) {
+	define('administrators',1);
+	define('viewers',2);
+	define('bozos',4);
+	define('album_managers',8);
+	define('default_user',16);
+	define('newuser',32);
+	$groupsdefined = getOption('defined_groups');
+	if (!$groupsdefined&administrators) {
 		saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
 	}
-	if (in_array('viewers',$list)) {
+	if (!$groupsdefined&viewers) {
 		saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
 	}
-	if (in_array('bozos',$list)) {
+	if (!$groupsdefined&bozos) {
 		saveAdmin('bozos', NULL, 'group', NULL, 0, array(), gettext('Banned users'),NULL, 0);
 	}
-	if (in_array('album managers',$list)) {
+	if (!$groupsdefined&album_managers) {
 		saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS
 										| COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
 	}
-	if (in_array('default',$list)) {
+	if (!$groupsdefined&default_user) {
 		saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
 	}
-	if (in_array('newuser',$list)) {
+	if (!$groupsdefined&newuser) {
 		saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
 	}
+	setOption('defined_groups',administrators|viewers|bozos|album_managers|default_user|newuser); // record that these have been set once (and never again)
 	
 	if (getOption('Allow_comments') || getOption('zenpage_comments_allowed')) {
 		setOptionDefault('zp_plugin_comment_form', 5);

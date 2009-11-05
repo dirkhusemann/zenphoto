@@ -291,15 +291,15 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs($currenttab) {
-	global $_zp_loggedin, $subtabs, $zenphoto_tabs;
+	global $_zp_loggedin, $subtabs, $zenphoto_tabs, $main_tab_space;
 	$zenphoto_tabs = zp_apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
-	$space = 0;
+	$chars = 0;
 	foreach ($zenphoto_tabs as $atab) {
-		$space = $space + strlen($atab['text'])*0.65; // per character
+		$chars = $chars + strlen($atab['text']);
 	}
-	$space = round($space+count($zenphoto_tabs)*2.2); // 8px margin, 2*12px padding
+	$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*7.9))/13);
 	?>
-	<ul class="nav" id="jsddm" style="width: <?php echo $space; ?>em">
+	<ul class="nav" id="jsddm" style="width: <?php echo $main_tab_space; ?>em">
 	<?php
 	foreach ($zenphoto_tabs as $key=>$atab) {
 		?>
@@ -360,18 +360,13 @@ function getSubtabs($tab, $default) {
 }
 
 function printSubtabs($tab, $default=NULL) {
-	global $zenphoto_tabs;
+	global $zenphoto_tabs, $main_tab_space;
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
 
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
-	$space = 0;
-	foreach ($tabs as $key=>$link) {
-		$space = $space + strlen($key)*0.65; // px per character
-	}
-	$space = round($space+count($tabs)*2.2); // 8px margin, 2*12px padding
 	?>
-	<ul class="subnav" style="width: <?php echo $space; ?>em">
+	<ul class="subnav" style="width: <?php echo ($main_tab_space-5); ?>em">
 	<?php
 	foreach ($tabs as $key=>$link) {
 		$i = strrpos($link, 'tab=');
