@@ -56,38 +56,55 @@ class contactformOptions {
 		$list = array(gettext("required") => "required",gettext("show") => "show",gettext("omitted") => "omitted");
 		$mailfieldinstruction = gettext("Set if the <code>%s</code> field should be required, just shown or omitted");
 		return array(	gettext('Intro text') => array('key' => 'contactform_introtext', 'type' => OPTION_TYPE_TEXTAREA,
+										'order' => 13,
 										'desc' => gettext("The intro text for your contact form")),
 									gettext('Confirm text') => array('key' => 'contactform_confirmtext', 'type' => OPTION_TYPE_TEXTAREA,
+										'order' => 14,
 										'desc' => gettext("The text that asks the vistior to confirm that he really wants to send the message.")),
 									gettext('Thanks text') => array('key' => 'contactform_thankstext', 'type' => OPTION_TYPE_TEXTAREA,
+										'order' => 15,
 										'desc' => gettext("The text that is shown after a message has been confirmed and sent.")),
 									gettext('New message link text') => array('key' => 'contactform_newmessagelink', 'type' => OPTION_TYPE_TEXTAREA,
+										'order' => 16,
 										'desc' => gettext("The text for the link after the thanks text to return to the contact page to send another message.")),
 									gettext('Mail address') => array('key' => 'contactform_mailaddress', 'type' => OPTION_TYPE_TEXTBOX,
+										'order' => 17,
 										'desc' => gettext("The e-mail address the messages should be sent to. Enter more than one address separated by comma without any spaces.")),
-									gettext('01. Title field') => array('key' => 'contactform_title', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Title field') => array('key' => 'contactform_title', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 1,
 										'desc' => sprintf($mailfieldinstruction,gettext("Title field."))),
-									gettext('02. Name field') => array('key' => 'contactform_name', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Name field') => array('key' => 'contactform_name', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 2,
 										'desc' => sprintf($mailfieldinstruction,gettext("Name field."))),
-									gettext('03. Company field') => array('key' => 'contactform_company', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Company field') => array('key' => 'contactform_company', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 3,
 										'desc' => sprintf($mailfieldinstruction,gettext("Company field."))),
-									gettext('04. Street field') => array('key' => 'contactform_street', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Street field') => array('key' => 'contactform_street', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 4,
 										'desc' => sprintf($mailfieldinstruction,gettext("Street field."))),
-									gettext('05. City field') => array('key' => 'contactform_city', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('City field') => array('key' => 'contactform_city', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 5,
 										'desc' => sprintf($mailfieldinstruction,gettext("City field."))),
-									gettext('06. Country field') => array('key' => 'contactform_country', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Country field') => array('key' => 'contactform_country', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 6,
 										'desc' => sprintf($mailfieldinstruction,gettext("Country field."))),
-									gettext('07. E-mail field') => array('key' => 'contactform_email', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('E-mail field') => array('key' => 'contactform_email', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 7,
 										'desc' => sprintf($mailfieldinstruction,gettext("E-mail field."))),
-									gettext('08. Website field') => array('key' => 'contactform_website', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Website field') => array('key' => 'contactform_website', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 8,
 										'desc' => sprintf($mailfieldinstruction,gettext("Website field."))),
-									gettext('09. Captcha field') => array('key' => 'contactform_captcha', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Captcha field') => array('key' => 'contactform_captcha', 'type' => OPTION_TYPE_CHECKBOX,
+										'order' => 9,
 										'desc' => gettext("If Captcha should be required.")),
-									gettext('10. Phone field') => array('key' => 'contactform_phone', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Phone field') => array('key' => 'contactform_phone', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 10,
 										'desc' => sprintf($mailfieldinstruction,gettext("Phone number field."))),
-									gettext('11. Subject field') => array('key' => 'contactform_subject', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Subject field') => array('key' => 'contactform_subject', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 11,
 										'desc' => sprintf($mailfieldinstruction,gettext("Subject field."))),
-									gettext('12. Message field') => array('key' => 'contactform_message', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+									gettext('Message field') => array('key' => 'contactform_message', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
+										'order' => 12,
 										'desc' => sprintf($mailfieldinstruction,gettext("Message field.")))
 		);
 	}
@@ -137,7 +154,7 @@ function printContactForm() {
 		if (getOption('contactform_street') == "required" && empty($mailcontent['street'])) { $error[4] = gettext("a <strong>street</strong>"); }
 		if (getOption('contactform_city') == "required" && empty($mailcontent['city'])) { $error[5] = gettext("a <strong>city</strong>"); }
 		if (getOption('contactform_country') == "required" && empty($mailcontent['country'])) { $error[6] = gettext("a <strong>country</strong>"); }
-		if (getOption('contactform_email') == "required" && empty($mailcontent['email']) || !is_valid_email_zp($mailcontent['email'])) { $error[7] = gettext("a <strong>valid email adress</strong>"); }
+		if (getOption('contactform_email') == "required" && (empty($mailcontent['email']) || !is_valid_email_zp($mailcontent['email']))) { $error[7] = gettext("a <strong>valid email adress</strong>"); }
 		if (getOption('contactform_website') == "required" && empty($mailcontent['website'])) {
 			$error[8] = gettext('a <strong>website</strong>');
 		} else {
