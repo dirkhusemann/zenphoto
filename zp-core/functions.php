@@ -30,7 +30,7 @@ require_once(dirname(__FILE__).'/functions-filter.php');
 
 $_zp_captcha = getOption('captcha');
 if (empty($_zp_captcha)) 	$_zp_captcha = 'zenphoto';
-require_once(getPlugin('/captcha/'.$_zp_captcha.'.php'));
+require_once(getPlugin('captcha/'.$_zp_captcha.'.php'));
 $_zp_captcha = new Captcha();
 
 //setup session before checking for logon cookie
