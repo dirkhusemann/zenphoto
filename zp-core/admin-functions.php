@@ -305,23 +305,6 @@ function printTabs($currenttab) {
 		?>
 		<li <?php if($currenttab == $key) echo 'class="current"' ?>>
 			<a href="<?php echo $atab['link']; ?>"><?php echo $atab['text']; ?></a>
-			<?php
-/* also enable the javascript in printAdminHeader()
-			if (is_array($atab['subtabs']) && $currenttab !== $key) {
-				?>
-				<ul id="subdropdownnav">
-				<?php
-				foreach ($atab['subtabs'] as $subtab=>$tablink) {
-					?>
-					<li><a href="<?php echo $tablink; ?>"><?php echo $subtab; ?></a></li>
-					<?php
-				}
-				?>
-				</ul>
-			 	<?php		 	
-			}
-*/			
-			?>
 		</li>
  		<?php
 	}

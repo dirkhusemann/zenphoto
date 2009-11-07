@@ -1191,8 +1191,8 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		static $id = 1;
 		$id++;
 		$class= 'class="' . trim("$editclass zp_editable zp_editable_{$context}_{$field}") . '"';
-		echo "<span id=\"editable_$id\" $class>" . $text . "</span>\n";
-		echo "<script type=\"text/javascript\">editInPlace('editable_$id', '$context', '$field');</script>";
+		echo "<span id=\"editable_{$context}_$id\" $class>" . $text . "</span>\n";
+		echo "<script type=\"text/javascript\">editInPlace('editable_{$context}_$id', '$context', '$field');</script>";
 	} else {
 		$class= 'class="' . "zp_uneditable zp_uneditable_{$context}_{$field}" . '"';
 		echo "<span $class>" . $text . "</span>\n";
