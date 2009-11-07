@@ -297,7 +297,7 @@ function printTabs($currenttab) {
 	foreach ($zenphoto_tabs as $atab) {
 		$chars = $chars + strlen($atab['text']);
 	}
-	$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*6))/11);
+	$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*6.5))/11);
 	?>
 	<ul class="nav" id="jsddm" style="width: <?php echo $main_tab_space; ?>em">
 	<?php
