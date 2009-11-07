@@ -255,119 +255,119 @@ class _Image extends PersistentObject {
 		} else {
 			$localpath = $this->getThumbImageFile();
 		}
-		zp_imageGetInfo($localpath, $imageInfo);
-		if (is_array($imageInfo)) {
-			$exifraw = read_exif_data_protected($localpath);
-			if (isset($exifraw['ValidEXIFData'])) {
-				$this->set('hasMetadata',1);
-				foreach($_zp_exifvars as $field => $exifvar) {
-					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
-						$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
-						$this->set($field, $exif);
-					} else if (isset($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]])) {
-						$exif = trim(sanitize($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]],3));
-						$this->set($field, $exif);
-					}
-				}
-
-				/* check IPTC data */
-				if (isset($imageInfo["APP13"])) {
-					$iptc = iptcparse($imageInfo["APP13"]);
-					if ($iptc) {
-						$this->set('hasMetadata',1);
-						$characterset = $this->getIPTCTag('1#090', $iptc);
-						if (!$characterset) {
-							$characterset = getOption('IPTC_encoding');
-						} else if (substr($characterset, 0, 1) == chr(27)) { // IPTC escape encoding
-							$characterset = substr($characterset, 1);
-							if ($characterset == '%G') {
-								$characterset = 'UTF-8';
-							} else { // we don't know, need to understand the IPTC standard here. In the mean time, default it.
-								$characterset = getOption('IPTC_encoding');
-							}
-						} else if ($characterset == 'UTF8') {
-							$characterset = 'UTF-8';
-						}
-
-						// Extract IPTC fields of interest
-						foreach ($_zp_exifvars as $field=>$exifvar) {
-							if ($exifvar[0]=='IPTC') {
-								$datum = $this->getIPTCTag($IPTCtags[$exifvar[1]], $iptc);
-								$this->set($field, $this->prepIPTCString($datum, $characterset));
-							}
-						}
-						/* iptc date */
-						$date = $this->get('IPTCDateCreated');
-						if (!empty($date)) {
-							$date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
-						}
-						/* EXIF date */
-						if (empty($date)) {
-							$date = $this->get('EXIFDateTime');
-						}
-						if (empty($date)) {
-							$date = $this->get('EXIFDateTimeOriginal');
-						}
-						if (empty($date)) {
-							$date = $this->get('EXIFDateTimeDigitized');
-						}
-						if (empty($date)) {
-							$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
-						} else {
-							$this->setDateTime($date);
-						}
-						
-						/* iptc title */
-						$title = $this->get('IPTCObjectName');
-						if (empty($title)) {
-							$title = $this->get('IPTCImageHeadline');
-						}
-						//EXIF title [sic]
-						if (empty($title)) {
-							$title = $this->get('EXIFImageDescription');
-						}
-						if (empty($title)) {
-							$this->set('title',$this->getDefaultTitle());
-						} else {
-							$this->setTitle($title);
-						}
-						
-						/* iptc description */
-						$this->setDesc($this->get('IPTCImageCaption'));
-
-						/* iptc location, state, country */
-						$this->setLocation($this->get('IPTCSubLocation'));
-						$this->setCity($this->get('IPTCCity'));
-						$this->setState($this->get('IPTCState'));
-						$this->setCountry($this->get('IPTCLocationName'));
-
-						/* iptc credit */
-						$credit = $this->get('IPTCByLine');
-						if (empty($credit)) {
-							$credit = $this->get('IPTCImageCredit');
-						}
-						if (empty($credit)) {
-							$credit = $this->get('IPTCSource');
-						}
-						$this->setCredit($credit);
-
-						/* iptc copyright */
-						$this->setCopyright($this->get('IPTCCopyright'));
-
-						/* iptc keywords (tags) */
-						$datum = $this->getIPTCTagArray('2#025', $iptc);
-						if (is_array($datum)) {
-							$tags = array();
-							$result['tags'] = array();
-							foreach ($datum as $item) {
-								$tags[] = $this->prepIPTCString($item, $characterset);;
-							}
-							$this->setTags($tags);
-						}
-					}
+		$exifraw = read_exif_data_protected($localpath);
+		if (isset($exifraw['ValidEXIFData'])) {
+			$this->set('hasMetadata',1);
+			foreach($_zp_exifvars as $field => $exifvar) {
+				if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
+					$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
+					$this->set($field, $exif);
+				} else if (isset($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]])) {
+					$exif = trim(sanitize($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]],3));
+					$this->set($field, $exif);
 				}
 			}
 		}
+			/* check IPTC data */
+			$iptcdata = zp_imageIPTC($localpath);
+			if (!empty($iptcdata)) {
+				$iptc = iptcparse($iptcdata);
+				if ($iptc) {
+					$this->set('hasMetadata',1);
+					$characterset = $this->getIPTCTag('1#090', $iptc);
+					if (!$characterset) {
+						$characterset = getOption('IPTC_encoding');
+					} else if (substr($characterset, 0, 1) == chr(27)) { // IPTC escape encoding
+						$characterset = substr($characterset, 1);
+						if ($characterset == '%G') {
+							$characterset = 'UTF-8';
+						} else { // we don't know, need to understand the IPTC standard here. In the mean time, default it.
+							$characterset = getOption('IPTC_encoding');
+						}
+					} else if ($characterset == 'UTF8') {
+						$characterset = 'UTF-8';
+					}
+					// Extract IPTC fields of interest
+					foreach ($_zp_exifvars as $field=>$exifvar) {
+						if ($exifvar[0]=='IPTC') {
+							$datum = $this->getIPTCTag($IPTCtags[$exifvar[1]], $iptc);
+							$this->set($field, $this->prepIPTCString($datum, $characterset));
+						}
+					}
+					
+					/* iptc keywords (tags) */
+					$datum = $this->getIPTCTagArray('2#025', $iptc);
+					if (is_array($datum)) {
+						$tags = array();
+						$result['tags'] = array();
+						foreach ($datum as $item) {
+							$tags[] = $this->prepIPTCString($item, $characterset);;
+						}
+						$this->setTags($tags);
+					}
+				}
+				/* "import" metadata into Zenphoto fields as makes sense */
+				
+				/* iptc date */
+				$date = $this->get('IPTCDateCreated');
+				if (!empty($date)) {
+					$date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
+				}
+				/* EXIF date */
+				if (empty($date)) {
+					$date = $this->get('EXIFDateTime');
+				}
+				if (empty($date)) {
+					$date = $this->get('EXIFDateTimeOriginal');
+				}
+				if (empty($date)) {
+					$date = $this->get('EXIFDateTimeDigitized');
+				}
+				if (empty($date)) {
+					$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
+				} else {
+					$this->setDateTime($date);
+				}
+
+				/* iptc title */
+				$title = $this->get('IPTCObjectName');
+				if (empty($title)) {
+					$title = $this->get('IPTCImageHeadline');
+				}
+				//EXIF title [sic]
+				if (empty($title)) {
+					$title = $this->get('EXIFImageDescription');
+				}
+				if (empty($title)) {
+					$this->set('title',$this->getDefaultTitle());
+				} else {
+					$this->setTitle($title);
+				}
+
+				/* iptc description */
+				$this->setDesc($this->get('IPTCImageCaption'));
+
+				/* iptc location, state, country */
+				$this->setLocation($this->get('IPTCSubLocation'));
+				$this->setCity($this->get('IPTCCity'));
+				$this->setState($this->get('IPTCState'));
+				$this->setCountry($this->get('IPTCLocationName'));
+
+				/* iptc credit */
+				$credit = $this->get('IPTCByLine');
+				if (empty($credit)) {
+					$credit = $this->get('IPTCImageCredit');
+				}
+				if (empty($credit)) {
+					$credit = $this->get('IPTCSource');
+				}
+				$this->setCredit($credit);
+
+				/* iptc copyright */
+				$this->setCopyright($this->get('IPTCCopyright'));
+
+			}
+
 	}
 
 	/**
@@ -428,7 +428,9 @@ class _Image extends PersistentObject {
 	 */
 	function updateDimensions() {
 		$discard = NULL;
-		$size = zp_imageGetInfo($this->localpath, $discard);
+		$size = zp_imageDims($this->localpath, $discard);
+		$width = $size['width'];
+		$height = $size['height'];
 		if (zp_imageCanRotate() && getOption('auto_rotate'))  {
 			// Swap the width and height values if the image should be rotated			
 			$splits = preg_split('/!([(0-9)])/', $this->get('EXIFOrientation'));
@@ -438,12 +440,13 @@ class _Image extends PersistentObject {
 				case 6:
 				case 7:
 				case 8:
-					$size = array($size[1], $size[0]);
+					$width = $size['height'];
+					$height =$size['width'];
 					break;
 			}
 		}
-		$this->set('width', $size[0]);
-		$this->set('height', $size[1]);
+		$this->set('width', $width);
+		$this->set('height', $height);
 	}
 
 	/**

@@ -289,14 +289,35 @@ function zp_rotateImage($im, $rotate) {
 }
 
 /**
- * Returns image info such as the image height and width
+ * Returns the image height and width
  *
  * @param string $filename
- * @param array $imageinfo
  * @return array
  */
-function zp_imageGetInfo($filename, &$imageinfo) {
-	return getimagesize($filename, $imageinfo);
+function zp_imageDims($filename) {
+	$imageinfo = NULL;
+	$rslt = getimagesize($filename, $imageinfo);
+	if (is_array($rslt)) {
+		return array('width'=>$rslt[0],'height'=>$rslt[1]);
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Returns the IPTC data of an image
+ *
+ * @param string $filename
+ * @return string
+ */
+function zp_imageIPTC($filename) {
+	$imageinfo = NULL;
+	$rslt = getimagesize($filename, $imageinfo);
+	if (is_array($rslt) && isset($imageinfo['APP13'])) {
+		return $imageinfo['APP13'];
+	} else {
+		return false;
+	}
 }
 
 /**
