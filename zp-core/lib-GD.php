@@ -75,6 +75,19 @@ function zp_createImage($w, $h) {
 }
 
 /**
+ * Creates a "color" object for use in such functions as zp_imagefill()
+ *
+ * @param image $image
+ * @param int $cr
+ * @param int $cg
+ * @param int $cb
+ * @return color
+ */
+function zp_imagecolorallocate($image, $cr, $cg, $cb) {
+	return imagecolorallocate($image, $cr, $cg, $cb);
+}
+
+/**
  * Fills an image area
  *
  * @param image $image
