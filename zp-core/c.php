@@ -24,7 +24,7 @@ if (isset($_GET['f'])) {
 if (empty($fontname)) {
 	$font = 5;
 } else {
-	$font = zp_imageloadfont($fontname);
+	$font = zp_imageLoadFont($fontname);
 }
 $pallet = array(array('R'=>16, 'G'=>110, 'B'=>3),
 								array('R'=>132, 'G'=>4, 'B'=>16),
@@ -32,7 +32,7 @@ $pallet = array(array('R'=>16, 'G'=>110, 'B'=>3),
 								array('R'=>143, 'G'=>32, 'B'=>3),
 								array('R'=>143, 'G'=>38, 'B'=>48),
 								array('R'=>0, 'G'=>155, 'B'=>18));
-$fw = zp_imagefontwidth($font); 
+$fw = zp_imageFontWidth($font); 
 $w = $fw*$len+2; 
 $h = $fh = zp_imagefontheight($font); 
 $kerning = min(4,floor($fw/2)-1);

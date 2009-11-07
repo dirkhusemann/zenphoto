@@ -75,19 +75,6 @@ function zp_createImage($w, $h) {
 }
 
 /**
- * Creates a "color" object for use in such functions as zp_imagefill()
- *
- * @param image $image
- * @param int $cr
- * @param int $cg
- * @param int $cb
- * @return color
- */
-function zp_imagecolorallocate($image, $cr, $cg, $cb) {
-	return imagecolorallocate($image, $cr, $cg, $cb);
-}
-
-/**
  * Fills an image area
  *
  * @param image $image
@@ -96,7 +83,7 @@ function zp_imagecolorallocate($image, $cr, $cg, $cb) {
  * @param color $color
  * @return bool
  */
-function  zp_imagefill($image, $x, $y, $color) {
+function  zp_imageFill($image, $x, $y, $color) {
 	return imagefill($image, $x, $y, $color);
 }
 
@@ -107,7 +94,7 @@ function  zp_imagefill($image, $x, $y, $color) {
  * @param color $color
  * @return bool
  */
-function zp_imagecolortransparent($image, $color)  {
+function zp_imageColorTransparent($image, $color)  {
 	return imagecolortransparent($image, $color);
 }
 
@@ -478,7 +465,7 @@ function zp_getFonts() {
  * @param string $font
  * @return int
  */
-function zp_imageloadfont($font) {
+function zp_imageLoadFont($font) {
 	if (file_exists($file = SERVERPATH.'/'.USER_PLUGIN_FOLDER.'/gd_fonts/'.$font.'.gdf')) {
 		return imageloadfont($file);
 	}
@@ -494,7 +481,7 @@ function zp_imageloadfont($font) {
  * @param int $font
  * @return int
   */
-function zp_imagefontwidth($font) {
+function zp_imageFontWidth($font) {
 	return imagefontwidth($font);
 }
 
@@ -504,7 +491,7 @@ function zp_imagefontwidth($font) {
  * @param int $font
  * @return int
  */
-function zp_imagefontheight($font) {
+function zp_imageFontHeight($font) {
 	return imagefontheight($font);
 }
 
