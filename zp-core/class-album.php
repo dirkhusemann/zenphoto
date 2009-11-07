@@ -913,8 +913,10 @@ class Album extends PersistentObject {
 		query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`=" . $this->id);
 		query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
 		if ($this->isDynamic()) {
+			@unlink($this->localpath.'.xmp'); // delete the sidecar
 			return unlink($this->localpath);
 		} else {
+			@unlink(substr($this->localpath,0,-1).'.xmp'); // delete the sidecar
 			return rmdir($this->localpath);
 		}
 	}
@@ -941,6 +943,7 @@ class Album extends PersistentObject {
 		}
 		if ($this->isDynamic()) {
 			if (@rename($this->localpath, $dest))	{
+				@rename($this->localpath.'.xmp', $dest.'.xmp');  // move the sidecar
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "UPDATE " . prefix('albums') . " SET folder='" . zp_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
 				$success = query($sql);
@@ -954,6 +957,7 @@ class Album extends PersistentObject {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
 				$rename = @rename($this->localpath, $dest);
+				@rename(substr($this->localpath,0,-1).'.xmp', $dest.'.xmp');  // move the sidecar
 				// Then: rename the cache folder
 				$cacherename = @rename(SERVERCACHE . '/' . $oldfolder, SERVERCACHE . '/' . $newfolder);
 				// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
@@ -1070,6 +1074,7 @@ class Album extends PersistentObject {
 		}
 		if ($this->isDynamic()) {
 			if (@copy($this->localpath, $dest)) {
+				@copy($this->localpath.'.xmp',$dest.'.xmp');  // copy the sidecar
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
 				$subrow = query_single_row($sql);
@@ -1083,6 +1088,7 @@ class Album extends PersistentObject {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
 				$num = dircopy($this->localpath, $dest);
+				@copy(substr($this->localpath,0,-1).'.xmp',$dest.'.xmp'); // copy the sidecar
 				// Get the subalbums.
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";

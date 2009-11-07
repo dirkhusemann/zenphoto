@@ -697,7 +697,11 @@ class _Image extends PersistentObject {
 	 * @return bool
 	 */
 	function deleteImage($clean=true) {
-		$result = @unlink($this->localpath);
+		$result = true;
+		$filestodelete = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+		foreach ($filestodelete as $file) {
+			$result = $result && @unlink($file);
+		}
 		if ($clean && $result) {
 			query("DELETE FROM ".prefix('comments') . "WHERE `type` IN (".zp_image_types('"').") AND `ownerid`=" . $this->id);
 			query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id);
@@ -724,7 +728,12 @@ class _Image extends PersistentObject {
 			// If the file exists, don't overwrite it.
 			return 2;
 		}
-		$result = @rename($this->localpath, $newpath);
+		$result = true;
+		$newfilename = substr(internalToFilesystem($newfilename),0,strrpos($newfilename,'.'));
+		$filestomove = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+		foreach ($filestomove as $file) {
+			$result = $result && @rename($file, $newalbum->localpath . $newfilename.strrchr($file,'.'));
+		}
 		if ($result) {
 			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
 		}
@@ -758,7 +767,11 @@ class _Image extends PersistentObject {
 			// If the file exists, don't overwrite it.
 			return 2;
 		}
-		$result = @copy($this->localpath, $newpath);
+		$result = true;
+		$filestocopy = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+		foreach ($filestocopy as $file) {
+			$result = $result && @copy($file, $newalbum->localpath . basename($file));
+		}
 		if ($result) {
 			$result = $this->copy(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));
 		}
