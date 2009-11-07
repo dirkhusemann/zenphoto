@@ -701,14 +701,18 @@ function getPlugin($plugin, $inTheme=false, $path=SERVERPATH) {
  */
 function getEnabledPlugins() {
 	$pluginlist = array();
-	$filelist = getPluginFiles('*.php');
-	foreach ($filelist as $extension=>$path) {
+	$sortlist = getPluginFiles('*.php');
+	foreach ($sortlist as $extension=>$path) {
 		$opt = 'zp_plugin_'.$extension;
 		if ($option = getOption($opt)) {
-			$pluginlist[$extension] = $option;
+			$pluginlist[$extension] = abs($option);
+			$sortlist[$extension] = $option;
 		}
 	}
 	arsort($pluginlist);
+	foreach($pluginlist as $key=>$value) {
+		$pluginlist[$key] = $sortlist[$key];
+	}
 	return $pluginlist;
 }
 

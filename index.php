@@ -89,9 +89,13 @@ if (isset($_GET['p'])) {
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
+	if (DEBUG_PLUGINS) debugLog('Loading the "theme" plugins.');
 	foreach (getEnabledPlugins() as $extension=>$loadtype) {
+		if ($loadtype <= 1) {
+			if (DEBUG_PLUGINS) debugLog('    '.$extension.' ('.$loadtype.')');
+			require_once(getPlugin($extension.'.php'));
+		}
 		$_zp_loaded_plugins[] = $extension;
-		require_once(getPlugin($extension.'.php'));
 	}
 
 	if (checkforPassword(true)) { // password protected object

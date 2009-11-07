@@ -17,9 +17,11 @@ if (getOption('zp_plugin_zenpage')) {
 }
 			
 // load the class & filter plugins
+if (DEBUG_PLUGINS) debugLog('Loading the "class" plugins.');
 $class_optionInterface = array();
 foreach (getEnabledPlugins() as $extension => $class) {
 	if (($class > 1) || (OFFSET_PATH && $class < 0)) {
+		if (DEBUG_PLUGINS) debugLog('    '.$extension.' ('.$class.')');
 		$option_interface = NULL;
 		require_once(getPlugin($extension.'.php'));
 		if (!is_null($option_interface)) {

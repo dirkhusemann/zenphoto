@@ -17,6 +17,7 @@ define('DEBUG_ERROR', !defined('RELEASE')); // set to true to supplies the calli
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 define('DEBUG_404', false); // set to true to log 404 error processing debug information.
 define('DEBUG_EXIF', false); // set to true to log start/finish of exif processing. Useful to find problematic images.
+define('DEBUG_PLUGINS', false); // set to true to log plugin load sequence.
 
 if (DEBUG_LOGIN || DEBUG_IMAGE || DEBUG_404 || DEBUG_EXIF) {
 	debugLog("Zenphoto v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']');
