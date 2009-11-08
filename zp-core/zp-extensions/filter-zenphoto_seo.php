@@ -10,8 +10,8 @@ $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-seo.php.html";
 $option_interface = new filter_zenphoto_seo();
 
-zp_register_filter('seoFriendlyURL', 'filterAccentedCharacters');
-zp_register_filter('seoFriendlyURL_js', 'filterAccentedCharacters_js');
+zp_register_filter('seoFriendly', 'filterAccentedCharacters');
+zp_register_filter('seoFriendly_js', 'filterAccentedCharacters_js');
 
 /**
  * Option handler class
@@ -42,21 +42,11 @@ class filter_zenphoto_seo {
 	}
 
 }
-
-/**
- * translates accented characters to unaccented ones
- *
- * @param string $string
- * @return string
- */
-function filterAccentedCharacters($string) {
-	// strip/convert a few specific characters
-	$specialchars = array(
+$specialchars = array(
 	"À"=>"A",
 	"Á"=>"A",
 	"Â"=>"A",
 	"Ã"=>"A",
-	"Ä"=>"AE",
 	"Å"=>"A",
 	"Ā"=>"A",
 	"Ă"=>"A",
@@ -80,6 +70,7 @@ function filterAccentedCharacters($string) {
 	"Ẵ"=>"A",
 	"Ặ"=>"A",
 	"Å"=>"A",
+	"Ä"=>"AE",
 	"Æ"=>"AE",
 	"Ǽ"=>"AE",
 	"Ǣ"=>"AE",
@@ -215,7 +206,6 @@ function filterAccentedCharacters($string) {
 	"Ǫ"=>"O",
 	"Ọ"=>"O",
 	"Ɵ"=>"O",
-	"Ø"=>"OE",
 	"Ồ"=>"O",
 	"Ố"=>"O",
 	"Ỗ"=>"O",
@@ -233,8 +223,9 @@ function filterAccentedCharacters($string) {
 	"Ở"=>"O",
 	"Ǭ"=>"O",
 	"Ộ"=>"O",
-	"Ǿ"=>"OE",
 	"Ɔ"=>"O",
+	"Ø"=>"OE",
+	"Ǿ"=>"OE",
 	"Œ"=>"OE",
 	"Ṕ"=>"P",
 	"Ṗ"=>"P",
@@ -275,7 +266,6 @@ function filterAccentedCharacters($string) {
 	"Ũ"=>"U",
 	"Ū"=>"U",
 	"Ŭ"=>"U",
-	"Ü"=>"UE",
 	"Ủ"=>"U",
 	"Ů"=>"U",
 	"Ű"=>"U",
@@ -299,6 +289,7 @@ function filterAccentedCharacters($string) {
 	"Ữ"=>"U",
 	"Ử"=>"U",
 	"Ự"=>"U",
+	"Ü"=>"UE",
 	"Ṽ"=>"V",
 	"Ṿ"=>"V",
 	"Ʋ"=>"V",
@@ -335,7 +326,6 @@ function filterAccentedCharacters($string) {
 	"ā"=>"a",
 	"ă"=>"a",
 	"ȧ"=>"a",
-	"ä"=>"ae",
 	"ả"=>"a",
 	"å"=>"a",
 	"ǎ"=>"a",
@@ -357,7 +347,8 @@ function filterAccentedCharacters($string) {
 	"ǻ"=>"a",
 	"ậ"=>"a",
 	"ặ"=>"a",
-	"ǽ"=>"a",
+	"ǽ"=>"ae",
+	"ä"=>"ae",
 	"ḃ"=>"b",
 	"ɓ"=>"b",
 	"ḅ"=>"b",
@@ -489,7 +480,6 @@ function filterAccentedCharacters($string) {
 	"ō"=>"o",
 	"ŏ"=>"o",
 	"ȯ"=>"o",
-	"ö"=>"oe",
 	"ỏ"=>"o",
 	"ő"=>"o",
 	"ǒ"=>"o",
@@ -499,7 +489,6 @@ function filterAccentedCharacters($string) {
 	"ǫ"=>"o",
 	"ọ"=>"o",
 	"ɵ"=>"o",
-	"ø"=>"oe",
 	"ồ"=>"o",
 	"ố"=>"o",
 	"ỗ"=>"o",
@@ -520,6 +509,7 @@ function filterAccentedCharacters($string) {
 	"ộ"=>"o",
 	"ǿ"=>"o",
 	"ɔ"=>"o",
+	"ø"=>"oe",
 	"œ"=>"oe",
 	"ṕ"=>"p",
 	"ṗ"=>"p",
@@ -565,7 +555,6 @@ function filterAccentedCharacters($string) {
 	"ũ"=>"u",
 	"ū"=>"u",
 	"ŭ"=>"u",
-	"ü"=>"ue",
 	"ủ"=>"u",
 	"ů"=>"u",
 	"ű"=>"u",
@@ -590,8 +579,9 @@ function filterAccentedCharacters($string) {
 	"ữ"=>"u",
 	"ử"=>"u",
 	"ự"=>"u",
-	"ṽ"=>"v",
 	"ṿ"=>"u",
+	"ü"=>"ue",
+	"ṽ"=>"v",
 	"ẁ"=>"w",
 	"ẃ"=>"w",
 	"ŵ"=>"w",
@@ -619,13 +609,20 @@ function filterAccentedCharacters($string) {
 	"ȥ"=>"z",
 	"ẓ"=>"z",
 	"ẕ"=>"z",
-	"ƶ"=>"z",
-	"/"=>"-",
-	","=>"-",
-	","=>"-",
-	";"=>"-",
-	" "=>"-");
+	"ƶ"=>"z"
+);
+
+/**
+ * translates accented characters to unaccented ones
+ *
+ * @param string $string
+ * @return string
+ */
+function filterAccentedCharacters($string) {
+	global $specialchars;
+	// strip/convert a few specific characters
 	$string = strtr($string,$specialchars);
+	$string = preg_replace("/[\/,; ]/","",$string);
 	if (getOption('zenphoto_seo_lowercase')) $string = strtolower($string);
 	$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
 	$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
@@ -633,30 +630,28 @@ function filterAccentedCharacters($string) {
 	return $string; 
 } 
 function filterAccentedCharacters_js($string) {
+	global $specialchars;
+	$xlate = array();
+	foreach ($specialchars as $from=>$to) {
+		if (array_key_exists($to,$xlate)) {
+			$xlate[$to] .= $from;
+		} else {
+			$xlate[$to] = $from;
+		}
+	}
 	$js = "
 	<script type=\"text/javascript\">
 		function soejs(fname) {
-			fname = fname.replace(/[ÃÃÃÃÃÃÃ Ã¡Ã¢Ã£Ã¥]/g, 'a');
-			fname = fname.replace(/[ÃÃ§]/g, 'c');
-			fname = fname.replace(/[ÃÃÃÃÃ¨Ã©ÃªÃ«]/g, 'e');
-			fname = fname.replace(/[ÃÃÃÃÃ¬Ã­Ã®Ã¯]/g, 'i');
-			fname = fname.replace(/[ÃÃÃÃÃÃ²Ã³Ã´ÃµÃ¸]/g, 'o');
-			fname = fname.replace(/[ÅÅÃÃ¶]/g, 'oe');
-			fname = fname.replace(/[Å Å¡]/g, 's');
-			fname = fname.replace(/[ÃÃÃÃ¹ÃºÃ»]/g, 'u');
-			fname = fname.replace(/[ÃÃ¼]/g, 'ue');
-			fname = fname.replace(/[ÃÅ¸Ã½Ã¿]/g, 'y');
-			fname = fname.replace(/Ã/g, 'ss');
-			fname = fname.replace(/[ï¿½?Ã¦Ã¤]/g, 'ae');
-			fname = fname.replace(/[ÃÃ°ÃÃ¾]/g, 'd');
-			fname = fname.replace(/[ÃÃ±]/g, 'n');";
+			fname = fname.replace(/[\/,; ]/g, '-');\n";
+	
+	foreach ($xlate as $to=>$from) {
+		$js .= "			fname = fname.replace(/[".$from."]/g, '".$to."');\n";
+	}
 	
 	if (getOption('zenphoto_seo_lowercase')) {
-		$js .= "
-		fname = fname.toLowerCase();";
+		$js .= "			fname = fname.toLowerCase();\n";
 	}
-	$js .= "		
-			fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
+	$js .= "			fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
 			fname = fname.replace(/^\s+|\s+$/g, '');
 			fname = fname.replace(/[^a-zA-Z0-9]/g, '-');
 			fname = fname.replace(/--*/g, '-');

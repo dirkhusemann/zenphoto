@@ -341,7 +341,7 @@ if (isset($_GET['action'])) {
 			break;
 		case 'newalbum':
 			$name = sanitize($_GET['name']);
-			$soename = seoFriendlyURL($name);
+			$soename = seoFriendly($name);
 			if ($folder != '/' && $folder != '.') {
 				$albumdir = "&album=" . urlencode($folder);
 			} else {

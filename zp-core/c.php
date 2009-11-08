@@ -21,11 +21,8 @@ if (isset($_GET['f'])) {
 } else {
 	$fontname = getOption('zenphoto_captcha_font');
 }
-if (empty($fontname)) {
-	$font = 5;
-} else {
-	$font = zp_imageLoadFont($fontname);
-}
+$font = zp_imageLoadFont($fontname);
+
 $pallet = array(array('R'=>16, 'G'=>110, 'B'=>3),
 								array('R'=>132, 'G'=>4, 'B'=>16),
 								array('R'=>103, 'G'=>3, 'B'=>143),
@@ -51,8 +48,8 @@ zp_copyCanvas($image, $background, 0, 0, rand(0,9), rand(0,9), $w, $h);
 
 $l = rand(2,$kerning);
 for ($i=0; $i<$len; $i++) {
-	$lettre = zp_colorAllocate($image,$ink[$i]['R'],$ink[$i]['G'],$ink[$i]['B']);
-	zp_writeString($image,$font,$l,$lead[$i],substr($string, $i, 1),$lettre);
+	$ink = zp_colorAllocate($image,$ink[$i]['R'],$ink[$i]['G'],$ink[$i]['B']);
+	zp_writeString($image,$font,$l,$lead[$i],substr($string, $i, 1),$ink);
 	$l = $l+$fw+$kern[$i];
 }
 

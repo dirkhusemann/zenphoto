@@ -34,7 +34,7 @@ if (!empty($_FILES)) {
 			}
 			@chmod($targetPath, CHMOD_VALUE);
 			if (is_valid_image($name) || is_valid_other_type($name)) {
-				$soename = seoFriendlyURL($name);
+				$soename = seoFriendly($name);
 				$targetFile =  $targetPath.'/'.internalToFilesystem($soename);
 				$rslt = move_uploaded_file($tempFile,$targetFile);
 				@chmod($targetFile, 0666 & CHMOD_VALUE);

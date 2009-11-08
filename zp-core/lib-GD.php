@@ -486,14 +486,16 @@ function zp_getFonts() {
  * @param string $font
  * @return int
  */
-function zp_imageLoadFont($font) {
-	if (file_exists($file = SERVERPATH.'/'.USER_PLUGIN_FOLDER.'/gd_fonts/'.$font.'.gdf')) {
-		return imageloadfont($file);
+function zp_imageLoadFont($font=NULL) {
+	if (!empty($font)) {
+		if (file_exists($file = SERVERPATH.'/'.USER_PLUGIN_FOLDER.'/gd_fonts/'.$font.'.gdf')) {
+			return imageloadfont($file);
+		}
+		if (file_exists($file = SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/'.$font.'.gdf')) {
+			return imageloadfont($file);
+		}
 	}
-	if (file_exists($file = SERVERPATH.'/'.ZENFOLDER.'/gd_fonts/'.$font.'.gdf')) {
-		return imageloadfont($file);
-	}
-	return false;
+	return 5; // default to the largest inbuilt font
 }
 
 /**

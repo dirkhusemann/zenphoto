@@ -42,8 +42,8 @@ function getExpiryDatePost() {
 function addPage() {
 	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(get_language_string($title));
-	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
+	$titlelink = seoFriendly(get_language_string($title));
+	if (empty($titlelink)) $titlelink = seoFriendly($date);
 
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
@@ -61,7 +61,7 @@ function addPage() {
 
 	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
-		$titlelink .= '_'.seoFriendlyURL($date); // force unique so that data may be saved.
+		$titlelink .= '_'.seoFriendly($date); // force unique so that data may be saved.
 	}
 	$page = new ZenpagePage($titlelink);
 	$page->set('title',$title);
@@ -117,9 +117,9 @@ function updatePage() {
 	} else if($permalink) {
 		$titlelink = sanitize($_POST['titlelink-old'],3);
 	} else {
-		$titlelink = seoFriendlyURL(get_language_string($title));
+		$titlelink = seoFriendly(get_language_string($title));
 	}
-	if(empty($titlelink)) $titlelink = seoFriendlyURL($result['date']);
+	if(empty($titlelink)) $titlelink = seoFriendly($result['date']);
 	$id = sanitize($_POST['id']);
 	$rslt = true;
 	$oldtitlelink = sanitize($_POST['titlelink-old']);
@@ -360,8 +360,8 @@ function printPagesList($pages) {
 function addArticle() {
 	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(get_language_string($title));
-	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
+	$titlelink = seoFriendly(get_language_string($title));
+	if (empty($titlelink)) $titlelink = seoFriendly($date);
 
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
@@ -379,7 +379,7 @@ function addArticle() {
 
 	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
-		$titlelink .= '_'.seoFriendlyURL($date); // force unique so that data may be saved.
+		$titlelink .= '_'.seoFriendly($date); // force unique so that data may be saved.
 	}
 	// create new article
 	$article = new ZenpageNews($titlelink);
@@ -442,9 +442,9 @@ function updateArticle() {
 	} else if($permalink) {
 		$titlelink = sanitize($_POST['titlelink-old'],3);
 	} else {
-		$titlelink = seoFriendlyURL(get_language_string($title));
+		$titlelink = seoFriendly(get_language_string($title));
 	}
-	if(empty($titlelink)) $titlelink = seoFriendlyURL($date);
+	if(empty($titlelink)) $titlelink = seoFriendly($date);
 
 	$id = sanitize($_POST['id']);
 	$rslt = true;
@@ -794,12 +794,12 @@ function printUnpublishedDropdown() {
  */
 function addCategory() {
 	$catname = process_language_string_save("category",2); // so that no \ are shown in the 'Category x added' message
-	$catlink = seoFriendlyURL(get_language_string($catname));
+	$catlink = seoFriendly(get_language_string($catname));
 	if(empty($catlink) OR empty($catname)) {
 		echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
 	} else {
 		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink) VALUES ('".zp_escape_string($catname)."', '".
-		zp_escape_string(seoFriendlyURL($catlink))."','".getCheckboxState('permalink')."')", true)) {
+		zp_escape_string(seoFriendly($catlink))."','".getCheckboxState('permalink')."')", true)) {
 			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$catlink)."</p>";
@@ -825,7 +825,7 @@ function updateCategory() {
 	}
 	if(!$result['permalink'] AND !getCheckboxState('edittitlelink')) {
 		$result['cat_link'] = process_language_string_save("category",2);
-		$result['cat_link'] = zp_escape_string(seoFriendlyURL(get_language_string($result['cat_link'])));
+		$result['cat_link'] = zp_escape_string(seoFriendly(get_language_string($result['cat_link'])));
 	}
 	// update the category in the category table
 	if(query("UPDATE ".prefix('zenpage_news_categories')." SET cat_name = '".$result['cat_name']."', cat_link = '".$result['cat_link']."', permalink = '".$result['permalink']."' WHERE id = ".$result['id'],true)) {

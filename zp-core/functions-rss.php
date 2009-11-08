@@ -294,9 +294,7 @@ function getRSSCacheFilename() {
 	);
 	$filename = strtr($filename,$replace);
 	$filename = preg_replace("/__/","_",$filename);
-	if(function_exists("filterAccentedCharacters")) {
-		$filename = filterAccentedCharacters($filename);
-	}
+	$filename = seoFriendly($filename);
 	return $filename.".xml";
 }
 

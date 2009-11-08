@@ -97,7 +97,7 @@ foreach ($subalbums as $folder) {
 	getSubalbumImages($folder);
 }
 $albumname = sanitize_path($albumname);
-$albumname = seoFriendlyURL($albumname);
+$albumname = seoFriendly($albumname);
 $old = '';
 while ($old != $albumname) {
 	$old = $albumname;

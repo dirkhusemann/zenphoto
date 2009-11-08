@@ -2154,7 +2154,7 @@ function unzip($file, $dir) { //check if zziplib is installed
 		if ($zip) {
 			while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
 				$fname = zip_entry_name($zip_entry);
-				$soename = internalToFilesystem(seoFriendlyURL($fname));
+				$soename = internalToFilesystem(seoFriendly($fname));
 				if (is_valid_image($soename) || is_valid_other_type($soename)) {
 					if (zip_entry_open($zip, $zip_entry, "r")) {
 						$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
@@ -2229,8 +2229,8 @@ function isolate($target, $str) {
 	return $str;
 }
 
-function seoFriendlyURL($source) {
-	$string = zp_apply_filter('seoFriendlyURL', $source);
+function seoFriendly($source) {
+	$string = zp_apply_filter('seoFriendly', $source);
 	if ($source == $string) { // no filter, do basic cleanup
 		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
 		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
@@ -2432,16 +2432,17 @@ $theme_description["desc"] = "%s";
 			$x = zp_imageWidth($im)/2 - 45;
 			$y = zp_imageHeight($im)/2 - 10;
 			$text = "CUSTOM COPY";
-
+			$font = zp_imageLoadFont();
+			$ink = zp_colorAllocate($im,0x0ff, 0x0ff, 0x0ff);
 			// create a blueish overlay
 			$overlay = zp_createImage(zp_imageWidth($im), zp_imageHeight($im));
-			imagefill ($overlay, 0, 0, 0x0606090);
+			zp_imageFill ($overlay, 0, 0, 0x0606090);
 			// Merge theme image and overlay
 			zp_imageMerge($im, $overlay, 0, 0, 0, 0, zp_imageWidth($im), zp_imageHeight($im), 45);
 			// Add text
-			imagestring ( $im,  5,  $x-1,  $y-1, $text,  0x0ffffff );
-			imagestring ( $im,  5,  $x+1,  $y+1, $text,  0x0ffffff );
-			imagestring ( $im,  5,  $x,  $y,   $text,  0x0ff0000 );
+			zp_writeString ( $im,  $font,  $x-1,  $y-1, $text,  $ink );
+			zp_writeString ( $im,  $font,  $x+1,  $y+1, $text,  $ink );
+			zp_writeString ( $im,  $font,  $x,  $y,   $text,  $ink );
 			// Save new theme image
 			zp_imageOutput($im, 'png', $themeimage);
 		}

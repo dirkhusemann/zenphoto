@@ -71,7 +71,7 @@ if (isset($_GET['action'])) {
 					if ($error == UPLOAD_ERR_OK) {
 						$tmp_name = $_FILES['files']['tmp_name'][$key];
 						$name = $_FILES['files']['name'][$key];
-						$soename = seoFriendlyURL($name);
+						$soename = seoFriendly($name);
 						if (is_valid_image($name) || is_valid_other_type($name)) {
 							$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
 							move_uploaded_file($tmp_name, $uploadfile);
@@ -255,20 +255,6 @@ if (ini_get('safe_mode')) { ?>
 		$defaultjs = "
 			<script type=\"text/javascript\">
 				function soejs(fname) {
-					fname = fname.replace(/[ÃÃÃÃÃÃÃ Ã¡Ã¢Ã£Ã¥]/g, 'a');
-					fname = fname.replace(/[ÃÃ§]/g, 'c');
-					fname = fname.replace(/[ÃÃÃÃÃ¨Ã©ÃªÃ«]/g, 'e');
-					fname = fname.replace(/[ÃÃÃÃÃ¬Ã­Ã®Ã¯]/g, 'i');
-					fname = fname.replace(/[ÃÃÃÃÃÃ²Ã³Ã´ÃµÃ¸]/g, 'o');
-					fname = fname.replace(/[ÅÅÃÃ¶]/g, 'oe');
-					fname = fname.replace(/[Å Å¡]/g, 's');
-					fname = fname.replace(/[ÃÃÃÃ¹ÃºÃ»]/g, 'u');
-					fname = fname.replace(/[ÃÃ¼]/g, 'ue');
-					fname = fname.replace(/[ÃÅ¸Ã½Ã¿]/g, 'y');
-					fname = fname.replace(/Ã/g, 'ss');
-					fname = fname.replace(/[ï¿½?Ã¦Ã¤]/g, 'ae');
-					fname = fname.replace(/[ÃÃ°ÃÃ¾]/g, 'd');
-					fname = fname.replace(/[ÃÃ±]/g, 'n');
 					fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
 					fname = fname.replace(/^\s+|\s+$/g, '');
 					fname = fname.replace(/[^a-zA-Z0-9]/g, '-');
@@ -277,7 +263,7 @@ if (ini_get('safe_mode')) { ?>
 				}
 			</script>
 		";
-		echo zp_apply_filter('seoFriendlyURL_js', $defaultjs);
+		echo zp_apply_filter('seoFriendly_js', $defaultjs);
 		?>
 		<script type="text/javascript">
 			function buttonstate(good) {
