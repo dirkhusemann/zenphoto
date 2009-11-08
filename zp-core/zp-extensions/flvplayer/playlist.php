@@ -33,7 +33,7 @@ foreach($playlist as $item) {
 		// As documentated on the fvl player's site movies and mp3 have are called via differently relative urls...
 		// http://www.jeroenwijering.com/?item=Supported_Playlists
 		if($ext == ".flv" OR $ext == ".mp4") {
-			echo "\t\t<location>../../..".getAlbumFolder('').$album->name."/".$item."</location>\n";
+			echo "\t\t<location>../..".getAlbumFolder('').$album->name."/".$item."</location>\n";
 		} else {
 			echo "\t\t<location>..".getAlbumFolder('').$album->name."/".$item."</location>\n";
 		}

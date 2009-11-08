@@ -60,7 +60,6 @@ class flvplayer {
 		setOptionDefault('flvplaylist_height', '240');
 		setOptionDefault('flvplaylist_size', '240');
 		setOptionDefault('flvplaylist_position', 'right');
-		setOptionDefault('flvplaylist_thumbsinplaylist', '');
 		setOptionDefault('flvplaylist_repeat', 'list');
 	}
 
@@ -94,8 +93,6 @@ class flvplayer {
 																		'desc' => gettext("Player width for use with the playlist (ignored for <em>mp3</em> files.)")),
 										gettext('flv player height for playlist') => array('key' => 'flvplaylist_height', 'type' => OPTION_TYPE_TEXTBOX,
 																		'desc' => gettext("Player height for use with the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-										gettext('Playlist Thumbs in playlist') => array('key' => 'flvplaylist_thumbsinplaylist', 'type' => OPTION_TYPE_CHECKBOX,
-																		'desc' => gettext("Check if you want that thumbnails of the preview images should be shown in the playlist (only if using the special <code>flvplaylist()</code> function).")),
 										gettext('Backcolor') => array('key' => 'flv_player_backcolor', 'type' => OPTION_TYPE_COLOR_PICKER,
 																		'desc' => gettext("Backgroundcolor of the controls, in HEX format.")),
 										gettext('Frontcolor') => array('key' => 'flv_player_frontcolor', 'type' => OPTION_TYPE_COLOR_PICKER,
@@ -254,7 +251,7 @@ class flvplayer {
  * @param string $option the mode to use "playlist" or "players"
  */
 function flvPlaylist($option='') {
-	global $_zp_current_album, $_zp_current_image, $_flv_player;
+	global $_zp_current_album, $_zp_current_image, $_flv_player,$_zp_flash_player;
 	if(checkAlbumPassword($_zp_current_album->getFolder(), $hint)) {
 		if($option === "players") {
 			$moviepath = getUnprotectedImageURL();
@@ -266,12 +263,6 @@ function flvPlaylist($option='') {
 	
 	switch($option) {
 		case "playlist":
-			//temorarily enable mediarss 
-			setOption('feed_enclosure', '1',false);
-			setOption('feed_mediarss', '1',false);
-			$totalitems = $_zp_current_album->getNumImages();
-			setOption('feed_items_albums',$totalitems,false);
-			$rssurl = WEBPATH."/rss.php?albumtitle=".urlencode($_zp_current_album->getTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".getOption('locale');
 			if(getNumImages() != 0) {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
@@ -288,8 +279,7 @@ function flvPlaylist($option='') {
 		so.addVariable('screencolor','<?php echo getOptionColor('flv_player_screencolor'); ?>');
 		so.addVariable('file','<?php echo WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/flvplayer/playlist.php?albumid=<?php echo $albumid; ?>');
 		so.addVariable('javascriptid','jstest');
-		so.addVariable('enablejs',true);
-		so.addVariable('thumbsinplaylist',<?php echo (getOption('flvplaylist_thumbsinplaylist') ? 'true' : 'false') ?>);
+		so.addVariable('enablejs','true');
 		so.write('flvplaylist');
 	</script>
 	<?php }
@@ -297,38 +287,12 @@ function flvPlaylist($option='') {
 
 		case "players":
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-				echo "<div id=\"flvplaylist-".$imagetitle."\">".gettext("The flv player is not installed. Please install or activate the flv player plugin.")."</div>";
-					
-				// check if an image/videothumb is available - this shouldn't be hardcoded...
-				$album = $_zp_current_image->getAlbum();
-				$videoThumb = $_zp_current_image->objectsThumb;
-				if (!empty($videoThumb)) {
-					$videoThumb = getAlbumFolder(WEBPATH).$album->name.'/'.$videoThumb;
-				}										
-		?>
-		<script type="text/javascript">
-		 <?php 
-
-		 if(($ext == ".mp3") && empty($videoThumb)) { 
-		 ?> 
-			var so = new SWFObject('<?php echo getPlgin('flvplayer/'.$_flv_player,WEBPATH); ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>');
-		<?php } else { ?>
-			var so = new SWFObject('<?php echo getPlgin('flvplayer/'.$_flv_player,WEBPATH); ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>');
-		<?php } ?>
-			so.addParam('allowfullscreen','true');
-			so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
-			so.addVariable('image','<?php echo $videoThumb; ?>');
-			so.addVariable('backcolor','<?php echo getOptionColor('flv_player_backcolor'); ?>');
-			so.addVariable('frontcolor','<?php echo getOptionColor('flv_player_frontcolor'); ?>');
-			so.addVariable('lightcolor','<?php echo getOptionColor('flv_player_lightcolor'); ?>');
-			so.addVariable('screencolor','<?php echo getOptionColor('flv_player_screencolor'); ?>');
-			so.addVariable('file','<?php echo $moviepath; ?>');
-			so.addVariable('javascriptid','jstest');
-			so.addVariable('enablejs',true';
-			so.write('flvplaylist-<?php echo zp_escape_string($imagetitle); ?>');
-	<?php	} ?>
-		</script>
-	<?php
+				if (is_null($_zp_flash_player)) {
+					echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
+				} else {
+					$_zp_flash_player->printPlayerConfig(getFullImageURL(),$_zp_current_image->getTitle(),$_zp_current_image->get("id"));
+				}
+			}
 	break;
 	}
 }
