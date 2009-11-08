@@ -788,7 +788,13 @@ if (!$setup_checked) {
 				}
 			}
 		} else {
-			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Check your install files.'));
+			if (file_exists('lib-Imagick.php')) {
+//TODO: put in the correct version number!
+				$supported = gettext('Zenphoto currently requires either the <em>GD</em> library or <em>Imagick</em> library version xx.yyy.zz.');
+			} else {
+				$supported = gettext('Zenphoto currently requires either the <em>GD</em> library.');
+			}
+			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support.').' '.$supported);
 		}
 	}
 	checkMark($noxlate, gettext('PHP <code>gettext()</code> support'), gettext('PHP <code>gettext()</code> support [is not present]'), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));

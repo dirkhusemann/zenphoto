@@ -2436,7 +2436,8 @@ $theme_description["desc"] = "%s";
 			$ink = zp_colorAllocate($im,0x0ff, 0x0ff, 0x0ff);
 			// create a blueish overlay
 			$overlay = zp_createImage(zp_imageWidth($im), zp_imageHeight($im));
-			zp_imageFill ($overlay, 0, 0, 0x0606090);
+			$back = zp_colorAllocate($image, 0x060, 0x060, 0x090);
+			zp_imageFill ($overlay, 0, 0, $back);
 			// Merge theme image and overlay
 			zp_imageMerge($im, $overlay, 0, 0, 0, 0, zp_imageWidth($im), zp_imageHeight($im), 45);
 			// Add text
