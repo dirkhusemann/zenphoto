@@ -790,9 +790,9 @@ if (!$setup_checked) {
 		} else {
 			if (file_exists('lib-Imagick.php')) {
 //TODO: put in the correct version number!
-				$supported = gettext('Zenphoto currently requires either the <em>GD</em> library or <em>Imagick</em> library version xx.yyy.zz.');
+				$supported = gettext('Zenphoto currently requires either the <em>GD</em> library or <em>Imagick</em> 2.3.0 or newer compiled against <em>ImageMagick</em> 6.3.8.');
 			} else {
-				$supported = gettext('Zenphoto currently requires either the <em>GD</em> library.');
+				$supported = gettext('Zenphoto requires the <em>GD</em> library.');
 			}
 			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support.').' '.$supported);
 		}
