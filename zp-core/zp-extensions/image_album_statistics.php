@@ -23,9 +23,10 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---image_al
  *     "latest" for the latest uploaded, "mostrated" for the most voted,
  *     "toprated" for the best voted
  * 		 "latestupdated" for the latest updated
+ *	@param string $albumfolder The name of an album to get only the statistc for its subalbums
  * @return string
  */
-function getAlbumStatistic($number=5, $option) {
+function getAlbumStatistic($number=5, $option,$albumfolder='') {
 	$passwordcheck = '';
 	if (zp_loggedin()) {
 		$albumWhere = "";
@@ -39,6 +40,14 @@ function getAlbumStatistic($number=5, $option) {
 		}
 		$albumWhere = "WHERE `show`=1".$passwordcheck;
 	}
+	$albumfolder = sanitize_path($albumfolder);
+	if(!empty($albumfolder)) {
+		if(empty($albumWhere)) {
+			$albumWhere = " WHERE folder LIKE '".$albumfolder."/%'";
+		} else {
+			$albumWhere .= " AND folder LIKE '".$albumfolder."/%'";
+		}
+	} 
 	switch($option) {
 		case "popular":
 			$sortorder = "hitcounter";
@@ -107,8 +116,8 @@ function getAlbumStatistic($number=5, $option) {
  * @param integer $height the height/cropheight of the thumb if crop=true else not used.  (Default 85px)
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true) {
-	$albums = getAlbumStatistic($number, $option);
+function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='') {
+	$albums = getAlbumStatistic($number, $option,$albumfolder);
 	echo "\n<div id=\"".$option."_album\">\n";
 	echo "<ul>";
 	foreach($albums as $album) {
@@ -144,11 +153,12 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 		$albumthumb = $tempalbum->getAlbumThumbImage();
+		echo "<pre>"; print_r($albumthumb); echo "</pre><br />";
 		$thumb = newImage($tempalbum, $albumthumb->filename);
 		if($crop) {
-			echo "<img src=\"".$thumb->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($thumb->getTitle()) . "\" /></a>\n<br />";
+			echo "<img src=\"".$albumthumb->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
 		} else {
-			echo "<img src=\"".$thumb->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE)."\" alt=\"" . html_encode($thumb->getTitle()) . "\" /></a>\n<br />";
+			echo "<img src=\"".$albumthumb->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE)."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
 		}
 		if($showtitle) {
 			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
@@ -206,8 +216,8 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
  * @param integer $height the height/cropheight of the thumb if crop=true else not used.  (Default 85px)
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='hitcounter',$width=85,$height=85,$crop=true) {
-	printAlbumStatistic($number,"popular",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop);
+function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='hitcounter',$width=85,$height=85,$crop=true,$albumfolder='') {
+	printAlbumStatistic($number,"popular",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$albumfolder);
 }
 
 /**
@@ -225,8 +235,8 @@ function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showde
  * @param integer $height the height/cropheight of the thumb if crop=true else not used.  (Default 85px)
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true) {
-	printAlbumStatistic($number,"latest",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop);
+function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='') {
+	printAlbumStatistic($number,"latest",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$albumfolder);
 }
 
 /**
@@ -244,8 +254,8 @@ function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdes
  * @param integer $height the height/cropheight of the thumb if crop=true else not used.  (Default 85px)
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true) {
-	printAlbumStatistic($number,"mostrated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop);
+function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='') {
+	printAlbumStatistic($number,"mostrated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$albumfolder);
 }
 
 /**
@@ -263,8 +273,8 @@ function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $show
  * @param integer $height the height/cropheight of the thumb if crop=true else not used.  (Default 85px)
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true) {
-	printAlbumStatistic($number,"toprated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop);
+function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='') {
+	printAlbumStatistic($number,"toprated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$albumfolder);
 }
 
 /**
@@ -282,8 +292,8 @@ function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showd
  * @param integer $height the height/cropheight of the thumb if crop=true else not used.  (Default 85px)
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true) {
-	printAlbumStatistic($number,"latestupdated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop);
+function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='') {
+	printAlbumStatistic($number,"latestupdated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$albumfolder);
 }
 
 /**
