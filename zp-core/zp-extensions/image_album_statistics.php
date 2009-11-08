@@ -153,7 +153,6 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 		$albumthumb = $tempalbum->getAlbumThumbImage();
-		echo "<pre>"; print_r($albumthumb); echo "</pre><br />";
 		$thumb = newImage($tempalbum, $albumthumb->filename);
 		if($crop) {
 			echo "<img src=\"".$albumthumb->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
