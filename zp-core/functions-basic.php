@@ -42,9 +42,7 @@ if (defined("RELEASE")) {
 }
 $_zp_error = false;
 
-if (file_exists('lib-Imagick.php') && class_exists('Imagick')) {
-	require_once(dirname(__FILE__).'/lib-Imagick.php');
-}
+require_once(dirname(__FILE__).'/lib-Imagick.php');
 if (!function_exists('zp_graphicsLibInfo')) {
 	require_once(dirname(__FILE__).'/lib-GD.php');
 }
