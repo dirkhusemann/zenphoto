@@ -2229,16 +2229,6 @@ function isolate($target, $str) {
 	return $str;
 }
 
-function seoFriendly($source) {
-	$string = zp_apply_filter('seoFriendly', $source);
-	if ($source == $string) { // no filter, do basic cleanup
-		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
-		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
-		$string = str_replace(array('---','--'),'-', $string);
-	}
-	return $string;
-}
-
 /**
  * Return an array of files from a directory and sub directories
  *

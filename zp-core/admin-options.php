@@ -216,7 +216,7 @@ if (isset($_GET['action'])) {
 			setOption('feed_cache_expire', sanitize($_POST['feed_cache_expire'],3));
 			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
 			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
-			setBoolOption('feed_mediarss', isset($_POST['feed_cache']));
+			setBoolOption('feed_cache', isset($_POST['feed_cache']));
 			setBoolOption('RSS_album_image', isset($_POST['RSS_album_image']));
 			setBoolOption('RSS_comments', isset($_POST['RSS_comments']));
 			setBoolOption('RSS_articles', isset($_POST['RSS_articles']));
@@ -1185,21 +1185,19 @@ if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		</tr>
 		<tr>
 			<td><?php echo gettext("RSS enclosure:"); ?></td>
-			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_enclosure"
+			<td><input type="checkbox" name="feed_enclosure"
 				value="1" <?php echo checked('1', getOption('feed_enclosure')); ?> /></td>
 			<td><?php echo gettext("Check if you want to enable the <em>rss enclosure</em> feature which provides a direct download for full images, movies etc. from within certain rss reader clients <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 			<tr>
 			<td><?php echo gettext("Media RSS:"); ?></td>
-			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_mediarss"
-				value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
+			<td><input type="checkbox" name="feed_mediarss" value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
 			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("RSS cache"); ?></td>
 			<td>
-				<input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_cache"
-				value="1" <?php echo checked('1', getOption('feed_cache')); ?> /> <label for "feed_cache"><?php echo gettext("Enable RSS cache"); ?></label><br /><br />
+				<label><input type="checkbox" name="feed_cache" value="1" <?php echo checked('1', getOption('feed_cache')); ?> /> <?php echo gettext("Enabled"); ?></label><br /><br />
 				<input type="text" size="15" id="feed_cache_expire" name="feed_cache_expire"
 				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'));?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br /> 
 				</td>

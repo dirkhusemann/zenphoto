@@ -2101,6 +2101,23 @@ function getUserIP() {
 	}
 }
 
+/**
+ * Strips out and/or replaces characters from the string that are not "soe" friendly
+ *
+ * @param string $source
+ * @return string
+ */
+function seoFriendly($source) {
+	$string = zp_apply_filter('seoFriendly', $source);
+	if ($source == $string) { // no filter, do basic cleanup
+		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
+		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
+		$string = str_replace(array('---','--'),'-', $string);
+	}
+	return $string;
+}
+
+
 //load PHP specific functions
 require_once(PHPScript('5.0.0', '_functions.php'));
 
