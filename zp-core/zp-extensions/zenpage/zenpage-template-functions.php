@@ -2380,7 +2380,7 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
 	if(empty($class)) {
 		$id = "";
 	} else {
-		$id = "id='".$classs." ";
+		$id = "id='".$id." ";
 	}
 	$comments = getLatestZenpageComments($number,$type,$itemID);
 	echo "<ul $id>\n";
