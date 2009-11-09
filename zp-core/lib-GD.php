@@ -523,6 +523,6 @@ if (extension_loaded('gd')) { // only define the functions if we have the proper
 	require_once(PHPScript('5.1.0', '_functions_GD.php'));
 	
 } else {
-	$_lib_GD_msg = gettext('The <strong><em>GD</em></strong> library is not available.');
+	$_lib_GD_msg = gettext('The <strong><em>GD</em></strong> extension is not available.');
 }
 ?>

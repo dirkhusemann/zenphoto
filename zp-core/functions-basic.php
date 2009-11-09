@@ -42,22 +42,6 @@ if (defined("RELEASE")) {
 }
 $_zp_error = false;
 
-require_once(dirname(__FILE__).'/lib-Imagick.php');
-if (!function_exists('zp_graphicsLibInfo')) {
-	require_once(dirname(__FILE__).'/lib-GD.php');
-}
-
-if (function_exists('zp_graphicsLibInfo')) {
-	$_zp_supported_images = zp_graphicsLibInfo();
-	unset($_zp_supported_images['Library']);
-	foreach ($_zp_supported_images as $key=>$type) {
-		unset($_zp_supported_images[$key]);
-		if ($type) $_zp_supported_images[strtolower($key)] = true;
-	}
-	$_zp_supported_images = array_keys($_zp_supported_images);
-} else {
-	$_zp_supported_images = array();
-}
 require_once(dirname(__FILE__).'/lib-utf8.php');
 
 if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . "/zp-config.php")) {
@@ -79,7 +63,26 @@ if (ini_get('memory_limit') && parse_size(ini_get('memory_limit')) < 100663296) 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
+$_zp_imagic_present = false;
 require_once(dirname(__FILE__).'/functions-db.php');
+
+require_once(dirname(__FILE__).'/lib-Imagick.php');
+if (!function_exists('zp_graphicsLibInfo')) {
+	require_once(dirname(__FILE__).'/lib-GD.php');
+}
+
+if (function_exists('zp_graphicsLibInfo')) {
+	$_zp_supported_images = zp_graphicsLibInfo();
+	unset($_zp_supported_images['Library']);
+	foreach ($_zp_supported_images as $key=>$type) {
+		unset($_zp_supported_images[$key]);
+		if ($type) $_zp_supported_images[strtolower($key)] = true;
+	}
+	$_zp_supported_images = array_keys($_zp_supported_images);
+} else {
+	$_zp_supported_images = array();
+}
+
 require_once(dirname(__FILE__).'/lib-encryption.php');
 
 switch (OFFSET_PATH) {

@@ -89,6 +89,7 @@ if (isset($_GET['action'])) {
 			setOption('date_format', $f);
 			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
 			setOption('captcha', sanitize($_POST['captcha']));
+			setBoolOption('use_Imagick', isset($_POST['use_Imagick']));
 			$msg = zp_apply_filter('save_admin_general_data', '');
 			
 			$returntab = "&tab=general";
@@ -697,7 +698,24 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						}
 						?>
 					</td>
-					</td>
+				<?php
+				if ($_zp_imagic_present) {
+					?>
+					<tr>
+						<td><?php echo gettext("Imagick:"); ?></td>
+						<td>
+							<label>
+								<input type="checkbox" name="use_Imagick" value="1" <?php if (getOption('use_Imagick')) echo ' CHECKED'; ?> />
+								<?php echo gettext('enabled'); ?>
+							</label>
+						</td>
+						<td>
+							<?php echo gettext('Imagick is present on your server. Check this option to enalbe it.') ?>
+						</td>
+					</tr>
+					<?php
+				}
+				?>
 				</tr>
 				<?php zp_apply_filter('admin_general_data'); ?>
 				<tr>
