@@ -460,7 +460,7 @@ if (extension_loaded('gd')) { // only define the functions if we have the proper
 	function zp_getFonts() {
 		global $_gd_fontlist;
 		if (!is_array($_gd_fontlist)) {
-			$_gd_fontlist = array();
+			$_gd_fontlist = array('system'=>'');
 			$curdir = getcwd();
 			$basefile = SERVERPATH.'/'.USER_PLUGIN_FOLDER.'/gd_fonts/';
 			if (is_dir($basefile)) {
