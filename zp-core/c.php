@@ -40,7 +40,7 @@ for ($i=0; $i<$len; $i++) {
 	$h = max($h, $fh+$lead[$i]+2);
 	$kern[$i] = rand(2,$kerning);
 	$w = $w+$kern[$i];
-	$ink[$i] =$pallet[rand(0,5)];
+	$p[$i] = $pallet[rand(0,5)];
 }
 $image = zp_createImage($w, $h);
 $background = zp_imageGet(SERVERPATH.'/'.ZENFOLDER.'/images/captcha_background.png');
@@ -48,7 +48,7 @@ zp_copyCanvas($image, $background, 0, 0, rand(0,9), rand(0,9), $w, $h);
 
 $l = rand(2,$kerning);
 for ($i=0; $i<$len; $i++) {
-	$ink = zp_colorAllocate($image,$ink[$i]['R'],$ink[$i]['G'],$ink[$i]['B']);
+	$ink = zp_colorAllocate($image,$p[$i]['R'],$p[$i]['G'],$p[$i]['B']);
 	zp_writeString($image,$font,$l,$lead[$i],substr($string, $i, 1),$ink);
 	$l = $l+$fw+$kern[$i];
 }
