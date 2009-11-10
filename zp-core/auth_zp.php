@@ -40,11 +40,20 @@ if (isset($_GET['ticket'])) { // password reset query
 	}
 }
 
+// we have the ssl marker cookie, normally we are already logged in
+// but we need to redirect to ssl to retrive the auth cookie (set as secure).
+if (zp_getCookie('zenphoto_ssl') && !isset($_SERVER['HTTPS'])) {
+	$redirect= "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+	header("Location:$redirect");
+	exit();
+}
+
 if (!isset($_POST['login'])) {
 	$_zp_loggedin = checkAuthorization(zp_getCookie('zenphoto_auth'));
 	if (!$_zp_loggedin) {
 		// Clear the cookie
 		zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
+		zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
 	}
 } else {
 	// Handle the login form.
@@ -55,7 +64,12 @@ if (!isset($_POST['login'])) {
 		$_zp_loggedin = checkLogon($post_user, $post_pass, true);
 		$_zp_loggedin = zp_apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
 		if ($_zp_loggedin) {
-			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath);
+			// https: set the 'zenphoto_ssl' marker for redirection
+			if(isset($_SERVER['HTTPS'])) {
+				zp_setcookie("zenphoto_ssl", "needed", time()+COOKIE_PESISTENCE, $cookiepath);
+			}
+			// set cookie as secure when in https
+			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath, isset($_SERVER['HTTPS']));
 			if (!empty($redirect)) {
 				header("Location: " . FULLWEBPATH . '/'. $redirect);
 				exit();
@@ -63,6 +77,7 @@ if (!isset($_POST['login'])) {
 		} else {
 			// Clear the cookie, just in case
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
+			zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
 			// was it a request for a reset?
 			if (isset($_POST['code_h']) && $_zp_captcha->checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
 				require_once(dirname(__FILE__).'/class-load.php'); // be sure that the plugins are loaded for the mail handler		
@@ -124,6 +139,7 @@ unset($saved_auth, $check_auth, $user, $pass);
 // Handle a logout action.
 if (isset($_REQUEST['logout'])) {
 	zp_setcookie("zenphoto_auth", "*", time()-368000, $cookiepath);
+	zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
 	$redirect = '';
 	if (isset($_GET['p'])) { $redirect .= "&p=" . $_GET['p']; }
 	if (isset($_GET['searchfields'])) { $redirect .= "&searchfields=" . $_GET['searchfields']; }
@@ -134,7 +150,13 @@ if (isset($_REQUEST['logout'])) {
 	if (isset($_GET['title'])) { $redirect .= "&title=" . $_GET['title']; }
 	if (isset($_GET['page'])) { $redirect .= "&page=" . $_GET['page']; }
 	if (!empty($redirect)) $redirect = '?'.substr($redirect, 1);
-	header("Location: " . FULLWEBPATH . '/index.php'. $redirect);
+	if ($_GET['logout']) {
+		$rd_protocal = 'https';
+	} else {
+		$rd_protocal = 'http';
+	}
+	$redirect = $rd_protocal."://".$_SERVER['HTTP_HOST'].WEBPATH.'/index.php'.$redirect;
+	header("Location: " . $redirect);
 	exit();
 }
 

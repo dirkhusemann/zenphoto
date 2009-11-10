@@ -36,8 +36,12 @@ $_zp_captcha = new Captcha();
 //setup session before checking for logon cookie
 require_once(dirname(__FILE__).'/functions-i18n.php');
 
-//TODO: is the test on OFFSET_PATH needed/desirable?
 if (getOption('album_session') && session_id() == '') {
+	// force session cookie to be secure when in https
+	if(isset($_SERVER['HTTPS'])) {
+		$CookieInfo=session_get_cookie_params();
+		session_set_cookie_params($CookieInfo['lifetime'],$CookieInfo['path'], $CookieInfo['domain'],TRUE);
+	}
 	session_start();
 }
 require_once(dirname(__FILE__).'/class-load.php');
@@ -1650,10 +1654,10 @@ function zp_getCookie($name) {
  * @param timestamp $time The time the cookie expires
  * @param string $path The path on the server in which the cookie will be available on
  */
-function zp_setCookie($name, $value, $time=0, $path='/') {
+function zp_setCookie($name, $value, $time=0, $path='/', $secure=false) {
 	if (DEBUG_LOGIN) debugLog("zp_setCookie($name, $value, $time, $path)::album_session=".getOption('album_session'));
 	if ($time < time() || !getOption('album_session')) {
-		setcookie($name, $value, $time, $path);
+		setcookie($name, $value, $time, $path, "", $secure);
 	}
 	if ($time < time()) {
 		if (isset($_SESSION))	unset($_SESSION[$name]);
@@ -1918,8 +1922,10 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		$post_pass = $_POST['pass'];
 		$auth = passwordHash($post_user, $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
-		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
-		if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
+		if ($_zp_loggedin = (getOption('server_protocol') != 'https_admin' || isset($_SERVER["HTTPS"]))) { // allow front end admin login
+			$_zp_loggedin = checkLogon($post_user, $post_pass, false);
+			if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
+		}
 		if ($_zp_loggedin) {	// allow Admin user login
 			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {

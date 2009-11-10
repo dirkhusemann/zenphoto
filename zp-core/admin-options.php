@@ -465,10 +465,13 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<?php $protocal = getOption('server_protocol'); ?>
 							<option value="http" <?php if ($protocal == 'http') echo 'SELECTED'; ?>>http</option>
 							<option value="https" <?php if ($protocal == 'https') echo 'SELECTED'; ?>>https</option>
+							<option value="https_admin" <?php if ($protocal == 'https_admin') echo 'SELECTED'; ?>><?php echo gettext('secure admin'); ?></option>
 						</select>
 					</td>
 					<td>
-						<?php echo gettext("If you're running a secure server, change this to <em>https</em>. (Most people will leave this alone.)"); ?>
+						<p><?php echo gettext("Normally this option should be set to <em>http</em>. If you're running a secure server, change this to <em>https</em>. Select <em>secure admin</em> to insure secure access to <code>admin</code> pages."); ?>
+						<p><?php echo gettext("<strong>Note:</strong> users may not be able to login from the front-end user login form if <em>secure admin</em> is selected.");?></p>
+
 					</td>
 				</tr>
 				<tr>

@@ -263,8 +263,9 @@ function printLogoAndLinks() {
 	echo "\n<div id=\"links\">";
 	echo "\n  ";
 	if (!is_null($_zp_current_admin)) {
+		if (getOption('server_protocol')=='https') $sec=1; else $sec=0;
 		printf(gettext("Logged in as %s"), $_zp_current_admin['user']);
-		echo " &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
+		echo " &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout=".$sec."\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
 	echo "<a href=\"".WEBPATH."/index.php";
 	if ($specialpage = getOption('custom_index_page')) {

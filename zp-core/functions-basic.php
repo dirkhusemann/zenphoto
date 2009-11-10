@@ -106,7 +106,19 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 if (!defined('SERVERPATH')) define('SERVERPATH', str_replace("\\", '/', dirname(dirname(__FILE__))));
-define('PROTOCOL', getOption('server_protocol'));
+$protocal = getOption('server_protocol');
+switch ($protocal) {
+	case 'https':
+	define('PROTOCOL', $protocal);
+	break;
+	default:
+	if(isset($_SERVER['HTTPS'])) {
+		define('PROTOCOL', 'https');
+	} else {
+		define('PROTOCOL', 'http');
+	}
+	break;
+}
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
 define('SERVERCACHE', SERVERPATH . '/'.CACHEFOLDER);

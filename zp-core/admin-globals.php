@@ -6,7 +6,14 @@
 
 // force UTF-8 Ø
 
-if (session_id() == '') session_start();
+if (session_id() == '') {
+	// force session cookie to be secure when in https
+	if(isset($_SERVER['HTTPS'])) {
+		$CookieInfo=session_get_cookie_params();
+		session_set_cookie_params($CookieInfo['lifetime'],$CookieInfo['path'], $CookieInfo['domain'],TRUE);
+	}
+	session_start();
+}
 
 $sortby = array(gettext('Filename') => 'filename',
 								gettext('Date') => 'date',

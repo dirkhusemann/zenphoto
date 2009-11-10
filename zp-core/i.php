@@ -197,6 +197,16 @@ if ($process) { // If the file hasn't been cached yet, create it.
 	}
 	$fmt = filemtime($newfile);
 }
+/*
+if (isset($_COOKIE['zenphoto_ssl']) || isset($_SESSION['zenphoto_ssl'])) {  // need to set protocol to https to serve the image
+	$protocol = "https://".$_SERVER['HTTP_HOST'].WEBPATH;
+} else {
+	$protocol = FULLWEBPATH;
+}
+*/$protocol = FULLWEBPATH;
+
+$path = $protocol . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename));
+
 if (!$debug) {
 	// ... and redirect the browser to it.
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
@@ -217,10 +227,10 @@ if (!$debug) {
 			exit();
 	}
 	header('Content-Type: image/'.$suffix);
-	header('Location: ' . FULLWEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename)), true, 301);
+	header('Location: ' . $path, true, 301);
 	exit();
 } else {
-	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($newfilename)) ."\" /></p>";
+	echo "\n<p>Image: <img src=\"" . $path ."\" /></p>";
 }
 
 ?>

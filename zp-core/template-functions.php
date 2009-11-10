@@ -266,7 +266,8 @@ function printAdminToolbox($id='admin') {
 		}	
 		
 		// logout link
-		echo "<li><a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a></li>\n";
+		if (getOption('server_protocol')=='https') $sec=1; else $sec=0;
+		echo "<li><a href=\"".$zf."/admin.php?logout={$sec}{$redirect}\">".gettext("Logout")."</a></li>\n";
 		
 		// close the list
 		echo "</ul>\n";
