@@ -699,7 +699,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						?>
 					</td>
 				<?php
-				if ($_zp_imagic_present) {
+				if ($_zp_imagick_present) {
 					?>
 					<tr>
 						<td><?php echo gettext("Imagick:"); ?></td>
