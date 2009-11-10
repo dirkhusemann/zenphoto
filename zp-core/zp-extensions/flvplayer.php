@@ -154,7 +154,7 @@ class flvplayer {
 			}
 		}
 		$output = '';
-		$output .= '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
+		$output .= '<p id="player'.$count.'">'.gettext('The flv player is not installed. Please install or activate the flv player plugin.').'</p>
 			<script type="text/javascript">'."\n";
 		if($ext === ".mp3" AND !isset($videoThumb)) {
 			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'",'.getOption('flv_player_width').','.FLV_PLAYER_MP3_HEIGHT.',7);'."\n";
@@ -288,7 +288,7 @@ function flvPlaylist($option='') {
 		case "players":
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				if (is_null($_zp_flash_player)) {
-					echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
+					echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('The flv player is not installed. Please install or activate the flv player plugin.')."' />";
 				} else {
 					$_zp_flash_player->printPlayerConfig(getFullImageURL(),$_zp_current_image->getTitle(),$_zp_current_image->get("id"));
 				}
