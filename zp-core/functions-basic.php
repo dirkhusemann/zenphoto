@@ -63,7 +63,7 @@ if (ini_get('memory_limit') && parse_size(ini_get('memory_limit')) < 100663296) 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
-$_zp_imagic_present = false;
+$_zp_imagick_present = false;
 require_once(dirname(__FILE__).'/functions-db.php');
 
 require_once(dirname(__FILE__).'/lib-Imagick.php');
