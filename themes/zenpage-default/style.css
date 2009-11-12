@@ -161,8 +161,8 @@ body {
 	background-position: 1px 0px;
 }
 
-.menu-active {
-	color: #002E5B;
+.menu li a.menu-active  {
+	color:  #002E5B;
 }
 
 .submenu {
@@ -170,6 +170,7 @@ body {
 	margin-left: -25px;
 	padding: 0px;
 }
+
 
 #footer {
 	width: 950px;
@@ -925,6 +926,5 @@ table.password td.hint{
 	padding: 2px;
 }
 
-/* text objects
+/* menu
 ----------------------/
-

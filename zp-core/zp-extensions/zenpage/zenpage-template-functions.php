@@ -2240,7 +2240,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 			} else {
 				$current = "";
 			}
-			echo "<li $class><a href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
+			echo "<li><a $current href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
 		}
 	}
 	// cleanup any hanging list elements

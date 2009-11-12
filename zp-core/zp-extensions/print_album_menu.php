@@ -194,9 +194,9 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 			}
 			if($firstimagelink && $topalbum->getNumImages() != 0) {
 				$imgurl = getFirstImageOfAlbum($topalbum);
-				$link = "<li".$current."><a href='".$imgurl."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+				$link = "<li><a ".$current."href='".$imgurl."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
 			} else {
-				$link = "<li".$current."><a href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+				$link = "<li><a ".$current."href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
 			}
 			echo $link;
 		}
