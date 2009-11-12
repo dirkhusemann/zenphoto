@@ -188,14 +188,15 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 			}
 			
 			if(in_context(ZP_ALBUM) && !in_context(ZP_SEARCH_LINKED) && getAlbumID() == $topalbum->getAlbumID()) {
-				$link = "<li".$css_class_t.">".$topalbum->getTitle().$count;
+				$current = $css_class_t;
 			} else {
-				if($firstimagelink && $topalbum->getNumImages() != 0) {
-					$imgurl = getFirstImageOfAlbum($topalbum);
-					$link = "<li><a href='".$imgurl."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
-				} else {
-					$link = "<li><a href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
-				}
+				$current = "";
+			}
+			if($firstimagelink && $topalbum->getNumImages() != 0) {
+				$imgurl = getFirstImageOfAlbum($topalbum);
+				$link = "<li".$current."><a href='".$imgurl."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+			} else {
+				$link = "<li".$current."><a href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
 			}
 			echo $link;
 		}

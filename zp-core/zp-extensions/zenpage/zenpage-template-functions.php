@@ -2236,11 +2236,11 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 				$gettitle = "";
 			}
 			if ($pageobj->getTitlelink() == $gettitle) {
-				echo "<li $class>".$pageobj->getTitle(); 
+				$current = $class;
 			} else {
-				echo "<li><a href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
+				$current = "";
 			}
-			
+			echo "<li $class><a href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
 		}
 	}
 	// cleanup any hanging list elements
