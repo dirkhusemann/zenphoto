@@ -953,9 +953,9 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 function getLatestNews($number=5,$option='none', $category='') {
 	global $_zp_current_zenpage_news;
 	if(!empty($category) AND $option="none") {
-		$latest = getNewsArticles($number,$category);
+		$latest = getNewsArticles($number,$category,NULL,true);
 	} else {
-		$latest = getNewsArticles($number);
+		$latest = getNewsArticles($number,'',NULL,true);
 	}
 	$counter = "";
 	foreach($latest as $news) {
@@ -1061,7 +1061,7 @@ function getLatestNews($number=5,$option='none', $category='') {
  */
 function printLatestNews($number=5,$option='with_latest_images', $category='', $showdate=true, $showcontent=true, $contentlength=70, $showcat=true){
 	global $_zp_gallery, $_zp_current_zenpage_news;
-	$latest = getLatestNews($number,$option,$category);
+	$latest = getLatestNews($number,$option,$category,true);
 	echo "\n<ul id=\"latestnews\">\n";
 	$count = "";
 	foreach($latest as $item) {

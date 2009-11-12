@@ -101,9 +101,10 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @param string $published "published" for an published articles,
 	 * 													"unpublished" for an unpublised articles,
 	 * 													"all" for all articles
+	 * @param boolean $ignorepagination Since also used for the news loop this function automatically paginates the results if the "page" GET variable is set. To avoid this behaviour if using it directly to get articles set this TRUE (default FALSE)
 	 * @return array
 	 */
-	function getNewsArticles($articles_per_page='', $category='', $published=NULL) {
+	function getNewsArticles($articles_per_page='', $category='', $published=NULL,$ignorepagination=false) {
 		global $_zp_current_category, $_zp_post_date;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
@@ -126,8 +127,11 @@ function getParentPages(&$parentid,$initparents=true) {
 		} else {
 			$postdate = NULL;
 		}
-		$limit = getLimitAndOffset($articles_per_page);
-		 
+		if($ignorepagination) {
+			$limit = " LIMIT ".$articles_per_page;
+		} else {
+			$limit = getLimitAndOffset($articles_per_page);
+		} 
 		/*** get articles by category ***/
 		if (!empty($category) OR in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 
