@@ -470,7 +470,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					</td>
 					<td>
 						<p><?php echo gettext("Normally this option should be set to <em>http</em>. If you're running a secure server, change this to <em>https</em>. Select <em>secure admin</em> to insure secure access to <code>admin</code> pages."); ?>
-						<p><?php echo gettext("<strong>Note:</strong> users may not be able to login from the front-end user login form if <em>secure admin</em> is selected.");?></p>
+						<p><?php echo gettext("<strong>Note:</strong> Login from the front-end user login form is secure only if <em>https</em> is selected.");?></p>
 
 					</td>
 				</tr>
