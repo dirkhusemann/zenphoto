@@ -66,7 +66,10 @@ if (isset($_GET['action'])) {
 				$offset = sanitize($_POST['time_offset'],3);
 			}
 			setOption('time_offset', $offset);
-			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
+			setOption('server_protocol', $protocol = sanitize($_POST['server_protocol'],3));
+			if ($protocal == 'http') {
+				zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
+			}
 			setOption('charset', sanitize($_POST['charset']),3);
 			setBoolOption('tinyMCEPresent', isset($_POST['tinyMCEPresent']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie

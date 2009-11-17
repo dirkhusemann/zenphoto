@@ -348,6 +348,9 @@ code {
 	font-size: 100%;
 }
 
+.errorbox li {
+	list-style-type:none;
+}
 .errorbox h2 {
 	color: #DD6666;
 	font-size: 100%;
