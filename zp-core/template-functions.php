@@ -3534,9 +3534,13 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 				} else {
 					$albumlist = NULL;
 				}
-				$key = str_replace('"', '', $key);
+				if (strpos($key,'"')===false) {
+					$quote = '"';
+				} else {
+					$quote = "'";
+				}
 				echo "\t<li><a href=\"".
-					htmlspecialchars(getSearchURL($key, '', SEARCH_TAGS, 0, 0, $albumlist))."\"$size rel=\"nofollow\">".
+					htmlspecialchars(getSearchURL($quote.$key.$quote, '', 'tags', 0, 0, $albumlist))."\"$size rel=\"nofollow\">".
 					$key.$counter."</a></li>\n";
 			}
 		}

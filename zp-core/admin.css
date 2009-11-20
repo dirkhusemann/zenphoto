@@ -332,7 +332,7 @@ code {
 	color: #006633;
 	font-size: 100%;
 	font-weight: bold;
-	margin: 0px;
+	margin-bottom: 1em;
 }
 
 /* Error Messages
@@ -351,11 +351,12 @@ code {
 .errorbox li {
 	list-style-type:none;
 }
+
 .errorbox h2 {
 	color: #DD6666;
 	font-size: 100%;
 	font-weight: bold;
-	margin: 0px;
+	margin-bottom: 1em;
 }
 
 /* Warning Messages
@@ -371,11 +372,15 @@ code {
 	font-size: 100%;
 }
 
+.warningbox li {
+	list-style-type:none;
+}
+
 .warningbox h2 {
 	color: #663300;
 	font-size: 100%;
 	font-weight: bold;
-	margin: 0px;
+	margin-bottom: 1em;
 }
 
 /* Miscellaneous
