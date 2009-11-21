@@ -236,8 +236,8 @@ function printLoginForm($redirect=null, $logo=true) {
 	?>
 	<tr><td></td><td colspan="2">
 	<div class="buttons">
-	<button type="submit" value="<?php echo gettext("Log in"); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Log in"); ?></button>
-	<button type="reset" value="<?php echo gettext("Reset"); ?>" /><img src="images/reset.png" alt="" /><?php echo gettext("Reset"); ?></button>
+	<button type="submit" value="<?php echo gettext("Log in"); ?>" ><img src="images/pass.png" alt="" /><?php echo gettext("Log in"); ?></button>
+	<button type="reset" value="<?php echo gettext("Reset"); ?>" ><img src="images/reset.png" alt="" /><?php echo gettext("Reset"); ?></button>
 	</div>
 	</td></tr>
 	</table>
@@ -1526,7 +1526,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<td>
 				<table class="noinput">
 					<tr>
-						<td><?php echo urldecode($album->getSearchParams()); ?></td>
+						<td><?php echo htmlspecialchars(urldecode($album->getSearchParams(true))); ?></td>
 					</tr>
 				</table>
 			</td>

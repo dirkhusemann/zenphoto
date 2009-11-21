@@ -479,6 +479,17 @@ li {
 	margin-left: -5px;
 	border:1px solid #009966;
 }
+#loginform {
+	padding: 10px;
+	width: 300px;
+	margin: 25px auto;
+	font-size: 100%;
+	background: #F7F8F9;
+	border-top: 1px solid #BAC9CF;
+	border-left: 1px solid #BAC9CF;
+	border-right: 1px solid #BAC9CF;
+	border-bottom: 5px solid #BAC9CF;
+}
 </style>
 
 </head>
@@ -1451,9 +1462,12 @@ if (file_exists(CONFIGFILE)) {
 
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
 			if (!($_zp_loggedin&ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
-				if (!empty($mod)) $mod = '?'.substr($mod, 1);
-				if ($_zp_loggedin) { echo "<br /><br />".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
-				printLoginForm("/" . ZENFOLDER . "/setup.php$mod", false);
+				if ($_zp_loggedin) { echo "<p>".gettext("You need <em>USER ADMIN</em> rights to run setup.").'</p>'; }
+				printLoginForm('', false);
+				if ($noxlate > 0) {
+					require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
+					printLanguageSelector();
+				}
 				echo "\n</div>";
 				printAdminFooter();
 				echo "\n</body>";
