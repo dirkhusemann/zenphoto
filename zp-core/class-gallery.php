@@ -447,8 +447,9 @@ class Gallery {
 						$album = new Album($this, $folder);
 						if (!$album->isDynamic()) {
 							if(is_null($album->getDateTime())) {  // see if we can get one from an image
-								$image = $album->getImage(0);
-								if(is_object($image)) {
+								$images = $album->getImages(0,0,'date','DESC');
+								if(count($images)>0) {
+									$image = newImage($album,array_shift($images));
 									$album->setDateTime($image->getDateTime());
 								}
 							}
@@ -479,6 +480,7 @@ class Gallery {
 					if ($image['mtime'] != $mtime = filemtime($imageName)) { // file has changed since we last saw it
 						$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
 						$imageobj->set('mtime', $mtime);
+						$imageobj->set('date', strftime('%Y-%m-%d %T', $mtime));
 						$imageobj->updateDimensions(); // update the width/height & account for rotation
 						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
 						$imageobj->save();

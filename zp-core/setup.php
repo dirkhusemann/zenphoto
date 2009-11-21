@@ -1919,6 +1919,8 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' DROP COLUMN `EXIFValid`';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `hasMetadata` int(1) default 0';
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `mtime`=0'; // force metadata refresh
+	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // empty dates should be NULL
+	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // force metadata refresh
 	
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {

@@ -48,7 +48,7 @@ function printLanguageSelector($class='') {
 	}
 	if (!empty($class)) { $class = " class='$class'"; }
 	?>
-	<div<?php echo $class; ?>$class>
+	<div<?php echo $class; ?>>
 		<form action="#" method="post">
 			<input type="hidden" name="oldlocale" value="<?php echo getOption('locale'); ?>" />
 			<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">

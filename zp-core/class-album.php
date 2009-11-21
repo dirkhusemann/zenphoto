@@ -280,12 +280,12 @@ class Album extends PersistentObject {
 	 * @param string $datetime formatted date
 	 */
 	function setDateTime($datetime) {
-		if ($datetime == "") {
-			$this->set('date', '0000-00-00 00:00:00');
-		} else {
+		if ($datetime) {
 			$newtime = dateTimeConvert($datetime);
 			if ($newtime === false) return;
 			$this->set('date', $newtime);
+		} else {
+			$this->set('date', NULL);
 		}
 	}
 

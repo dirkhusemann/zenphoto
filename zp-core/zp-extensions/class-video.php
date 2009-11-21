@@ -91,7 +91,7 @@ class Video extends _Image {
 			$this->setDateTime($newDate);
 			$alb = $this->album;
 			if (!is_null($alb)) {
-				if (is_null($alb->getDateTime()) || getOption('album_use_new_image_date')) {
+				if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
 					$this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
 					$this->album->save();
 				}

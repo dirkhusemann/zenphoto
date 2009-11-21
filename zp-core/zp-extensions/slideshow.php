@@ -263,6 +263,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			$returnpath = rewrite_path('/'.pathurlencode($album->name).'/'.rawurlencode($_POST['imagefile']).getOption('mod_rewrite_image_suffix'),'/index.php?album='.urlencode($album->name).'&image='.urlencode($_POST['imagefile']));
 		}
 	}
+	$showdesc = getOption("slideshow_showdesc");
 	// slideshow display section
 	switch($option) {
 		case "jQuery":
@@ -294,7 +295,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 								//$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . pathurlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
 								echo 'ImageList[' . $cntr . '] = "' . $img . '";'. "\n";
 								echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. "\n";
-								if(getOption("slideshow_showdesc")) {
+								if($showdesc) {
 									$desc = $image->getDesc();
 									$desc = str_replace("\r\n", '<br />', $desc); 
 									$desc = str_replace("\r", '<br />', $desc); 
@@ -456,7 +457,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 							printCustomSizedImageMaxSpace($alt='',$width,$height,NULL,NULL,false);
 							//echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".urlencode($folder)."&i=".urlencode($filename)."&s=".$imagesize."' alt='".html_encode($image->getTitle())."' title='".html_encode($image->getTitle())."' />\n";
 						}
-						if(getOption("slideshow_showdesc")) {
+						if($showdesc) {
 							$desc = $image->getDesc();
 							$desc = str_replace("\r\n", '<br />', $desc);
 							$desc = str_replace("\r", '<br />', $desc);

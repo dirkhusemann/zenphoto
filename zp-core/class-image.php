@@ -108,8 +108,8 @@ class _Image extends PersistentObject {
 			$this->updateMetaData();			// extract info from image
 			$alb = $this->album;
 			if (!is_null($alb)) {
-				if (is_null($alb->getDateTime()) || getOption('album_use_new_image_date')) {
-					$this->album->setDateTime($this->get('date'));   //  not necessarily the right one, but will do. Can be changed in Admin
+				if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
+					$this->album->setDateTime($this->getDateTime());   //  not necessarily the right one, but will do. Can be changed in Admin
 					$this->album->save();
 				}
 			}
@@ -148,6 +148,7 @@ class _Image extends PersistentObject {
 		$this->comments = null;
 		$this->filemtime = @filemtime($this->localpath);
 		$this->imagetype = strtolower(get_class($this)).'s';
+		$this->set('date', strftime('%Y-%m-%d %T', $this->filemtime));
 		return true;
 	}
 	
@@ -323,9 +324,7 @@ class _Image extends PersistentObject {
 				if (empty($date)) {
 					$date = $this->get('EXIFDateTimeDigitized');
 				}
-				if (empty($date)) {
-					$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
-				} else {
+				if (!empty($date)) {
 					$this->setDateTime($date);
 				}
 
@@ -656,12 +655,12 @@ class _Image extends PersistentObject {
 	 * @param string $datetime the date
 	 */
 	function setDateTime($datetime) {
-		if ($datetime == "") {
-			$this->set('date', '0000-00-00 00:00:00');
-		} else {
+		if ($datetime) {
 			$newtime = dateTimeConvert($datetime);
 			if ($newtime === false) return;
 			$this->set('date', $newtime);
+		} else {
+			$this->set('date', NULL);
 		}
 	}
 
