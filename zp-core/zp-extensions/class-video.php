@@ -45,13 +45,13 @@ class VideoObject_Options {
 		return array(gettext('Watermark default images') => array ('key' => 'video_watermark_default_images', 'type' => OPTION_TYPE_CHECKBOX,
 																	'desc' => gettext('Check to place watermark image on default thumbnail images.')),
 		gettext('Quicktime video width') => array ('key' => 'zp_plugin_class-video_mov_w', 'type' => OPTION_TYPE_TEXTBOX,
-																	'desc' => gettext(' ')),
+																	'desc' => ''),
 		gettext('Quicktime video height') => array ('key' => 'zp_plugin_class-video_mov_h', 'type' => OPTION_TYPE_TEXTBOX,
-																	'desc' => gettext(' ')),
+																	'desc' => ''),
 		gettext('3gp video width') => array ('key' => 'zp_plugin_class-video_3gp_w', 'type' => OPTION_TYPE_TEXTBOX,
-																	'desc' => gettext(' ')),
+																	'desc' => ''),
 		gettext('3gp video height') => array ('key' => 'zp_plugin_class-video_3gp_h', 'type' => OPTION_TYPE_TEXTBOX,
-																	'desc' => gettext(' '))
+																	'desc' => '')
 		);
 	}
 	
