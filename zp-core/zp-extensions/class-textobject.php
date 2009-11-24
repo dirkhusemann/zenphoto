@@ -113,17 +113,7 @@ class TextObject extends _Image {
 			$this->set('title', $title);
 			$this->set('mtime', $ts = filectime($this->localpath));
 			$newdate = strftime('%Y-%m-%d %T', $ts);
-			$this->setDateTime($newdate);
-			$alb = $this->album;
-			if (!is_null($alb)) {
-				if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
-					$this->album->setDateTime($newdate);   //  not necessarily the right one, but will do. Can be changed in Admin
-					$this->album->save();
-				}
-			}
-			if (!is_null($this->objectsThumb)) {
-				$this->updateMetaData();
-			}
+			$this->updateMetaData();
 			$this->save();
 			zp_apply_filter('new_image', $this);
 		}

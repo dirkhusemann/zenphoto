@@ -87,21 +87,7 @@ class Video extends _Image {
 		$this->updateDimensions();  // TODO: figure out how to know if this should change. I.e. old videos, changes of the flash player.
 		if (parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name))) {
 			$this->set('mtime', $ts = filemtime($this->localpath));
-			$newDate = strftime('%Y-%m-%d %T', $ts);
-			$this->setDateTime($newDate);
-			$alb = $this->album;
-			if (!is_null($alb)) {
-				if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
-					$this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
-					$this->album->save();
-				}
-			}
-
-			$title = $this->getDefaultTitle();
-			$this->set('title', sanitize($title, 2));
-			if (!is_null($this->objectsThumb)) {
-				$this->updateMetaData();
-			}
+			$this->updateMetaData();
 			$this->save();
 			zp_apply_filter('new_image', $this);
 		}

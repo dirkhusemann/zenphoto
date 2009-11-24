@@ -480,7 +480,6 @@ class Gallery {
 					if ($image['mtime'] != $mtime = filemtime($imageName)) { // file has changed since we last saw it
 						$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
 						$imageobj->set('mtime', $mtime);
-						$imageobj->set('date', strftime('%Y-%m-%d %T', $mtime));
 						$imageobj->updateDimensions(); // update the width/height & account for rotation
 						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
 						$imageobj->save();

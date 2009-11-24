@@ -106,13 +106,6 @@ class _Image extends PersistentObject {
 			$this->set('mtime', $mtime);
 			$this->updateDimensions();		// deal with rotation issues
 			$this->updateMetaData();			// extract info from image
-			$alb = $this->album;
-			if (!is_null($alb)) {
-				if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
-					$this->album->setDateTime($this->getDateTime());   //  not necessarily the right one, but will do. Can be changed in Admin
-					$this->album->save();
-				}
-			}
 			$this->save();
 			if ($new) zp_apply_filter('new_image', $this);
 		}
@@ -248,7 +241,7 @@ class _Image extends PersistentObject {
 											'Orientation'					=>	'2#131',	//	Image	 rientation									Size:1		
 											'LangID'							=>	'2#135',	//	Language ID												Size:3		
 											'Subfile'							=>	'8#010'		//	Subfile														Size:2
-										);
+		);
 		$this->set('hasMetadata',0);
 		$result = array();
 		if (get_class($this)=='_Image') {
@@ -256,19 +249,20 @@ class _Image extends PersistentObject {
 		} else {
 			$localpath = $this->getThumbImageFile();
 		}
-		$exifraw = read_exif_data_protected($localpath);
-		if (isset($exifraw['ValidEXIFData'])) {
-			$this->set('hasMetadata',1);
-			foreach($_zp_exifvars as $field => $exifvar) {
-				if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
-					$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
-					$this->set($field, $exif);
-				} else if (isset($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]])) {
-					$exif = trim(sanitize($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]],3));
-					$this->set($field, $exif);
+		if (!empty($localpath)) { // there is some kind of image to get metadata from
+			$exifraw = read_exif_data_protected($localpath);
+			if (isset($exifraw['ValidEXIFData'])) {
+				$this->set('hasMetadata',1);
+				foreach($_zp_exifvars as $field => $exifvar) {
+					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
+						$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
+						$this->set($field, $exif);
+					} else if (isset($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]])) {
+						$exif = trim(sanitize($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]],3));
+						$this->set($field, $exif);
+					}
 				}
 			}
-		}
 			/* check IPTC data */
 			$iptcdata = zp_imageIPTC($localpath);
 			if (!empty($iptcdata)) {
@@ -295,7 +289,7 @@ class _Image extends PersistentObject {
 							$this->set($field, $this->prepIPTCString($datum, $characterset));
 						}
 					}
-					
+						
 					/* iptc keywords (tags) */
 					$datum = $this->getIPTCTagArray('2#025', $iptc);
 					if (is_array($datum)) {
@@ -308,7 +302,7 @@ class _Image extends PersistentObject {
 					}
 				}
 				/* "import" metadata into Zenphoto fields as makes sense */
-				
+
 				/* iptc date */
 				$date = $this->get('IPTCDateCreated');
 				if (!empty($date)) {
@@ -337,9 +331,7 @@ class _Image extends PersistentObject {
 				if (empty($title)) {
 					$title = $this->get('EXIFImageDescription');
 				}
-				if (empty($title)) {
-					$this->set('title',$this->getDefaultTitle());
-				} else {
+				if (!empty($title)) {
 					$this->setTitle($title);
 				}
 
@@ -366,7 +358,21 @@ class _Image extends PersistentObject {
 				$this->setCopyright($this->get('IPTCCopyright'));
 
 			}
-
+		}
+		$alb = $this->album;
+		if (!is_null($alb)) {
+			if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
+				$this->album->setDateTime($this->getDateTime());   //  not necessarily the right one, but will do. Can be changed in Admin
+			}
+		}
+		$x = $this->getTitle();
+		if (empty($x)) {
+			$this->set('title',$this->getDefaultTitle());
+		}
+		$x = $this->getDateTime();
+		if (empty($x)) {
+			$imageobj->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
+		}
 	}
 
 	/**
