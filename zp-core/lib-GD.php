@@ -60,11 +60,7 @@ if (extension_loaded('gd')) { // only define the functions if we have the proper
 		$qual = max(min($qual, 100),0);
 		switch ($type) {
 			case 'png':
-				if ($qual = 100) {
-					$qual = 0;
-				} else {
-					$qual = round((99 - $qual)/10);
-				}
+				$qual = max(0,9 - round($qual/10));
 				return imagepng($im, $filename, $qual);
 			case 'wbmp':
 				return imagewbmp($im, $filename);
