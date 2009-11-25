@@ -371,7 +371,7 @@ class _Image extends PersistentObject {
 		}
 		$x = $this->getDateTime();
 		if (empty($x)) {
-			$imageobj->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
+			$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
 		}
 	}
 
