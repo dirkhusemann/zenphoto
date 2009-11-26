@@ -164,7 +164,7 @@ class flowplayer3 {
 			$playerconfig = '
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.$width.'px; height: '.$height.'px;">
 			</span>
-			<script>
+			<script type="text/javascript">
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.5.swf", {
 			plugins: { 
         controls: {

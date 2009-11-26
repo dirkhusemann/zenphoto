@@ -141,7 +141,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			<a id="player" class="flowplayer3_playlist" style="display:block; width: '.getOption('flow_player3_playlistwidth').'px; height: '.getOption('flow_player3_playlistheight').'px;">
 			'.$videoThumb.'
 			</a>
-			<script>
+			<script type="text/javascript">
 			$(function() {
 			$("div.playlist").scrollable({
 				items:"div.clips",
