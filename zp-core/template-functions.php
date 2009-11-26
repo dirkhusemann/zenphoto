@@ -3458,19 +3458,20 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 				echo "<span class=\"tags_title\">".$preText."</span>";
 			}
 			echo "<ul class=\"".$class."\">\n";
-			$ct = count($singletag);
 			if (is_object($_zp_current_search)) {
 				$albumlist = $_zp_current_search->album_list;
 			} else {
 				$albumlist = NULL;
 			}
-			for ($x = 0; $x < $ct; $x++) {
-				if ($x === $ct - 1) { $separator = ""; }
+			$ct = count($singletag);
+			$x = 0;
+			foreach ($singletag as $atag) {
+				if ($x++ == $ct) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0, $albumlist))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0, $albumlist))."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
-				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
+				echo "\t<li>".$links1.$atag.$links2.$separator."</li>\n";
 			}
 			echo "</ul>";
 		} else {
