@@ -1593,7 +1593,7 @@ function printAlbumButtons($album) {
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
 		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
 		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/redo.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
+		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/refresh.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
 	  </div>	
 		</form>
 	<?php
@@ -1703,7 +1703,7 @@ function printAlbumEditRow($album) {
 		if (!$album->isDynamic()) {
 			?>
 			<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
-			<img src="images/redo1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh metadata in the album %s'), $album->name); ?>" /></a>
+			<img src="images/refresh1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh metadata in the album %s'), $album->name); ?>" /></a>
 			<?php
 			}
 		?>

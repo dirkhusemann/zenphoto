@@ -17,7 +17,7 @@ require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
 $button_text = gettext('Reset album thumbs');
 $button_hint = gettext('Reset album thumbnails to either '."'random' or 'most recent''.");
-$button_icon = 'images/burst1.png';
+$button_icon = 'images/reset1.png';
 $button_rights = MANAGE_ALL_ALBUM_RIGHTS;
 
 
