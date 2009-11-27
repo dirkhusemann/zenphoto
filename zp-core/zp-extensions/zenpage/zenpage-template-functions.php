@@ -1308,7 +1308,11 @@ function getPrevNewsPageURL() {
 	$page = getCurrentNewsPage();
 	if($page != 1) {
 		if(($page - 1) == 1) {
-			return getNewsIndexURL();
+			if(is_NewsCategory()) {
+				return getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().($page - 1);
+			} else {
+				return getNewsIndexURL();
+			}
 		} else {
 			return getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().($page - 1);
 		}
