@@ -758,13 +758,13 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
 				echo "<li class=\"tags_title\">".$preText."</li>";
 			}
 			$ct = count($singletag);
-			for ($x = 0; $x < $ct; $x++) {
-				if ($x == $ct - 1) { $separator = ""; }
+			foreach ($singletag as $atag) {
+				if ($x++ == $ct) { $separator = ""; }
 				if ($option == "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0))."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', SEARCH_TAGS, 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
-				echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
+				echo "\t<li>".$links1.htmlspecialchars($atag, ENT_QUOTES).$links2.$separator."</li>\n";
 			}
 
 			echo "</ul>";
