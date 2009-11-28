@@ -26,10 +26,10 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---image_al
  *	@param string $albumfolder The name of an album to get only the statistc for its subalbums
  * @return string
  */
-function getAlbumStatistic($number=5, $option,$albumfolder='') {
+function getAlbumStatistic($number=5, $option, $albumfolder='') {
 	$passwordcheck = '';
 	if (zp_loggedin()) {
-		$albumWhere = "";
+		$albumWhere = "WHERE `dynamic`=0";
 	} else {
 		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 		foreach($albumscheck as $albumcheck) {
@@ -38,15 +38,11 @@ function getAlbumStatistic($number=5, $option,$albumfolder='') {
 				$passwordcheck = $passwordcheck.$albumpasswordcheck;
 			}
 		}
-		$albumWhere = "WHERE `show`=1".$passwordcheck;
+		$albumWhere = "WHERE `dynamic`=0 AND `show`=1".$passwordcheck;
 	}
 	$albumfolder = sanitize_path($albumfolder);
 	if(!empty($albumfolder)) {
-		if(empty($albumWhere)) {
-			$albumWhere = " WHERE folder LIKE '".$albumfolder."/%'";
-		} else {
-			$albumWhere .= " AND folder LIKE '".$albumfolder."/%'";
-		}
+		$albumWhere .= " AND folder LIKE '".$albumfolder."/%'";
 	} 
 	switch($option) {
 		case "popular":
@@ -61,38 +57,28 @@ function getAlbumStatistic($number=5, $option,$albumfolder='') {
 			$sortorder = "(total_value/total_votes)"; break;
 		case "latestupdated":
 			// get all albums
-			$allalbums = query_full_array("SELECT id, title, folder, thumb FROM " . prefix('albums'). $albumWhere);
+			$allalbums = query_full_array("SELECT id, title, folder, thumb, `show` FROM " . prefix('albums'). $albumWhere);
 			$latestimages = array();
 
-			// get latest images of each album
-			foreach($allalbums as $album) {
-				$image = query_single_row("SELECT id, albumid FROM " . prefix('images'). " WHERE albumid = ".$album['id'] . " AND `show` = 1 ORDER BY id DESC");
-				array_push($latestimages, $image);
+			// get latest image of each album
+			foreach($allalbums as $key=>$album) {
+				$image = query_single_row("SELECT id, albumid, mtime FROM " . prefix('images'). " WHERE albumid = ".$album['id'] . " AND `show` = 1 ORDER BY `mtime` DESC LIMIT 1");
+				if (is_array($image)) {
+					$latestimages[$key] = $image['mtime'];
+				}
 			}
 			// sort latest image by mtime
 			arsort($latestimages);
-			//print_r($latestimages);
+			$latestimages = array_slice($latestimages,0,$number);
 			$updatedalbums = array();
 			$count = 0;
-			foreach($latestimages as $latestimage) {
-				$count++;
-				foreach($allalbums as $album) {
-					if($album['id'] === $latestimage['albumid']) {
-						array_push($updatedalbums,$album);
-					}
-				}
-				if($count == $number) {
-					break;
-				}
+			foreach($latestimages as $key=>$time) {
+				array_push($updatedalbums,$allalbums[$key]);
 			}
-			break;
+			return $updatedalbums;
 	}
-	if($option === "latestupdated") {
-		return $updatedalbums;
-	} else {
-		$albums = query_full_array("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
-		return $albums;
-	}
+	$albums = query_full_array("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
+	return $albums;
 }
 
 /**

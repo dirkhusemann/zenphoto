@@ -209,7 +209,7 @@ function setDefault($option, $default) {
 	setOptionDefault('gallery_user', '');
 	setOptionDefault('search_user', '');
 	setOptionDefault('album_use_new_image_date', 0);
-	setOptionDefault('thumb_select_images', 1);
+	setOptionDefault('thumb_select_images', 0);
 	setOptionDefault('Gallery_description', 'You can insert your Gallery description using on the Admin Options tab.');
 	setOptionDefault('multi_lingual', 0);
 	setOptionDefault('login_user_field', 1);

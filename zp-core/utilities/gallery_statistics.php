@@ -15,6 +15,8 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
+require_once(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/image_album_statistics.php');
+
 if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
 }
@@ -172,18 +174,8 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 						$albumentry = array("id" => $albumobj->get('id'), "title" => $albumobj->getTitle(), "folder" => $albumobj->name,"imagenumber" => $albumobj->getNumImages(), "show" => $albumobj->get("show"));
 						array_unshift($albums,$albumentry);
 					}
-					$maxvalue = 0;
-					if(empty($albums)) {
-						$itemssorted = array();
-					} else {
-						foreach ($albums as $entry) {
-							if (array_key_exists('imagenumber', $entry)) {
-								$v = $entry['imagenumber'];
-								if ($v > $maxvalue) $maxvalue = $v;
-							}
-						}
-						$itemssorted = $albums; // The items are originally sorted by id;
-					}
+					$maxvalue = 1;
+					$itemssorted = $albums; // The items are originally sorted by id;
 					$headline = $typename." - ".gettext("latest");
 					break;
 				case "images":
@@ -195,67 +187,19 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			}
 			break;
 		 case "latestupdated":
-		 		// part taken from the image_albums_statistics - could probably be optimized regarding queries...
-		 		// get all albums
-		 		$allalbums = query_full_array("SELECT id, title, folder, `show` FROM " . prefix('albums'));
-		 		$albums = array();
-		 		$latestimages = array();
-		 		foreach ($allalbums as $album) {
-					$albumobj = new Album($gallery,$album['folder']);
-					$albumentry = array("id" => $albumobj->get('id'), "title" => $albumobj->getTitle(), "folder" => $albumobj->name,"imagenumber" => $albumobj->getNumImages(), "show" => $albumobj->get("show"));
-					array_unshift($albums,$albumentry);
-				}
-		 	 	// get latest images of each album
-				$count = 0;
-		 		foreach($albums as $album) {
-		 			$count++;
-		 			$image = query_single_row("SELECT id, albumid, mtime FROM " . prefix('images'). " WHERE albumid = ".$album['id'] . " ORDER BY id DESC LIMIT 1");
-					if (is_array($image)) array_push($latestimages, $image);
-		 			if($count === $to_number) {
-		 				break;
-		 			}
-		 		} 
-		 		// sort latest image by mtime
-		 		$latestimages = sortMultiArray($latestimages,"mtime","desc",false,false);
-		 		//echo "<pre>"; print_r($albums); echo "</pre>";
-		 		$itemssorted = array();
-		 		$count = 0;
-		 		foreach($latestimages as $latestimage) {
-		 			$count++;
-		 			foreach($allalbums as $album) {
-		 				if($album['id'] === $latestimage['albumid']) {
-		 					array_push($albums,$album);
-		 				}
-		 			}
-		 			if($count === $to_number) {
-		 				break;
-		 			}
-		 		}
-		 		if($to_number < 1) {
-		 			$stopelement = 1;
-		 		} else {
-		 			$stopelement = $to_number;
-		 		}
-		 		$albums = array_slice($albums,0,$stopelement); // clear unnessesary items fron array
-		 		$maxvalue = 0;
-		 		if(empty($albums)) {
-		 			$itemssorted = array();
-		 		} else {
-					foreach ($albums as $key=>$entry) {
-						if (array_key_exists('imagenumber', $entry)) {
-							$v = $entry['imagenumber'];
-							if ($v > $maxvalue) $maxvalue = $v;
-						} else {
-							unset($albums[$key]); // if it has no imagenumber it must not be a valid entry!
-						}
+		 		$albums = getAlbumStatistic($to_number, 'latestupdated', '');
+		 		$maxvalue = 1;
+		 		if(!empty($albums)) {
+					foreach ($albums as $key=>$album) {
+						$albumobj = new Album($gallery, $album['folder']);
+						$albums[$key]['imagenumber'] = $albumobj->getNumImages();
 					}
-		 			$itemssorted = $albums; // The items are originally sorted by id;
 		 		}
+		 		$itemssorted = $albums;
 		 		$headline = $typename." - ".gettext("latest updated");
-		 		//echo "<pre>"; print_r($albums); echo "</pre>";
 			break; 
 	}
-	if($maxvalue == 0 OR empty($itemssorted)) {
+	if($maxvalue == 0 || empty($itemssorted)) {
 		$maxvalue = 1;
 		$no_statistic_message = "<tr><td><em>".gettext("No statistic available")."</em></td><td></td><td></td><td></td></tr>";
 	} else {
