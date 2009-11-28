@@ -1305,7 +1305,7 @@ if ($debug) {
 		}
 	}
 	if ($Apache || $ch != -2) {
-		checkMark($ch, $msg, $err, $desc);			
+		$good = checkMark($ch, $msg, $err, $desc) && $good;			
 	}
 	$base = true;
 	$f = '';
@@ -1412,8 +1412,8 @@ if ($debug) {
 			require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
 			printLanguageSelector();
 		}
-		printadminfooter();
 		echo "</div>";
+		printadminfooter();
 		echo "</body>";
 		echo "</html>";
 		exit();

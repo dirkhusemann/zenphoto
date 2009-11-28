@@ -1923,7 +1923,10 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		$auth = passwordHash($post_user, $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
 		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
-		$redirect_to = str_replace(WEBPATH.'/','',sanitize_path($_POST['redirect']));
+		$redirect_to = sanitize_path($_POST['redirect']);
+		if (strpos($redirect_to,WEBPATH.'/')===0) {
+			$redirect_to = substr($redirect_to,strlen(WEBPATH)+1);
+		}
 		if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
 		if ($_zp_loggedin) {	// allow Admin user login
 			// https: set the 'zenphoto_ssl' marker for redirection
