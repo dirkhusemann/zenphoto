@@ -1923,6 +1923,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		$auth = passwordHash($post_user, $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
 		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
+		$redirect_to = str_replace(WEBPATH.'/','',sanitize_path($_POST['redirect']));
 		if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
 		if ($_zp_loggedin) {	// allow Admin user login
 			// https: set the 'zenphoto_ssl' marker for redirection
@@ -1932,7 +1933,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 			// set cookie as secure when in https
 			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath, isset($_SERVER['HTTPS']));
 			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
-				header("Location: " . FULLWEBPATH . "/" . sanitize_path($_POST['redirect']));
+				header("Location: " . FULLWEBPATH . "/" . $redirect_to);
 				exit();
 			}
 		} else {
@@ -1943,7 +1944,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 				if (DEBUG_LOGIN) debugLog("zp_handle_password: valid credentials");
 				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 				if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
-					header("Location: " . FULLWEBPATH . "/" . sanitize_path($_POST['redirect']));
+					header("Location: " . FULLWEBPATH . "/" . $redirect_to);
 					exit();
 				}
 			} else {
