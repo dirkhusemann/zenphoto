@@ -499,7 +499,14 @@ $count = round($count/2);
 			<?php echo $button['hidden']; ?>
 			<div class="buttons" id="home_exif">
 			<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>">
-			<?php if(!empty($button_icon)) echo '<img src="'.$button_icon.'" alt="'.$button['alt'].'" />'; echo addslashes($button['button_text']); ?>
+			<?php
+			if(!empty($button_icon)) {
+				?>
+				<img src="<?php echo $button_icon; ?>" alt="<?php echo $button['alt']; ?>" />
+				<?php
+			}
+			echo htmlspecialchars($button['button_text']);
+			?>
 			</button>
 			</div>
 			<br clear="all" />
