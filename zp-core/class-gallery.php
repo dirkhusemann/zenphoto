@@ -342,7 +342,7 @@ class Gallery {
 			// Load the albums from disk
 			$albumfolder = getAlbumFolder();
 			while($row = mysql_fetch_assoc($result)) {
-				$valid = file_exists($albumpath = $albumfolder.internalToFilesystem($row['folder'])) && (hasDynamicAlbumSuffix($albumpath) || is_dir($albumpath));
+				$valid = file_exists($albumpath = $albumfolder.internalToFilesystem($row['folder'])) && (hasDynamicAlbumSuffix($albumpath) || (is_dir($albumpath) && strpos($albumpath,'/./') === false && strpos($albumpath,'/../') === false));
 				if (!$valid || in_array($row['folder'], $live)) {
 					$dead[] = $row['id'];
 					if ($row['album_theme'] !== '') {  // orphaned album theme options table
