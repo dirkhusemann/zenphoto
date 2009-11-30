@@ -1515,10 +1515,7 @@ span.tagMatches span {
 .nowrap {
 white-space:nowrap;
 }
-
-/* Pretty buttons */
-
-.buttons button {
+.log_buttons a,.buttons button {
 	display: block;
 	float: left;
 	margin: 0 7px 0 0;
@@ -1538,43 +1535,84 @@ white-space:nowrap;
 	padding: 5px 10px 6px 7px; /* Links */
 }
 
+.log_buttons button {
+	text-decoration: none;
+	width: auto;
+	overflow: visible;
+	padding: 4px 10px 3px 7px; /* IE6 */
+}
+
+.log_buttons button[type] {
+	text-decoration: none;
+	padding: 5px 10px 5px 7px; /* Firefox */
+	line-height: 17px; /* Safari */
+}
+
+.log_buttons button img,.log_buttons a img {
+	text-decoration: none;
+	margin: 0 3px -3px 0 !important;
+	padding: 0;
+	border: none;
+	width: 16px;
+	height: 16px;
+}
+
 /* standard buttons */
-button:hover {
+button:hover,.log_buttons a:hover {
 	text-decoration: none;
 	background-color: #dff4ff;
 	border: 1px solid #CBCBCB;
 	color: #FF8A00;
 }
 
+.log_buttons a:active {
+	text-decoration: none;
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #fff;
+}
 
 /* positive buttons */
-button.positive {
+button.positive,.log_buttons a.positive {
 	text-decoration: none;
 	color: #529214;
 }
 
-button.positive:hover {
+.log_buttons a.positive:hover,button.positive:hover {
 	text-decoration: none;
 	background-color: #E6EFC2;
 	border: 1px solid #f5f5f4;
 	color: #529214;
 }
 
+.log_buttons a.positive:active {
+	text-decoration: none;
+	background-color: #529214;
+	border: 1px solid #529214;
+	color: #fff;
+}
 
 /* negative buttons */
-button.negative {
+.log_buttons a.negative,button.negative {
 	text-decoration: none;
 	color: #d12f19;
 }
 
-button.negative:hover {
+.log_buttons a.negative:hover,button.negative:hover {
 	text-decoration: none;
 	background: #fbe3e4;
 	border: 1px solid #fbc2c4;
 	color: #d12f19;
 }
 
-.buttons .tooltip {
+.log_buttons a.negative:active {
+	text-decoration: none;
+	background-color: #d12f19;
+	border: 1px solid #d12f19;
+	color: #fff;
+}
+
+.log_buttons .tooltip {
 	width: 10em;
 	text-align: left;
 }
