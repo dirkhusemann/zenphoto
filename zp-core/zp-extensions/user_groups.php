@@ -8,7 +8,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("Provides rudimentary user groups.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_groups.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---user_groups.php.html";
 
 zp_register_filter('admin_tabs', 'user_groups_admin_tabs');
 zp_register_filter('admin_alterrights', 'user_groups_admin_alterrights');

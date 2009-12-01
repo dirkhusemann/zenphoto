@@ -8,7 +8,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("Provides mass edit of some image properties.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins--image_massedit.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."--image_massedit.php.html";
 
 zp_register_filter('admin_tabs', 'image_massedit_admin_tabs');
 

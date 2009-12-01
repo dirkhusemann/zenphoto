@@ -8,7 +8,7 @@ $plugin_version = '1.2.7';
 $plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />" 
 				."<strong>NOTE:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>zenpage default</code> and <code>effervescence+</code> themes support Zenpage.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_plugins---zenpage---zenpage-template-functions.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_".PLUGIN_FOLDER."---zenpage---zenpage-template-functions.php.html";
 $option_interface = new zenpagecms();
 
 $zenpage_version = $plugin_version;

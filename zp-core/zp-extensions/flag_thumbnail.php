@@ -11,7 +11,7 @@
 $plugin_description = sprintf(gettext('Apply <img src="%1$s/images/lock.png"/> over thumbnails of <em>password protected</em> albums and <img src="%1$s/images/action.png"/> over thumbnails of <em>not published</em> albums and <em>not visible</em> images.'),WEBPATH.'/'.ZENFOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flag_thumbnail.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flag_thumbnail.php.html";
 
 zp_register_filter('standard_image_thumb_html', 'flag_thumbnail_std_image_thumbs');
 zp_register_filter('standard_album_thumb_html', 'flag_thumbnail_std_album_thumbs', 1);

@@ -8,7 +8,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("Example filter for custom data.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-custom_data.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-custom_data.php.html";
 
 zp_register_filter('save_image_custom_data', 'custom_data_save_image');
 zp_register_filter('edit_image_custom_data', 'custom_data_edit_image');

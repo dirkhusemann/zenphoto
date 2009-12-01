@@ -10,7 +10,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("Email all posters when a new comment is made on an item.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-comments.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-comments.php.html";
 
 zp_register_filter('comment_post', 'emailReply');
 zp_register_filter('comment_approve', 'emailApproval');

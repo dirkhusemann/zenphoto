@@ -7,7 +7,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("Zenphoto outgoing mail handler based on the PHP <em>mail</em> facility.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---zenphoto_sendmail.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---zenphoto_sendmail.html";
 
 zp_register_filter('sendmail', 'zenphoto_sendmail');
 

@@ -11,7 +11,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("An example of how to create extensions to the administrative toolbox on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.7';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flter-admin_toolbox.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flter-admin_toolbox.php.html";
 
 zp_register_filter('admin_toolbox_global', 'toolbox_global_extensions');
 zp_register_filter('admin_toolbox_gallery', 'toolbox_gallery_extensions');
