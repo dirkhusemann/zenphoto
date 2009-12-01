@@ -19,6 +19,9 @@
  * modifiers applied.
  * 
  * I have included some typical default text files. Feel free to change them.
+ * 
+ * @author Stephen Billard (sbillard)
+ * @package plugins
  */
 $plugin_description = sprintf(gettext('Attaches "Effenberger effects" to images and thumbnails. This plugin is intended as an example for the use of the <em>image_html</em> filters.<br /><strong>Due to licensing considerations no effects are included with this plugin.</strong> See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>/%s/effenberger_effects</code> folder.<br />All testing was done with the <code>default</code> theme. No warranty is made that any particular effect will work with any particular theme.'),USER_PLUGIN_FOLDER);
 $plugin_URL = "http://www.netzgesta.de/cvi/";

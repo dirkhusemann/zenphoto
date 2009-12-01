@@ -5,6 +5,8 @@
  * 
  * To use simply enable the plugin.
  * 
+ * @author Stephen Billard (sbillard)
+ * @package plugins
  */
 $plugin_description = sprintf(gettext('Apply <img src="%1$s/images/lock.png"/> over thumbnails of <em>password protected</em> albums and <img src="%1$s/images/action.png"/> over thumbnails of <em>not published</em> albums and <em>not visible</em> images.'),WEBPATH.'/'.ZENFOLDER);
 $plugin_author = "Stephen Billard (sbillard)";

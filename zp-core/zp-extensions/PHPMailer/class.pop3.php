@@ -41,7 +41,7 @@
  * This class is rfc 1939 compliant and implements all the commands
  * required for POP3 connection, authentication and disconnection.
  *
- * @package PHPMailer
+ * @subpackage  PHPMailer
  * @author Richard Davey
  */
 

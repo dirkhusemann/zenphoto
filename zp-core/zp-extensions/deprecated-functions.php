@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * These functions have been removed from mainstream Zenphoto as as they have been
  * supplanted. 
  * 

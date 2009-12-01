@@ -27,7 +27,7 @@
 /**
  * PHPMailer - PHP email transport class
  * NOTE: Designed for use with PHP version 5 and up
- * @package PHPMailer
+ * @subpackage  PHPMailer
  * @author Andy Prevost
  * @copyright 2004 - 2008 Andy Prevost
  */
