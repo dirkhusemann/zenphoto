@@ -1,4 +1,26 @@
 <?php
+/**
+ * POP Before SMTP Authentication Class
+ * Version 2.1
+ *
+ * Author: Richard Davey (rich@corephp.co.uk)
+ * Modifications: Andy Prevost
+ * License: LGPL, see PHPMailer License
+ *
+ * Specifically for PHPMailer to allow POP before SMTP authentication.
+ * Does not yet work with APOP - if you have an APOP account, contact me
+ * and we can test changes to this script.
+ *
+ * This class is based on the structure of the SMTP class by Chris Ryan
+ *
+ * This class is rfc 1939 compliant and implements all the commands
+ * required for POP3 connection, authentication and disconnection.
+ * 
+ * @package plugins
+ * @subpackage  PHPMailer
+ * @author Richard Davey
+ */
+
 /*~ class.pop3.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
@@ -23,27 +45,7 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
-
-/**
- * POP Before SMTP Authentication Class
- * Version 2.1
- *
- * Author: Richard Davey (rich@corephp.co.uk)
- * Modifications: Andy Prevost
- * License: LGPL, see PHPMailer License
- *
- * Specifically for PHPMailer to allow POP before SMTP authentication.
- * Does not yet work with APOP - if you have an APOP account, contact me
- * and we can test changes to this script.
- *
- * This class is based on the structure of the SMTP class by Chris Ryan
- *
- * This class is rfc 1939 compliant and implements all the commands
- * required for POP3 connection, authentication and disconnection.
- *
- * @subpackage  PHPMailer
- * @author Richard Davey
- */
+*/
 
 class POP3 {
   /**

@@ -1,4 +1,14 @@
 <?php
+/**
+ * PHPMailer - PHP email transport class
+ * NOTE: Designed for use with PHP version 5 and up
+ * 
+ * @package plugins
+ * @subpackage  PHPMailer
+ * @author Andy Prevost
+ * @copyright 2004 - 2008 Andy Prevost
+ */
+
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
@@ -24,13 +34,7 @@
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
 
-/**
- * PHPMailer - PHP email transport class
- * NOTE: Designed for use with PHP version 5 and up
- * @subpackage  PHPMailer
- * @author Andy Prevost
- * @copyright 2004 - 2008 Andy Prevost
- */
+*/
 
 class PHPMailer {
 
