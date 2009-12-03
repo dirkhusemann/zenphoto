@@ -619,7 +619,7 @@ if (!$setup_checked) {
 						}
 					}
 					if (!empty($subfolderfailed)) {
-						return checkMark(-1, '', sprintf(gettext('<em>%1$s</em> folder%2$s [subfolder creation failure]'),$which, $f), sprintf(gettext('Setup could not create the followin subfolders:<br />%s'),substr($subfolderfailed,2)));
+						return checkMark(-1, '', sprintf(gettext('<em>%1$s</em> folder%2$s [subfolder creation failure]'),$which, $f), sprintf(gettext('Setup could not create the following subfolders:<br />%s'),substr($subfolderfailed,2)));
 					}
 				}
 				if (($_zp_loggedin&ADMIN_RIGHTS) && (($chmod==0755) || $relaxation)) {

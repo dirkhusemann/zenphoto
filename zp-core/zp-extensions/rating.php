@@ -283,7 +283,7 @@ function getRating($object=NULL) {
 function optionVoteStatus($before, $object, $prefix) {
 	$me = new jquery_rating();
 	$currentvalue = $object->get('rating_status');
-	$output = 'Vote Status:<br />'."\n";
+	$output = gettext('Vote Status:').'<br />'."\n";
 	foreach($me->ratingstate as $text=>$value) {
 		if($value == $currentvalue) {
 			$checked = "checked='checked' ";

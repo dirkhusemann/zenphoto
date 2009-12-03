@@ -91,7 +91,7 @@ class image_effenberger {
 		}
 		if (count($list) == 0) {
 			return array(gettext('No effects') => array('key' => 'effenberger_effect', 'type' => OPTION_TYPE_CUSTOM,
-										'desc' => gettext('Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to a folder named <code>effenberger_effects</code> in the golbal plugins folder.')));
+										'desc' => gettext('Due to licensing considerations no effects are included with this plugin. See <a href="http://www.netzgesta.de/cvi/">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to a folder named <code>effenberger_effects</code> in the global plugins folder.')));
 		}
 		$std = array(	gettext('Images (standard)') => array('key' => 'effenberger_std_images', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => $list, 'null_selection' => gettext('none'),

@@ -42,7 +42,7 @@ class captcha {
 												'desc' => gettext('The font to use for captcha characters.')),
 								'' 			=> array('key' => 'zenphoto_captcha_image', 'type' => OPTION_TYPE_CUSTOM,
 												'order' => 4,
-												'desc' => gettext('Sample cpatcha'))
+												'desc' => gettext('Simple cpatcha'))
 								);
 	}
 	function handleOption($key, $cv) {
