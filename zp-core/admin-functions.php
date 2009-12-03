@@ -1019,7 +1019,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<tr>
 		<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td> 
 		<td>
-		<?php print_language_string_list($album->get('place'), $prefix."albumplace", false); ?>
+		<?php print_language_string_list($album->getLocation(), $prefix."albumlocation", false); ?>
 		</td>
 	</tr>
 	<?php
@@ -1242,7 +1242,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	?>
 	<select style="width:320px" <?php	if ($showThumb) {	?>class="thumbselect" onChange="updateThumbPreview(this)"	<?php	}	?> name="<?php echo $prefix; ?>thumb">
 		<option <?php if ($showThumb) {	?>class="thumboption" style="background-color:#B1F7B6"<?php		}
-			if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo gettext('most recent'); ?>
+			if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo getOption('AlbumThumbSelecorText'); ?>
 		</option>
 	<option <?php if ($showThumb) { ?>class="thumboption" value="\" style="background-color:#B1F7B6" <?php } ?>
 		<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
@@ -1753,15 +1753,6 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$album->setTitle(process_language_string_save($prefix.'albumtitle', 2));
 	$album->setDesc(process_language_string_save($prefix.'albumdesc', 1));
 	$tags = array();
-	for ($i=0; $i<4; $i++) {
-		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
-			$tag = trim(sanitize($_POST[$tagsprefix.'new_tag_value_'.$i]));
-			unset($_POST[$tagsprefix.'new_tag_value_'.$i]);
-			if (!empty($tag)) {
-				$tags[] = $tag;
-			}
-		}
-	}
 	$l = strlen($tagsprefix);
 	foreach ($_POST as $key => $value) {
 		$key = postIndexDecode($key);
@@ -1774,7 +1765,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$tags = array_unique($tags);
 	$album->setTags($tags);
 	$album->setDateTime(sanitize($_POST[$prefix."albumdate"]));
-	$album->setPlace(process_language_string_save($prefix.'albumplace', 3));
+	$album->setLocation(process_language_string_save($prefix.'albumlocation', 3));
 	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(sanitize($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));

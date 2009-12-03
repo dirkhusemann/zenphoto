@@ -1,13 +1,4 @@
-albums
-cache
-cache_html
-cache_html/rss
 index.php
-plugins
-plugins/effenberger_effects
-plugins/flvplayer
-plugins/gd_fonts
-plugins/watermarks
 rss-comments.php
 rss-news-comments.php
 rss-news.php
@@ -209,7 +200,6 @@ themes/zenpage-default/theme.png
 themes/zenpage-default/themeoptions.php
 themes/zenpage-default/theme_description.php
 trackback.php
-Zenphoto.package
 zp-core
 zp-core/404.php
 zp-core/admin-albumsort.php
@@ -463,6 +453,10 @@ zp-core/locale/de_DE/select_files_button.png
 zp-core/locale/en_US
 zp-core/locale/en_US/select_files_button.png
 zp-core/locale/es_ES
+zp-core/locale/es_ES/LC_MESSAGES
+zp-core/locale/es_ES/LC_MESSAGES/zenphoto.mo
+zp-core/locale/es_ES/LC_MESSAGES/zenphoto.po
+zp-core/locale/es_ES/select_files_button.png
 zp-core/locale/fr_FR
 zp-core/locale/fr_FR/LC_MESSAGES
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
@@ -485,6 +479,8 @@ zp-core/locale/pl_PL/LC_MESSAGES/zenphoto.po
 zp-core/locale/pl_PL/select_files_button.png
 zp-core/locale/zh_CN
 zp-core/locale/zh_CN/LC_MESSAGES
+zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.mo
+zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
 zp-core/locale/zh_CN/select_files_button.png
 zp-core/locale/zh_TW
 zp-core/locale/zh_TW/LC_MESSAGES
@@ -1708,4 +1704,3 @@ zp-core/zp-extensions/zenpage/zenpage.css
 zp-core/zp-extensions/zenpage/zp-functions.php
 zp-core/zp-extensions/zenpage.php
 zp-core/zp-extensions/zenphoto_sendmail.php
-zp-data

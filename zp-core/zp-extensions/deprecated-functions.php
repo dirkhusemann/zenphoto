@@ -268,5 +268,31 @@ function getImageEXIFData() {
 	return $_zp_current_image->getMetaData();
 }
 
+/**
+ * Returns the Location of the album.
+ *
+ * @return string
+ */
+function getAlbumPlace() {
+	trigger_error(gettext('getAlbumPlace is deprecated. Use getAlbumLocation().'), E_USER_NOTICE);
+	global $_zp_current_album;
+	return $_zp_current_album->getLocation();
+}
+
+/**
+ * Prints the location of the album and make it editable
+ *
+ * @param bool $editable when true, enables AJAX editing in place
+ * @param string $editclass CSS class applied to element if editable
+ * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
+ * @author Ozh
+ */
+function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true) {
+	trigger_error(gettext('printAlbumPlace is deprecated. Use printAlbumLocation().'), E_USER_NOTICE);
+	if ( $messageIfEmpty === true ) {
+		$messageIfEmpty = gettext('(No place...)');
+	}
+	printEditable('album', 'location', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
+}
 
 ?>

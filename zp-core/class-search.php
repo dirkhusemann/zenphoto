@@ -10,41 +10,19 @@
 //*************************************************************
 //*ZENPHOTO SEARCH ENGINE CLASS *******************************
 //*************************************************************
-define('SEARCH_TITLE', 0x1);
-define('SEARCH_DESC', 0x2);
-define('SEARCH_TAGS', 0x4);
-define('SEARCH_FILENAME', 0x8); // includes folder for albums
-define('SEARCH_LOCATION', 0x10);
-define('SEARCH_CITY', 0x20);
-define('SEARCH_STATE', 0x40);
-define('SEARCH_COUNTRY', 0x80);
-define('SEARCH_EXIFMake', 0x100);
-define('SEARCH_EXIFModel', 0x200); 
-define('SEARCH_EXIFExposureTime', 0x400);
-define('SEARCH_EXIFFNumber', 0x800);
-define('SEARCH_EXIFFocalLength', 0x1000);
-define('SEARCH_EXIFISOSpeedRatings', 0x2000);
-define('SEARCH_EXIFExposureBiasValue', 0x4000);
-define('SEARCH_EXIFMeteringMode', 0x8000);
-define('SEARCH_EXIFFlash', 0x10000);
-define('SEARCH_EXIFContrast', 0x20000);
-define('SEARCH_EXIFSharpness',  0x40000);
-define('SEARCH_EXIFSaturation', 0x80000);
-define('SEARCH_EXIFWhiteBalance',	0x100000);
 
 class SearchEngine
 {
 	var $words;
 	var $dates;
+	var $whichdates = 'date'; // for zenpage date searches, which date field to search
 	var $fields;
 	var $page;
 	var $images;
 	var $albums;
 	var $album_list; // list of albums to search
 	var $dynalbumname;
-	var $zp_search_fields;			// translatable names
-	var $zp_search_fieldnames;	// database field names
-	var $zp_search_all_fields;
+	var $search_structure;		// relates translatable names to search fields
 	var $lastimagesort = NULL;  // remember the order for the last album/image sorts
 	var $lastsubalbumsort = NULL;
 	
@@ -54,38 +32,40 @@ class SearchEngine
 	 * @return SearchEngine
 	 */
 	function SearchEngine() {
-		$this->zp_search_fields= array (gettext('Title')=>SEARCH_TITLE, gettext('Description')=>SEARCH_DESC, gettext('Tags')=>SEARCH_TAGS,
-																		gettext('File/Folder name')=>SEARCH_FILENAME,
-																		gettext('Location')=>SEARCH_LOCATION, gettext('City')=>SEARCH_CITY, gettext('State')=>SEARCH_STATE,
-																		gettext('Country')=>SEARCH_COUNTRY, 
-																		gettext('Camera Maker')=>SEARCH_EXIFMake, gettext('Camera Model')=>SEARCH_EXIFModel,
-																		gettext('Shutter Speed')=>SEARCH_EXIFExposureTime, gettext('Aperture')=>SEARCH_EXIFFNumber, gettext('Focal Length')=>SEARCH_EXIFFocalLength, gettext('ISO Sensitivity')=>SEARCH_EXIFISOSpeedRatings,
-																		gettext('Exposure Compensation')=>SEARCH_EXIFExposureBiasValue, gettext('Metering Mode')=>SEARCH_EXIFMeteringMode, gettext('Flash Fired')=>SEARCH_EXIFFlash,
-																		gettext('Contrast Setting')=>SEARCH_EXIFContrast, gettext('Sharpness Setting')=>SEARCH_EXIFSharpness, gettext('Saturation Setting')=>SEARCH_EXIFSaturation,
-																		gettext('White Balance')=>SEARCH_EXIFWhiteBalance
-																		);
-		
-		$this->zp_search_fieldnames = array ('title'=>SEARCH_TITLE, 'desc'=>SEARCH_DESC,'File/Folder name'=>SEARCH_FILENAME,
-																				'Location'=>SEARCH_LOCATION, 'City'=>SEARCH_CITY, 'State'=>SEARCH_STATE,
-																				'Country'=>SEARCH_COUNTRY,
-																				'EXIFMake'=>SEARCH_EXIFMake, 'EXIFModel'=>SEARCH_EXIFModel,
-																				'EXIFExposureTime'=>SEARCH_EXIFExposureTime, 'EXIFFNumber'=>SEARCH_EXIFFNumber, 'EXIFFocalLength'=>SEARCH_EXIFFocalLength, 'EXIFISOSpeedRatings'=>SEARCH_EXIFISOSpeedRatings,
-																				'EXIFExposureBiasValue'=>SEARCH_EXIFExposureBiasValue, 'EXIFMeteringMode'=>SEARCH_EXIFMeteringMode, 'EXIFFlash'=>SEARCH_EXIFFlash,
-																				'EXIFContrast'=>SEARCH_EXIFContrast, 'EXIFSharpness'=>SEARCH_EXIFSharpness, 'EXIFSaturation'=>SEARCH_EXIFSaturation,
-																				'EXIFWhiteBalance'=>SEARCH_EXIFWhiteBalance
-																				);
-																		
-		$this->zp_search_all_fields = SEARCH_TAGS;
-		foreach ($this->zp_search_fieldnames as $value) {
-			$this->zp_search_all_fields = $this->zp_search_all_fields + $value;		
-		}		
-		
+		global $_zp_exifvars;
+		//image/album fields
+		$this->search_structure['title']							= gettext('Title');
+		$this->search_structure['desc']								= gettext('Description');
+		$this->search_structure['tags']								= gettext('Tags');
+		$this->search_structure['filename']						= gettext('File/Folder name');
+		$this->search_structure['date']								= gettext('Date');
+		$this->search_structure['custom_data']				= gettext('Custom data');
+		$this->search_structure['location']						= gettext('Location/Place');
+		$this->search_structure['city']								= gettext('City');
+		$this->search_structure['state']							= gettext('State');
+		$this->search_structure['country']						= gettext('Country');
+		$this->search_structure['copyright']					= gettext('Copyright');
+		if (getOption('zp_plugin_zenpage')) {//zenpage fields
+			$this->search_structure['content']					= gettext('Content');
+			$this->search_structure['extracontent']			= gettext('ExtraContent');
+			$this->search_structure['author']						= gettext('Author');
+			$this->search_structure['lastchangeauthor']	= gettext('Last Editor');
+			$this->search_structure['titlelink']				= gettext('TitleLink');
+		}
+		//metadata fields
+		foreach ($_zp_exifvars as $field=>$row) {
+			$this->search_structure[$field]							= $row[2];
+		}
+
 		if (isset($_REQUEST['words'])) {
 			$this->words = $_REQUEST['words'];
 		} else {
 			$this->words = '';
 			if (isset($_REQUEST['date'])) {  // words & dates are mutually exclusive
 				$this->dates = sanitize($_REQUEST['date'], 3);
+				if (isset($_REQUEST['whichdate'])) {
+					$this->whichdates = sanitize($_REQUEST['whichdate']);
+				}
 			} else {
 				$this->dates = '';
 			}
@@ -103,54 +83,94 @@ class SearchEngine
 	}
 
 	/**
+	 * Returns a list of search fields display names indexed by the search mask
+	 *
+	 * @return array
+	 */
+	function getSearchFieldList() {
+		$list = array();
+		foreach ($this->search_structure as $key=>$display) {
+			$list[$key] = $display;
+		}
+		return $list;
+	}
+	
+	/**
 	 * Returns an array of the enabled search fields
 	 *
 	 * @return array
 	 */
 	function allowedSearchFields() {
-		$fields = getOption('search_fields');
 		$setlist = array();
-		foreach ($this->zp_search_fields as $key=>$value) {
-			if ($fields & $value) {
-				$setlist[$key] = $value;
+		$fields = getOption('search_fields');
+		if (is_numeric($fields)) {
+			$setlist = $this->numericFields($fields);
+		} else {
+			$list = explode(',',$fields);
+			foreach ($this->search_structure as $key=>$display) {
+				if (in_array($key,$list)) {
+					$setlist[$key] = $display;
+				}
 			}
 		}
 		return $setlist;
 	}
 	
 	/**
+	 * converts old style bitmask field spec into field list array
+	 *
+	 * @param bit $fields
+	 * @return array
+	 */
+	function numericFields($fields) {
+		if ($fields==0) $fields = 0x0fff;
+		if ($fields & 0x01) $list['title'] = $this->search_structure['title'];
+		if ($fields & 0x02) $list['desc'] = $this->search_structure['desc'];
+		if ($fields & 0x04) $list['tags'] = $this->search_structure['tags'];
+		if ($fields & 0x08) $list['filename'] = $this->search_structure['filename'];
+		return $list;
+	}
+
+	/**
 	 * returns the search fields bitmap
 	 *
 	 * @return bits
 	 */
 	function getFields() {
-		$fields = $this->fields;
-		if ($fields == $this->zp_search_all_fields) $fields = 0;
-		return $fields;
+		return $this->fields;
 	}
 	
 	/**
 	 * creates a search query from the search words
+	 * 
+	 * @param bool $long set to false to omit albumname and page parts
 	 *
 	 * @return string
 	 */
-	function getSearchParams() {
+	function getSearchParams($long=true) {
 		global $_zp_page;
 		$r = '';
 		$w = urlencode(trim($this->codifySearchString()));
 		if (!empty($w)) { $r .= '&words=' . $w; }
 		$d = trim($this->dates);
-		if (!empty($d)) { $r .= '&date=' . $d; }
-		$f = trim($this->fields);
-		if (!empty($f)) { $r .= '&searchfields=' . $f; }
-		$a = $this->dynalbumname;
-		if ($a) { $r .= '&albumname=' . $a; }
-		if (!empty($this->album_list)) {
-			$r .= '&inalbums='.implode(',', $this->album_list);
+		if (!empty($d)) { 
+			$r .= '&date=' . $d;
+			$d = trim($this->whichdates);
+			if ($d != 'date') {
+				$r.= '&whichdates=' . $d;
+			}
 		}
-		if ($_zp_page != 1) {
-			$this->page = $_zp_page;
-			$r .= '&page=' . $_zp_page;
+		if (count($this->fields)>0) { $r .= '&searchfields=' . implode(',',$this->fields); }
+		if ($long) {
+			$a = $this->dynalbumname;
+			if ($a) { $r .= '&albumname=' . $a; }
+			if (!empty($this->album_list)) {
+				$r .= '&inalbums='.implode(',', $this->album_list);
+			}
+			if ($_zp_page != 1) {
+				$this->page = $_zp_page;
+				$r .= '&page=' . $_zp_page;
+			}
 		}
 		return $r;
 	}
@@ -173,8 +193,21 @@ class SearchEngine
 				case 'date':
 					$this->dates = $v;
 					break;
+				case 'whichdates':
+					$this->whichdates = $v;
+					break;
 				case 'searchfields':
-					$this->fields = $v;
+					if (is_numeric($v)) {
+						$this->fields = array_flip($this->numericFields($v));
+					} else {
+						$this->fields = array();
+						$list = explode(',',$v);
+						foreach ($this->search_structure as $key=>$row) {
+							if (in_array($key,$list)) {
+								$this->fields[] = $key;
+							}
+						}
+					}
 					break;
 				case 'page':
 					$this->page = $v;
@@ -425,7 +458,7 @@ class SearchEngine
 				}
 			}
 		}
-		return trim($sanitizedwords);
+		return trim(str_replace(array('   ','  '),' ', $sanitizedwords));
 	}
 
 	/**
@@ -446,18 +479,20 @@ class SearchEngine
 	 * @since 1.1.3
 	 */
 	function parseQueryFields() {
+		$fields = array();
 		if (isset($_REQUEST['searchfields'])) {
-			$fields = 0+sanitize_numeric($_GET['searchfields']);
+			$fs = sanitize($_REQUEST['searchfields']);
+			if (is_numeric($fs)) {
+				$fields = array_flip($this->numericFields($fs));
+			} else {
+				$fields = explode(',',$fs);
+			}
 		} else {
-			$fields = 0;
 			foreach ($_REQUEST as $key=>$value) {
 				if (strpos($key, '_SEARCH_') !== false) {
-					$fields = $fields | $value;
+					$fields[] = $value;
 				}
 			}
-		}
-		if ($fields == 0) {
-			$fields = ~0 & getOption('search_fields');
 		}
 		return $fields;
 	}
@@ -472,18 +507,24 @@ class SearchEngine
 	 * @return string
 	 * @since 1.1.3
 	 */
-	function searchDate($searchstring, $searchdate, $tbl, $sorttype, $sortdirection) {
+	function searchDate($searchstring, $searchdate, $tbl, $sorttype, $sortdirection, $whichdate='date') {
 		global $_zp_current_album;
-		$sql = 'SELECT DISTINCT `id`, `show`,`title`,`desc`';
-		if ($tbl=='albums') {
-			$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_FILENAME); // these are all albums have
-			$sql .= ",`folder`";
-		} else {
-			$sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
+		$sql = 'SELECT DISTINCT `id`, `show`,`title`';
+		switch ($tbl) {
+			case 'zenpage_pages':
+			case 'zenpage_news':
+				$sql .= '`titlelink` ';
+				break;
+			case 'albums':
+				$sql .= ",`desc`,`folder` ";
+				break;
+			default:
+				$sql .= ",`desc`,`albumid`,`filename`,`location`,`city`,`state`,`country` ";
+				break;
 		}
-		$sql .= " FROM ".prefix($tbl)." WHERE ";
+		$sql .= "FROM ".prefix($tbl)." WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
-		
+
 		if (!empty($searchdate)) {
 			if ($searchdate == "0000-00") {
 				$sql .= "`date`=\"0000-00-00 00:00:00\"";
@@ -492,63 +533,72 @@ class SearchEngine
 				$d = strtotime($d1);
 				$d = strtotime('+ 1 month', $d);
 				$d2 = substr(date('Y-m-d H:m:s', $d), 0, 7) . "-01 00:00:00";
-				$sql .= "`date` >= \"$d1\" AND `date` < \"$d2\"";
+				$sql .= "`$whichdate` >= \"$d1\" AND `date` < \"$d2\"";
 			}
 		}
 		if(!zp_loggedin()) { $sql .= ")"; }
-		
-		if ($tbl == 'albums') {
-			if (is_null($sorttype)) {
-				if (empty($this->dynalbumname)) {
-					$key = subalbumSortKey(getOption('gallery_sorttype'));
-					if ($key != '`sort_order`') {
-						if (getOption('gallery_sortdirection')) {
-							$key .= " DESC";
+
+		switch ($tbl) {
+			case 'zenpage_news':
+				$key = '`id`';
+				break;
+			case 'zenpage_pages':
+				$key = '`sort_order`';
+				break;
+			case 'albums':
+				if (is_null($sorttype)) {
+					if (empty($this->dynalbumname)) {
+						$key = subalbumSortKey(getOption('gallery_sorttype'));
+						if ($key != '`sort_order`') {
+							if (getOption('gallery_sortdirection')) {
+								$key .= " DESC";
+							}
+						}
+					} else {
+						$gallery = new Gallery();
+						$album = new Album($gallery, $this->dynalbumname);
+						$key = $album->getSubalbumSortKey();
+						if ($key != '`sort_order`') {
+							if ($album->getSortDirection('album')) {
+								$key .= " DESC";
+							}
 						}
 					}
 				} else {
-					$gallery = new Gallery();
-					$album = new Album($gallery, $this->dynalbumname);
-					$key = $album->getSubalbumSortKey();
-					if ($key != '`sort_order`') {
-						if ($album->getSortDirection('album')) {
-							$key .= " DESC";
-						}
+					$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
+					$key = trim($sorttype.' '.$sortdirection);
+				}
+				break;
+			default:
+				$hidealbums = getNotViewableAlbums();
+				if (!is_null($hidealbums)) {
+					foreach ($hidealbums as $id) {
+						$sql .= ' AND `albumid`!='.$id;
 					}
 				}
-			} else {
-				$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
-				$key = trim($sorttype.' '.$sortdirection);
-			}
-		} else {
-			$hidealbums = getNotViewableAlbums();
-			if (!is_null($hidealbums)) {
-				foreach ($hidealbums as $id) {
-					$sql .= ' AND `albumid`!='.$id;
-				}
-			}
-			if (is_null($sorttype)) {
-				if (empty($this->dynalbumname)) {
-					$key = albumSortKey(getOption('image_sorttype'));
-					if ($key != '`sort_order`') {
-						if (getOption('image_sortdirection')) {
-							$key .= " DESC";
+				if (is_null($sorttype)) {
+					if (empty($this->dynalbumname)) {
+						$key = albumSortKey(getOption('image_sorttype'));
+						if ($key != '`sort_order`') {
+							if (getOption('image_sortdirection')) {
+								$key .= " DESC";
+							}
+						}
+					} else {
+						$gallery = new Gallery();
+						$album = new Album($gallery, $this->dynalbumname);
+						$key = $album->getSortKey();
+						if ($key != '`sort_order`') {
+							if ($album->getSortDirection('image')) {
+								$key .= " DESC";
+							}
 						}
 					}
 				} else {
-					$gallery = new Gallery();
-					$album = new Album($gallery, $this->dynalbumname);
-					$key = $album->getSortKey();
-					if ($key != '`sort_order`') {
-						if ($album->getSortDirection('image')) {
-							$key .= " DESC";
-						}
-					}
+					$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
+					$key = trim($sorttype.' '.$sortdirection);
 				}
-			} else {
-				$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
-				$key = trim($sorttype.' '.$sortdirection);
-			}
+				break;
 		}
 		$sql .= " ORDER BY ".$key;
 		return query_full_array($sql, true);
@@ -572,7 +622,9 @@ class SearchEngine
 		// create an array of [tag, objectid] pairs for tags
 		$tag_objects = array();
 		$fields = $this->fields;
-		if ($fields & SEARCH_TAGS) {
+		$t = array_search('tags',$fields);
+		if ($t!==false) {
+			unset($fields[$t]);
 			$tagsql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
 			foreach($searchstring as $singlesearchstring){
 				switch ($singlesearchstring) {
@@ -600,8 +652,7 @@ class SearchEngine
 		
 		// create an array of [name, objectid] pairs for the search fields.
 		$field_objects = array();
-		$fields = $fields & ~SEARCH_TAGS;
-		if ($fields) {
+		if (count($fields)>0) {
 			$columns = array();
 			$sql = 'SHOW COLUMNS FROM '.prefix($tbl);
 			$result = query_full_array($sql);
@@ -623,18 +674,11 @@ class SearchEngine
 						query('SET @serachtarget="'.zp_escape_string($singlesearchstring).'"');
 						$fieldsql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE (';
 	
-						foreach ($this->zp_search_fieldnames as $fieldname=>$value) {
-							
-							if ($value == SEARCH_FILENAME) {
-								if ($tbl == 'albums') {
-									$fieldname = 'folder';
-								} else {
-									$fieldname = 'filename';
-								}
-							} else {
-								$fieldname = strtolower($fieldname);
+						foreach ($fields as $fieldname) {
+							if ($tbl=='albums' && $fieldname='filename') {
+								$fieldname = 'folder';
 							}
-							if (($value & $fields) && in_array($fieldname, $columns)) {
+							if ($fieldname && in_array($fieldname, $columns)) {
 								$fieldsql .= ' `'.$fieldname.'` LIKE "%'.zp_escape_string($singlesearchstring).'%" OR ';
 							}
 						}
@@ -759,11 +803,18 @@ class SearchEngine
 		}
 		if (count($idlist)==0) {return NULL; }
 
-		$sql = 'SELECT DISTINCT `id`,`show`,`title`,`desc`,';
-		if ($tbl=='albums') {
-			$sql .= "`folder` ";
-		} else {
-			$sql .= "`albumid`,`filename`,`location`,`city`,`state`,`country` ";
+		$sql = 'SELECT DISTINCT `id`,`show`,`title`,';
+		switch ($tbl) {
+			case 'zenpage_pages':
+			case 'zenpage_news':
+				$sql .= '`titlelink` ';
+				break;
+			case 'albums':
+				$sql .= "`desc`,`folder` ";
+				break;
+			default:
+				$sql .= "`desc`,`albumid`,`filename`,`location`,`city`,`state`,`country` ";
+				break;
 		}
 		$sql .= "FROM ".prefix($tbl)." WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND "; }
@@ -773,46 +824,56 @@ class SearchEngine
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).')';
 
-		if ($tbl == 'albums') {
-			if (is_null($sorttype)) {
-				if (empty($this->dynalbumname)) {
-					$key = subalbumSortKey(getOption('gallery_sorttype'));
-					if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
-				} else {
-					$gallery = new Gallery();
-					$album = new Album($gallery, $this->dynalbumname);
-					$key = $album->getSubalbumSortKey();
-					if ($key != '`sort_order`') {
-						if ($album->getSortDirection('album')) {
-							$key .= " DESC";
+		switch ($tbl) {
+			case 'zenpage_news':
+				$key = '`id`';
+				break;
+			case 'zenpage_pages':
+				$key = '`sort_order`';
+				break;
+			case 'albums':
+				if (is_null($sorttype)) {
+					if (empty($this->dynalbumname)) {
+						$key = subalbumSortKey(getOption('gallery_sorttype'));
+						if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
+					} else {
+						$gallery = new Gallery();
+						$album = new Album($gallery, $this->dynalbumname);
+						$key = $album->getSubalbumSortKey();
+						if ($key != '`sort_order`') {
+							if ($album->getSortDirection('album')) {
+								$key .= " DESC";
+							}
 						}
 					}
-				}
-			} else {
-				$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
-				$key = trim($sorttype.' '.$sortdirection);
-			}
-		} else {
-			if (is_null($sorttype)) {
-				if (empty($this->dynalbumname)) {
-					$key = albumSortKey(getOption('image_sorttype'));
-					if (getOption('image_sortdirection')) { $key .= " DESC"; }
 				} else {
-					$gallery = new Gallery();
-					$album = new Album($gallery, $this->dynalbumname);
-					$key = $album->getSortKey();
-					if ($key != '`sort_order`') {
-						if ($album->getSortDirection('image')) {
-							$key .= " DESC";
+					$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
+					$key = trim($sorttype.' '.$sortdirection);
+				}
+				break;
+			default:
+				if (is_null($sorttype)) {
+					if (empty($this->dynalbumname)) {
+						$key = albumSortKey(getOption('image_sorttype'));
+						if (getOption('image_sortdirection')) { $key .= " DESC"; }
+					} else {
+						$gallery = new Gallery();
+						$album = new Album($gallery, $this->dynalbumname);
+						$key = $album->getSortKey();
+						if ($key != '`sort_order`') {
+							if ($album->getSortDirection('image')) {
+								$key .= " DESC";
+							}
 						}
 					}
+				} else {				
+					$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
+					$key = trim($sorttype.' '.$sortdirection);
 				}
-			} else {				
-				$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
-				$key = trim($sorttype.' '.$sortdirection);
-			}
+				break;
 		}
-		$sql .= " ORDER BY ".$key."";
+		
+		$sql .= " ORDER BY ".$key;
 		$result = query_full_array($sql);
 		return $result;
 	}
@@ -1036,8 +1097,46 @@ class SearchEngine
 		return false;
 	}
 
+	/**
+	 * Returns a list of Pages IDs found in the search
+	 *
+	 * @return array
+	 */
+	function getSearchPages() {
+		if (getOption('zp_plugin_zenpage')) {
+			$searchstring = $this->getSearchString();
+			$searchdate = $this->dates;
+			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find
+			if (empty($searchdate)) {
+				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_pages', false, false);	
+			} else {	
+				$search_results = $this->SearchDate($searchstring, $searchdate, 'zenpage_pages', false, false);
+			}
+			return $search_results;
+			}
+		return false;
+	}
+
+	/**
+	 * Returns a list of News IDs found in the search
+	 *
+	 * @return array
+	 */
+	function getSearchNews() {
+		if (getOption('zp_plugin_zenpage')) {
+			$searchstring = $this->getSearchString();
+			$searchdate = $this->dates;
+			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find
+			if (empty($searchdate)) {
+				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_news', false, false);	
+			} else {	
+				$search_results = $this->SearchDate($searchstring, $searchdate, 'zenpage_news', false, false,$this->whichdates);
+			}
+			return $search_results;
+		}
+		return false;
+	}
+	
 } // search class end
-
-
 
 ?>

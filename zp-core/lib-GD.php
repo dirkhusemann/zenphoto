@@ -362,7 +362,7 @@ if (extension_loaded('gd')) { // only define the functions if we have the proper
 	 * @param int $src_w
 	 * @param int $src_h
 	 * @param int $pct
-	 * @return resource
+	 * @return bool
 	 */
 	function zp_imageMerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
 		return imagecopymerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct);

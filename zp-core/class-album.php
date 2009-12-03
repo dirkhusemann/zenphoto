@@ -83,13 +83,12 @@ class Album extends PersistentObject {
 						$this->set('thumb', $thumb);
 					}
 					if (strpos($data1, 'FIELDS=') !== false) {
-
 						$fields = "&searchfields=".trim(substr($data1, 7));
 					}
 				}
 				if (!empty($words)) {
 					if (empty($fields)) {
-						$fields = '&searchfields=4';
+						$fields = '&searchfields=tags';
 					}
 					$this->set('search_params', $words.$fields);
 				}
@@ -295,8 +294,8 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getPlace() {
-		return get_language_string($this->get('place'));
+	function getLocation() {
+		return get_language_string($this->get('location'));
 	}
 
 	/**
@@ -304,7 +303,7 @@ class Album extends PersistentObject {
 	 *
 	 * @param string $place text for the place field
 	 */
-	function setPlace($place) { $this->set('place', $place); }
+	function setLocation($place) { $this->set('location', $place); }
 
 
 	/**
@@ -679,6 +678,8 @@ class Album extends PersistentObject {
 			$albumdir = getAlbumFolder();
 		}
 		$shuffle = $thumb != '1';
+		$field = getOption('AlbumThumbSelectField');
+		$direction = getOption('AlbumThumbSelectDirection');
 		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.internalToFilesystem($thumb))) {
 			if ($i===false) {
 				return newImage($this, $thumb);
@@ -693,7 +694,7 @@ class Album extends PersistentObject {
 				return $this->albumthumbnail;
 			}
 		} else if ($this->isDynamic()) {
-			$this->getImages(0, 0, 'ID', 'DESC');
+			$this->getImages(0, 0, $field, $direction);
 			$thumbs = $this->images;
 			if (!is_null($thumbs)) {
 				if ($shuffle) {
@@ -712,7 +713,7 @@ class Album extends PersistentObject {
 				}
 			}
 		} else {
-			$this->getImages(0, 0, 'ID', 'DESC');
+			$this->getImages(0, 0, $field, $direction);
 			$thumbs = $this->images;
 			if (!is_null($thumbs)) {
 				if ($shuffle) {
@@ -911,6 +912,7 @@ class Album extends PersistentObject {
 		}
 		query("DELETE FROM " . prefix('options') . "WHERE `ownerid`=" . $this->id);
 		query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`=" . $this->id);
+		query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`=" . $this->id);
 		query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
 		if ($this->isDynamic()) {
 			@unlink($this->localpath.'.xmp'); // delete the sidecar
@@ -1376,11 +1378,18 @@ class Album extends PersistentObject {
 
 	/**
 	 * Returns the search parameters for a dynamic album
+	 * 
+	 * @param bool $processed set false to process the parms
 	 *
 	 * @return string
 	 */
-	function getSearchParams() {
-		return $this->get('search_params');
+	function getSearchParams($processed=false) {
+		if ($processed) {
+			if (is_null($this->getSearchEngine())) return NULL;
+			return $this->searchengine->getSearchParams(false);
+		} else {
+			return $this->get('search_params');
+		}
 	}
 
 	/**
@@ -1401,7 +1410,7 @@ class Album extends PersistentObject {
 		if (!$this->isDynamic()) return null;
 		if (!is_null($this->searchengine)) return $this->searchengine;
 		$this->searchengine = new SearchEngine();
-		$params = $this->getSearchParams();
+		$params = $this->get('search_params');
 		$params .= '&albumname='.$this->name;
 		$this->searchengine->setSearchParams($params);
 		return $this->searchengine;

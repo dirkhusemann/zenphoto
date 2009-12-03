@@ -204,15 +204,6 @@ if (isset($_GET['action'])) {
 									}
 									$tagsprefix = 'tags_'.$i.'-';
 									$tags = array();
-									for ($j=0; $j<4; $j++) {
-										if (isset($_POST[$tagsprefix.'new_tag_value_'.$j])) {
-											$tag = trim(sanitize($_POST[$tagsprefix.'new_tag_value_'.$j]));
-											unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
-											if (!empty($tag)) {
-												$tags[] = $tag;
-											}
-										}
-									}
 									$l = strlen($tagsprefix);
 									foreach ($_POST as $key => $value) {
 										$key = postIndexDecode($key);

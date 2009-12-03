@@ -49,13 +49,18 @@ if (isset($_POST['savealbum'])) {
 	} else {
 		$thumb = '';
 	}
-	$fields = $search->fields;
+	$searchfields = array();
+	foreach ($_POST as $key=>$value) {
+		if (strpos($key, '_SEARCH_') !== false) {
+			$searchfields[] = $value;
+		}
+	}
 	$redirect = $album.'/'.$albumname.".alb";
 
 	if (!empty($albumname)) {
 		$f = fopen(internalToFilesystem(getAlbumFolder().$redirect), 'w');
 		if ($f !== false) {
-			fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=$fields\n");
+			fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=".implode(',',$searchfields)."\n");
 			fclose($f);
 			// redirct to edit of this album
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit&album=" . urlencode($redirect));
@@ -145,7 +150,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		$showThumb = getOption('thumb_select_images');
 		echo "\n<option";
 		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
-		echo ' value="1">'.gettext('most recent');
+		echo ' value="1">'.getOption('AlbumThumbSelecorText');
 		echo '</option>';
 		echo "\n<option";
 		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
@@ -185,10 +190,10 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		echo '<ul class="searchchecklist">'."\n";
 		$selected_fields = array();
 		$engine = new SearchEngine();
-		$available_fields = $engine->allowedSearchFields();
-		foreach ($available_fields as $key=>$value) {
-			if ($value & $fields) {
-				$selected_fields[$key] = $value;
+		$available_fields = array_flip($engine->allowedSearchFields());
+		foreach ($available_fields as $display=>$key) {
+			if (in_array($key,$fields)) {
+				$selected_fields[$display] = $key;
 			}
 		}
 		

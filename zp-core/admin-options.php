@@ -166,13 +166,14 @@ if (isset($_GET['action'])) {
 
 		/*** Search options ***/
 		if (isset($_POST['savesearchoptions'])) {
-			$searchfields = 0;
+			$search = new SearchEngine();
+			$searchfields = array();
 			foreach ($_POST as $key=>$value) {
 				if (strpos($key, '_SEARCH_') !== false) {
-					$searchfields = $searchfields | $value;
+					$searchfields[] = $value;
 				}
 			}
-			setOption('search_fields', $searchfields);
+			setOption('search_fields', implode(',',$searchfields));
 			setOption('exact_tag_match', sanitize($_POST['tag_match']));
 			$olduser = getOption('search_user');
 			$newuser = sanitize($_POST['search_user'],3);
@@ -1080,10 +1081,10 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					$exact .= '/>'. gettext('exact');
 					$partial .= '/>'. gettext('partial');
 					$engine = new SearchEngine();
-					$fields = array_flip($engine->zp_search_fields);
-					$fields[SEARCH_TAGS] .= $exact.$partial;
+					$fields = $engine->getSearchFieldList();
+					$fields['tags'] .= $exact.$partial;
 					$fields = array_flip($fields);
-					$set_fields = $engine->allowedSearchFields();
+					$set_fields = array_flip($engine->allowedSearchFields());
 					?>
 					<td>
 						<?php echo gettext('Fields list:'); ?>

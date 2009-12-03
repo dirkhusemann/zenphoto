@@ -307,21 +307,29 @@ if(is_object($result)) {
 				<?php } ?>
     		<?php echo zp_apply_filter('general_zenpage_utilities', '', $result); ?>
     		</div>
-			
+    		
+    		<?php
+    		if (is_object($result)) {
+	    		?>
+					<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Tags"); ?></h2>
+					<span id="zenpagetags">
+						<?php	tagSelector($result, 'tags_', false, getTagOrder());	?>
+				</span>
+				<br />
 		    <?php
+    		}
+    		
 		    if (is_AdminEditPage("newsarticle")) {
 		    	?>
 			    <h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>
-		    	<p>
-			    	<?php 
+		    				    	<?php 
 			    	if(is_object($result)) {
 			    	 	printCategorySelection(getIfObject($result,"id")); 
 			    	} else {
 			    		printCategorySelection("","all");
 			    	}
 			    	?>
-      		</p>
-      		<?php
+      	 		<?php
 				}
 				?>
 

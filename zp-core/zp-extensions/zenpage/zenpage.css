@@ -385,7 +385,8 @@ div.tabs>div h2 {
 /* scrollable sortables for zenpage
 -------------------------------------------------*/
 	/* CSS for checklists */
-.zenpagechecklist {
+.zenpagechecklist,
+#zenpagetags .tagchecklist {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 15em;
@@ -396,12 +397,14 @@ div.tabs>div h2 {
 	margin: 0px 0 0 0;
 }
 
-.zenpagechecklist ul {
+.zenpagechecklist ul,
+#zenpagetags .tagchecklist ul {
 	padding: 0;
 	margin: 0;
 }
 
-.zenpagechecklist li {
+.zenpagechecklist li
+#zenpagetags .tagchecklist li {
 	background: white;
 	padding-left: 0;
 	height: 1.5em;
@@ -410,7 +413,8 @@ div.tabs>div h2 {
 	font-weight: normal;
 }
 
-.zenpagechecklist label {
+.zenpagechecklist label,
+#zenpagetags .tagchecklist label {
 	display: block;
 	padding-left: 25px;
 	padding-top: 0;
@@ -418,7 +422,10 @@ div.tabs>div h2 {
 	text-indent: -25px;
 }
 
-.zenpagechecklist label:hover,.zenpagechecklist label.hover {
+.zenpagechecklist label:hover,
+.zenpagechecklist label.hover
+#zenpagetags .tagchecklist label:hover,
+#zenpagetags .tagchecklist label.hover {
 	background: #F1F2F3;
 	color: #333;
 }

@@ -15,7 +15,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header ('Content-Type: text/html; charset=UTF-8');
 
 define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
-define('HTACCESS_VERSION', '1.2.2.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
+define('HTACCESS_VERSION', '1.2.8.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 
 $debug = isset($_REQUEST['debug']);
 
@@ -106,9 +106,6 @@ if (!file_exists(CONFIGFILE)) {
 	} else {
 		$newconfig = true;
 		@copy('zp-config.php.source', CONFIGFILE);
-		if (!file_exists(dirname(dirname(__FILE__)).'/.htaccess')) {
-			copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
-		}
 	}
 } else {
 	$newconfig = false;
@@ -243,6 +240,11 @@ if (!function_exists('setOption')) { // setup a primitive environment
 	require_once(dirname(__FILE__).'/setup-primitive.php');
 	require_once(dirname(__FILE__).'/functions-i18n.php');
 }
+if ($newconfig || isset($_GET['copyhtaccess'])) {
+	if (!file_exists(dirname(dirname(__FILE__)).'/.htaccess') || ($_zp_loggedin&ADMIN_RIGHTS)) {
+		copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
+	}
+}
 
 if ($setup_checked) {
 	setupLog(gettext("Completed system check"), true);
@@ -289,7 +291,7 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 
 <head>
 
-<title>zenphoto <?php echo $upgrade ? gettext("upgrade") : gettext("setup") ; ?></title>
+<title><?php echo $upgrade ? gettext("Zenphoto upgrade") : gettext("Zenphoto setup") ; ?></title>
 <link rel="stylesheet" href="admin.css" type="text/css" />
 
 <script src="js/jquery.js" type="text/javascript"></script>
@@ -1169,6 +1171,8 @@ if ($debug) {
 	$base = dirname(dirname(__FILE__)).'/';
 	$folders = array();
 	foreach ($installed_files as $key=>$value) {
+		$component_data = explode(':',$value);
+		$value = $component_data[0];
 		$component = $base.$value;
 		if (file_exists($component)) {
 			if (is_dir($component)) {
@@ -1187,11 +1191,13 @@ if ($debug) {
 					}
 				}
 				$t = filemtime($component);
-				if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
+
+				if ((defined('RELEASE') && ($t < $lowset || $t > $highset))) {
+					$installed_files[$key] = $value;
+				} else {
 					unset($installed_files[$key]);
 				}
 			}
-
 		}
 	}
 	if (count($folders)>0) {
@@ -1234,9 +1240,9 @@ if ($debug) {
 	$filelist = implode("<br />", $installed_files);
 	if (count($installed_files) > 0) {
 		if (!defined("RELEASE")) {
-			$msg1 = gettext("Zenphoto core files [This is not an official build. Some files are missing or their <em>filemtimes</em> seem out of variance]");
+			$msg1 = gettext("Zenphoto core files [This is not an official build. Some files are missing or seem out of variance]");
 		} else {
-			$msg1 = gettext("Zenphoto core files [Some files are missing or their <em>filemtimes</em> seem out of variance]");
+			$msg1 = gettext("Zenphoto core files [Some files are missing or seem out of variance]");
 		}
 		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').'<br /><code>'.$filelist.'</code>';
 		$mark = -1;
@@ -1270,9 +1276,9 @@ if ($debug) {
 		if ($Apache) {
 			$ch = -1;
 			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
-			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.").' ' .
-						gettext("Just change the one line indicated to make it work.").
-						"<br /><br />".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
+			$desc = gettext('If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs.').
+						'<br /><br />'.gettext('You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option.');
+			$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
 		} else {
 			$ch = -2;
 			$err = '';
@@ -1287,10 +1293,14 @@ if ($debug) {
 		$ch = !empty($vr) && ($vr == HTACCESS_VERSION);
 		if (!$ch && !$Apache) $ch = -1;
 		$err = gettext("<em>.htaccess</em> file [wrong version]");
-		$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
+		$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
+		if ($_zp_loggedin&ADMIN_RIGHTS) {
+			$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
+		}
 	}
 
 	$mod = '';
+	$rw = '';
 	if ($ch) {
 		$i = strpos($htu, 'REWRITEENGINE');
 		if ($i === false) {
@@ -1364,7 +1374,7 @@ if ($debug) {
 			checkmark($rslt, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not create a <em>robots.txt</em> file.'));
 		}
 	}
-			
+
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
 		checkmark(-1, 'albums', gettext("albums [<code>\$conf['external_album_folder']</code> is deprecated]"), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 		$_zp_conf_vars['album_folder_class'] = 'external';
@@ -1407,7 +1417,14 @@ if ($debug) {
 	if ($good) {
 		$dbmsg = "";
 	} else {
-		echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
+		if ($_zp_loggedin&ADMIN_RIGHTS) {
+			echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
+		} else {
+			if ($_zp_loggedin) {
+				echo "<p>".gettext("You need <em>USER ADMIN</em> rights to run setup.").'</p>';
+				printLoginForm('', false);
+			}
+		}
 		if ($noxlate > 0) {
 			require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
 			printLanguageSelector();
@@ -1571,7 +1588,7 @@ if (file_exists(CONFIGFILE)) {
 		`title` text,
 		`desc` text,
 		`date` datetime default NULL,
-		`place` text,
+		`location` text,
 		`show` int(1) unsigned NOT NULL default '1',
 		`closecomments` int(1) unsigned NOT NULL default '0',
 		`commentson` int(1) UNSIGNED NOT NULL default '1',
@@ -1835,7 +1852,6 @@ if (file_exists(CONFIGFILE)) {
 	
 	//v1.2.1
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT";
-	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `place` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
@@ -1921,6 +1937,9 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `mtime`=0'; // force metadata refresh
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // empty dates should be NULL
 	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // force metadata refresh
+	//v1.2.8
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `location` TEXT";
+	
 	
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {
@@ -2213,7 +2232,7 @@ if (file_exists(CONFIGFILE)) {
 		<div class="error">
 			<h3><?php echo gettext("database did not connect"); ?></h3>
 			<p>
-			<?php echo gettext("You should run setup.php to check your configuration. If you haven't created the database yet, now would be a good time."); ?>
+			<?php echo gettext("If you haven't created the database yet, now would be a good time."); ?>
 			</p>
 		</div>
 		<?php
@@ -2231,7 +2250,6 @@ if (file_exists(CONFIGFILE)) {
 </div>
 <?php
 if ($noxlate > 0) {
-//if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
 	printLanguageSelector();
 }

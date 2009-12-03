@@ -197,7 +197,7 @@ function xmpMetadata_new_album($album) {
 			$album->setTitle(xmpMetadata_to_string($metadata['IPTCImageHeadline']));
 		}
 		if (array_key_exists('IPTCLocationName',$metadata)) {
-			$album->setPlace(xmpMetadata_to_string($metadata['IPTCLocationName']));
+			$album->setLocation(xmpMetadata_to_string($metadata['IPTCLocationName']));
 		}
 		if (array_key_exists('IPTCKeywords',$metadata)) {
 			$album->setTags(xmpMetadata_to_string($metadata['IPTCKeywords']));

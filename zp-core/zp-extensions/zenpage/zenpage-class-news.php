@@ -262,7 +262,26 @@ class ZenpageNews extends PersistentObject {
 		return $this->commentcount;
 	}
 	
-	
+	/**
+	 * Returns the tag data of an album
+	 *
+	 * @return string
+	 */
+	function getTags() {
+		return readTags($this->id, 'zenpage_news');
+	}
+
+	/**
+	 * Stores tag information of an album
+	 *
+	 * @param string $tags the tag list
+	 */
+	function setTags($tags) {
+		if (!is_array($tags)) {
+			$tags = explode(',', $tags);
+		}
+		storeTags(filterTags($tags), $this->id, 'zenpage_news');
+	}
 	
 } // zenpage news class end
 

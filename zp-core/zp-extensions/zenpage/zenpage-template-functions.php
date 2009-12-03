@@ -180,10 +180,13 @@ function getAuthor($fullname=false) {
  * @return bool
  */
 function next_news($combi=true) {
-	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery;
+	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery, $_zp_current_search;
 	if(!checkforPassword()) {
 		if (is_null($_zp_zenpage_articles)) {
-			if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
+			if (in_context(ZP_SEARCH)) {
+				processExpired('zenpage_news');
+				$_zp_zenpage_articles = $_zp_current_search->getSearchNews();
+			} else if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
 				$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
 			} else {
 				$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"));
@@ -761,7 +764,7 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
 			foreach ($singletag as $atag) {
 				if ($x++ == $ct) { $separator = ""; }
 				if ($option == "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', SEARCH_TAGS, 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.htmlspecialchars($atag, ENT_QUOTES).$links2.$separator."</li>\n";
@@ -1771,7 +1774,31 @@ function printTopRatedItems($number=10, $option="all",$showstats=true) {
 
 /************************************************/
 /* Pages functions
- /************************************************/
+/************************************************/
+$_zp_zenpage_pagelist = NULL;
+
+/**
+ * Returns a page from the search list
+ *
+ * @return object
+ */
+function next_page() {
+	global $_zp_zenpage_pagelist,$_zp_current_search,$_zp_current_zenpage_page;
+	if (!in_context(ZP_SEARCH)) {
+		return false;
+	}
+	if (is_null($_zp_zenpage_pagelist)) {
+		processExpired('zenpage_pages');
+		$_zp_zenpage_pagelist = $_zp_current_search->getSearchPages();
+	}
+	if (empty($_zp_zenpage_pagelist)) {
+		$_zp_zenpage_pagelist = NULL;
+		return false;
+	}
+	$page = array_shift($_zp_zenpage_pagelist);
+	$_zp_current_zenpage_page = new ZenpagePage($page['titlelink']);
+	return true;
+}
 
 /**
  * Returns title of a page

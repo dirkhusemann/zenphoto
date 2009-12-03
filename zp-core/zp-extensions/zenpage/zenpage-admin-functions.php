@@ -30,6 +30,27 @@ function getExpiryDatePost() {
 	return NULL;
 }
 
+/**
+ * processes the taglist save
+ *
+ * @param object $object the object on which the save happened
+ */
+function processTags($object) {
+	$tagsprefix = 'tags_';
+	$tags = array();
+	$l = strlen($tagsprefix);
+	foreach ($_POST as $key => $value) {
+		$key = postIndexDecode($key);
+		if (substr($key, 0, $l) == $tagsprefix) {
+			if ($value) {
+				$tags[] = substr($key, $l);
+			}
+		}
+	}
+	$tags = array_unique($tags);
+	$object->setTags(sanitize($tags, 3));
+}
+
 /**************************
 /* page functions
 ***************************/
@@ -76,6 +97,7 @@ function addPage() {
 	$page->set('permalink',$permalink);
 	$page->set('locked',$locked);
 	$page->set('expiredate',$expiredate);
+	processTags($page);
 	$msg = zp_apply_filter('new_page', '', $page);
 	$page->save();
 	if(empty($title)) {
@@ -147,6 +169,7 @@ function updatePage() {
 	if (getCheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
+	processTags($page);
 	$msg = zp_apply_filter('update_page', '', $page, $oldtitlelink);
 	$page->save();
 	if (!$rslt) {
@@ -168,6 +191,13 @@ function updatePage() {
 function deletePage() {
 	$id = sanitize_numeric($_GET['del']);
 	$sortorder = sanitize($_GET['sortorder']);
+	query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_pages' AND `objectid`=" . $id);
+	$result = query_full_array('SELECT `id` FROM '.prefix('zenpage_pages')." WHERE `sort_order` like '".$sortorder."-%'");
+	if (is_array($result)) {
+		foreach ($result as $row) {
+			query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_pages' AND `objectid`=" . $row['id']);
+		}
+	}
 	query("DELETE FROM ".prefix('zenpage_pages')." WHERE id = ".$id." OR `sort_order` like '".$sortorder."-%'"); // Delete the actual page
 	//query("DELETE FROM ".prefix('zenpage_pages')." WHERE OR `sort_order` like '".$sortorder."%'"); // delete sub pages if there are some
 	echo"<p class='messagebox' id='fade-message'>".gettext("Page successfully deleted!")."</p>";
@@ -394,6 +424,7 @@ function addArticle() {
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
+	processTags($article);
 	$msg = zp_apply_filter('new_article', '', $article);
 	$article->save();
 	// create news2cat rows
@@ -473,6 +504,7 @@ function updateArticle() {
 	if(getCheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
+	processTags($article);
 	$msg = zp_apply_filter('update_article', '', $article, $oldtitlelink); 
 	$article->save();
 	// create news2cat rows
@@ -509,6 +541,7 @@ function updateArticle() {
  */
 function deleteArticle() {
 	$id = sanitize_numeric($_GET['del']);
+	query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_news' AND `objectid`=" . $id);
 	query("DELETE FROM ".prefix('zenpage_news')." WHERE id = $id");  // remove the article
 	query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE news_id = $id"); // delete the category association
 	echo "<p class='messagebox' id='fade-message'>".gettext("Article successfully deleted!")."</p>";

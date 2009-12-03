@@ -68,7 +68,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 					 if (($num = getNumImages()) > 1) { printf(gettext('%1$u of %2$u photos'), imageNumber(), getNumImages()); }
 					 ?></li>
 					<li class="date"><?php printImageDate(); ?></li>
-					<li class="tags"><?php echo getAlbumPlace(); ?></li>
+					<li class="tags"><?php echo getAlbumLocation(); ?></li>
 					<li class="exif">
 				<?php
 					if (getImageMetaData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";

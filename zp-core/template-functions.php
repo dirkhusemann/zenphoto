@@ -1075,28 +1075,28 @@ function printAlbumDate($before='', $nonemessage='', $format=null, $editable=fal
 }
 
 /**
- * Returns the place of the album.
+ * Returns the Location of the album.
  *
  * @return string
  */
-function getAlbumPlace() {
+function getAlbumLocation() {
 	global $_zp_current_album;
-	return $_zp_current_album->getPlace();
+	return $_zp_current_album->getLocation();
 }
 
 /**
- * Prints the place of the album and make it editable
+ * Prints the location of the album and make it editable
  *
  * @param bool $editable when true, enables AJAX editing in place
  * @param string $editclass CSS class applied to element if editable
  * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
  * @author Ozh
  */
-function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true) {
+function printAlbumLocation($editable=false, $editclass='', $messageIfEmpty = true) {
 	if ( $messageIfEmpty === true ) {
-		$messageIfEmpty = gettext('(No place...)');
+		$messageIfEmpty = gettext('(No Locatrion...)');
 	}
-	printEditable('album', 'place', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
+	printEditable('album', 'location', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
 
 /**
@@ -3862,13 +3862,9 @@ function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
 	} else {
 		$url = WEBPATH."/index.php?p=search";
 	}
-	if (($fields != 0) && empty($dates)) {
-		if($mr) {
-			if ($fields == SEARCH_TAGS) {
+	if (!empty($fields) && empty($dates)) {
+		if($mr && $fields == 'tags') {
 				$url .= "tags/";
-			} else {
-				$url .= "fields$fields/";
-			}
 		} else {
 			$url .= "&searchfields=$fields";
 		}
@@ -3951,7 +3947,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 	}
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	$engine = new SearchEngine();
-	$fields = array_flip($engine->allowedSearchFields());
+	$fields = $engine->allowedSearchFields();
 	if (!$_zp_adminJS_loaded) {
 		$_zp_adminJS_loaded = true;
 		?>
@@ -3974,16 +3970,21 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 	if (count($fields) > 1) {
 		natcasesort($fields);
 		$fields = array_flip($fields);
-		if (is_null($query_fields)) $query_fields = $engine->parseQueryFields();
+		if (is_null($query_fields)) {
+			$query_fields = $engine->parseQueryFields();
+			if (count($query_fields)==0) {
+				$query_fields = array_flip($engine->allowedSearchFields());
+			}
+		}
 		?>
 		<ul style="display:none;" id="searchextrashow">
 		<?php
-		foreach ($fields as $key=>$item) {
-			echo '<li><label><input id="_SEARCH_'.$item.'" name="_SEARCH_'.$item.'" type="checkbox"';		
-			if ($item & $query_fields) {
+		foreach ($fields as $display=>$key) {
+			echo '<li><label><input id="_SEARCH_'.$key.'" name="_SEARCH_'.$key.'" type="checkbox"';		
+			if (in_array($key,$query_fields)) {
 				echo ' checked="checked" ';
 			}
-			echo ' value="'.$item.'"  /> ' . $key . "</label></li>"."\n";
+			echo ' value="'.$key.'"  /> ' . $display . "</label></li>"."\n";
 		}
 		?>
 		</ul>

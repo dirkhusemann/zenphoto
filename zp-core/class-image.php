@@ -711,6 +711,7 @@ class _Image extends PersistentObject {
 			$result = $result && @unlink($file);
 		}
 		if ($clean && $result) {
+			query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='images' AND `objectid`=" . $this->id);
 			query("DELETE FROM ".prefix('comments') . "WHERE `type` IN (".zp_image_types('"').") AND `ownerid`=" . $this->id);
 			query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id);
 		}
