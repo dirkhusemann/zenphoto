@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-23 19:54+0100\n"
-"PO-Revision-Date: 2009-11-26 20:55+0100\n"
+"PO-Revision-Date: 2009-12-02 22:58+0100\n"
 "Last-Translator: moorray@wp.pl <moorray>\n"
 "Language-Team: Polish <zenphoto-translate.googlegroup.com>\n"
 "MIME-Version: 1.0\n"
@@ -138,19 +138,19 @@ msgstr "Wybierz, które obrazy mają być wybranymi sześcioma slajdami."
 
 #: /var/www/html/zenphoto-svn/themes/stopdesign/themeoptions.php:19
 msgid "Gallery image crop width"
-msgstr ""
+msgstr "Szerokość dla miniatur"
 
 #: /var/www/html/zenphoto-svn/themes/stopdesign/themeoptions.php:19
 msgid "The width of image to crop in the gallery pages"
-msgstr ""
+msgstr "Szerokość obrazów, z których tworzone będą miniaturki."
 
 #: /var/www/html/zenphoto-svn/themes/stopdesign/themeoptions.php:20
 msgid "Gallery image crop height"
-msgstr ""
+msgstr "Wysokość dla miniatur"
 
 #: /var/www/html/zenphoto-svn/themes/stopdesign/themeoptions.php:20
 msgid "The height of image to crop in the gallery pages"
-msgstr ""
+msgstr "Wysokość obrazów, z których tworzone będą miniaturki."
 
 #: /var/www/html/zenphoto-svn/themes/stopdesign/404.php:9
 #: /var/www/html/zenphoto-svn/themes/stopdesign/404.php:21
@@ -1529,7 +1529,7 @@ msgstr "Upewnij się, że w pliku zp-config.php podane są właściwe wartości 
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:134
 msgid "MySQL POST handling"
-msgstr ""
+msgstr "MySQL przetwarzanie POST"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:186
 msgid "Updated zp-config.php"
@@ -1537,34 +1537,32 @@ msgstr "Zapisano zmiany w zp-config.php"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:248
 msgid "Completed system check"
-msgstr ""
+msgstr "Zakończono sprawdzanie systemu"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:255
-#, fuzzy
 msgid "Setup cookie test successful"
-msgstr "Plik został pomyślnie zmieniony"
+msgstr "Testowanie cookie zakończono powodzeniem"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:258
 msgid "Setup cookie test unsuccessful"
-msgstr ""
+msgstr "Testowanie cookie zakończono niepowodzeniem"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:262
 msgid "Post of MySql credentials"
-msgstr ""
+msgstr "Uprawnienia MySQL"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:267
-#, fuzzy
 msgid "Full environment"
-msgstr "Imię i nazwisko:"
+msgstr "Pełne środowisko"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:269
 msgid "Primitive environment"
-msgstr ""
+msgstr "Środowisko uproszczone"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:271
 #, php-format
 msgid "Query error: %s"
-msgstr ""
+msgstr "Błąd kwerendy: %s"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:283
 msgid "create"
@@ -1575,14 +1573,12 @@ msgid "update"
 msgstr "zaktualizuj"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:292
-#, fuzzy
 msgid "upgrade"
-msgstr "Aktualizacja"
+msgstr "aktualizacja"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:292
-#, fuzzy
 msgid "setup"
-msgstr "Instalacja"
+msgstr "instalacja"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:501
 msgid "Zen Photo Setup"
@@ -1624,10 +1620,9 @@ msgstr "<strong>Uwaga!</strong> Kliknij, aby zobaczyć szczegóły"
 msgid "Notice!"
 msgstr "Uwaga!"
 
-#: /var/www/html/zenphoto-svn/zp-core/setup.php:622
-#, fuzzy, php-format
+#: /var/www/html/zenphoto-svn/zp-core/setup.php:622, php-format
 msgid "<em>%1$s</em> folder%2$s [subfolder creation failure]"
-msgstr "Folder%2$s <em>%1$s</em>"
+msgstr "Folder <em>%1$s</em>%2$s [tworzenie podfolderów nieudane]"
 
 #: /var/www/html/zenphoto-svn/zp-core/setup.php:622
 #, php-format
@@ -3325,7 +3320,7 @@ msgstr "Zabezpiecz podgląd"
 
 #: /var/www/html/zenphoto-svn/zp-core/admin-options.php:1509
 msgid "Download"
-msgstr "Pobieranie"
+msgstr "Pobierz"
 
 #: /var/www/html/zenphoto-svn/zp-core/admin-options.php:1509
 msgid "No access"
@@ -6899,28 +6894,24 @@ msgid "Image Credit"
 msgstr "Twórcy"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:78
-#, fuzzy
 msgid "ByLine"
-msgstr "Dobry"
+msgstr "Redakcja"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:79
-#, fuzzy
 msgid "ByLine Title"
-msgstr "Tytuł Obrazu"
+msgstr "Tytuł redakcji"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:80
-#, fuzzy
 msgid "Image source"
-msgstr "Rozmiar zdjęcia"
+msgstr "Źródło obrazu"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:82
 msgid "Copyright Holder"
 msgstr "Właściciel praw autorskich"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:83
-#, fuzzy
 msgid "Copyright Notice"
-msgstr "Właściciel praw autorskich"
+msgstr "Nota praw autorskich"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:90
 msgid "Original Width"
@@ -6939,35 +6930,32 @@ msgid "Subject Distance"
 msgstr "Odległość Obiektu"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:99
-#, fuzzy
 msgid "Lens Type"
-msgstr "Typ odnośnika"
+msgstr "Typ soczewki"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:100
-#, fuzzy
 msgid "Lens Info"
-msgstr "Informacje o obrazie"
+msgstr "Informacje o soczewce"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:101
 msgid "Focal Length Equivalent in 35mm Film"
-msgstr ""
+msgstr "Odpowiednik długości ogniskowej w filmie 35mm"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:103
-#, fuzzy
 msgid "Sublocation"
-msgstr "Lokalizacja"
+msgstr "Podlokalizacja"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:104
 msgid "Province/State"
-msgstr ""
+msgstr "Region/Województwo"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:105
 msgid "Country/Primary Location Code"
-msgstr ""
+msgstr "Kod Kraju"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:106
 msgid "Country/Primary Location Name"
-msgstr ""
+msgstr "Nazwa Kraju"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:107
 msgid "Latitude"
@@ -6995,20 +6983,19 @@ msgstr "Dane Wysokościowe"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:113
 msgid "Originating Program "
-msgstr ""
+msgstr "Program do obróbki"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:114
-#, fuzzy
 msgid "Program version"
-msgstr "nieprawidłowa wersja"
+msgstr "Wersja programu"
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:437
 msgid "Mail send failed. There is no mail handler configured."
-msgstr ""
+msgstr "Nie udało się wysłać listu. Żaden pośrednik poczty nie został skonfigurowany."
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:440
 msgid "Mail send failed. The \"to\" list is empty."
-msgstr ""
+msgstr "Nie udało się wysłać listu. Pole \"Do\" jest puste."
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:926
 #, php-format
@@ -7092,7 +7079,7 @@ msgstr "Komentarz wysłany"
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:1143
 #, php-format
 msgid "Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation."
-msgstr ""
+msgstr "Zenphoto nie znalazło skryptów motywów. Sprawdź folder <em>%s</em> w swojej instalacji."
 
 #: /var/www/html/zenphoto-svn/zp-core/functions.php:1529
 msgid "Unknown name"
@@ -7143,7 +7130,7 @@ msgstr "class-image nie jest kompatybilna z tą wersją zenphoto."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/class-video.php:10
 msgid "Video and MP3/4 handling for Zenphoto. This plugin must always be enabled to use multimedia content."
-msgstr ""
+msgstr "Obsługa MP3/4. Aby używać multimediów, ten plugin musi być zawsze włączony."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/class-video.php:45
 msgid "Watermark default images"
@@ -7155,21 +7142,19 @@ msgstr "Zaznacz, jeśli chcesz, aby znak wodny była nakładany również na dom
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/class-video.php:47
 msgid "Quicktime video width"
-msgstr ""
+msgstr "Szerokość filmów Quicktime"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/class-video.php:49
 msgid "Quicktime video height"
-msgstr ""
+msgstr "Wyskokość filmów Quicktime"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/class-video.php:51
-#, fuzzy
 msgid "3gp video width"
-msgstr "Szerokość slajdu"
+msgstr "Szerokość filmów 3gp"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/class-video.php:53
-#, fuzzy
 msgid "3gp video height"
-msgstr "Wysokość slajdu"
+msgstr "Wysokość filmów 3gp"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/filter-login.php:14
 #, php-format
@@ -7395,74 +7380,67 @@ msgstr "Wyświetl lub ukryj Google Map."
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:23
 #, php-format
 msgid "Attaches \"Effenberger effects\" to images and thumbnails. This plugin is intended as an example for the use of the <em>image_html</em> filters.<br /><strong>Due to licensing considerations no effects are included with this plugin.</strong> See <a href=\"http://www.netzgesta.de/cvi/\">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to the <code>/%s/effenberger_effects</code> folder.<br />All testing was done with the <code>default</code> theme. No warranty is made that any particular effect will work with any particular theme."
-msgstr ""
+msgstr "Dodaje \"Efekty Effenbergera\" do obrazów i miniatur. Ten plugin ma jest demonstracją użytku filtrów <em>image_html</em>.<br /><strong>Z uwagi na licencje, żadne efekty nie są dołączone do pluginu.</strong> Zajrzyj na stronę Christiana Effenbergera <a href=\"http://www.netzgesta.de/cvi/\">CVI Astonishing Image Effects</a>, by wybrać i pobrać efekty. Rozpakuj pobrane pliki i skopiuj plik <code><em>effect</em></code>.js do folderu <code>/%s/effenberger_effects</code>.<br />Wszelkie testy były przeprowadzane z domyślnym motywem, nie ma żadnej gwarancji, że jakikolwiek efet będzie działał z jakimkolwiek motywem."
 
-#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:84
-#, fuzzy, php-format
+#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:84, php-format
 msgid "Modifiers for <em>%s</em>"
-msgstr "Zresetuj <em>%s</em>"
+msgstr "Parametry dla <em>%s</em>"
 
-#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:86
-#, fuzzy, php-format
+#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:86, php-format
 msgid "Additional parameters for the <em>%s</em> effect."
-msgstr "Nieprawidłowy parametr opcjonalny %s dla tej metody"
+msgstr "Dodatkowe parametry dla efektu <em>%s</em>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:90
-#, fuzzy
 msgid "No effects"
-msgstr "Przejście"
+msgstr "Brak efektów"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:91
 msgid "Due to licensing considerations no effects are included with this plugin. See <a href=\"http://www.netzgesta.de/cvi/\">CVI Astonishing Image Effects</a> by Christian Effenberger to select and download effects. Unzip the file you download and copy the <code><em>effect</em></code>.js file to a folder named <code>effenberger_effects</code> in the golbal plugins folder."
-msgstr ""
+msgstr "Z uwagi na licencje, żadne efekty nie są dołączone do pluginu. Zajrzyj na stronę Christiana Effenbergera <a href=\"http://www.netzgesta.de/cvi/\">CVI Astonishing Image Effects</a>, by wybrać i pobrać efekty. Rozpakuj pobrane pliki i skopiuj plik <code><em>effect</em></code>.js do podfolderu <code>effenberger_effects</code> w głównym folderze pluginów."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:93
-#, fuzzy
 msgid "Images (standard)"
-msgstr "Zdjęcia dodane"
+msgstr "Zdjęcia (domyślne)"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:95
 msgid "Apply <em>effect</em> to images shown via the <code>printDefaultSizedImage()</code> function."
-msgstr ""
+msgstr "Włącz <em>efekt</em> dla obrazów wyświetlanych przez funkcję <code>printDefaultSizedImage()</code>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:96
-#, fuzzy
 msgid "Images (custom)"
-msgstr "obraz(y)"
+msgstr "Obrazy (niestandardowe)"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:98
 msgid "Apply <em>effect</em> to images shown via the custom image functions."
-msgstr ""
+msgstr "Włącz <em>efekt</em> dla obrazów wyświetlanych przez niestandardowe funkcje."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:99
 msgid "Image thumbnails (standard)"
-msgstr ""
+msgstr "Miniaturki obrazów (domyślne)"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:101
 msgid "Apply <em>effect</em> to images shown via the <code>printImageThumb()</code> function."
-msgstr ""
+msgstr "Włącz <em>efekt</em> dla obrazów wyświetlanych przez funkcję <code>printImageThumb()</code>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:102
-#, fuzzy
 msgid "Album thumbnails (standard)"
-msgstr "Miniatury Albumu"
+msgstr "Miniatury albumu (domyślne)"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:104
 msgid "Apply <em>effect</em> to images shown via the <code>printAlbumThumbImage()</code> function."
-msgstr ""
+msgstr "Włącz <em>efekt</em> dla obrazów wyświetlanych przez funkcję <code>printAlbumThumbImage()</code>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:105
 msgid "Image thumbnails (custom)"
-msgstr ""
+msgstr "Miniaturki obrazów (własne)"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:107
 msgid "Apply <em>effect</em> to images shown via the custom image functions when <em>thumbstandin</em> is set."
-msgstr ""
+msgstr "Włącz <em>efekt</em> dla obrazów wyświetlanych przez niestandardowe funkcje z <em>thumbstandin</em> w nazwie."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:108
-#, fuzzy
 msgid "Album thumbnails  (custom)"
-msgstr "Miniatury Albumu"
+msgstr "Miniatury albumu (własne)"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/effenberger_effects.php:110
 msgid "Apply <em>effect</em> to images shown via the <code>printCustomAlbumThumbImage()</code> function."
@@ -7602,18 +7580,16 @@ msgid "News page name"
 msgstr "Nazwa strony z newsami"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/zenpage.php:53
-#, fuzzy
 msgid "If you want to rename the theme page <em>news.php</em> that is used to display news, you need to enter the new name without the .php suffix here. <strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!"
-msgstr "Jeśli chcesz używać do wyświetlania newsów pliku innego niż <em>news.php</em>, musisz tu podać jego nazwę. <strong>UWAGA: </strong>Jeśli używasz mod_rewrite będziesz też musiał ręcznie zmodyfikować plik <em>.htaccess</em>!"
+msgstr "Jeśli chcesz używać do wyświetlania newsów pliku innego niż <em>news.php</em>, musisz tu podać jego nazwę, bez końcówki .php. <strong>UWAGA: </strong>Jeśli używasz mod_rewrite będziesz też musiał ręcznie zmodyfikować plik <em>.htaccess</em>!"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/zenpage.php:54
 msgid "Pages page name"
 msgstr "Nazwa strony ze stronami"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/zenpage.php:55
-#, fuzzy
 msgid "If you want to rename the theme page <em>pages.php</em> that is used to display pages, you need to enter the new name without the .php suffix here. <strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!"
-msgstr "Jeśli chcesz używać do wyświetlania Twoich stron pliku innego niż <em>pages.php</em>, musisz tu podać jego nazwę. <strong>UWAGA: </strong>Jeśli używasz mod_rewrite będziesz też musiał ręcznie zmodyfikować plik <em>.htaccess</em>!"
+msgstr "Jeśli chcesz używać do wyświetlania Twoich stron pliku innego niż <em>pages.php</em>, musisz tu podać jego nazwę, bez końcówki .php. <strong>UWAGA: </strong>Jeśli używasz mod_rewrite będziesz też musiał ręcznie zmodyfikować plik <em>.htaccess</em>!"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/zenpage.php:56
 msgid "CombiNews"
@@ -7692,9 +7668,8 @@ msgid "Choose if you want to link from the image entry it's image page directly 
 msgstr "Wybierz, czy linki do galerii związane z obrazkiem mają prowadzić do strony obrazka czy jego albumu. Opcja ma znaczenie tylko jeśli w sekcji CombiNews wyświetlane są obrazy i wpływa na wszystkie linki (<em>tytuł</em>, <em>obraz</em> i <em>link do strony galerii</em>)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/html_meta_tags.php:13
-#, fuzzy
 msgid "A plugin to print the most common html meta tags (except the charset one which is standard to all theme files anyway) to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."
-msgstr "Plugin dodaje do nagłówka strony tagi HTML-a 'meta', bazując na informacjach podanych w Zenphoto takich, jak na przykład: opis galerii, tagi zdjęć albo kategorie artykułów. Tagi meta są wykorzystywane przez przeglądarki i wyszukiwarki, włączenie plug-inu nie zmienia wyglądu strony."
+msgstr "Plugin dodaje do nagłówka strony tagi HTML-a 'meta' (oprócz kodowania znaków, które jest standardowe dla wszystkich motywów), bazując na informacjach podanych w Zenphoto takich, jak na przykład: opis galerii, tagi zdjęć albo kategorie artykułów. Tagi meta są wykorzystywane przez przeglądarki i wyszukiwarki, włączenie pluginu nie zmienia wyglądu strony."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/html_meta_tags.php:55
 msgid "Cache control"
@@ -7751,16 +7726,15 @@ msgstr "<strong>odtwarzacze Flash nie wspierają <em>Albumów Zewnętrznych</em>
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:14
 #, php-format
 msgid "Enable <strong>FLV player 4.x</strong> to handle multimedia files. <strong>No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations.</strong> Please download these files from the <a href=\"http://www.longtailvideo.com/players/jw-flv-player/\">Longtail Video</a> site. Extract the files \"player*.swf\" and \"swobjects.js\" into <code>/%s/flvplayer/</code></strong>. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time. The class-video plugin must be enabled."
-msgstr ""
+msgstr "Włącz <strong>FLV player 4.x</strong> do obsługi multimediów.  <strong>Odtwarzacz <em>FLVPlayer</em> nie jest dołączony do tego pluginu z uwagi na licencję.</strong> Pobierz odtwarzacz ze strony <a href=\"http://www.longtailvideo.com/players/jw-flv-player/\">Longtail Video</a>. Następnie rozpakuj pliki i umieść \"player*.swf\" oraz \"swobjects.js\" w folderze <code>/%s/flvplayer/</code>. <br />WAŻNE: Tylko jeden odtwarzacz multimediów może być włączony w danej chwili. Plugin class-video musi być włączony."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:69
-#, fuzzy
 msgid "No FLV Player"
-msgstr "Wersja odtwarzacza FLV"
+msgstr "Brak FLV Playera"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:70
 msgid "No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations. Please download these files from the <a href=\"http://www.longtailvideo.com/players/jw-flv-player/\">Longtail Video</a> site. Extract the files and place the files \"player*.swf\" and \"swobjects.js\" in a folder named <code>flvplayer</code> in the global plugins folder."
-msgstr ""
+msgstr "Odtwarzacz <em>FLVPlayer</em> nie jest dołączony do tego pluginu z uwagi na licencję. Pobierz odtwarzacz ze strony <a href=\"http://www.longtailvideo.com/players/jw-flv-player/\">Longtail Video</a>. Następnie rozpakuj pliki i umieść \"player*.swf\" oraz \"swobjects.js\" w podfolderze <code>flvplayer</code> folderu pluginów.<code>flvplayer</code>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:73
 msgid "flv player width"
@@ -7810,42 +7784,36 @@ msgid "Over"
 msgstr "Ponad"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:83
-#, fuzzy
 msgid "The position of the controlbar."
-msgstr "Umiejscowienie paska odtwarzania. <em>Dotyczy tylko wersji 4 odtwarzacza!</em>"
+msgstr "Pozycja paska odtwarzania."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:84
-#, fuzzy
 msgid "Playlist position"
-msgstr "opcje listy odtwarzania flv"
+msgstr "Pozycja lisy odtwarzania"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:85
 msgid "Right"
 msgstr "Prawy"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:86
-#, fuzzy
 msgid "Position of the playlist (only if using the special <code>flvplaylist()</code> function)."
-msgstr "Wybierz opcje dla funkcji <em>flv_playlist()</em> ."
+msgstr "Pozycja lisy odtwarzania (jedynie przy użyciu funkcji <code>flvplaylist()</code>)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:87
-#, fuzzy
 msgid "Playlist size"
-msgstr "Lista odtwarzania"
+msgstr "Wielkość listy odtwarzania"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:88
 msgid "When <em>playlist</em> is set to <em>below</em> this refers to the height, when <em>right</em> this refers to the width of the playlist (only if using the special <code>flvplaylist()</code> function)."
-msgstr ""
+msgstr "Kiedy pozycja <em>listy odtwarzania</em> jest ustawiona na <em>below</em> (pod), parametr odnosi się do wysokości, kiedy na <em>right</em> (prawo) parametr odnosi się do szerokości listy (jedynie przy użyciu funkcji <code>flvplaylist()</code>)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:89
-#, fuzzy
 msgid "Playlist repeat"
-msgstr "Długość listy odtwarzania"
+msgstr "Autopowtarzanie"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:90
-#, fuzzy
 msgid "Always"
-msgstr "zawsze"
+msgstr "Zawsze"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:90
 msgid "Single"
@@ -7853,90 +7821,79 @@ msgstr "Pojedynczy"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:91
 msgid "set to list to play the entire playlist once, to always to continously play the song/video/playlist and to single to continue repeating the selected file in a playlist. (only if using the special <code>flvplaylist()</code> function)."
-msgstr ""
+msgstr "Ustaw na <em>list</em>, aby odtworzyć całą listę raz, na <em>always</em>, aby powtarzać piosenkę/film/listę lub <em>single</em>, aby powtarzać wybrany plik w playliście. (jedynie przy użyciu funkcji <code>flvplaylist()</code>)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:92
-#, fuzzy
 msgid "flv player width for playlist"
-msgstr "Szerokość odtwarzacza z kolejką do odtwarzania"
+msgstr "flv player szerokość listy"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:93
-#, fuzzy
 msgid "Player width for use with the playlist (ignored for <em>mp3</em> files.)"
-msgstr "Szerokość odtwarzacza (ignorowana dla plików <em>mp3</em>)."
+msgstr "Szerokość odtwarzacza z kolejką odtwarzania (ignorowana dla plików <em>mp3</em>)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:94
-#, fuzzy
 msgid "flv player height for playlist"
-msgstr "Odtwarzacz flv wysokość"
+msgstr "flv player wysokość listy"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:95
-#, fuzzy
 msgid "Player height for use with the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)"
-msgstr "Szerokość odtwarzacza z kolejką do odtwarzania (ignorowana dla plików <em>mp3</em>, jeśli nie ustawiono obrazka zastępczego)."
+msgstr "Wysokość odtwarzacza z kolejką odtwarzania (ignorowana dla plików .<em>mp3</em>, jeśli nie ustawiono obrazka zastępczego)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:96
 msgid "Backcolor"
 msgstr "Kolor tylny"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:97
-#, fuzzy
 msgid "Backgroundcolor of the controls, in HEX format."
-msgstr "Kolor tła kontrolek."
+msgstr "Kolor tła kontrolek (szesnastkowo)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:98
 msgid "Frontcolor"
 msgstr "Kolor przodu"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:99
-#, fuzzy
 msgid "Texts & buttons color of the controls, in HEX format. "
-msgstr "Kolor tekstu i przycisków (szesnastkowo). <em>Dotyczy tylko wersji 3 odtwarzacza!</em>"
+msgstr "Kolor tekstu i przycisków (szesnastkowo)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:100
 msgid "Lightcolor"
 msgstr "Kolor światła"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:101
-#, fuzzy
 msgid "Rollover color of the controls, in HEX format."
-msgstr "Kolor przycisków pod kursorem (szesnastkowo). <em>Dotyczy tylko wersji 3 odtwarzacza!</em>"
+msgstr "Kolor przycisków pod kursorem (szesnastkowo)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:102
 msgid "Screencolor"
 msgstr "Kolor ekranu"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:103
-#, fuzzy
 msgid "Color of the display area, in HEX format."
-msgstr "Kolor pola wyświetlania (szesnastkowo). <em>Dotyczy tylko wersji 3 odtwarzacza!</em>"
+msgstr "Kolor pola wyświetlania (szesnastkowo)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:104
 msgid "Stretching"
-msgstr ""
+msgstr "Skalowanie"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:105
-#, fuzzy
 msgid "Exactfit"
-msgstr "dokładny"
+msgstr "Rozciągnij"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:105
-#, fuzzy
 msgid "Uniform"
-msgstr "na"
+msgstr "Dopasuj"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:105
-#, fuzzy
 msgid "Fill"
-msgstr "Plik"
+msgstr "Wypełnij"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:106
 msgid "Defines how to resize images in the display. Can be none (no stretching), exactfit (disproportionate), uniform (stretch with black borders) or fill (uniform, but completely fill the display)."
-msgstr ""
+msgstr "Określa w jaki sposób skalować obrazy. Możliwe wartości: brak (bez skalowania), rozciągnij (nieproporcjonalne), dopasuj (powiększ pozostawiając puste miejsce) lub wypełnij (powiększ tak, by wypelnić cały ekran)."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:118
 msgid "FLV Player support files missing."
-msgstr ""
+msgstr "Brak plików pomocniczych FLV Playera."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:157
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flvplayer.php:268
@@ -7949,9 +7906,8 @@ msgid "Extracts <em>xmp</em> metadata from images and <code>xmp</code> sidecar f
 msgstr "Wydobywa metadane <em>xmp</em> z obrazów i plików pomocniczych <code>xmp</code>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/xmpMetadata.php:78
-#, fuzzy
 msgid "Process extensions."
-msgstr "Brakujące rozszerzenia zlib"
+msgstr "Przetwarzanie rozszerzeń."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/xmpMetadata.php:80
 msgid "If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive."
@@ -8469,16 +8425,15 @@ msgstr "Niepoprawny format parametru $default."
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/flag_thumbnail.php:9
 #, php-format
 msgid "Apply <img src=\"%1$s/images/lock.png\"/> over thumbnails of <em>password protected</em> albums and <img src=\"%1$s/images/action.png\"/> over thumbnails of <em>not published</em> albums and <em>not visible</em> images."
-msgstr ""
+msgstr "Wyświetla <img src=\"%1$s/images/lock.png\"/> nas miniaturami albumów <em>chronionych hasłem</em> oraz <img src=\"%1$s/images/action.png\"/> nad miniaturami <em>nieopublikowanych</em> albumów i <em>niewidocznych</em> obrazów."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/rating.php:17
-#, fuzzy
 msgid "Adds several theme functions to enable images, album, news, or pages to be rated by users."
 msgstr "Dodaje kilka funkcji motywu, aby umożliwić odwiedzającym ocenianie zdjęć, albumów, newsów, artykułów i stron."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/rating.php:32
 msgid "All ratings have been set to <em>unrated</em>."
-msgstr ""
+msgstr "Wszystkie elementy zostały ustawione na <em>nieocenione</em>."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/rating.php:62
 msgid "retract"
@@ -8509,7 +8464,6 @@ msgid "<em>Enable</em> state of voting."
 msgstr "Ustala, kto może oddawać głosy w galerii."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/rating.php:98
-#, fuzzy
 msgid "Split stars"
 msgstr "Połówki gwiazdek"
 
@@ -8599,9 +8553,8 @@ msgid "Reset all ratings"
 msgstr "Wyczyść rankingi"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/rating.php:315
-#, fuzzy
 msgid "Sets all ratings to unrated."
-msgstr "Ustawia wszystkie obrazy i albumy na nieocenione."
+msgstr "Ustawia wszystkie elementy na nieocenione."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/dynamic-locale.php:22
 msgid "Enable <strong>dynamic-locale</strong> to allow viewers of your site to select the language translation of their choice."
@@ -8993,62 +8946,55 @@ msgstr "Kliknij prawej stronie paska kontrolek, aby zobaczyć pełen rozmiar."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:23
 msgid "Provides trackback functionality to comments. Tracksbacks are available for images and albums as well as Zenpage news articles and pages. Trackback pings currently available only for news articles and pages. CAUTION: BETA STATUS. BETA STATUS Known bug: Does not work with sites in subdomains!"
-msgstr ""
+msgstr "Daje możliwość używania TrackBacków w komentarzach. TrackaBacki są dostępne dla obrazów i albumów oraz artykułów i stron Zenpage. Wiadomości TrackBack są aktualnie rozsyłane jedynie w przypadku stron i artykułów. UWAGA: STATUS BETA. STATUS BETA Znany błąd: nie współdziała ze stronami w poddomenach!"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:61
-#, fuzzy
 msgid "Allow trackbacks on"
-msgstr "Pozwól na komentarze do"
+msgstr "Zezwól na TrackBack na"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:63
-#, fuzzy
 msgid "Trackbacks will be allowed on the checked pages."
-msgstr "Formularz dodawania komentarzy będzie wyświetlany na zaznaczonych stronach."
+msgstr "TrackBack jest dostępny na zaznaczonych stronach."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:140
 msgid "Trackbacking your entry..."
-msgstr ""
+msgstr "Wysyłanie TrackBacków związanych z twoim wpisem..."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:143
 msgid "I found your entry interessting so I've added a Trackback to it on my weblog."
-msgstr ""
+msgstr "Uważam, że Twój wpis jest interesujący, więc dodałem TrackBack do niego na moim blogu."
 
-#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:161
-#, fuzzy, php-format
+#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:161, php-format
 msgid "Can't connect to: %s."
-msgstr "Nie można nawiązać połączenia z"
+msgstr "Nie można nawiązać połączenia z: %s."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:220
 msgid "An error occured while trying to log your trackback..."
-msgstr ""
+msgstr "Wystąpił błąd podczas rejestracji wiadomości TrackBack..."
 
-#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:455
-#, fuzzy, php-format
+#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:455, php-format
 msgid "Trackback send to <em>%s</em>."
-msgstr "Wszystkie miniaturki ustawiona na <em>%s</em>."
+msgstr "Wysłano TrackBack do <em>%s</em>."
 
-#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:458
-#, fuzzy, php-format
+#: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:458, php-format
 msgid "Trackback to <em>%1$s</em> failed...%2$s"
-msgstr "Folder%2$s <em>%1$s</em>"
+msgstr "Wysłanie TrackBacka do <em>%1$s</em> nie powiodło się...%2$s"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:463
 msgid "No trackbacks were auto-discovered..."
-msgstr ""
+msgstr "Automatyczne wyszukiwanie nie odnalazło wiadomości TrackBack..."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:637
-#, fuzzy
 msgid "Sorry, comments are closed for this item."
-msgstr "Komentarze są niedostępne."
+msgstr "Przepraszamy, komentarze są niedostępne dla tego elementu."
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:648
-#, fuzzy
 msgid "This trackback already exists!"
-msgstr "%s już istnieje."
+msgstr "Takie powiadomienie już istnieje!"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_trackback.php:777
 msgid "Send trackback ping"
-msgstr ""
+msgstr "Wyślij powiadomienie TrackBack"
 
 #: /var/www/html/zenphoto-svn/zp-core/zp-extensions/comment_form.php:17
 msgid "Provides a unified comment handling facility."
