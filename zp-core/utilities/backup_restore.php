@@ -149,7 +149,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 			$writeresult = writeheader('file_version', 1);
 			$writeresult = $writeresult && writeHeader('compression_handler',$compression_handler);
 			if ($writeresult === false) {
-				echo gettext('failed writing to backup!');
+				$msg = gettext('failed writing to backup!');
 			}
 			
 			$counter = 0;
@@ -170,7 +170,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 						$storestring = strlen($storestring).':'.$storestring;
 						$writeresult = fwrite($handle, $storestring);
 						if ($writeresult === false) {
-							echo gettext('failed writing to backup!');
+							$msg = gettext('failed writing to backup!');
 							break;
 						}
 						$counter ++;
@@ -185,7 +185,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 			fclose($handle);
 		}
 	} else {
-		echo gettext('MySQL SHOW TABLES failed!');
+		$msg = gettext('MySQL SHOW TABLES failed!');
 		$writeresult = false;
 	}
 	if ($writeresult) {
@@ -206,12 +206,13 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		?>
 		<div class="errorbox" id="fade-message">
 		<h2><?php echo gettext("backup failed"); ?></h2>
+		<p><?php echo $msg; ?></p>
 		</div>
 		<?php
 	}
 } else if (isset($_REQUEST['restore']) && db_connect()) {
 	$oldzenpage = getOption('zp_plugin_zenpage');
-	$success = false;
+	$success = 1;
 	if (isset($_REQUEST['backupfile'])) {
 		$file_version = 0;
 		$compression_handler = 'gzip';
@@ -220,7 +221,26 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		if (file_exists($filename)) {
 			$handle = fopen($filename, 'r');
 			if ($handle !== false) {
-				$success = true;
+				$prefix = $_zp_conf_vars['mysql_prefix'];
+				$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$prefix."%';";
+				$result = query_full_array($sql);
+				$tables = array();
+				$table_cleared = array();
+				if (is_array($result)) {
+					foreach($result as $row) {
+						$table = array_shift($row);
+						$tables[$table] = array();
+						$table_cleared[$table] = false;
+						$sql = 'SHOW COLUMNS FROM `'.$table.'`';
+						$result2 = query_full_array($sql);
+						if (is_array($result2)) {
+							foreach ($result2 as $row) {
+								$tables[$table][] = $row['Field'];
+							}
+						}
+					}
+				}
+				$success = 0;
 				$string = getrow($handle);
 				while (substr($string, 0, strlen(HEADER)) == HEADER) {
 					$string = substr($string, strlen(HEADER));
@@ -237,36 +257,52 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 					$string = getrow($handle);
 				}
 				$counter = 0;
-				while (!empty($string)) {
+				$missing_table = array();
+				$missing_element = array();
+				while (!empty($string) && !$success) {
 					$sep = strpos($string, TABLE_SEPARATOR);
 					$table = substr($string, 0, $sep);
-					$row = substr($string, $sep+strlen(TABLE_SEPARATOR));
-					$row = unserialize($row);
-					$items = '';
-					$values = '';
-					$updates = '';
-					$special_keys = '';
-					$special_values = '';
-					foreach($row as $key=>$element) {
-						if (!empty($element)) {
-							$element = decompress($element);
+					if (array_key_exists($prefix.$table,$tables)) {
+						if (!$table_cleared[$prefix.$table]) {
+							$sql = 'TRUNCATE '.$prefix.$table;
+							if (!query($sql, true)) {
+								$success = 2;
+							}
+							$table_cleared[$prefix.$table] = true;
 						}
-						$items .= '`'.$key.'`,';
-						if (is_null($element)) {
-							$values .= 'NULL,';
-							$updates .= '`'.$key.'`=NULL,';
-						} else {
-							$values .= '"'.zp_escape_string($element).'",';
-							$updates .= '`'.$key.'`="'.zp_escape_string($element).'",';
+						$row = substr($string, $sep+strlen(TABLE_SEPARATOR));
+						$row = unserialize($row);
+						$items = '';
+						$values = '';
+						foreach($row as $key=>$element) {
+							if (array_search($key,$tables[$prefix.$table]) === false) {
+								$missing_element[] = $table.'->'.$key;
+							} else {
+								if (!empty($element)) {
+									$element = decompress($element);
+								}
+								$items .= '`'.$key.'`,';
+								if (is_null($element)) {
+									$values .= 'NULL,';
+								} else {
+									$values .= '"'.zp_escape_string($element).'",';
+								}
+							}
 						}
+						if (!empty($items)) {
+							if ($table!='options' || strpos($values,'zenphoto_release')===false) {
+								$items = substr($items,0,-1);
+								$values = substr($values,0,-1);
+	
+								$sql = 'INSERT INTO '.prefix($table).' ('.$items.') VALUES ('.$values.')';
+								if (!query($sql, true)) {
+									$success = 2;
+								}
+							}
+						}
+					} else {
+						$missing_table[] = $table;
 					}
-
-					$items = substr($items,0,-1);
-					$values = substr($values,0,-1);
-					$updates = substr($updates,0,-1);
-
-					$sql = 'REPLACE INTO '.prefix($table).' ('.$items.') VALUES ('.$values.')';
-					if (!query($sql, true)) $success = false;
 					$counter ++;
 					if ($counter >= RESPOND_COUNTER) {
 						echo ' ';
@@ -274,34 +310,90 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 					}
 					$string = getrow($handle);
 				}
-				fclose($handle);
 			}
+			fclose($handle);
 		}
 	}
-	if ($success) {
-		?>
-		<div class="messagebox" id="fade-message">
-		<h2>
-		<?php
-		if ($compression_handler == 'no') {
-			echo(gettext('restore completed'));
-		} else {
-			printf(gettext('restore completed using %s compression'), $compression_handler);
-		}
-		// override the release level settings
-		setOption('zenphoto_release', ZENPHOTO_RELEASE);
 
+	if (!empty($missing_table) || !empty($missing_element)) {
 		?>
-		</h2>
+		<div class="warningbox">
+			<h2><?php echo gettext("Restore had exceptions"); ?></h2>
+			<?php
+			if (!empty($missing_table)) {
+				?>
+				<p>
+				<?php
+				echo gettext('The following tables were not restored because the table no longer exists:');
+				?>
+					<ul>
+					<?php
+					foreach (array_unique($missing_table) as $item) {
+						?>
+						<li><em><?php echo $item; ?></em></li>
+						<?php
+					}
+					?>
+					</ul>
+				</p>
+				<?php
+			}
+			if (!empty($missing_element)) {
+				?>
+				<p>
+				<?php
+				echo gettext('The following fields were not restored because the field no longer exists:');
+				?>
+					<ul>
+					<?php
+					foreach (array_unique($missing_element) as $item) {
+						?>
+						<li><em><?php echo $item; ?></em></li>
+						<?php
+					}
+					?>
+					</ul>
+				</p>
+				<?php
+			}
+			?>
+		</div>
+		<?php	
+	} else if ($success) {
+		?>
+		<div class="errorbox">
+			<h2><?php echo gettext("Restore failed"); ?></h2>
+			<?php
+			switch ($success) {
+				case 1:
+					echo '<p>'.gettext('No backup set found.').'</p>';
+					break;
+				case 2:
+					echo '<p';
+					printf(gettext('MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,mysql_error());
+					echo '</p>';
+					break;
+			}
+			?>
 		</div>
 		<?php
 	} else {
 		?>
-		<div class="errorbox" id="fade-message">
-		<h2><?php echo gettext("restore failed"); ?></h2>
+		<div class="messagebox" id="fade-message">
+			<h2>
+			<?php
+			if ($compression_handler == 'no') {
+				echo(gettext('Restore completed'));
+			} else {
+				printf(gettext('Restore completed using %s compression'), $compression_handler);
+			}
+	
+			?>
+			</h2>
 		</div>
 		<?php
 	}
+	setOption('zenphoto_release', ZENPHOTO_RELEASE); // be sure it is correct
 }
 if (db_connect()) {
 	$compression_level = getOption('backup_compression');
@@ -367,12 +459,12 @@ if (isset($oldzenpage) && !$oldzenpage && getOption('zp_plugin_zenpage', true)) 
 	echo	'</div>';
 }
 echo	'<p>';
-echo gettext('The backup facility creates database snapshots in the <code>backup</code> folder of your installation.').' '; 
-echo gettext('These backups are named in according to the date and time the backup was taken.').' ';
-echo gettext('The compression level goes from 0 (no compression) to 9 (maximum compression). Higher compression requires more processing and may not result in much space savings.').' ';
-echo '<br /><br />';
-echo gettext('You restore your database by selecting a backup and pressing the <em>Restore the Database</em> button').' ';
-echo gettext('The restore is “additive”. That is the database is not emptied before the restore is attempted.');
+echo gettext('The backup facility creates database snapshots in the <code>backup</code> folder of your installation. These backups are named in according to the date and time the backup was taken. '.
+							'The compression level goes from 0 (no compression) to 9 (maximum compression). Higher compression requires more processing and may not result in much space savings.');
+echo '</p><p>';
+echo gettext('You restore your database by selecting a backup and pressing the <em>Restore the Database</em> button. <strong>Note</strong>: Each database table is emptied before the restore is attempted. After a successful restore the database will be in the same state as when the backup was created.');
+echo '</p><p>';
+echo gettext('Ideally a restore should be done only on the same version of Zenphoto on which the backup was created. If you are intending to upgrade, first do the restore on the version of Zenphoto you were running, then install the new Zenphoto. If this is not possible the restore can still be done, but if the database fields have changed between versions, data from changed fields will not be restored.');
 echo '</p>'
 ?>
 </div>
@@ -381,7 +473,3 @@ echo '</p>'
 <?php printAdminFooter(); ?>
 </body>
 <?php echo "</html>"; ?>
-
-
-
-
