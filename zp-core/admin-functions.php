@@ -2467,6 +2467,7 @@ function deleteThemeDirectory($source) {
  * @param string $source the script file incase REQUEST_URI is not available
  */
 function currentRelativeURL($source) {
+	$source = str_replace('\\','/',$source);
 	$source = str_replace(SERVERPATH, '', $source);
 	$q = '';
 	if (!empty($_GET)) {

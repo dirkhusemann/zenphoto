@@ -241,7 +241,7 @@ if (!function_exists('setOption')) { // setup a primitive environment
 	require_once(dirname(__FILE__).'/functions-i18n.php');
 }
 if ($newconfig || isset($_GET['copyhtaccess'])) {
-	if (!file_exists(dirname(dirname(__FILE__)).'/.htaccess') || ($_zp_loggedin&ADMIN_RIGHTS)) {
+	if ($newconfig && !file_exists(dirname(dirname(__FILE__)).'/.htaccess') || ($_zp_loggedin&ADMIN_RIGHTS)) {
 		copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
 	}
 }
@@ -1278,7 +1278,7 @@ if ($debug) {
 			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
 			$desc = gettext('If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs.').
 						'<br /><br />'.gettext('You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option.');
-			$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
+			if ($_zp_loggedin&ADMIN_RIGHTS) $desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
 		} else {
 			$ch = -2;
 			$err = '';

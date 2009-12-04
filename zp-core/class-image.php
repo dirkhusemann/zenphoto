@@ -301,63 +301,63 @@ class _Image extends PersistentObject {
 						$this->setTags($tags);
 					}
 				}
-				/* "import" metadata into Zenphoto fields as makes sense */
-
-				/* iptc date */
-				$date = $this->get('IPTCDateCreated');
-				if (!empty($date)) {
-					$date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
-				}
-				/* EXIF date */
-				if (empty($date)) {
-					$date = $this->get('EXIFDateTime');
-				}
-				if (empty($date)) {
-					$date = $this->get('EXIFDateTimeOriginal');
-				}
-				if (empty($date)) {
-					$date = $this->get('EXIFDateTimeDigitized');
-				}
-				if (!empty($date)) {
-					$this->setDateTime($date);
-				}
-
-				/* iptc title */
-				$title = $this->get('IPTCObjectName');
-				if (empty($title)) {
-					$title = $this->get('IPTCImageHeadline');
-				}
-				//EXIF title [sic]
-				if (empty($title)) {
-					$title = $this->get('EXIFImageDescription');
-				}
-				if (!empty($title)) {
-					$this->setTitle($title);
-				}
-
-				/* iptc description */
-				$this->setDesc($this->get('IPTCImageCaption'));
-
-				/* iptc location, state, country */
-				$this->setLocation($this->get('IPTCSubLocation'));
-				$this->setCity($this->get('IPTCCity'));
-				$this->setState($this->get('IPTCState'));
-				$this->setCountry($this->get('IPTCLocationName'));
-
-				/* iptc credit */
-				$credit = $this->get('IPTCByLine');
-				if (empty($credit)) {
-					$credit = $this->get('IPTCImageCredit');
-				}
-				if (empty($credit)) {
-					$credit = $this->get('IPTCSource');
-				}
-				$this->setCredit($credit);
-
-				/* iptc copyright */
-				$this->setCopyright($this->get('IPTCCopyright'));
-
 			}
+			/* "import" metadata into Zenphoto fields as makes sense */
+
+			/* iptc date */
+			$date = $this->get('IPTCDateCreated');
+			if (!empty($date)) {
+				$date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
+			}
+			/* EXIF date */
+			if (empty($date)) {
+				$date = $this->get('EXIFDateTime');
+			}
+			if (empty($date)) {
+				$date = $this->get('EXIFDateTimeOriginal');
+			}
+			if (empty($date)) {
+				$date = $this->get('EXIFDateTimeDigitized');
+			}
+			if (!empty($date)) {
+				$this->setDateTime($date);
+			}
+
+			/* iptc title */
+			$title = $this->get('IPTCObjectName');
+			if (empty($title)) {
+				$title = $this->get('IPTCImageHeadline');
+			}
+			//EXIF title [sic]
+			if (empty($title)) {
+				$title = $this->get('EXIFImageDescription');
+			}
+			if (!empty($title)) {
+				$this->setTitle($title);
+			}
+
+			/* iptc description */
+			$this->setDesc($this->get('IPTCImageCaption'));
+
+			/* iptc location, state, country */
+			$this->setLocation($this->get('IPTCSubLocation'));
+			$this->setCity($this->get('IPTCCity'));
+			$this->setState($this->get('IPTCState'));
+			$this->setCountry($this->get('IPTCLocationName'));
+
+			/* iptc credit */
+			$credit = $this->get('IPTCByLine');
+			if (empty($credit)) {
+				$credit = $this->get('IPTCImageCredit');
+			}
+			if (empty($credit)) {
+				$credit = $this->get('IPTCSource');
+			}
+			$this->setCredit($credit);
+
+			/* iptc copyright */
+			$this->setCopyright($this->get('IPTCCopyright'));
+
 		}
 		$alb = $this->album;
 		if (!is_null($alb)) {
