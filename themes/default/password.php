@@ -28,7 +28,14 @@
 </div>
 
 <div id="credit">
-<?php printZenphotoLink(); ?>
+	<?php
+	if (!zp_loggedin() && function_exists('printRegistrationForm') && getOption('gallery_page_unprotected_register')) {
+		echo '<p>';
+		printCustomPageURL(gettext('Register for this site'), 'register', '', '<br />');
+		echo '</p>';
+	}
+	?>
+	<?php printZenphotoLink(); ?>
 </div>
 
 <?php printAdminToolbox(); ?>

@@ -131,7 +131,8 @@ function setDefault($option, $default) {
 	setOptionDefault('feed_mediarss', '0');
 	setOptionDefault('feed_cache', '1');
 	setOptionDefault('feed_cache_expire', 86400);
-	setOptionDefault('search_fields', 'title,desc,tags,file,location,city,state,country');
+	setOptionDefault('search_fields', 'title,desc,tags,file,location,city,state,country,content,author');
+	
 	$a =							"a => (href =>() title =>() target=>() class=>() id=>())\n" .
 	 									"abbr =>(class=>() id=>() title =>())\n" .
 	 									"acronym =>(class=>() id=>() title =>())\n" .

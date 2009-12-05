@@ -29,12 +29,17 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php printPasswordForm(NULL, false); ?>
 		</div>
 	
+	<?php
+	if (!zp_loggedin() && function_exists('printRegistrationForm') && getOption('gallery_page_unprotected_register')) {
+		printCustomPageURL(gettext('Register for this site'), 'register', '', '<br />');
+		echo '<br />';
+	}
+	?>
 </div> 
 		
 
-
 <div id="footer">
-<?php include("footer.php"); ?>
+	<?php include("footer.php"); ?>
 </div>
 
 

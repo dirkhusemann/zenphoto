@@ -531,9 +531,13 @@ function getImageProcessorURI($args, $album, $image) {
 	return $uri;
 }
 
-/** Takes user input meant to be used within a path to a file or folder and
+/**
+ * Takes user input meant to be used within a path to a file or folder and
  * removes anything that could be insecure or malicious, or result in duplicate
  * representations for the same physical file.
+ * 
+ * This function is used primarily for album names. 
+ * NOTE: The initial and trailing slashes are removed!!!
  *
  * Returns the sanitized path
  *

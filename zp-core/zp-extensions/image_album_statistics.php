@@ -403,7 +403,7 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 		if($crop) {
 			echo "<img src=\"".$image->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
 		} else {
-			echo "<img src=\"".$image->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE)."\"alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
+			echo "<img src=\"".$image->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE)."\" alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
 		}
 		if($showtitle) {
 			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . html_encode($image->getTitle()) . "\">\n";

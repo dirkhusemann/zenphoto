@@ -67,7 +67,7 @@ $_zp_exifvars = array(
 	'IPTCImageCaption' 					=> array('IPTC',	 'ImageCaption',					gettext('Image caption'),															false,			2000),
 	'IPTCImageCaptionWriter' 		=> array('IPTC',	 'ImageCaptionWriter',		gettext('Image caption writer'),											false,			32),
 	'EXIFDateTime'  						=> array('SubIFD', 'DateTime', 				 			gettext('Time Taken'),            										true,				52),
-	'EXIFDateTimeOriginal'  		=> array('SubIFD', 'DateTimeOriginal',  		gettext('Oritinal Time Taken'),        								true,				52),
+	'EXIFDateTimeOriginal'  		=> array('SubIFD', 'DateTimeOriginal',  		gettext('Original Time Taken'),        								true,				52),
 	'EXIFDateTimeDigitized'  		=> array('SubIFD', 'DateTimeDigitized',  		gettext('Time Digitized'),            								true,				52),
 	'IPTCDateCreated'					  => array('IPTC',	 'DateCreated',						gettext('Date created'),															false,			8),
 	'IPTCTimeCreated' 					=> array('IPTC',	 'TimeCreated',						gettext('Time created'),															false,			11),
@@ -1923,8 +1923,15 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		$auth = passwordHash($post_user, $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
 		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
-		$redirect_to = sanitize_path($_POST['redirect']);
-		if (strpos($redirect_to,WEBPATH.'/')===0) {
+
+		$redirect_to = $_POST['redirect'];
+		if (substr($redirect_to,0,1)=='/') {
+			$initial = '/';
+		} else {
+			$initial = '';
+		}
+		$redirect_to = $initial.sanitize_path($_POST['redirect']);
+		if (strpos($redirect_to, WEBPATH.'/')===0) {
 			$redirect_to = substr($redirect_to,strlen(WEBPATH)+1);
 		}
 		if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
