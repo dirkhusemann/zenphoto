@@ -909,12 +909,12 @@ function printCategoryList() {
   <td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."&amp;tab=categories' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
   <td class="icons3"><?php echo $count; ?> <?php echo gettext("articles"); ?></td>
   <td class="icons">
-  	<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>" title="<?php echo gettext("Reset hitcounter"); ?>">
+  	<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>&amp;tab=categories" title="<?php echo gettext("Reset hitcounter"); ?>">
   	<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" />
   	</a>
   </td> 
   <td class="icons">
-  <a href="javascript:confirmDeleteImage('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
+  <a href="javascript:confirmDeleteImage('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories','<?php echo js_encode(gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
   </td>
   </tr>
  <?php	

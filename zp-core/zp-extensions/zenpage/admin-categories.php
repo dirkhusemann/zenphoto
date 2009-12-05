@@ -73,7 +73,7 @@ printLogoAndLinks();
 			<p class="buttons">
 			<span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
 			<?php if(isset($_GET["edit"])) { ?>
-				<a href="admin-categories.php"><img src="images/add.png" alt="" /><?php echo gettext("Add New Category"); ?></a>
+				<a href="admin-categories.php?tab=categories"><img src="images/add.png" alt="" /><?php echo gettext("Add New Category"); ?></a>
 			<?php } ?>
 			</p>
 			<br clear: all /><br clear: all />
@@ -87,10 +87,10 @@ printLogoAndLinks();
 				<?php
 				if(isset($_GET["edit"])) {
 					$formname = 'update';
-					$formaction = "admin-categories.php?edit&amp;update";
+					$formaction = "admin-categories.php?edit&amp;update&amp;tab=categories";
 				} else {
 					$formname = 'addcat';
-					$formaction = "admin-categories.php?save";
+					$formaction = "admin-categories.php?save&amp;tab=categories";
 				}
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
