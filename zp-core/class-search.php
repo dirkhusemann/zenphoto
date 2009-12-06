@@ -838,7 +838,7 @@ class SearchEngine
 						}
 					}
 				} else {
-					$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
+					$sorttype = lookupSortKey($sorttype, 'folder', 'folder');
 					$key = trim($sorttype.' '.$sortdirection);
 				}
 				break;
@@ -858,7 +858,7 @@ class SearchEngine
 						}
 					}
 				} else {				
-					$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
+					$sorttype = lookupSortKey($sorttype, 'sort_order', 'filename');
 					$key = trim($sorttype.' '.$sortdirection);
 				}
 				break;
