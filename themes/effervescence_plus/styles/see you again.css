@@ -362,7 +362,7 @@ color: #FFFFFF;
 color: #ffffff;
 }
 #description a:hover {
-    color: #FFFFFF;
+color: #FFFFFF;
 text-decoration: underline;
 }
 #main2 #description a {
@@ -1112,4 +1112,28 @@ table.password td.hint{
 .inputbox {
 	width: 250px;
 	padding: 2px;
+}
+#zenpagesearch {
+padding: 0px;
+}
+#zenpagesearch h3 {
+padding: 10px;
+background: #a56faf;
+}
+.zenpagesearchtext {
+margin-top: 5px;
+padding: 0 5px;
+color: #ECEBE1; /*comment text color*/
+}
+.zenpagesearchtext a {
+color: #ECEBE1;
+cursor: pointer;
+}
+.zenpagesearchtext a:hover {
+color: #FFFFFF;
+text-decoration: underline;
+}
+.zenpagesearchtext ul {
+list-style-type: none;
+padding-left:20px
 }

@@ -171,11 +171,33 @@ function getAuthor($fullname=false) {
 /************************************************/
 
 /**
+ * Returns the number of news articles.
+ * 
+ * When in search context this is the count of the articles found. Otherwise
+ * it is the count of articles that match the criteria.
+ *
+ * @param bool $combi
+ * @return int
+ */
+function getNumNews($combi=true) {
+	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery, $_zp_current_search;
+	if (in_context(ZP_SEARCH)) {
+		processExpired('zenpage_news');
+		$_zp_zenpage_articles = $_zp_current_search->getSearchNews();
+	} else if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
+		$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
+	} else {
+		$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"));
+	}
+	return count($_zp_zenpage_articles);
+}
+
+/**
  * Returns the next news item on a page.
  * sets $_zp_current_zenpage_news to the next news item
  * Returns true if there is an new item to be shown
  * 
- * @param bool $c
+ * @param bool $combi
  *
  * @return bool
  */
@@ -1778,6 +1800,27 @@ function printTopRatedItems($number=10, $option="all",$showstats=true) {
 $_zp_zenpage_pagelist = NULL;
 
 /**
+ * Returns a count of the pages
+ * 
+ * If in search context, the count is the number of items found. Otherwise it is
+ * the total number of pages.
+ *
+ * @return int
+ */
+function getNumPages() {
+	global $_zp_zenpage_pagelist, $_zp_current_search;
+	processExpired('zenpage_pages');
+	if (in_context(ZP_SEARCH)) {
+		$_zp_zenpage_pagelist = $_zp_current_search->getSearchPages();
+		$count = count($_zp_zenpage_pagelist);
+	} else {
+		$result = query('SELECT COUNT(*) FROM '.prefix('zenpage_pages'));
+		$count = mysql_result($result, 0);
+	}
+	return $count;
+}
+
+/**
  * Returns a page from the search list
  *
  * @return object
@@ -1807,7 +1850,7 @@ function next_page() {
  */
 function getPageTitle() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (!is_null($_zp_current_zenpage_page)) {
 		return $_zp_current_zenpage_page->getTitle();
 	} 
 }

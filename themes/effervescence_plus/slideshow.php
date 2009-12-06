@@ -49,7 +49,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							$images = $search->getImages(0);
 							$searchwords = $search->words;
 							$searchdate = $search->dates;
-							$searchfields = $search->fields;
+							$searchfields = $search->getSearchFields();
 							$page = $search->page;
 							$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 							echo '<a href='.$returnpath.'><em>'.gettext('Search').'</em></a> | ';

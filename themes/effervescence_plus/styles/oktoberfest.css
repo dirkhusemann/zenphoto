@@ -1115,3 +1115,27 @@ table.password td.hint{
 	width: 250px;
 	padding: 2px;
 }
+#zenpagesearch {
+padding: 0px;
+}
+#zenpagesearch h3 {
+padding: 10px;
+background: #8F7F10;
+}
+.zenpagesearchtext {
+margin-top: 5px;
+padding: 0 5px;
+color: #ECEBE1; /*comment text color*/
+}
+.zenpagesearchtext a {
+color: #ECEBE1;
+cursor: pointer;
+}
+.zenpagesearchtext a:hover {
+color: #FFFFFF;
+text-decoration: underline;
+}
+.zenpagesearchtext ul {
+list-style-type: none;
+padding-left:20px
+}

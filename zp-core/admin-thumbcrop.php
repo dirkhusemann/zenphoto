@@ -242,7 +242,7 @@ printAdminHeader();
 							<?php 
 							if (getOption('thumb_crop')) {
 							?>
-								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br>
+								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br />
 								<br />	
 								<p class="buttons">
 								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>

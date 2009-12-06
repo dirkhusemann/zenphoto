@@ -107,7 +107,7 @@ foreach ($images as $image) {
 	adminPrintImageThumb(newImage($album, $image));
 }
 ?></div>
-<br>
+<br />
 
 <div>
 	

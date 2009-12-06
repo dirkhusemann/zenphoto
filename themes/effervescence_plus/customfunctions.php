@@ -292,4 +292,8 @@ function commonNewsLoop() {
 	} 
   printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 }
+
+function exerpt($content,$length) {
+	return shortenContent(strip_tags($content),$length,getOption("zenpage_textshorten_indicator"));
+}
 ?>

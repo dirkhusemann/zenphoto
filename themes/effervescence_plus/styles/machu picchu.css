@@ -164,10 +164,13 @@ h2 a:hover {
 h3 {
 	color: #22b393; /*textcolor in comment header ("X Comments") */
 	font: normal 17px Trebuchet MS, Arial, Helvetica, Tahoma, Verdana, sans-serif;
+text-align: left;
+font-weight: bold;
+margin-left: 10px;
 }
 #navbar h3 {
-	margin-left: 6px;
-	text-align: center;
+margin-left: 10px;
+text-align: justify;
 }
 h3 a {
 	color: #fff;
@@ -406,6 +409,7 @@ text-decoration:none;
 }
 #galleryheader {
 	background: #607848; /*the header area above the nav-bar, single image view*/
+text-align: left;
 	border: none;
 	padding: 0;
 	margin: 0;
@@ -418,14 +422,14 @@ text-decoration:none;
 }
 #description {
 	color: #604848; /*text color for descriptions*/
-	text-align: center;
+text-align: justify;
 	padding: 7px 7px;
 	margin: 0px auto 0px auto;
 	width: 620px;
 }
 #main2 #description {
 	margin: 0 auto 0 auto;
-	text-align: center;
+text-align: justify;
 	color: #a5e7d9; /* unknown */
 }
 #pagenumbers {
@@ -1069,4 +1073,28 @@ table.password td.hint{
 .inputbox {
 	width: 250px;
 	padding: 2px;
+}
+#zenpagesearch {
+padding: 0px;
+}
+#zenpagesearch h3 {
+padding: 10px;
+background: #607848;
+}
+.zenpagesearchtext {
+margin-top: 5px;
+padding: 0 5px;
+color: #ECEBE1; /*comment text color*/
+}
+.zenpagesearchtext a {
+color: #ECEBE1;
+cursor: pointer;
+}
+.zenpagesearchtext a:hover {
+color: #FFFFFF;
+text-decoration: underline;
+}
+.zenpagesearchtext ul {
+list-style-type: none;
+padding-left:20px
 }

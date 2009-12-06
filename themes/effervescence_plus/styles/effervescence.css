@@ -165,10 +165,13 @@ font-weight: bold;
 h3 {
 	color: #22b393; /*textcolor in comment header ("X Comments") */
 	font: normal 17px Trebuchet MS, Arial, Helvetica, Tahoma, Verdana, sans-serif;
+text-align: left;
+font-weight: bold;
+margin-left: 10px;
 }
 #navbar h3 {
-	margin-left: 6px;
-	text-align: center;
+margin-left: 10px;
+text-align: justify;
 }
 h3 a {
 	color: #fff;
@@ -406,6 +409,7 @@ text-decoration:none;
 }
 #galleryheader {
     background: #0b9577; /*the header area above the nav-bar, single image view*/
+text-align: left;
 	border: none;
 	padding: 0;
 	margin: 0;
@@ -425,7 +429,7 @@ text-decoration:none;
 }
 #main2 #description {
 	margin: 0 auto 0 auto;
-	text-align: center;
+text-align: justify;
 	color: #a5e7d9;
 }
 #pagenumbers {
@@ -1087,4 +1091,22 @@ table.password td.hint{
 .inputbox {
 	width: 250px;
 	padding: 2px;
+}
+#zenpagesearch {
+padding: 0px;
+text-align:left;
+}
+#zenpagesearch h3 {
+padding: 10px;
+background: #d8d6cf;
+}
+.zenpagesearchtext {
+margin-top: 5px;
+padding: 0 5px;
+color: black;
+text-align:left;
+}
+.zenpagesearchtext ul {
+list-style-type: none;
+padding-left:20px
 }

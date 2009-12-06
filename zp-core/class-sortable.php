@@ -138,7 +138,7 @@ class jQuerySortable {
 			<?php
 		}
 		if ($this->debugging)
-			echo '<br>';
+			echo '<br />';
 	}
 	
 	function getOrderArray($input, $listname, $itemKeyName = 'element', $orderKeyName = 'order') {

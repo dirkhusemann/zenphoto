@@ -579,7 +579,7 @@ function getPageURL($page, $total=null) {
 	if (in_context(ZP_SEARCH)) {
 		$searchwords = $_zp_current_search->codifySearchString();
 		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->getFields();
+		$searchfields = $_zp_current_search->getSearchFields();
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list);
 		return $searchpagepath;
 	} else {
@@ -958,7 +958,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 		$page = $_zp_current_search->page;
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->getFields();
+		$searchfields = $_zp_current_search->getSearchFields();
 		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
@@ -3865,8 +3865,9 @@ function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
 	if (!empty($fields) && empty($dates)) {
 		if($mr && $fields == 'tags') {
 				$url .= "tags/";
+				$urls = '';
 		} else {
-			$url .= "&searchfields=$fields";
+			$urls = "searchfields=$fields";
 		}
 	}
 
@@ -3891,8 +3892,16 @@ function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
 			$url .= "&page=$page";
 		}
 	}
-	if (!empty($inalbums)) {
+	if (!empty($urls)) {
 		if ($mr) {
+			$url .= '?'.$urls;
+		} else {
+			$url .= '&'.$urls;
+		}
+		
+	}
+	if (!empty($inalbums)) {
+		if ($mr&empty($urls)) {
 			$url .= '?';
 		} else {
 			$url .= '&';

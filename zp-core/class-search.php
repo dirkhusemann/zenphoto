@@ -16,7 +16,7 @@ class SearchEngine
 	var $words;
 	var $dates;
 	var $whichdates = 'date'; // for zenpage date searches, which date field to search
-	var $fields;
+	var $fieldList;
 	var $page;
 	var $images;
 	var $albums;
@@ -70,7 +70,7 @@ class SearchEngine
 				$this->dates = '';
 			}
 		}
-		$this->fields = $this->parseQueryFields();
+		$this->fieldList = $this->parseQueryFields();
 		$this->album_list = NULL;
 		if (isset($_REQUEST['inalbums'])) {
 			$list = trim(sanitize($_REQUEST['inalbums'], 3));
@@ -130,15 +130,6 @@ class SearchEngine
 		if ($fields & 0x08) $list['filename'] = $this->search_structure['filename'];
 		return $list;
 	}
-
-	/**
-	 * returns the search fields bitmap
-	 *
-	 * @return bits
-	 */
-	function getFields() {
-		return $this->fields;
-	}
 	
 	/**
 	 * creates a search query from the search words
@@ -160,7 +151,7 @@ class SearchEngine
 				$r.= '&whichdates=' . $d;
 			}
 		}
-		if (count($this->fields)>0) { $r .= '&searchfields=' . implode(',',$this->fields); }
+		if (count($this->fieldList)>0) { $r .= '&searchfields=' . implode(',',$this->fieldList); }
 		if ($long) {
 			$a = $this->dynalbumname;
 			if ($a) { $r .= '&albumname=' . $a; }
@@ -198,13 +189,13 @@ class SearchEngine
 					break;
 				case 'searchfields':
 					if (is_numeric($v)) {
-						$this->fields = array_flip($this->numericFields($v));
+						$this->fieldList = array_flip($this->numericFields($v));
 					} else {
-						$this->fields = array();
+						$this->fieldList = array();
 						$list = explode(',',$v);
 						foreach ($this->search_structure as $key=>$row) {
 							if (in_array($key,$list)) {
-								$this->fields[] = $key;
+								$this->fieldList[] = $key;
 							}
 						}
 					}
@@ -249,7 +240,7 @@ class SearchEngine
 	 * @return bit
 	 */
 	function getSearchFields() {
-		return $this->fields;
+		return implode(',',$this->fieldList);
 	}
 
 	/**
@@ -621,7 +612,7 @@ class SearchEngine
 
 		// create an array of [tag, objectid] pairs for tags
 		$tag_objects = array();
-		$fields = $this->fields;
+		$fields = $this->fieldList;
 		$t = array_search('tags',$fields);
 		if ($t!==false) {
 			unset($fields[$t]);

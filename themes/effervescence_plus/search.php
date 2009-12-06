@@ -95,12 +95,21 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 <!-- Wrap Subalbums -->
 <div id="subcontent">
-<div id="submain">
+	<div id="submain">
 
-<!-- Album Description -->
-<div id="description">
+	<div id="description">
+		<h2>
 		<?php
-			$total = getNumAlbums() + getNumImages();
+			$numimages = getNumImages();
+			$numalbums = getNumAlbums();
+			$total = $numimages + $numalbums;
+			if ($zenpage = getOption('zp_plugin_zenpage')) {
+				$numpages = getNumPages();
+				$numnews = getNumNews();
+				$total = $total + $numnews + $numpages;
+			} else {
+				$numpages = $numnews = 0;
+			}
 			$searchwords = getSearchWords();
 			$searchdate = getSearchDate();
 			if (!empty($searchdate)) {
@@ -110,14 +119,80 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				$searchwords .= $searchdate;
 			}
 			if ($total > 0 ) {
-				if ($total > 1) { 
-					printf('%1$u Hits for <em>%2$s</em>', $total, $searchwords); 
-				} else {
-					printf('1 Hit for <em>%s</em>', $searchwords); 
-				}
+				printf(ngettext('%1$u Hit for <em>%2$s</em>','%1$u Hits for <em>%2$s</em>',$total), $total, $searchwords); 
 			}
 		?>
-</div>
+		</h2>
+		<?php
+		if ($zenpage && $_zp_page==1) { //test of zenpage searches
+			define ('TRUNCATE_LENGTH',80);
+			?>
+			<div id="zenpagesearch">
+			<?php
+	
+			if ($numpages>0) {
+				?>
+				<h3><?php printf(gettext('Pages (%s)'),$numpages); ?></h3>
+				<div class="zenpagesearchtext">
+					<ul>
+					<?php
+					while (next_page()) {
+						?>
+						<li>
+						<a href =<?php echo getPageLinkURL($_zp_current_zenpage_page->getTitlelink()); ?>><?php echo getPageTitle(); ?></a>
+							<ul>
+								<li><?php echo exerpt($_zp_current_zenpage_page->getContent(),TRUNCATE_LENGTH); ?></li>
+							</ul>
+						</li>
+						<?php
+					}
+					?>
+					</ul>
+				</div>
+				<?php
+			}
+			if ($numnews>0) {
+				if ($numpages>0) echo '<br />';
+				?>
+				<h3><?php printf(gettext('Articles (%s)'),$numnews); ?></h3>
+				<div class="zenpagesearchtext">
+					<ul>
+					<?php
+					while (next_news()) {
+						?>
+						<li>
+						<?php printNewsTitleLink(); ?>
+							<ul>
+								<li><?php echo exerpt($_zp_current_zenpage_news->getContent(),TRUNCATE_LENGTH); ?></li>
+							</ul>
+						</li>
+						<?php
+					}
+					?>
+					</ul>
+				</div>
+				<?php
+			}
+			if ($total>0) {
+				?>
+				<br />
+				<h3>
+				<?php
+				if (getOption('search_no_albums')) {
+					printf(gettext('Images (%s)'),$numimages);
+				} else {
+					printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
+				}
+				?>
+				</h3>
+				<?php
+			}
+			?>
+			</div>
+			<?php
+		}
+		?>		
+	</div>
 
 	<!-- Album List -->
 		<?php
@@ -137,11 +212,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<li>
 			<?php $annotate = annotateAlbum();?>
 			<div class="imagethumb">
-			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
-				<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate;	?>">
-			<?php printAlbumTitle(); ?></a></h4></li>
-		<?php
+				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
+					<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
+			</div>
+			<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate;	?>"><?php printAlbumTitle(); ?></a></h4></li>
+			<?php
 			}
 			if (!is_null($firstAlbum)) {
 				?>
@@ -149,9 +224,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php
 			}
 			?>
-	<div class="clearage"></div>
-	<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
-</div>
+		<div class="clearage"></div>
+		<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
+	</div>
 
 <!-- Wrap Main Body -->
  	<?php
@@ -223,13 +298,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  					<?php
 	 			}
 	 		} /* image loop */
-	 	} else { /* no images to display */
-			if (getNumAlbums() == 0){
-			?>
-				<div id="main3">
-				<div id="main2">
-				<br />
-				<p align="center">
+	 	}
+	 	
+	 	if ($total == 0){
+		?>
+			<div id="main3">
+			<div id="main2">
+			<br />
+			<p align="center">
 			<?php
 				if (empty($searchwords)) {
 					echo gettext('Enter your search criteria.');
@@ -238,12 +314,12 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				}
 			?>
 			</p>
-			</div>
-			</div> <!-- main3 -->
+		</div>
+		</div> <!-- main3 -->
 		<?php
-	 		}
-	 	} ?>
-
+ 		}
+	 	?>
+	 	
 <!-- Page Numbers -->
 
 		<div id="pagenumbers">
