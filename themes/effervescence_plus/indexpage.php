@@ -24,7 +24,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 		<!-- Logo -->
 			<div id="logo">
-			<?php printLogo(); ?>
+				<?php 
+				if (getOption('Allow_search')) {  printSearchForm(NULL, '', $_zp_themeroot.'/images/search.png'); }
+				printLogo();
+				?>
 			</div>
 		</div> <!-- gallerytitle -->
 

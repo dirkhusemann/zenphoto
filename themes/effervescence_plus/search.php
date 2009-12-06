@@ -54,6 +54,19 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
+	<script type="text/javascript">
+	function toggleExtraElements(category, show) {
+		if (show) {
+			jQuery('.'+category+'_showless').show();
+			jQuery('.'+category+'_showmore').hide();
+			jQuery('.'+category+'_extrashow').show();
+		} else {
+			jQuery('.'+category+'_showless').hide();
+			jQuery('.'+category+'_showmore').show();
+			jQuery('.'+category+'_extrashow').hide();
+		}
+	}
+	</script>
 </head>
 
 <body onload="blurAnchors()">
@@ -126,23 +139,34 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php
 		if ($zenpage && $_zp_page==1) { //test of zenpage searches
 			define ('TRUNCATE_LENGTH',80);
+			define ('SHOW_ITEMS', 5);
 			?>
 			<div id="zenpagesearch">
 			<?php
 	
 			if ($numpages>0) {
 				?>
-				<h3><?php printf(gettext('Pages (%s)'),$numpages); ?></h3>
+				<div id="zenpagesearchhead">
+					<h3><?php printf(gettext('Pages (%s)'),$numpages); ?></h3>
+					<?php
+					if ($numpages>SHOW_ITEMS) {
+						?>
+						<p class="pages_showmore"><a href="javascript:toggleExtraElements('pages',true);"><?php echo gettext('Show more results');?></a></p>
+						<p class="pages_showless" style="display:none;"><a href="javascript:toggleExtraElements('pages',false);"><?php echo gettext('Show fewer results');?></a></p>
+						<?php
+					}
+					?>
+				</div>
 				<div class="zenpagesearchtext">
 					<ul>
 					<?php
+					$c = 0;
 					while (next_page()) {
+						$c++;
 						?>
-						<li>
-						<a href =<?php echo getPageLinkURL($_zp_current_zenpage_page->getTitlelink()); ?>><?php echo getPageTitle(); ?></a>
-							<ul>
-								<li><?php echo exerpt($_zp_current_zenpage_page->getContent(),TRUNCATE_LENGTH); ?></li>
-							</ul>
+						<li<?php if ($c>SHOW_ITEMS) echo ' class="pages_extrashow" style="display:none;"'; ?>>
+						<?php print printPageTitleLink(); ?>
+						<p style="text-indent:1em;"><?php echo exerpt($_zp_current_zenpage_page->getContent(),TRUNCATE_LENGTH); ?></p>
 						</li>
 						<?php
 					}
@@ -154,17 +178,27 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if ($numnews>0) {
 				if ($numpages>0) echo '<br />';
 				?>
-				<h3><?php printf(gettext('Articles (%s)'),$numnews); ?></h3>
+				<div id="zenpagesearchhead">
+					<h3><?php printf(gettext('Articles (%s)'),$numnews); ?></h3>
+					<?php
+					if ($numnews>SHOW_ITEMS) {
+						?>
+						<p class="news_showmore"><a href="javascript:toggleExtraElements('news',true);"><?php echo gettext('Show more results');?></a></p>
+						<p class="news_showless" style="display:none;"><a href="javascript:toggleExtraElements('news',false);"><?php echo gettext('Show fewer results');?></a></p>
+						<?php
+					}
+					?>
+				</div>
 				<div class="zenpagesearchtext">
 					<ul>
 					<?php
+					$c=0;
 					while (next_news()) {
+						$c++;
 						?>
-						<li>
+						<li<?php if ($c>SHOW_ITEMS) echo ' class="newss_extrashow" style="display:none;"'; ?>>
 						<?php printNewsTitleLink(); ?>
-							<ul>
-								<li><?php echo exerpt($_zp_current_zenpage_news->getContent(),TRUNCATE_LENGTH); ?></li>
-							</ul>
+						<p style="text-indent:1em;"><?php echo exerpt($_zp_current_zenpage_news->getContent(),TRUNCATE_LENGTH); ?></p>
 						</li>
 						<?php
 					}

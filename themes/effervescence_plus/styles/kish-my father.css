@@ -1119,9 +1119,13 @@ table.password td.hint{
 padding: 0px;
 text-align:left;
 }
-#zenpagesearch h3 {
+#zenpagesearchhead {
 padding: 10px;
 background: #8597A5;
+}
+#zenpagesearchhead p {
+text-align: right;
+font-size: 80%;
 }
 .zenpagesearchtext {
 margin-top: 5px;
@@ -1140,4 +1144,7 @@ text-decoration: underline;
 .zenpagesearchtext ul {
 list-style-type: none;
 padding-left:20px
+}
+.zenpagesearchtext p {
+text-indent: 1em;
 }
