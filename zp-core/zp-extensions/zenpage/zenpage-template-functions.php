@@ -1893,7 +1893,7 @@ function getPageTitleLink() {
  * @return string
  */
 function printPageTitleLink() {
-	echo getPageTitleLink();
+	echo '<a href="'.getPageTitleLink().'" title="'.getBarePageTitle().'">'.getPageTitle().'</a>';
 }
 
 
