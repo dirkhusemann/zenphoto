@@ -317,7 +317,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 		}
 		switch($type) {
 			case "albums":
-				$editurl=  $webpath."/admin.php?page=edit&amp;album=".$name;
+				$editurl=  $webpath."/admin-edit.php?page=edit&amp;album=".$name;
 				$viewurl = WEBPATH."/index.php?album=".$name;
 				$title = get_language_string($item['title']);
 				break;
@@ -330,7 +330,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 					}					
 					$value = $value.">".get_language_string($getalbumfolder['title'])."</span> (".$getalbumfolder['folder'].")";
 				}
-				$editurl=  $webpath."/admin.php?page=edit&amp;album=".$getalbumfolder['folder']."&amp;image=".$item['filename']."&amp;tab=imageinfo#IT";
+				$editurl=  $webpath."/admin-edit.php?page=edit&amp;album=".$getalbumfolder['folder']."&amp;image=".$item['filename']."&amp;tab=imageinfo#IT";
 				$viewurl = WEBPATH."/index.php?album=".$getalbumfolder['folder']."&amp;image=".$name;
 				$title = get_language_string($item['title']);
 				break;
