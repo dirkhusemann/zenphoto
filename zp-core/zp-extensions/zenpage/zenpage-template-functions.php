@@ -1827,6 +1827,7 @@ function getNumPages() {
  */
 function next_page() {
 	global $_zp_zenpage_pagelist,$_zp_current_search,$_zp_current_zenpage_page;
+	set_context(ZP_SEARCH | ZP_ZENPAGE_PAGE);
 	if (!in_context(ZP_SEARCH)) {
 		return false;
 	}
@@ -1893,7 +1894,8 @@ function getPageTitleLink() {
  * @return string
  */
 function printPageTitleLink() {
-	echo '<a href="'.getPageTitleLink().'" title="'.getBarePageTitle().'">'.getPageTitle().'</a>';
+	global $_zp_current_zenpage_page;
+	echo '<a href="'.getPageLinkURL(getPageTitleLink()).'" title="'.getBarePageTitle().'">'.getPageTitle().'</a>';
 }
 
 
