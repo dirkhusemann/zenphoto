@@ -110,11 +110,36 @@ body {
 	margin-bottom: 0.3em;
 }
 
+/* "Show more results" link for search */
+#content-left h3 small {
+	font-size: 12px;
+	font-weight: normal;
+	}
+
+
+#content-left h4 {
+	margin: 0;
+	font-weight: normal;
+}
+	
+
+
 #content-left p {
 	font-size: 1.1em;
 	line-height: 1.5em;
 	margin-bottom: 1em;
 	clear: both;
+}
+
+#content-left p.zenpageexcerpt {
+	font-size: 13px;
+	line-height: 1.5em;
+	margin: 0px;
+	clear: both;
+}
+
+#content-left ul.searchresults li {
+	margin-bottom: 8px;
 }
 
 #sidebar {
@@ -926,5 +951,3 @@ table.password td.hint{
 	padding: 2px;
 }
 
-/* menu
-----------------------/

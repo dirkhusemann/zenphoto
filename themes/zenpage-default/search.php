@@ -9,6 +9,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
+	<?php require_once("customfunctions.php"); ?>
+	<?php printZDSearchToggleJS(); ?>
+	
 </head>
 
 <body>
@@ -53,21 +56,24 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if ($total > 0 ) {
 				printf(ngettext('%1$u Hit for <em>%2$s</em>','%1$u Hits for <em>%2$s</em>',$total), $total, $searchwords); 
 			}
-		$c = 0;
-		?>
 		
+		?>
+		<hr />
 		<?php if ($_zp_page == 1) { //test of zenpage searches
 			if ($numpages > 0) {
+				$number_to_show = 5;
+				$c = 0;
 				?>
 				</h2>
-				<h3><?php printf(gettext('Pages (%s)'),$numpages); ?></h3>
-					<ul>
+				<h3><?php printf(gettext('Pages (%s)'),$numpages); ?> <small><?php	printZDSearchShowMoreLink("pages",$number_to_show); ?></small></h3>
+					<ul class="searchresults">
 					<?php
 					while (next_page()) {
+						$c++;
 						?>
-						<li>
-						<h4><?php printPageTitleLink(); ?></h4>
-						<p><?php echo shortenContent(strip_tags($_zp_current_zenpage_page->getContent()),80,getOption("zenpage_textshorten_indicator")); ?></p>
+						<li<?php printZDToggleClass('pages',$c,$number_to_show); ?>>
+						<h4><?php printPageTitlelink(); ?></h4>
+							<p class="zenpageexcerpt"><?php echo shortenContent(strip_tags(getPageContent()),80,getOption("zenpage_textshorten_indicator")); ?></p>
 						</li>
 						<?php
 					}
@@ -75,29 +81,31 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					</ul>
 				<?php
 				}
-			if ($numnews>0) {
+			if ($numnews > 0) {
+				$number_to_show = 5;
+				$c = 0;
 				?>
-				<h3><?php printf(gettext('Articles (%s)'),$numnews); ?></h3>
-				<div class="zenpagesearchtext">
-					<ul>
+				<h3><?php printf(gettext('Articles (%s)'),$numnews); ?> <small><?php	printZDSearchShowMoreLink("news",$number_to_show); ?></small></h3>
+					<ul class="searchresults">
 					<?php
 					while (next_news()) {
+						$c++;
 						?>
-						<li>
+						<li<?php printZDToggleClass('news',$c,$number_to_show); ?>>
 						<h4><?php printNewsTitleLink(); ?></h4>
-							<p><?php echo shortenContent(strip_tags(getNewsContent()),80,getOption("zenpage_textshorten_indicator")); ?></p>
+							<p class="zenpageexcerpt"><?php echo shortenContent(strip_tags(getNewsContent()),80,getOption("zenpage_textshorten_indicator")); ?></p>
 						</li>
 						<?php
 					}
 					?>
 					</ul>
-				</div>
+			
 				<?php
 				}
 			}
 			?>
 		<?php	if (!getOption('search_no_albums') && getNumAlbums() > 0) {	?>
-			<h3><?php printf(gettext('Albums (%s)'),$numalbums); ?></h3>
+		 <h3><?php printf(gettext('Albums (%s)'),$numalbums); ?></h3>
 			<div id="albums">
 				<?php while (next_album()): ?>
 					<div class="album">
