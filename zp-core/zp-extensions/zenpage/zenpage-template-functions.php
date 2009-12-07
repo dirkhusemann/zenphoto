@@ -2437,7 +2437,7 @@ function getLatestZenpageComments($number,$type="all",$itemID="") {
 		$comments[$comment['id']] = $comment;
 	}
 	krsort($comments);
-	return array_slice($comments, 0, $number);
+	return array_slice_preserve($comments, 0, $number);
 }
 
 

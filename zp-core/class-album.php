@@ -491,7 +491,7 @@ class Album extends PersistentObject {
 			return $this->subalbums;
 		} else {
 			$albums_per_page = max(1, getOption('albums_per_page'));
-			return array_slice($this->subalbums, $albums_per_page*($page-1), $albums_per_page);
+			return array_slice($this->subalbums, $albums_per_page*($page-1), $albums_per_page, true);
 		}
 	}
 
@@ -538,7 +538,7 @@ class Album extends PersistentObject {
 				$pageStart = $firstPageCount + $images_per_page * $fetchPage;
 
 			}
-			$slice = array_slice($this->images, $pageStart , $images_per_page);
+			$slice = array_slice($this->images, $pageStart , $images_per_page, true);
 
 			return $slice;
 		}

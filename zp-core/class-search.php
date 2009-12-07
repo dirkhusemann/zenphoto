@@ -918,7 +918,7 @@ class SearchEngine
 			return $this->albums;
 		} else {
 			$albums_per_page = max(1, getOption('albums_per_page'));
-			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
+			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page, true);
 		}
 	}
 
@@ -984,6 +984,7 @@ class SearchEngine
 	 * @return array
 	 */
 	function getSearchImages($sorttype, $sortdirection) {
+		if (getOption('search_no_images')) return array();
 		$hint = '';
 		$images = array();
 		$searchstring = $this->getSearchString();
@@ -1044,7 +1045,7 @@ class SearchEngine
 				$images_per_page = max(1, getOption('images_per_page'));
 				$pageStart = $firstPageCount + $images_per_page * $fetchPage;
 			}
-			$slice = array_slice($this->images, $pageStart , $images_per_page);
+			$slice = array_slice($this->images, $pageStart, $images_per_page, true);
 			return $slice;
 		}
 	}
@@ -1095,6 +1096,7 @@ class SearchEngine
 	 */
 	function getSearchPages() {
 		if (getOption('zp_plugin_zenpage')) {
+			if (getOption('search_no_pages')) return array();
 			$searchstring = $this->getSearchString();
 			$searchdate = $this->dates;
 			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find
@@ -1115,6 +1117,7 @@ class SearchEngine
 	 */
 	function getSearchNews() {
 		if (getOption('zp_plugin_zenpage')) {
+			if (getOption('search_no_news')) return array();
 			$searchstring = $this->getSearchString();
 			$searchdate = $this->dates;
 			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find

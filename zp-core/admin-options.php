@@ -207,6 +207,9 @@ if (isset($_GET['action'])) {
 			}
 			setBoolOption('search_space_is_or', isset($_POST['search_space_is_or']));
 			setBoolOption('search_no_albums', isset($_POST['search_no_albums']));
+			setBoolOption('search_no_images', isset($_POST['search_no_images']));
+			setBoolOption('search_no_pages', isset($_POST['search_no_pages']));
+			setBoolOption('search_no_news', isset($_POST['search_no_news']));
 			$returntab = "&tab=search";
 		}
 		
@@ -1106,13 +1109,37 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 								<?php echo gettext('Do not return <em>album</em> matches') ?>
 							</label>
 						</p>
+						<p>
+							<label>
+								<input type="checkbox" name="search_no_images" value="1" <?php echo checked('1', getOption('search_no_images')); ?> />
+								<?php echo gettext('Do not return <em>image</em> matches') ?>
+							</label>
+						</p>
+						<?php
+						if (getOption('zp_plugin_zenpage')) {
+							?>
+							<p>
+								<label>
+									<input type="checkbox" name="search_no_news" value="1" <?php echo checked('1', getOption('search_no_news')); ?> />
+									<?php echo gettext('Do not return <em>news</em> matches') ?>
+								</label>
+							</p>
+							<p>
+								<label>
+									<input type="checkbox" name="search_no_pages" value="1" <?php echo checked('1', getOption('search_no_pages')); ?> />
+									<?php echo gettext('Do not return <em>page</em> matches') ?>
+								</label>
+							</p>
+							<?php
+						}
+					?>
 					</td>
 					<td>
 						<p><?php echo gettext('Search behavior settings.') ?></p>
 						<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
 						<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
 						<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
-						<p><?php echo gettext('Setting <code>Do not return <em>album</em> matches</code> will cause search to ignore albums when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
+						<p><?php echo gettext('Setting <code>Do not return <em>{item}</em> matches</code> will cause search to ignore <em>{items}</em> when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
 					</td>
 				</tr>
 				<tr>

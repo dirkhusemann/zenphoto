@@ -213,9 +213,15 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<h3>
 				<?php
 				if (getOption('search_no_albums')) {
-					printf(gettext('Images (%s)'),$numimages);
+					if (!getOption('search_no_images')) {
+						printf(gettext('Images (%s)'),$numimages);
+					}
 				} else {
-					printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
+					if (getOption('search_no_images')) {
+						printf(gettext('Albums (%s'),$numalbums);
+					} else {
+						printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
+					}
 				}
 				?>
 				</h3>

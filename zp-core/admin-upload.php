@@ -369,7 +369,7 @@ if (ini_get('safe_mode')) { ?>
 				</label>
 			</div>
 		</div>
-		<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?>
+		<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("titled:"); ?>
 			<input id="albumtitle" size="42" type="text" name="albumtitle"
 										onKeyUp="buttonstate(updateFolder(this, 'folderdisplay', 'autogen','<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));" />
 		

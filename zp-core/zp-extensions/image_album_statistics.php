@@ -69,11 +69,12 @@ function getAlbumStatistic($number=5, $option, $albumfolder='') {
 			}
 			// sort latest image by mtime
 			arsort($latestimages);
-			$latestimages = array_slice($latestimages,0,$number);
 			$updatedalbums = array();
 			$count = 0;
 			foreach($latestimages as $key=>$time) {
 				array_push($updatedalbums,$allalbums[$key]);
+				$count++;
+				if ($count>=$number) break;
 			}
 			return $updatedalbums;
 	}

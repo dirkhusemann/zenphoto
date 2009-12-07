@@ -121,7 +121,7 @@ if (isset($_GET['dsp'])) {
 }
 
 if (!$watermark_use_image && !$rotate) { // no processing needed
-	if (getOption('album_folder_class') != 'external' && getOption('protect_full_image') != 'Download') { // local album system, return the image directly
+	if (getOption('album_folder_class') != 'external' && $disposal != 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
 		header('Location: '.getAlbumFolder(FULLWEBPATH).pathurlencode(imgSrcURI($album8.'/'.$image8)), true, 301);
 		exit();

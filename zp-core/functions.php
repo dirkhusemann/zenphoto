@@ -786,7 +786,7 @@ function fetchComments($number) {
 				krsort($comments);
 				if ($number) {
 					if ($number < count($comments)) {
-						$comments = array_slice($comments, 0, $number);
+						$comments = array_slice($comments, 0, $number, true);
 					}
 				}
 			}
