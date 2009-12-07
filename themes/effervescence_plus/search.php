@@ -196,7 +196,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					while (next_news()) {
 						$c++;
 						?>
-						<li<?php if ($c>SHOW_ITEMS) echo ' class="newss_extrashow" style="display:none;"'; ?>>
+						<li<?php if ($c>SHOW_ITEMS) echo ' class="news_extrashow" style="display:none;"'; ?>>
 						<?php printNewsTitleLink(); ?>
 						<p style="text-indent:1em;"><?php echo exerpt($_zp_current_zenpage_news->getContent(),TRUNCATE_LENGTH); ?></p>
 						</li>
