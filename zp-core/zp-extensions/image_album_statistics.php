@@ -139,7 +139,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	global $_zp_gallery;
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 	if($firstimglink && $tempalbum->getNumImages() != 0) {
-		$firstimage = $tempalbum->getImages();
+		$firstimage = $tempalbum->getImages(1); // need only the first so don't get all
 		$firstimage = $firstimage[0];
 		echo $firstimage;
 		$modrewritesuffix = getOption('mod_rewrite_image_suffix');
@@ -233,7 +233,7 @@ function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showde
  * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  * @param bool $firstimglink 'false' (default) if the album thumb link should lead to the album page, 'true' if to the first image of theh album if the album itself has images 
  */
-function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='',$firstimglink=true) {
+function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$albumfolder='',$firstimglink=false) {
 	printAlbumStatistic($number,"latest",$showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$albumfolder,$firstimglink);
 }
 
