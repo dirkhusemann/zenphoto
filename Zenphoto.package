@@ -173,6 +173,7 @@ themes/zenpage-default/404.php
 themes/zenpage-default/album.php
 themes/zenpage-default/archive.php
 themes/zenpage-default/contact.php
+themes/zenpage-default/customfunctions.php
 themes/zenpage-default/footer.php
 themes/zenpage-default/gallery.php
 themes/zenpage-default/image.php

@@ -337,13 +337,28 @@ class _Image extends PersistentObject {
 			}
 
 			/* iptc description */
-			$this->setDesc($this->get('IPTCImageCaption'));
+			$desc = $this->get('IPTCImageCaption');
+			if (!empty($desc)) {
+				$this->setDesc($desc);
+			}
 
 			/* iptc location, state, country */
-			$this->setLocation($this->get('IPTCSubLocation'));
-			$this->setCity($this->get('IPTCCity'));
-			$this->setState($this->get('IPTCState'));
-			$this->setCountry($this->get('IPTCLocationName'));
+			$loc = $this->get('IPTCSubLocation');
+			if (!empty($loc)) {
+				$this->setLocation($loc);
+			}
+			$city = $this->get('IPTCCity');
+			if (!empty($city)) {
+				$this->setCity($city);
+			}
+			$state = $this->get('IPTCState');
+			if (!empty($state)) {
+				$this->setState($state);
+			}
+			$country = $this->get('IPTCLocationName');
+			if (!empty($country)) {
+				$this->setCountry($country);
+			}
 
 			/* iptc credit */
 			$credit = $this->get('IPTCByLine');
@@ -353,17 +368,13 @@ class _Image extends PersistentObject {
 			if (empty($credit)) {
 				$credit = $this->get('IPTCSource');
 			}
-			$this->setCredit($credit);
+			if (!empty($credit)) {
+				$this->setCredit($credit);
+			}
 
 			/* iptc copyright */
 			$this->setCopyright($this->get('IPTCCopyright'));
 
-		}
-		$alb = $this->album;
-		if (!is_null($alb)) {
-			if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
-				$this->album->setDateTime($this->getDateTime());   //  not necessarily the right one, but will do. Can be changed in Admin
-			}
 		}
 		$x = $this->getTitle();
 		if (empty($x)) {
@@ -372,6 +383,12 @@ class _Image extends PersistentObject {
 		$x = $this->getDateTime();
 		if (empty($x)) {
 			$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
+		}
+		$alb = $this->album;
+		if (!is_null($alb)) {
+			if (is_null($albdate = $alb->getDateTime()) || (getOption('album_use_new_image_date') && strtotime($albdate)<strtotime($this->getDateTime()))) {
+				$this->album->setDateTime($this->getDateTime());   //  not necessarily the right one, but will do. Can be changed in Admin
+			}
 		}
 	}
 
