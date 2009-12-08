@@ -671,17 +671,22 @@ function zp_error($message) {
  * This is here because it's used in both template-functions.php and in the classes.
  * @param string $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
  * @param string $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
+ * @param bool $webpath true if you want the WEBPATH to be returned, false if you want to generate a partly path. A trailing "/" is always added.
  * @return string
  */
-function rewrite_path($rewrite, $plain) {
+function rewrite_path($rewrite, $plain,$webpath=true) {
 	$path = null;
 	if (getOption('mod_rewrite')) {
 		$path = $rewrite;
 	} else {
 		$path = $plain;
 	}
-	if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-	return WEBPATH . "/" . $path;
+	if (substr($path, 0, 1) == "/"  && $webpath) $path = substr($path, 1);
+	if($webpath) {
+		return WEBPATH . "/" . $path;
+	} else {
+		return $path;
+	}
 }
 
 /**
