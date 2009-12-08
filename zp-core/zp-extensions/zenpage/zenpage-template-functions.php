@@ -2231,7 +2231,12 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	} else {
 		$published = TRUE;
 	}
-	
+	// don't highlight current pages or foldout if in search mode as next_page() sets page context
+	if(in_context(ZP_SEARCH)) {
+		$css_class_topactive != "";
+		$css_class_active != "";
+		rem_context(ZP_ZENPAGE_PAGE);
+	}
 	$pages = getPages($published);
 	if (count($pages)==0) return; // nothing to do
 	echo "<ul$css_id>";
@@ -2311,7 +2316,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 			} else {
 				$gettitle = "";
 			}
-			if ($pageobj->getTitlelink() == $gettitle) {
+			if ($pageobj->getTitlelink() == $gettitle && !in_context(ZP_SEARCH)) {
 				$current = $class;
 			} else {
 				$current = "";
