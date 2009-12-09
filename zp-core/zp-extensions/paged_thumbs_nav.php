@@ -5,7 +5,7 @@
  * @author Malte Müller (acrylian)
  * @package plugins
  */
-$plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
+$plugin_description = gettext("Prints a paged thumbs navigation on image.php, independent of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---paged_thumbs_nav.php.html";
@@ -48,7 +48,7 @@ class pagedthumbsOptions {
 		gettext('Crop') => array('key' => 'pagedthumbs_crop', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to thumb	size (by shortest side). Otherwise, it will be the full image resized to thumb size (by shortest side).")),
 		gettext('Placeholders') => array('key' => 'pagedthumbs_placeholders', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("if you want to use placeholder for layout reasons to fill up the thumbs if the the number of thumbs does not match images per page. Recommended only for cropped thumbs.")),
+										'desc' => gettext("if you want to use placeholder for layout reasons to fill up the thumbs if the number of thumbs does not match images per page. Recommended only for cropped thumbs.")),
 		gettext('Page list') => array('key' => 'pagedthumbs_pagelist', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If you want the list of the pages to be shown.")),
 		gettext('Pages list prev and next links') => array('key' => 'pagedthumbs_pagelistprevnext', 'type' => OPTION_TYPE_CHECKBOX,
