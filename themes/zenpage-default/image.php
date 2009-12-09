@@ -48,8 +48,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<div id="content-left">
 		
 	<!-- The Image -->
-	<?php if (!checkForPassword()) { ?>
-	
  <?php 
  if(function_exists("printPagedThumbsNav")) { 
  		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40); 
@@ -77,7 +75,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		}
 		?>
 	</div>
-
 	<div id="narrow">
 		<?php printImageDesc(true); ?>
 		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
@@ -102,7 +99,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			</div>
 		<?php } ?>
 	
-		<?php } ?>
 </div><!-- content-left -->
 					
 <div id="sidebar">

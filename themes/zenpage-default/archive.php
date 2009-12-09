@@ -28,7 +28,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 <div id="content">
 	<div id="content-left">
- 			<?php if (!checkForPassword()) {?>
 			<div id="archive">
 			<h3>Gallery archive</h3>
 			<?php printAllDates(); ?>
@@ -43,7 +42,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<div id="tag_cloud">
  			<?php printAllTagsAs('cloud', 'tags'); ?>
 				</div>
- 			<?php } ?>
  			
 	</div><!-- content left-->
 	

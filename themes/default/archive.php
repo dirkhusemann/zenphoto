@@ -22,15 +22,12 @@
 		</span> | <?php echo gettext("Archive View"); ?>
 		</h2>
 	</div>
-
 		<div id="padbox">
- 		<?php if (!checkForPassword()) {?>
 		<div id="archive"><?php printAllDates(); ?></div>
 		<div id="tag_cloud">
 					<p><? echo gettext('Popular Tags'); ?></p>
 			<?php printAllTagsAs('cloud', 'tags'); ?>
 				</div>
- 		<?php } ?>
 	</div>
 
 </div>

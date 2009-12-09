@@ -43,7 +43,6 @@
 	</div>
 
 	<!-- The Image -->
-	<?php if (!checkForPassword()) { ?>
 	<div id="image">
 		<strong>
 		<?php
@@ -93,7 +92,6 @@
 		}
 		?>
 	</div>
-		<?php } ?>
 </div>
 
 <div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 

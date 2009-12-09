@@ -27,7 +27,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	</h2>
 	</div>
 <div id="content-left">
-<?php if(!checkforPassword()) { ?>
 <h2><?php printPageTitle(); ?></h2>
 <?php 
 printPageContent(); 
@@ -41,8 +40,6 @@ if (function_exists('printCommentForm')) { ?>
 	<?php printCommentForm(); ?>
 	</div>
 	<?php } ?>
-	
-	<?php } // password check end ?>
 	</div><!-- content left-->
 		
 		

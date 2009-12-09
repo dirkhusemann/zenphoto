@@ -31,7 +31,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <?php printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev')); ?>
 <?php
 // single news article
-if(is_NewsArticle() AND !checkforPassword()) { 
+if(is_NewsArticle()) { 
 	?>  
   <?php if(getPrevNewsURL()) { ?><div class="singlenews_prev"><?php printPrevNewsLink(); ?></div><?php } ?>
   <?php if(getNextNewsURL()) { ?><div class="singlenews_next"><?php printNextNewsLink(); ?></div><?php } ?>
