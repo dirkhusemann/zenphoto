@@ -34,14 +34,18 @@ class register_user_options {
 	function register_user_options() {
 		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
+		setOptionDefault('register_user_text', gettext('You have received this email because you registered on the site. To complete your registration visit %s.'));
 		setOptionDefault('register_user_captcha', 0);
+		setOptionDefault('register_user_page', 'register');
 	}
 
 	function getOptionsSupported() {
 		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
 												'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
-											gettext('User registration page') => array('key' => 'user_registration_page', 'type' => OPTION_TYPE_CUSTOM, 
-												'desc' => gettext('If this option is not empty, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
+											gettext('Email notification text') => array('key' => 'register_user_text', 'type' => OPTION_TYPE_TEXTAREA,				
+												'desc' => gettext('Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear.')),
+											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM, 
+												'desc' => gettext('If this option is set, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
 											gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX, 
 												'desc' => gettext('If checked, captcha validation will be required for user registration.'))
 											);
@@ -82,7 +86,7 @@ class register_user_options {
 				<td style="margin:0; padding:0"><?php echo gettext('script'); ?></td>
 				<td style="margin:0; padding:0"> 
 					<select id="user_registration_page" name="user_registration_page">
-						<option value=""></option>
+						<option value=""><?php echo gettext('*no page selected'); ?></option>
 						<?php
 						$curdir = getcwd();
 						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$gallery->getCurrentTheme().'/';
@@ -195,7 +199,7 @@ if (!OFFSET_PATH) { // handle form post
 					$notify = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
-						$message = sprintf(gettext('You have received this email because you registered on the site. To complete your registration visit %s.'), $link);
+						$message = sprintf(getOption('user_registration_text'), $link);
 						$notify = zp_mail(gettext('Registration confirmation'), $message, NULL, NULL, array($user=>$admin_e));
 						if (empty($notify)) $notify = 'accepted';
 					}

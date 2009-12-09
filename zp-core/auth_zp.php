@@ -152,11 +152,11 @@ if (isset($_REQUEST['logout'])) {
 	if (isset($_GET['page'])) { $redirect .= "&page=" . $_GET['page']; }
 	if (!empty($redirect)) $redirect = '?'.substr($redirect, 1);
 	if ($_GET['logout']) {
-		$rd_protocal = 'https';
+		$rd_protocol = 'https';
 	} else {
-		$rd_protocal = 'http';
+		$rd_protocol = 'http';
 	}
-	$redirect = $rd_protocal."://".$_SERVER['HTTP_HOST'].WEBPATH.'/index.php'.$redirect;
+	$redirect = $rd_protocol."://".$_SERVER['HTTP_HOST'].WEBPATH.'/index.php'.$redirect;
 	header("Location: " . $redirect);
 	exit();
 }

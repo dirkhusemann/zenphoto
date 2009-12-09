@@ -48,7 +48,7 @@ class ThemeOptions {
 				$theme = $gallery->getCurrentTheme();
 				$themeroot = SERVERPATH . "/themes/$theme/images";
 				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
-				echo '<option value=""></option>';
+				echo '<option value="">'.gettext('*no logo selected').'</option>';
 				generateListFromFiles($currentValue, $themeroot , '.png');
 				echo "</select>\n";
 				break;

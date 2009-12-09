@@ -1055,9 +1055,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<select id="sortselect" name="<?php echo $prefix; ?>subalbumsortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>album_direction_div','<?php echo $javaprefix; ?>album_custom_div')">
 			<?php
 			if (is_null($album->getParent())) {
-				$globalsort = gettext("gallery album sort order");
+				$globalsort = gettext("*gallery album sort order");
 			} else {
-				$globalsort = gettext("parent album subalbum sort order");
+				$globalsort = gettext("*parent album subalbum sort order");
 			}
 			echo "\n<option value =''>$globalsort</option>";
 			$cvt = $type = strtolower($album->get('subalbum_sort_type'));
@@ -1122,9 +1122,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<select id="sortselect" name="<?php echo $prefix; ?>sortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>image_direction_div','<?php echo $javaprefix; ?>image_custom_div')">
 			<?php
 			if (is_null($album->getParent())) {
-				$globalsort = gettext("gallery default image sort order");
+				$globalsort = gettext("*gallery image sort order");
 			} else {
-				$globalsort = gettext("parent album image sort order");
+				$globalsort = gettext("*parent album image sort order");
 			}
 			?>
 			<option value =""><?php echo $globalsort; ?></option>
@@ -1192,7 +1192,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			$selected = '';;
 		}
 		?>
-		<option value="" <?php echo $selected; ?> > </option>
+		<option value="" <?php echo $selected; ?> ><?php echo gettext('*gallery theme')?></option>
 		<?php
 		foreach ($themes as $theme=>$themeinfo) {
 			if ($oldtheme == $theme) {
@@ -1217,7 +1217,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	  	<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
 	  	<td>
 				<select id="album_watermark" name="album_watermark">
-					<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">not set</option>
+					<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 					<?php
 					$watermarks = getWatermarks();
 					generateListFromArray(array($current), $watermarks, false, false);

@@ -33,7 +33,7 @@ class zp_PHPMailer {
 	 * @return zp_PHPMailer
 	 */
 	function zp_PHPMailer() {
-		setOptionDefault('PHPMailer_mail_protocal','sendmail');
+		setOptionDefault('PHPMailer_mail_protocol','sendmail');
 		setOptionDefault('PHPMailer_server','');
 		setOptionDefault('PHPMailer_pop_port','110');
 		setOptionDefault('PHPMailer_smtp_port','25');
@@ -48,7 +48,7 @@ class zp_PHPMailer {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Mail protocol') => array('key' => 'PHPMailer_mail_protocal', 'type' => OPTION_TYPE_RADIO,
+		return array(	gettext('Mail protocol') => array('key' => 'PHPMailer_mail_protocol', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => array('POP3'=>'pop3', 'SMTP'=>'smtp', 'SendMail'=>'sendmail'),
 										'desc' => gettext('Select the mail protocol you wish to be used.')),
 									gettext('Outgoing mail server') => array('key' => 'PHPMailer_server', 'type' => OPTION_TYPE_TEXTBOX,
@@ -83,7 +83,7 @@ class zp_PHPMailer {
 }
 
 function zenphoto_PHPMailer($msg, $email_list, $subject, $message, $from_mail, $from_name, $cc_addresses) {
-	switch (getOption('PHPMailer_mail_protocal')) {
+	switch (getOption('PHPMailer_mail_protocol')) {
 		case 'pop3':
 			require_once(dirname(__FILE__).'/PHPMailer/class.pop3.php');
 			$pop = new POP3();

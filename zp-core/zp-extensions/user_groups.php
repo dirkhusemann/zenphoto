@@ -175,7 +175,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 			</script>';
 		
 		$grouppart .= '<select name="'.$i.'group" onchange="javascript: groupchange'.$i.'(this);"'.'>'."\n";
-		$grouppart .= '<option value="" title="'.gettext('no group affiliation').'"></option>'."\n";
+		$grouppart .= '<option value="" title="'.gettext('*no group affiliation').'">'.gettext('*no group selected').'</option>'."\n";
 		$selected_hint = gettext('no group affiliation');
 		foreach ($groups as $user) {
 			if ($user['name']=='template') {

@@ -67,7 +67,7 @@ if (isset($_GET['action'])) {
 			}
 			setOption('time_offset', $offset);
 			setOption('server_protocol', $protocol = sanitize($_POST['server_protocol'],3));
-			if ($protocal == 'http') {
+			if ($protocol == 'http') {
 				zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
 			}
 			setOption('charset', sanitize($_POST['charset']),3);
@@ -469,10 +469,10 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td width="175"><?php echo gettext("Server protocol:"); ?></td>
 					<td width="350">
 						<select id="server_protocol" name="server_protocol">
-							<?php $protocal = getOption('server_protocol'); ?>
-							<option value="http" <?php if ($protocal == 'http') echo 'SELECTED'; ?>>http</option>
-							<option value="https" <?php if ($protocal == 'https') echo 'SELECTED'; ?>>https</option>
-							<option value="https_admin" <?php if ($protocal == 'https_admin') echo 'SELECTED'; ?>><?php echo gettext('secure admin'); ?></option>
+							<?php $protocol = getOption('server_protocol'); ?>
+							<option value="http" <?php if ($protocol == 'http') echo 'SELECTED'; ?>>http</option>
+							<option value="https" <?php if ($protocol == 'https') echo 'SELECTED'; ?>>https</option>
+							<option value="https_admin" <?php if ($protocol == 'https_admin') echo 'SELECTED'; ?>><?php echo gettext('secure admin'); ?></option>
 						</select>
 					</td>
 					<td>
@@ -494,7 +494,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							$zones = getTimezones();
 							?>
 							<select id="time_zone" name="time_zone">
-							<option value=""></option>
+							<option value=""><?php echo gettext('*not specified'); ?></option>
 							<?php generateListFromArray(array($tz = getOption('time_zone')), $zones, false, false); ?>
 							</select>
 						</td>
@@ -1469,7 +1469,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td style="margin:0; padding:0;"><?php echo gettext('Images'); ?> </td>
 					<td style="margin:0; padding:0">
 						<select id="fullimage_watermark" name="fullimage_watermark">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">none</option>
+							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 							<?php
 							$watermarks = getWatermarks();
 							generateListFromArray(array($current), $watermarks, false, false);
@@ -1489,7 +1489,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						<td style="margin:0; padding:0;"><?php	echo $plugin;	?> <?php echo gettext('thumbnails'); ?> </td>
 						<td style="margin:0; padding:0">
 							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray">none</option>
+							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 							<?php
 							$watermarks = getWatermarks();
 							generateListFromArray(array($current), $watermarks, false, false);
@@ -2006,7 +2006,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td><?php echo gettext("Gallery index page link:"); ?></td>
 				<td>
 					<select id="custom_index_page" name="custom_index_page">
-						<option value=""></option>
+						<option value=""><?php echo gettext('*none'); ?></option>
 						<?php
 						$curdir = getcwd();
 						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';

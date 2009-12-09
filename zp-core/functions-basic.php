@@ -106,10 +106,10 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 if (!defined('SERVERPATH')) define('SERVERPATH', str_replace("\\", '/', dirname(dirname(__FILE__))));
-$protocal = getOption('server_protocol');
-switch ($protocal) {
+$protocol = getOption('server_protocol');
+switch ($protocol) {
 	case 'https':
-	define('PROTOCOL', $protocal);
+	define('PROTOCOL', $protocol);
 	break;
 	default:
 	if(isset($_SERVER['HTTPS'])) {
