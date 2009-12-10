@@ -3489,7 +3489,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			$ct = count($singletag);
 			$x = 0;
 			foreach ($singletag as $atag) {
-				if ($x++ == $ct) { $separator = ""; }
+				if (++$x == $ct) { $separator = ""; }
 				if ($option === "links") {
 					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0, $albumlist))."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
 					$links2 = "</a>";
