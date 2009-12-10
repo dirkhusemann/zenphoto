@@ -3462,9 +3462,8 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			$tagstring = $messageIfEmpty;
 		}
 	}
-	//$object =  in_context(ZP_IMAGE) ? 'image' : 'album' ;
 	if(in_context(ZP_IMAGE)) {
-		$object = "images";
+		$object = "image";
 	} else if (in_context(ZP_ALBUM)) {
 		$object = "album";
 	} else if(in_context(ZP_ZENPAGE_PAGE)) {
@@ -3472,7 +3471,6 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 	} else if(in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
 		$object = "zenpage_news";
 	}
-	
 	if ($editable && zp_loggedin()) {
 		printEditable($object, '_update_tags', true, $editclass, $tagstring);
 	} else {
