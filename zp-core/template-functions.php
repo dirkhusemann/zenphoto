@@ -1158,17 +1158,25 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 	}
 
 	switch($context) {
-	case 'image':
-		global $_zp_current_image;
-		$object = $_zp_current_image;
-		break;
-	case 'album':
-		global $_zp_current_album;
-		$object = $_zp_current_album;
-		break;
-	default:
-		trigger_error(gettext('printEditable() incomplete function call.'), E_USER_NOTICE);
-		return false;
+		case 'image':
+			global $_zp_current_image;
+			$object = $_zp_current_image;
+			break;
+		case 'album':
+			global $_zp_current_album;
+			$object = $_zp_current_album;
+			break;
+		case 'zenpage_page':
+			global $_zp_current_zenpage_page;
+			$object = $_zp_current_zenpage_page;
+			break;
+		case 'zenpage_news':
+			global $_zp_current_zenpage_news;
+			$object = $_zp_current_zenpage_news;
+			break;
+		default:
+			trigger_error(gettext('printEditable() incomplete function call.'), E_USER_NOTICE);
+			return false;
 	}
 	$text = trim( $override !== false ? $override : get_language_string($object->get($field)) );
 	$text = zp_apply_filter($context.'_'.$field, $text, $object, $context, $field);
@@ -3420,6 +3428,12 @@ function getTags() {
 	} else if (in_context(ZP_ALBUM)) {
 		global $_zp_current_album;
 		return $_zp_current_album->getTags();
+	} else if(in_context(ZP_ZENPAGE_PAGE)) {
+		global $_zp_current_zenpage_page;
+		return $_zp_current_zenpage_page->getTags();
+	} else if(in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
+		global $_zp_current_zenpage_news;
+		return $_zp_current_zenpage_news->getTags();
 	}
 }
 
@@ -3448,8 +3462,17 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			$tagstring = $messageIfEmpty;
 		}
 	}
+	//$object =  in_context(ZP_IMAGE) ? 'image' : 'album' ;
+	if(in_context(ZP_IMAGE)) {
+		$object = "images";
+	} else if (in_context(ZP_ALBUM)) {
+		$object = "album";
+	} else if(in_context(ZP_ZENPAGE_PAGE)) {
+		$object = "zenpage_page";
+	} else if(in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
+		$object = "zenpage_news";
+	}
 	
-	$object =  in_context(ZP_IMAGE) ? 'image' : 'album' ;
 	if ($editable && zp_loggedin()) {
 		printEditable($object, '_update_tags', true, $editclass, $tagstring);
 	} else {

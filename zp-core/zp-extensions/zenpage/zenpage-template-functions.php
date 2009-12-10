@@ -232,6 +232,8 @@ function next_news($combi=true) {
 					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 				}
 			}
+			save_context();
+			add_context(ZP_ZENPAGE_NEWS_ARTICLE);
 			return true;
 		} else if (empty($_zp_zenpage_articles)) {
 			$_zp_zenpage_articles = NULL;
