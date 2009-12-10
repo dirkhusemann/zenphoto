@@ -1172,7 +1172,7 @@ if ($debug) {
 	$folders = array();
 	foreach ($installed_files as $key=>$value) {
 		$component_data = explode(':',$value);
-		$value = $component_data[0];
+		$value = trim($component_data[0]);
 		$component = $base.$value;
 		if (file_exists($component)) {
 			if (is_dir($component)) {
