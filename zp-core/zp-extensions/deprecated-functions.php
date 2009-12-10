@@ -8,7 +8,7 @@
  * 
  * @package plugins
  */
-$plugin_description = gettext("Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as as they have been supplanted. They are not maintained and they are not guarentted to function correctly with the current version of Zenphoto.");
+$plugin_description = gettext("Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as as they have been supplanted. They are not maintained and they are not guaranteed to function correctly with the current version of Zenphoto.");
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---deprecated-functions.php.html";
 
 /**
