@@ -3556,10 +3556,14 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 				} else {
 					$albumlist = NULL;
 				}
-				if (strpos($key,'"')===false) {
-					$quote = '"';
+				if (preg_match("/[^a-zA-Z0-9_]/",$key)) {
+					if (strpos($key,'"')===false) {
+						$quote = '"';
+					} else {
+						$quote = "'";
+					}
 				} else {
-					$quote = "'";
+					$quote = '';
 				}
 				echo "\t<li><a href=\"".
 					htmlspecialchars(getSearchURL($quote.$key.$quote, '', 'tags', 0, 0, $albumlist))."\"$size rel=\"nofollow\">".
