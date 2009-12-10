@@ -335,26 +335,27 @@ ul.pagelist li.next {
 
 /* Tags
 ------------------------------ */
-.taglist ul {
+.taglist {
 	display: inline;
 	list-style-type: none;
 }
 
-.taglist ul li {
+.taglist li {
 	background: url(../images/tag.png) no-repeat left center;
 	list-style-type: none;
-	padding-left: 18px;
+	padding-left: 0px;
 	float: left;
-	padding-right: 5px;
+	padding-right: 0px;
 	color: #999999;
 	display: inline;
 	list-style-type: none;
 }
 
-.taglist .tags_title {
+.tags_title {
 	background: none;
 	padding-right: 5px;
 	padding-left: 0;
+	float: left; 
 }
 
 /* Image Thumbnails

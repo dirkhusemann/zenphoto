@@ -31,6 +31,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <?php 
 printPageContent(); 
 printCodeblock(1); 
+printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); 
+?>
+<br style="clear:both;" /><br />
+<?php
 if (function_exists('printRating')) { printRating(); }
 ?>
 

@@ -84,8 +84,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				printImageMetadata('', false);
 			}
 		?>
-		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
-
+		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
+    <br style="clear:both;" /><br />
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
 
     <?php if (function_exists('printRating')) { printRating(); }?>

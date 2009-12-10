@@ -59,8 +59,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		</div>
 				<p style="clear: both; "></p>
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
-		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
-
+		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
+		<br style="clear:both;" /><br />
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 	<?php if (function_exists('printRating')) { printRating(); }?>
 	<?php

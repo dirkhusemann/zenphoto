@@ -39,6 +39,8 @@ if(is_NewsArticle()) {
   <h3><?php printNewsTitle(); ?></h3> 
   <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span> <?php printNewsCategories(", ",gettext("Categories: "),"newscategories"); ?></div>
   <?php printNewsContent(); ?>
+  <?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
+  <br style="clear:both;" /><br />
   <?php if (function_exists('printRating')) { printRating(); } ?>
 <?php 
 // COMMENTS TEST
@@ -69,7 +71,8 @@ if(is_GalleryNewsType()) {
     <?php printNewsContent(); ?>
     <p><?php printNewsReadMoreLink(); ?></p>
     <?php printCodeblock(1); ?>
-    
+    <?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
+    <br style="clear:both;" /><br />
     </div>	
 <?php
   endwhile; 
