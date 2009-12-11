@@ -236,7 +236,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		$pagenum = 1;
 	}
 
-	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE, true);
+	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE);
 	$allcommentscount = count($allcomments);
 	$totalpages = ceil(($allcommentscount / COMMENTS_PER_PAGE));
 	?>

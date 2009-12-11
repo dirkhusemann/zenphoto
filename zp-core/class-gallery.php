@@ -130,7 +130,7 @@ class Gallery {
 		if ($page == 0) {
 			return $this->albums;
 		} else {
-			return array_slice($this->albums, galleryAlbumsPerPage()*($page-1), galleryAlbumsPerPage(), true);
+			return array_slice($this->albums, galleryAlbumsPerPage()*($page-1), galleryAlbumsPerPage());
 		}
 	}
 

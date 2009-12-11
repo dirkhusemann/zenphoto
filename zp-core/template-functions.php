@@ -3125,7 +3125,7 @@ function getLatestComments($number,$type="all",$itemID="") {
 		$comments[$comment['id']] = $comment;
 	}
 	krsort($comments);
-	return array_slice($comments, 0, $number, true);
+	return array_slice($comments, 0, $number);
 }
 
 
@@ -3527,7 +3527,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			arsort($tagcount);
 	}
 	if (!is_null($limit)) {
-		$tagcount = array_slice($tagcount, 0, $limit, true);
+		$tagcount = array_slice($tagcount, 0, $limit);
 	}
 	echo "<ul ".$class.">\n";
 	foreach ($tagcount as $key=>$val) {

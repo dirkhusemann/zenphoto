@@ -485,7 +485,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			$pagenum = 1;
 		}
 	}
-	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE, true);
+	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
 
 	$totalimages = count($images);
 

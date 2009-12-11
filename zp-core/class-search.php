@@ -918,7 +918,7 @@ class SearchEngine
 			return $this->albums;
 		} else {
 			$albums_per_page = max(1, getOption('albums_per_page'));
-			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page, true);
+			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
 		}
 	}
 
@@ -1045,7 +1045,7 @@ class SearchEngine
 				$images_per_page = max(1, getOption('images_per_page'));
 				$pageStart = $firstPageCount + $images_per_page * $fetchPage;
 			}
-			$slice = array_slice($this->images, $pageStart, $images_per_page, true);
+			$slice = array_slice($this->images, $pageStart, $images_per_page);
 			return $slice;
 		}
 	}

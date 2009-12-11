@@ -222,7 +222,7 @@ class pagedThumbsNav {
 	 */
 	function getThumbs() {
 		global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
-		$curimages = array_slice($this->images,$this->currentfloor,$this->imagesperpage,true);
+		$curimages = array_slice($this->images,$this->currentfloor,$this->imagesperpage);
 		$thumbs = array();
 		foreach($curimages as $item) {
 			if(in_context(ZP_SEARCH_LINKED) AND $this->searchimages) {

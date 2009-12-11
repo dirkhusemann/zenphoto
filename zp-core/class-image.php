@@ -255,10 +255,10 @@ class _Image extends PersistentObject {
 				$this->set('hasMetadata',1);
 				foreach($_zp_exifvars as $field => $exifvar) {
 					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
-						$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],3));
+						$exif = trim(sanitize($exifraw[$exifvar[0]][$exifvar[1]],1));
 						$this->set($field, $exif);
 					} else if (isset($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]])) {
-						$exif = trim(sanitize($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]],3));
+						$exif = trim(sanitize($exifraw[$exifvar[0]]['MakerNote'][$exifvar[1]],1));
 						$this->set($field, $exif);
 					}
 				}
@@ -442,7 +442,7 @@ class _Image extends PersistentObject {
 		$outputset = getOption('charset');
 		if ($characterset == $outputset) return $iptcstring;
 		$iptcstring = $_zp_UTF8->convert($iptcstring, $characterset, $outputset);
-		return trim(sanitize($iptcstring));
+		return trim(sanitize($iptcstring,1));
 	}
 	/**
 	 * Update this object's values for width and height.
