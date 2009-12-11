@@ -71,6 +71,7 @@ if (isset($_GET['action'])) {
 				zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
 			}
 			setOption('charset', sanitize($_POST['charset']),3);
+			setOption('site_email', sanitize($_POST['site_email']),3);
 			setBoolOption('tinyMCEPresent', isset($_POST['tinyMCEPresent']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
@@ -708,6 +709,14 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						}
 						?>
 					</td>
+				</tr>
+				<tr>
+					<td width="175"><?php echo gettext("Site email:"); ?></td>
+					<td width="350">
+						<input type="text" size="40" id="site_email" name="site_email" style="width: 338px" value="<?php echo getOption('site_email'); ?>" />
+					</td>
+					<td><?php echo gettext("This email address will be used as the <em>From</em> address for all mails sent by Zenphoto."); ?></td>
+				</tr>
 				<?php
 				if ($_zp_imagick_present) {
 					?>
@@ -726,7 +735,6 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<?php
 				}
 				?>
-				</tr>
 				<?php zp_apply_filter('admin_general_data'); ?>
 				<tr>
 					<td colspan="3">

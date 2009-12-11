@@ -368,7 +368,6 @@ function is_valid_email_zp($input_email) {
 	return false;
 }
 
-
 /**
  * Send an mail to the mailing list. We also attempt to intercept any form injection
  * attacks by slime ball spammers. Returns error message if send failure.
@@ -384,7 +383,7 @@ function is_valid_email_zp($input_email) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zp_mail($subject, $message, $from_mail=NULL, $from_name=NULL, $email_list=null, $cc_addresses=NULL) {
+function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
 	$result = '';
 	if (is_null($email_list)) {
 		$email_list = getAdminEmail();
@@ -420,11 +419,9 @@ function zp_mail($subject, $message, $from_mail=NULL, $from_name=NULL, $email_li
 				}
 			}
 
-			if(is_null($from_mail)) {
-				$from_mail = "zenphoto@" . $_SERVER['SERVER_NAME'];
-				$from_name = get_language_string(getOption('gallery_title'), getOption('locale'));
-			}
-
+			$from_mail = getOption('site_email');
+			$from_name = get_language_string(getOption('gallery_title'), getOption('locale'));
+				
 			// Convert to UTF-8
 			if (getOption('charset') != 'UTF-8') {
 				$subject = $_zp_UTF8->convert($subject, getOption('charset'));
@@ -984,7 +981,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			}
 			$on = gettext('Comment posted');
 			$gallery = new Gallery();
-			zp_mail("[" . $gallery->getTitle() . "] $on", $message, NULL, NULL, $emails);
+			zp_mail("[" . $gallery->getTitle() . "] $on", $message, $emails);
 		}
 	}
 	return $commentobj;

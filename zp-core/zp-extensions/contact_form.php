@@ -238,7 +238,7 @@ function printContactForm() {
 		$name = sanitize($_POST['name']);
 		$contactform_mailinglist = getOption("contactform_mailaddress");
 		$mailinglist = explode(';',$contactform_mailinglist);
-		$err_msg = zp_mail($subject, $message, $mailaddress, $name, $mailinglist, array($name=>$mailaddress));
+		$err_msg = zp_mail($subject, $message, $mailinglist, array($name=>$mailaddress));
 		if ($err_msg) {
 			echo $err_msg;
 		} else {

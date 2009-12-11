@@ -326,4 +326,7 @@ function setDefault($option, $default) {
 	setOptionDefault('AlbumThumbSelectField','ID');
 	setOptionDefault('AlbumThumbSelectDirection','DESC');
 	setOptionDefault('AlbumThumbSelecorText',gettext('most recent'));
+	
+	setOptionDefault('site_email',"zenphoto@".$_SERVER['SERVER_NAME']);
+	
 	?>
