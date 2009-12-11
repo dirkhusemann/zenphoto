@@ -3487,6 +3487,13 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			$ct = count($singletag);
 			$x = 0;
 			foreach ($singletag as $atag) {
+				if (preg_match("/[ &|!'\"`,()]/",$atag)) {
+					if (strpos($atag,'"')===false) {
+						$atag = '"'.$atag.'"';
+					} else {
+						$quote = "'".$atag."'";
+					}
+				}
 				if (++$x == $ct) { $separator = ""; }
 				if ($option === "links") {
 					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0, $albumlist))."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
