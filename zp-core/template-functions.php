@@ -3556,7 +3556,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 				} else {
 					$albumlist = NULL;
 				}
-				if (preg_match("/[^a-zA-Z0-9_]/",$key)) {
+				if (preg_match("/[ &|!'\"`,()]/",$key)) {
 					if (strpos($key,'"')===false) {
 						$quote = '"';
 					} else {
