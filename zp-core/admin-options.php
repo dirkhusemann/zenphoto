@@ -1912,10 +1912,10 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td><?php echo gettext("Recommended number of albums on a page. You might need to adjust this for a better page layout."); ?></td>
 			</tr>
 			<tr>
-				<td><?php echo gettext("Images per page:"); ?></td>
+				<td><?php echo gettext("Thumbnails per page:"); ?></td>
 				<td><input type="text" size="3" name="images_per_page"
 					value="<?php echo getThemeOption('images_per_page',$album,$themename);?>" /></td>
-				<td><?php echo gettext("Recommended number of images on a page. You might need to adjust this for a better page layout."); ?></td>
+				<td><?php echo gettext("Recommended number of thumbnails on a album page. You might need to adjust this for a better page layout."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Thumb size:"); ?></td>
