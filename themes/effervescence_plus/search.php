@@ -218,7 +218,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					}
 				} else {
 					if (getOption('search_no_images')) {
-						printf(gettext('Albums (%s'),$numalbums);
+						printf(gettext('Albums (%s)'),$numalbums);
 					} else {
 						printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
 					}
