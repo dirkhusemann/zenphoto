@@ -70,7 +70,7 @@ if(is_GalleryNewsType()) {
 </div>
     <?php printNewsContent(); ?>
     <p><?php printNewsReadMoreLink(); ?></p>
-    <?php printCodeblock(1); ?>
+    <?php if(is_NewsType("news")) printCodeblock(1); ?>
     <?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
     <br style="clear:both;" /><br />
     </div>	
