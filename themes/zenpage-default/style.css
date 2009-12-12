@@ -901,6 +901,9 @@ hr {
 	height: 100%;
 }
 
+#dynamic-locale {
+	width: 195px;
+}
 /* zenphoto/zenpage link
 ---------------------------*/
 #zen-part {
