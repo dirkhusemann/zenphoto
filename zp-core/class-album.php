@@ -262,7 +262,7 @@ class Album extends PersistentObject {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
-		storeTags(filterTags($tags), $this->id, 'albums');
+		storeTags($tags, $this->id, 'albums');
 	}
 
 

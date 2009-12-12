@@ -662,7 +662,7 @@ class _Image extends PersistentObject {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
-		storeTags(filterTags($tags), $this->id, 'images');
+		storeTags($tags, $this->id, 'images');
 	}
 
 	/**

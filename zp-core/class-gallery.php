@@ -470,100 +470,105 @@ class Gallery {
 			} else {
 				$restartwhere = '';
 			}
-			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime` FROM ' . prefix('images').$restartwhere.' ORDER BY `id`';
+			define('RECORD_LIMIT',5);
+			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime` FROM ' . prefix('images').$restartwhere.' ORDER BY `id` LIMIT '.(RECORD_LIMIT+2);
 			$images = query_full_array($sql);
-			foreach($images as $image) {
-				$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
-				$row = query_single_row($sql);
-				$imageName = internalToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
-				if (file_exists($imageName)) {
-					$mtime = filemtime($imageName);
-					if ($image['mtime'] != $mtime) { // file has changed since we last saw it
-						$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
-						$imageobj->set('mtime', $mtime);
-						$imageobj->updateDimensions(); // update the width/height & account for rotation
-						$imageobj->updateMetaData(); // prime the EXIF/IPTC fields						
-						$imageobj->save();
-						zp_apply_filter('image_refresh', $imageobj);
+			if (count($images) > 0) {
+				$c = 0;
+				foreach($images as $image) {
+					$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
+					$row = query_single_row($sql);
+					$imageName = internalToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
+					if (file_exists($imageName)) {
+						$mtime = filemtime($imageName);
+						if ($image['mtime'] != $mtime) { // file has changed since we last saw it
+							$imageobj = newImage(new Album($this, $row['folder']), $image['filename']);
+							$imageobj->set('mtime', $mtime);
+							$imageobj->updateDimensions(); // update the width/height & account for rotation
+							$imageobj->updateMetaData(); // prime the EXIF/IPTC fields
+							$imageobj->save();
+							zp_apply_filter('image_refresh', $imageobj);
 						}
-				} else {
-					$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
-					$result = query($sql);
-					$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type` IN ('.zp_image_types('"').') AND `ownerid` ="' . $image['id'] . '";';
-					$result = query($sql);
+					} else {
+						$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
+						$result = query($sql);
+						$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type` IN ('.zp_image_types('"').') AND `ownerid` ="' . $image['id'] . '";';
+						$result = query($sql);
+					}
+					if (++$c >= RECORD_LIMIT) {
+						return $image['id']; // avoide excessive processing
+					}
 				}
-				if (array_sum(explode(" ",microtime())) - $start >=10) {
-					return $image['id']; // avoide excessive processing
-				}
-
 			}
 
-			/* clean the comments table */
-			/* do the images */
-			$imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));       /* all the image IDs */
-			$idsofimages = array();
-			foreach($imageids as $row) { $idsofimages[] = $row['id']; }
-			$commentImages = query_full_array("SELECT DISTINCT `ownerid` FROM " .
-							prefix('comments') . 'WHERE `type` IN ('.zp_image_types('"').')'); /* imageids of all the comments */
-			$imageidsofcomments = array();
-			foreach($commentImages as $row) { $imageidsofcomments [] = $row['ownerid']; }
-			$orphans = array_diff($imageidsofcomments , $idsofimages );                 /* image ids of comments with no image */
+			if (empty($restart)) {
+				/* clean the comments table */
+				/* do the images */
+				$imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));       /* all the image IDs */
+				$idsofimages = array();
+				foreach($imageids as $row) { $idsofimages[] = $row['id']; }
+				$commentImages = query_full_array("SELECT DISTINCT `ownerid` FROM " .
+				prefix('comments') . 'WHERE `type` IN ('.zp_image_types('"').')'); /* imageids of all the comments */
+				$imageidsofcomments = array();
+				foreach($commentImages as $row) { $imageidsofcomments [] = $row['ownerid']; }
+				$orphans = array_diff($imageidsofcomments , $idsofimages );                 /* image ids of comments with no image */
 
-			if (count($orphans) > 0 ) { /* delete dead comments from the DB */
-				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('comments') . " WHERE `type` IN (".zp_image_types("'").") AND `ownerid`='" . $firstrow . "'";
-				foreach($orphans as $id) {
-					$sql .= " OR `ownerid`='" . $id . "'";
+				if (count($orphans) > 0 ) { /* delete dead comments from the DB */
+					$firstrow = array_pop($orphans);
+					$sql = "DELETE FROM " . prefix('comments') . " WHERE `type` IN (".zp_image_types("'").") AND `ownerid`='" . $firstrow . "'";
+					foreach($orphans as $id) {
+						$sql .= " OR `ownerid`='" . $id . "'";
+					}
+					query($sql);
 				}
-				query($sql);
-			}
 
-			/* do the same for album comments */
-			$albumids = query_full_array('SELECT `id` FROM ' . prefix('albums'));      /* all the album IDs */
-			$idsofalbums = array();
-			foreach($albumids as $row) { $idsofalbums[] = $row['id']; }
-			$commentAlbums = query_full_array("SELECT DISTINCT `ownerid` FROM " .
-			prefix('comments') . 'WHERE `type`="albums"');                         /* album ids of all the comments */
-			$albumidsofcomments = array();
-			foreach($commentAlbums as $row) { $albumidsofcomments [] = $row['ownerid']; }
-			$orphans = array_diff($albumidsofcomments , $idsofalbums );                 /* album ids of comments with no album */
-			if (count($orphans) > 0 ) { /* delete dead comments from the DB */
-				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`='" . $firstrow . "'";
-				foreach($orphans as $id) {
-					$sql .= " OR `ownerid`='" . $id . "'";
+				/* do the same for album comments */
+				$albumids = query_full_array('SELECT `id` FROM ' . prefix('albums'));      /* all the album IDs */
+				$idsofalbums = array();
+				foreach($albumids as $row) { $idsofalbums[] = $row['id']; }
+				$commentAlbums = query_full_array("SELECT DISTINCT `ownerid` FROM " .
+				prefix('comments') . 'WHERE `type`="albums"');                         /* album ids of all the comments */
+				$albumidsofcomments = array();
+				foreach($commentAlbums as $row) { $albumidsofcomments [] = $row['ownerid']; }
+				$orphans = array_diff($albumidsofcomments , $idsofalbums );                 /* album ids of comments with no album */
+				if (count($orphans) > 0 ) { /* delete dead comments from the DB */
+					$firstrow = array_pop($orphans);
+					$sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`='" . $firstrow . "'";
+					foreach($orphans as $id) {
+						$sql .= " OR `ownerid`='" . $id . "'";
+					}
+					query($sql);
 				}
-				query($sql);
-			}
 
-			/* clean the tags table */
-			/* do the images */
-			$tagImages = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type` IN ('.zp_image_types('"').')');                         /* imageids of all the comments */
-			$imageidsoftags = array();
-			foreach($tagImages as $row) { $imageidsoftags [] = $row['objectid']; }
-			$orphans = array_diff($imageidsoftags , $idsofimages );                 /* image ids of comments with no image */
-			if (count($orphans) > 0 ) { /* delete dead tags from the DB */
-				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE `type` IN (".zp_image_types('"').") AND (`objectid`='" . $firstrow . "'";
-				foreach($orphans as $id) {
-					$sql .= " OR `objectid`='" . $id . "'";
+				/* clean the tags table */
+				/* do the images */
+				$tagImages = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type` IN ('.zp_image_types('"').')');                         /* imageids of all the comments */
+				$imageidsoftags = array();
+				foreach($tagImages as $row) { $imageidsoftags [] = $row['objectid']; }
+				$orphans = array_diff($imageidsoftags , $idsofimages );                 /* image ids of comments with no image */
+				if (count($orphans) > 0 ) { /* delete dead tags from the DB */
+					$firstrow = array_pop($orphans);
+					$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE `type` IN (".zp_image_types('"').") AND (`objectid`='" . $firstrow . "'";
+					foreach($orphans as $id) {
+						$sql .= " OR `objectid`='" . $id . "'";
+					}
+					$sql .= ')';
+					query($sql);
 				}
-				$sql .= ')';
-				query($sql);
-			}
 
-			/* do the same for album tags */
-			$tagAlbums = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type`="albums"');                         /* album ids of all the comments */
-			$albumidsoftags = array();
-			foreach($tagAlbums as $row) { $albumidsoftags [] = $row['objectid']; }
-			$orphans = array_diff($albumidsoftags , $idsofalbums );                 /* album ids of comments with no album */
-			if (count($orphans) > 0 ) { /* delete dead tags from the DB */
-				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`='" . $firstrow . "'";
-				foreach($orphans as $id) {
-					$sql .= " OR `objectid`='" . $id . "'";
+				/* do the same for album tags */
+				$tagAlbums = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type`="albums"');                         /* album ids of all the comments */
+				$albumidsoftags = array();
+				foreach($tagAlbums as $row) { $albumidsoftags [] = $row['objectid']; }
+				$orphans = array_diff($albumidsoftags , $idsofalbums );                 /* album ids of comments with no album */
+				if (count($orphans) > 0 ) { /* delete dead tags from the DB */
+					$firstrow = array_pop($orphans);
+					$sql = "DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`='" . $firstrow . "'";
+					foreach($orphans as $id) {
+						$sql .= " OR `objectid`='" . $id . "'";
+					}
+					query($sql);
 				}
-				query($sql);
 			}
 		}
 		return false;

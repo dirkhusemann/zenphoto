@@ -91,8 +91,9 @@ if (isset($_GET['refresh']) && db_connect()) {
 		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret; 
 		echo '<p>'.gettext('This process should continue automatically. If not press: ').'</p>';
 		echo "<p><a href=".$redirecturl."\" title=\"".$continue."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Continue!")."</a></p>";
-		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$redirecturl.'">';
+		echo '<meta HTTP-EQUIV="REFRESH" content="2; url='.$redirecturl.'">';
 	}
+		
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
 	$folder = $albumwhere = $imagewhere = $id = $r = '';
@@ -138,7 +139,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 		$starturl = '?'.$type.'refresh=start'.$album.$ret;
 		echo '<p>'.gettext('This process should start automatically. If not press: ').'</p>';
 		echo "<p><a href=\"$starturl\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
-		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$starturl.'">';
+		echo '<meta HTTP-EQUIV="REFRESH" content="2; url='.$starturl.'">';
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";

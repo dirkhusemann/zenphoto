@@ -198,7 +198,7 @@ class ZenpagePage extends PersistentObject {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
-		storeTags(filterTags($tags), $this->id, 'zenpage_pages');
+		storeTags($tags, $this->id, 'zenpage_pages');
 	}
 	
 	/****************

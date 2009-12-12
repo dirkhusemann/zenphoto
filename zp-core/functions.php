@@ -1219,31 +1219,6 @@ function is_valid_other_type($filename) {
 	}
 }
 
-// multidimensional array column sort - source: http://codingforums.com/showthread.php?t=71904
-/**
- * Trims the tag values and eliminates duplicates.
- * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved
- *
- * Returns the filtered tag array.
- *
- * @param array $tags
- * @return array
- */
-function filterTags($tags) {
-	$lc_tags = array();
-	$filtered_tags = array();
-	foreach ($tags as $key=>$tag) {
-		$tag = trim($tag);
-		if (!empty($tag)) {
-			$lc_tag = strtolower($tag);
-			if (!in_array($lc_tag, $lc_tags)) {
-				$lc_tags[] = $lc_tag;
-				$filtered_tags[] = $tag;
-			}
-		}
-	}
-	return $filtered_tags;
-}
 
 $_zp_unique_tags = NULL;
 /**
@@ -1316,10 +1291,15 @@ function getAllTagsCount() {
  */
 function storeTags($tags, $id, $tbl) {
 	global $_zp_UTF8;
-	$tags = filterTags($tags);
 	$tagsLC = array();
-	foreach ($tags as $tag) {
-		$tagsLC[$tag] = $_zp_UTF8->strtolower($tag);
+	foreach ($tags as $key=>$tag) {
+		$tag = trim($tag);
+		if (!empty($tag)) {
+			$lc_tag = $_zp_UTF8->strtolower($tag);
+			if (!in_array($lc_tag, $tagsLC)) {
+				$tagsLC[] = $lc_tag;
+			}
+		}
 	}
 	$sql = "SELECT `id`, `tagid` from ".prefix('obj_to_tag')." WHERE `objectid`='".$id."' AND `type`='".$tbl."'";
 	$result = query_full_array($sql);
@@ -1339,7 +1319,7 @@ function storeTags($tags, $id, $tbl) {
 	foreach ($tags as $tag) {
 		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
-			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')");
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')",true);
 			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
