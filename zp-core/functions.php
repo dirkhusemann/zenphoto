@@ -1315,7 +1315,7 @@ function storeTags($tags, $id, $tbl) {
 			}
 		}
 	}
-	$tags = array_flip(array_diff($tagsLC, $existing)); // new tags for the object
+	$tags = array_diff($tagsLC, $existing); // new tags for the object
 	foreach ($tags as $tag) {
 		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
