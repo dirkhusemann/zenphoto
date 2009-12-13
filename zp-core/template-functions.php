@@ -3878,6 +3878,15 @@ function printRSSHeaderLink($option, $linktext) {
 //****************************************************************************
 
 /**
+ * tests if a search page is an "archive" page
+ * 
+ * @return bool
+ */
+function isArchive() {
+	return isset($_REQUEST['date']);
+}
+
+/**
  * Returns a search URL
  *
  * @param string $words the search words target

@@ -31,7 +31,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		$numimages = getNumImages();
 		$numalbums = getNumAlbums();
 		$total = $numimages + $numalbums;
-		if ($zenpage = getOption('zp_plugin_zenpage')) {
+		$zenpage = getOption('zp_plugin_zenpage');
+		if ($zenpage && !isArchive()) {
 			$numpages = getNumPages();
 			$numnews = getNumNews();
 			$total = $total + $numnews + $numpages;
