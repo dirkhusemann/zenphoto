@@ -10,6 +10,10 @@
 // force UTF-8 Ø
 require_once(dirname(__FILE__).'/folder-definitions.php');
 include(dirname(__FILE__).'/version.php'); // Include the version info.
+if(!function_exists("gettext")) {
+	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
+}
+
 
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts

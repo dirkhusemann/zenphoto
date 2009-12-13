@@ -14,11 +14,6 @@ $_zp_flash_player = NULL;
 $_zp_HTML_cache = NULL;
 $_zp_themeroot = NULL;
 
-if(!function_exists("gettext")) {
-	// load the drop-in replacement library
-	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
-}
-
 if(!function_exists("json_encode")) {
 	// load the drop-in replacement library
 	require_once(dirname(__FILE__).'/lib-json.php');

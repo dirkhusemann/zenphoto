@@ -23,7 +23,6 @@ $setup_checked = isset($_GET['checked']);
 $upgrade = false;
 
 if(!function_exists("gettext")) {
-	// load the drop-in replacement library
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 	$noxlate = -1;
 } else {
