@@ -208,7 +208,7 @@ function getHTMLMetaData() {
 }
 
 /**
- * Helper function to list tags/categories as keywords separated by comma. Limited to 30 keywords currently.
+ * Helper function to list tags/categories as keywords separated by comma. 
  *
  * @param array $array the array of the tags or categories to list
  */
@@ -226,6 +226,11 @@ function getMetaKeywords() {
 		if(is_NewsArticle()) {
 			$tags = getNewsCategories(getNewsID());
 			$words .= getMetaAlbumAndImageTags($tags,"zenpage");
+			$tags = getTags();
+			$words = $words.",".getMetaAlbumAndImageTags($tags,"gallery");
+		} else if(is_Pages()) {
+			$tags = getTags();
+			$words = getMetaAlbumAndImageTags($tags,"gallery");
 		} else if(is_News()) {
 			$tags = getAllCategories();
 			$words .= getMetaAlbumAndImageTags($tags,"zenpage");
@@ -236,32 +241,33 @@ function getMetaKeywords() {
 	return $words;
 }
 /**
- * Helper function to print the album and image tags or the news article categorieslist within printMetaKeywords()
- * Shorens the length to the allowed 1000 characters.
+ * Helper function to print the album and image tags and/or the news article categorieslist within printMetaKeywords()
+ * Shortens the length to the allowed 1000 characters.
  *
  * @param array $tags the array of the tags to list
- * @param string $mode "gallery" or "zenpage"
+ * @param string $mode "gallery" (to process tags on all) or "zenpage" (to process news categories)
  */
 function getMetaAlbumAndImageTags($tags,$mode="") {
 	if(is_array($tags)) {
 		$alltags = '';
+		$count = "";
+		$separator = ", ";
 		foreach($tags as $keyword) {
+			$count++;
+			if($count >= count($tags)) $separator = "";
 			switch($mode) {
 				case "gallery":
-					$alltags .= ','.htmlspecialchars($keyword);
+					$alltags .= htmlspecialchars($keyword).$separator;
 					break;
 				case "zenpage":
-					$alltags .= ','.htmlspecialchars($keyword["cat_name"]);
+					$alltags .= htmlspecialchars($keyword["cat_name"]).$separator;
 					break;
 			}
-		}
-		if(strlen($alltags) > 1000) {
-			break;
 		}
 	} else {
 		$alltags = $tags;
 	}
-	return substr($alltags,1);
+	return $alltags;
 }
 
 ?>
