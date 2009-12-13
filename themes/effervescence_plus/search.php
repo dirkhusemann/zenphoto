@@ -214,12 +214,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<h3>
 				<?php
 				if (getOption('search_no_albums')) {
-					if (!getOption('search_no_images')) {
+					if (!getOption('search_no_images') && ($numpages + $numnews) > 0) {
 						printf(gettext('Images (%s)'),$numimages);
 					}
 				} else {
 					if (getOption('search_no_images')) {
-						printf(gettext('Albums (%s)'),$numalbums);
+						if (($numpages + $numnews) > 0) {
+							printf(gettext('Albums (%s)'),$numalbums);
+						}
 					} else {
 						printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
 					}
