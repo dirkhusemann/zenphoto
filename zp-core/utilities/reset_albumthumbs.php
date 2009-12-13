@@ -17,7 +17,7 @@ require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
 $current = getOption('AlbumThumbSelecorText');
 $button_text = gettext('Reset album thumbs');
-$button_hint = sprintf(gettext('Reset album thumbnails to either "random or "%s"'),getOption('AlbumThumbSelecorText'));
+$button_hint = sprintf(gettext('Reset album thumbnails to either random or %s'),getOption('AlbumThumbSelecorText'));
 $button_icon = 'images/reset1.png';
 $button_rights = MANAGE_ALL_ALBUM_RIGHTS;
 

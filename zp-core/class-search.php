@@ -616,7 +616,7 @@ class SearchEngine
 				break;
 		}
 		$sql .= " ORDER BY ".$key;
-		$result = query_full_array($sql, true);
+		$result = query_full_array($sql);
 		if (!$result) return array();
 		return $result;
 	}
