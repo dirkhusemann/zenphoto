@@ -351,7 +351,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				break;
 			case "tags":
 				$editurl=  $webpath."/admin-tags.php";
-				$viewurl = WEBPATH."/index.php?p=search&amp;searchfields=4&amp;words=".$item['name'];
+				$viewurl = WEBPATH."/index.php?p=search&amp;searchfields=tags&amp;words=".$item['name'];
 				$title = get_language_string($item['name']);
 				break;
 		}

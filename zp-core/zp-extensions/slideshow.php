@@ -236,7 +236,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 		$images = $search->getImages(0);
 		$searchwords = $search->words;
 		$searchdate = $search->dates;
-		$searchfields = $search->getSearchFields();
+		$searchfields = $search->getSearchFields(true);
 		$page = $search->page;
 		if (empty($_POST['imagenumber'])) {
 			$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".abs($albumid));

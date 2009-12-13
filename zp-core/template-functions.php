@@ -579,7 +579,7 @@ function getPageURL($page, $total=null) {
 	if (in_context(ZP_SEARCH)) {
 		$searchwords = $_zp_current_search->codifySearchString();
 		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->getSearchFields();
+		$searchfields = $_zp_current_search->getSearchFields(true);
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list);
 		return $searchpagepath;
 	} else {
@@ -958,7 +958,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 		$page = $_zp_current_search->page;
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->getSearchFields();
+		$searchfields = $_zp_current_search->getSearchFields(true);
 		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
@@ -3662,7 +3662,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
 		} else {
 			$albumlist = NULL;
 		}
-		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), 0, 0, $albumlist))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
+		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), '', 0, $albumlist))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
 	}
 	echo "</ul>\n</li>\n</ul>\n";
 }
@@ -3895,11 +3895,13 @@ function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
 		$url = WEBPATH."/index.php?p=search";
 	}
 	if (!empty($fields) && empty($dates)) {
-		if($mr && $fields == 'tags') {
+		if (!is_array($fields)) $fields = explode(',',$fields);
+		if ($mr && count($fields)==1 && $fields[0]=='tags') {
 				$url .= "tags/";
 				$urls = '';
 		} else {
-			$urls = "searchfields=$fields";
+			$search = new SearchEngine();
+			$urls = $search->getSearchFieldsText($fields, 'searchfields=');
 		}
 	}
 

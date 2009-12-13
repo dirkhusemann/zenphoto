@@ -238,6 +238,7 @@ function next_news($combi=true) {
 		} else if (empty($_zp_zenpage_articles)) {
 			$_zp_zenpage_articles = NULL;
 			$_zp_current_zenpage_news = $_zp_current_zenpage_news_restore;
+			restore_context();
 			return false;
 		} else {
 			$news = array_shift($_zp_zenpage_articles);
@@ -1829,16 +1830,18 @@ function getNumPages() {
  */
 function next_page() {
 	global $_zp_zenpage_pagelist,$_zp_current_search,$_zp_current_zenpage_page;
-	set_context(ZP_SEARCH | ZP_ZENPAGE_PAGE);
 	if (!in_context(ZP_SEARCH)) {
 		return false;
 	}
+	save_context();
+	add_context(ZP_ZENPAGE_PAGE);
 	if (is_null($_zp_zenpage_pagelist)) {
 		processExpired('zenpage_pages');
 		$_zp_zenpage_pagelist = $_zp_current_search->getSearchPages();
 	}
 	if (empty($_zp_zenpage_pagelist)) {
 		$_zp_zenpage_pagelist = NULL;
+		restore_context();
 		return false;
 	}
 	$page = array_shift($_zp_zenpage_pagelist);

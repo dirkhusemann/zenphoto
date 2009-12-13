@@ -151,7 +151,7 @@ class SearchEngine
 				$r.= '&whichdates=' . $d;
 			}
 		}
-		if (count($this->fieldList)>0) { $r .= '&searchfields=' . implode(',',$this->fieldList); }
+		$r .= $this->getSearchFieldsText($this->fieldList);
 		if ($long) {
 			$a = $this->dynalbumname;
 			if ($a) { $r .= '&albumname=' . $a; }
@@ -165,6 +165,26 @@ class SearchEngine
 		}
 		return $r;
 	}
+	
+	/**
+	 * Returns the "searchstring" element of a query parameter set
+	 * 
+	 * @param array $fields the fields required
+	 * @param string $param the query parameter (possibly with the intro character
+	 * @return string
+	 */
+	function getSearchFieldsText($fields, $param='&searchfields=') {
+		$default = array_keys($this->allowedSearchFields());
+		$diff = array_diff($default, $fields);
+		if (count($diff)>0) {
+			foreach ($fields as $field) {
+				$param .= $field.',';
+			}
+			return substr($param,0,-1); 
+		}
+		return '';
+	}
+	
 	/**
 	 * Parses and stores a search string
 	 * NOTE!! this function assumes that the 'words' part of the list has been urlencoded!!!
@@ -237,9 +257,13 @@ class SearchEngine
 	/**
 	 * Returns the search fields variable
 	 *
-	 * @return bit
+	 * @param bool $array set to true to return the fields as array elements. Otherwise 
+	 * a comma delimited string is returned
+	 * 
+	 * @return mixed
 	 */
-	function getSearchFields() {
+	function getSearchFields($array=false) {
+		if ($array) return $this->fieldList;
 		return implode(',',$this->fieldList);
 	}
 
@@ -504,7 +528,7 @@ class SearchEngine
 		switch ($tbl) {
 			case 'zenpage_pages':
 			case 'zenpage_news':
-				$sql .= '`titlelink` ';
+				$sql .= ',`titlelink` ';
 				break;
 			case 'albums':
 				$sql .= ",`desc`,`folder` ";
@@ -592,7 +616,9 @@ class SearchEngine
 				break;
 		}
 		$sql .= " ORDER BY ".$key;
-		return query_full_array($sql, true);
+		$result = query_full_array($sql, true);
+		if (!$result) return array();
+		return $result;
 	}
 
 	/**
@@ -613,6 +639,9 @@ class SearchEngine
 		// create an array of [tag, objectid] pairs for tags
 		$tag_objects = array();
 		$fields = $this->fieldList;
+		if (count($fields)==0) { // then use the default ones
+			$fields = array_keys($this->allowedSearchFields());
+		}
 		$t = array_search('tags',$fields);
 		if ($t!==false) {
 			unset($fields[$t]);

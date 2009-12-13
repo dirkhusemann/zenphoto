@@ -407,13 +407,12 @@ class Gallery {
 									$thumb = trim(substr($data1, 6));
 								}
 								if (strpos($data1, 'FIELDS=') !== false) {
-
 									$fields = "&searchfields=".trim(substr($data1, 7));
 								}
 							}
 							if (!empty($words)) {
 								if (empty($fields)) {
-									$fields = '&searchfields=4';
+									$fields = '&searchfields=tags';
 								}
 							}
 							$album->set('search_params',$words.$fields);
