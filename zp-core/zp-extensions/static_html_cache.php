@@ -134,16 +134,19 @@ class staticCache {
 	function startHTMLCache() {
 		global $_zp_gallery_page;
 		if($this->checkIfAllowedPage()) {
-			$this->startmtime = microtime(true);
-			$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
-			if(file_exists($cachefilepath) AND !isset($_POST['comment']) AND time()-filemtime($cachefilepath) < getOption("static_cache_expire")) { // don't use cache if comment is posted
-				echo file_get_contents($cachefilepath); // PHP >= 4.3
-				$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
-				echo "\n<!-- ".sprintf(gettext("Cached content served by static_html_cache in %u seconds"),$final)." -->";
-				exit();
-			} else {
-				$this->deleteStaticCacheFile($cachefilepath);
-				ob_start();
+			$cachefilepath = $this->createCacheFilepath();
+			if (!empty($cachefilepath)) {
+				$this->startmtime = microtime(true);
+				$cachefilepath = STATIC_CACHE_FOLDER."/".$cachefilepath;
+				if(file_exists($cachefilepath) AND !isset($_POST['comment']) AND time()-filemtime($cachefilepath) < getOption("static_cache_expire")) { // don't use cache if comment is posted
+					echo file_get_contents($cachefilepath); // PHP >= 4.3
+					$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
+					echo "\n<!-- ".sprintf(gettext("Cached content served by static_html_cache in %u seconds"),$final)." -->";
+					exit();
+				} else {
+					$this->deleteStaticCacheFile($cachefilepath);
+					ob_start();
+				}
 			}
 		}
 	}
@@ -157,16 +160,18 @@ class staticCache {
 	function endHTMLCache() {
 		global $_zp_gallery_page;
 		if($this->checkIfAllowedPage()) {
-			$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
+			$cachefilepath = $this->createCacheFilepath();
 			if(!empty($cachefilepath)) {
+				$cachefilepath = STATIC_CACHE_FOLDER."/".$cachefilepath;
 				// Display speed information.
 				$end = microtime(true); $final = $end - $this->startmtime; $final = round($final, 4);
 				echo "\n<!-- ".sprintf(gettext("Content generated dynamically in %u seconds"),$final)." -->";
 				// End
 				$pagecontent = ob_get_clean();
-				$fh = fopen($cachefilepath,"w");
-				fputs($fh, $pagecontent);
-				fclose($fh);
+				if ($fh = fopen($cachefilepath,"w")) {
+					fputs($fh, $pagecontent);
+					fclose($fh);
+				}
 				echo $pagecontent;
 			}
 		}

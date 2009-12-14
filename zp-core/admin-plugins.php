@@ -162,10 +162,13 @@ foreach ($filelist as $extension) {
 			<input type="checkbox" name="<?php echo $opt; ?>" value="<?php echo $loadtype; ?>"
 				<?php
 				if ($parserr || $plugin_disable) {
+					$optionlink = false;
 					echo 'DISABLED';
 				} else {
 					if (getOption($opt)) {
 						echo 'CHECKED="CHECKED"';
+					} else {
+						$optionlink = false;
 					}
 				} ?> />
 			<span<?php if (!$third_party_plugin) echo ' style="font-weight:bold"' ?>><?php echo $extension; ?></span>
