@@ -1250,7 +1250,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	<?php
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
-		$search = new SearchEngine();
+		$search = new SearchEngine(true);
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
 		$thumb = $album->get('thumb');
@@ -1587,7 +1587,7 @@ function printAlbumButtons($album) {
 		</form>
 	<?php		
 	}
-	if ($imagcount || count($album->getSubalbums())>0) {
+	if ($imagcount || (!$album->isDynamic() && count($album->getSubalbums())>0)) {
 	?>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">

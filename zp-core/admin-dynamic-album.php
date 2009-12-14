@@ -36,7 +36,7 @@ if (!zp_loggedin()) {
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
-$search = new SearchEngine();
+$search = new SearchEngine(true);
 if (isset($_POST['savealbum'])) {
 	$albumname = sanitize($_POST['album']);
 	if (!isMyAlbum($albumname, ALBUM_RIGHTS)) {
@@ -189,11 +189,15 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<?php 
 		echo '<ul class="searchchecklist">'."\n";
 		$selected_fields = array();
-		$engine = new SearchEngine();
+		$engine = new SearchEngine(true);
 		$available_fields = array_flip($engine->allowedSearchFields());
-		foreach ($available_fields as $display=>$key) {
-			if (in_array($key,$fields)) {
-				$selected_fields[$display] = $key;
+		if (count($fields)==0) {
+			$selected_fields = $available_fields;
+		} else {
+			foreach ($available_fields as $display=>$key) {
+				if (in_array($key,$fields)) {
+					$selected_fields[$display] = $key;
+				}
 			}
 		}
 		

@@ -39,10 +39,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
 						<?php echo getGalleryTitle();?></a> |
 						<?php
-						if (!is_null($_zp_current_album)) {
-							printParentBreadcrumb();
-							printAlbumBreadcrumb("", " | ");
-						} else {
+						if (is_null($_zp_current_album)) {
 							$search = new SearchEngine();
 							$params = trim(zp_getCookie('zenphoto_image_search_params'));
 							$search->setSearchParams($params);
@@ -53,6 +50,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							$page = $search->page;
 							$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 							echo '<a href='.$returnpath.'><em>'.gettext('Search').'</em></a> | ';
+						} else {
+							printParentBreadcrumb();
+							printAlbumBreadcrumb("", " | ");
 						}
 						?> </span>
 						Slideshow

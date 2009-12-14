@@ -29,9 +29,10 @@ class SearchEngine
 	/**
 	 * Constuctor
 	 *
+	 * @param bool $dynamic_album set true for dynamic albums (limits the search fields)
 	 * @return SearchEngine
 	 */
-	function SearchEngine() {
+	function SearchEngine($dynamic_album = false) {
 		global $_zp_exifvars;
 		//image/album fields
 		$this->search_structure['title']							= gettext('Title');
@@ -45,7 +46,7 @@ class SearchEngine
 		$this->search_structure['state']							= gettext('State');
 		$this->search_structure['country']						= gettext('Country');
 		$this->search_structure['copyright']					= gettext('Copyright');
-		if (getOption('zp_plugin_zenpage')) {//zenpage fields
+		if (getOption('zp_plugin_zenpage') && !$dynamic_album) {//zenpage fields
 			$this->search_structure['content']					= gettext('Content');
 			$this->search_structure['extracontent']			= gettext('ExtraContent');
 			$this->search_structure['author']						= gettext('Author');

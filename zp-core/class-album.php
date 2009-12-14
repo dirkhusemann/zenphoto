@@ -468,12 +468,16 @@ class Album extends PersistentObject {
 
 	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
 		if (is_null($this->subalbums) || $sorttype.$sortdirection !== $this->lastsubalbumsort ) {
-			$dirs = $this->loadFileNames(true);
-			$subalbums = array();
-
-			foreach ($dirs as $dir) {
-				$dir = $this->name . '/' . $dir;
-				$subalbums[] = $dir;
+			if ($this->isDynamic()) {
+				$search = $this->getSearchEngine();
+				$subalbums = $search->getAlbums($page);
+			} else {
+				$dirs = $this->loadFileNames(true);
+				$subalbums = array();
+				foreach ($dirs as $dir) {
+					$dir = $this->name . '/' . $dir;
+					$subalbums[] = $dir;
+				}
 			}
 			$key = $this->getSubalbumSortKey($sorttype);
 			if ($key != '`sort_order`') {
@@ -487,6 +491,7 @@ class Album extends PersistentObject {
 			$this->subalbums = $sortedSubalbums;
 			$this->lastsubalbumsort = $sorttype.$sortdirection;
 		}
+
 		if ($page == 0) {
 			return $this->subalbums;
 		} else {
@@ -667,7 +672,7 @@ class Album extends PersistentObject {
 	 * @return Image
 	 */
 	function getAlbumThumbImage() {
-		
+
 		if (!is_null($this->albumthumbnail)) return $this->albumthumbnail;
 
 		$albumdir = $this->localpath;
@@ -693,39 +698,41 @@ class Album extends PersistentObject {
 				$this->albumthumbnail = newImage(new Album($this->gallery, $albumdir), $thumb);
 				return $this->albumthumbnail;
 			}
-		} else if ($this->isDynamic()) {
-			$this->getImages(0, 0, $field, $direction);
-			$thumbs = $this->images;
-			if (!is_null($thumbs)) {
-				if ($shuffle) {
-					shuffle($thumbs);
-				}
-				while (count($thumbs) > 0) {
-					$thumb = array_shift($thumbs);
-					if (is_valid_image($thumb['filename'])) {
-						$alb = new Album($this->gallery, $thumb['folder']);
-						$thumb = newImage($alb, $thumb['filename']);
-						if ($thumb->getShow()) {
-							$this->albumthumbnail = $thumb;
-							return $thumb;
+		} else {
+			if ($this->isDynamic()) {
+				$this->getImages(0, 0, $field, $direction);
+				$thumbs = $this->images;
+				if (!is_null($thumbs)) {
+					if ($shuffle) {
+						shuffle($thumbs);
+					}
+					while (count($thumbs) > 0) {
+						$thumb = array_shift($thumbs);
+						if (is_valid_image($thumb['filename'])) {
+							$alb = new Album($this->gallery, $thumb['folder']);
+							$thumb = newImage($alb, $thumb['filename']);
+							if ($thumb->getShow()) {
+								$this->albumthumbnail = $thumb;
+								return $thumb;
+							}
 						}
 					}
 				}
-			}
-		} else {
-			$this->getImages(0, 0, $field, $direction);
-			$thumbs = $this->images;
-			if (!is_null($thumbs)) {
-				if ($shuffle) {
-					shuffle($thumbs);
-				}
-				while (count($thumbs) > 0) {
-					$thumb = array_shift($thumbs);
-					if (is_valid_image($thumb)) {
-						$thumb = newImage($this, $thumb);
-						if ($thumb->getShow()) {
-							$this->albumthumbnail = $thumb;
-							return $thumb;
+			} else {
+				$this->getImages(0, 0, $field, $direction);
+				$thumbs = $this->images;
+				if (!is_null($thumbs)) {
+					if ($shuffle) {
+						shuffle($thumbs);
+					}
+					while (count($thumbs) > 0) {
+						$thumb = array_shift($thumbs);
+						if (is_valid_image($thumb)) {
+							$thumb = newImage($this, $thumb);
+							if ($thumb->getShow()) {
+								$this->albumthumbnail = $thumb;
+								return $thumb;
+							}
 						}
 					}
 				}
@@ -749,17 +756,19 @@ class Album extends PersistentObject {
 					}
 				}
 			}
-			// no images, no subalbums, check for standins
-			$dp = @opendir($albumdir);
-			if ($dp) {
-				while ($thumb = readdir($dp)) {
-					if (is_file($albumdir.$thumb) && is_valid_other($thumb)) {
-						$othersThumb = checkObjectsThumb($albumdir, $thumb);
-						if (!empty($othersThumb)) {
-							$thumb = newImage($this, $othersThumb);
-							if ($this->getShow()) {
-								$this->albumthumbnail = $thumb;
-								return $thumb;
+			if (!$this->isDynamic()) {
+				// no images, no subalbums, check for standins
+				$dp = @opendir($albumdir);
+				if ($dp) {
+					while ($thumb = readdir($dp)) {
+						if (is_file($albumdir.$thumb) && is_valid_other($thumb)) {
+							$othersThumb = checkObjectsThumb($albumdir, $thumb);
+							if (!empty($othersThumb)) {
+								$thumb = newImage($this, $othersThumb);
+								if ($this->getShow()) {
+									$this->albumthumbnail = $thumb;
+									return $thumb;
+								}
 							}
 						}
 					}
@@ -1409,7 +1418,7 @@ class Album extends PersistentObject {
 	function getSearchEngine() {
 		if (!$this->isDynamic()) return null;
 		if (!is_null($this->searchengine)) return $this->searchengine;
-		$this->searchengine = new SearchEngine();
+		$this->searchengine = new SearchEngine(true);
 		$params = $this->get('search_params');
 		$params .= '&albumname='.$this->name;
 		$this->searchengine->setSearchParams($params);

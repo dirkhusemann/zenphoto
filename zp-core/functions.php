@@ -547,16 +547,12 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
  *
  * @param string $albumname the album
  * @param string &$hint becomes populated with the password hint.
- * @param bool $checkGuest set to true to check guest credentials only
  * @return bool
  */
-function checkAlbumPassword($albumname, &$hint, $checkGuest=false) {
+function checkAlbumPassword($albumname, &$hint) {
 	global $_zp_pre_authorization, $_zp_loggedin, $_zp_gallery;
-	
-	if (!$checkGuest && $_zp_loggedin) {
-		if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return true;
-		if (isMyAlbum($albumname, ALL_RIGHTS)) return true;  // he is allowed to see it.
-	}
+	if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return 'zp_master_admin';
+	if (isMyAlbum($albumname, ALL_RIGHTS)) return 'zp_album_admin';  // he is allowed to see it.
 	if (isset($_zp_pre_authorization[$albumname])) {
 		return $_zp_pre_authorization[$albumname];
 	}
@@ -567,11 +563,12 @@ function checkAlbumPassword($albumname, &$hint, $checkGuest=false) {
 		$album = $album->getParent();
 		while (!is_null($album)) {
 			$hash = $album->getPassword();
-			$authType = "zp_album_auth_" . cookiecode($album->name);
+			$authType = "zp_album_auth_" . $album->get('id');
 			$saved_auth = zp_getCookie($authType);
 
 			if (!empty($hash)) {
 				if ($saved_auth == $hash) {
+					$_zp_pre_authorization[$albumname] = $authType;
 					return $authType;
 				} else {
 					$hint = $album->getPasswordHint();
@@ -591,7 +588,7 @@ function checkAlbumPassword($albumname, &$hint, $checkGuest=false) {
 			}
 		}
 	} else {
-		$authType = "zp_album_auth_" . cookiecode($album->name);
+		$authType = "zp_album_auth_" . $album->get('id');
 		$saved_auth = zp_getCookie($authType);
 		if ($saved_auth != $hash) {
 			$hint = $album->getPasswordHint();
@@ -1643,13 +1640,6 @@ function zp_setCookie($name, $value, $time=0, $path='/', $secure=false) {
 }
 
 /**
- * encodes for cookie
- **/
-function cookiecode($text) {
-	return md5($text);
-}
-
-/**
  * returns a list of comment record 'types' for "images"
  * @param string $quote quotation mark to use
  *
@@ -1851,7 +1841,6 @@ function logTime($tag) {
  */
 function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
 	global $_zp_loggedin, $_zp_login_error, $_zp_current_album;
-	if (zp_loggedin()) { return; } // who cares, we don't need any authorization
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (empty($authType)) { // not supplied by caller
@@ -1865,7 +1854,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 			$check_auth = getOption('search_password');
 			$check_user = getOption('search_user');
 		} else if (in_context(ZP_ALBUM)) { // album page
-			$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
+			$authType = "zp_album_auth_" . $_zp_current_album->get('id');
 			$check_auth = $_zp_current_album->getPassword();
 			$check_user = $_zp_current_album->getUser();
 			if (empty($check_auth)) {
@@ -1873,7 +1862,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 				while (!is_null($parent)) {
 					$check_auth = $parent->getPassword();
 					$check_user = $parent->getUser();
-					$authType = "zp_album_auth_" . cookiecode($parent->name);
+					$authType = "zp_album_auth_" . $parent->get('id');
 					if (!empty($check_auth)) { break; }
 					$parent = $parent->getParent();
 				}
@@ -1887,7 +1876,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 	}
 	// Handle the login form.
 	if (DEBUG_LOGIN) debugLog("zp_handle_password: \$authType=$authType; \$check_auth=$check_auth; \$check_user=$check_user; ");
-	if (isset($_POST['password']) && isset($_POST['pass'])) {
+	if (isset($_POST['password']) && isset($_POST['pass'])) {	// process login form
 		if (isset($_POST['user'])) {
 			$post_user = $_POST['user'];
 		} else {
@@ -1940,7 +1929,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		}
 		return;
 	}
-	if (empty($check_auth)) { //no password on record
+	if (empty($check_auth) || zp_loggedin()) { //no password on record or admin logged in
 		return;
 	}
 	if (($saved_auth = zp_getCookie($authType)) != '') {

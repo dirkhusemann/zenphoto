@@ -441,17 +441,7 @@ function next_album($all=false, $sorttype=null, $sortdirection=NULL) {
 		if (in_context(ZP_SEARCH)) {
 			$_zp_albums = $_zp_current_search->getAlbums($all ? 0 : $_zp_page);
 		} else if (in_context(ZP_ALBUM)) {
-
-			if ($_zp_current_album->isDynamic()) {
-
-				$search = $_zp_current_album->getSearchEngine();
-
-				$_zp_albums = $search->getAlbums($all ? 0 : $_zp_page);
-
-			} else {
-				$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
-
-			}
+			$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
 		} else {
 			$_zp_albums = $_zp_gallery->getAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
 		}
@@ -492,12 +482,7 @@ function getNumSubalbums() {
 	if (in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
 		return $_zp_current_search->getNumAlbums();
 	} else {
-		if ($_zp_current_album->isDynamic()) {
-			$search = $_zp_current_album->getSearchEngine();
-			return $search->getNumAlbums();
-		} else {
-			return count($_zp_current_album->getSubalbums());
-		}
+		return count($_zp_current_album->getSubalbums());
 	}
 	return false;
 }
@@ -864,8 +849,7 @@ function albumNumber() {
 				$albums = $parent->getSubalbums();
 			}
 		} else {
-			$search = $_zp_dynamic_album->getSearchEngine();
-			$albums = $search->getAlbums();
+			$albums = $_zp_dynamic_album->getSubalbums();
 		}
 	}
 	$c = 0;
@@ -4205,7 +4189,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * @param string $show
  * @return string
  */
-function checkforGuest(&$hint, &$show) {
+function checkForGuest(&$hint, &$show) {
 	global $_zp_gallery;
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
@@ -4223,7 +4207,7 @@ function checkforGuest(&$hint, &$show) {
 		}
 	} else if (isset($_GET['album'])) {  // album page
 		list($album, $image) = rewrite_get_album_image('album','image');
-		if ($authType = checkAlbumPassword($album, $hint, true)) {
+		if ($authType = checkAlbumPassword($album, $hint)) {
 			return $authType;
 		} else {
 			$alb = new Album($_zp_gallery, $album);
@@ -4265,7 +4249,7 @@ function checkforGuest(&$hint, &$show) {
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
 	if (zp_loggedin(OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return false;  // an admin is logged in
-	if ($authType = checkforGuest($hint, $show)) return false;	// a guest is logged in
+	if ($authType = checkForGuest($hint, $show)) return false;	// a guest is logged in
 	if ($silent) return true;
 	printPasswordForm($hint, true, getOption('login_user_field') || $show);
 	return true;
