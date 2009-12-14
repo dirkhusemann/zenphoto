@@ -547,16 +547,18 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
  *
  * @param string $albumname the album
  * @param string &$hint becomes populated with the password hint.
+ * @param bool $checkGuest set to true to check guest credentials only
  * @return bool
  */
-function checkAlbumPassword($albumname, &$hint) {
+function checkAlbumPassword($albumname, &$hint, $checkGuest=false) {
 	global $_zp_pre_authorization, $_zp_loggedin, $_zp_gallery;
-	if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return true; }
-	if ($_zp_loggedin) {
-		if (isMyAlbum($albumname, ALL_RIGHTS)) { return true; }  // he is allowed to see it.
+	
+	if (!$checkGuest && $_zp_loggedin) {
+		if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return true;
+		if (isMyAlbum($albumname, ALL_RIGHTS)) return true;  // he is allowed to see it.
 	}
 	if (isset($_zp_pre_authorization[$albumname])) {
-		return true;
+		return $_zp_pre_authorization[$albumname];
 	}
 	if (!is_object($_zp_gallery)) $_zp_gallery = new Gallery();
 	$album = new Album($_zp_gallery, $albumname);
@@ -570,7 +572,7 @@ function checkAlbumPassword($albumname, &$hint) {
 
 			if (!empty($hash)) {
 				if ($saved_auth == $hash) {
-					return true;
+					return $authType;
 				} else {
 					$hint = $album->getPasswordHint();
 					return false;
@@ -596,8 +598,8 @@ function checkAlbumPassword($albumname, &$hint) {
 			return false;
 		}
 	}
-	$_zp_pre_authorization[$albumname] = true;
-	return true;
+	$_zp_pre_authorization[$albumname] = $authType;
+	return $authType;
 }
 
 /**

@@ -4199,6 +4199,50 @@ function normalizeColumns($albumColumns, $imageColumns) {
 //************************************************************************************************
 
 /**
+ * returns the auth type of a guest login
+ * 
+ * @param string $hint
+ * @param string $show
+ * @return string
+ */
+function checkforGuest(&$hint, &$show) {
+	global $_zp_gallery;
+	if (in_context(ZP_SEARCH)) {  // search page
+		$hash = getOption('search_password');
+		$show = (getOption('search_user') != '');
+		$hint = get_language_string(getOption('search_hint'));
+		$authType = 'zp_search_auth';
+		if (empty($hash)) {
+			$hash = $_zp_gallery->getPassword();
+			$show = $_zp_gallery->getUser() != '';
+			$hint = $_zp_gallery->getPasswordHint();
+			$authType = 'zp_gallery_auth';
+		}
+		if (!empty($hash) && zp_getCookie($authType) == $hash) {
+			return $authType;
+		}
+	} else if (isset($_GET['album'])) {  // album page
+		list($album, $image) = rewrite_get_album_image('album','image');
+		if ($authType = checkAlbumPassword($album, $hint, true)) {
+			return $authType;
+		} else {
+			$alb = new Album($_zp_gallery, $album);
+			$show = $alb->getUser() != '';
+			return false;
+		}
+	} else {  // other page
+		$hash = $_zp_gallery->getPassword();
+		$show = $_zp_gallery->getUser() != '';
+		$hint = $_zp_gallery->getPasswordHint();
+		if (!empty($hash) && zp_getCookie('zp_gallery_auth') == $hash) {
+			return 'zp_gallery_auth';
+		}
+	}
+	if (empty($hash)) return 'zp_unprotected';
+	return false;
+}
+
+/**
  * Checks to see if a password is needed
  * displays a password form if log-on is required
  *
@@ -4220,49 +4264,11 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
-	if (zp_loggedin(OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
-	if (in_context(ZP_SEARCH)) {  // search page
-		$hash = getOption('search_password');
-		$show = (getOption('search_user') != '');
-		$hint = get_language_string(getOption('search_hint'));
-		$authType = 'zp_search_auth';
-		if (empty($hash)) {
-			$hash = $_zp_gallery->getPassword();
-			$show = $_zp_gallery->getUser() != '';
-			$hint = $_zp_gallery->getPasswordHint();
-			$authType = 'zp_gallery_auth';
-		}
-		if (!empty($hash)) {
-			if (zp_getCookie($authType) != $hash) {
-				if (!$silent) printPasswordForm($hint, true, getOption('login_user_field') || $show);
-				return true;
-			}
-		}
-	} else if (isset($_GET['album'])) {  // album page
-		list($album, $image) = rewrite_get_album_image('album','image');
-		if (checkAlbumPassword($album, $hint)) {
-			return false;
-		} else {
-			$alb = new Album($_zp_gallery, $album);
-			if (!$silent) printPasswordForm($hint, true,  getOption('login_user_field') || $alb->getUser() != '');
-			return true;
-		}
-	} else {  // other page
-		if ($_zp_loggedin) return false;
-		$hash = $_zp_gallery->getPassword();
-		$show = $_zp_gallery->getUser() != '';
-		$hint = $_zp_gallery->getPasswordHint();
-		if (!empty($hash)) {
-			if (zp_getCookie('zp_gallery_auth') != $hash) {
-				if (getOption('gallery_page_unprotected_'.substr($_zp_gallery_page, 0, -4))) {
-					return false; // excluded page
-				}
-				if (!$silent) printPasswordForm($hint, true, getOption('login_user_field') || $show);
-				return true;
-			}
-		}
-	}
-	return false;
+	if (zp_loggedin(OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return false;  // an admin is logged in
+	if ($authType = checkforGuest($hint, $show)) return false;	// a guest is logged in
+	if ($silent) return true;
+	printPasswordForm($hint, true, getOption('login_user_field') || $show);
+	return true;
 }
 
 /**
