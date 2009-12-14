@@ -311,7 +311,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  		</div> <!-- content -->
 			<?php
 				} else {  /* flash */
-	 			if (($imagePage = isImagePage()) && !checkforPassword()) {
+	 			if ($imagePage = isImagePage()) {
 			?>
 <!-- Simpleviewer section -->
 			<div id="flash">

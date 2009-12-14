@@ -55,8 +55,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<div id="main2">
 			<div id="content-left">
 <h2><?php printPageTitle(); ?></h2>
-<?php
-if (!checkForPassword()) {
 	?>
 	<div id="pagetext">
 	<?php printCodeblock(1); ?>
@@ -72,7 +70,6 @@ if (!checkForPassword()) {
 		</div>			
 		<?php 
 	} 
-}
 ?>
 	
 			</div><!-- content left-->
