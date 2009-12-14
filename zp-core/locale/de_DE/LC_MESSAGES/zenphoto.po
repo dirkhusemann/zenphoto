@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zenphoto 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-13 11:40+0100\n"
-"PO-Revision-Date: 2009-12-13 11:40+0100\n"
+"POT-Creation-Date: 2009-12-14 20:04+0100\n"
+"PO-Revision-Date: 2009-12-14 20:19+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -507,62 +507,62 @@ msgstr "Neuigkeiten"
 msgid "Category"
 msgstr "Kategorie"
 
-#: zp-trunk/themes/effervescence_plus/search.php:135
+#: zp-trunk/themes/effervescence_plus/search.php:136
 #, php-format
 msgid "%1$u Hit for <em>%2$s</em>"
 msgid_plural "%1$u Hits for <em>%2$s</em>"
 msgstr[0] "%1$u Besucher für <em>%2$s</em>"
 msgstr[1] "%1$u Besucher für <em>%2$s</em>"
 
-#: zp-trunk/themes/effervescence_plus/search.php:150
+#: zp-trunk/themes/effervescence_plus/search.php:151
 #, php-format
 msgid "Pages (%s)"
 msgstr "Seiten (%s)"
 
-#: zp-trunk/themes/effervescence_plus/search.php:154
-#: zp-trunk/themes/effervescence_plus/search.php:186
+#: zp-trunk/themes/effervescence_plus/search.php:155
+#: zp-trunk/themes/effervescence_plus/search.php:187
 msgid "Show more results"
 msgstr "Mehr Ergebnisse anzeigen"
 
-#: zp-trunk/themes/effervescence_plus/search.php:155
-#: zp-trunk/themes/effervescence_plus/search.php:187
+#: zp-trunk/themes/effervescence_plus/search.php:156
+#: zp-trunk/themes/effervescence_plus/search.php:188
 msgid "Show fewer results"
 msgstr "Weniger Ergebnisse anzeigen"
 
-#: zp-trunk/themes/effervescence_plus/search.php:182
+#: zp-trunk/themes/effervescence_plus/search.php:183
 #, php-format
 msgid "Articles (%s)"
 msgstr "Artikel (%s)"
 
-#: zp-trunk/themes/effervescence_plus/search.php:217
+#: zp-trunk/themes/effervescence_plus/search.php:218
 #, php-format
 msgid "Images (%s)"
 msgstr "Bilder (%s)"
 
-#: zp-trunk/themes/effervescence_plus/search.php:221
+#: zp-trunk/themes/effervescence_plus/search.php:223
 #, php-format
 msgid "Albums (%s)"
 msgstr "Alben (%s)"
 
-#: zp-trunk/themes/effervescence_plus/search.php:223
+#: zp-trunk/themes/effervescence_plus/search.php:226
 #, php-format
 msgid "Albums (%1$s) &amp; Images (%2$s)"
 msgstr "Alben (%1$s) &amp; Bilder (%2$s)"
 
-#: zp-trunk/themes/effervescence_plus/search.php:314
+#: zp-trunk/themes/effervescence_plus/search.php:317
 msgid "get Adobe Flash."
 msgstr "installieren Sie Adobe Flash."
 
-#: zp-trunk/themes/effervescence_plus/search.php:351
+#: zp-trunk/themes/effervescence_plus/search.php:354
 msgid "Enter your search criteria."
 msgstr "Geben Sie Ihr Suchkriterium ein."
 
-#: zp-trunk/themes/effervescence_plus/search.php:353
+#: zp-trunk/themes/effervescence_plus/search.php:356
 #, php-format
 msgid "Sorry, no matches for <em>%s</em>. Try refining your search."
 msgstr "Leider keine Treffer für <em>%s</em>. Versuchen Sie Ihre Suche zu verfeinern."
 
-#: zp-trunk/themes/effervescence_plus/search.php:381
+#: zp-trunk/themes/effervescence_plus/search.php:384
 msgid "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled."
 msgstr "Simpleviewer erfordert, dass <em>mod_rewrite</em> aktiviert ist. Simpleviewer ist deaktiviert."
 
@@ -1044,11 +1044,6 @@ msgstr "&laquo; vorherige"
 #: zp-trunk/themes/zenpage-default/image.php:53
 msgid "next thumbs &raquo;"
 msgstr "nächste &raquo;"
-
-#: zp-trunk/themes/zenpage-default/search.php:105
-#, php-format
-msgid "Albums (%s"
-msgstr "Alben (%s"
 
 #: zp-trunk/themes/zenpage-default/sidebar.php:4
 msgid "All news"
@@ -2701,7 +2696,7 @@ msgstr "Website-E-Mail:"
 
 #: zp-trunk/zp-core/admin-options.php:718
 msgid "This email address will be used as the <em>From</em> address for all mails sent by Zenphoto."
-msgstr ""
+msgstr "Diese E-Mail-Adresse wird als die Absenderadresse (\"From\") für alle von Zenphoto versendeten E-Mails verwendet."
 
 #: zp-trunk/zp-core/admin-options.php:724
 msgid "Imagick:"
@@ -4554,12 +4549,12 @@ msgstr "Zu wenige Werte! Bild nicht gefunden."
 msgid "Method Not Allowed"
 msgstr "Methode nicht erlaubt"
 
-#: zp-trunk/zp-core/functions-basic.php:48
+#: zp-trunk/zp-core/functions-basic.php:52
 #, php-format
 msgid "<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"
 msgstr "<strong>Zenphoto Fehler:</strong> zp-config.php wurde nicht gefunden. Vielleicht müssen Sie  <a href=\"%s/setup.php\">setup</a> ausführen (oder Ihre alte zp-config.php übertragen)"
 
-#: zp-trunk/zp-core/functions-basic.php:311
+#: zp-trunk/zp-core/functions-basic.php:315
 msgid "ERROR: Assertion failed in"
 msgstr "Fehler: Erklärung scheiterte in"
 
@@ -5191,259 +5186,259 @@ msgstr "Unbekannter Fehler! Bitte benachrichtigen Sie die Entwickler auf  <a hre
 msgid "Latest Albums"
 msgstr "Neuste Alben"
 
-#: zp-trunk/zp-core/functions.php:62
+#: zp-trunk/zp-core/functions.php:57
 msgid "Camera Maker"
 msgstr "Kamerahersteller"
 
-#: zp-trunk/zp-core/functions.php:63
+#: zp-trunk/zp-core/functions.php:58
 msgid "Camera Model"
 msgstr "Kameramodell"
 
-#: zp-trunk/zp-core/functions.php:64
+#: zp-trunk/zp-core/functions.php:59
 msgid "Image Title"
 msgstr "Bildtitel"
 
-#: zp-trunk/zp-core/functions.php:65
+#: zp-trunk/zp-core/functions.php:60
 msgid "Object name"
 msgstr "Objektname"
 
-#: zp-trunk/zp-core/functions.php:66
+#: zp-trunk/zp-core/functions.php:61
 msgid "Image headline"
 msgstr "Bildüberschrift"
 
-#: zp-trunk/zp-core/functions.php:67
+#: zp-trunk/zp-core/functions.php:62
 msgid "Image caption"
 msgstr "Bildtitel"
 
-#: zp-trunk/zp-core/functions.php:68
+#: zp-trunk/zp-core/functions.php:63
 msgid "Image caption writer"
 msgstr "Bildtitelautor"
 
-#: zp-trunk/zp-core/functions.php:69
+#: zp-trunk/zp-core/functions.php:64
 msgid "Time Taken"
 msgstr "Uhrzeit"
 
-#: zp-trunk/zp-core/functions.php:70
+#: zp-trunk/zp-core/functions.php:65
 msgid "Original Time Taken"
 msgstr "Originaldatum des Fotos"
 
-#: zp-trunk/zp-core/functions.php:71
+#: zp-trunk/zp-core/functions.php:66
 msgid "Time Digitized"
 msgstr "Digitalisierungsdatum"
 
-#: zp-trunk/zp-core/functions.php:72
+#: zp-trunk/zp-core/functions.php:67
 msgid "Date created"
 msgstr "Erstellungsdatum"
 
-#: zp-trunk/zp-core/functions.php:73
+#: zp-trunk/zp-core/functions.php:68
 msgid "Time created"
 msgstr "Erstellungsdatum"
 
-#: zp-trunk/zp-core/functions.php:74
+#: zp-trunk/zp-core/functions.php:69
 msgid "Digital Creation Date"
 msgstr "Digitalerstellungsdatum"
 
-#: zp-trunk/zp-core/functions.php:75
+#: zp-trunk/zp-core/functions.php:70
 msgid "Digital Creation Time"
 msgstr "Digitalerstellungsdatum"
 
-#: zp-trunk/zp-core/functions.php:76
+#: zp-trunk/zp-core/functions.php:71
 msgid "Artist"
 msgstr "Künstler"
 
-#: zp-trunk/zp-core/functions.php:77
+#: zp-trunk/zp-core/functions.php:72
 msgid "Image Credit"
 msgstr "Bildcredit"
 
-#: zp-trunk/zp-core/functions.php:78
+#: zp-trunk/zp-core/functions.php:73
 msgid "ByLine"
 msgstr "ByLine"
 
-#: zp-trunk/zp-core/functions.php:79
+#: zp-trunk/zp-core/functions.php:74
 msgid "ByLine Title"
 msgstr "ByLine Titel"
 
-#: zp-trunk/zp-core/functions.php:80
+#: zp-trunk/zp-core/functions.php:75
 msgid "Image source"
 msgstr "Bildquelle"
 
-#: zp-trunk/zp-core/functions.php:82
+#: zp-trunk/zp-core/functions.php:77
 msgid "Copyright Holder"
 msgstr "Copyrightinhaber"
 
-#: zp-trunk/zp-core/functions.php:83
+#: zp-trunk/zp-core/functions.php:78
 msgid "Copyright Notice"
 msgstr "Copyrightinhaber"
 
-#: zp-trunk/zp-core/functions.php:84
+#: zp-trunk/zp-core/functions.php:79
 msgid "Shutter Speed"
 msgstr "Verschlussgeschwindigkeit"
 
-#: zp-trunk/zp-core/functions.php:85
+#: zp-trunk/zp-core/functions.php:80
 msgid "Aperture"
 msgstr "Blende"
 
-#: zp-trunk/zp-core/functions.php:86
+#: zp-trunk/zp-core/functions.php:81
 msgid "ISO Sensitivity"
 msgstr "ISO-Empfindlichkeit"
 
-#: zp-trunk/zp-core/functions.php:87
+#: zp-trunk/zp-core/functions.php:82
 msgid "Exposure Compensation"
 msgstr "Belichtungskorrektur"
 
-#: zp-trunk/zp-core/functions.php:88
+#: zp-trunk/zp-core/functions.php:83
 msgid "Metering Mode"
 msgstr "Messeinstellung"
 
-#: zp-trunk/zp-core/functions.php:89
+#: zp-trunk/zp-core/functions.php:84
 msgid "Flash Fired"
 msgstr "Blitz verwendet"
 
-#: zp-trunk/zp-core/functions.php:90
+#: zp-trunk/zp-core/functions.php:85
 msgid "Original Width"
 msgstr "Originalbreite"
 
-#: zp-trunk/zp-core/functions.php:91
+#: zp-trunk/zp-core/functions.php:86
 msgid "Original Height"
 msgstr "Originalhöhe"
 
-#: zp-trunk/zp-core/functions.php:92
+#: zp-trunk/zp-core/functions.php:87
 msgid "Orientation"
 msgstr "Ausrichtung"
 
-#: zp-trunk/zp-core/functions.php:93
+#: zp-trunk/zp-core/functions.php:88
 msgid "Contrast Setting"
 msgstr "Kontrastseinstellung"
 
-#: zp-trunk/zp-core/functions.php:94
+#: zp-trunk/zp-core/functions.php:89
 msgid "Sharpness Setting"
 msgstr "Schärfeeinstellung"
 
-#: zp-trunk/zp-core/functions.php:95
+#: zp-trunk/zp-core/functions.php:90
 msgid "Saturation Setting"
 msgstr "Sättigungseinstellung"
 
-#: zp-trunk/zp-core/functions.php:96
+#: zp-trunk/zp-core/functions.php:91
 msgid "White Balance"
 msgstr "Weißbalance"
 
-#: zp-trunk/zp-core/functions.php:97
+#: zp-trunk/zp-core/functions.php:92
 msgid "Subject Distance"
 msgstr "Motiventfernung"
 
-#: zp-trunk/zp-core/functions.php:98
+#: zp-trunk/zp-core/functions.php:93
 msgid "Focal Length"
 msgstr "Brennweite"
 
-#: zp-trunk/zp-core/functions.php:99
+#: zp-trunk/zp-core/functions.php:94
 msgid "Lens Type"
 msgstr "Linsentyp"
 
-#: zp-trunk/zp-core/functions.php:100
+#: zp-trunk/zp-core/functions.php:95
 msgid "Lens Info"
 msgstr "Linseninfo"
 
-#: zp-trunk/zp-core/functions.php:101
+#: zp-trunk/zp-core/functions.php:96
 msgid "Focal Length Equivalent in 35mm Film"
 msgstr "Brennweiteequivalent 35mm Film."
 
-#: zp-trunk/zp-core/functions.php:103
+#: zp-trunk/zp-core/functions.php:98
 msgid "Sublocation"
 msgstr "Unterort"
 
-#: zp-trunk/zp-core/functions.php:104
+#: zp-trunk/zp-core/functions.php:99
 msgid "Province/State"
 msgstr "Provinz/Staat"
 
-#: zp-trunk/zp-core/functions.php:105
+#: zp-trunk/zp-core/functions.php:100
 msgid "Country/Primary Location Code"
 msgstr "Land/Hauptortsbestimmungscode"
 
-#: zp-trunk/zp-core/functions.php:106
+#: zp-trunk/zp-core/functions.php:101
 msgid "Country/Primary Location Name"
 msgstr "Land/Hauptortsbestimmungsname"
 
-#: zp-trunk/zp-core/functions.php:107
+#: zp-trunk/zp-core/functions.php:102
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: zp-trunk/zp-core/functions.php:108
+#: zp-trunk/zp-core/functions.php:103
 msgid "Latitude Reference"
 msgstr "Breitengradreferenz"
 
-#: zp-trunk/zp-core/functions.php:109
+#: zp-trunk/zp-core/functions.php:104
 msgid "Longitude"
 msgstr "Längengrad"
 
-#: zp-trunk/zp-core/functions.php:110
+#: zp-trunk/zp-core/functions.php:105
 msgid "Longitude Reference"
 msgstr "Längengradreferenz"
 
-#: zp-trunk/zp-core/functions.php:111
+#: zp-trunk/zp-core/functions.php:106
 msgid "Altitude"
 msgstr "Höhenlage"
 
-#: zp-trunk/zp-core/functions.php:112
+#: zp-trunk/zp-core/functions.php:107
 msgid "Altitude Reference"
 msgstr "Höhenlagereferenz"
 
-#: zp-trunk/zp-core/functions.php:113
+#: zp-trunk/zp-core/functions.php:108
 msgid "Originating Program "
 msgstr "Originalprogramm"
 
-#: zp-trunk/zp-core/functions.php:114
+#: zp-trunk/zp-core/functions.php:109
 msgid "Program version"
 msgstr "Programmversion"
 
-#: zp-trunk/zp-core/functions.php:434
+#: zp-trunk/zp-core/functions.php:429
 msgid "Mail send failed. There is no mail handler configured."
 msgstr "Mailversand gescheitert. Es ist keine Mailfunktionalität konfiguriert."
 
-#: zp-trunk/zp-core/functions.php:437
+#: zp-trunk/zp-core/functions.php:432
 msgid "Mail send failed. The \"to\" list is empty."
 msgstr "Mailversand gescheitert. Die \"to\"-Liste ist leer."
 
-#: zp-trunk/zp-core/functions.php:923
+#: zp-trunk/zp-core/functions.php:920
 #, php-format
 msgid "A comment has been placed in moderation on your album \"%1$s\"."
 msgstr "Ihr Kommentar wurde im Album \"%1$s\" zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/functions.php:925
+#: zp-trunk/zp-core/functions.php:922
 #, php-format
 msgid "A comment has been posted on your album \"%1$s\"."
 msgstr "Es wurde ein Kommentar zu Ihrem Album \"%1$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:931
+#: zp-trunk/zp-core/functions.php:928
 #, php-format
 msgid "A comment has been placed in moderation on your article \"%1$s\"."
 msgstr "Ihr Kommentar zur Ihrem Artikel \"%1$s\" wurde zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/functions.php:933
+#: zp-trunk/zp-core/functions.php:930
 #, php-format
 msgid "A comment has been posted on your article \"%1$s\"."
 msgstr "Ihr Kommentar wurde zum Artikel \"%1$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:939
+#: zp-trunk/zp-core/functions.php:936
 #, php-format
 msgid "A comment has been placed in moderation on your page \"%1$s\"."
 msgstr "Ihr Kommentar zur Seite \"%1$s\" wurde zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/functions.php:941
+#: zp-trunk/zp-core/functions.php:938
 #, php-format
 msgid "A comment has been posted on your page \"%1$s\"."
 msgstr "Ihr Kommentar wurde zur Seite \"%1$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:949
+#: zp-trunk/zp-core/functions.php:946
 #, php-format
 msgid "A comment has been placed in moderation on your image \"%1$s\" in the album \"%2$s\"."
 msgstr "Ein Kommentar zu Ihrem Bild \"%1$s\" im Album \"%2$s\" wartet auf Moderation."
 
-#: zp-trunk/zp-core/functions.php:951
+#: zp-trunk/zp-core/functions.php:948
 #, php-format
 msgid "A comment has been posted on your image \"%1$s\" in the album \"%2$s\"."
 msgstr "Es wurde ein Kommentar zu Ihrem Bild \"%1$s\" im Album \"%2$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:957
+#: zp-trunk/zp-core/functions.php:954
 #, php-format
 msgid ""
 "Author: %1$s\n"
@@ -5460,7 +5455,7 @@ msgstr ""
 "\n"
 "%4$s"
 
-#: zp-trunk/zp-core/functions.php:958
+#: zp-trunk/zp-core/functions.php:955
 #, php-format
 msgid ""
 "You can view all comments about this item here:\n"
@@ -5469,7 +5464,7 @@ msgstr ""
 "Sie können alle Kommentare dazu hier ansehen:\n"
 "%1$s"
 
-#: zp-trunk/zp-core/functions.php:959
+#: zp-trunk/zp-core/functions.php:956
 #, php-format
 msgid ""
 "You can edit the comment here:\n"
@@ -5478,33 +5473,33 @@ msgstr ""
 "Sie können den Kommentare hier bearbeiten:\n"
 "%1$s"
 
-#: zp-trunk/zp-core/functions.php:982
+#: zp-trunk/zp-core/functions.php:979
 msgid "Comment posted"
 msgstr "Kommentar gesendet"
 
-#: zp-trunk/zp-core/functions.php:1140
+#: zp-trunk/zp-core/functions.php:1137
 #, php-format
 msgid "Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation."
 msgstr "Zenphoto hat keine Themedateien gefunden. Bitte überprüfen Sie den <em>%s</em>Ordner Ihrer Installation."
 
-#: zp-trunk/zp-core/functions.php:1506
+#: zp-trunk/zp-core/functions.php:1503
 msgid "Unknown name"
 msgstr "Unbekannter Name"
 
-#: zp-trunk/zp-core/functions.php:1506
+#: zp-trunk/zp-core/functions.php:1503
 msgid "Unknown author"
 msgstr "Unbekannter Autor"
 
-#: zp-trunk/zp-core/functions.php:1506
-#: zp-trunk/zp-core/functions.php:1514
+#: zp-trunk/zp-core/functions.php:1503
+#: zp-trunk/zp-core/functions.php:1511
 msgid "<strong>Theme description error!</strong>"
 msgstr "<strong>Theme-Beschreibungsfehler!</strong>"
 
-#: zp-trunk/zp-core/functions.php:1506
+#: zp-trunk/zp-core/functions.php:1503
 msgid "Unknown date"
 msgstr "Unbekanntes Datum"
 
-#: zp-trunk/zp-core/functions.php:1539
+#: zp-trunk/zp-core/functions.php:1536
 #, php-format
 msgid "Page access %2$s (%1$s)"
 msgstr "Seitenzugriff  %2$s (%1$s)"
@@ -5902,898 +5897,898 @@ msgstr "Neu registrierte und bestätigte Benutzer."
 msgid "most recent"
 msgstr "neuesten"
 
-#: zp-trunk/zp-core/setup.php:131
+#: zp-trunk/zp-core/setup.php:130
 msgid "MySQL POST handling"
 msgstr "MySQL-POST-Behandlung"
 
-#: zp-trunk/zp-core/setup.php:183
+#: zp-trunk/zp-core/setup.php:182
 msgid "Updated zp-config.php"
 msgstr "zp-config.php-Datei aktualisiert"
 
-#: zp-trunk/zp-core/setup.php:250
+#: zp-trunk/zp-core/setup.php:249
 msgid "Completed system check"
 msgstr "Systemüberprüfung komplett"
 
-#: zp-trunk/zp-core/setup.php:257
+#: zp-trunk/zp-core/setup.php:256
 msgid "Setup cookie test successful"
 msgstr "Installations-Testcookie erfolgreich"
 
-#: zp-trunk/zp-core/setup.php:260
+#: zp-trunk/zp-core/setup.php:259
 msgid "Setup cookie test unsuccessful"
 msgstr "Setup Cookietest fehlgeschlagen"
 
-#: zp-trunk/zp-core/setup.php:264
+#: zp-trunk/zp-core/setup.php:263
 msgid "Post of MySql credentials"
 msgstr "MySql-Spezifikation"
 
-#: zp-trunk/zp-core/setup.php:269
+#: zp-trunk/zp-core/setup.php:268
 msgid "Full environment"
 msgstr "Volle Umgebung"
 
-#: zp-trunk/zp-core/setup.php:271
+#: zp-trunk/zp-core/setup.php:270
 msgid "Primitive environment"
 msgstr "Einfache Umgebung"
 
-#: zp-trunk/zp-core/setup.php:273
+#: zp-trunk/zp-core/setup.php:272
 #, php-format
 msgid "Query error: %s"
 msgstr "Abfragefehler:  %s"
 
-#: zp-trunk/zp-core/setup.php:285
+#: zp-trunk/zp-core/setup.php:284
 msgid "create"
 msgstr "erstellen"
 
-#: zp-trunk/zp-core/setup.php:285
+#: zp-trunk/zp-core/setup.php:284
 msgid "update"
 msgstr "aktualisieren"
 
-#: zp-trunk/zp-core/setup.php:294
+#: zp-trunk/zp-core/setup.php:293
 msgid "Zenphoto upgrade"
 msgstr "Zenphoto-Aktualisierung"
 
-#: zp-trunk/zp-core/setup.php:294
+#: zp-trunk/zp-core/setup.php:293
 msgid "Zenphoto setup"
 msgstr "Zenphoto-Installation"
 
-#: zp-trunk/zp-core/setup.php:503
+#: zp-trunk/zp-core/setup.php:502
 msgid "Zen Photo Setup"
 msgstr "Zen Photo Installation"
 
-#: zp-trunk/zp-core/setup.php:504
+#: zp-trunk/zp-core/setup.php:503
 msgid "Upgrade"
 msgstr "Aktualisierung"
 
-#: zp-trunk/zp-core/setup.php:504
+#: zp-trunk/zp-core/setup.php:503
 msgid "Setup"
 msgstr "Installation"
 
-#: zp-trunk/zp-core/setup.php:516
+#: zp-trunk/zp-core/setup.php:515
 msgid "Zenphoto has detected that you're upgrading to a new version."
 msgstr "Zenphoto hat festgestellt, dass Sie auf eine neue Version aktualisieren."
 
-#: zp-trunk/zp-core/setup.php:518
+#: zp-trunk/zp-core/setup.php:517
 msgid "Welcome to Zenphoto! This page will set up Zenphoto on your web server."
 msgstr "Willkommen bei Zenphoto! Diese Seite wird Zenphoto auf Ihrem Webserver einrichten."
 
-#: zp-trunk/zp-core/setup.php:522
+#: zp-trunk/zp-core/setup.php:521
 msgid "Systems Check:"
 msgstr "Systemcheck:"
 
-#: zp-trunk/zp-core/setup.php:564
+#: zp-trunk/zp-core/setup.php:563
 msgid "Error!"
 msgstr "Fehler!"
 
-#: zp-trunk/zp-core/setup.php:572
+#: zp-trunk/zp-core/setup.php:571
 msgid "Warning!"
 msgstr "Warnung!"
 
-#: zp-trunk/zp-core/setup.php:577
+#: zp-trunk/zp-core/setup.php:576
 msgid "<strong>Notice!</strong> click for details"
 msgstr "<strong>Anmerkung!</strong> Für mehr Details klicken"
 
-#: zp-trunk/zp-core/setup.php:579
+#: zp-trunk/zp-core/setup.php:578
 msgid "Notice!"
 msgstr "Anmerkung!"
 
-#: zp-trunk/zp-core/setup.php:624
+#: zp-trunk/zp-core/setup.php:623
 #, php-format
 msgid "<em>%1$s</em> folder%2$s [subfolder creation failure]"
 msgstr "<em>%1$s</em> Ordner%2$s [Unterordnererstellung fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:624
+#: zp-trunk/zp-core/setup.php:623
 #, php-format
 msgid "Setup could not create the following subfolders:<br />%s"
 msgstr "Setup konnte die folgenden Unterordner nicht erstellen:<br />%s"
 
-#: zp-trunk/zp-core/setup.php:636
+#: zp-trunk/zp-core/setup.php:635
 #, php-format
 msgid "<em>%1$s</em> folder%2$s [permissions failure]"
 msgstr "<em>%1$s</em> Ordner%2$s [Dateizugriffsrechte fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:636
+#: zp-trunk/zp-core/setup.php:635
 msgid "Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> for details on Zenphoto permissions requirements."
 msgstr "Setup konnte die Ordner nicht auf die gewünschten Dateizugriffsrechte setzen. Sie müssen diese manuell einstellen. Bitte lesen Sie <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> zu Details über die erforderlichen Dateizugriffsrechte."
 
-#: zp-trunk/zp-core/setup.php:666
+#: zp-trunk/zp-core/setup.php:665
 #, php-format
 msgid "You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>."
 msgstr "Sie müssen den Ordner <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code> erstellen."
 
-#: zp-trunk/zp-core/setup.php:668
+#: zp-trunk/zp-core/setup.php:667
 #, php-format
 msgid "<em>%1$s</em> folder [<em>%2$s</em> does not exist]"
 msgstr "Ordner <em>%1$s</em> [<em>%2$s</em> existiert nicht]"
 
-#: zp-trunk/zp-core/setup.php:670
+#: zp-trunk/zp-core/setup.php:669
 #, php-format
 msgid "<em>%1$s</em> folder [<em>%2$s</em> does not exist and <strong>setup</strong> could not create it]"
 msgstr "Ordner <em>%1$s</em> [<em>%2$s</em> existiert nicht und <strong>setup</strong> konnte ihn nicht erstellen]"
 
-#: zp-trunk/zp-core/setup.php:673
+#: zp-trunk/zp-core/setup.php:672
 #, php-format
 msgid "Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)"
 msgstr "Ändern Sie die Zugriffsrechte des <code>%1$s</code>-Ordners auf schreibbar durch den Server (<code>chmod 777 %2$s</code>)"
 
-#: zp-trunk/zp-core/setup.php:674
+#: zp-trunk/zp-core/setup.php:673
 #, php-format
 msgid "<em>%1$s</em> folder [<em>%2$s</em> is not writeable and <strong>setup</strong> could not make it so]"
 msgstr "Ordner <em>%1$s</em> [<em>%2$s</em> ist nicht beschreibbar und <strong>setup</strong> konnte dies nicht ändern]"
 
-#: zp-trunk/zp-core/setup.php:677
+#: zp-trunk/zp-core/setup.php:676
 #, php-format
 msgid "<em>%1$s</em> folder%2$s"
 msgstr "<em>%1$s</em> Ordner %2$s"
 
-#: zp-trunk/zp-core/setup.php:745
-#: zp-trunk/zp-core/setup.php:748
+#: zp-trunk/zp-core/setup.php:744
+#: zp-trunk/zp-core/setup.php:747
 #, php-format
 msgid "PHP version %s"
 msgstr "PHP-Version %s"
 
-#: zp-trunk/zp-core/setup.php:745
+#: zp-trunk/zp-core/setup.php:744
 #, php-format
 msgid "Version %1$s or greater is strongly recommended."
 msgstr "Version %1$s oder neuer ist ausdrücklich empfohlen."
 
-#: zp-trunk/zp-core/setup.php:748
+#: zp-trunk/zp-core/setup.php:747
 #, php-format
 msgid "Version %1$s or greater is required. Use earlier versions at your own risk. Version %2$s or greater is strongly recommended."
 msgstr "Version %1$s oder neuer ist notwendig. Verwenden Sie ältere Version auf eigenes Risiko. Version %2$s oder neuer ist ausdrücklich empfohlen."
 
-#: zp-trunk/zp-core/setup.php:756
+#: zp-trunk/zp-core/setup.php:755
 msgid "PHP <code>Safe Mode</code>"
 msgstr "PHP <code>Safe Mode</code>"
 
-#: zp-trunk/zp-core/setup.php:756
+#: zp-trunk/zp-core/setup.php:755
 msgid "PHP <code>Safe Mode</code> [is set]"
 msgstr "PHP <code>Safe Mode</code> [ist aktiv]"
 
-#: zp-trunk/zp-core/setup.php:756
+#: zp-trunk/zp-core/setup.php:755
 msgid "Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."
 msgstr "Zenphotos Funktionalität ist eingeschränkt solange PHP Safe Mode-Einschränkungen aktiv sind."
 
-#: zp-trunk/zp-core/setup.php:763
+#: zp-trunk/zp-core/setup.php:762
 msgid "PHP <code>magic_quotes_gpc</code>"
 msgstr "PHP <code>magic_quotes_gpc</code>"
 
-#: zp-trunk/zp-core/setup.php:763
+#: zp-trunk/zp-core/setup.php:762
 msgid "PHP <code>magic_quotes_gpc</code> [is enabled]"
 msgstr "PHP <code>magic_quotes_gpc</code> [sind aktiviert]"
 
-#: zp-trunk/zp-core/setup.php:763
+#: zp-trunk/zp-core/setup.php:762
 msgid "You should consider disabling <code>magic_quotes_gpc</code>. For more information See #25 of the Zenphoto troubleshooting guide."
 msgstr "Sie sollten in Erwägung ziehen <code>magic_quotes_gpc</code> zu deaktivieren. Für mehr Information lesen Sie bitte Nr. 25 im Zenphoto troubleshooting guide."
 
-#: zp-trunk/zp-core/setup.php:774
+#: zp-trunk/zp-core/setup.php:773
 #, php-format
 msgid "Graphics support: <code>%s</code>"
 msgstr "Grafikunterstützung: <code>%s</code>"
 
-#: zp-trunk/zp-core/setup.php:774
+#: zp-trunk/zp-core/setup.php:773
 msgid "Graphics support [is not installed]"
 msgstr "Grafikunterstützung [ist nicht installiert]"
 
-#: zp-trunk/zp-core/setup.php:774
+#: zp-trunk/zp-core/setup.php:773
 msgid "You need to install a graphics support library such as the <em>GD library</em> in your PHP"
 msgstr "Sie müssen eine <em>Grafikerweitung</em> für PHP wie die GD-Bibliothek installieren"
 
-#: zp-trunk/zp-core/setup.php:783
+#: zp-trunk/zp-core/setup.php:782
 #, php-format
 msgid "Your PHP graphics library does not support %1$s or %2$s"
 msgstr "Ihre PHP-Grafiklibary unterstützt %1$s oder %2$s nicht"
 
-#: zp-trunk/zp-core/setup.php:785
+#: zp-trunk/zp-core/setup.php:784
 #, php-format
 msgid "Your PHP graphics library does not support %1$s"
 msgstr "Ihre PHP-Grafiklibary unterstützt %1$s nicht"
 
-#: zp-trunk/zp-core/setup.php:788
+#: zp-trunk/zp-core/setup.php:787
 msgid "To correct this you should install a graphics library with appropriate image support in your PHP"
 msgstr "Um dies zu beheben, sollten Sie GD-Grafikerweiterung mit entsprechender Bildunterstützung für PHP installieren"
 
-#: zp-trunk/zp-core/setup.php:790
+#: zp-trunk/zp-core/setup.php:789
 #, php-format
 msgid "Your PHP graphics library does not support %1$s, %2$s, or %3$s"
 msgstr "Ihre PHP-Grafiklibary unterstützt  %1$s, %2$s oder %3$s nicht"
 
-#: zp-trunk/zp-core/setup.php:793
+#: zp-trunk/zp-core/setup.php:792
 msgid "To correct this you need to a install GD with appropriate image support in your PHP"
 msgstr "Um dies zu beheben, müssen Sie die GD-Erweiterung für PHP mit der entsprechenden Bildformatunterstützung installieren"
 
-#: zp-trunk/zp-core/setup.php:795
+#: zp-trunk/zp-core/setup.php:794
 msgid "PHP graphics image support"
 msgstr "PHP-GD-Bildbearbeitungs-Unterstützung"
 
-#: zp-trunk/zp-core/setup.php:796
+#: zp-trunk/zp-core/setup.php:795
 msgid "The unsupported image types will not be viewable in your albums."
 msgstr "Die nicht unterstützten Bildformate werden in Ihren Alben nicht zu sehen sein."
 
-#: zp-trunk/zp-core/setup.php:800
+#: zp-trunk/zp-core/setup.php:799
 msgid "Graphics Library rotation support [is not present]"
 msgstr "Grafikbibliothek Bildrotationunterstützung [ist nicht vorhanden]"
 
-#: zp-trunk/zp-core/setup.php:800
+#: zp-trunk/zp-core/setup.php:799
 msgid "The graphics support library does not provide support for image rotation."
 msgstr "Die Grafikunterstützung bietet keine Bildrotationsfunktionalität."
 
-#: zp-trunk/zp-core/setup.php:804
+#: zp-trunk/zp-core/setup.php:803
 msgid "Graphics support [configuration error]"
 msgstr "Grafikunterstützung [Konfigurationsfehler]"
 
-#: zp-trunk/zp-core/setup.php:804
+#: zp-trunk/zp-core/setup.php:803
 msgid "No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support."
 msgstr "Es wurde keine Zenphoto-Grafikbibliothek geladen. Überprüfen Sie, dass Ihr PHP über Grafikunterstützung verfügt."
 
-#: zp-trunk/zp-core/setup.php:807
+#: zp-trunk/zp-core/setup.php:806
 msgid "PHP <code>gettext()</code> support"
 msgstr "PHP <code>gettext()</code>-Unterstützung"
 
-#: zp-trunk/zp-core/setup.php:807
+#: zp-trunk/zp-core/setup.php:806
 msgid "PHP <code>gettext()</code> support [is not present]"
 msgstr "PHP <code>gettext()</code>-Unterstützung [ist nicht vorhanden]"
 
-#: zp-trunk/zp-core/setup.php:807
+#: zp-trunk/zp-core/setup.php:806
 msgid "Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"
 msgstr "Lokalisation von Zenphoto benötigt zur Zeit die Installation der PHP-<code>gettext()</code>-Erweiterung"
 
-#: zp-trunk/zp-core/setup.php:809
+#: zp-trunk/zp-core/setup.php:808
 msgid "PHP <code>setlocale()</code>"
 msgstr "PHP <code>setlocale()</code>"
 
-#: zp-trunk/zp-core/setup.php:809
+#: zp-trunk/zp-core/setup.php:808
 msgid "PHP <code>setlocale()</code> failed"
 msgstr "PHP <code>setlocale()</code> fehlgeschlagen"
 
-#: zp-trunk/zp-core/setup.php:809
+#: zp-trunk/zp-core/setup.php:808
 msgid "Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work."
 msgstr "Ihr Server verfügt nicht über Locale-Funktionalität oder die ausgewählte Locale existiert nicht. Übersetzung funktionieren daher möglicherweise nicht."
 
-#: zp-trunk/zp-core/setup.php:817
+#: zp-trunk/zp-core/setup.php:816
 msgid "Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly."
 msgstr "Es wird empfohlen, die <em>mbstring.internal_encoding</em> auf <strong>UTF-8</strong> in Ihrer <em>php.ini</em>-Datei zu setzen, um sicher zu stellen, dass akzentuierte und multi-byte Buchstaben wie erwartet funktionieren."
 
-#: zp-trunk/zp-core/setup.php:818
+#: zp-trunk/zp-core/setup.php:817
 msgid "PHP <code>mbstring</code> package"
 msgstr "PHP <code>mbstring</code>-Erweiterung"
 
-#: zp-trunk/zp-core/setup.php:818
+#: zp-trunk/zp-core/setup.php:817
 #, php-format
 msgid "PHP <code>mbstring</code> package [Your internal characater set is <strong>%s</strong>]"
 msgstr "PHP <code>mbstring</code>-Erweiterung [Ihr interner Zeichensatz ist auf <strong>%s</strong> eingestellt]"
 
-#: zp-trunk/zp-core/setup.php:822
+#: zp-trunk/zp-core/setup.php:821
 msgid "You need to install the <code>mbstring</code> package or correct the issue with <code>iconv(()</code>"
 msgstr "Sie müssen die <code>mbstring</code>-Erweiterung installieren oder Angelegenheit mit  <code>iconv(()</code> beheben"
 
-#: zp-trunk/zp-core/setup.php:823
+#: zp-trunk/zp-core/setup.php:822
 msgid "PHP <code>mbstring</code> package [is not present and <code>iconv()</code> is not working]"
 msgstr "PHP <code>mbstring</code>-Erweiterung [ist nicht vorhanden und <code>iconv()</code> funktioniert nicht]"
 
-#: zp-trunk/zp-core/setup.php:825
+#: zp-trunk/zp-core/setup.php:824
 msgid "Strings generated internally by PHP may not display correctly. (e.g. dates)"
 msgstr "Zeichenketten, die intern von PHP generiert werden, können unter Umständen nicht korrekt dargestellt werden (z. B. Datumsangaben)."
 
-#: zp-trunk/zp-core/setup.php:826
+#: zp-trunk/zp-core/setup.php:825
 msgid "PHP <code>mbstring</code> package [is not present]"
 msgstr "PHP <code>mbstring</code>-Erweiterung [ist nicht vorhanden]"
 
-#: zp-trunk/zp-core/setup.php:831
+#: zp-trunk/zp-core/setup.php:830
 msgid "PHP <code>MySQL support</code>"
 msgstr "PHP <code>MySQL-Unterstützung</code>"
 
-#: zp-trunk/zp-core/setup.php:831
+#: zp-trunk/zp-core/setup.php:830
 msgid "PHP <code>MySQL support</code> [is not installed]"
 msgstr "PHP <code>MySQL-Unterstützung</code> [ist nicht installiert]"
 
-#: zp-trunk/zp-core/setup.php:831
+#: zp-trunk/zp-core/setup.php:830
 msgid "You need to install MySQL support in your PHP"
 msgstr "Sie müssen MySQL-Unterstützung für PHP installieren"
 
-#: zp-trunk/zp-core/setup.php:838
+#: zp-trunk/zp-core/setup.php:837
 msgid "<em>zp-config.php</em> file"
 msgstr "<em>zp-config.php</em>-Datei"
 
-#: zp-trunk/zp-core/setup.php:838
+#: zp-trunk/zp-core/setup.php:837
 msgid "<em>zp-config.php</em> file [does not exist]"
 msgstr "<em>zp-config.php</em>-Datei [existiert nicht]"
 
-#: zp-trunk/zp-core/setup.php:839
+#: zp-trunk/zp-core/setup.php:838
 #, php-format
 msgid "Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file's comments and rename it to <code>zp-config.php</code>. Place the file in the %s folder."
 msgstr "Das Installationsprogramm konnte diese Datei nicht erstellen. Sie müssen daher die Datei <code>zp-config.php.source</code> wie in den Dateikommentar angegeben editieren und es in <code>zp-config.php</code> umbenennen. Platzieren Sie die Datei dann im  %s-Ordner."
 
-#: zp-trunk/zp-core/setup.php:841
+#: zp-trunk/zp-core/setup.php:840
 #, php-format
 msgid "<br /><br />You can find the file in the \"%s\" directory."
 msgstr "<br /><br />Sie finden diese Datei innerhalb des \"%s\"-Verzeichnisses."
 
-#: zp-trunk/zp-core/setup.php:845
+#: zp-trunk/zp-core/setup.php:844
 #, php-format
 msgid "Change file/folder permissions mask: %s"
 msgstr "Ändern der Dateizugriffsrechte-Maske: %s"
 
-#: zp-trunk/zp-core/setup.php:847
+#: zp-trunk/zp-core/setup.php:846
 msgid "loose (0777)"
 msgstr "locker (0777)"
 
-#: zp-trunk/zp-core/setup.php:848
+#: zp-trunk/zp-core/setup.php:847
 msgid "relaxed (0775)"
 msgstr "entspannt (0775)"
 
-#: zp-trunk/zp-core/setup.php:849
+#: zp-trunk/zp-core/setup.php:848
 msgid "strict (0755)"
 msgstr "streng (0755)"
 
-#: zp-trunk/zp-core/setup.php:853
+#: zp-trunk/zp-core/setup.php:852
 msgid "You must be logged in to change permissions."
 msgstr "Sie müssen angemeldet sein, um Dateiberechtigungen ändern zu können."
 
-#: zp-trunk/zp-core/setup.php:858
+#: zp-trunk/zp-core/setup.php:857
 msgid "<em>loose</em> (<code>0777</code>)"
 msgstr "<em>Locker</em> (<code>0777</code>)"
 
-#: zp-trunk/zp-core/setup.php:862
+#: zp-trunk/zp-core/setup.php:861
 msgid "<em>relaxed</em> (<code>0775</code>)"
 msgstr "<em>Entspannt</em> (<code>0775</code>)"
 
-#: zp-trunk/zp-core/setup.php:866
+#: zp-trunk/zp-core/setup.php:865
 msgid "<em>strict</em> (<code>0755</code>)"
 msgstr "<em>Streng</em> (<code>0755</code>)"
 
-#: zp-trunk/zp-core/setup.php:870
+#: zp-trunk/zp-core/setup.php:869
 #, php-format
 msgid "<em>unknown</em> (<code>%o</code>)"
 msgstr "<em>Unbekannt</em> (<code>%o</code>)"
 
-#: zp-trunk/zp-core/setup.php:873
+#: zp-trunk/zp-core/setup.php:872
 #, php-format
 msgid "File/Folder Permissions [are %s]"
 msgstr "Datei-/Ordnerberechtigungen [sind %s]"
 
-#: zp-trunk/zp-core/setup.php:875
+#: zp-trunk/zp-core/setup.php:874
 msgid "If file and folder permissions are not set to <em>strict</em> there could be a security risk. However, on some servers Zenphoto does not function correctly with <em>strict</em> file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission."
 msgstr "Es ist empfohlen, dass Sie <em>Strenge Rechte</em> aktivieren, da dies andernfalls ein Sicherheitsrisiko darstellen kann.. Jedoch funktioniert Zenphoto auf einigen Servern leider nicht mit strenger Rechtevergabe. Wenn Sie diese Einstellung aktivieren und Fehler über die Rechtevergabe erhalten, führen Sie Setup erneut aus und deaktivieren Sie die Einstellung. "
 
-#: zp-trunk/zp-core/setup.php:899
+#: zp-trunk/zp-core/setup.php:898
 msgid "MySQL setup in zp-config.php"
 msgstr "MySQL-Konfiguration in zp-config.php"
 
-#: zp-trunk/zp-core/setup.php:905
+#: zp-trunk/zp-core/setup.php:904
 msgid "Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."
 msgstr "Tragen Sie die fehlende Information unten ein und <strong>setup</strong> wird versuchen, Ihre <code>zp-config.php</code>-Datei zu aktualisieren."
 
-#: zp-trunk/zp-core/setup.php:916
+#: zp-trunk/zp-core/setup.php:915
 msgid "MySQL admin user"
 msgstr "MySQL-Administrationsbenutzer"
 
-#: zp-trunk/zp-core/setup.php:922
+#: zp-trunk/zp-core/setup.php:921
 msgid "MySQL admin password"
 msgstr "MySQL-Administrationspasswort"
 
-#: zp-trunk/zp-core/setup.php:928
+#: zp-trunk/zp-core/setup.php:927
 msgid "MySQL host"
 msgstr "MySQL-Server"
 
-#: zp-trunk/zp-core/setup.php:934
+#: zp-trunk/zp-core/setup.php:933
 msgid "MySQL database"
 msgstr "MySQL-Datenbank"
 
-#: zp-trunk/zp-core/setup.php:940
+#: zp-trunk/zp-core/setup.php:939
 msgid "Database table prefix"
 msgstr "Datenbank-Vorsilbe"
 
-#: zp-trunk/zp-core/setup.php:947
+#: zp-trunk/zp-core/setup.php:946
 msgid "required"
 msgstr "erforderlich"
 
-#: zp-trunk/zp-core/setup.php:962
+#: zp-trunk/zp-core/setup.php:961
 msgid "MySQL setup in <em>zp-config.php</em>"
 msgstr "MySQL-Konfiguration in <em>zp-config.php</em>"
 
-#: zp-trunk/zp-core/setup.php:963
+#: zp-trunk/zp-core/setup.php:962
 msgid "You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file."
 msgstr "Sie haben keinen <strong>MySQL</strong>-<code>Benutzer</code>, <code>-Passwort</code> etc. in Ihrer<code>zp-config.php</code>-Datei eingetragen, so dass <strong>setup</strong> die Datei nicht aktualisieren kann."
 
-#: zp-trunk/zp-core/setup.php:966
+#: zp-trunk/zp-core/setup.php:965
 msgid "Connect to MySQL"
 msgstr "Verbinden mit MySQL"
 
-#: zp-trunk/zp-core/setup.php:966
+#: zp-trunk/zp-core/setup.php:965
 msgid "Connect to MySQL [<code>CONNECT</code> query failed]"
 msgstr "MySQL-Verbindung  [<code>CONNECT</code>-Abfrage fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:970
+#: zp-trunk/zp-core/setup.php:969
 msgid "Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again."
 msgstr "Überprüfen Sie <code>Benutzername</code>, <code>Passwort</code> und <code>Datenbankserver</code> und versuchen Sie es erneut."
 
-#: zp-trunk/zp-core/setup.php:974
+#: zp-trunk/zp-core/setup.php:973
 #, php-format
 msgid "MySQL version %s"
 msgstr "MySQL-Version %s"
 
-#: zp-trunk/zp-core/setup.php:974
+#: zp-trunk/zp-core/setup.php:973
 #, php-format
 msgid "Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is prefered."
 msgstr "Version %1$s oder neuer ist notwendig.<br />Version %2$s oder neuer bevorzugt."
 
-#: zp-trunk/zp-core/setup.php:981
+#: zp-trunk/zp-core/setup.php:980
 #, php-format
 msgid "Database <code>%s</code> created"
 msgstr "Datenbank <code>%s</code> erstellt"
 
-#: zp-trunk/zp-core/setup.php:981
+#: zp-trunk/zp-core/setup.php:980
 #, php-format
 msgid "Database <code>%s</code> not created [<code>CREATE DATABASE</code> query failed]"
 msgstr "Datenbank <code>%s</code> nicht erstellt [<code>CREATE DATABASE</code>-Abfrage fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:984
+#: zp-trunk/zp-core/setup.php:983
 msgid "Connect to the database [You have not provided a database name]"
 msgstr "Verbindung zur Datenbank [Sie haben keinen Datenbanknamen angegeben]"
 
-#: zp-trunk/zp-core/setup.php:984
+#: zp-trunk/zp-core/setup.php:983
 msgid "Privode the name of your database in the form above."
 msgstr "Geben Sie den Namen Ihrer Datenbank ein."
 
-#: zp-trunk/zp-core/setup.php:987
+#: zp-trunk/zp-core/setup.php:986
 msgid "Connect to the database [Database does not exist]"
 msgstr "Verbindung mit Datenbank [Datenbank existiert nicht]"
 
-#: zp-trunk/zp-core/setup.php:987
+#: zp-trunk/zp-core/setup.php:986
 #, php-format
 msgid "Click here to attempt to create <a href=\"?Create_Database\" >%s</a>."
 msgstr "Klicken Sie hier, um die Datenbank zu erstellen: <a href=\"?Create_Database\" >%s</a>. "
 
-#: zp-trunk/zp-core/setup.php:992
+#: zp-trunk/zp-core/setup.php:991
 #, php-format
 msgid "Connect to the database <code>%s</code>"
 msgstr "Verbunden mit Datenbank <code> %s </code>"
 
-#: zp-trunk/zp-core/setup.php:993
+#: zp-trunk/zp-core/setup.php:992
 #, php-format
 msgid "Could not access the <strong>MySQL</strong> database (<code>%s</code>)."
 msgstr "Zugriff auf die <strong>MySQL</strong>-Datenbank fehlgeschlagen (<code>%s</code>)."
 
-#: zp-trunk/zp-core/setup.php:994
+#: zp-trunk/zp-core/setup.php:993
 msgid "Check the <code>user</code>, <code>password</code>, <code>database name</code>, and <code>MySQL host</code>."
 msgstr "Überprüfen Sie <code>Benutzername</code>, <code>Passwort</code>, <code>Datenbankname</code> und <code>Datenbankserver</code>."
 
-#: zp-trunk/zp-core/setup.php:995
+#: zp-trunk/zp-core/setup.php:994
 #, php-format
 msgid "Make sure the database has been created and that <code>%s</code> has access to it."
 msgstr "Überprüfen Sie, ob die Datenbank erstellt wurden und das <code>%s</code> auch der Zugriff erlaubt ist."
 
-#: zp-trunk/zp-core/setup.php:1003
+#: zp-trunk/zp-core/setup.php:1002
 msgid "You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration."
 msgstr "Sie müssen möglicherweise den  <code>SQL-Modus</code> in Ihrer MySQL-Konfiguration auf <em>leer</em>"
 
-#: zp-trunk/zp-core/setup.php:1010
+#: zp-trunk/zp-core/setup.php:1009
 #, php-format
 msgid "MySQL <code>SQL mode</code> [<em>%s</em> overridden]"
 msgstr "MySQL <code>SQL-Modus</code> [<em>%s</em> übergangen]"
 
-#: zp-trunk/zp-core/setup.php:1010
+#: zp-trunk/zp-core/setup.php:1009
 msgid "Consider setting it <em>empty</em> in your MySQL configuration."
 msgstr "Ziehen Sie in Erwägung dies in Ihrer MySQL-Konfiguration auf <em>leer</em> zu stellen."
 
-#: zp-trunk/zp-core/setup.php:1017
+#: zp-trunk/zp-core/setup.php:1016
 msgid "MySQL <code>SQL mode</code>"
 msgstr "MySQL <code>SQL-Modus</code>"
 
-#: zp-trunk/zp-core/setup.php:1017
+#: zp-trunk/zp-core/setup.php:1016
 #, php-format
 msgid "MySQL <code>SQL mode</code> [is set to <em>%s</em>]"
 msgstr "MySQL <code>SQL-Modus</code> [ist auf <em>%s</em> gestellt]"
 
-#: zp-trunk/zp-core/setup.php:1017
+#: zp-trunk/zp-core/setup.php:1016
 msgid "Consider setting it <em>empty</em> if you get MySql errors."
 msgstr "Ziehen Sie in Erwägung dies auf <em>leer</em> zu stellen, wenn Sie MySQL-Fehlermeldungen bekommen."
 
-#: zp-trunk/zp-core/setup.php:1020
+#: zp-trunk/zp-core/setup.php:1019
 #, php-format
 msgid "MySQL <code>SQL mode</code> [query failed]"
 msgstr "MySQL <code>SQL-Modus</code> [Abfrage fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:1023
+#: zp-trunk/zp-core/setup.php:1022
 msgid "MySQL <code>SQL mode</code> [SET SESSION failed]"
 msgstr "MySQL <code>SQL-Modus</code> [SET SESSION fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:1041
+#: zp-trunk/zp-core/setup.php:1040
 msgid "Select"
 msgstr "Auswählen"
 
-#: zp-trunk/zp-core/setup.php:1041
+#: zp-trunk/zp-core/setup.php:1040
 msgid "Create"
 msgstr "Erzeugen"
 
-#: zp-trunk/zp-core/setup.php:1041
+#: zp-trunk/zp-core/setup.php:1040
 msgid "Drop"
 msgstr "Verwerfen"
 
-#: zp-trunk/zp-core/setup.php:1041
+#: zp-trunk/zp-core/setup.php:1040
 msgid "Insert"
 msgstr "Einfügen"
 
-#: zp-trunk/zp-core/setup.php:1042
+#: zp-trunk/zp-core/setup.php:1041
 msgid "Update"
 msgstr "Aktualisieren"
 
-#: zp-trunk/zp-core/setup.php:1042
+#: zp-trunk/zp-core/setup.php:1041
 msgid "Alter"
 msgstr "Ändern"
 
-#: zp-trunk/zp-core/setup.php:1052
+#: zp-trunk/zp-core/setup.php:1051
 msgid "Grants found:"
 msgstr "Grants gefunden:"
 
-#: zp-trunk/zp-core/setup.php:1080
+#: zp-trunk/zp-core/setup.php:1079
 msgid "The <em>SHOW GRANTS</em> query failed."
 msgstr "Die <code>SHOW GRANTS</code>-Abfrage ist fehlgeschlagen."
 
-#: zp-trunk/zp-core/setup.php:1082
+#: zp-trunk/zp-core/setup.php:1081
 msgid "MySQL <code>access rights</code>"
 msgstr "MySQL-<code>Zugriffsrechte</code>"
 
-#: zp-trunk/zp-core/setup.php:1082
+#: zp-trunk/zp-core/setup.php:1081
 #, php-format
 msgid "MySQL <code>access rights</code> [%s]"
 msgstr "MySQL-<code>Zugriffsrechte</code> [%s]"
 
-#: zp-trunk/zp-core/setup.php:1083
+#: zp-trunk/zp-core/setup.php:1082
 #, php-format
 msgid "Your MySQL user must have %s rights."
 msgstr "Ihr MySQL-Benutzer muß über %s Rechte verfügen."
 
-#: zp-trunk/zp-core/setup.php:1095
+#: zp-trunk/zp-core/setup.php:1094
 msgid "MySQL <em>show tables</em> [found no tables]"
 msgstr "MySQL <em>show tables</em> [keine Tabellen gefunden]"
 
-#: zp-trunk/zp-core/setup.php:1098
+#: zp-trunk/zp-core/setup.php:1097
 #, php-format
 msgid "MySQL <em>show tables</em> found: %s"
 msgstr "MySQL-<em>show tables</em> fand: %s"
 
-#: zp-trunk/zp-core/setup.php:1103
+#: zp-trunk/zp-core/setup.php:1102
 msgid "MySQL <em>show tables</em> [Failed]"
 msgstr "MySQL-<em>show tables</em> [fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:1103
+#: zp-trunk/zp-core/setup.php:1102
 #, php-format
 msgid "MySQL did not return a list of the database tables for <code>%s</code>."
 msgstr "MySQL hat für <code>%s</code> keine Liste der Datenbanktabellen zurückgegeben."
 
-#: zp-trunk/zp-core/setup.php:1104
+#: zp-trunk/zp-core/setup.php:1103
 msgid "<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."
 msgstr "<strong>Setup</strong> wird versuchen, die Tabellen zu erstellen. Es werden keine bereits existierenden Tabellen überschrieben."
 
-#: zp-trunk/zp-core/setup.php:1144
+#: zp-trunk/zp-core/setup.php:1143
 msgid "MySQL <code>field collations</code> [Image table]"
 msgstr "MySQL-<code>Feldkollationen</code> [Bildtabelle]"
 
-#: zp-trunk/zp-core/setup.php:1147
+#: zp-trunk/zp-core/setup.php:1146
 msgid "MySQL <code>field collations</code> [Album table]"
 msgstr "MySQL-<code>Feldkollationen</code> [Albumtabelle]"
 
-#: zp-trunk/zp-core/setup.php:1150
+#: zp-trunk/zp-core/setup.php:1149
 msgid "MySQL <code>field collations</code> [Image and Album tables]"
 msgstr "MySQL <code>Feldkollationen</code> [Bild- und Albumtabellen]"
 
-#: zp-trunk/zp-core/setup.php:1153
+#: zp-trunk/zp-core/setup.php:1152
 msgid "MySQL <code>field collations</code> [SHOW COLUMNS query failed]"
 msgstr "MySQL <code>Feldkollationen</code> [SHOW COLUMNS-Abfrage fehlgeschlagen]"
 
-#: zp-trunk/zp-core/setup.php:1156
+#: zp-trunk/zp-core/setup.php:1155
 msgid "MySQL <code>field collations</code>"
 msgstr "MySQL-<code>Feldkollationen</code> "
 
-#: zp-trunk/zp-core/setup.php:1156
+#: zp-trunk/zp-core/setup.php:1155
 #, php-format
 msgid "%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>"
 msgid_plural "%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>"
 msgstr[0] "%s ist nicht UTF-8. Sie sollten erwägen, Ihre Daten in UTF-8 zu übertragen und die Kollation der Datenbankfelder auf  <code>utf8_unicode_ci</code> zu setzen."
 msgstr[1] "%s sind nicht UTF-8. Sie sollten erwägen, Ihre Daten in UTF-8 zu übertragen und die Kollation der Datenbankfelder auf  <code>utf8_unicode_ci</code> zu setzen."
 
-#: zp-trunk/zp-core/setup.php:1158
+#: zp-trunk/zp-core/setup.php:1157
 msgid "MySQL <code>$conf[\"UTF-8\"]</code> [is not set <em>true</em>]"
 msgstr "MySQL <code>$conf[\"UTF-8\"]</code> [ist nicht auf <em>true</em> gestellt]"
 
-#: zp-trunk/zp-core/setup.php:1158
+#: zp-trunk/zp-core/setup.php:1157
 msgid "You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings."
 msgstr "Sie sollten erwägen, Ihre Daten in UTF-8 zu übertragen und die Kollation der Datenbankfelder auf  <code>utf8_unicode_ci</code> zu setzen und dies auf <em>true</em> zu stellen. Zenphoto arbeitet am besten mit reinen UTF-8-Codierungen."
 
-#: zp-trunk/zp-core/setup.php:1243
+#: zp-trunk/zp-core/setup.php:1242
 msgid "Zenphoto core files [This is not an official build. Some files are missing or seem out of variance]"
 msgstr "Zenphoto-Hauptdateien [Dies ist keine offizielle Version. Einige Dateien scheinen außerhalb des Rahmens zu sein]"
 
-#: zp-trunk/zp-core/setup.php:1245
+#: zp-trunk/zp-core/setup.php:1244
 msgid "Zenphoto core files [Some files are missing or seem out of variance]"
 msgstr "Zenphoto-Hauptdateien [Einige <em>filemtimes</em> scheinen außerhalb des Rahmens zu sein]"
 
-#: zp-trunk/zp-core/setup.php:1247
+#: zp-trunk/zp-core/setup.php:1246
 msgid "Perhaps there was a problem with the upload. You should check the following files: "
 msgstr "Vielleicht ist ein Problem mit dem Upload aufgetreten. Sie sollten die folgenden Dateien überprüfen:"
 
-#: zp-trunk/zp-core/setup.php:1252
+#: zp-trunk/zp-core/setup.php:1251
 msgid "Zenphoto core files [This is not an official build]"
 msgstr "Zenphoto-Hauptdateien [Dies ist keine offizielle Version]"
 
-#: zp-trunk/zp-core/setup.php:1260
+#: zp-trunk/zp-core/setup.php:1259
 msgid "Zenphoto core files"
 msgstr "Zenphoto-Hauptdateien"
 
-#: zp-trunk/zp-core/setup.php:1261
+#: zp-trunk/zp-core/setup.php:1260
 msgid "Zenphoto core file permissions"
 msgstr "Zenphoto-Hauptdateien-Zugriffsrechte"
 
-#: zp-trunk/zp-core/setup.php:1261
+#: zp-trunk/zp-core/setup.php:1260
 msgid "Zenphoto core file permissions [not correct]"
 msgstr "Zenphoto-Hauptdateien-Dateiberechtigungen [nicht korrekt]"
 
-#: zp-trunk/zp-core/setup.php:1261
+#: zp-trunk/zp-core/setup.php:1260
 msgid "Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> for details on Zenphoto permissions requirements."
 msgstr "Setup konnte die die gewünschten Dateizugriffsrechte nicht setzen. Sie müssen diese manuell einstellen. Bitte lesen Sie <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> zu Details über die erforderlichen Dateizugriffsrechte."
 
-#: zp-trunk/zp-core/setup.php:1262
+#: zp-trunk/zp-core/setup.php:1261
 msgid "<em>.htaccess</em> file"
 msgstr "<em>.htaccess</em>-Datei"
 
-#: zp-trunk/zp-core/setup.php:1264
+#: zp-trunk/zp-core/setup.php:1263
 msgid "Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."
 msgstr "Der Server scheint kein Apache-Server oder nicht Apache kompatibel zu sein, daher wird der<code>.htaccess</code> nicht benötigt."
 
-#: zp-trunk/zp-core/setup.php:1278
+#: zp-trunk/zp-core/setup.php:1277
 msgid "<em>.htaccess</em> file [is empty or does not exist]"
 msgstr "<em>.htaccess</em>-Datei [ist leer oder existiert nicht]"
 
-#: zp-trunk/zp-core/setup.php:1279
+#: zp-trunk/zp-core/setup.php:1278
 msgid "If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs."
 msgstr "Wenn Ihr Apache-Server über mod_rewrite-Funktionalität verfügt, muß eine <em>.htaccess</em>-Datei im Zenphoto-Hauptverzeichnis vorhanden sein, wenn Sie suchmaschinenfreundliche, klare URLs verwenden möchten."
 
-#: zp-trunk/zp-core/setup.php:1280
+#: zp-trunk/zp-core/setup.php:1279
 msgid "You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option."
 msgstr "Sie können dies ignorieren, wenn Sie nicht vorhaben <code>mod_rewrite</code> zu verwenden."
 
-#: zp-trunk/zp-core/setup.php:1281
+#: zp-trunk/zp-core/setup.php:1280
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup create the file."
 msgstr "Klicken Sie <a href=\"?copyhtaccess\" >hier</a>, um die Installation die Datei erstellen zu lassen."
 
-#: zp-trunk/zp-core/setup.php:1295
+#: zp-trunk/zp-core/setup.php:1294
 msgid "<em>.htaccess</em> file [wrong version]"
 msgstr "<em>.htaccess</em>-Datei [falsche Version]"
 
-#: zp-trunk/zp-core/setup.php:1296
+#: zp-trunk/zp-core/setup.php:1295
 #, php-format
 msgid "The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."
-msgstr ""
+msgstr "Die <em>.htaccess</em>-Datei in Ihren Zenphoto-Hauptverzeichnis ist nicht die selbe Version wie die in dieser Zenphoto-Version enthaltene. Wenn Sie Änderungen an <em>.htaccess</em> vorgenommen haben, fügen Sie diese Änderungen in die <em>%s/htaccess</em>-Datei ein, um eine neue <em>.htaccess</em>-Datei zu erstellen."
 
-#: zp-trunk/zp-core/setup.php:1298
+#: zp-trunk/zp-core/setup.php:1297
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup replace your <em>.htaccess</em> file with the current version."
-msgstr ""
+msgstr "Klicken Sie  <a href=\"?copyhtaccess\" >hier</a> damit das Installationsskript Ihre <em>.htaccess</em>-Datei mit der aktuellen Version ersetzt."
 
-#: zp-trunk/zp-core/setup.php:1313
+#: zp-trunk/zp-core/setup.php:1312
 #, php-format
 msgid "<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"
 msgstr "<em>.htaccess</em>-Datei (<em>RewriteEngine</em> ist <strong>%s</strong>)"
 
-#: zp-trunk/zp-core/setup.php:1328
+#: zp-trunk/zp-core/setup.php:1327
 msgid "<em>.htaccess</em> RewriteBase [is <em>missing</em>]"
 msgstr "<em>.htaccess</em> RewriteBase [<em>fehlt</em>]"
 
-#: zp-trunk/zp-core/setup.php:1334
+#: zp-trunk/zp-core/setup.php:1333
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code>"
 msgstr "<em>.htaccess</em> RewriteBase ist <code>%s</code>"
 
-#: zp-trunk/zp-core/setup.php:1335
+#: zp-trunk/zp-core/setup.php:1334
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> [Does not match install folder]"
 msgstr "<em>.htaccess</em> RewriteBase ist <code>%s</code> [Stimmt nicht mit dem Installationsordner überein]"
 
-#: zp-trunk/zp-core/setup.php:1345
+#: zp-trunk/zp-core/setup.php:1344
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"
 msgstr "<em>.htaccess</em> RewriteBase ist <code>%s</code> (behoben)"
 
-#: zp-trunk/zp-core/setup.php:1353
+#: zp-trunk/zp-core/setup.php:1352
 msgid "Setup was not able to write to the file change RewriteBase match the install folder."
 msgstr "Setup konnte die Dateiänderung nicht schreiben. Ändern Sie die RewriteBase passend zum Installationsordner."
 
-#: zp-trunk/zp-core/setup.php:1354
+#: zp-trunk/zp-core/setup.php:1353
 #, php-format
 msgid "Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."
 msgstr "Entweder Sie machen die Datei beschreibbar oder Sie setzen die<code>RewriteBase</code> in Ihrer <code>.htaccess</code>-Datei auf <code>%s</code>."
 
-#: zp-trunk/zp-core/setup.php:1359
-#: zp-trunk/zp-core/setup.php:1362
-#: zp-trunk/zp-core/setup.php:1374
+#: zp-trunk/zp-core/setup.php:1358
+#: zp-trunk/zp-core/setup.php:1361
+#: zp-trunk/zp-core/setup.php:1373
 msgid "<em>robots.txt</em> file"
 msgstr "<em>robots.txt</em>-Datei"
 
-#: zp-trunk/zp-core/setup.php:1359
-#: zp-trunk/zp-core/setup.php:1362
-#: zp-trunk/zp-core/setup.php:1374
+#: zp-trunk/zp-core/setup.php:1358
+#: zp-trunk/zp-core/setup.php:1361
+#: zp-trunk/zp-core/setup.php:1373
 msgid "<em>robots.txt</em> file [Not created]"
 msgstr "<em>robots.txt</em>-Dateu [nicht erstellt]"
 
-#: zp-trunk/zp-core/setup.php:1359
+#: zp-trunk/zp-core/setup.php:1358
 msgid "Setup could not find the  <em>example_robots.txt</em> file."
 msgstr "Setup konnte keine<em>example_robots.txt</em>-Datei finden."
 
-#: zp-trunk/zp-core/setup.php:1362
+#: zp-trunk/zp-core/setup.php:1361
 msgid "Setup did not create a <em>robots.txt</em> file because one already exists."
 msgstr "Setup konnte keine<em>robots.txt</em>-Datei erstellen, da die Datei bereits existiert."
 
-#: zp-trunk/zp-core/setup.php:1374
+#: zp-trunk/zp-core/setup.php:1373
 msgid "Setup could not create a <em>robots.txt</em> file."
 msgstr "Setup konnte keine<em>robots.txt</em>-Datei erstellen."
 
-#: zp-trunk/zp-core/setup.php:1379
+#: zp-trunk/zp-core/setup.php:1378
 msgid "albums [<code>$conf['external_album_folder']</code> is deprecated]"
 msgstr "Alben [<code>$conf['external_album_folder']</code> ist veraltet]"
 
-#: zp-trunk/zp-core/setup.php:1379
-#: zp-trunk/zp-core/setup.php:1402
+#: zp-trunk/zp-core/setup.php:1378
+#: zp-trunk/zp-core/setup.php:1401
 msgid "You should update your zp-config.php file to conform to the current zp-config.php.example file."
 msgstr "Sie sollten Ihre zp-config.php-Datein aktualisieren, damit sie der aktuellen zp-config.php.example-Datei entspricht."
 
-#: zp-trunk/zp-core/setup.php:1402
+#: zp-trunk/zp-core/setup.php:1401
 msgid "<em>albums</em> folder"
 msgstr "<em>albums</em>-Ordner"
 
-#: zp-trunk/zp-core/setup.php:1402
+#: zp-trunk/zp-core/setup.php:1401
 msgid "<em>albums</em> folder [The line <code>$conf['album_folder']</code> is missing from your zp-config.php file]"
 msgstr "<em>albums</em>-Ordner [Die Zeile <code>$conf['album_folder']</code> fehlt in Ihrer zp-config.php-Datei]"
 
-#: zp-trunk/zp-core/setup.php:1406
+#: zp-trunk/zp-core/setup.php:1405
 msgid "<em>locale</em> folders"
 msgstr "<em>locale</em>-Ordner"
 
-#: zp-trunk/zp-core/setup.php:1406
+#: zp-trunk/zp-core/setup.php:1405
 msgid "<em>locale</em> folders [Are not complete]"
 msgstr "<em>locale</em>-Ordner [sind nicht vollständig]"
 
-#: zp-trunk/zp-core/setup.php:1406
+#: zp-trunk/zp-core/setup.php:1405
 msgid "Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder."
 msgstr "Stellen Sie sicher, dass sie das komplette Zenphoto-Paket heruntergeladen haben. Sie müssen wenigstens den <em>en_US</em>-Ordner haben."
 
-#: zp-trunk/zp-core/setup.php:1407
+#: zp-trunk/zp-core/setup.php:1406
 msgid "uploaded"
 msgstr "uploaded"
 
-#: zp-trunk/zp-core/setup.php:1409
+#: zp-trunk/zp-core/setup.php:1408
 msgid "HTML cache"
 msgstr "HTML-Cache"
 
-#: zp-trunk/zp-core/setup.php:1410
+#: zp-trunk/zp-core/setup.php:1409
 msgid "Third party plugins"
 msgstr "Drittherstellerplugins"
 
-#: zp-trunk/zp-core/setup.php:1421
+#: zp-trunk/zp-core/setup.php:1420
 msgid "You need to address the problems indicated above then run <code>setup.php</code> again."
 msgstr "Sie müssen die oben aufgeführten Problem beheben und dann <code>setup.php</code> erneut ausführen."
 
-#: zp-trunk/zp-core/setup.php:1424
-#: zp-trunk/zp-core/setup.php:1482
+#: zp-trunk/zp-core/setup.php:1423
+#: zp-trunk/zp-core/setup.php:1481
 msgid "You need <em>USER ADMIN</em> rights to run setup."
 msgstr "Sie müssen über<em>Benutzerverwaltungsrechte</em> verfügen, um setup ausführen zu können."
 
-#: zp-trunk/zp-core/setup.php:1967
+#: zp-trunk/zp-core/setup.php:1966
 msgid "About to create tables"
 msgstr "Bereit, die Tabellen zu erstellen"
 
-#: zp-trunk/zp-core/setup.php:1969
+#: zp-trunk/zp-core/setup.php:1968
 msgid "About to update tables"
 msgstr "Bereit, die Tabellen zu aktualisieren"
 
-#: zp-trunk/zp-core/setup.php:1971
+#: zp-trunk/zp-core/setup.php:1970
 msgid "Begin table creation"
 msgstr "Tabellenerstellung begonnen."
 
-#: zp-trunk/zp-core/setup.php:1976
-#: zp-trunk/zp-core/setup.php:1989
+#: zp-trunk/zp-core/setup.php:1975
+#: zp-trunk/zp-core/setup.php:1988
 #, php-format
 msgid "MySQL Query %1$s Failed. Error: %2$s"
 msgstr "MySQL-Abfrage %1$s fehlgeschlagen. Fehler: %2$s"
 
-#: zp-trunk/zp-core/setup.php:1978
+#: zp-trunk/zp-core/setup.php:1977
 #, php-format
 msgid "Table creation failure: %s"
 msgstr "Tabellenerstellung fehlgeschlagen: %s"
 
-#: zp-trunk/zp-core/setup.php:1981
-#: zp-trunk/zp-core/setup.php:1991
+#: zp-trunk/zp-core/setup.php:1980
+#: zp-trunk/zp-core/setup.php:1990
 #, php-format
 msgid "MySQL Query ( %s ) Success."
 msgstr "MySQL-Abfrage ( %s ) erfolgreich."
 
-#: zp-trunk/zp-core/setup.php:1985
+#: zp-trunk/zp-core/setup.php:1984
 msgid "Begin table updates"
 msgstr "Die Tabellenaktualisierung wird gestartet."
 
-#: zp-trunk/zp-core/setup.php:1996
+#: zp-trunk/zp-core/setup.php:1995
 msgid "Done with database creation and update"
 msgstr "Tabellenaktualisierung abgeschlossen!"
 
-#: zp-trunk/zp-core/setup.php:2000
+#: zp-trunk/zp-core/setup.php:1999
 #, php-format
 msgid "Previous Release was %s"
 msgstr "Die vorige Veröffentlichung war %s"
 
-#: zp-trunk/zp-core/setup.php:2125
+#: zp-trunk/zp-core/setup.php:2124
 msgid "Done with table create!"
 msgstr "Tabellenerstellung abgeschlossen!"
 
-#: zp-trunk/zp-core/setup.php:2127
+#: zp-trunk/zp-core/setup.php:2126
 msgid "Done with table create with errors!"
 msgstr "Tabellenerstellung mit Fehlern abgeschlossen!"
 
-#: zp-trunk/zp-core/setup.php:2131
+#: zp-trunk/zp-core/setup.php:2130
 msgid "Done with table update"
 msgstr "Tabellenaktualisierung abgeschlossen!"
 
-#: zp-trunk/zp-core/setup.php:2133
+#: zp-trunk/zp-core/setup.php:2132
 msgid "Done with table update with errors"
 msgstr "Tabellenaktualisierung mit Fehlern abgeschlossen"
 
-#: zp-trunk/zp-core/setup.php:2148
+#: zp-trunk/zp-core/setup.php:2147
 #, php-format
 msgid "You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"
 msgstr "Sie können entweder Ihren <a href=\"admin-users.php?page=users\">Benutzernamen und Ihr Passwort definieren</a> oder die <a href=\"%s/backup_restore.php\">Backup-Wiederherstellung</a> ausführen"
 
-#: zp-trunk/zp-core/setup.php:2150
+#: zp-trunk/zp-core/setup.php:2149
 msgid "You need to <a href=\"admin-users.php\">set your admin user and password</a>"
 msgstr "Sie müssen Ihren <a href=\"admin-options.php\">Benutzernamen und Ihr Passwort setzen</a>"
 
-#: zp-trunk/zp-core/setup.php:2153
+#: zp-trunk/zp-core/setup.php:2152
 msgid "You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"
 msgstr "Sie können nun <a href=\"../\">Ihre Galerie ansehen</a> oder <a href=\"admin.php\">verwalten</a>."
 
-#: zp-trunk/zp-core/setup.php:2180
+#: zp-trunk/zp-core/setup.php:2179
 #, php-format
 msgid "Database tables to create: %s"
 msgstr "Datenbanktabelle zu erstellen: %s"
 
-#: zp-trunk/zp-core/setup.php:2198
+#: zp-trunk/zp-core/setup.php:2197
 #, php-format
 msgid "Database tables to update: %s"
 msgstr "Datenbanktabelle zu aktualisieren:  %s"
 
-#: zp-trunk/zp-core/setup.php:2226
+#: zp-trunk/zp-core/setup.php:2225
 msgid "create and or update the database tables."
 msgstr "erstellen oder aktualisieren die Datenbanktabellen."
 
-#: zp-trunk/zp-core/setup.php:2226
+#: zp-trunk/zp-core/setup.php:2225
 msgid "Go"
 msgstr "Los"
 
-#: zp-trunk/zp-core/setup.php:2233
+#: zp-trunk/zp-core/setup.php:2232
 msgid "database did not connect"
 msgstr "Die Datenbank konnte keine Verbindung herstellen"
 
-#: zp-trunk/zp-core/setup.php:2235
+#: zp-trunk/zp-core/setup.php:2234
 msgid "If you haven't created the database yet, now would be a good time."
 msgstr "Wenn Sie die Datenbank noch nicht erstellt haben, wäre jetzt der richtige Zeitpunkt."
 
-#: zp-trunk/zp-core/setup.php:2244
+#: zp-trunk/zp-core/setup.php:2243
 msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
 msgstr "Die zp-config.php-Datei existiert nicht. Sie sollten setup.php ausführen, um Ihre Konfiguration zu überprüfen und diese Datei zu erstellen. "
 
@@ -7037,23 +7032,23 @@ msgstr "Neuste Kommentare zu diesem Album RSS "
 msgid "Latest albums RSS"
 msgstr "Neuste Alben RSS "
 
-#: zp-trunk/zp-core/template-functions.php:4007
+#: zp-trunk/zp-core/template-functions.php:4016
 msgid "select search fields"
 msgstr "Wählen Sie die Suchfelder"
 
-#: zp-trunk/zp-core/template-functions.php:4066
+#: zp-trunk/zp-core/template-functions.php:4075
 msgid "no date"
 msgstr "kein Datum"
 
-#: zp-trunk/zp-core/template-functions.php:4330
+#: zp-trunk/zp-core/template-functions.php:4345
 msgid "Check your user and password and try again."
 msgstr "Überprüfen Sie Ihr Benutzer-Passwort und versuchen Sie es erneut."
 
-#: zp-trunk/zp-core/template-functions.php:4337
+#: zp-trunk/zp-core/template-functions.php:4352
 msgid "The page you are trying to view is password protected."
 msgstr "Die Seite, die Sie sehen möchten, ist passwortgeschützt."
 
-#: zp-trunk/zp-core/template-functions.php:4394
+#: zp-trunk/zp-core/template-functions.php:4409
 msgid "Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 msgstr "Betrieben mit <a href=\"http://www.zenphoto.org\" title=\"Eine einfachere Bildgalerie\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 
@@ -8174,11 +8169,11 @@ msgstr "Wiederherstellung ergab Ausnahmen."
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:327
 msgid "The following tables were not restored because the table no longer exists:"
-msgstr ""
+msgstr "Die folgenden Tabellen wurden nicht wiederhergestellt, da die Tabellen nicht mehr existieren:"
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:345
 msgid "The following fields were not restored because the field no longer exists:"
-msgstr ""
+msgstr "Die folgenden Felder wurden nicht wiederhergestellt, da die Felder nicht mehr existieren:"
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:365
 msgid "Restore failed"
@@ -8242,11 +8237,11 @@ msgstr "Die Backup-Funktion erstellt Datenbank-Schnappschüße im <code>backup</
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:465
 msgid "You restore your database by selecting a backup and pressing the <em>Restore the Database</em> button. <strong>Note</strong>: Each database table is emptied before the restore is attempted. After a successful restore the database will be in the same state as when the backup was created."
-msgstr ""
+msgstr "Sie stellen Ihre Datenbank wieder her, indem Sie eine Backupdatei auswählen und auf die<em>Datenbank wiederherstellen</em>-Schaltfläche klicken. <strong>Anmerkung</strong>: Jede Datenbank wird geleert bevor eine Wiederherstellung versucht wird. Nach einer erfolgreichen Wiederherstellung wird die Datenbank den selben Zustand wie zum Zeitpunkt der Backuperstellung."
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:467
 msgid "Ideally a restore should be done only on the same version of Zenphoto on which the backup was created. If you are intending to upgrade, first do the restore on the version of Zenphoto you were running, then install the new Zenphoto. If this is not possible the restore can still be done, but if the database fields have changed between versions, data from changed fields will not be restored."
-msgstr ""
+msgstr "Eine Wiederherstellung sollte idealerweise mit der selben Version von Zenphoto ausgeführt werden, mit der das Backup erstellt wurde. Wenn Sie vorhaben eine Aktualisierung von Zenphoto auszuführen, stellen Sie zunächst die Zenphoto-Version wieder her, die Sie derzeit haben, und installieren dann die neue Version. Wenn dies nicht möglich sein sollte, kann die Wiederherstellung dennoch ausgeführt werden, wenn sich jedoch Datenbankfelder zwischen den Versionen geändert haben sollten, wird der Inhalt der geänderten Felder nicht wiederhergestellt."
 
 #: zp-trunk/zp-core/utilities/gallery_statistics.php:24
 #: zp-trunk/zp-core/utilities/gallery_statistics.php:404
@@ -8442,7 +8437,7 @@ msgstr "Albumthumbnails zurücksetzen"
 
 #: zp-trunk/zp-core/utilities/reset_albumthumbs.php:20
 #, php-format
-msgid "Reset album thumbnails to either \"random or \"%s\""
+msgid "Reset album thumbnails to either random or %s"
 msgstr "Alle Albumthumbnails auf entweder \"zufällig\" oder \"%s\" zurücksetzen."
 
 #: zp-trunk/zp-core/utilities/reset_albumthumbs.php:41
@@ -10326,7 +10321,7 @@ msgstr "E-Mail-Benachrichtigungstext"
 #: zp-trunk/zp-core/zp-extensions/register_user.php:46
 #, php-format
 msgid "Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear."
-msgstr ""
+msgstr "Text für die E-Mail, die an den Benutzer gesendet wird. <strong>ANMERKUNG</strong>: Sie müssen  <code>%s</code> in Ihre Nachricht  dort einfügen, wo der Link zur Abschließen der Registrierung erscheinen soll. "
 
 #: zp-trunk/zp-core/zp-extensions/register_user.php:47
 msgid "User registration page"
@@ -11934,6 +11929,8 @@ msgstr "Album %s ansehen"
 msgid "View %s"
 msgstr "%s ansehen"
 
+#~ msgid "Albums (%s"
+#~ msgstr "Alben (%s"
 #~ msgid "Images per page:"
 #~ msgstr "Bilder pro Seite:"
 #~ msgid ""
