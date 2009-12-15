@@ -5,7 +5,7 @@
  * Enable this filter to scan images (or xmp sidecar files) for metadata.
  * 
  * Relevant metadata found will be incorporated into the image (or album object)
- * see “IPTC Core” Schema for XMP http://xml.coverpages.org/IPTC-CoreSchema200503-XMPSchema8.pdf
+ * see “Adobe XMP Specification" http://www.aiim.org/documents/standards/xmpspecification.pdf
  * for xmp metadata description. This plugin attempts to map the xmp metadata to IPTC fields
  * 
  * If a sidecar file exists, it will take precedence (the image file will not be
@@ -99,7 +99,8 @@ class xmpMetadata_options {
  */
 function xmpMetadata_extract($xmpdata) {
 	$desiredtags = array(
-		'EXIFLensInfo'					=>	'<aux:Lens>',
+		'EXIFLensType'					=>	'<aux:Lens>',
+		'EXIFLensInfo'					=>	'<aux:LensInfo>',
 		'EXIFArtist'						=>	'<dc:creator>',
 		'IPTCCopyright'					=>	'<dc:rights>',
 		'EXIFDescription'				=>	'<dc:description>',
@@ -112,10 +113,14 @@ function xmpMetadata_extract($xmpdata) {
 		'EXIFISOSpeedRatings'		=>	'<exif:ISOSpeedRatings>',
 		'EXIFDateTimeOriginal'	=>	'<exif:DateTimeOriginal>',
 		'EXIFExposureBiasValue'	=>	'<exif:ExposureBiasValue>',
+		'EXIFGPSLatitude'				=>	'<exif:GPSLatitude>',
+		'EXIFGPSLongitude'			=>	'<exif:GPSLongitude>',
+		'EXIFGPSAltitude'				=>	'<exif:GPSAltitude>',
 		'EXIFMeteringMode'			=>	'<exif:MeteringMode>',
 		'EXIFFocalLength'				=>	'<exif:FocalLength>',
 		'EXIFContrast'					=>	'<exif:Contrast>',
 		'EXIFSharpness'					=>	'<exif:Sharpness>',
+		'EXIFExposureTime'			=>	'<exif:ShutterSpeedValue>',
 		'EXIFSaturation'				=>	'<exif:Saturation>',
 		'EXIFWhiteBalance'			=>	'<exif:WhiteBalance>',
 		'IPTCLocationCode' 			=>	'<Iptc4xmpCore:CountryCode>',
@@ -160,6 +165,21 @@ function xmpMetadata_extract($xmpdata) {
 					}
 				}
 				$xmp_parsed[$key] = $elements;
+			}
+		} else {	// look for shorthand elements
+			if (strpos($tag,'<rdf:Description')!==false) {
+				$meta = substr($tag, 17);	// strip off the description tag leaving the elements
+				while (preg_match('/^[a-zA-z0-9_]+\:[a-zA-z0-9_]+\=".*"/', $meta, $element)) {
+						$item = $element[0];
+						$meta = trim(substr($meta, strlen($item)));
+						$i = strpos($item,'=');
+						$tag = '<'.substr($item,0,$i).'>';
+						$v = substr($item,$i+2,-1);
+						$key = array_search($tag,$desiredtags);
+						if ($key !== false) {
+							$xmp_parsed[$key] = $v;
+						}
+					}
 			}
 		}
 	}
@@ -311,6 +331,18 @@ function xmpMetadata_new_image($image) {
 					}
 					if (substr($v,$i,1)=='.') $i--;
 					$v = substr($v,0,$i+1);
+					break;
+				case 'EXIFGPSLatitude':
+				case 'EXIFGPSLongitude':
+				case 'EXIFGPSAltitude':
+					$ref = substr($element,-1,1);
+					$image->set($field.'Ref', $ref);
+					$element = substr($element,0,-1);
+					$n = explode(',',$element);
+					if (count($n)==3) {
+						$n[1] = $n[1].round($n[2]/60,4);
+					}
+					$v = $n[0].'.'.round($n[1]/60,10);
 					break;
 				case 'IPTCKeywords':
 					$image->setTags($element);
