@@ -196,7 +196,7 @@ printSubtabs($_current_tab, 'users');
 				echo  "<h2>".gettext('User name not provided')."</h2>";
 				break;
 			case 'format':
-				echo '<h2>'.urldecode(sanitize($_GET['error'])).'</h2>';
+				echo '<h2>'.urldecode(sanitize($_GET['error'],2)).'</h2>';
 				break;
 			default:
 				echo  "<h2>".gettext('Your passwords did not match')."</h2>";

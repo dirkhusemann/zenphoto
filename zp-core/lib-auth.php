@@ -102,19 +102,25 @@ function validatePassword($pass) {
 	}
 	$p = getOption('password_pattern');
 	if (!empty($p)) {
+		$strong = false;
 		$p = str_replace('\|', "\t", $p);	
 		$patterns = explode('|', $p);
+		$p2 = '';
 		foreach ($patterns as $pat) {
 			$pat = trim(str_replace("\t", '|', $pat));
 			if (!empty($pat)) {
+				$p2 .= '{<em>'.$pat.'</em>}, ';
 				if (preg_match('/[0-9A-Za-z]-[0-90-9A-Za-z]/', $pat)) {
 					$patrn = $pat;
 				} else {
 					$patrn = addcslashes($pat,'\\/.()[]^-');
 				}
-				if (!preg_match('/(['.$patrn.'])/', $pass)) return sprintf(gettext('Password must contain at least one of <em>%s</em>'), $pat);
-			}		
+				if (preg_match('/(['.$patrn.'])/', $pass)) {
+					$strong = true;
+				}
+			}
 		}
+		if (!$strong)	return sprintf(gettext('Password must contain at least one of %s'), substr($p2,0,-2));
 	}
 	return false;
 }
