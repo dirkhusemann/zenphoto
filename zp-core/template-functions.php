@@ -3470,17 +3470,24 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			}
 			$ct = count($singletag);
 			$x = 0;
+			if (getOption('search_space_is_or')) {
+				$match = "/[ &|!'\"`,()]/";
+			} else {
+				$match = "/[&|!'\"`,()]/";
+			}
 			foreach ($singletag as $atag) {
-				if (preg_match("/[ &|!'\"`,()]/",$atag)) {
+				if (preg_match($match,$atag)) {
 					if (strpos($atag,'"')===false) {
-						$atag = '"'.$atag.'"';
+						$latag = '"'.$atag.'"';
 					} else {
-						$quote = "'".$atag."'";
+						$latag = "'".$atag."'";
 					}
+				} else {
+					$ltag = $atag;
 				}
 				if (++$x == $ct) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0, $albumlist))."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($latag, '', 'tags', 0, 0, $albumlist))."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.$atag.$links2.$separator."</li>\n";
@@ -3547,7 +3554,12 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 				} else {
 					$albumlist = NULL;
 				}
-				if (preg_match("/[ &|!'\"`,()]/",$key)) {
+				if (getOption('search_space_is_or')) {
+					$match = "/[ &|!'\"`,()]/";
+				} else {
+					$match = "/[&|!'\"`,()]/";
+				}
+				if (preg_match($match,$key)) {
 					if (strpos($key,'"')===false) {
 						$quote = '"';
 					} else {

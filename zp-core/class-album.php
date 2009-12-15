@@ -35,7 +35,7 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
-			debugLogBacktrace('Bad gallery in instantiation of album '.$folder8);			
+			debugLogBacktrace('Bad gallery in instantiation of album '.$folder8);
 			$gallery = new Gallery();
 		}
 		$folder8 = sanitize_path($folder8);
@@ -63,7 +63,7 @@ class Album extends PersistentObject {
 		$this->localpath = $localpath;
 		$this->name = $folder8;
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder8));
-		
+
 		if (hasDynamicAlbumSuffix($folder8)) {
 			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
 				$data = file_get_contents($this->localpath);
@@ -114,6 +114,8 @@ class Album extends PersistentObject {
 	function setDefaults() {
 		// Set default data for a new Album (title and parent_id)
 		$parentalbum = $this->getParent();
+		$this->set('mtime', filemtime($this->localpath));
+		$this->setDateTime(strftime('%Y-%m-%d %T', $this->get('mtime')));
 		$title = trim($this->name);
 		if (!is_null($parentalbum)) {
 			$this->set('parentid', $parentalbum->getAlbumId());
@@ -622,7 +624,7 @@ class Album extends PersistentObject {
 				$loop = 0;
 			}
 		} while ($loop==1);
-		
+
 		$images = array_flip($images_to_keys);
 		ksort($images);
 		$images_ordered = array();
@@ -998,7 +1000,7 @@ class Album extends PersistentObject {
 	function renameAlbum($newfolder) {
 		return $this->moveAlbum($newfolder);
 	}
-	
+
 	/**
 	 * returns the SQL to insert a row like $subrow into $table
 	 *
@@ -1108,7 +1110,7 @@ class Album extends PersistentObject {
 				$allsuccess = true;
 				foreach ($result as $subrow) {
 					$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, $subrow['folder'] == $oldfolder);
-					
+
 					if ($success) {
 						$oldID = $subrow['id'];
 						$newID = mysql_insert_id();
@@ -1123,7 +1125,7 @@ class Album extends PersistentObject {
 							}
 						}
 					}
-					
+
 					if (!($success == true && mysql_affected_rows() == 1)) {
 						$allsuccess = false;
 					}
@@ -1305,7 +1307,7 @@ class Album extends PersistentObject {
 	 */
 	function getComments($moderated=false, $private=false, $desc=false) {
 		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") .
- 			" WHERE `type`='albums' AND `ownerid`='" . $this->id . "'";
+			" WHERE `type`='albums' AND `ownerid`='" . $this->id . "'";
 		if (!$moderated) {
 			$sql .= " AND `inmoderation`=0";
 		}
@@ -1387,7 +1389,7 @@ class Album extends PersistentObject {
 
 	/**
 	 * Returns the search parameters for a dynamic album
-	 * 
+	 *
 	 * @param bool $processed set false to process the parms
 	 *
 	 * @return string
