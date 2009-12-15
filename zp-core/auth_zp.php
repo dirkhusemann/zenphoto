@@ -42,7 +42,7 @@ if (isset($_GET['ticket'])) { // password reset query
 
 // we have the ssl marker cookie, normally we are already logged in
 // but we need to redirect to ssl to retrive the auth cookie (set as secure).
-if (zp_getCookie('zenphoto_ssl') && !isset($_SERVER['HTTPS'])) {
+if (zp_getCookie('zenphoto_ssl') && !secureServer()) {
 	$redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 	header("Location:$redirect");
 	exit();
@@ -65,11 +65,11 @@ if (!isset($_POST['login'])) {
 		$_zp_loggedin = zp_apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
 		if ($_zp_loggedin) {
 			// https: set the 'zenphoto_ssl' marker for redirection
-			if(isset($_SERVER['HTTPS'])) {
+			if(secureServer()) {
 				zp_setcookie("zenphoto_ssl", "needed", time()+COOKIE_PESISTENCE, $cookiepath);
 			}
 			// set cookie as secure when in https
-			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath, isset($_SERVER['HTTPS']));
+			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath, secureServer());
 			if (!empty($redirect)) {
 				if (substr($redirect,0,1) != '/') $redirect = '/'.$redirect;
 				header("Location: " . FULLWEBPATH . $redirect);

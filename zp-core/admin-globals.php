@@ -8,7 +8,7 @@
 
 if (session_id() == '') {
 	// force session cookie to be secure when in https
-	if(isset($_SERVER['HTTPS'])) {
+	if(secureServer()) {
 		$CookieInfo=session_get_cookie_params();
 		session_set_cookie_params($CookieInfo['lifetime'],$CookieInfo['path'], $CookieInfo['domain'],TRUE);
 	}

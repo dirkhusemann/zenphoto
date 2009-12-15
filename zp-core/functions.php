@@ -33,7 +33,7 @@ require_once(dirname(__FILE__).'/functions-i18n.php');
 
 if (getOption('album_session') && session_id() == '') {
 	// force session cookie to be secure when in https
-	if(isset($_SERVER['HTTPS'])) {
+	if(secureServer()) {
 		$CookieInfo=session_get_cookie_params();
 		session_set_cookie_params($CookieInfo['lifetime'],$CookieInfo['path'], $CookieInfo['domain'],TRUE);
 	}
@@ -1900,11 +1900,11 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		if ($_zp_loggedin) $_zp_loggedin = zp_apply_filter('guest_login_attempt', $_zp_loggedin, $post_user, $post_pass, 'zp_admin_auth');
 		if ($_zp_loggedin) {	// allow Admin user login
 			// https: set the 'zenphoto_ssl' marker for redirection
-			if(isset($_SERVER['HTTPS'])) {
+			if(secureServer()) {
 				zp_setcookie("zenphoto_ssl", "needed", time()+COOKIE_PESISTENCE, $cookiepath);
 			}
 			// set cookie as secure when in https
-			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath, isset($_SERVER['HTTPS']));
+			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath, secureServer());
 			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
 				header("Location: " . FULLWEBPATH . "/" . $redirect_to);
 				exit();

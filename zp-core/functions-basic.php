@@ -116,7 +116,7 @@ switch ($protocol) {
 	define('PROTOCOL', $protocol);
 	break;
 	default:
-	if(isset($_SERVER['HTTPS'])) {
+	if(secureServer()) {
 		define('PROTOCOL', 'https');
 	} else {
 		define('PROTOCOL', 'http');
@@ -1182,5 +1182,17 @@ function zp_escape_string($string) {
 	return mysql_real_escape_string($string,$mysql_connection);
 }
 
+/**
+ * Checks to see if access was through a secure protocol
+ * 
+ * @return vool
+ */
+function secureServer() {
+	if(isset($_SERVER['HTTPS'])) {	
+		if (!$_SERVER['HTTPS'] || strtolower($_SERVER['HTTPS'])=='off') return false;
+		return true;
+	}
+	return false;
+}
 
 ?>
