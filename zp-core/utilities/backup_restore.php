@@ -318,7 +318,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 	if (!empty($missing_table) || !empty($missing_element)) {
 		?>
 		<div class="warningbox">
-			<h2><?php echo gettext("Restore had exceptions"); ?></h2>
+			<h2><?php echo gettext("Restore encountered exceptions"); ?></h2>
 			<?php
 			if (!empty($missing_table)) {
 				?>

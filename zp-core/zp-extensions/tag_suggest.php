@@ -26,7 +26,7 @@ foreach ($taglist AS $tag) {
 $js = '<script type="text/javascript">'."\n".
 			'var _tagList = ['.$list."];\n".
 			"$(function () {\n".
-				"$('#search_input, #edit-editable_4').tagSuggest({ tags: _tagList });\n".
+				"$('#search_input, #edit-editable_4').tagSuggest({ separator:'".(getOption('search_space_is_or')?' ':',')."', tags: _tagList });\n".
 			"});\n".
 		'</script>';
 addPluginScript($js);
