@@ -449,8 +449,6 @@ class SearchEngine
 					case '!':
 						$sanitizedwords .= " NOT ";
 						break;
-					case '!':
-					case '|':
 					case '(':
 					case ')':
 						$sanitizedwords .= " $singlesearchstring ";
