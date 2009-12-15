@@ -3483,7 +3483,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 						$latag = "'".$atag."'";
 					}
 				} else {
-					$ltag = $atag;
+					$latag = $atag;
 				}
 				if (++$x == $ct) { $separator = ""; }
 				if ($option === "links") {
