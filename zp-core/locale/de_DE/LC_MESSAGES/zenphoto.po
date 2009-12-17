@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zenphoto 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-14 20:04+0100\n"
-"PO-Revision-Date: 2009-12-14 20:19+0100\n"
+"POT-Creation-Date: 2009-12-16 15:58+0100\n"
+"PO-Revision-Date: 2009-12-16 15:59+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -1433,7 +1433,7 @@ msgstr "Suchkriterium:"
 msgid "Search fields:"
 msgstr "Suchfelder:"
 
-#: zp-trunk/zp-core/admin-dynamic-album.php:208
+#: zp-trunk/zp-core/admin-dynamic-album.php:212
 msgid "Create the album"
 msgstr "Album erstellen"
 
@@ -2348,7 +2348,7 @@ msgstr "Gesichert"
 #: zp-trunk/zp-core/admin-options.php:2084
 #: zp-trunk/zp-core/admin-options.php:2154
 #: zp-trunk/zp-core/admin-plugins.php:80
-#: zp-trunk/zp-core/admin-plugins.php:220
+#: zp-trunk/zp-core/admin-plugins.php:223
 #: zp-trunk/zp-core/admin-users.php:236
 msgid "save"
 msgstr "Sichern"
@@ -3498,15 +3498,15 @@ msgstr "<strong>Fehler beim Einlesen der <em>plugin_URL</em>-Zeichenkette!</stro
 msgid "<strong>Error parsing <em>plugin_disable</em> string!</strong> Try removing semicolons from string."
 msgstr "<strong>Fehler beim Einlesen von <em>plugin_disable</em></strong>! Versuchen Sie Semikolons von der Zeichenkette zu entfernen."
 
-#: zp-trunk/zp-core/admin-plugins.php:190
+#: zp-trunk/zp-core/admin-plugins.php:193
 msgid "Usage information"
 msgstr "Bedienungsanleitung"
 
-#: zp-trunk/zp-core/admin-plugins.php:200
+#: zp-trunk/zp-core/admin-plugins.php:203
 msgid "Author"
 msgstr "Autor"
 
-#: zp-trunk/zp-core/admin-plugins.php:208
+#: zp-trunk/zp-core/admin-plugins.php:211
 msgid "Change plugin options"
 msgstr "Plugin-Einstellungen ändern"
 
@@ -4467,12 +4467,12 @@ msgstr "Wenn Sie Ihr Passwort nicht zurücksetzen wollen, ignorieren Sie einfach
 msgid "The Zenphoto information you requested"
 msgstr "Die Zenphoto-Information, die Sie angefordert haben"
 
-#: zp-trunk/zp-core/class-album.php:1246
+#: zp-trunk/zp-core/class-album.php:1257
 #, php-format
 msgid "Error: The album named %s cannot be found."
 msgstr "Fehler: Das Album %s wurde nicht gefunden."
 
-#: zp-trunk/zp-core/class-album.php:1248
+#: zp-trunk/zp-core/class-album.php:1259
 #, php-format
 msgid "Error: The album %s is not readable."
 msgstr "Fehler: Das Album %s ist nicht lesbar."
@@ -4497,47 +4497,47 @@ msgstr "Unbekannt"
 msgid "<strong>Missing theme info file!</strong>"
 msgstr "<strong>Die Theme-Infodatei fehlt!</strong>"
 
-#: zp-trunk/zp-core/class-search.php:40
+#: zp-trunk/zp-core/class-search.php:41
 msgid "File/Folder name"
 msgstr "Datei-/Ordnername"
 
-#: zp-trunk/zp-core/class-search.php:42
+#: zp-trunk/zp-core/class-search.php:43
 msgid "Custom data"
 msgstr "Benutzerdefinierte Daten:"
 
-#: zp-trunk/zp-core/class-search.php:43
+#: zp-trunk/zp-core/class-search.php:44
 msgid "Location/Place"
 msgstr "Ort/Platz"
 
-#: zp-trunk/zp-core/class-search.php:44
+#: zp-trunk/zp-core/class-search.php:45
 msgid "City"
 msgstr "Stadt"
 
-#: zp-trunk/zp-core/class-search.php:45
+#: zp-trunk/zp-core/class-search.php:46
 msgid "State"
 msgstr "Land"
 
-#: zp-trunk/zp-core/class-search.php:46
+#: zp-trunk/zp-core/class-search.php:47
 msgid "Country"
 msgstr "Staat"
 
-#: zp-trunk/zp-core/class-search.php:47
+#: zp-trunk/zp-core/class-search.php:48
 msgid "Copyright"
 msgstr "Copyright"
 
-#: zp-trunk/zp-core/class-search.php:49
+#: zp-trunk/zp-core/class-search.php:50
 msgid "Content"
 msgstr "Inhalt"
 
-#: zp-trunk/zp-core/class-search.php:50
+#: zp-trunk/zp-core/class-search.php:51
 msgid "ExtraContent"
 msgstr "Extrainhalt"
 
-#: zp-trunk/zp-core/class-search.php:52
+#: zp-trunk/zp-core/class-search.php:53
 msgid "Last Editor"
 msgstr "Letzter Bearbeiter"
 
-#: zp-trunk/zp-core/class-search.php:53
+#: zp-trunk/zp-core/class-search.php:54
 msgid "TitleLink"
 msgstr "Titellink"
 
@@ -5398,47 +5398,47 @@ msgstr "Mailversand gescheitert. Es ist keine Mailfunktionalität konfiguriert."
 msgid "Mail send failed. The \"to\" list is empty."
 msgstr "Mailversand gescheitert. Die \"to\"-Liste ist leer."
 
-#: zp-trunk/zp-core/functions.php:920
+#: zp-trunk/zp-core/functions.php:917
 #, php-format
 msgid "A comment has been placed in moderation on your album \"%1$s\"."
 msgstr "Ihr Kommentar wurde im Album \"%1$s\" zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/functions.php:922
+#: zp-trunk/zp-core/functions.php:919
 #, php-format
 msgid "A comment has been posted on your album \"%1$s\"."
 msgstr "Es wurde ein Kommentar zu Ihrem Album \"%1$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:928
+#: zp-trunk/zp-core/functions.php:925
 #, php-format
 msgid "A comment has been placed in moderation on your article \"%1$s\"."
 msgstr "Ihr Kommentar zur Ihrem Artikel \"%1$s\" wurde zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/functions.php:930
+#: zp-trunk/zp-core/functions.php:927
 #, php-format
 msgid "A comment has been posted on your article \"%1$s\"."
 msgstr "Ihr Kommentar wurde zum Artikel \"%1$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:936
+#: zp-trunk/zp-core/functions.php:933
 #, php-format
 msgid "A comment has been placed in moderation on your page \"%1$s\"."
 msgstr "Ihr Kommentar zur Seite \"%1$s\" wurde zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/functions.php:938
+#: zp-trunk/zp-core/functions.php:935
 #, php-format
 msgid "A comment has been posted on your page \"%1$s\"."
 msgstr "Ihr Kommentar wurde zur Seite \"%1$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:946
+#: zp-trunk/zp-core/functions.php:943
 #, php-format
 msgid "A comment has been placed in moderation on your image \"%1$s\" in the album \"%2$s\"."
 msgstr "Ein Kommentar zu Ihrem Bild \"%1$s\" im Album \"%2$s\" wartet auf Moderation."
 
-#: zp-trunk/zp-core/functions.php:948
+#: zp-trunk/zp-core/functions.php:945
 #, php-format
 msgid "A comment has been posted on your image \"%1$s\" in the album \"%2$s\"."
 msgstr "Es wurde ein Kommentar zu Ihrem Bild \"%1$s\" im Album \"%2$s\" abgegeben."
 
-#: zp-trunk/zp-core/functions.php:954
+#: zp-trunk/zp-core/functions.php:951
 #, php-format
 msgid ""
 "Author: %1$s\n"
@@ -5455,7 +5455,7 @@ msgstr ""
 "\n"
 "%4$s"
 
-#: zp-trunk/zp-core/functions.php:955
+#: zp-trunk/zp-core/functions.php:952
 #, php-format
 msgid ""
 "You can view all comments about this item here:\n"
@@ -5464,7 +5464,7 @@ msgstr ""
 "Sie können alle Kommentare dazu hier ansehen:\n"
 "%1$s"
 
-#: zp-trunk/zp-core/functions.php:956
+#: zp-trunk/zp-core/functions.php:953
 #, php-format
 msgid ""
 "You can edit the comment here:\n"
@@ -5473,33 +5473,33 @@ msgstr ""
 "Sie können den Kommentare hier bearbeiten:\n"
 "%1$s"
 
-#: zp-trunk/zp-core/functions.php:979
+#: zp-trunk/zp-core/functions.php:976
 msgid "Comment posted"
 msgstr "Kommentar gesendet"
 
-#: zp-trunk/zp-core/functions.php:1137
+#: zp-trunk/zp-core/functions.php:1134
 #, php-format
 msgid "Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation."
 msgstr "Zenphoto hat keine Themedateien gefunden. Bitte überprüfen Sie den <em>%s</em>Ordner Ihrer Installation."
 
-#: zp-trunk/zp-core/functions.php:1503
+#: zp-trunk/zp-core/functions.php:1500
 msgid "Unknown name"
 msgstr "Unbekannter Name"
 
-#: zp-trunk/zp-core/functions.php:1503
+#: zp-trunk/zp-core/functions.php:1500
 msgid "Unknown author"
 msgstr "Unbekannter Autor"
 
-#: zp-trunk/zp-core/functions.php:1503
-#: zp-trunk/zp-core/functions.php:1511
+#: zp-trunk/zp-core/functions.php:1500
+#: zp-trunk/zp-core/functions.php:1508
 msgid "<strong>Theme description error!</strong>"
 msgstr "<strong>Theme-Beschreibungsfehler!</strong>"
 
-#: zp-trunk/zp-core/functions.php:1503
+#: zp-trunk/zp-core/functions.php:1500
 msgid "Unknown date"
 msgstr "Unbekanntes Datum"
 
-#: zp-trunk/zp-core/functions.php:1536
+#: zp-trunk/zp-core/functions.php:1533
 #, php-format
 msgid "Page access %2$s (%1$s)"
 msgstr "Seitenzugriff  %2$s (%1$s)"
@@ -5557,56 +5557,56 @@ msgstr "Verwalten"
 msgid "Password must be at least %u characters"
 msgstr "Ein Passwort muß mindestens aus %u Zeichen bestehen"
 
-#: zp-trunk/zp-core/lib-auth.php:115
+#: zp-trunk/zp-core/lib-auth.php:123
 #, php-format
-msgid "Password must contain at least one of <em>%s</em>"
-msgstr "Das Passwort muß mindestens eines von <em>%s</em> enthalten."
+msgid "Password must contain at least one of %s"
+msgstr "Das Passwort muß mindestens eine Zeichen aus %s enthalten."
 
-#: zp-trunk/zp-core/lib-auth.php:146
+#: zp-trunk/zp-core/lib-auth.php:152
 #, php-format
 msgid "<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s."
 msgid_plural "<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s."
 msgstr[0] "<strong>Anmerkung</strong>: Passwörter müssen mindestens  %1$u Zeichen lang sein und mindestens eine Zeichen aus  %2$s enthalten."
 msgstr[1] "<strong>Anmerkung</strong>: Passwörter müssen mindestens  %1$u Zeichen lang sein und mindestens eine Zeichen aus einer der folgenden Gruppen enthalten:  %2$s."
 
-#: zp-trunk/zp-core/lib-auth.php:149
+#: zp-trunk/zp-core/lib-auth.php:155
 #, php-format
 msgid "<strong>Note</strong>: passwords must contain at least one character from %s."
 msgid_plural "<strong>Note</strong>: passwords must contain at least one character from each of the following groups: %s."
 msgstr[0] "<strong>Anmerkung:</strong> Passwörter müssen mindestens ein Zeichen aus %s enthalten."
 msgstr[1] "<strong>Anmerkung:</strong> Passwörter müssen mindestens ein Zeichen aus jeder der folgenden Gruppen enthalten: %s."
 
-#: zp-trunk/zp-core/lib-auth.php:154
+#: zp-trunk/zp-core/lib-auth.php:160
 #, php-format
 msgid "<strong>Note</strong>: passwords must be at least %u characters long."
 msgstr "<strong>Anmerkung</strong>: Passwörter müssen mindestens  %u Zeichen lang sein."
 
-#: zp-trunk/zp-core/lib-auth.php:361
+#: zp-trunk/zp-core/lib-auth.php:367
 #, php-format
 msgid "Migrating lib-auth data version %1$s => version %2$s"
 msgstr "Übertrage lib-auth Datenversion %1$s => version %2$s"
 
-#: zp-trunk/zp-core/lib-auth.php:507
+#: zp-trunk/zp-core/lib-auth.php:513
 msgid "Augment password hash:"
 msgstr "Passwortverschlüsselung erweitern:"
 
-#: zp-trunk/zp-core/lib-auth.php:508
+#: zp-trunk/zp-core/lib-auth.php:514
 msgid "Extra text appended when hashing password to strengthen Zenphoto authentication. <strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text."
 msgstr "Zusatztext, der beim Generieren des Passworts gehängt wird, um die Sicherheit der Authentifizierung zu verstärken. <strong>ANMERKUNG:</strong> Wenn Sie dies ändern, müssne alle Benutzer ihre Passworte zurücksetzen! Sie sollten umgehend Ihr Passwort ändern, wenn Sie diesen Text ändern."
 
-#: zp-trunk/zp-core/lib-auth.php:509
+#: zp-trunk/zp-core/lib-auth.php:515
 msgid "Minimum password length:"
 msgstr "Minimallänge des Passworts:"
 
-#: zp-trunk/zp-core/lib-auth.php:510
+#: zp-trunk/zp-core/lib-auth.php:516
 msgid "Minimum number of characters a password must contain."
 msgstr "Minimum an Zeichen, die ein Passwort enthalten muß."
 
-#: zp-trunk/zp-core/lib-auth.php:511
+#: zp-trunk/zp-core/lib-auth.php:517
 msgid "Password characters:"
 msgstr "Password-Zeichen:"
 
-#: zp-trunk/zp-core/lib-auth.php:512
+#: zp-trunk/zp-core/lib-auth.php:518
 msgid "Passwords must contain at least one of the characters from each of the groups. Groups are separated by \"|\". (Use \"\\|\" to represent the \"|\" character in the groups.)"
 msgstr "Passwörter müssen mindestens ein Zeichen jeder Gruppen enthalten. Gruppen sind unterteilt durch \"|\". (Verwenden Sie \"\\|\" für das \"|\" Zeichen in den Gruppe.)"
 
@@ -6927,128 +6927,128 @@ msgstr "Seite hinzufügen"
 msgid "Logout"
 msgstr "Abmelden"
 
-#: zp-trunk/zp-core/template-functions.php:694
-#: zp-trunk/zp-core/template-functions.php:743
+#: zp-trunk/zp-core/template-functions.php:679
+#: zp-trunk/zp-core/template-functions.php:728
 msgid "Previous Page"
 msgstr "Vorherige Seite"
 
-#: zp-trunk/zp-core/template-functions.php:696
-#: zp-trunk/zp-core/template-functions.php:773
+#: zp-trunk/zp-core/template-functions.php:681
+#: zp-trunk/zp-core/template-functions.php:758
 msgid "Next Page"
 msgstr "Nächste Seite"
 
-#: zp-trunk/zp-core/template-functions.php:758
+#: zp-trunk/zp-core/template-functions.php:743
 msgid "(Current Page)"
 msgstr "(Aktuelle Seite)"
 
-#: zp-trunk/zp-core/template-functions.php:843
-#: zp-trunk/zp-core/template-functions.php:1878
+#: zp-trunk/zp-core/template-functions.php:828
+#: zp-trunk/zp-core/template-functions.php:1862
 msgid "(No title...)"
 msgstr "(Kein Titel...)"
 
-#: zp-trunk/zp-core/template-functions.php:915
+#: zp-trunk/zp-core/template-functions.php:899
 msgid "Album Thumbnails"
 msgstr "Albumthumbnails"
 
-#: zp-trunk/zp-core/template-functions.php:1071
-#: zp-trunk/zp-core/template-functions.php:1962
+#: zp-trunk/zp-core/template-functions.php:1055
+#: zp-trunk/zp-core/template-functions.php:1946
 msgid "(No date...)"
 msgstr "(Kein Datum...)"
 
-#: zp-trunk/zp-core/template-functions.php:1097
+#: zp-trunk/zp-core/template-functions.php:1081
 msgid "(No Locatrion...)"
 msgstr "(Kein Ort...)"
 
-#: zp-trunk/zp-core/template-functions.php:1132
-#: zp-trunk/zp-core/template-functions.php:2046
+#: zp-trunk/zp-core/template-functions.php:1116
+#: zp-trunk/zp-core/template-functions.php:2030
 msgid "(No description...)"
 msgstr "(Keine Beschreibung...)"
 
-#: zp-trunk/zp-core/template-functions.php:1156
-#: zp-trunk/zp-core/template-functions.php:1178
+#: zp-trunk/zp-core/template-functions.php:1140
+#: zp-trunk/zp-core/template-functions.php:1162
 msgid "printEditable() incomplete function call."
 msgstr "printEditable() unvollständiger Funktionsaufruf."
 
-#: zp-trunk/zp-core/template-functions.php:1191
+#: zp-trunk/zp-core/template-functions.php:1175
 msgid "(...)"
 msgstr "(...)"
 
-#: zp-trunk/zp-core/template-functions.php:1234
-#: zp-trunk/zp-core/template-functions.php:1274
-#: zp-trunk/zp-core/template-functions.php:2109
+#: zp-trunk/zp-core/template-functions.php:1218
+#: zp-trunk/zp-core/template-functions.php:1258
+#: zp-trunk/zp-core/template-functions.php:2093
 msgid "(No data...)"
 msgstr "(Keine Daten...)"
 
-#: zp-trunk/zp-core/template-functions.php:2358
+#: zp-trunk/zp-core/template-functions.php:2342
 msgid "(No data)"
 msgstr "(Keine Daten)"
 
-#: zp-trunk/zp-core/template-functions.php:2942
+#: zp-trunk/zp-core/template-functions.php:2926
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: zp-trunk/zp-core/template-functions.php:3066
+#: zp-trunk/zp-core/template-functions.php:3050
 msgid "Download Zip of the Album"
 msgstr "Zip-Archiv dieses Albums runterladen"
 
-#: zp-trunk/zp-core/template-functions.php:3066
+#: zp-trunk/zp-core/template-functions.php:3050
 msgid "Download a zip file of this album"
 msgstr "zip-Datei dieses Albums herunterladen"
 
-#: zp-trunk/zp-core/template-functions.php:3405
+#: zp-trunk/zp-core/template-functions.php:3389
 #, php-format
 msgid "View image: %s"
 msgstr "Bild %s ansehen"
 
-#: zp-trunk/zp-core/template-functions.php:3460
+#: zp-trunk/zp-core/template-functions.php:3444
 msgid "(No tags...)"
 msgstr "(Keine Schlagworte...)"
 
-#: zp-trunk/zp-core/template-functions.php:3773
+#: zp-trunk/zp-core/template-functions.php:3769
 msgid "Latest images RSS"
 msgstr "Neuste Bilder RSS "
 
-#: zp-trunk/zp-core/template-functions.php:3778
+#: zp-trunk/zp-core/template-functions.php:3774
 msgid "Latest images of this album RSS"
 msgstr "Neuste Bilder dieses Albums RSS "
 
-#: zp-trunk/zp-core/template-functions.php:3783
+#: zp-trunk/zp-core/template-functions.php:3779
 msgid "Latest images of this album and its subalbums RSS"
 msgstr "Neuste Bilder dieses Albums und seiner Unteralben RSS "
 
-#: zp-trunk/zp-core/template-functions.php:3788
+#: zp-trunk/zp-core/template-functions.php:3784
 msgid "Latest comments RSS"
 msgstr "Neuste Kommentare RSS "
 
-#: zp-trunk/zp-core/template-functions.php:3793
+#: zp-trunk/zp-core/template-functions.php:3789
 msgid "Latest comments RSS for this image"
 msgstr "Neuste Kommentare zu diesem Bild RSS "
 
-#: zp-trunk/zp-core/template-functions.php:3798
+#: zp-trunk/zp-core/template-functions.php:3794
 msgid "Latest comments RSS for this album"
 msgstr "Neuste Kommentare zu diesem Album RSS "
 
-#: zp-trunk/zp-core/template-functions.php:3803
+#: zp-trunk/zp-core/template-functions.php:3799
 msgid "Latest albums RSS"
 msgstr "Neuste Alben RSS "
 
-#: zp-trunk/zp-core/template-functions.php:4016
+#: zp-trunk/zp-core/template-functions.php:4012
 msgid "select search fields"
 msgstr "Wählen Sie die Suchfelder"
 
-#: zp-trunk/zp-core/template-functions.php:4075
+#: zp-trunk/zp-core/template-functions.php:4071
 msgid "no date"
 msgstr "kein Datum"
 
-#: zp-trunk/zp-core/template-functions.php:4345
+#: zp-trunk/zp-core/template-functions.php:4341
 msgid "Check your user and password and try again."
 msgstr "Überprüfen Sie Ihr Benutzer-Passwort und versuchen Sie es erneut."
 
-#: zp-trunk/zp-core/template-functions.php:4352
+#: zp-trunk/zp-core/template-functions.php:4348
 msgid "The page you are trying to view is password protected."
 msgstr "Die Seite, die Sie sehen möchten, ist passwortgeschützt."
 
-#: zp-trunk/zp-core/template-functions.php:4409
+#: zp-trunk/zp-core/template-functions.php:4405
 msgid "Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 msgstr "Betrieben mit <a href=\"http://www.zenphoto.org\" title=\"Eine einfachere Bildgalerie\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 
@@ -8164,8 +8164,8 @@ msgid "backup failed"
 msgstr "Backup fehlgeschlagen"
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:321
-msgid "Restore had exceptions"
-msgstr "Wiederherstellung ergab Ausnahmen."
+msgid "Restore encountered exceptions"
+msgstr "Bei der Wiederherstellung sind Probleme augetreten."
 
 #: zp-trunk/zp-core/utilities/backup_restore.php:327
 msgid "The following tables were not restored because the table no longer exists:"
@@ -10609,21 +10609,21 @@ msgstr "Ausgeschlossene Seiten"
 msgid "The list of pages to excluded from cache generation. Pages that can be excluded are custom theme pages including Zenpage pages (these optionally more specific by titlelink) and the standard theme files image.php (optionally by image file name), album.php (optionally by album folder name) or index.php.<br /> If you want to exclude a page completly enter <em>page-filename.php/</em>. <br />If you want to exclude a page by a specific title,image filename or album folder name enter <em>pagefilename.php/titlelink or image filename or album folder</em>. Separate several entries by comma."
 msgstr "Die Liste der Seiten, die vom Cache ausgeschlossen werden sollen. Es können sowohl benutzerdefinierte Seite inklusive Zenpage Seiten (optional mit Titellink)  als auch die Standardthemeseiten image.php (optional mit Bild-Dateiname), album.php (optional mit Albumordnername) or index.php ausgeschlossen werden.<br /> Wenn Sie eine Seite komplett ausschließen möchten, geben Sie <em>page-filename.php/</em> ein. <br />Wenn Sie eine Seite nur mit einem speziellen Titel/Bild/Album ausschließen möchten, geben Sie <em>pagefilename.php/titlelink or image filename or album folder</em> ein. Trennen Sie mehrere Einträge durch Kommata."
 
-#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:142
+#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:144
 #, php-format
 msgid "Cached content served by static_html_cache in %u seconds"
 msgstr "Der Cacheinhalt wurde von static_html_cache in %u Sekunden bereitgestellt"
 
-#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:164
+#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:168
 #, php-format
 msgid "Content generated dynamically in %u seconds"
 msgstr "Der Inhalt wurde dynamisch in %u Sekunden generiert"
 
-#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:283
+#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:288
 msgid "Purge HTML cache"
 msgstr "HTML-Cache löschen"
 
-#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:287
+#: zp-trunk/zp-core/zp-extensions/static_html_cache.php:292
 msgid "Clear the static HTML cache. HTML pages will be recached as they are viewed."
 msgstr "Leert den HTML-Cache. HTML-Seiten werden erneut zwischengespeichert, sobald sie angesehen werden."
 
@@ -10749,7 +10749,7 @@ msgstr "Erweiterungen ausführen."
 msgid "If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive."
 msgstr "Wenn keine Zusatzbilder exisitieren und dieses Plugin is akativiert, wird das Plugin in diesem Typ <em>Bild</em>-Datei nach einem <code>xmp</code>-Block suchen. <strong>Warnung</strong>: Stellen Sie dies nur ein, wenn Sie es unbedingt benötigen. Das Durchsuchen der Bilddateien kann sehr rechenintensiv sein."
 
-#: zp-trunk/zp-core/zp-extensions/xmpMetadata.php:301
+#: zp-trunk/zp-core/zp-extensions/xmpMetadata.php:321
 #, php-format
 msgid "%s sec"
 msgstr "%s sek"
