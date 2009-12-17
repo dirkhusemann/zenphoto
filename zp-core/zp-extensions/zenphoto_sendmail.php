@@ -13,7 +13,7 @@ zp_register_filter('sendmail', 'zenphoto_sendmail');
 
 function zenphoto_sendmail($msg, $email_list, $subject, $message, $from_mail, $from_name, $cc_addresses) {
 	global $_zp_UTF8;
-	$headers = sprintf(gettext('From: %1$s <%2$s>'), $from_name, $from_mail)."\n";
+	$headers = sprintf('From: %1$s <%2$s>', $from_name, $from_mail)."\n";
 	if (count($cc_addresses) > 0) {
 		$cclist = '';
 		foreach ($cc_addresses as $cc_name=>$cc_mail) {
