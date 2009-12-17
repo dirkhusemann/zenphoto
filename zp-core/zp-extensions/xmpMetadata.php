@@ -38,6 +38,8 @@ zp_register_filter('album_refresh', 'xmpMetadata_new_album');
 zp_register_filter('new_image', 'xmpMetadata_new_image');
 zp_register_filter('image_refresh', 'xmpMetadata_new_image');
 
+require_once(dirname(dirname(__FILE__)).'/exif/exif.php');
+
 /**
  * Plugin option handling class
  *
@@ -116,6 +118,7 @@ function xmpMetadata_extract($xmpdata) {
 		'EXIFGPSLatitude'				=>	'<exif:GPSLatitude>',
 		'EXIFGPSLongitude'			=>	'<exif:GPSLongitude>',
 		'EXIFGPSAltitude'				=>	'<exif:GPSAltitude>',
+		'EXIFGPSAltituedRef'		=>	'<exif:GPSAltitudeRef>',
 		'EXIFMeteringMode'			=>	'<exif:MeteringMode>',
 		'EXIFFocalLength'				=>	'<exif:FocalLength>',
 		'EXIFContrast'					=>	'<exif:Contrast>',
@@ -252,6 +255,23 @@ function extractXMP($f) {
 }
 
 /**
+ * convert a fractional representation to something more user friendly
+ * 
+ * @param $element string
+ * @return string
+ */
+function rationalNum($element) {
+	// deal with the fractional representation
+	$n = explode('/',$element);
+	$v = sprintf('%f', $n[0]/$n[1]);
+	for ($i=strlen($v)-1;$i>1;$i--) {
+		if (substr($v,$i,1) != '0') break;
+	}
+	if (substr($v,$i,1)=='.') $i--;
+	return substr($v,0,$i+1);
+}
+
+/**
  * Filter for handling image objects
  *
  * @param object $image
@@ -314,35 +334,31 @@ function xmpMetadata_new_image($image) {
 				case 'IPTCSubLocation':
 					$image->setLocation($v);
 					break;
-					case 'EXIFAperatureValue':
-					$v = 'f'.$element;
-					break;
 				case 'EXIFExposureTime':
-					$v = sprintf(gettext('%s sec'),$element);
+					$v = formatExposure(rationalNum($element));
 					break;
 				case 'EXIFFocalLength':
+					$v = rationalNum($element).' mm';
+					break;
+				case 'EXIFAperatureValue':
 				case 'EXIFFNumber':
+					$v = 'f/'.rationalNum($element);
+					break;
 				case 'EXIFExposureBiasValue':
-					// deal with the fractional representation
-					$n = explode('/',$element);
-					$v = sprintf('%f', $n[0]/$n[1]);
-					for ($i=strlen($v)-1;$i>1;$i--) {
-						if (substr($v,$i,1) != '0') break;
-					}
-					if (substr($v,$i,1)=='.') $i--;
-					$v = substr($v,0,$i+1);
+				case 'EXIFGPSAltitude':
+					$v = rationalNum($element);
 					break;
 				case 'EXIFGPSLatitude':
 				case 'EXIFGPSLongitude':
-				case 'EXIFGPSAltitude':
 					$ref = substr($element,-1,1);
 					$image->set($field.'Ref', $ref);
 					$element = substr($element,0,-1);
 					$n = explode(',',$element);
 					if (count($n)==3) {
-						$n[1] = $n[1].round($n[2]/60,4);
+						$v = $n[0]+($n[1]+($n[2]/60)/60);
+					} else {
+						$v = $n[0]+$n[1]/60;
 					}
-					$v = $n[0].'.'.round($n[1]/60,10);
 					break;
 				case 'IPTCKeywords':
 					$image->setTags($element);

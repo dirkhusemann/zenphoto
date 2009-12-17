@@ -99,6 +99,8 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 					$maxSP = unRational(substr($data,24,8),$type,$intel);
 					if ($minFL == $maxFL) {
 						$data = sprintf('%0.0f f/%0.0f',$minFL,$minSP);
+					} elseif ($minSP == $maxSP) {
+						$data = sprintf('%0.0f-%0.0fmm f/%0.1f',$minFL,$maxFL,$minSP);
 					} else {
 						$data = sprintf('%0.0f-%0.0fmm f/%0.1f-%0.1f',$minFL,$maxFL,$minSP,$maxSP);
 					}
