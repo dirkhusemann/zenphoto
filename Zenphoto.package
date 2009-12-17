@@ -201,6 +201,7 @@ themes/zenpage-default/theme.png
 themes/zenpage-default/themeoptions.php
 themes/zenpage-default/theme_description.php
 trackback.php
+Zenphoto.package
 zp-core
 zp-core/404.php
 zp-core/admin-albumsort.php
@@ -463,11 +464,10 @@ zp-core/locale/fr_FR/LC_MESSAGES
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
 zp-core/locale/fr_FR/select_files_button.png
-zp-core/locale/it_IT
-zp-core/locale/it_IT/LC_MESSAGES
-zp-core/locale/it_IT/LC_MESSAGES/zenphoto.mo
-zp-core/locale/it_IT/LC_MESSAGES/zenphoto.po
-zp-core/locale/it_IT/select_files_button.png
+zp-core/locale/ja_JP
+zp-core/locale/ja_JP/LC_MESSAGES
+zp-core/locale/ja_JP/LC_MESSAGES/zenphoto.mo
+zp-core/locale/ja_JP/LC_MESSAGES/zenphoto.po
 zp-core/locale/nl_NL
 zp-core/locale/nl_NL/LC_MESSAGES
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.mo
@@ -772,6 +772,7 @@ zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_save_as_form.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_save_name.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_save_text.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_text_editor.php
+zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/debug.html
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/inc
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/inc/class.auth.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/inc/class.file.php
@@ -1205,8 +1206,10 @@ zp-core/zp-extensions/tiny_mce/plugins/paste/pasteword.htm
 zp-core/zp-extensions/tiny_mce/plugins/preview
 zp-core/zp-extensions/tiny_mce/plugins/preview/editor_plugin.js
 zp-core/zp-extensions/tiny_mce/plugins/preview/editor_plugin_src.js
+zp-core/zp-extensions/tiny_mce/plugins/preview/example.html
 zp-core/zp-extensions/tiny_mce/plugins/preview/jscripts
 zp-core/zp-extensions/tiny_mce/plugins/preview/jscripts/embed.js
+zp-core/zp-extensions/tiny_mce/plugins/preview/preview.html
 zp-core/zp-extensions/tiny_mce/plugins/print
 zp-core/zp-extensions/tiny_mce/plugins/print/editor_plugin.js
 zp-core/zp-extensions/tiny_mce/plugins/print/editor_plugin_src.js
@@ -1377,6 +1380,7 @@ zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img/tinyzenpage.gif
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img/wrapLeft.gif
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img/wrapNone.gif
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img/wrapRight.gif
+zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/installation.html
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/js
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/js/dialog.php
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/js/thickbox-compressed.js

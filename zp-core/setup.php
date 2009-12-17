@@ -51,7 +51,7 @@ function setupLog($message, $anyway=false, $reset=false) {
   global $debug, $chmod;  
 	if ($debug || $anyway) {
 		if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
-			@mkdir(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
+			mkdir_recursive(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
 		}
 		if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
 		$f = fopen(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . '/setup_log.txt', $mode);

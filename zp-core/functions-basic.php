@@ -1185,11 +1185,10 @@ function zp_escape_string($string) {
 /**
  * Checks to see if access was through a secure protocol
  * 
- * @return vool
+ * @return bool
  */
 function secureServer() {
-	if(isset($_SERVER['HTTPS'])) {	
-		if (!$_SERVER['HTTPS'] || strtolower($_SERVER['HTTPS'])=='off') return false;
+	if(isset($_SERVER['HTTPS']) && strpos(strtolower($_SERVER['HTTPS']),'on')===0) {
 		return true;
 	}
 	return false;
