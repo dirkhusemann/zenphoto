@@ -35,7 +35,7 @@ themes/effervescence_plus/404.php
 themes/effervescence_plus/album.php
 themes/effervescence_plus/archive.php
 themes/effervescence_plus/contact.php
-themes/effervescence_plus/customfunctions.php
+themes/effervescence_plus/functions.php
 themes/effervescence_plus/gallery.php
 themes/effervescence_plus/image.php
 themes/effervescence_plus/images
@@ -173,8 +173,8 @@ themes/zenpage-default/404.php
 themes/zenpage-default/album.php
 themes/zenpage-default/archive.php
 themes/zenpage-default/contact.php
-themes/zenpage-default/customfunctions.php
 themes/zenpage-default/footer.php
+themes/zenpage-default/functions.php
 themes/zenpage-default/gallery.php
 themes/zenpage-default/image.php
 themes/zenpage-default/images
