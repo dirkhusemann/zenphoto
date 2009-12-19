@@ -13,8 +13,6 @@ if (isset($_GET['noflash'])) {
 	}
 	*/
 
-require_once ('customfunctions.php');
-
 // Change the configuration here
 
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');

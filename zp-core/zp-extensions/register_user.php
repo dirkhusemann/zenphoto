@@ -41,7 +41,7 @@ class register_user_options {
 
 	function getOptionsSupported() {
 		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
-												'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
+												'desc' => gettext('If checked, an e-mail will be sent to the gallery admin when a new user has verified his registration.')),
 											gettext('Email notification text') => array('key' => 'register_user_text', 'type' => OPTION_TYPE_TEXTAREA,				
 												'desc' => gettext('Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear.')),
 											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM, 

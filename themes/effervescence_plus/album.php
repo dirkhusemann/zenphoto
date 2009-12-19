@@ -35,7 +35,6 @@ if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOpt
 }
 
 if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
-	require_once ('customfunctions.php');
 	$themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 	$firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	if ($_noFlash) {

@@ -1,4 +1,4 @@
-<?php require_once ('customfunctions.php');
+<?php
 define('ALBUMCOLUMNS', 3);
 define('IMAGECOLUMNS', 5);
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');

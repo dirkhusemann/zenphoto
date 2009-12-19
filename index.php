@@ -87,6 +87,12 @@ if (isset($_GET['p'])) {
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
 
+if (!isset($theme)) {
+	$theme = setupTheme();
+}
+$custom = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).'/functions.php';
+if (!file_exists($custom)) $custom = false;
+
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 	if (DEBUG_PLUGINS) debugLog('Loading the "theme" plugins.');
@@ -98,6 +104,8 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 		$_zp_loaded_plugins[] = $extension;
 	}
 
+	if ($custom) require_once($custom);
+	
 	if (checkforPassword(true)) { // password protected object
 		$passwordpage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password.php';
 		if (file_exists($passwordpage)) {
@@ -132,21 +140,18 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 
 	// Display the page itself
 	if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
-		// Include the appropriate page for the requested object, and a 200 OK header.
-		header("HTTP/1.0 200 OK");
-		header("Status: 200 OK");
-		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-		include($obj);
+	// Include the appropriate page for the requested object, and a 200 OK header.
+	header("HTTP/1.0 200 OK");
+	header("Status: 200 OK");
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+	include(internalToFilesystem($obj));
 
 } else {
 	// If the requested object does not exist, issue a 404 and redirect to the theme's
 	// 404.php page, or a 404.php in the zp-core folder.
-
+	
 	list($album, $image) = rewrite_get_album_image('album','image');
 	$_zp_gallery_page = '404.php';
-	if (!isset($theme)) {
-		$theme = setupTheme();
-	}
 	$errpage = THEMEFOLDER.'/'.internalToFilesystem($theme).'/404.php';
 	if (DEBUG_404) {
 		debugLog("404 error: album=$album; image=$image; theme=$theme");
@@ -157,6 +162,7 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {
+		if ($custom) require_once($custom);
 		include($errpage);
 	} else {
 		include(ZENFOLDER. '/404.php');

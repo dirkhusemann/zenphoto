@@ -1,4 +1,4 @@
-<?php require ('customfunctions.php');
+<?php
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 ?>
