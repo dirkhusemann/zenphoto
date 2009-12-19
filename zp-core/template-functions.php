@@ -4295,7 +4295,7 @@ function getPageRedirect() {
 			break;
 		default:
 		if (in_context(ZP_SEARCH)) {
-			$action = '/index.php?userlog=1&p=search' . htmlspecialchars($_zp_current_search->getSearchParams());
+			$action = '/index.php?userlog=1&p=search' . $_zp_current_search->getSearchParams();
 		} else {
 			$action = '/index.php?userlog=1&p='.substr($_zp_gallery_page, 0, -4);
 		}
@@ -4349,7 +4349,7 @@ function printPasswordForm($_password_hint, $_password_showProtected=true, $_pas
 		</p>
 		<?php
 	}
-
+	$_password_redirect = htmlspecialchars($_password_redirect);
 	$passwordform = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password_form.php';
 	if (file_exists($passwordform)) {
 		include($passwordform);

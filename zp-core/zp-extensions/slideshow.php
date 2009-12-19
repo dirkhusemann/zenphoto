@@ -86,8 +86,9 @@ $slideshow_instance = 0;
  * A CSS id names 'slideshowlink' is attached to the link so it can be directly styled.
  *
  * @param string $linktext Text for the link
+ * @param string $linkstyle Style of Text for the link
  */
-function printSlideShowLink($linktext='') {
+function printSlideShowLink($linktext='', $linkstyle='') {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_search, $slideshow_instance;
 	if (checkForPassword(true)) return;
 	if(empty($_GET['page'])) {
@@ -101,7 +102,7 @@ function printSlideShowLink($linktext='') {
 		$imagefile = '';
 		$albumnr = 0;
 		$slideshowlink = rewrite_path("/page/slideshow","index.php?p=slideshow");
-		$slideshowhidden = '<input type="hidden" name="preserve_search_params" value="'.$_zp_current_search->getSearchParams().'" />';
+		$slideshowhidden = '<input type="hidden" name="preserve_search_params" value="'.htmlspecialchars($_zp_current_search->getSearchParams()).'" />';
 	} else {
 		if(in_context(ZP_IMAGE)) {
 			$imagenumber = imageNumber();
@@ -112,7 +113,7 @@ function printSlideShowLink($linktext='') {
 		}
 		if (in_context(ZP_SEARCH_LINKED)) {
 			$albumnr = -getAlbumID();
-			$slideshowhidden = '<input type="hidden" name="preserve_search_params" value="'.$_zp_current_search->getSearchParams().'" />';
+			$slideshowhidden = '<input type="hidden" name="preserve_search_params" value="'.htmlspecialchars($_zp_current_search->getSearchParams()).'" />';
 		} else {
 			$albumnr = getAlbumID();
 		}
@@ -128,7 +129,9 @@ function printSlideShowLink($linktext='') {
 			<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
 			<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" /> 
 			<input type="hidden" name="imagefile" value="<?php echo html_encode($imagefile);?>" /> 
+			<?php if (!empty($linkstyle)) echo '<p style="'.$linkstyle.'">';?>
 			<a id="slideshowlink_<?php echo $slideshow_instance; ?>" 	href="javascript:document.slideshow_<?php echo $slideshow_instance; ?>.submit()"><?php echo $linktext; ?></a>
+			<?php if (!empty($linkstyle)) echo '</p>';?>
 		</form>
 		<?php
 	}

@@ -302,9 +302,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		 			<div class="clearage"></div>
  					<?php
 					if (function_exists('printSlideShowLink')) {
-						echo "<p align=\"center\">";
-						printSlideShowLink(gettext('View Slideshow'));
-						echo "</p>";
+						printSlideShowLink(gettext('View Slideshow'),'text-align:center;');
 					}
  					printNofM('Photo', $firstImage, $lastImage, getNumImages());
  					?>
@@ -328,7 +326,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  					View gallery without Flash</a>.</p>
  					</div> <!-- flash -->
  					<?php
- 					$flash_url = "index.php?p=search" . getSearchParams() . "&amp;format=xml";
+ 					$flash_url = "index.php?p=search" . htmlspecialchars(getSearchParams()) . "&amp;format=xml";
  					?>
  					<script type="text/javascript">
 									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");

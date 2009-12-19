@@ -283,10 +283,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  								}
 	 							echo '<div class="clearage"></div>';
  								if (function_exists('printSlideShowLink') && ($personality != 'Smoothgallery')) {
-									echo "<p align=\"center\">";
- 									printSlideShowLink(gettext('View Slideshow'));
- 									echo "</p>";
- 								}	
+									printSlideShowLink(gettext('View Slideshow'),'text-align:center;');
+								}	
  								if (getOption('enable_album_zipfile')) {
 									echo "<p align=\"center\">";
  									printAlbumZip();
@@ -294,11 +292,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  								}
 								if (function_exists('printRating')) {
 									?>
-									<p align="left">
 									<?php
 									printRating();
 									?>
-									</p>
 								<?php
 								}
 								
