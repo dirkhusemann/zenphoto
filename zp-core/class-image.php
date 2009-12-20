@@ -104,8 +104,8 @@ class _Image extends PersistentObject {
 		$mtime = filemtime($this->localpath);
 		if ($new || ($mtime != $this->get('mtime'))) {
 			$this->set('mtime', $mtime);
-			$this->updateDimensions();		// deal with rotation issues
 			$this->updateMetaData();			// extract info from image
+			$this->updateDimensions();		// deal with rotation issues
 			$this->save();
 			if ($new) zp_apply_filter('new_image', $this);
 		}
