@@ -1613,14 +1613,11 @@ function getCodeblock($number='',$titlelink='') {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
 	$getcodeblock = '';
 	if (empty($titlelink)) {
-		if(is_News() AND in_context(ZP_ZENPAGE_NEWS_ARTICLE)) { // single news article or page
+		if(is_NewsArticle() AND is_NewsType("news")) {
 			$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
 		}
-		if(is_Pages()) { // single news article or page
+		if(is_Pages()) {
 			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
-		}
-		if((is_News() AND !is_Pages()) AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND is_NewsType("news")) { // news loop
-			$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
 		}
 	}	else { // direct page request
 		$page = new ZenpagePage($titlelink);
