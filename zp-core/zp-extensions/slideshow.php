@@ -400,7 +400,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 				<div id="controls">
 				<div><span><a href="#" id="prev"
 					title="<?php echo gettext("Previous"); ?>"></a></span> <a
-					href="<?php echo $returnpath; ?>" id="stop"
+					href="<?php echo htmlspecialchars($returnpath); ?>" id="stop"
 					title="<?php echo gettext("Stop and return to album or image page"); ?>"></a>
 				<a href="#" id="pause"
 					title="<?php echo gettext("Pause (to stop the slideshow without returning)"); ?>"></a>
@@ -474,7 +474,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 
 		case "flash":
 			if ($heading) {
-				echo "<span class='slideimage'><h4><strong>".$albumtitle."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
+				echo "<span class='slideimage'><h4><strong>".$albumtitle."</strong> (".$numberofimages." images) | <a style='color: white' href='".htmlspecialchars($returnpath)."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
 			}
 			echo "<span id='slideshow' style='display: block; margin: 0 auto; width:".getOption('slideshow_flow_player_width')."px; height: ".getOption('slideshow_flow_player_height')."px'></span>";
 			?> 

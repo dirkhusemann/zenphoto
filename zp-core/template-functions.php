@@ -3966,7 +3966,7 @@ function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
  * @param string $buttonSource optional path to the image for the button
  * @param string $buttontext optional text for the button ("Search" will be the default text)
  * @param string $iconsource optional theme based icon for the search fields toggle
- * @param bit $query_fields override selection for enabled fields with this mask
+ * @param array $query_fields override selection for enabled fields with this list
  * @param array $album_list optional array of albums to search
  * @since 1.1.3
  */
@@ -4020,10 +4020,15 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 		$fields = array_flip($fields);
 		if (is_null($query_fields)) {
 			$query_fields = $engine->parseQueryFields();
-			if (count($query_fields)==0) {
-				$query_fields = array_flip($engine->allowedSearchFields());
+		} else{
+			if (!is_array($query_fields)) {
+				$query_fields = $engine->numericFields($query_fields);
 			}
 		}
+		if (count($query_fields)==0) {
+			$query_fields = array_flip($engine->allowedSearchFields());
+		}
+
 		?>
 		<ul style="display:none;" id="searchextrashow">
 		<?php
