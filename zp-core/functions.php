@@ -1149,34 +1149,6 @@ function setupTheme() {
 }
 
 /**
- * Returns true if the file has the dynamic album suffix
- *
- * @param string $path
- * @return bool
- */
-function hasDynamicAlbumSuffix($path) {
-	return strtolower(substr(strrchr($path, "."), 1)) == 'alb';
-}
-
-/**
- * Count Binary Ones
- *
- * Returns the number of bits set in $bits
- *
- * @param bit $bits the bit mask to count
- * @param int $limit the upper limit on the numer of bits;
- * @return int
- */
-function cbone($bits, $limit) {
-	$c = 0;
-	for ($i=0; $i<$limit; $i++) {
-		$x = pow(2, $i);
-		if ($bits & $x) $c++;
-	}
-	return $c;
-}
-
-/**
  * Allows plugins to add to the scripts output by zenJavascript()
  *
  * @param string $script the text to be added.

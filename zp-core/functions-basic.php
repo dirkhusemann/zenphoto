@@ -317,6 +317,16 @@ function assert_handler($file, $line, $code) {
 // Set up assertion callback
 assert_options(ASSERT_CALLBACK, 'assert_handler');
 
+/**
+ * Returns true if the file has the dynamic album suffix
+ *
+ * @param string $path
+ * @return bool
+ */
+function hasDynamicAlbumSuffix($path) {
+	return strtolower(substr(strrchr($path, "."), 1)) == 'alb';
+}
+
 
 /**
  * rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
