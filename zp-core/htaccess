@@ -3,14 +3,11 @@
 #		First make a copy of this file as 'oldhtaccess' in the zp-core folder so setup can test for unmodified files
 #		Update the above and the define in setup.php
 
-# NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory. (Or let setup.php do it for you!)
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
-  #### !!! Change this to the web path (eg: http://www.yourwebsite.com/photos --> /photos) !!!
   RewriteBase /zenphoto
-  ####
   
   RewriteRule	^admin/?$                       zp-core/admin.php [R,L]
   
