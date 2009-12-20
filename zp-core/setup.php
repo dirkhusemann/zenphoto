@@ -1271,6 +1271,8 @@ if ($debug) {
 	$vr = "";
 	$ch = 1;
 	$j = 0;
+	$err = '';
+	$desc = '';
 	if (empty($htu)) {
 		if ($Apache) {
 			$ch = -1;
@@ -1280,8 +1282,6 @@ if ($debug) {
 			if ($_zp_loggedin&ADMIN_RIGHTS) $desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
 		} else {
 			$ch = -2;
-			$err = '';
-			$desc = '';
 		}
 	} else {
 		$i = strpos($htu, 'VERSION');
@@ -1290,11 +1290,20 @@ if ($debug) {
 			$vr = trim(substr($htu, $i+7, $j-$i-7));
 		}
 		$ch = !empty($vr) && ($vr == HTACCESS_VERSION);
-		if (!$ch && !$Apache) $ch = -1;
-		$err = gettext("<em>.htaccess</em> file [wrong version]");
-		$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
-		if ($_zp_loggedin&ADMIN_RIGHTS) {
-			$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
+		if (!$ch) {	// wrong version
+			$oht = @file_get_contents('oldhtaccess');
+			if ($oht == $ht) {	// an unmodified .htaccess file, we can just replace it
+				@unlink($htfile);
+				$ch = @copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
+			}
+		}
+		if (!$ch) {
+			if (!$Apache) $ch = -1;
+			$err = gettext("<em>.htaccess</em> file [wrong version]");
+			$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
+			if ($_zp_loggedin&ADMIN_RIGHTS) {
+				$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
+			}
 		}
 	}
 
@@ -1344,8 +1353,8 @@ if ($debug) {
 						$b =  sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"), $d);
 						$err =  '';
 					}
+					fclose($handle);
 				}
-				fclose($handle);
 			}
 		}
 		$good = checkMark($base, $b, $err,

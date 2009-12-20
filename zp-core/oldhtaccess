@@ -1,8 +1,5 @@
-# htaccess file version 1.2.8.0;
-# When Zenphoto requires changes to the rewrite rules:
-#		First make a copy of this file as 'oldhtaccess' in the zp-core folder so setup can test for unmodified files
-#		Update the above and the define in setup.php
-
+# htaccess file version 1.2.2.0;
+# Update the above and the define in setup.php when you make changes to the rewrite rules!
 # NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory. (Or let setup.php do it for you!)
 
 <IfModule mod_rewrite.c>
@@ -33,8 +30,8 @@
   RewriteRule ^page/search/fields([0-9]+)/(.*)/?$      index.php?p=search&searchfields=$1&words=$2 [L,QSA]
   RewriteRule ^page/search/archive/(.*)/([0-9]+)/?$      index.php?p=search&date=$1&page=$2 [L,QSA]
   RewriteRule ^page/search/archive/(.*)/?$      index.php?p=search&date=$1 [L,QSA]
-  RewriteRule ^page/search/tags/(.*)/([0-9]+)/?$  index.php?p=search&searchfields=tags&words=$1&page=$2 [L,QSA]
-  RewriteRule ^page/search/tags/(.*)/?$ 					 index.php?p=search&searchfields=tags&words=$1 [L,QSA]
+  RewriteRule ^page/search/tags/(.*)/([0-9]+)/?$  index.php?p=search&searchfields=4&words=$1&page=$2 [L,QSA]
+  RewriteRule ^page/search/tags/(.*)/?$ 					 index.php?p=search&searchfields=4&words=$1 [L,QSA]
   RewriteRule ^page/search/(.*)/([0-9]+)/?$      index.php?p=search&words=$1&page=$2 [L,QSA]
   RewriteRule ^page/search/(.*)/?$      index.php?p=search&words=$1 [L,QSA]
   #### Rewrite additions for zenpage	
