@@ -314,7 +314,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			break;
 		case 'image.php':
 			if (!getOption('comment_form_images')) return;
-			$comments_open = OpenedForComments('IMAGE');
+			$comments_open = OpenedForComments(IMAGE);
 			$formname = '/comment_form.php';
 			break;
 		case ZENPAGE_PAGES.'.php':
