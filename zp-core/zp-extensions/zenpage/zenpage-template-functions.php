@@ -20,6 +20,7 @@ require_once(PHPScript('5.0.0', '_zenpage_template_functions.php'));
 /************************************************/
 
 /**
+ * DEPRECATED FUNCTION!
  * Same as zenphoto's rewrite_path() except it's without WEBPATH, needed for some partial urls
  * 
  * @param $rewrite The path with mod_rewrite
@@ -1173,7 +1174,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
  * @return string
  */
 function getNewsCategoryURL($catlink='') {
-	return rewrite_path_zenpage(getNewsBaseURL()."/category/".urlencode($catlink),getNewsBaseURL()."&amp;category=".urlencode($catlink));
+	return rewrite_path(getNewsBaseURL()."/category/".urlencode($catlink),getNewsBaseURL()."&amp;category=".urlencode($catlink),false);
 }
 
 
@@ -1234,7 +1235,7 @@ function getNewsBaseURL() {
  * @return string
  */
 function getNewsCategoryPath() {
-	return rewrite_path_zenpage("/category/","&amp;category=");
+	return rewrite_path("/category/","&amp;category=",false);
 }
 
 /**
@@ -1243,7 +1244,7 @@ function getNewsCategoryPath() {
  * @return string
  */
 function getNewsArchivePath() {
-	return rewrite_path_zenpage("/archive/","&amp;date=");
+	return rewrite_path("/archive/","&amp;date=",false);
 }
 
 
@@ -1253,7 +1254,7 @@ function getNewsArchivePath() {
  * @return string
  */
 function getNewsTitlePath() {
-	return rewrite_path_zenpage("/","&amp;title=");
+	return rewrite_path("/","&amp;title=",false);
 }
 
 
@@ -1263,7 +1264,7 @@ function getNewsTitlePath() {
  * @return string
  */
 function getNewsPagePath() { 
-	return rewrite_path_zenpage("/","&amp;page=");
+	return rewrite_path("/","&amp;page=",false);
 }
 
 
@@ -2444,7 +2445,7 @@ function getLatestZenpageComments($number,$type="all",$itemID="") {
 		$comments[$comment['id']] = $comment;
 	}
 	krsort($comments);
-	return array_slice_preserve($comments, 0, $number);
+	return array_slice($comments, 0, $number);
 }
 
 
