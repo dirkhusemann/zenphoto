@@ -65,7 +65,6 @@ if (isset($_GET['action'])) {
 					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
-
 				foreach ($_FILES['files']['error'] as $key => $error) {
 					if ($_FILES['files']['name'][$key] == "") continue;
 					if ($error == UPLOAD_ERR_OK) {
@@ -73,6 +72,7 @@ if (isset($_GET['action'])) {
 						$name = $_FILES['files']['name'][$key];
 						$soename = seoFriendly($name);
 						if (is_valid_image($name) || is_valid_other_type($name)) {
+							if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
 							$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
 							move_uploaded_file($tmp_name, $uploadfile);
 							@chmod($uploadfile, 0666 & CHMOD_VALUE);

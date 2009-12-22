@@ -35,11 +35,12 @@ if (!empty($_FILES)) {
 			@chmod($targetPath, CHMOD_VALUE);
 			if (is_valid_image($name) || is_valid_other_type($name)) {
 				$soename = seoFriendly($name);
+				if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
 				$targetFile =  $targetPath.'/'.internalToFilesystem($soename);
 				$rslt = move_uploaded_file($tempFile,$targetFile);
 				@chmod($targetFile, 0666 & CHMOD_VALUE);
 				$album = new Album(New Gallery(), $folder);
-				$image = newImage($album, $name);
+				$image = newImage($album, $soename);
 				if ($name != $soename) {
 					$image->setTitle(substr($name, 0, strrpos($name, '.')));
 					$image->save();
