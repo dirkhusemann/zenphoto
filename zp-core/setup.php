@@ -240,7 +240,7 @@ if (!function_exists('setOption')) { // setup a primitive environment
 	require_once(dirname(__FILE__).'/functions-i18n.php');
 }
 if ($newconfig || isset($_GET['copyhtaccess'])) {
-	if ($newconfig && !file_exists(dirname(dirname(__FILE__)).'/.htaccess') || ($_zp_loggedin&ADMIN_RIGHTS)) {
+	if ($newconfig && !file_exists(dirname(dirname(__FILE__)).'/.htaccess') || zp_loggedin(ADMIN_RIGHTS)) {
 		copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
 	}
 }
@@ -595,7 +595,7 @@ if (!$setup_checked) {
 	}
 	
 	function folderCheck($which, $path, $class, $relaxation=true, $subfolders=NULL) {
-		global $const_webpath, $serverpath, $chmod, $_zp_loggedin;
+		global $const_webpath, $serverpath, $chmod;
 		$path = str_replace('\\', '/', $path);
 		if (!is_dir($path) && $class == 'std') {
 			mkdir_recursive($path, $chmod);
@@ -623,7 +623,7 @@ if (!$setup_checked) {
 						return checkMark(-1, '', sprintf(gettext('<em>%1$s</em> folder%2$s [subfolder creation failure]'),$which, $f), sprintf(gettext('Setup could not create the following subfolders:<br />%s'),substr($subfolderfailed,2)));
 					}
 				}
-				if (($_zp_loggedin&ADMIN_RIGHTS) && (($chmod==0755) || $relaxation)) {
+				if (zp_loggedin(ADMIN_RIGHTS) && (($chmod==0755) || $relaxation)) {
 					@chmod($path,$chmod);
 					clearstatcache();
 					if (($perms = fileperms($path)&0777)!=$chmod) {
@@ -839,7 +839,7 @@ if (!$setup_checked) {
  							' Place the file in the %s folder.'),DATA_FOLDER).
  							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
  	if ($cfg) {
-  	if ($_zp_loggedin&ADMIN_RIGHTS) {
+  	if (zp_loggedin(ADMIN_RIGHTS)) {
 			$chmodselector =	'<form>'.
 												sprintf(gettext('Change file/folder permissions mask: %s'),
 												'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">'.
@@ -1178,7 +1178,7 @@ if ($debug) {
 				$folders[$component] = $component;
 				unset($installed_files[$key]);
 			} else {
-				if ($_zp_loggedin&ADMIN_RIGHTS) {
+				if (zp_loggedin(ADMIN_RIGHTS)) {
 					@chmod($component,0666&$chmod);
 					clearstatcache();
 					if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
@@ -1257,7 +1257,7 @@ if ($debug) {
 	}
 	
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
-	if ($_zp_loggedin&ADMIN_RIGHTS) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
+	if (zp_loggedin(ADMIN_RIGHTS)) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	$msg = gettext("<em>.htaccess</em> file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
 		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."), "", "");
@@ -1279,7 +1279,7 @@ if ($debug) {
 			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
 			$desc = gettext('If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs.').
 						'<br /><br />'.gettext('You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option.');
-			if ($_zp_loggedin&ADMIN_RIGHTS) $desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
+			if (zp_loggedin(ADMIN_RIGHTS)) $desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
 		} else {
 			$ch = -2;
 		}
@@ -1301,7 +1301,7 @@ if ($debug) {
 			if (!$Apache) $ch = -1;
 			$err = gettext("<em>.htaccess</em> file [wrong version]");
 			$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
-			if ($_zp_loggedin&ADMIN_RIGHTS) {
+			if (zp_loggedin(ADMIN_RIGHTS)) {
 				$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
 			}
 		}
@@ -1425,10 +1425,10 @@ if ($debug) {
 	if ($good) {
 		$dbmsg = "";
 	} else {
-		if ($_zp_loggedin&ADMIN_RIGHTS) {
+		if (zp_loggedin(ADMIN_RIGHTS)) {
 			echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
 		} else {
-			if ($_zp_loggedin) {
+			if (zp_loggedin()) {
 				echo "<p>".gettext("You need <em>USER ADMIN</em> rights to run setup.").'</p>';
 				printLoginForm('', false);
 			}
@@ -1486,8 +1486,8 @@ if (file_exists(CONFIGFILE)) {
 		}
 
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
-			if (!($_zp_loggedin&ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
-				if ($_zp_loggedin) { echo "<p>".gettext("You need <em>USER ADMIN</em> rights to run setup.").'</p>'; }
+			if (!zp_loggedin(ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
+				if (zp_loggedin()) { echo "<p>".gettext("You need <em>USER ADMIN</em> rights to run setup.").'</p>'; }
 				printLoginForm('', false);
 				if ($noxlate > 0) {
 					require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
