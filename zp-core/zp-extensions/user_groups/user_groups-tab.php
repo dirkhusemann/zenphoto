@@ -33,6 +33,7 @@ if (isset($_GET['action'])) {
 	} else if ($action == 'savegroups') {
 		for ($i = 0; $i < $_POST['totalgroups']; $i++) {
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
+			$groupname = str_replace('"','',$groupname);
 			if (!empty($groupname)) {
 				$group = new Administrator($groupname, 0);
 				if (isset($_POST[$i.'-initgroup']) && !empty($_POST[$i.'-initgroup'])) {
@@ -176,8 +177,8 @@ echo '</head>'."\n";
 												<em><?php if ($grouptype == 'group') echo gettext('group'); else echo gettext('template'); ?></em>
 												<br />
 												<strong><?php echo $groupname; ?></strong>
-												<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo $groupname ?>" />
-												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo $grouptype ?>" />
+												<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo htmlspecialchars($groupname); ?>" />
+												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo htmlspecialchars($grouptype); ?>" />
 												<?php
 											}
 											?>
@@ -248,7 +249,7 @@ echo '</head>'."\n";
 										if (!empty($groupname)) {
 											$msg = gettext('Are you sure you want to delete this group?');
 											?>
-											<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo $groupname; ?>'; }"
+											<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo addslashes($groupname); ?>'; }"
 																title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
 												<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
 											</a> 

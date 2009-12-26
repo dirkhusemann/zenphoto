@@ -179,7 +179,7 @@ function passwordNote() {
  */
 function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1) {
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
-	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user' AND `valid`=$valid";
+	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '".zp_escape_string($user)."' AND `valid`=$valid";
 	$result = query_single_row($sql);
 	if (!is_null($pass)) {
 		// validate the password.

@@ -120,7 +120,7 @@ function printAdminToolbox($id='admin') {
 			}
 		</script>
 		<?php
-		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
+		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript:toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		
 		// open the list--all links go between here and the close of the list below
@@ -181,7 +181,7 @@ function printAdminToolbox($id='admin') {
 					echo "</li>\n";
 				}
 				// and a delete link
-				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=" .
+				echo "<li><a href=\"javascript:confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=" .
 					urlencode(urlencode($albumname)) .
 					"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
