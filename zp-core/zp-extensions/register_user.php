@@ -6,13 +6,13 @@
  * Probably the best use is to create a new 'custom page' script just for handling these
  * user registrations. Then put a link to that script on your index page so that people
  * who wish to register will click on the link and be taken to the registration page.
- * 
+ *
  * When successfully registered, a new admin user will be created with no logon rights. An e-mail
  * will be sent to the user with a link to activate the user ID. When he clicks on that link
- * he will be taken to the registration page and the verification process will be completed. 
- * At this point the user ID rights is set to the value of the plugin default user rights option 
+ * he will be taken to the registration page and the verification process will be completed.
+ * At this point the user ID rights is set to the value of the plugin default user rights option
  * and an email is sent to the Gallery admin announcing the new registration.
- * 
+ *
  * NOTE: If you change the rights on a user pending verification you have verified the user.
  *
  * @author Stephen Billard (sbillard)
@@ -35,18 +35,20 @@ class register_user_options {
 		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
 		setOptionDefault('register_user_text', gettext('You have received this email because you registered on the site. To complete your registration visit %s.'));
+		setOptionDefault('register_user_page_tip', gettext('Click here to register for this site.'));
+		setOptionDefault('register_user_page_link', gettext('Register'));
 		setOptionDefault('register_user_captcha', 0);
-		setOptionDefault('register_user_page', 'register');
+		setOptionDefault('register_user_page_page', 'register');
 	}
 
 	function getOptionsSupported() {
-		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX, 
+		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, an e-mail will be sent to the gallery admin when a new user has verified his registration.')),
-											gettext('Email notification text') => array('key' => 'register_user_text', 'type' => OPTION_TYPE_TEXTAREA,				
+											gettext('Email notification text') => array('key' => 'register_user_text', 'type' => OPTION_TYPE_TEXTAREA,
 												'desc' => gettext('Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear.')),
-											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM, 
+											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM,
 												'desc' => gettext('If this option is set, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
-											gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX, 
+											gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, captcha validation will be required for user registration.'))
 											);
 		$admins = getAdministrators();
@@ -84,8 +86,9 @@ class register_user_options {
 		<table>
 			<tr>
 				<td style="margin:0; padding:0"><?php echo gettext('script'); ?></td>
-				<td style="margin:0; padding:0"> 
-					<select id="user_registration_page" name="user_registration_page">
+				<td style="margin:0; padding:0">
+					<input type="hidden" name="_ZP_CUSTOM_selector-register_user_page_page" value=0 />
+					<select id="register_user_page_page" name="register_user_page_page">
 						<option value=""><?php echo gettext('*no page selected'); ?></option>
 						<?php
 						$curdir = getcwd();
@@ -97,7 +100,7 @@ class register_user_options {
 							$list[] = str_replace('.php', '', filesystemToInternal($file));
 						}
 						$list = array_diff($list, standardScripts());
-						generateListFromArray(array(getOption('user_registration_page')), $list, false, false);
+						generateListFromArray(array(getOption('register_user_page_page')), $list, false, false);
 						chdir($curdir);
 						?>
 					</select>
@@ -105,11 +108,17 @@ class register_user_options {
 			</tr>
 			<tr>
 				<td style="margin:0; padding:0"><?php echo gettext('Link text'); ?></td>
-				<td style="margin:0; padding:0"><?php print_language_string_list(getOption('user_registration_text'), 'user_registration_text', false, NULL, '', true); ?></td>
+				<td style="margin:0; padding:0">
+					<input type="hidden" name="_ZP_CUSTOM_text-register_user_page_link" value=0 />
+					<?php print_language_string_list(getOption('register_user_page_link'), 'register_user_page_link', false, NULL, '', true); ?>
+				</td>
 			</tr>
 			<tr>
 				<td style="margin:0; padding:0"><?php echo gettext('Hint text'); ?></td>
-				<td style="margin:0; padding:0"><?php print_language_string_list(getOption('user_registration_tip'), 'user_registration_tip', false, NULL, '', true); ?></td>
+				<td style="margin:0; padding:0">
+					<input type="hidden" name="_ZP_CUSTOM_text-register_user_page_tip" value=0 />
+					<?php print_language_string_list(getOption('register_user_page_tip'), 'register_user_page_tip', false, NULL, '', true); ?>
+				</td>
 			</tr>
 		</table>
 		<?php
@@ -142,7 +151,7 @@ if (!OFFSET_PATH) { // handle form post
 			$userobj->setRights($rights | NO_RIGHTS);
 			$userobj->setGroup($group);
 			zp_apply_filter('register_user_verified', $userobj);
-			$notify = saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
+			$notify = saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 			if (getOption('register_user_notify') && !$notify) {
 				$notify = zp_mail(gettext('Zenphoto Gallery registration'),
 									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$userobj->getName(), $adminuser['user'], $admin_e));
@@ -196,7 +205,7 @@ if (!OFFSET_PATH) { // handle form post
 					$userobj->setGroup('');
 					$userobj->setCustomData('');
 					zp_apply_filter('register_user_registered', $userobj);
-					$notify = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
+					$notify = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
 						$message = sprintf(getOption('register_user_text'), $link);
