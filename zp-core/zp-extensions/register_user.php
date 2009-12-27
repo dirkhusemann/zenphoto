@@ -25,6 +25,8 @@ $plugin_version = '1.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---register_user.php.html";
 $option_interface = new register_user_options();
 
+require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
 /**
  * Plugin option handling class
  *
@@ -150,6 +152,10 @@ if (!OFFSET_PATH) { // handle form post
 			$userobj->setEmail($admin_e = $adminuser['email']);
 			$userobj->setRights($rights | NO_RIGHTS);
 			$userobj->setGroup($group);
+			if (!empty($group)) {
+				$membergroup = new Administrator($group, 0);
+				$userobj->setAlbums(populateManagedAlbumList($membergroup->get('id')));
+			}
 			zp_apply_filter('register_user_verified', $userobj);
 			$notify = saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 			if (getOption('register_user_notify') && !$notify) {

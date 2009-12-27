@@ -33,6 +33,7 @@ function user_groups_save_admin($discard, $userobj, $i) {
 			if (!empty($oldgroup)) {
 				$group = new Administrator($oldgroup, 0);
 				$userobj->setRights($group->getRights());
+				$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
 			}
 		} else {
 			$group = new Administrator($groupname, 0);
@@ -174,7 +175,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 		$grouppart .= '
 			</script>';
 		
-		$grouppart .= '<select name="'.$i.'group" onchange="javascript: groupchange'.$i.'(this);"'.'>'."\n";
+		$grouppart .= '<select name="'.$i.'group" onchange="javascript:groupchange'.$i.'(this);"'.'>'."\n";
 		$grouppart .= '<option value="" title="'.gettext('*no group affiliation').'">'.gettext('*no group selected').'</option>'."\n";
 		$selected_hint = gettext('no group affiliation');
 		foreach ($groups as $user) {

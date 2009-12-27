@@ -566,14 +566,14 @@ if (!$setup_checked) {
 				} else if ($check == -1) {
 					$moreid++;
 					// should warnings start out hidden?
-					//					echo ' <a href="javascript: toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
+					//					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
 					echo "<div class='warning' id='more".$moreid."' style='display:block'>";
 					echo gettext('Warning!');
 					echo "<p>".$msg."</p>";
 					echo "</div>";
 				} else {
 					$moreid++;
-					echo ' <a href="javascript: toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Notice!</strong> click for details').'</a>';
+					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Notice!</strong> click for details').'</a>';
 					echo "<div class='notice' id='more".$moreid."' style='display:none'>";
 					echo gettext('Notice!');
 					echo "<p>".$msg."</p>";

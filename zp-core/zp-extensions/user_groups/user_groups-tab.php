@@ -192,7 +192,7 @@ echo '</head>'."\n";
 												<br />
 												<?php echo gettext('clone:'); ?>
 												<br />
-												<select name="<?php echo $id; ?>-initgroup" onchange="javascript: $('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
+												<select name="<?php echo $id; ?>-initgroup" onchange="javascript:$('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
 													<option title=""></option>
 													<?php
 													foreach ($groups as $user) {
@@ -249,7 +249,7 @@ echo '</head>'."\n";
 										if (!empty($groupname)) {
 											$msg = gettext('Are you sure you want to delete this group?');
 											?>
-											<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo addslashes($groupname); ?>'; }"
+											<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo addslashes($groupname); ?>'; }"
 																title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
 												<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
 											</a> 
@@ -306,7 +306,7 @@ echo '</head>'."\n";
 												<?php echo $user['user']; ?>
 											</td>
 											<td style="border-top: 1px solid #D1DBDF;" valign="top" >
-												<select name="<?php echo $id; ?>-group" onchange="javascript: $('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
+												<select name="<?php echo $id; ?>-group" onchange="javascript:$('#hint<?php echo $id; ?>').html(this.options[this.selectedIndex].title);">
 													<option title="<?php echo gettext('no group affiliation'); ?>"></option>
 													<?php
 													$selected_hint = gettext('no group affiliation');

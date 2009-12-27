@@ -221,7 +221,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			$id_toggle = $id.'_toggle';
 			$id_data = $id.'_data';
 			if (is_null($text)) $text = gettext('Google Map');
-			echo "<a id=\"$id_toggle\" href=\"javascript: vtoggle('$id_data');\" title=\"".gettext('Display or hide the Google Map.')."\">";
+			echo "<a id=\"$id_toggle\" href=\"javascript:vtoggle('$id_data');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
 			echo "</a>\n";
 			echo "  <div id=\"$id_data\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
@@ -311,7 +311,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			$id_data = $id.'_data';
 			
 			if (is_null($text)) $text = gettext('Google Map');
-			echo "<a id=\"$id_toggle\" href=\"javascript: vtoggle('$id_data');\" title=\"".gettext('Display or hide the Google Map.')."\">";
+			echo "<a id=\"$id_toggle\" href=\"javascript:vtoggle('$id_data');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
 			echo "</a>\n";
 			echo "  <div id=\"$id_data\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";

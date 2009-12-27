@@ -149,7 +149,7 @@ printLogoAndLinks();
 									<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 								</td>
 								<td class="icons">
-									<a href="javascript: confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>">
+									<a href="javascript:confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>">
 									<img src="../../images/fail.png" alt="<?php echo gettext("Delete article"); ?>" /></a>
 								</td>
 								<?php } else { ?>

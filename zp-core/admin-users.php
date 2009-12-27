@@ -388,7 +388,7 @@ if (empty($alterrights)) {
 								$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
 							}
 						?>
-						<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+						<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 							title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
 							src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
 						<?php

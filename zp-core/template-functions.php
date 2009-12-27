@@ -115,7 +115,7 @@ function printAdminToolbox($id='admin') {
 			function newAlbum(folder,albumtab) {
 				var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 				if (album) {
-					window.location = '<?php echo $zf; ?>/admin-edit.php?action=newalbum&album='+encodeURIComponent(folder)+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
+					window.location = '<?php echo $zf; ?>/admin-edit.php?action=newalbum&amp;album='+encodeURIComponent(folder)+'&amp;name='+encodeURIComponent(album)+'&amp;albumtab='+albumtab;
 				}
 			}
 		</script>
@@ -208,7 +208,7 @@ function printAdminToolbox($id='admin') {
 				$imagename = $_zp_current_image->filename;
 				if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
 					// if admin has edit rights on this album, provide a delete link for the image.
-					echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
+					echo "<li><a href=\"javascript:confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
 					urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 					echo "</li>\n";
 
@@ -247,7 +247,7 @@ function printAdminToolbox($id='admin') {
 					// page is a NewsArticle--provide zenpage edit, delete, and Add links
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Article")."</a></li>";
 					?> 
-					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
+					<li><a href="javascript:confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 					<?php
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
 					zp_apply_filter('admin_toolbox_news', $titlelink);
@@ -257,7 +257,7 @@ function printAdminToolbox($id='admin') {
 					// page is zenpage page--provide edit, delete, and add links
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Page")."</a></li>";
 					?> 
-					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
+					<li><a href="javascript:confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
 					<?php	
 					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
 					zp_apply_filter('admin_toolbox_page', $titlelink);
@@ -4009,7 +4009,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 	<?php echo $prevtext; ?>
 	<input type="text" name="words" value="<?php  echo $searchwords; ?>" id="search_input" size="10" />
 	<?php if(count($fields) > 1) { ?>
-		<a href="javascript: toggle('searchextrashow');"><img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" id="searchfields_icon" /></a>
+		<a href="javascript:toggle('searchextrashow');"><img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" id="searchfields_icon" /></a>
 	<?php } ?>
 	<input type="<?php echo $type; ?>" <?php echo $buttontext; ?> class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
 	<input type="hidden" name="inalbums" value="<?php if (empty($album_list)) echo ''; else echo implode(',', $album_list); ?>" />

@@ -976,28 +976,28 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						</p>					
 					</td>
 					<td>
-						<p><?php  echo gettext("<a href=\"javascript: toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>" ); ?></p>
+						<p><?php  echo gettext("<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>" ); ?></p>
 						<div id="albumdate" style="display: none">
 							<p><?php echo gettext("If you wish your album date to reflect the date of the latest image uploaded set set this option. Otherwise the date will be set initially to the date the album was created.") ?></p>
 						</div>
 
-						<p><?php  echo gettext("<a href=\"javascript: toggle('username');\" >Details</a> for <em>enable user name login field</em>" ); ?></p>
+						<p><?php  echo gettext("<a href=\"javascript:toggle('username');\" >Details</a> for <em>enable user name login field</em>" ); ?></p>
 						<div id="username" style="display: none">
 						<p><?php echo gettext("This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."); ?></p>
 						</div>
 
-						<p><?php  echo gettext("<a href=\"javascript: toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>" ); ?></p>
+						<p><?php  echo gettext("<a href=\"javascript:toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>" ); ?></p>
 						<div id="visualthumb" style="display: none">
 						<p><?php echo gettext("Setting this places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "); ?></p>
 						</div>
 
-						<p><?php  echo gettext("<a href=\"javascript: toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>" ); ?></p>
+						<p><?php  echo gettext("<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>" ); ?></p>
 						<div id="persistentarchive" style="display: none">
 						<p><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?>
 							<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></p>
 						</div>
 
-						<p><?php  echo gettext("<a href=\"javascript: toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>" ); ?></p>
+						<p><?php  echo gettext("<a href=\"javascript:toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>" ); ?></p>
 						<div id="gallerysessions" style="display: none">
 						<p><?php echo gettext("Check this option if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></p>
 						</div>

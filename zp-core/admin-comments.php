@@ -197,7 +197,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <p><?php echo $status_anon; ?></p>
 <hr />
 <p class="buttons">
-<a href="javascript: if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
 		title="<?php echo gettext('Delete'); ?>" ><img src="images/fail.png" alt="" />
 		<?php echo gettext('Delete'); ?></a></p>
 		<br style="clear:both" />
@@ -399,7 +399,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
 		<td align="center">
-			<a href="javascript: if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
 			title="<?php echo gettext('Delete this comment.'); ?>" > <img
 			src="images/fail.png" style="border: 0px;" alt="<?php echo gettext('Delete'); ?>" /></a></td>
 	</tr>

@@ -300,7 +300,7 @@ function printPagesListTable($page, $flag) {
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
-		<a href="javascript: confirmDeleteImage('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!")); ?>')" title="<?php echo gettext("Delete page"); ?>">
+		<a href="javascript:confirmDeleteImage('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!")); ?>')" title="<?php echo gettext("Delete page"); ?>">
 		<img src="../../images/fail.png" alt="delete" /></a>
 	</td>
 	<?php } else { ?>
