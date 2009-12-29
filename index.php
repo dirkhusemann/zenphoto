@@ -90,22 +90,24 @@ if (isset($_GET['p'])) {
 if (!isset($theme)) {
 	$theme = setupTheme();
 }
+if (DEBUG_PLUGINS) debugLog('Loading the "theme" plugins.');
+foreach (getEnabledPlugins() as $extension=>$loadtype) {
+	if ($loadtype <= 1) {
+		if (DEBUG_PLUGINS) debugLog('    '.$extension.' ('.$loadtype.')');
+		require_once(getPlugin($extension.'.php'));
+	}
+	$_zp_loaded_plugins[] = $extension;
+}
+
 $custom = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).'/functions.php';
-if (!file_exists($custom)) $custom = false;
+if (file_exists($custom)) {
+	require_once($custom);
+} else {
+	$custom = false;
+}
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
-	if (DEBUG_PLUGINS) debugLog('Loading the "theme" plugins.');
-	foreach (getEnabledPlugins() as $extension=>$loadtype) {
-		if ($loadtype <= 1) {
-			if (DEBUG_PLUGINS) debugLog('    '.$extension.' ('.$loadtype.')');
-			require_once(getPlugin($extension.'.php'));
-		}
-		$_zp_loaded_plugins[] = $extension;
-	}
-
-	if ($custom) require_once($custom);
-	
 	if (checkforPassword(true)) { // password protected object
 		$passwordpage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password.php';
 		if (file_exists($passwordpage)) {
