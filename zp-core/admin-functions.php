@@ -8,7 +8,7 @@
 
 
 require_once(dirname(__FILE__).'/functions.php');
-	
+
 $_zp_admin_ordered_taglist = NULL;
 $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
@@ -28,19 +28,19 @@ function printAdminFooter($addl='') {
 	?>
 	<div id="footer">
 	<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>.">zen<strong>photo</strong></a>
-	version 
+	version
 	<?php echo ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
 	if (!empty($addl)) {
 		echo ' | '. $addl;
 	}
 	?>
-	 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a> 
-	 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a> 
+	 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a>
+	 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a>
 	 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
 	 <br />
 	<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
 	</div>
-  <?php
+	<?php
 }
 
 function datepickerJS($path) {
@@ -172,9 +172,11 @@ function printLoginForm($redirect=null, $logo=true) {
 			}
 		}
 	}
-	$user = array_shift($admins);
-	if ($user['email']) {
-		$star = '*';
+	while (count($admins)>0) {
+		$user = array_shift($admins);
+		if ($user['valid'] && $user['rights']&ADMIN_RIGHTS && $user['email']) {
+			$star = '*';
+		}
 	}
 	?>
 	<div id="loginform">
@@ -243,8 +245,8 @@ function printLoginForm($redirect=null, $logo=true) {
 	</table>
 	</form>
 	</div>
-<?php 
-} 
+<?php
+}
 
 
 /**
@@ -305,7 +307,7 @@ function printTabs($currenttab) {
 		<li <?php if($currenttab == $key) echo 'class="current"' ?>>
 			<a href="<?php echo $atab['link']; ?>"><?php echo $atab['text']; ?></a>
 		</li>
- 		<?php
+		<?php
 	}
 	?>
 	</ul>
@@ -512,7 +514,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 				$option = str_replace('_', ' ', $option);
 			}
 			if ($theme) {
-				$v = getThemeOption($key, $album, $theme);				
+				$v = getThemeOption($key, $album, $theme);
 			} else {
 				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($key) . "';";
 				$db = query_single_row($sql);
@@ -616,7 +618,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 								$display = str_replace(' ', '&nbsp;', $display);
 								?>
 								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
-								
+
 								<span style="white-space:nowrap">
 									<label>
 										<input type="checkbox" id="<?php echo $checkbox; ?>" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
@@ -658,9 +660,9 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						<td width="350px" style="margin:0; padding:0">
 						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value=0 />
 						<script type="text/javascript">
-					  	$(document).ready(function() {
-					    	$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
-					  	});
+							$(document).ready(function() {
+								$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
+							});
 						</script>
 						<table style="margin:0; padding:0" >
 							<tr>
@@ -931,11 +933,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<td align="left" valign="top" width="150"><?php echo gettext("Album Title"); ?>: </td>
 		<td>
 		<?php print_language_string_list($album->get('title'), $prefix."albumtitle", false); ?>
-  	</td>
-  	</tr>
-  	 
+		</td>
+		</tr>
+		 
 	<tr>
-	<td align="left" valign="top" ><?php echo gettext("Album Description:"); ?> </td> 
+	<td align="left" valign="top" ><?php echo gettext("Album Description:"); ?> </td>
 	<td>
 	<?php	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor'); ?>
 	</td>
@@ -954,7 +956,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		if (!empty($x)) echo "**********";
 		?>
 		</td>
-	</tr> 
+	</tr>
 	<tr class="<?php echo $prefix; ?>passwordextrahide" style="display:none" >
 		<td align="left" value="top">
 			<p>
@@ -982,7 +984,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			if (!empty($x)) {
 				$x = '			 ';
 			}
-		  ?>
+			?>
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" />
 			<br />
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
@@ -992,13 +994,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</p>
 		</td>
 	</tr>
-	
+
 	<?php
 	$d = $album->getDateTime();
 	if ($d == "0000-00-00 00:00:00") {
 		$d = "";
 	}
-  ?>
+	?>
 
 	<script type="text/javascript">
 		$(function() {
@@ -1012,12 +1014,12 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	</script>
 
 	<tr>
-		<td align="left" valign="top"><?php echo gettext("Date:");?> </td> 
+		<td align="left" valign="top"><?php echo gettext("Date:");?> </td>
 		<td width="400">
 		<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
 	</tr>
 	<tr>
-		<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td> 
+		<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td>
 		<td>
 		<?php print_language_string_list($album->getLocation(), $prefix."albumlocation", false); ?>
 		</td>
@@ -1075,7 +1077,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	?>
 	<span id="<?php echo $javaprefix; ?>album_direction_div" style="display:<?php echo $dsp; ?>">
 		<label>
-			<?php echo gettext("Descending"); ?> 
+			<?php echo gettext("Descending"); ?>
 			<input type="checkbox" name="<?php echo $prefix; ?>album_sortdirection" value="1" <?php if ($album->getSortDirection('album')) {	echo "CHECKED";	}; ?>>
 		</label>
 	</span>
@@ -1102,17 +1104,17 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<?php echo gettext('custom fields:') ?>
 		<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
 		</span>
-	
+
 		</td>
 	</tr>
 </table>
 	</td>
 	</tr>
 
-  <tr>
+	<tr>
 	<td align="left" valign="top"><?php echo gettext("Sort images by:"); ?> </td>
 	<td>
-  <?php 
+	<?php
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 	?>
@@ -1183,7 +1185,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<td align="left" valign="top"><?php echo gettext("Album theme:"); ?> </td>
 		<td>
 		<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"	<?php if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo "DISABLED "; ?>	>
-		<?php 
+		<?php
 		$themes = $gallery->getThemes();
 		$oldtheme = $album->getAlbumTheme();
 		if (empty($oldtheme)) {
@@ -1213,9 +1215,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	if (!$album->isDynamic()) {
 		$current = $album->get('watermark');
 		?>
-	  <tr>
-	  	<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
-	  	<td>
+		<tr>
+			<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
+			<td>
 				<select id="album_watermark" name="album_watermark">
 					<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 					<?php
@@ -1223,12 +1225,12 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					generateListFromArray(array($current), $watermarks, false, false);
 					?>
 				</select>
-	  	</td>
-	  </tr>
-	  <?php
+			</td>
+		</tr>
+		<?php
 	}
 	?>
-  <tr>
+	<tr>
 	<td align="left" valign="top" width="150"><?php echo gettext("Thumbnail:"); ?> </td>
 	<td>
 	<?php
@@ -1366,12 +1368,12 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
 			<p>
 				<label>
-					<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />	
+					<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />
 					<?php echo gettext("Published");?>
 				</label>
 			</p>
 		</div>
-		
+
 		<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
 		<div class="box-edit">
 			<p>
@@ -1387,14 +1389,14 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				?>
 				<label>
 					<input type="checkbox" name="reset_hitcounter">
-					<?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?> 
+					<?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?>
 				</label>
 			</p>
 			<p>
 				<?php
 				$tv = $album->get('total_value');
 				$tc = $album->get('total_votes');
-			
+
 				if ($tc > 0) {
 					$hc = $tv/$tc;
 					printf(gettext('Rating: <strong>%u</strong>'), $hc);
@@ -1413,7 +1415,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<!-- **************** Move/Copy/Rename ****************** -->
 		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 		<div class="box-edit">
-			
+
 			<span style="white-space:nowrap">
 				<label style="padding-right: .5em">
 					<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
@@ -1421,7 +1423,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					<?php echo gettext("Move");?>
 				</label>
 			</span>
-			
+
 			<span style="white-space:nowrap">
 				<label style="padding-right: .5em">
 					<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
@@ -1429,7 +1431,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					<?php echo gettext("Copy");?>
 				</label>
 			</span>
-			
+
 			<span style="white-space:nowrap">
 				<label style="padding-right: .5em">
 					<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
@@ -1437,9 +1439,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					<?php echo gettext("Rename Folder");?>
 				</label>
 			</span>
-			
-		
-		
+
+
+
 			<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
 				<?php echo gettext("to:"); ?>
 				<select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
@@ -1461,7 +1463,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						$singlefolder = $fullfolder;
 						$saprefix = '';
 						$salevel = 0;
-						
+
 						while (strstr($singlefolder, '/') !== false) {
 							$singlefolder = substr(strstr($singlefolder, '/'), 1);
 							$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
@@ -1491,23 +1493,23 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			?>
 			<span style="line-height: 0em;"><br clear=all /></span>
 			</div>
-		  <h2 class="h2_bordered_edit">
-		  	<?php
-		  	if ($collapse_tags) {
-		  		?>
-		  		<a href="javascript:toggle('<?php echo $prefix; ?>taglist_hide');" >
+			<h2 class="h2_bordered_edit">
+				<?php
+				if ($collapse_tags) {
+					?>
+					<a href="javascript:toggle('<?php echo $prefix; ?>taglist_hide');" >
 					<?php
-		  	}
-		  	echo gettext("Tags");
-		  	if ($collapse_tags) {
-		  		?>
-		  		</a>
+				}
+				echo gettext("Tags");
+				if ($collapse_tags) {
+					?>
+					</a>
 					<?php
-		  	}
-		  	?>
-	  	</h2>
-	  	<div class="box-edit-unpadded">
-		  	<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?> >
+				}
+				?>
+			</h2>
+			<div class="box-edit-unpadded">
+				<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?> >
 					<?php
 					$tagsort = getTagOrder();
 					tagSelector($album, 'tags_'.$prefix, false, $tagsort);
@@ -1532,9 +1534,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</td>
 		</tr>
 	<?php } ?>
-	
+
 	</table>
-	
+
 <br clear="all" />
 	<p class="buttons">
 		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
@@ -1568,7 +1570,7 @@ function printAlbumButtons($album) {
 		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Clears the album's cached images.");?>"><img src="images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Clear album cache"); ?></button>
 		</div>
 		</form>
-	
+
 		<form name="cache_images" action="admin-cache-images.php" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
 		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
@@ -1585,7 +1587,7 @@ function printAlbumButtons($album) {
 		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Resets all hitcounters in the album."); ?>"><img src="images/reset1.png" style="border: 0px;" /> <?php echo gettext("Reset hitcounters"); ?></button>
 		</div>
 		</form>
-	<?php		
+	<?php
 	}
 	if ($imagcount || (!$album->isDynamic() && count($album->getSubalbums())>0)) {
 	?>
@@ -1594,11 +1596,11 @@ function printAlbumButtons($album) {
 		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
 		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/refresh.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
-	  </div>	
+		</div>
 		</form>
 	<?php
 	}
-	?>		
+	?>
 	<br /><br />
 	<?php
 }
@@ -1659,13 +1661,13 @@ function printAlbumEditRow($album) {
 	?>
 	<td style="text-align: right;" width="80"><?php echo $sa; ?></td>
 	<td style="text-align: right;" width="80"><?php echo $si; ?></td>
-  <?php	$wide='40px'; ?>
+	<?php	$wide='40px'; ?>
 	<td>
 		<table width="100%">
 		<tr>
 		<td>
 		<td style="text-align:center;" width='$wide'>
-  <?php
+	<?php
 	$pwd = $album->getPassword();
 	if (!empty($pwd)) {
 		echo '<a title="'.gettext('Password protected').'"><img src="images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
@@ -1678,7 +1680,7 @@ function printAlbumEditRow($album) {
 		?>
 		<a class="publish" href="?action=publish&value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
 		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('Published'); ?>" /></a>
-		
+
 	 <?php
 	} else {
 		?>
@@ -1736,7 +1738,7 @@ function printAlbumEditRow($album) {
  * processes the post from the above
  * @param int $index the index of the entry in mass edit or 0 if single album
  * @param object $album the album object
- * @param string $redirectto used to redirect page refresh on move/copy/rename 
+ * @param string $redirectto used to redirect page refresh on move/copy/rename
  *@return string error flag if passwords don't match
  *@since 1.1.3
  */
@@ -1845,7 +1847,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
 	zp_apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
-	
+
 	// Move/Copy/Rename the album after saving.
 	$movecopyrename_action = '';
 	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {
@@ -2351,7 +2353,7 @@ function copyThemeDirectory($source, $target, $newname) {
 		'/images/slimbox' => '/images/slimbox',
 	);
 	*/
-	
+
 	// Create new directory structure
 	foreach ($dirs_to_create as $dir) {
 		mkdir("$target/$dir", CHMOD_VALUE);
@@ -2363,8 +2365,8 @@ function copyThemeDirectory($source, $target, $newname) {
 		$newfile = str_replace($source, $target, $file);
 		if (! copy("$file", "$newfile" ) )
 			return sprintf(gettext("An error occured while copying files. Please delete manually the new theme directory '%s' and retry or copy files manually."), basename($target));
-		chmod("$newfile", CHMOD_VALUE);	
-	}	
+		chmod("$newfile", CHMOD_VALUE);
+	}
 
 	// Rewrite the theme header.
 	if ( file_exists($target.'/theme_description.php') ) {
@@ -2391,7 +2393,7 @@ $theme_description["desc"] = "%s";
 		htmlentities($theme_description['version'], ENT_COMPAT),
 		htmlentities($theme_description['date'], ENT_COMPAT),
 		htmlentities($theme_description['desc'], ENT_COMPAT));
-	
+
 	$f = fopen($target.'/theme_description.php', 'w');
 	if ($f !== FALSE) {
 		@fwrite($f, $description);
@@ -2560,7 +2562,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<span style="white-space:nowrap">
 						<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $id.'-'.$rightselement; ?>"
-								value=<?php echo $rightsvalue; if ($rights & $rightsvalue) echo ' checked'; 
+								value=<?php echo $rightsvalue; if ($rights & $rightsvalue) echo ' checked';
 								echo $alterrights; ?> /> <?php echo $name; ?></label>
 					</span>
 				</td>
