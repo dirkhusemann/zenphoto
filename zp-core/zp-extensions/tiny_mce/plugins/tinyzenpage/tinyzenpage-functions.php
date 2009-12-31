@@ -17,7 +17,7 @@ function printFullAlbumsList() {
 	global $galleryobj;
 	$albumlist = $galleryobj->getAlbums();
 	foreach($albumlist as $album) {
-		if (isMyAlbum($album, MANAGE_ALL_ALBUM_RIGHTS) OR isMyAlbum($album, ALBUM_RIGHTS)) {
+		if (isMyAlbum($album, ALL_RIGHTS)) {
 			$albumobj = new Album($galleryobj,$album);
 			echo "<option value='".urlencode($albumobj->name)."'>".$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj)." (".$albumobj->getNumImages().")</option>";
 			printSubLevelAlbums($albumobj);

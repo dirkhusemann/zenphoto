@@ -30,7 +30,7 @@ $gallery = new Gallery();
 if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
 	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-		if (!isMyAlbum($folder, $_zp_loggedin)) {
+		if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 			exit();
 		}

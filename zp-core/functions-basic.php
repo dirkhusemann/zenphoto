@@ -30,7 +30,7 @@ if (DEBUG_LOGIN || DEBUG_IMAGE || DEBUG_404 || DEBUG_EXIF) {
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 	error_reporting(0);
 	$_zp_server_timezone = date_default_timezone_get();
-	date_default_timezone_set($_zp_server_timezone); 
+	date_default_timezone_set($_zp_server_timezone);
 	@ini_set('date.timezone', $_zp_server_timezone);
 }
 
@@ -184,7 +184,7 @@ function getOption($key, $db=false) {
 	global $_zp_conf_vars, $_zp_options, $_zp_optionDB_hasownerid;
 	if (is_null($_zp_options)) {
 		$_zp_options = array();
-	
+
 		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`=0';
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist == false) { // might be old, un-migrated option table during setup--retry without the `ownerid`.
@@ -459,13 +459,13 @@ function getImageParameters($args, $album=NULL) {
 	$thumb = $crop = false;
 	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $WM, $adminrequest, $gray) = $args;
 	$thumb = $thumbstandin;
-	if ($size == 'thumb') { 
+	if ($size == 'thumb') {
 		$thumb = true;
 		if ($thumb_crop) {
 			$cw = $thumb_crop_width;
 			$ch = $thumb_crop_height;
 		}
-		$size = round($thumb_size);		
+		$size = round($thumb_size);
 	} else {
 		if ($size == 'default') {
 			$size = $image_default_size;
@@ -475,7 +475,7 @@ function getImageParameters($args, $album=NULL) {
 			$size = round($size);
 		}
 	}
-	
+
 	// Round each numeric variable, or set it to false if not a number.
 	list($width, $height, $cw, $ch, $quality) =	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $quality));
 	if (!is_null($cx)) {
@@ -485,7 +485,7 @@ function getImageParameters($args, $album=NULL) {
 		$cy = sanitize_numeric($cy);
 	}
 	if (empty($cw) && empty($ch)) {
-		$crop = false; 
+		$crop = false;
 	} else {
 		$crop = true;
 	}
@@ -549,8 +549,8 @@ function getImageProcessorURI($args, $album, $image) {
  * Takes user input meant to be used within a path to a file or folder and
  * removes anything that could be insecure or malicious, or result in duplicate
  * representations for the same physical file.
- * 
- * This function is used primarily for album names. 
+ *
+ * This function is used primarily for album names.
  * NOTE: The initial and trailing slashes are removed!!!
  *
  * Returns the sanitized path
@@ -615,7 +615,7 @@ function sanitize_string($input_string, $sanitize_level) {
 	// Basic sanitation.
 	if ($sanitize_level === 0) {
 		return str_replace(chr(0), " ", $input_string);
-    }
+		}
 	// User specified sanititation.
 	require_once(dirname(__FILE__).'/lib-htmlawed.php');
 
@@ -916,10 +916,10 @@ function mkdir_recursive($pathname, $mode=0777) {
  */
 function parse_size($size) {
 	$suffixes = array(
-    '' => 1,
-    'k' => 1024,
-    'm' => 1048576, // 1024 * 1024
-    'g' => 1073741824, // 1024 * 1024 * 1024
+		'' => 1,
+		'k' => 1024,
+		'm' => 1048576, // 1024 * 1024
+		'g' => 1073741824, // 1024 * 1024 * 1024
 	);
 	if (preg_match('/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $match)) {
 		return $match[1] * $suffixes[strtolower($match[2])];
@@ -987,9 +987,9 @@ function is_valid_other($filename) {
  *
  * @return bool
  */
-function isWin() {  
-	return (strtoupper (substr(PHP_OS, 0,3)) == 'WIN' ) ;  
-}  
+function isWin() {
+	return (strtoupper (substr(PHP_OS, 0,3)) == 'WIN' ) ;
+}
 
 /**
  * Returns an img src URI encoded based on the OS of the server
@@ -1074,7 +1074,7 @@ function getAlbumInherited($folder, $field, &$id) {
  * primitive theme setup for image handling scripts
  *
  * we need to conserve memory so loading the classes is out of the question.
- * 
+ *
  * @param string $album
  * @return string
  */
@@ -1136,7 +1136,7 @@ function loadLocalOptions($albumid, $theme) {
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS | VIEW_ALL_RIGHTS)) {
 		return $_zp_loggedin & (ADMIN_RIGHTS | $action);
 	}
 	if (empty($albumfolder) || $albumfolder == '/') {
@@ -1194,7 +1194,7 @@ function zp_escape_string($string) {
 
 /**
  * Checks to see if access was through a secure protocol
- * 
+ *
  * @return bool
  */
 function secureServer() {
