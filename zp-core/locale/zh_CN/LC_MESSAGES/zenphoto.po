@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zenphoto\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-17 02:33+0800\n"
+"POT-Creation-Date: 2010-01-01 03:58+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: fatman <fatman.lee@gmail.com>\n"
 "Language-Team: \n"
@@ -257,10 +257,10 @@ msgid "The default theme in 4 distinct flavors. After choosing this theme you ca
 msgstr "预设布景主题有四种不同韵味.  选择这主题后你可以在管理选项栏中的<em>布景主题颜色</em>选取不同的主题颜色."
 
 #: zenphoto/themes/effervescence_plus/404.php:33
-#: zenphoto/themes/effervescence_plus/album.php:140
+#: zenphoto/themes/effervescence_plus/album.php:139
 #: zenphoto/themes/effervescence_plus/archive.php:37
-#: zenphoto/themes/effervescence_plus/contact.php:81
-#: zenphoto/themes/effervescence_plus/gallery.php:37
+#: zenphoto/themes/effervescence_plus/contact.php:79
+#: zenphoto/themes/effervescence_plus/gallery.php:38
 #: zenphoto/themes/effervescence_plus/image.php:70
 #: zenphoto/themes/effervescence_plus/news.php:38
 #: zenphoto/themes/effervescence_plus/pages.php:38
@@ -269,10 +269,10 @@ msgid "Main Index"
 msgstr "主索引"
 
 #: zenphoto/themes/effervescence_plus/404.php:33
-#: zenphoto/themes/effervescence_plus/album.php:140
+#: zenphoto/themes/effervescence_plus/album.php:139
 #: zenphoto/themes/effervescence_plus/archive.php:37
-#: zenphoto/themes/effervescence_plus/contact.php:81
-#: zenphoto/themes/effervescence_plus/gallery.php:37
+#: zenphoto/themes/effervescence_plus/contact.php:79
+#: zenphoto/themes/effervescence_plus/gallery.php:38
 #: zenphoto/themes/effervescence_plus/image.php:70
 #: zenphoto/themes/effervescence_plus/news.php:38
 #: zenphoto/themes/effervescence_plus/pages.php:38
@@ -280,27 +280,27 @@ msgstr "主索引"
 msgid "Home"
 msgstr "主页"
 
-#: zenphoto/themes/effervescence_plus/album.php:203
+#: zenphoto/themes/effervescence_plus/album.php:202
 msgid "Google Map"
 msgstr "Google地图"
 
-#: zenphoto/themes/effervescence_plus/album.php:319
+#: zenphoto/themes/effervescence_plus/album.php:314
 msgid "For the best viewing experience"
 msgstr "为着最好的观看体验"
 
-#: zenphoto/themes/effervescence_plus/album.php:319
+#: zenphoto/themes/effervescence_plus/album.php:314
 msgid "Get Adobe Flash."
 msgstr "下载Adobe Flash."
 
-#: zenphoto/themes/effervescence_plus/album.php:328
+#: zenphoto/themes/effervescence_plus/album.php:323
 msgid "View Gallery Without Flash"
 msgstr "不以Flash观看相簿"
 
-#: zenphoto/themes/effervescence_plus/album.php:353
+#: zenphoto/themes/effervescence_plus/album.php:348
 msgid "Album is empty"
 msgstr "没有照片"
 
-#: zenphoto/themes/effervescence_plus/album.php:413
+#: zenphoto/themes/effervescence_plus/album.php:408
 msgid "Open In New Window"
 msgstr "在新视窗开启"
 
@@ -314,171 +314,171 @@ msgstr "记录模式"
 msgid "Images By Date"
 msgstr "根据日期"
 
-#: zenphoto/themes/effervescence_plus/contact.php:52
-#: zenphoto/themes/effervescence_plus/contact.php:88
+#: zenphoto/themes/effervescence_plus/contact.php:50
+#: zenphoto/themes/effervescence_plus/contact.php:86
 msgid "Contact"
 msgstr "联络"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:21
+#: zenphoto/themes/effervescence_plus/functions.php:21
 msgid "There were no images from which to select the random heading."
 msgstr "没有图片可以选择作为随机标题."
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:40
+#: zenphoto/themes/effervescence_plus/functions.php:40
 msgid "Random picture..."
 msgstr "随机图片..."
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:66
+#: zenphoto/themes/effervescence_plus/functions.php:66
 #, php-format
 msgid "%u album"
 msgid_plural "%u albums"
 msgstr[0] "%u 个相簿"
 msgstr[1] "%u 个相簿"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:72
+#: zenphoto/themes/effervescence_plus/functions.php:72
 #, php-format
 msgid "%u image"
 msgid_plural "%u images"
 msgstr[0] "%u 张图片"
 msgstr[1] "%u 张图片"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:98
+#: zenphoto/themes/effervescence_plus/functions.php:98
 #, php-format
 msgid "Album %1$u of %2$u"
 msgstr "相簿 %2$u 之 %1$u "
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:100
+#: zenphoto/themes/effervescence_plus/functions.php:100
 #, php-format
 msgid "Photo %1$u of %2$u"
 msgstr "相片 %2$u 之 %1$u "
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:104
+#: zenphoto/themes/effervescence_plus/functions.php:104
 #, php-format
 msgid "Albums %1$u-%2$u of %3$u"
 msgstr "Albums %3$u 之 %1$u-%2$u"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:106
+#: zenphoto/themes/effervescence_plus/functions.php:106
 #, php-format
 msgid "Photos %1$u-%2$u of %3$u"
 msgstr "相片 %3$u 之 %1$u-%2$u "
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:128
-#: zenphoto/themes/effervescence_plus/customfunctions.php:133
+#: zenphoto/themes/effervescence_plus/functions.php:128
+#: zenphoto/themes/effervescence_plus/functions.php:133
 #, php-format
 msgid "Effervescence %s"
 msgstr "Effervescence %s"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:130
+#: zenphoto/themes/effervescence_plus/functions.php:130
 #, php-format
 msgid "Effervescence %s (not found)"
 msgstr "Effervescence %s (不存在)"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:136
+#: zenphoto/themes/effervescence_plus/functions.php:136
 #, php-format
 msgid "Effervescence %1$s %2$s"
 msgstr "Effervescence %1$s %2$s"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:138
+#: zenphoto/themes/effervescence_plus/functions.php:138
 #, php-format
 msgid "Effervescence %1$s %2$s (not found)"
 msgstr "Effervescence %1$s %2$s (不存在)"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:167
+#: zenphoto/themes/effervescence_plus/functions.php:167
 msgid "The album is password protected."
 msgstr "这相簿受密码保护."
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:170
+#: zenphoto/themes/effervescence_plus/functions.php:170
 msgid "The album is not published."
 msgstr "相簿未发表."
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:172
+#: zenphoto/themes/effervescence_plus/functions.php:172
 #, php-format
 msgid "View the Album: %s"
 msgstr "观看相簿: %s"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:178
+#: zenphoto/themes/effervescence_plus/functions.php:178
 msgid "The image is marked not visible."
 msgstr "图片标示为不可见."
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:182
+#: zenphoto/themes/effervescence_plus/functions.php:182
 #, php-format
 msgid "View the image: %s"
 msgstr "观看图片: %s"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:192
+#: zenphoto/themes/effervescence_plus/functions.php:192
 msgid "page"
 msgstr "页"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:195
+#: zenphoto/themes/effervescence_plus/functions.php:195
 msgid "album"
 msgstr "相簿"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:199
+#: zenphoto/themes/effervescence_plus/functions.php:199
 msgid "image"
 msgstr "图片"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:204
+#: zenphoto/themes/effervescence_plus/functions.php:204
 msgid "category"
 msgstr "类别"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:208
+#: zenphoto/themes/effervescence_plus/functions.php:208
 msgid "article"
 msgstr "文章"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:219
+#: zenphoto/themes/effervescence_plus/functions.php:219
 #, php-format
 msgid "%1$u hit on this %2$s"
 msgid_plural "%1$u hits on this %2$s"
 msgstr[0] "在 %2$s 有 %1$u 观看次数"
 msgstr[1] "在 %2$s 有 %1$u 观看次数"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:227
+#: zenphoto/themes/effervescence_plus/functions.php:227
 #, php-format
 msgid "%u Album"
 msgid_plural "%u Albums"
 msgstr[0] "%u 个相簿"
 msgstr[1] "%u 个相簿"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:228
+#: zenphoto/themes/effervescence_plus/functions.php:228
 #, php-format
 msgid "%u Subalbum"
 msgid_plural "%u Subalbums"
 msgstr[0] "%u 个子相簿"
 msgstr[1] "%u 个子相簿"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:230
+#: zenphoto/themes/effervescence_plus/functions.php:230
 #, php-format
 msgid "%u Image"
 msgid_plural "%u Images"
 msgstr[0] "%u 张图片"
 msgstr[1] "%u 张图片"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:234
+#: zenphoto/themes/effervescence_plus/functions.php:234
 #, php-format
 msgid "%u Comment"
 msgid_plural "%u Comments"
 msgstr[0] "%u 个留言"
 msgstr[1] "%u 个留言"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:267
+#: zenphoto/themes/effervescence_plus/functions.php:267
 #: zenphoto/themes/effervescence_plus/news.php:72
 #, php-format
 msgid "Comments: %d"
 msgstr "留言: %d"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:277
+#: zenphoto/themes/effervescence_plus/functions.php:277
 msgid "Album:"
 msgstr "相簿:"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:281
+#: zenphoto/themes/effervescence_plus/functions.php:281
 #: zenphoto/themes/effervescence_plus/news.php:81
 msgid "Categories: "
 msgstr "类别:"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:293
+#: zenphoto/themes/effervescence_plus/functions.php:293
 msgid "next &raquo;"
 msgstr "下一页 &raquo;"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:293
+#: zenphoto/themes/effervescence_plus/functions.php:293
 msgid "&laquo; prev"
 msgstr "&laquo; 上一页"
 
@@ -507,62 +507,62 @@ msgstr "新闻"
 msgid "Category"
 msgstr "Categories"
 
-#: zenphoto/themes/effervescence_plus/search.php:136
+#: zenphoto/themes/effervescence_plus/search.php:134
 #, php-format
 msgid "%1$u Hit for <em>%2$s</em>"
 msgid_plural "%1$u Hits for <em>%2$s</em>"
 msgstr[0] "<em>%2$s</em> 有 %1$u 观看次数"
 msgstr[1] "<em>%2$s</em> 有 %1$u 观看次数"
 
-#: zenphoto/themes/effervescence_plus/search.php:151
+#: zenphoto/themes/effervescence_plus/search.php:149
 #, php-format
 msgid "Pages (%s)"
 msgstr "页 (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:155
-#: zenphoto/themes/effervescence_plus/search.php:187
+#: zenphoto/themes/effervescence_plus/search.php:153
+#: zenphoto/themes/effervescence_plus/search.php:185
 msgid "Show more results"
 msgstr "显示更多结果"
 
-#: zenphoto/themes/effervescence_plus/search.php:156
-#: zenphoto/themes/effervescence_plus/search.php:188
+#: zenphoto/themes/effervescence_plus/search.php:154
+#: zenphoto/themes/effervescence_plus/search.php:186
 msgid "Show fewer results"
 msgstr "显示更少结果"
 
-#: zenphoto/themes/effervescence_plus/search.php:183
+#: zenphoto/themes/effervescence_plus/search.php:181
 #, php-format
 msgid "Articles (%s)"
 msgstr "文章 (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:218
+#: zenphoto/themes/effervescence_plus/search.php:216
 #, php-format
 msgid "Images (%s)"
 msgstr "图片 (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:223
+#: zenphoto/themes/effervescence_plus/search.php:220
 #, php-format
 msgid "Albums (%s)"
 msgstr "相簿 (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:226
+#: zenphoto/themes/effervescence_plus/search.php:222
 #, php-format
 msgid "Albums (%1$s) &amp; Images (%2$s)"
 msgstr "相簿 (%1$s) &amp; 图片 (%2$s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:317
+#: zenphoto/themes/effervescence_plus/search.php:311
 msgid "get Adobe Flash."
 msgstr "下载 Adobe Flash."
 
-#: zenphoto/themes/effervescence_plus/search.php:354
+#: zenphoto/themes/effervescence_plus/search.php:348
 msgid "Enter your search criteria."
 msgstr "输入搜寻条件."
 
-#: zenphoto/themes/effervescence_plus/search.php:356
+#: zenphoto/themes/effervescence_plus/search.php:350
 #, php-format
 msgid "Sorry, no matches for <em>%s</em>. Try refining your search."
 msgstr "对不起, 没有符合 <em>%s</em> 结果.  请再以不同条件搜寻."
 
-#: zenphoto/themes/effervescence_plus/search.php:384
+#: zenphoto/themes/effervescence_plus/search.php:378
 msgid "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled."
 msgstr "Simpleviewer 须要<em>mod_rewrite</em> 开启.  Simpleviewer不会启动."
 
@@ -2816,32 +2816,32 @@ msgid "enable gallery sessions"
 msgstr "启作相馆sessions"
 
 #: zenphoto/zp-core/admin-options.php:979
-msgid "<a href=\"javascript: toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>"
-msgstr "<a href=\"javascript: toggle('albumdate');\" >评细资料</a> ：<em>使用最新图片日期为相簿日期</em>"
+msgid "<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>"
+msgstr "<em>使用最新图片日期为相簿日期</em>的<a href=\"javascript:toggle('albumdate');\" >评细资料</a>"
 
 #: zenphoto/zp-core/admin-options.php:981
 msgid "If you wish your album date to reflect the date of the latest image uploaded set set this option. Otherwise the date will be set initially to the date the album was created."
 msgstr "设定这选项使你的最新上载的图片日期为相簿日期, 否则相簿日期将使用相簿的建立日期."
 
 #: zenphoto/zp-core/admin-options.php:984
-msgid "<a href=\"javascript: toggle('username');\" >Details</a> for <em>enable user name login field</em>"
-msgstr "<a href=\"javascript: toggle('username');\" >评细资料</a>：<em>启动用户名称登入栏位</em>"
+msgid "<a href=\"javascript:toggle('username');\" >Details</a> for <em>enable user name login field</em>"
+msgstr "<em>启动用户名称登入栏位</em>的<a href=\"javascript:toggle('username');\" >评细资料</a> "
 
 #: zenphoto/zp-core/admin-options.php:986
 msgid "This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."
 msgstr "这选项会在相馆中(搜寻, 相簿)放置用户名称栏位.  如你设置访客用户名称, 这是必须的.  这同时令管理员可以在这些页面中直接登入, 而不用在管理登入页."
 
 #: zenphoto/zp-core/admin-options.php:989
-msgid "<a href=\"javascript: toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>"
-msgstr "<a href=\"javascript: toggle('visualthumb');\" >评细资料</a>：<em>缩图选单</em>"
+msgid "<a href=\"javascript:toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>"
+msgstr "<em>缩图选单</em>的<a href=\"javascript:toggle('visualthumb');\" >评细资料</a>"
 
 #: zenphoto/zp-core/admin-options.php:991
 msgid "Setting this places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "
 msgstr "设定此选项会在相簿缩图选单中显示缩图(在每一个相簿编辑页的向下表列中).  在Firefox中向下表列会显示缩图, 但在IE和Safari只会显示名称(虽则缩图已载入!).  在有大量图片的相簿会用不少时间载入而浏览器却不显示, 是不必要的.  清除此选项会令图片缩图不载入."
 
 #: zenphoto/zp-core/admin-options.php:994
-msgid "<a href=\"javascript: toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>"
-msgstr "<a href=\"javascript: toggle('persistentarchive');\" >评细资料</a>：<em>启动持续式存档</em>"
+msgid "<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>"
+msgstr "<em>启动持续式存档</em>的<a href=\"javascript:toggle('persistentarchive');\" >评细资料</a>"
 
 #: zenphoto/zp-core/admin-options.php:996
 msgid "Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked\tthat .zip file will be regenerated each time."
@@ -2852,8 +2852,8 @@ msgid "<strong>Note: </strong>Setting\tthis option may impact password protected
 msgstr "<strong>注意: </strong>设定此选项会影响以密码保护的相簿!"
 
 #: zenphoto/zp-core/admin-options.php:1000
-msgid "<a href=\"javascript: toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>"
-msgstr "<a href=\"javascript: toggle('gallerysessions');\" >评细资料</a>：<em>启动相馆sessions</em>"
+msgid "<a href=\"javascript:toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>"
+msgstr "<em>启动相馆sessions</em>的<a href=\"javascript:toggle('gallerysessions');\" >评细资料</a>"
 
 #: zenphoto/zp-core/admin-options.php:1002
 msgid "Check this option if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
@@ -4035,7 +4035,7 @@ msgstr "收起所有栏位"
 
 #: zenphoto/zp-core/admin-users.php:288
 msgid "pending verification"
-msgstr "等待确认中"
+msgstr "等待验证中"
 
 #: zenphoto/zp-core/admin-users.php:296
 msgid "Master"
@@ -5482,24 +5482,24 @@ msgstr "留言已贴上"
 msgid "Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation."
 msgstr "Zenphoto找不到任何布景主题.  请检查安装的 <em>%s</em> 资料夹."
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown name"
 msgstr "未知名称: "
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown author"
 msgstr "不知名作者"
 
-#: zenphoto/zp-core/functions.php:1500
-#: zenphoto/zp-core/functions.php:1508
+#: zenphoto/zp-core/functions.php:1472
+#: zenphoto/zp-core/functions.php:1480
 msgid "<strong>Theme description error!</strong>"
 msgstr "<strong>布景主题描述错误</strong>"
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown date"
 msgstr "未知日期: "
 
-#: zenphoto/zp-core/functions.php:1533
+#: zenphoto/zp-core/functions.php:1505
 #, php-format
 msgid "Page access %2$s (%1$s)"
 msgstr "页面存取 %2$s (%1$s)"
@@ -6555,240 +6555,240 @@ msgstr "<em>.htaccess</em> 档案"
 msgid "Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."
 msgstr "伺服器可能不是Apache或Apache兼容, 不须要<code>.htaccess</code>."
 
-#: zenphoto/zp-core/setup.php:1277
+#: zenphoto/zp-core/setup.php:1279
 msgid "<em>.htaccess</em> file [is empty or does not exist]"
 msgstr "<em>.htaccess</em> 档案 [是空白或不存在]"
 
-#: zenphoto/zp-core/setup.php:1278
+#: zenphoto/zp-core/setup.php:1280
 msgid "If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs."
 msgstr "如果启动了 mod_rewrite 模组, zenphoto 根资料夹中必须有<code>.htaccess</code>档案, 以使得到更好看的URL."
 
-#: zenphoto/zp-core/setup.php:1279
+#: zenphoto/zp-core/setup.php:1281
 msgid "You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option."
 msgstr "如果你不想设定<code>mod_rewrite</code>, 你可以忽略这些警告."
 
-#: zenphoto/zp-core/setup.php:1280
+#: zenphoto/zp-core/setup.php:1282
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup create the file."
 msgstr "点击<a href=\"?copyhtaccess\" >这里</a> 使到安装程式建立档案."
 
-#: zenphoto/zp-core/setup.php:1294
+#: zenphoto/zp-core/setup.php:1302
 msgid "<em>.htaccess</em> file [wrong version]"
 msgstr "<em>.htaccess</em> 档案 [版本错误]"
 
-#: zenphoto/zp-core/setup.php:1295
+#: zenphoto/zp-core/setup.php:1303
 #, php-format
 msgid "The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."
 msgstr "在根资料夹的<em>.htaccess</em> 和跟随本版本 Zenphoto 的并不相同.  如你有曾经改动 <em>.htaccess</em>, 请根据 <em>%s/htaccess</em> 合并改动以产生新的<em>.htaccess</em> 档案."
 
-#: zenphoto/zp-core/setup.php:1297
+#: zenphoto/zp-core/setup.php:1305
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup replace your <em>.htaccess</em> file with the current version."
 msgstr "点击<a href=\"?copyhtaccess\" >这里</a> 使到安装程式以现时的版本覆盖你的<em>.htaccess</em> 档案."
 
-#: zenphoto/zp-core/setup.php:1312
+#: zenphoto/zp-core/setup.php:1321
 #, php-format
 msgid "<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"
 msgstr " <em>.htaccess</em> 档案 (<em>RewriteEngine</em> 是 <strong>%s</strong>)"
 
-#: zenphoto/zp-core/setup.php:1327
+#: zenphoto/zp-core/setup.php:1336
 msgid "<em>.htaccess</em> RewriteBase [is <em>missing</em>]"
 msgstr "<em>.htaccess</em> RewriteBase [是 <em>不存在</em>]"
 
-#: zenphoto/zp-core/setup.php:1333
+#: zenphoto/zp-core/setup.php:1342
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code>"
 msgstr "<em>.htaccess</em> RewriteBase 是 <code>%s</code>"
 
-#: zenphoto/zp-core/setup.php:1334
+#: zenphoto/zp-core/setup.php:1343
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> [Does not match install folder]"
 msgstr "<em>.htaccess</em> RewriteBase 是 <code>%s</code> [和安装资料夹不符合]"
 
-#: zenphoto/zp-core/setup.php:1344
+#: zenphoto/zp-core/setup.php:1353
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"
 msgstr "<em>.htaccess</em> RewriteBase 是 <code>%s</code> (已更正)"
 
-#: zenphoto/zp-core/setup.php:1352
+#: zenphoto/zp-core/setup.php:1361
 msgid "Setup was not able to write to the file change RewriteBase match the install folder."
 msgstr "安装程式不能写入档案以修改 RewriteBase 去符合安装的资料夹."
 
-#: zenphoto/zp-core/setup.php:1353
+#: zenphoto/zp-core/setup.php:1362
 #, php-format
 msgid "Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."
 msgstr "使到档案可以写入或在<code>.htaccess</code>档案里设定<code>RewriteBase</code>为 <code>%s</code>."
 
-#: zenphoto/zp-core/setup.php:1358
-#: zenphoto/zp-core/setup.php:1361
-#: zenphoto/zp-core/setup.php:1373
+#: zenphoto/zp-core/setup.php:1367
+#: zenphoto/zp-core/setup.php:1370
+#: zenphoto/zp-core/setup.php:1382
 msgid "<em>robots.txt</em> file"
 msgstr "<em>robots.txt</em> 档案"
 
-#: zenphoto/zp-core/setup.php:1358
-#: zenphoto/zp-core/setup.php:1361
-#: zenphoto/zp-core/setup.php:1373
+#: zenphoto/zp-core/setup.php:1367
+#: zenphoto/zp-core/setup.php:1370
+#: zenphoto/zp-core/setup.php:1382
 msgid "<em>robots.txt</em> file [Not created]"
 msgstr "<em>robots.txt</em> 档案[未建立]"
 
-#: zenphoto/zp-core/setup.php:1358
+#: zenphoto/zp-core/setup.php:1367
 msgid "Setup could not find the  <em>example_robots.txt</em> file."
 msgstr "安装程式  <em>example_robots.txt</em> 档案."
 
-#: zenphoto/zp-core/setup.php:1361
+#: zenphoto/zp-core/setup.php:1370
 msgid "Setup did not create a <em>robots.txt</em> file because one already exists."
 msgstr "安装程式不能建立<em>robots.txt</em> 档案, 原因为档案已存在."
 
-#: zenphoto/zp-core/setup.php:1373
+#: zenphoto/zp-core/setup.php:1382
 msgid "Setup could not create a <em>robots.txt</em> file."
 msgstr "安装程式不能建立 <em>robots.txt</em> 档案."
 
-#: zenphoto/zp-core/setup.php:1378
+#: zenphoto/zp-core/setup.php:1387
 msgid "albums [<code>$conf['external_album_folder']</code> is deprecated]"
 msgstr "相簿 [<code>$conf['external_album_folder']</code> 已不支援]"
 
-#: zenphoto/zp-core/setup.php:1378
-#: zenphoto/zp-core/setup.php:1401
+#: zenphoto/zp-core/setup.php:1387
+#: zenphoto/zp-core/setup.php:1410
 msgid "You should update your zp-config.php file to conform to the current zp-config.php.example file."
 msgstr "应该依据最新的 zp-config.php.example 档案去修改你的  zp-config.php."
 
-#: zenphoto/zp-core/setup.php:1401
+#: zenphoto/zp-core/setup.php:1410
 msgid "<em>albums</em> folder"
 msgstr "<em>相簿</em> 资料夹"
 
-#: zenphoto/zp-core/setup.php:1401
+#: zenphoto/zp-core/setup.php:1410
 msgid "<em>albums</em> folder [The line <code>$conf['album_folder']</code> is missing from your zp-config.php file]"
 msgstr "<em>相簿</em> 资料夹 [在 zp-config.php 档案找不到<code>$conf['album_folder']</code>]"
 
-#: zenphoto/zp-core/setup.php:1405
+#: zenphoto/zp-core/setup.php:1414
 msgid "<em>locale</em> folders"
 msgstr "<em>locale</em> 资料夹"
 
-#: zenphoto/zp-core/setup.php:1405
+#: zenphoto/zp-core/setup.php:1414
 msgid "<em>locale</em> folders [Are not complete]"
 msgstr "<em>locale</em> 资料夹 [不完整]"
 
-#: zenphoto/zp-core/setup.php:1405
+#: zenphoto/zp-core/setup.php:1414
 msgid "Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder."
 msgstr "请确定已上载整个 Zenphoto 程序.  因为最少会有一个 <em>en_US</em> 资料来."
 
-#: zenphoto/zp-core/setup.php:1406
+#: zenphoto/zp-core/setup.php:1415
 msgid "uploaded"
 msgstr "已上载"
 
-#: zenphoto/zp-core/setup.php:1408
+#: zenphoto/zp-core/setup.php:1417
 msgid "HTML cache"
 msgstr "HTML 快取"
 
-#: zenphoto/zp-core/setup.php:1409
+#: zenphoto/zp-core/setup.php:1418
 msgid "Third party plugins"
 msgstr "第三方外挂"
 
-#: zenphoto/zp-core/setup.php:1420
+#: zenphoto/zp-core/setup.php:1429
 msgid "You need to address the problems indicated above then run <code>setup.php</code> again."
 msgstr "你要处理以上的问题并再次执行<code>setup.php</code>."
 
-#: zenphoto/zp-core/setup.php:1423
-#: zenphoto/zp-core/setup.php:1481
+#: zenphoto/zp-core/setup.php:1432
+#: zenphoto/zp-core/setup.php:1490
 msgid "You need <em>USER ADMIN</em> rights to run setup."
 msgstr "你要<em>用户管理</em>权去执行安装."
 
-#: zenphoto/zp-core/setup.php:1966
+#: zenphoto/zp-core/setup.php:1975
 msgid "About to create tables"
 msgstr "关于建立资料库表格."
 
-#: zenphoto/zp-core/setup.php:1968
+#: zenphoto/zp-core/setup.php:1977
 msgid "About to update tables"
 msgstr "关于更新资料库表格"
 
-#: zenphoto/zp-core/setup.php:1970
+#: zenphoto/zp-core/setup.php:1979
 msgid "Begin table creation"
 msgstr "开始建立资料库表格"
 
-#: zenphoto/zp-core/setup.php:1975
-#: zenphoto/zp-core/setup.php:1988
+#: zenphoto/zp-core/setup.php:1984
+#: zenphoto/zp-core/setup.php:1997
 #, php-format
 msgid "MySQL Query %1$s Failed. Error: %2$s"
 msgstr "MySQL 查询 %1$s 失败. 错误: %2$s"
 
-#: zenphoto/zp-core/setup.php:1977
+#: zenphoto/zp-core/setup.php:1986
 #, php-format
 msgid "Table creation failure: %s"
 msgstr "不能建立资料库表格: %s"
 
-#: zenphoto/zp-core/setup.php:1980
-#: zenphoto/zp-core/setup.php:1990
+#: zenphoto/zp-core/setup.php:1989
+#: zenphoto/zp-core/setup.php:1999
 #, php-format
 msgid "MySQL Query ( %s ) Success."
 msgstr "MySQL 查询 ( %s ) 成功."
 
-#: zenphoto/zp-core/setup.php:1984
+#: zenphoto/zp-core/setup.php:1993
 msgid "Begin table updates"
 msgstr "开始更新资料库表格"
 
-#: zenphoto/zp-core/setup.php:1995
+#: zenphoto/zp-core/setup.php:2004
 msgid "Done with database creation and update"
 msgstr "完成资料库表格更新及建立 "
 
-#: zenphoto/zp-core/setup.php:1999
+#: zenphoto/zp-core/setup.php:2008
 #, php-format
 msgid "Previous Release was %s"
 msgstr "上一版本为 %s"
 
-#: zenphoto/zp-core/setup.php:2124
+#: zenphoto/zp-core/setup.php:2133
 msgid "Done with table create!"
 msgstr "完成建立资料库表格!"
 
-#: zenphoto/zp-core/setup.php:2126
+#: zenphoto/zp-core/setup.php:2135
 msgid "Done with table create with errors!"
 msgstr "完成但建立资料库表格有错误!"
 
-#: zenphoto/zp-core/setup.php:2130
+#: zenphoto/zp-core/setup.php:2139
 msgid "Done with table update"
 msgstr "完成更新资料库表格"
 
-#: zenphoto/zp-core/setup.php:2132
+#: zenphoto/zp-core/setup.php:2141
 msgid "Done with table update with errors"
 msgstr "完成但更新资料库表格有错误"
 
-#: zenphoto/zp-core/setup.php:2147
+#: zenphoto/zp-core/setup.php:2156
 #, php-format
 msgid "You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"
 msgstr "你可能要到 <a href=\"admin-users.php?page=users\"> 设定你的管理员用户及密码</a> 或到 <a href=\"%s/backup_restore.php\">执行备行-回复</a>"
 
-#: zenphoto/zp-core/setup.php:2149
+#: zenphoto/zp-core/setup.php:2158
 msgid "You need to <a href=\"admin-users.php\">set your admin user and password</a>"
 msgstr "你要到 <a href=\"admin-users.php\"> 设定你的管理员用户及密码</a>"
 
-#: zenphoto/zp-core/setup.php:2152
+#: zenphoto/zp-core/setup.php:2161
 msgid "You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"
 msgstr "现在可以到 <a href=\"../\"> 观看你的相馆</a>, 或 <a href=\"admin.php\"> 执行管理.</a>"
 
-#: zenphoto/zp-core/setup.php:2179
+#: zenphoto/zp-core/setup.php:2188
 #, php-format
 msgid "Database tables to create: %s"
 msgstr "会建立的资料库表格: %s"
 
-#: zenphoto/zp-core/setup.php:2197
+#: zenphoto/zp-core/setup.php:2206
 #, php-format
 msgid "Database tables to update: %s"
 msgstr "会更新的资料库表格: %s"
 
-#: zenphoto/zp-core/setup.php:2225
+#: zenphoto/zp-core/setup.php:2234
 msgid "create and or update the database tables."
 msgstr "建立或更近资料库表格."
 
-#: zenphoto/zp-core/setup.php:2225
+#: zenphoto/zp-core/setup.php:2234
 msgid "Go"
 msgstr "去"
 
-#: zenphoto/zp-core/setup.php:2232
+#: zenphoto/zp-core/setup.php:2241
 msgid "database did not connect"
 msgstr "资料库未连接"
 
-#: zenphoto/zp-core/setup.php:2234
+#: zenphoto/zp-core/setup.php:2243
 msgid "If you haven't created the database yet, now would be a good time."
 msgstr "如果你还未建立资料库, 现在是一个好时机."
 
-#: zenphoto/zp-core/setup.php:2243
+#: zenphoto/zp-core/setup.php:2252
 msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
 msgstr "zp-config.php档案不存在.  你应该执行setup.php去检查你的设定并建立它."
 
@@ -7036,19 +7036,19 @@ msgstr "最新相簿 RSS"
 msgid "select search fields"
 msgstr "选择搜寻栏位:"
 
-#: zenphoto/zp-core/template-functions.php:4071
+#: zenphoto/zp-core/template-functions.php:4076
 msgid "no date"
 msgstr "没有日期"
 
-#: zenphoto/zp-core/template-functions.php:4341
+#: zenphoto/zp-core/template-functions.php:4346
 msgid "Check your user and password and try again."
 msgstr "检查你的用户名称及密码并再尝试."
 
-#: zenphoto/zp-core/template-functions.php:4348
+#: zenphoto/zp-core/template-functions.php:4353
 msgid "The page you are trying to view is password protected."
 msgstr "你想观看的网页受密码保护."
 
-#: zenphoto/zp-core/template-functions.php:4405
+#: zenphoto/zp-core/template-functions.php:4410
 msgid "Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 msgstr "由<a href=\"http://www.zenphoto.org\" title=\"简洁的网上相簿\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>提供"
 
@@ -7184,7 +7184,7 @@ msgstr "其他"
 
 #: zenphoto/zp-core/exif/exif.php:510
 #: zenphoto/zp-core/exif/makers/fujifilm.php:87
-#: zenphoto/zp-core/exif/makers/nikon.php:175
+#: zenphoto/zp-core/exif/makers/nikon.php:177
 #: zenphoto/zp-core/exif/makers/panasonic.php:102
 msgid "Daylight"
 msgstr "日光"
@@ -7361,7 +7361,7 @@ msgid "Color Sequential Linear Sensor"
 msgstr "色彩序列线性感光元件"
 
 #: zenphoto/zp-core/exif/exif.php:590
-#: zenphoto/zp-core/exif/makers/nikon.php:142
+#: zenphoto/zp-core/exif/makers/nikon.php:144
 msgid "Monochrome"
 msgstr "单色"
 
@@ -7433,7 +7433,7 @@ msgstr "微距"
 #: zenphoto/zp-core/exif/makers/canon.php:165
 #: zenphoto/zp-core/exif/makers/canon.php:172
 #: zenphoto/zp-core/exif/makers/fujifilm.php:80
-#: zenphoto/zp-core/exif/makers/nikon.php:150
+#: zenphoto/zp-core/exif/makers/nikon.php:152
 #: zenphoto/zp-core/exif/makers/panasonic.php:130
 #: zenphoto/zp-core/exif/makers/panasonic.php:203
 msgid "Normal"
@@ -7473,7 +7473,7 @@ msgstr "特级"
 #: zenphoto/zp-core/exif/makers/fujifilm.php:109
 #: zenphoto/zp-core/exif/makers/fujifilm.php:121
 #: zenphoto/zp-core/exif/makers/fujifilm.php:131
-#: zenphoto/zp-core/exif/makers/nikon.php:173
+#: zenphoto/zp-core/exif/makers/nikon.php:175
 #: zenphoto/zp-core/exif/makers/panasonic.php:101
 #: zenphoto/zp-core/exif/makers/panasonic.php:112
 msgid "Auto"
@@ -7592,7 +7592,7 @@ msgid "Pan Focus"
 msgstr "摇镜对焦"
 
 #: zenphoto/zp-core/exif/makers/canon.php:151
-#: zenphoto/zp-core/exif/makers/nikon.php:187
+#: zenphoto/zp-core/exif/makers/nikon.php:189
 msgid "None"
 msgstr "没有"
 
@@ -7664,7 +7664,7 @@ msgstr "右"
 
 #: zenphoto/zp-core/exif/makers/canon.php:209
 #: zenphoto/zp-core/exif/makers/canon.php:287
-#: zenphoto/zp-core/exif/makers/nikon.php:202
+#: zenphoto/zp-core/exif/makers/nikon.php:204
 msgid "Center"
 msgstr "中"
 
@@ -7719,7 +7719,7 @@ msgstr "阳光"
 
 #: zenphoto/zp-core/exif/makers/canon.php:271
 #: zenphoto/zp-core/exif/makers/fujifilm.php:88
-#: zenphoto/zp-core/exif/makers/nikon.php:178
+#: zenphoto/zp-core/exif/makers/nikon.php:180
 #: zenphoto/zp-core/exif/makers/panasonic.php:103
 msgid "Cloudy"
 msgstr "阴天"
@@ -7857,83 +7857,83 @@ msgstr "过度曝光"
 msgid "Converter"
 msgstr "转换器"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:128
+#: zenphoto/zp-core/exif/makers/nikon.php:130
 msgid "VGA Basic"
 msgstr "VGA 基本"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:129
+#: zenphoto/zp-core/exif/makers/nikon.php:131
 msgid "VGA Normal"
 msgstr "VGA 正常"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:130
+#: zenphoto/zp-core/exif/makers/nikon.php:132
 msgid "VGA Fine"
 msgstr "VGA 精细"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:131
+#: zenphoto/zp-core/exif/makers/nikon.php:133
 msgid "SXGA Basic"
 msgstr "SXGA 基本"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:132
+#: zenphoto/zp-core/exif/makers/nikon.php:134
 msgid "SXGA Normal"
 msgstr "SXGA 正常"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:133
+#: zenphoto/zp-core/exif/makers/nikon.php:135
 msgid "SXGA Fine"
 msgstr "SXGA 精细"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:141
+#: zenphoto/zp-core/exif/makers/nikon.php:143
 msgid "Color"
 msgstr "彩色"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:151
+#: zenphoto/zp-core/exif/makers/nikon.php:153
 msgid "Bright+"
 msgstr "亮度 +"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:152
+#: zenphoto/zp-core/exif/makers/nikon.php:154
 msgid "Bright-"
 msgstr "亮度 -"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:153
+#: zenphoto/zp-core/exif/makers/nikon.php:155
 msgid "Contrast+"
 msgstr "对比 +"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:154
+#: zenphoto/zp-core/exif/makers/nikon.php:156
 msgid "Contrast-"
 msgstr "对比 - "
 
-#: zenphoto/zp-core/exif/makers/nikon.php:174
+#: zenphoto/zp-core/exif/makers/nikon.php:176
 msgid "Preset"
 msgstr "预设"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:176
+#: zenphoto/zp-core/exif/makers/nikon.php:178
 msgid "Incandescense"
 msgstr "白热灯"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:177
+#: zenphoto/zp-core/exif/makers/nikon.php:179
 msgid "Flourescence"
 msgstr "荧光灯"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:179
+#: zenphoto/zp-core/exif/makers/nikon.php:181
 msgid "SpeedLight"
 msgstr "闪光灯"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:188
+#: zenphoto/zp-core/exif/makers/nikon.php:190
 msgid "Fisheye"
 msgstr "鱼眼"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:222
+#: zenphoto/zp-core/exif/makers/nikon.php:224
 msgid "AF non D"
 msgstr "AF non D"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:235
+#: zenphoto/zp-core/exif/makers/nikon.php:237
 msgid "Did Not Fire"
 msgstr "没有闪光"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:237
+#: zenphoto/zp-core/exif/makers/nikon.php:239
 msgid "External"
 msgstr "外置"
 
-#: zenphoto/zp-core/exif/makers/nikon.php:238
+#: zenphoto/zp-core/exif/makers/nikon.php:240
 msgid "On Camera"
 msgstr "在相机"
 
@@ -10301,134 +10301,134 @@ msgstr "重设所有评级为未评级."
 msgid "Provides a means for placing a user registration form on your theme pages."
 msgstr "提供方法可以放置用户注册表格到布景主题页面."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:37
+#: zenphoto/zp-core/zp-extensions/register_user.php:39
 #, php-format
 msgid "You have received this email because you registered on the site. To complete your registration visit %s."
 msgstr "你收到这封电邮是因为曾在本网登记.  要完成登记请到 %s."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:43
+#: zenphoto/zp-core/zp-extensions/register_user.php:47
 msgid "Notify"
 msgstr "通知"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:44
-msgid "If checked, an e-mail notification is sent on new user registration."
-msgstr "如剔选, 当有新用户登记时通知电邮会寄出."
+#: zenphoto/zp-core/zp-extensions/register_user.php:48
+msgid "If checked, an e-mail will be sent to the gallery admin when a new user has verified his registration."
+msgstr "如剔选, 当有新用户已验证时通知电邮会寄给管理员."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:45
+#: zenphoto/zp-core/zp-extensions/register_user.php:49
 msgid "Email notification text"
 msgstr "电邮通知文字"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:46
+#: zenphoto/zp-core/zp-extensions/register_user.php:50
 #, php-format
 msgid "Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear."
 msgstr "会发给用户的电邮内容. <strong>注意</strong>: 讯息中必须包含 <code>%s</code> 到希望显示完成登记连结."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:47
+#: zenphoto/zp-core/zp-extensions/register_user.php:51
 msgid "User registration page"
 msgstr "用户登记页"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:48
+#: zenphoto/zp-core/zp-extensions/register_user.php:52
 msgid "If this option is set, the visitor login form will include a link to this page. The link text will be labeled with the text provided."
 msgstr "如设定了这选项, 访客登入表格会包括连结到这页.  连结的文字是本栏的文字."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:49
+#: zenphoto/zp-core/zp-extensions/register_user.php:53
 msgid "Use Captcha"
 msgstr "使用验证码"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:50
+#: zenphoto/zp-core/zp-extensions/register_user.php:54
 msgid "If checked, captcha validation will be required for user registration."
 msgstr "如剔选, 新用户登记时要验证码查证."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:69
+#: zenphoto/zp-core/zp-extensions/register_user.php:73
 msgid "Initial group assignment for the new user."
 msgstr "新用户的初始组别."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:73
+#: zenphoto/zp-core/zp-extensions/register_user.php:77
 msgid "Default user group"
 msgstr "预设用户组别"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:75
+#: zenphoto/zp-core/zp-extensions/register_user.php:79
 msgid "Default user rights"
 msgstr "预设用户权限"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:76
+#: zenphoto/zp-core/zp-extensions/register_user.php:80
 msgid "No rights"
 msgstr "没有权限"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:76
+#: zenphoto/zp-core/zp-extensions/register_user.php:80
 msgid "View Rights"
 msgstr "显示权限"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:77
+#: zenphoto/zp-core/zp-extensions/register_user.php:81
 msgid "Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified."
-msgstr "用户的初始权限.<br /> 如想审核用户请设定 <em>没有权限</em> .<br />设定 <em>观看权限</em> 令用户一旦确认后就可以浏览相馆."
+msgstr "用户的初始权限.<br /> 如想审核用户请设定 <em>没有权限</em> .<br />设定 <em>观看权限</em> 令用户一旦验证后就可以浏览相馆."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:86
+#: zenphoto/zp-core/zp-extensions/register_user.php:90
 msgid "script"
 msgstr "脚本"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:89
+#: zenphoto/zp-core/zp-extensions/register_user.php:94
 msgid "*no page selected"
 msgstr "*没有选择页面"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:107
+#: zenphoto/zp-core/zp-extensions/register_user.php:112
 msgid "Link text"
 msgstr "连结文字"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:111
+#: zenphoto/zp-core/zp-extensions/register_user.php:119
 msgid "Hint text"
 msgstr "提示文字"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:147
+#: zenphoto/zp-core/zp-extensions/register_user.php:162
 msgid "Zenphoto Gallery registration"
 msgstr "Zenphoto 相管登记"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:148
+#: zenphoto/zp-core/zp-extensions/register_user.php:163
 #, php-format
 msgid "%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s."
 msgstr "%1$s (%2$s) 已用电邮地址 %3$s 登记 zenphoto."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:203
+#: zenphoto/zp-core/zp-extensions/register_user.php:218
 msgid "Registration confirmation"
 msgstr "确认登记"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:228
+#: zenphoto/zp-core/zp-extensions/register_user.php:243
 msgid "you are already logged in."
 msgstr "你已经登入."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:240
+#: zenphoto/zp-core/zp-extensions/register_user.php:255
 msgid "Thank you for registering."
 msgstr "多谢登记!"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:243
+#: zenphoto/zp-core/zp-extensions/register_user.php:258
 msgid "Your registration information has been accepted. An email has been sent to you to verify your email address."
-msgstr "你的证记资料已被接纳, 确认电邮地址的电邮已寄出."
+msgstr "你的证记资料已被接纳, 验证电邮地址的电邮已寄出."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:251
+#: zenphoto/zp-core/zp-extensions/register_user.php:266
 msgid "You may now log onto the site."
 msgstr "你现在可以登入本网"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:258
+#: zenphoto/zp-core/zp-extensions/register_user.php:273
 msgid "Registration failed."
 msgstr "登记失败."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:262
+#: zenphoto/zp-core/zp-extensions/register_user.php:277
 msgid "The user ID you chose is already in use."
 msgstr "你选的用户名称已被使用."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:268
+#: zenphoto/zp-core/zp-extensions/register_user.php:283
 msgid "You have not filled in all the fields."
 msgstr "你没有填入所有栏位."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:271
+#: zenphoto/zp-core/zp-extensions/register_user.php:286
 msgid "Invalid verification link."
 msgstr "不正确验证连结"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:274
+#: zenphoto/zp-core/zp-extensions/register_user.php:289
 msgid "Enter a valid email address."
 msgstr "输入正确的电邮地址."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:277
+#: zenphoto/zp-core/zp-extensions/register_user.php:292
 msgid "The captcha you entered was not correct."
 msgstr "你输入的验证码不正确."
 
@@ -10548,35 +10548,35 @@ msgstr "幻灯片显示的 Flowplayer 宽度<em>(Flash 模式)</em>."
 msgid "Height of the Flowplayer display for the slideshow <em>(Flash mode)</em>."
 msgstr "幻灯片显示的 Flowplayer 高度<em>(Flash 模式)</em>."
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:180
+#: zenphoto/zp-core/zp-extensions/slideshow.php:183
 msgid "Invalid linking to the slideshow page."
 msgstr "无效连结到幻灯片播放页."
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:255
+#: zenphoto/zp-core/zp-extensions/slideshow.php:258
 msgid "This album is password protected!"
 msgstr "这相簿受密码保护!"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:401
+#: zenphoto/zp-core/zp-extensions/slideshow.php:404
 msgid "Stop and return to album or image page"
 msgstr "停止并返回相簿或图片页."
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:403
+#: zenphoto/zp-core/zp-extensions/slideshow.php:406
 msgid "Pause (to stop the slideshow without returning)"
 msgstr "暂停(停止幻灯片播放但不返回)"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:404
+#: zenphoto/zp-core/zp-extensions/slideshow.php:407
 msgid "Play"
 msgstr "播放"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:431
+#: zenphoto/zp-core/zp-extensions/slideshow.php:434
 msgid ":"
 msgstr ":"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:474
+#: zenphoto/zp-core/zp-extensions/slideshow.php:477
 msgid "back"
 msgstr "回原处"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:524
+#: zenphoto/zp-core/zp-extensions/slideshow.php:527
 msgid "Click on the right in the player control bar to view full size."
 msgstr "点击播放器的控制栏的右方以全尺寸显示."
 
@@ -10639,39 +10639,39 @@ msgstr "Remy Sharp's <a href='http://remysharp.com/2007/12/28/jquery-tag-suggest
 msgid "Provides rudimentary user groups."
 msgstr "提供基础的用户组别."
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:178
+#: zenphoto/zp-core/zp-extensions/user_groups.php:179
 msgid "*no group affiliation"
 msgstr "*没有组别从属"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:178
+#: zenphoto/zp-core/zp-extensions/user_groups.php:179
 msgid "*no group selected"
 msgstr "*没有选择组别"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:179
+#: zenphoto/zp-core/zp-extensions/user_groups.php:180
 msgid "no group affiliation"
 msgstr "没有组别从属"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:182
+#: zenphoto/zp-core/zp-extensions/user_groups.php:183
 msgid "Template:"
 msgstr "布景主题:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:202
+#: zenphoto/zp-core/zp-extensions/user_groups.php:203
 msgid "Group:"
 msgstr "组别:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:206
+#: zenphoto/zp-core/zp-extensions/user_groups.php:207
 msgid "User group membership.<br /><strong>NOTE:</strong> When a group is assigned <em>rights</em> and <em>managed albums</em> are determined by the group!"
 msgstr "用户组别成员 .<br /><strong>注意:</strong> 当分配了组别, <em>权限</em> 和<em>管理相簿</em>是由组别决定!"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:212
+#: zenphoto/zp-core/zp-extensions/user_groups.php:213
 msgid "users"
 msgstr "用户"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:213
+#: zenphoto/zp-core/zp-extensions/user_groups.php:214
 msgid "assignments"
 msgstr "分配 "
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:214
+#: zenphoto/zp-core/zp-extensions/user_groups.php:215
 msgid "groups"
 msgstr "组别"
 
@@ -10741,18 +10741,13 @@ msgstr "预设参数的格式错误"
 msgid "Extracts <em>xmp</em> metadata from images and <code>xmp</code> sidecar files."
 msgstr "提取 <em>xmp</em> 图片的诠释资料及 <code>xmp</code> 侧档案."
 
-#: zenphoto/zp-core/zp-extensions/xmpMetadata.php:78
+#: zenphoto/zp-core/zp-extensions/xmpMetadata.php:80
 msgid "Process extensions."
 msgstr "运作扩展."
 
-#: zenphoto/zp-core/zp-extensions/xmpMetadata.php:80
+#: zenphoto/zp-core/zp-extensions/xmpMetadata.php:82
 msgid "If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive."
 msgstr "如果没有侧档案和扩展已启用, 这外挂会在<em>图片</em>档案中寻找<code>xmp</code>区块.  <strong>警告</strong>只有须要时才设定这选项, 寻找图片档案是要大量电脑计算."
-
-#: zenphoto/zp-core/zp-extensions/xmpMetadata.php:321
-#, php-format
-msgid "%s sec"
-msgstr "%s 秒"
 
 #: zenphoto/zp-core/zp-extensions/zenpage.php:8
 msgid "A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br /><strong>NOTE:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>zenpage default</code> and <code>effervescence+</code> themes support Zenpage."
@@ -10909,11 +10904,6 @@ msgstr "选择图片直接连结到图片页或相簿页 (如设定为CombiNews�
 #: zenphoto/zp-core/zp-extensions/zenphoto_sendmail.php:7
 msgid "Zenphoto outgoing mail handler based on the PHP <em>mail</em> facility."
 msgstr "Zenphoto 向外电邮处理器是使用  PHP <em>电邮</em> 功能."
-
-#: zenphoto/zp-core/zp-extensions/zenphoto_sendmail.php:16
-#, php-format
-msgid "From: %1$s <%2$s>"
-msgstr "寄信人: %1$s <%2$s>"
 
 #: zenphoto/zp-core/zp-extensions/zenphoto_sendmail.php:30
 #, php-format
@@ -11334,41 +11324,41 @@ msgstr "下载Flash"
 msgid "to see this player."
 msgstr "以看到播放器."
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:141
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:142
 msgid "Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected."
 msgstr "设定组别权限和选择相簿给组别中用户以管理.  管理员拥有<em>用户管理</em>或 <em>管理所有相簿</em> 权限时可管理所有相簿.  其他就只可以管理已选取的."
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:168
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:176
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:169
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:177
 msgid "group"
 msgstr "组别"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:169
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:176
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:170
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:177
 msgid "template"
 msgstr "布景主题"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:185
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:186
 msgid "description:"
 msgstr "描述:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:192
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:193
 msgid "clone:"
 msgstr "复制:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:228
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:229
 msgid "Assign users"
 msgstr "分配用户"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:249
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:250
 msgid "Are you sure you want to delete this group?"
 msgstr "是否肯定要删除这个组别?"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:252
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:253
 msgid "Delete this group."
 msgstr "删除这组别."
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:285
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:286
 msgid "Assign users to groups."
 msgstr "分配用户到组别."
 
@@ -11881,98 +11871,56 @@ msgstr "发表 (推翻过期设定)"
 msgid "Toggle Editor"
 msgstr "编辑器开关"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:441
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:442
 msgid "No flash player installed."
 msgstr "没有安装Flash播放器."
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:1364
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:1365
 msgid "Prev page"
 msgstr "上一页"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2539
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2537
 msgid "News RSS"
 msgstr "新闻 RSS"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2544
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2542
 msgid "News Category RSS"
 msgstr "新闻类别 RSS"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2549
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2547
 msgid "News and Gallery RSS"
 msgstr "新闻相馆 RSS"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2554
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2552
 msgid "Zenpage Comments RSS"
 msgstr "Zenpage 留言 RSS"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2559
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2557
 msgid "News article comments RSS"
 msgstr "新闻文章留言 RSS"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2564
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2562
 msgid "Page Comments RSS"
 msgstr "页留言 RSS"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2645
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2643
 #, php-format
 msgid "View the %s album"
 msgstr "观看 %s 相簿"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2647
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2645
 #, php-format
 msgid "View the photo album %s"
 msgstr "观看相簿 %s"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2652
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2653
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2650
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2651
 #, php-format
 msgid "View %s"
 msgstr "显示 %s"
 
-#~ msgid "Total matches for"
-#~ msgstr "符合"
-#~ msgid "Images per page:"
-#~ msgstr "每页图片数:"
-#~ msgid ""
-#~ "Recommended number of images on a page. You might need to adjust this for "
-#~ "a better page layout."
-#~ msgstr "建议每页的图片数量.  你可能要改变它去配合不同的布景主题设计."
-#~ msgid "called:"
-#~ msgstr "名称:"
-#~ msgid "upgrade"
-#~ msgstr "升级"
-#~ msgid "setup"
-#~ msgstr "安装"
-#~ msgid "Just change the one line indicated to make it work."
-#~ msgstr "只修改指定的一行令它运作."
-#~ msgid ""
-#~ "You need to upload the copy of the .htaccess file that was included with "
-#~ "the zenphoto distribution."
-#~ msgstr "你要上载和zenphoto一起的.htaccess档案."
-#~ msgid ""
-#~ "The backup facility creates database snapshots in the <code>backup</code> "
-#~ "folder of your installation."
-#~ msgstr "这备份工具会在<code>backup</code>资料夹中建立资料库影像."
-#~ msgid ""
-#~ "These backups are named in according to the date and time the backup was "
-#~ "taken."
-#~ msgstr "这些备份以备份的日期时间命名."
-#~ msgid ""
-#~ "You restore your database by selecting a backup and pressing the "
-#~ "<em>Restore the Database</em> button"
-#~ msgstr "选择一个要回复的资料库备份及按下<em>回复资料库</em>"
-#~ msgid ""
-#~ "The restore is “additive”. That is the database is not emptied before the "
-#~ "restore is attempted."
-#~ msgstr "回复为\"相加的\".  即是资料库不会在回复前清空"
-#~ msgid "Set to most recent"
-#~ msgstr "设定为最新"
-#~ msgid ""
-#~ "This will override any album thumb selections you have made on individual "
-#~ "albums."
-#~ msgstr "这会超越各个相簿的各自缩图设定."
-#~ msgid " "
-#~ msgstr " "
-#~ msgid "Mail protocal to use."
-#~ msgstr "使用电邮协议."
+#~ msgid "%s sec"
+#~ msgstr "%s 秒"
+#~ msgid "From: %1$s <%2$s>"
+#~ msgstr "寄信人: %1$s <%2$s>"
 
