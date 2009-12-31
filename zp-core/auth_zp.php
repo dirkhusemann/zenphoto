@@ -90,10 +90,9 @@ if (!isset($_POST['login'])) {
 				$admins = getAdministrators();
 				$mails = array();	
 				$user = NULL;
-				if (!empty($post_user)) {
-					$user = null;
-					foreach ($admins as $tuser) {
-						if ($tuser['user'] == $post_user && !empty($tuser['email'])) {
+				foreach ($admins as $key=>$tuser) {
+					if ($tuser['valid']) {
+						if (!empty($post_user) && !empty($tuser['email']) && ($tuser['user'] == $post_user || $tuser['email'] == $post_user)) {
 							$name = $tuser['name'];
 							if (empty($name)) {
 								$name = $tuser['user'];
@@ -102,6 +101,8 @@ if (!isset($_POST['login'])) {
 							$user = $tuser;
 							break;
 						}
+					} else {
+						unset($admins[$key]);	// we want to ignore groups here!
 					}
 				}
 				$tuser = array_shift($admins);

@@ -272,7 +272,7 @@ function checkAuthorization($authCode) {
 	global $_zp_current_admin;
 	$admins = getAdministrators();
 	foreach ($admins as $key=>$user) {
-		if (!$user['valid']) {
+		if (!$user['valid']) {	// no groups!
 			unset($admins[$key]);
 		}
 	}
