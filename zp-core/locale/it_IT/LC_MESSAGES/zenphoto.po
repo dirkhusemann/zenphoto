@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-17 22:25+0100\n"
-"PO-Revision-Date: 2009-12-17 22:26+0100\n"
+"POT-Creation-Date: 2009-12-27 13:40+0100\n"
+"PO-Revision-Date: 2010-01-01 03:32+0100\n"
 "Last-Translator: Iacopo Benesperi <iacchi@iacchi.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -340,23 +340,23 @@ msgstr "RSS ultimi album"
 msgid "select search fields"
 msgstr "selezionare i campi di ricerca"
 
-#: zenphoto/zp-core/template-functions.php:4071
+#: zenphoto/zp-core/template-functions.php:4076
 msgid "no date"
 msgstr "nessuna data"
 
-#: zenphoto/zp-core/template-functions.php:4339
+#: zenphoto/zp-core/template-functions.php:4344
 msgid "There was an error logging in."
 msgstr "C'è stato un errore durante l'accesso."
 
-#: zenphoto/zp-core/template-functions.php:4341
+#: zenphoto/zp-core/template-functions.php:4346
 msgid "Check your user and password and try again."
 msgstr "Controllare i propri nome utente e password e provare di nuovo."
 
-#: zenphoto/zp-core/template-functions.php:4348
+#: zenphoto/zp-core/template-functions.php:4353
 msgid "The page you are trying to view is password protected."
 msgstr "La pagina che si sta provando a visualizzare è protetta da password."
 
-#: zenphoto/zp-core/template-functions.php:4405
+#: zenphoto/zp-core/template-functions.php:4410
 msgid "Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 msgstr "Basato su <a href=\"http://www.zenphoto.org\" title=\"Un semplice album di foto sul web\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>"
 
@@ -664,28 +664,28 @@ msgstr "Commento inviato"
 msgid "Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation."
 msgstr "Zenphoto non ha trovato alcun tema. Controllare la cartella <em>%s</em> della propria installazione."
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown name"
 msgstr "Nome sconosciuto"
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown author"
 msgstr "Autore sconosciuto"
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: zenphoto/zp-core/functions.php:1500
-#: zenphoto/zp-core/functions.php:1508
+#: zenphoto/zp-core/functions.php:1472
+#: zenphoto/zp-core/functions.php:1480
 msgid "<strong>Theme description error!</strong>"
 msgstr "<strong>Errore nella descrizione del tema!</strong>"
 
-#: zenphoto/zp-core/functions.php:1500
+#: zenphoto/zp-core/functions.php:1472
 msgid "Unknown date"
 msgstr "Data sconosciuta"
 
-#: zenphoto/zp-core/functions.php:1533
+#: zenphoto/zp-core/functions.php:1505
 #, php-format
 msgid "Page access %2$s (%1$s)"
 msgstr "Accesso pagina %2$s (%1$s)"
@@ -920,7 +920,7 @@ msgid "Continue!"
 msgstr "Continua!"
 
 #: zenphoto/zp-core/admin-refresh-metadata.php:98
-#: zenphoto/zp-core/setup.php:1438
+#: zenphoto/zp-core/setup.php:1447
 msgid "database connected"
 msgstr "database connesso"
 
@@ -2003,240 +2003,240 @@ msgstr "File <em>.htaccess</em>"
 msgid "Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."
 msgstr "Il server sembra non essere Apache o Apache-compatibile, <code>.htaccess</code> non richiesto."
 
-#: zenphoto/zp-core/setup.php:1277
+#: zenphoto/zp-core/setup.php:1279
 msgid "<em>.htaccess</em> file [is empty or does not exist]"
 msgstr "File <em>.htaccess</em> [è vuoto o non esiste]"
 
-#: zenphoto/zp-core/setup.php:1278
+#: zenphoto/zp-core/setup.php:1280
 msgid "If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs."
 msgstr "Se si ha il modulo mod_rewrite attivo è necessario il file <em>.htaccess</em> nella cartella radice di Zenphoto per creare URL puliti."
 
-#: zenphoto/zp-core/setup.php:1279
+#: zenphoto/zp-core/setup.php:1281
 msgid "You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option."
 msgstr "È possibile ignorare questo avviso se non si intende impostare l'opzione <code>mod_rewrite</code>."
 
-#: zenphoto/zp-core/setup.php:1280
+#: zenphoto/zp-core/setup.php:1282
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup create the file."
 msgstr "Fare clic <a href=\"?copyhtaccess\">qui</a> per fare in modo che il setup crei il file."
 
-#: zenphoto/zp-core/setup.php:1294
+#: zenphoto/zp-core/setup.php:1302
 msgid "<em>.htaccess</em> file [wrong version]"
 msgstr "File <em>.htaccess</em> [versione sbagliata]"
 
-#: zenphoto/zp-core/setup.php:1295
+#: zenphoto/zp-core/setup.php:1303
 #, php-format
 msgid "The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."
-msgstr ""
+msgstr "La versione del file <em>.htaccess</em> nella propria cartella di installazione non è la stessa di quello distribuito con questa versione di Zenphoto. Se sono state fatte delle modifiche al file <em>.htaccess</em>, integrare nel file <em>%s/.htaccess</em> per produrre un nuovo file <em>.htaccess</em>."
 
-#: zenphoto/zp-core/setup.php:1297
+#: zenphoto/zp-core/setup.php:1305
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup replace your <em>.htaccess</em> file with the current version."
-msgstr ""
+msgstr "Fare clic <a href=\"?copyhtaccess\" >qui</a> per fare in modo che il setup rimpiazzi il file <em>.htaccess</em> con la versione corrente."
 
-#: zenphoto/zp-core/setup.php:1312
+#: zenphoto/zp-core/setup.php:1321
 #, php-format
 msgid "<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"
 msgstr "File <em>.htaccess</em> (<em>RewriteEngine</em> è <strong>%s</strong>)"
 
-#: zenphoto/zp-core/setup.php:1327
+#: zenphoto/zp-core/setup.php:1336
 msgid "<em>.htaccess</em> RewriteBase [is <em>missing</em>]"
 msgstr "RewriteBase in <em>.htaccess</em>[è <em>mancante</em>]"
 
-#: zenphoto/zp-core/setup.php:1333
+#: zenphoto/zp-core/setup.php:1342
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code>"
 msgstr "Il RewriteBase in <em>.htaccess</em> è <code>%s</code>"
 
-#: zenphoto/zp-core/setup.php:1334
+#: zenphoto/zp-core/setup.php:1343
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> [Does not match install folder]"
 msgstr "RewriteBase in <em>.htaccess</em> è <code>%s</code> [Non corrisponde alla cartella d'installazione]"
 
-#: zenphoto/zp-core/setup.php:1344
+#: zenphoto/zp-core/setup.php:1353
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"
 msgstr "Il RewriteBase in <em>.htaccess</em> è <code>%s</code> (risolto)"
 
-#: zenphoto/zp-core/setup.php:1352
+#: zenphoto/zp-core/setup.php:1361
 msgid "Setup was not able to write to the file change RewriteBase match the install folder."
 msgstr "Setup non è stato in grado di scrivere la modifica a RewriteBase nel file per farlo corrispondere alla cartella d'installazione."
 
-#: zenphoto/zp-core/setup.php:1353
+#: zenphoto/zp-core/setup.php:1362
 #, php-format
 msgid "Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."
 msgstr "Rendere il file scrivibile o impostare <code>RewriteBase</code> nel proprio file <code>.htaccess</code> con <code>%s</code>."
 
-#: zenphoto/zp-core/setup.php:1358
-#: zenphoto/zp-core/setup.php:1361
-#: zenphoto/zp-core/setup.php:1373
+#: zenphoto/zp-core/setup.php:1367
+#: zenphoto/zp-core/setup.php:1370
+#: zenphoto/zp-core/setup.php:1382
 msgid "<em>robots.txt</em> file"
 msgstr "File <em>robots.txt</em>"
 
-#: zenphoto/zp-core/setup.php:1358
-#: zenphoto/zp-core/setup.php:1361
-#: zenphoto/zp-core/setup.php:1373
+#: zenphoto/zp-core/setup.php:1367
+#: zenphoto/zp-core/setup.php:1370
+#: zenphoto/zp-core/setup.php:1382
 msgid "<em>robots.txt</em> file [Not created]"
 msgstr "File <em>robots.txt</em> [Non creato]"
 
-#: zenphoto/zp-core/setup.php:1358
+#: zenphoto/zp-core/setup.php:1367
 msgid "Setup could not find the  <em>example_robots.txt</em> file."
 msgstr "Setup non ha potuto trovare il file <em>example_robots.txt</em>."
 
-#: zenphoto/zp-core/setup.php:1361
+#: zenphoto/zp-core/setup.php:1370
 msgid "Setup did not create a <em>robots.txt</em> file because one already exists."
 msgstr "Setup non ha creato il file <em>robots.txt</em> perché ne esiste già uno."
 
-#: zenphoto/zp-core/setup.php:1373
+#: zenphoto/zp-core/setup.php:1382
 msgid "Setup could not create a <em>robots.txt</em> file."
 msgstr "Setup non ha potuto creare il file <em>robots.txt</em>"
 
-#: zenphoto/zp-core/setup.php:1378
+#: zenphoto/zp-core/setup.php:1387
 msgid "albums [<code>$conf['external_album_folder']</code> is deprecated]"
 msgstr "albums [<code>$conf['external_album_folder']</code> è deprecata]"
 
-#: zenphoto/zp-core/setup.php:1378
-#: zenphoto/zp-core/setup.php:1401
+#: zenphoto/zp-core/setup.php:1387
+#: zenphoto/zp-core/setup.php:1410
 msgid "You should update your zp-config.php file to conform to the current zp-config.php.example file."
 msgstr "È necessario aggiornare il proprio file zp-config.php in modo da renderlo conforme al file zp-config.php.example corrente."
 
-#: zenphoto/zp-core/setup.php:1401
+#: zenphoto/zp-core/setup.php:1410
 msgid "<em>albums</em> folder"
 msgstr "cartella <em>albums</em>"
 
-#: zenphoto/zp-core/setup.php:1401
+#: zenphoto/zp-core/setup.php:1410
 msgid "<em>albums</em> folder [The line <code>$conf['album_folder']</code> is missing from your zp-config.php file]"
 msgstr "Cartella <em>albums</em> [Manca la linea <code>$conf['album_folder']</code> nel proprio file zp-config.php]"
 
-#: zenphoto/zp-core/setup.php:1405
+#: zenphoto/zp-core/setup.php:1414
 msgid "<em>locale</em> folders"
 msgstr "Cartelle <em>locale</em>"
 
-#: zenphoto/zp-core/setup.php:1405
+#: zenphoto/zp-core/setup.php:1414
 msgid "<em>locale</em> folders [Are not complete]"
 msgstr "Cartelle <em>locale</em> [Non sono complete]"
 
-#: zenphoto/zp-core/setup.php:1405
+#: zenphoto/zp-core/setup.php:1414
 msgid "Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder."
 msgstr "Assicurarsi di aver caricato completamente il pacchetto di Zenphoto. Deve esserci almeno la cartella <em>en_US</em>."
 
-#: zenphoto/zp-core/setup.php:1406
+#: zenphoto/zp-core/setup.php:1415
 msgid "uploaded"
 msgstr "caricato"
 
-#: zenphoto/zp-core/setup.php:1408
+#: zenphoto/zp-core/setup.php:1417
 msgid "HTML cache"
 msgstr "Cache HTML"
 
-#: zenphoto/zp-core/setup.php:1409
+#: zenphoto/zp-core/setup.php:1418
 msgid "Third party plugins"
 msgstr "Plug-in di terze parti"
 
-#: zenphoto/zp-core/setup.php:1420
+#: zenphoto/zp-core/setup.php:1429
 msgid "You need to address the problems indicated above then run <code>setup.php</code> again."
 msgstr "È necessario risolvere i problemi indicati sopra e lanciare nuovamente <code>setup.php</code>."
 
-#: zenphoto/zp-core/setup.php:1423
-#: zenphoto/zp-core/setup.php:1481
+#: zenphoto/zp-core/setup.php:1432
+#: zenphoto/zp-core/setup.php:1490
 msgid "You need <em>USER ADMIN</em> rights to run setup."
 msgstr "Sono necessari i permessi <em>USER ADMIN</em> per lanciare il setup."
 
-#: zenphoto/zp-core/setup.php:1966
+#: zenphoto/zp-core/setup.php:1975
 msgid "About to create tables"
 msgstr "Sto creando le tabelle"
 
-#: zenphoto/zp-core/setup.php:1968
+#: zenphoto/zp-core/setup.php:1977
 msgid "About to update tables"
 msgstr "Sto aggiornando le tabelle"
 
-#: zenphoto/zp-core/setup.php:1970
+#: zenphoto/zp-core/setup.php:1979
 msgid "Begin table creation"
 msgstr "Inizio creazione tabella"
 
-#: zenphoto/zp-core/setup.php:1975
-#: zenphoto/zp-core/setup.php:1988
+#: zenphoto/zp-core/setup.php:1984
+#: zenphoto/zp-core/setup.php:1997
 #, php-format
 msgid "MySQL Query %1$s Failed. Error: %2$s"
 msgstr "Query MySQL %1$s fallita. Errore: %2$s"
 
-#: zenphoto/zp-core/setup.php:1977
+#: zenphoto/zp-core/setup.php:1986
 #, php-format
 msgid "Table creation failure: %s"
 msgstr "Creazione tabella fallita: %s"
 
-#: zenphoto/zp-core/setup.php:1980
-#: zenphoto/zp-core/setup.php:1990
+#: zenphoto/zp-core/setup.php:1989
+#: zenphoto/zp-core/setup.php:1999
 #, php-format
 msgid "MySQL Query ( %s ) Success."
 msgstr "Query MySQL ( %s ) eseguita con successo."
 
-#: zenphoto/zp-core/setup.php:1984
+#: zenphoto/zp-core/setup.php:1993
 msgid "Begin table updates"
 msgstr "Inizio aggiornamento tabella"
 
-#: zenphoto/zp-core/setup.php:1995
+#: zenphoto/zp-core/setup.php:2004
 msgid "Done with database creation and update"
 msgstr "Creazione database e aggiornamento tabella completati"
 
-#: zenphoto/zp-core/setup.php:1999
+#: zenphoto/zp-core/setup.php:2008
 #, php-format
 msgid "Previous Release was %s"
 msgstr "La versione precedente era la %s"
 
-#: zenphoto/zp-core/setup.php:2124
+#: zenphoto/zp-core/setup.php:2133
 msgid "Done with table create!"
 msgstr "Creazione tabella completata!"
 
-#: zenphoto/zp-core/setup.php:2126
+#: zenphoto/zp-core/setup.php:2135
 msgid "Done with table create with errors!"
 msgstr "Creazione tabella completata con errori!"
 
-#: zenphoto/zp-core/setup.php:2130
+#: zenphoto/zp-core/setup.php:2139
 msgid "Done with table update"
 msgstr "Aggiornamento tabella completato"
 
-#: zenphoto/zp-core/setup.php:2132
+#: zenphoto/zp-core/setup.php:2141
 msgid "Done with table update with errors"
 msgstr "Aggiornamento tabella completato con errori"
 
-#: zenphoto/zp-core/setup.php:2147
+#: zenphoto/zp-core/setup.php:2156
 #, php-format
 msgid "You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"
 msgstr "È necessario <a href=\"admin-users.php?page=users\">impostare il nome utente e la password dell'amministratore</a> o <a href=\"%s/backup_restore.php\">lanciare il ripristino di un backup</a>"
 
-#: zenphoto/zp-core/setup.php:2149
+#: zenphoto/zp-core/setup.php:2158
 msgid "You need to <a href=\"admin-users.php\">set your admin user and password</a>"
 msgstr "È necessario <a href=\"admin-options.php\">impostare il nome utente e la password dell'amministratore</a>"
 
-#: zenphoto/zp-core/setup.php:2152
+#: zenphoto/zp-core/setup.php:2161
 msgid "You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"
 msgstr "È ora possibile <a href=\"../\">visualizzare la propria galleria</a> oppure <a href=\"admin.php\">amministrarla</a>."
 
-#: zenphoto/zp-core/setup.php:2179
+#: zenphoto/zp-core/setup.php:2188
 #, php-format
 msgid "Database tables to create: %s"
 msgstr "Tabelle del database da creare: %s"
 
-#: zenphoto/zp-core/setup.php:2197
+#: zenphoto/zp-core/setup.php:2206
 #, php-format
 msgid "Database tables to update: %s"
 msgstr "Tabelle del database da aggiornare: %s"
 
-#: zenphoto/zp-core/setup.php:2225
+#: zenphoto/zp-core/setup.php:2234
 msgid "create and or update the database tables."
 msgstr "crea e/o aggiorna le tabelle del database."
 
-#: zenphoto/zp-core/setup.php:2225
+#: zenphoto/zp-core/setup.php:2234
 msgid "Go"
 msgstr "Vai"
 
-#: zenphoto/zp-core/setup.php:2232
+#: zenphoto/zp-core/setup.php:2241
 msgid "database did not connect"
 msgstr "il database non si è connesso"
 
-#: zenphoto/zp-core/setup.php:2234
+#: zenphoto/zp-core/setup.php:2243
 msgid "If you haven't created the database yet, now would be a good time."
 msgstr "Se non si è già creato il database, ora è il momento buono."
 
-#: zenphoto/zp-core/setup.php:2243
+#: zenphoto/zp-core/setup.php:2252
 msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
 msgstr "Il file zp-config.php non esiste. È necessario lanciare setup.php per verificare la propria configurazione e creare questo file."
 
@@ -5275,7 +5275,7 @@ msgstr "E-mail sito:"
 
 #: zenphoto/zp-core/admin-options.php:718
 msgid "This email address will be used as the <em>From</em> address for all mails sent by Zenphoto."
-msgstr ""
+msgstr "Questo indirizzo e-mail verrà utilizzato nel campo <em>Da</em> per tutte le e-mail inviate da Zenphoto."
 
 #: zenphoto/zp-core/admin-options.php:724
 msgid "Imagick:"
@@ -5388,32 +5388,32 @@ msgid "enable gallery sessions"
 msgstr "abilita le sessioni della galleria"
 
 #: zenphoto/zp-core/admin-options.php:979
-msgid "<a href=\"javascript: toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>"
-msgstr "<a href=\"javascript: toggle('albumdate');\" >Dettagli</a> per <em>utilizza la data dell'ultima immagine come data dell'album</em>"
+msgid "<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>"
+msgstr "<a href=\"javascript:toggle('albumdate');\" >Dettagli</a> per <em>utilizza la data dell'ultima immagine come data dell'album</em>"
 
 #: zenphoto/zp-core/admin-options.php:981
 msgid "If you wish your album date to reflect the date of the latest image uploaded set set this option. Otherwise the date will be set initially to the date the album was created."
 msgstr "Impostare questa opzione se si vuole che la data dell'album rifletta la data dell'ultima immagine inserita. Altrimenti, verrà impostata la data in cui l'album è stato creato."
 
 #: zenphoto/zp-core/admin-options.php:984
-msgid "<a href=\"javascript: toggle('username');\" >Details</a> for <em>enable user name login field</em>"
-msgstr "<a href=\"javascript: toggle('username');\" >Dettagli</a> per <em>abilita il campo nome utente per l'accesso</em>"
+msgid "<a href=\"javascript:toggle('username');\" >Details</a> for <em>enable user name login field</em>"
+msgstr "<a href=\"javascript:toggle('username');\" >Dettagli</a> per <em>abilita il campo nome utente per l'accesso</em>"
 
 #: zenphoto/zp-core/admin-options.php:986
 msgid "This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."
 msgstr "Questa opzione inserisce nella galleria (ricerca, album) un campo per il nome utente per effettuare l'accesso. È necessario se avete impostato l'accesso per gli utenti ospite. È utile anche per consentire agli amministratori di accedere da queste pagine invece che dall'accesso amministratori."
 
 #: zenphoto/zp-core/admin-options.php:989
-msgid "<a href=\"javascript: toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>"
-msgstr "<a href=\"javascript: toggle('visualthumb');\" >Dettagli</a> per <em>selezione visuale miniature</em>"
+msgid "<a href=\"javascript:toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>"
+msgstr "<a href=\"javascript:toggle('visualthumb');\" >Dettagli</a> per <em>selezione visuale miniature</em>"
 
 #: zenphoto/zp-core/admin-options.php:991
 msgid "Setting this places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "
 msgstr "Impostando questa opzione le miniature vengono caricate nella lista di selezione miniature dell'album (il menu a tendina sulla pagina di modifica album). Firefox mostra le miniature nella tendina, mentre IE e Safari mostrano solo i nomi (anche se le miniature vengono comunque caricate!). Caricare queste miniature per album con molte immagini richiede molto tempo e non è necessario se il browser non le mostra. Deselezionare l'opzione e le miniature non verranno caricate."
 
 #: zenphoto/zp-core/admin-options.php:994
-msgid "<a href=\"javascript: toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>"
-msgstr "<a href=\"javascript: toggle('persistentarchive');\" >Dettagli</a> per <em>abilita gli archivi persistenti</em>"
+msgid "<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>"
+msgstr "<a href=\"javascript:toggle('persistentarchive');\" >Dettagli</a> per <em>abilita gli archivi persistenti</em>"
 
 #: zenphoto/zp-core/admin-options.php:996
 msgid "Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked\tthat .zip file will be regenerated each time."
@@ -5424,8 +5424,8 @@ msgid "<strong>Note: </strong>Setting\tthis option may impact password protected
 msgstr "<strong>Nota: </strong> L'abilitazione\tdi questa opzione potrebbe influire sugli album protetti da password!"
 
 #: zenphoto/zp-core/admin-options.php:1000
-msgid "<a href=\"javascript: toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>"
-msgstr "<a href=\"javascript: toggle('gallerysessions');\" >Dettagli</a> per <em>abilita le sessioni della galleria</em>"
+msgid "<a href=\"javascript:toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>"
+msgstr "<a href=\"javascript:toggle('gallerysessions');\" >Dettagli</a> per <em>abilita le sessioni della galleria</em>"
 
 #: zenphoto/zp-core/admin-options.php:1002
 msgid "Check this option if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
@@ -6136,15 +6136,15 @@ msgstr "backup fallito"
 
 #: zenphoto/zp-core/utilities/backup_restore.php:321
 msgid "Restore encountered exceptions"
-msgstr ""
+msgstr "Si sono verificati errori durante il ripristino"
 
 #: zenphoto/zp-core/utilities/backup_restore.php:327
 msgid "The following tables were not restored because the table no longer exists:"
-msgstr ""
+msgstr "Le tabelle seguenti non sono state ripristinate perché non esistono più:"
 
 #: zenphoto/zp-core/utilities/backup_restore.php:345
 msgid "The following fields were not restored because the field no longer exists:"
-msgstr ""
+msgstr "I campi seguenti non sono stati ripristinati perché non esistono più:"
 
 #: zenphoto/zp-core/utilities/backup_restore.php:365
 msgid "Restore failed"
@@ -6208,11 +6208,11 @@ msgstr "L'utilità di backup crea delle istantanee del database nella cartella <
 
 #: zenphoto/zp-core/utilities/backup_restore.php:465
 msgid "You restore your database by selecting a backup and pressing the <em>Restore the Database</em> button. <strong>Note</strong>: Each database table is emptied before the restore is attempted. After a successful restore the database will be in the same state as when the backup was created."
-msgstr ""
+msgstr "È possibile ripristinare il database selezionando un backup e premendo il bottone <em>Ripristina il database</em>. <strong>Nota</strong>: ogni tabella del database viene svuotata prima di provare il ripristino. Dopo un ripristino eseguito con successo il database sarà nello stesso stato in cui era quando era stato creato il backup."
 
 #: zenphoto/zp-core/utilities/backup_restore.php:467
 msgid "Ideally a restore should be done only on the same version of Zenphoto on which the backup was created. If you are intending to upgrade, first do the restore on the version of Zenphoto you were running, then install the new Zenphoto. If this is not possible the restore can still be done, but if the database fields have changed between versions, data from changed fields will not be restored."
-msgstr ""
+msgstr "Idealmente, un ripristino dovrebbe essere eseguito solamente con la stessa versione di Zenphoto con cui è stato creato il backup. Se si vuole aggiornare, eseguire prima il ripristino con la versione di Zenphoto che si stava utilizzando e dopo installare la nuova versione. Se questo non è possibile il ripristino può ancora essere fatto, ma se i campi del database sono cambiati tra le versioni, i dati dei campi modificati non verranno ripristinati."
 
 #: zenphoto/zp-core/utilities/gallery_statistics.php:24
 #: zenphoto/zp-core/utilities/gallery_statistics.php:404
@@ -7627,134 +7627,134 @@ msgstr "Errore di Uploadify in %1$s. Controllare il log di debug."
 msgid "Provides a means for placing a user registration form on your theme pages."
 msgstr "Fornisce un modo per inserire un campo di registrazione utente nelle pagine del tema."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:37
+#: zenphoto/zp-core/zp-extensions/register_user.php:39
 #, php-format
 msgid "You have received this email because you registered on the site. To complete your registration visit %s."
 msgstr "Si sta ricevendo questa e-mail perché ci si è registrati sul sito. Per completare la registrazione visitare %s."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:43
+#: zenphoto/zp-core/zp-extensions/register_user.php:47
 msgid "Notify"
 msgstr "Notifica"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:44
-msgid "If checked, an e-mail notification is sent on new user registration."
-msgstr "Se selezionata, verrà inviata un'e-mail di notifica alla registrazione di un nuovo utente."
+#: zenphoto/zp-core/zp-extensions/register_user.php:48
+msgid "If checked, an e-mail will be sent to the gallery admin when a new user has verified his registration."
+msgstr "Se selezionata, verrà inviata un'e-mail all'amministratore della galleria quando un nuovo utente avrà verificato la propria registrazione."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:45
+#: zenphoto/zp-core/zp-extensions/register_user.php:49
 msgid "Email notification text"
 msgstr "Testo dell'e-mail di notifica"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:46
+#: zenphoto/zp-core/zp-extensions/register_user.php:50
 #, php-format
 msgid "Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear."
-msgstr ""
+msgstr "Testo del corpo dell'e-mail da spedire all'utente. <strong>NOTA</strong>: bisogna includere <code>%s</code> nel messaggio nella posizione in cui si vuole appaia il collegamento per il completamento della registrazione."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:47
+#: zenphoto/zp-core/zp-extensions/register_user.php:51
 msgid "User registration page"
 msgstr "Pagina di registrazione utente"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:48
+#: zenphoto/zp-core/zp-extensions/register_user.php:52
 msgid "If this option is set, the visitor login form will include a link to this page. The link text will be labeled with the text provided."
 msgstr "Se questa opzione è impsotata, il form di accesso dei visitatori includerà un collegamento a questa pagina. Il testo fornito sarà il testo del collegamento."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:49
+#: zenphoto/zp-core/zp-extensions/register_user.php:53
 msgid "Use Captcha"
 msgstr "Utilizza captcha"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:50
+#: zenphoto/zp-core/zp-extensions/register_user.php:54
 msgid "If checked, captcha validation will be required for user registration."
 msgstr "Se selezionata, la validazione captcha sarà richiesta per la registrazione utente."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:69
+#: zenphoto/zp-core/zp-extensions/register_user.php:73
 msgid "Initial group assignment for the new user."
 msgstr "Assegnazione gruppo iniziale per i nuovi utenti."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:73
+#: zenphoto/zp-core/zp-extensions/register_user.php:77
 msgid "Default user group"
 msgstr "Gruppo utente predefinito"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:75
+#: zenphoto/zp-core/zp-extensions/register_user.php:79
 msgid "Default user rights"
 msgstr "Diritti predefiniti utente"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:76
+#: zenphoto/zp-core/zp-extensions/register_user.php:80
 msgid "No rights"
 msgstr "Nessun diritto"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:76
+#: zenphoto/zp-core/zp-extensions/register_user.php:80
 msgid "View Rights"
 msgstr "Diritti di visione"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:77
+#: zenphoto/zp-core/zp-extensions/register_user.php:81
 msgid "Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified."
 msgstr "Diritti iniziali per i nuovi utenti.<br />Impostare a <em>Nessun diritto</em> se si vuole approvare l'utente.<br />Impostare a <em>Diritti di visione</em> per permettergli di visitare la galleria una volta verificato."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:86
+#: zenphoto/zp-core/zp-extensions/register_user.php:90
 msgid "script"
 msgstr "script"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:89
+#: zenphoto/zp-core/zp-extensions/register_user.php:94
 msgid "*no page selected"
 msgstr "*nessuna pagina selezionata"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:107
+#: zenphoto/zp-core/zp-extensions/register_user.php:112
 msgid "Link text"
 msgstr "Testo del collegamento"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:111
+#: zenphoto/zp-core/zp-extensions/register_user.php:119
 msgid "Hint text"
 msgstr "Testo del suggerimento"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:147
+#: zenphoto/zp-core/zp-extensions/register_user.php:162
 msgid "Zenphoto Gallery registration"
 msgstr "Registrazione alla galleria Zenphoto"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:148
+#: zenphoto/zp-core/zp-extensions/register_user.php:163
 #, php-format
 msgid "%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s."
 msgstr "%1$s (%2$s) si è registrato alla galleria zenphoto con l'indirizzo e-mail %3$s."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:203
+#: zenphoto/zp-core/zp-extensions/register_user.php:218
 msgid "Registration confirmation"
 msgstr "Conferma registrazione"
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:228
+#: zenphoto/zp-core/zp-extensions/register_user.php:243
 msgid "you are already logged in."
 msgstr "accesso già effettuato."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:240
+#: zenphoto/zp-core/zp-extensions/register_user.php:255
 msgid "Thank you for registering."
 msgstr "Grazie per la registrazione."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:243
+#: zenphoto/zp-core/zp-extensions/register_user.php:258
 msgid "Your registration information has been accepted. An email has been sent to you to verify your email address."
 msgstr "Le informazioni di registrazione sono state accettate. È stata inviata un'e-mail per la verifica dell'indirizzo."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:251
+#: zenphoto/zp-core/zp-extensions/register_user.php:266
 msgid "You may now log onto the site."
 msgstr "È ora possibile effettuare l'accesso al sito."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:258
+#: zenphoto/zp-core/zp-extensions/register_user.php:273
 msgid "Registration failed."
 msgstr "Registrazione fallita."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:262
+#: zenphoto/zp-core/zp-extensions/register_user.php:277
 msgid "The user ID you chose is already in use."
 msgstr "Il nome utente scelto è già in uso."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:268
+#: zenphoto/zp-core/zp-extensions/register_user.php:283
 msgid "You have not filled in all the fields."
 msgstr "Non sono stati compilati tutti i campi."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:271
+#: zenphoto/zp-core/zp-extensions/register_user.php:286
 msgid "Invalid verification link."
 msgstr "Collegamento di verifica non valido."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:274
+#: zenphoto/zp-core/zp-extensions/register_user.php:289
 msgid "Enter a valid email address."
 msgstr "Inserire un indirizzo e-mail valido."
 
-#: zenphoto/zp-core/zp-extensions/register_user.php:277
+#: zenphoto/zp-core/zp-extensions/register_user.php:292
 msgid "The captcha you entered was not correct."
 msgstr "Il captcha inserito non è corretto."
 
@@ -8221,7 +8221,7 @@ msgstr "mtime"
 
 #: zenphoto/zp-core/zp-extensions/zenpage.php:67
 msgid "The sort order for your gallery items within the CombiNews display. 'date' (date order), 'id' (added to db order), 'mtime' (upload order). NOTE: If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id or mtime they will be sorted by date with the articles afterwards since articles only have a date."
-msgstr ""
+msgstr "L'ordinamento degli elementi della galleria all'interno di CombiNews. 'data' (ordinamento per data), 'id' (ordinamento del database), 'mtime' (ordinamento per data caricamento). NOTA: se si verificano risultati inattesi, questi si riferiscono soltanto alle immagini prelevate dal database. Anche se sono prelevate per id o mtime, saranno ordinate per data con gli articoli di seguito dato che solo gli articoli hanno una data."
 
 #: zenphoto/zp-core/zp-extensions/zenpage.php:68
 msgid "CombiNews: Gallery link"
@@ -8233,7 +8233,7 @@ msgstr "album"
 
 #: zenphoto/zp-core/zp-extensions/zenpage.php:70
 msgid "Choose if you want to link from the image entry it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>"
-msgstr ""
+msgstr "Scegliere se il collegamento dell'immagine deve puntare alla pagina dell'immagine o a quella dell'album (se la modalità di CombiNews è impostata su album il collegamento punterà in ogni caso agli album). Questa opzione riguarda solo i collegamenti degli elementi <em>titolo</em>, <em>immagine</em> e <em>visita galleria</em>"
 
 #: zenphoto/zp-core/zp-extensions/class-textobject.php:58
 msgid "class-textobject requires Zenphoto v 1.2.1 or greater."
@@ -9077,50 +9077,45 @@ msgstr "Larghezza dell'area di visualizzazione di Flowplayer per la presentazion
 msgid "Height of the Flowplayer display for the slideshow <em>(Flash mode)</em>."
 msgstr "Altezza dell'area di visualizzazione di Flowplayer per la presentazione <em>(Modalità flash)</em>."
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:180
+#: zenphoto/zp-core/zp-extensions/slideshow.php:183
 msgid "Invalid linking to the slideshow page."
 msgstr "Collegamento non valido alla pagina della presentazione."
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:255
+#: zenphoto/zp-core/zp-extensions/slideshow.php:258
 msgid "This album is password protected!"
 msgstr "Questo album è protetto da password!"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:399
+#: zenphoto/zp-core/zp-extensions/slideshow.php:402
 msgid "Previous"
 msgstr "Precedente"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:401
+#: zenphoto/zp-core/zp-extensions/slideshow.php:404
 msgid "Stop and return to album or image page"
 msgstr "Si ferma e torna alla pagina dell'album o dell'immagine"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:403
+#: zenphoto/zp-core/zp-extensions/slideshow.php:406
 msgid "Pause (to stop the slideshow without returning)"
 msgstr "Pausa (per fermare la presentazione senza iniziare da capo)"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:404
+#: zenphoto/zp-core/zp-extensions/slideshow.php:407
 msgid "Play"
 msgstr "Play"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:431
+#: zenphoto/zp-core/zp-extensions/slideshow.php:434
 msgid ":"
 msgstr ":"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:474
+#: zenphoto/zp-core/zp-extensions/slideshow.php:477
 msgid "back"
 msgstr "indietro"
 
-#: zenphoto/zp-core/zp-extensions/slideshow.php:524
+#: zenphoto/zp-core/zp-extensions/slideshow.php:527
 msgid "Click on the right in the player control bar to view full size."
 msgstr "Fare clic sulla destra nella barra dei controlli del lettore per la visualizzazione a schermo intero."
 
 #: zenphoto/zp-core/zp-extensions/zenphoto_sendmail.php:7
 msgid "Zenphoto outgoing mail handler based on the PHP <em>mail</em> facility."
 msgstr "Gestore della posta in uscita di Zenphoto basato sulla funzione <em>mail</em> di PHP."
-
-#: zenphoto/zp-core/zp-extensions/zenphoto_sendmail.php:16
-#, php-format
-msgid "From: %1$s <%2$s>"
-msgstr "Da: %1$s <%2$s>"
 
 #: zenphoto/zp-core/zp-extensions/zenphoto_sendmail.php:30
 #, php-format
@@ -9581,39 +9576,39 @@ msgstr "Applica <img src=\"%1$s/images/lock.png\"/> sopra le miniature di album 
 msgid "Provides rudimentary user groups."
 msgstr "Fornisce gruppi di utenti rudimentali."
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:178
+#: zenphoto/zp-core/zp-extensions/user_groups.php:179
 msgid "*no group affiliation"
 msgstr "*nessuna affiliazione a un gruppo"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:178
+#: zenphoto/zp-core/zp-extensions/user_groups.php:179
 msgid "*no group selected"
 msgstr "*nessun gruppo selezionato"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:179
+#: zenphoto/zp-core/zp-extensions/user_groups.php:180
 msgid "no group affiliation"
 msgstr "nessuna affiliazione a un gruppo"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:182
+#: zenphoto/zp-core/zp-extensions/user_groups.php:183
 msgid "Template:"
 msgstr "Modello:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:202
+#: zenphoto/zp-core/zp-extensions/user_groups.php:203
 msgid "Group:"
 msgstr "Gruppo:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:206
+#: zenphoto/zp-core/zp-extensions/user_groups.php:207
 msgid "User group membership.<br /><strong>NOTE:</strong> When a group is assigned <em>rights</em> and <em>managed albums</em> are determined by the group!"
 msgstr "Gruppo di appartenenza dell'utente.<br /><strong>NOTA:</strong> quando viene assegnato un gruppo <em>permessi</em> e <em>album gestiti</em> sono determinati dal gruppo."
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:212
+#: zenphoto/zp-core/zp-extensions/user_groups.php:213
 msgid "users"
 msgstr "utenti"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:213
+#: zenphoto/zp-core/zp-extensions/user_groups.php:214
 msgid "assignments"
 msgstr "incarichi"
 
-#: zenphoto/zp-core/zp-extensions/user_groups.php:214
+#: zenphoto/zp-core/zp-extensions/user_groups.php:215
 msgid "groups"
 msgstr "gruppi"
 
@@ -10025,41 +10020,41 @@ msgstr "E-mail:"
 msgid "Enter %s:"
 msgstr "Inserire %s:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:141
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:142
 msgid "Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected."
 msgstr "Imposta i permessi del gruppo e seleziona uno o più album per essere gestiti dagli utenti del gruppo. Utenti con i permessi <em>Utente amministratore</em> o <em>Gestisci tutti gli album</em> possono gestire tutti gli album. Tutti gli altri possono gestire solamente quelli selezionati."
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:168
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:176
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:169
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:177
 msgid "group"
 msgstr "gruppo"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:169
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:176
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:170
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:177
 msgid "template"
 msgstr "modello"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:185
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:186
 msgid "description:"
 msgstr "descrizione:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:192
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:193
 msgid "clone:"
 msgstr "clone:"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:228
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:229
 msgid "Assign users"
 msgstr "Assegna utenti"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:249
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:250
 msgid "Are you sure you want to delete this group?"
 msgstr "Si è sicuri di voler cancellare questo gruppo?"
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:252
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:253
 msgid "Delete this group."
 msgstr "Elimina questo gruppo."
 
-#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:285
+#: zenphoto/zp-core/zp-extensions/user_groups/user_groups-tab.php:286
 msgid "Assign users to groups."
 msgstr "Assegna utenti ai gruppi."
 
@@ -10081,7 +10076,7 @@ msgstr "Cartella album:"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage-functions.php:101
 msgid "(Click on image to include)"
-msgstr ""
+msgstr "(Fare clic sull'immagine per includerla)"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage-functions.php:143
 msgid "<strong>Note:</strong> This album does not contain any images."
@@ -10093,7 +10088,7 @@ msgstr "Pagina"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage-functions.php:335
 msgid "(Click on article title to include a link)"
-msgstr ""
+msgstr "(Fare clic sull'articolo per includere un collegamento)"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:37
 msgid "*Select*"
@@ -10109,12 +10104,12 @@ msgstr "*Seleziona un album*"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:53
 msgid "(select variant below)"
-msgstr ""
+msgstr "(selezionare una variante in basso)"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:62
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:134
 msgid "What to include"
-msgstr ""
+msgstr "Cosa includere"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:64
 msgid "Image title"
@@ -10143,7 +10138,7 @@ msgstr "Immagine ridimensionata"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:81
 msgid "Custom size (uncropped)"
-msgstr ""
+msgstr "Dimensione personalizzata (non ritagliata)"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:89
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:143
@@ -10169,83 +10164,83 @@ msgstr "Collegamento personalizzato"
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:102
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:147
 msgid "Text wrap"
-msgstr ""
+msgstr "Cornice testo"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:103
 msgid "No wrap"
-msgstr "Nessun involucro"
+msgstr "Nessuna cornice"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:119
 msgid "This provides access to your images and albums (dropdown 'zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them."
-msgstr ""
+msgstr "Fornisce l'accesso alle immagini e agli album (menu a tendina 'zenphoto) così come alle pagine, agli articoli di notizie e alle categorie di notizie (menu a tendina 'zenpage'), in modo da poterli includere facilmente nelle pagine e negli articoli. Sono necessari almeno i permessi 'Gestisci tutti gli album' o 'Modifica' per un album specifico per poter includere le immagini."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:121
 msgid "The options below the 'zenphoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album)."
-msgstr ""
+msgstr "Le opzioni sotto il menu 'zenphoto' si riferiscono solamente all'inclusione di immagini e album. Queste opzioni sono usate al volo e non vengono mantenute se si ricarica la pagina (selezionando un album diverso o muovendosi all'interno delle pagine di un album)."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:123
 msgid "The windows does not close automatically so you can include several images one after another."
-msgstr ""
+msgstr "La finestra non si chiude automaticamente quindi è possibile includere più immagini una dopo l'altra."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:125
 msgid "The tinyZenpage page on the Zenpage project site: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='zenpage project site'>zenpage.maltem.de/pages/tinyZenpage</a>"
-msgstr ""
+msgstr "La pagina di tinyZenpage sul sito del progetto Zenpage: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='sito progetto zenpage'>zenpage.maltem.de/pages/tinyZenpage</a>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:129
 msgid "Select to show a list of Zenpage pages, articles or categories. Click on a title to include a link. Hover of the link to see an excerpt of the page or article. Unpublished pages or articles are marked with an '*'. There are no further options."
-msgstr ""
+msgstr "Selezionare per mostrare una lista delle pagine, articoli e categorie di Zenpage. Fare clic su un titolo per aggiungere un collegamento. Andare sopra un collegamento per vedere una parte della pagina o articolo. Le pagine o gli articoli non pubblicati sono marcati con un '*'. Non ci sono altre opzioni."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:133
 msgid "Select an album to include images from into your page or article. Click on the image to included it. Unpublished albums or images are marked with an '*'. You can also click on the magnify glass icon to see a preview of the item (Multimedia files are previewed in Flowplayer, no matter if that plugin is activated or not.). <br />Note that it is currently not possible to include multimedia files directly as a sized image or custom image. Besides that you have several options what to include and how:"
-msgstr ""
+msgstr "Selezionare un album da cui includere le immagini nella pagina o articolo. Fare clic sull'immagine per includerla. Album o immagini non pubblicati sono marcati con un '*'. È anche possibile fare clic sull'icona della lente d'ingrandimento per vedere un'anteprima dell'elemento (i file multimediali sono mostrati in Flowplayer, a prescindere se il plug-in è attivo oppure no).<br />Notare che non è possibile per ora includere file multimediali direttamente come un'immagine ridimensionata o personalizzata. A parte questo, ci sono molte opzioni per cosa includere e come:"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:137
 msgid "Include the image itself, only its title, the title of its album or a custom text."
-msgstr ""
+msgstr "Include l'immagine stessa, solo il suo titolo, il titolo del suo album o un testo personalizzato."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:141
 msgid "Include the thumbnail of the size set in Zenphoto's options, a custom thumbnail (size for the longest side / cropwidth x cropheight), the sized image as set in Zenphoto's options or a custom size (size is for the longest side of the image)."
-msgstr ""
+msgstr "Include le miniature della dimensione impostata nelle opzioni di Zenphoto, una miniatura personalizzata (dimensione del lato più lungo / larghezza ritaglio x altezza ritaglio), l'immagine ridimensionata come impostata nelle opzioni di Zenphoto o di una grandezza personalizzata (dimensione è per il lato più lungo dell'immagine)."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:145
 msgid "Select to link to the image page of the image, to the album the image is in, no link at all or a custom url."
-msgstr ""
+msgstr "Selezionare per inserire un collegamento alla pagina immagine dell'immagine, all'album in cui l'immagine è contenuta, una url personalizzata oppure nessun collegamento."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:149
 msgid "Wrap the text right or left of the image or not at all. Note that tinyZenpage adds a bit of CSS to the included image if you use text wrap. So that you see immediate results to the text wrap it attaches some inline CSS:"
-msgstr ""
+msgstr "Incornicia il testo sulla destra o sulla sinistra dell'immagine, o non lo incornicia affatto. Notare che tinyZenpage aggiunge del CSS all'immagine inclusa se si usa la cornice per il testo. In questo modo è possibile vedere immediatamente il CSS inline che vine aggiunto per la cornice del testo:"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:151
 msgid "left wrap: <em>style=\"float:right\"</em>"
-msgstr ""
+msgstr "cornice sinistra: <em>style=\"float:right\"</em>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:152
 msgid "right wrap: <em>style=\"float: left\"</em>"
-msgstr ""
+msgstr "cornice destra: <em>style=\"float: left\"</em>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:156
 msgid "Also tinyZenpage attaches a default CSS class to the image (if image is chosen) to be styled with your theme's css:"
-msgstr ""
+msgstr "TinyZenpage aggiunge anche una classe CSS predefinita all'immagine (se viene scelta un'immagine) in modo che possa essere gestita col CSS del tema:"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:159
 msgid "Default thumbnail: <em>zenpage_thumb_left</em> or <em>zenpage_thumb_right</em>"
-msgstr ""
+msgstr "Miniatura predefinita: <em>zenpage_thumb_left</em> o <em>zenpage_thumb_right</em>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:160
 msgid "Custom thumbnail: <em>zenpage_customthumb_left</em> or <em>zenpage_customthumb_right</em>"
-msgstr ""
+msgstr "Miniatura personalizzata: <em>zenpage_customthumb_left</em> o <em>zenpage_customthumb_right</em>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:161
 msgid "Sized image: <em>zenpage_sizedimage_left</em> or <em>zenpage_sizedimage_right</em>"
-msgstr ""
+msgstr "Immagine ridimensionata: <em>zenpage_sizedimage_left</em> o <em>zenpage_sizedimage_right</em>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:162
 msgid "Custom image: <em>zenpage_customimage_left</em> or <em>zenpage_customimage_right</em>"
-msgstr ""
+msgstr "Immagine personalizzata: <em>zenpage_customimage_left</em> o <em>zenpage_customimage_right</em>"
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:165
 msgid "If you like to do some direct styling you can also use TinyMCE's image button or source code editor. <br />Also you can customize the CSS output yourself by directly changing the textwrap variables in line 47 and 50 in <em>tinyzenpage/js/dialog.php</em>."
-msgstr ""
+msgstr "Se si vuole aggiungere dello stile direttamente, è possibile usare anche il bottone immagine di TinyMCE o l'editor del codice sorgente.<br />È anche possibile personalizzare il CSS cambiando le variabili di incorniciatura del testo nelle linee 47 e 50 di <em>tinyzenpage/js/dialog.php</em>."
 
 #: zenphoto/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:176
 msgid "Help"
@@ -10350,21 +10345,21 @@ msgstr "Aggiungi nuova categoria"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:81
 msgid "A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically if a new category is added. You can edit it later manually if necessary."
-msgstr ""
+msgstr "Un <em>collegamento al titolo</em> di facile comprensione per i motori di ricerca (aka slug) senza caratteri speciali da usare nelle URL viene generato dal titolo della lingua correntemente selezionata se viene aggiunta una nuova categoria. Sarà possibile modificarlo successivamente se necessario."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:82
 msgid "If you are editing a category check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting."
-msgstr ""
+msgstr "Se si sta modificando una categoria selezionare <em>Modifica collegamento al titolo</em> se c'è bisogno di personalizzare il modo in cui il titolo appare nelle URL. Altrimenti, sarà aggiornato automaticamente in base alle modifiche fatte al titolo. Se si vuole prevenire questo comportamento selezionare <em>Abilitare collegamento al titolo permanente</em> e il collegamento al titolo rimarrà lo stesso (raccomandato se si utilizza la modalità multilingua di Zenphoto). <strong>Nota:</strong> <em>Modifica collegamento al titolo</em> sovrascrive le impostazioni dei permalink."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:83
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:178
 msgid "<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."
-msgstr ""
+msgstr "<strong>Importante:</strong> se si sta utilizzando la modalità multilingua di Zenphoto il collegamento al titolo viene generato dal titolo della lingua correntemente selezionata."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:84
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:189
 msgid "Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."
-msgstr ""
+msgstr "Suggerimento: se si ha bisogno di più spazio per il testo usare la modalità a schermo intero di TinyMCE (fare clic sul quadrato blu in alto a destra della barra dei controlli dell'editor)."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:109
 msgid "Category Title:"
@@ -10376,7 +10371,7 @@ msgstr "Titolo nuova categoria:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:116
 msgid "Enable permaTitleLink"
-msgstr "Abilitare permaTitleLink"
+msgstr "Abilitare collegamento al titolo permanente"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-categories.php:123
 msgid "Category TitleLink:"
@@ -10417,7 +10412,7 @@ msgstr "Elimina categoria"
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:104
 #, php-format
 msgid "Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"
-msgstr ""
+msgstr "Pagina <em>%s</em> aggiunta ma è necessario inserire un <strong>titolo</strong> prima della pubblicazione."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:106
 #, php-format
@@ -10427,12 +10422,12 @@ msgstr "Aggiunta pagina <em>%s</em>"
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:176
 #, php-format
 msgid "A page with the title/titlelink <em>%s</em> already exists!"
-msgstr ""
+msgstr "Esiste già una pagina col titolo/collegamento al titolo <em>%s</em>."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:178
 #, php-format
 msgid "Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"
-msgstr ""
+msgstr "Pagina <em>%s</em> aggiornata ma è necessario inserire un <strong>titolo</strong> prima della pubblicazione."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:180
 #, php-format
@@ -10441,7 +10436,7 @@ msgstr "Aggiornata pagina <em>%s</em>"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:203
 msgid "Page successfully deleted!"
-msgstr ""
+msgstr "Pagina eliminata correttamente."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:235
 msgid "Sort order saved."
@@ -10475,7 +10470,7 @@ msgstr "Si è sicuri di voler cancellare questa pagina? NON SI POTRÀ TORNARE IN
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:438
 #, php-format
 msgid "Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"
-msgstr ""
+msgstr "Articolo <em>%s</em> aggiunto ma è necessario inserire un <strong>titolo</strong> prima della pubblicazione."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:440
 #, php-format
@@ -10485,12 +10480,12 @@ msgstr "Aggiunto articolo <em>%s</em>"
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:527
 #, php-format
 msgid "An article with the title/titlelink <em>%s</em> already exists!"
-msgstr ""
+msgstr "Esiste già un articolo col titolo/collegamento al titolo <em>%s</em>."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:529
 #, php-format
 msgid "Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"
-msgstr ""
+msgstr "Articolo <em>%s</em> aggiornato ma è necessario inserire un <strong>titolo</strong> prima della pubblicazione."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:531
 #, php-format
@@ -10499,7 +10494,7 @@ msgstr "Aggiornato articolo <em>%s</em>"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:547
 msgid "Article successfully deleted!"
-msgstr ""
+msgstr "Articolo eliminato correttamente"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:617
 msgid "View all months"
@@ -10547,7 +10542,7 @@ msgstr "Aggiunta categoria <em>%s</em>"
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:871
 #, php-format
 msgid "A category with the title/titlelink <em>%s</em> already exists!"
-msgstr ""
+msgstr "Esiste già una categoria col titolo/collegamento al titolo <em>%s</em>."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:868
 msgid "Category updated!"
@@ -10555,12 +10550,12 @@ msgstr "Categoria aggiornata."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:892
 msgid "Category successfully deleted!"
-msgstr ""
+msgstr "Categoria eliminata correttamente"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:905
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:938
 msgid "Untitled category"
-msgstr ""
+msgstr "Categoria senza titolo"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:909
 msgid "Edit this category"
@@ -10641,11 +10636,11 @@ msgstr[1] "(<strong>%1$u</strong> categorie)"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1191
 msgid "You need Admin Rights or Zenpage rights to use Zenpage"
-msgstr ""
+msgstr "Sono necessari i permessi di amministratore o di Zenpage per usare Zenpage"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1198
 msgid "Published/Not published/Scheduled for publishing"
-msgstr ""
+msgstr "Pubblicato/Non pubblicato/Pubblicazione programmata"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1199
 msgid "Comments on/off"
@@ -10663,7 +10658,7 @@ msgstr "Scadenza: %s"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1285
 msgid "Publish immediatly (skip scheduling)"
-msgstr ""
+msgstr "Pubblica immediatamente (salta la programmazione)"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1288
 msgid "Scheduled for published"
@@ -10671,7 +10666,7 @@ msgstr "Pubblicazione programmata"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1291
 msgid "Enable scheduled publishing"
-msgstr ""
+msgstr "Pubblicazione programmata abilitata"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1299
 msgid "Un-publish"
@@ -10679,7 +10674,7 @@ msgstr "Rimuovi pubblicazione"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1312
 msgid "Publish (override expiration)"
-msgstr ""
+msgstr "Pubblica (sovrascrivi scadenza)"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1469
 #: zenphoto/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1486
@@ -10687,50 +10682,50 @@ msgstr ""
 msgid "Toggle Editor"
 msgstr "Abilita/disabilita editor"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:441
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:442
 msgid "No flash player installed."
-msgstr ""
+msgstr "Nessun lettore flash installato"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:1364
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:1365
 msgid "Prev page"
 msgstr "Pagina prec."
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2539
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2537
 msgid "News RSS"
 msgstr "RSS notizie"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2544
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2542
 msgid "News Category RSS"
 msgstr "RSS categorie notizie"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2549
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2547
 msgid "News and Gallery RSS"
 msgstr "RSS galleria e notizie"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2554
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2552
 msgid "Zenpage Comments RSS"
 msgstr "RSS commenti Zenpage"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2559
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2557
 msgid "News article comments RSS"
 msgstr "RSS commenti articoli di notizie"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2564
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2562
 msgid "Page Comments RSS"
 msgstr "RSS commenti pagina"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2645
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2643
 #, php-format
 msgid "View the %s album"
 msgstr "Visualizza l'album %s"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2647
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2645
 #, php-format
 msgid "View the photo album %s"
 msgstr "Visualizza l'album fotografico %s"
 
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2652
-#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2653
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2650
+#: zenphoto/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2651
 #, php-format
 msgid "View %s"
 msgstr "Visualizza %s"
@@ -10738,11 +10733,11 @@ msgstr "Visualizza %s"
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:22
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:28
 msgid "Future publishing date:"
-msgstr ""
+msgstr "Data futura di pubblicazione:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:36
 msgid "This is not a future date!"
-msgstr ""
+msgstr "Questa non è una data futura!"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:94
 msgid "Update Article"
@@ -10766,11 +10761,11 @@ msgstr "Modifica articolo:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:130
 msgid "(Article scheduled for publishing)"
-msgstr ""
+msgstr "(Articolo programmato per la pubblicazione)"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:132
 msgid "Note: Scheduled publishing is not active unless the article is also set to 'published'"
-msgstr ""
+msgstr "Nota: la pubblicazione programmata non è attiva se l'articolo non è impostato su 'pubblicato'"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:139
 msgid "Edit Page:"
@@ -10778,51 +10773,51 @@ msgstr "Modifica pagina:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:142
 msgid "(Page scheduled for publishing)"
-msgstr ""
+msgstr "(Pagina programmata per la pubblicazione)"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:144
 msgid "Note: Scheduled publishing is not active unless the page is also set to 'published'"
-msgstr ""
+msgstr "Nota: la pubblicazione programmata non è attiva se la pagina non è impostata su 'pubblicata'"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:176
 msgid "Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting."
-msgstr ""
+msgstr "Selezionare <em>Modifica collegamento al titolo</em> se è necessario personalizzare il modo in cui il titolo appare nelle URL. Altrimenti, sarà aggiornato seguendo le modifiche fatte al titolo. Se si vogliono bloccare le modifiche, selezionare <em>Abilitare collegamento al titolo permanente</em> e il collegamento al titolo rimarrà sempre lo stesso (raccomandato se si utilizza la modalità multilingua di Zenphoto). <strong>Nota:</strong> <em>Modifica collegamento al titolo</em> sovrascrive le impostazioni del collegamento permanente."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:177
 msgid "If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"
-msgstr ""
+msgstr "Se si blocca un articolo soltanto l'autore/utente corrente o un qualsiasi utente con i permessi di amministratore saranno in grado di modificarlo successivamente."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:180
 msgid "<em>Custom article shortening:</em> You can set a custom article shorten length for the news loop excerpts by using the standard TinyMCE <em>page break</em> plugin button. This will override the general shorten length set on the plugin option then."
-msgstr ""
+msgstr "<em>Abbreviazione articolo personalizzata:</em> è possibile impostare una lunghezza personalizzata per l'anteprima dell'articolo da visualizzare nel ciclo delle notizie usando la funzione <em>interruzione pagina</em> di TinyMCE. Questa impostazione sovrascriverà le impostazioni predefinite per la lunghezza dell'anteprima definite nelle opzioni del tema."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:182
 msgid "<em>Scheduled publishing:</em> To automatically publish a page/news article in the future set it to 'published' and enter a future date in the date field manually. Note this works on server time!"
-msgstr ""
+msgstr "<em>Pubblicazione programmata:</em> per pubblicare automaticamente una pagina/notizia in futuro impostarla su 'pubblicata' e inserire una data futura manualmente nel campo data. Nota: questa funzione segue l'ora del server."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:183
 msgid "<em>Expiration date:</em> Enter a future date in the date field manually to set a date the page or article will be set unpublished automatically. After the page/article has been expired it can only be published again if the expiration date is deleted. Note this works on server time!"
-msgstr ""
+msgstr "<em>Data scadenza:</em> inserire una data futura manualmente nel campo data per impostare una data in cui la pagina o l'articolo verrà rimosso dalla pubblicazione. Dopo che la pagina/articolo è scaduto può essere pubblicato di nuovo solo eliminando la data di scadenza. Nota: questa funzione segue l'ora del server."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:184
 msgid "<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"
-msgstr ""
+msgstr "<em>Contenuto extra:</em> qui è possibile aggiungere del contenuto extra, per esempio da visualizzare nella barra laterale"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:185
 msgid "<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or javascript code."
-msgstr ""
+msgstr "<em>Blocchi di codice:</em> usare questi campi se bisogna inserire codice php (per esempio funzioni di Zenphoto) o codice javascript."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:186
 msgid "You also can use the codeblock fields as custom fields."
-msgstr ""
+msgstr "È anche possibile usare i campi blocco di codice come campi personalizzati."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:187
 msgid "Note that your theme must be setup to use the codeblock functions. Note also that codeblock fields are not multi-lingual."
-msgstr ""
+msgstr "Nota: il tema deve supportare le funzioni blocco di codice. Notare anche che i campi blocco di codice non sono multilingua."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:224
 msgid "Enable permaTitlelink"
-msgstr "Abilitare permaTitlelink"
+msgstr "Abilitare collegamento al titolo permanente"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:232
 msgid "Locked for changes"
@@ -10835,7 +10830,7 @@ msgstr "Data scadenza:"
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:290
 #, php-format
 msgid "Last change:<br />%1$s<br />by %2$s"
-msgstr ""
+msgstr "Ultima modifica:<br />%1$s<br />di %2$s"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:305
 #, php-format
@@ -10848,7 +10843,7 @@ msgstr "Collegamento al titolo:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:344
 msgid "A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically. You can edit it manually later after saving if necessary."
-msgstr ""
+msgstr "Un <em>collegamento al titolo</em> di facile comprensione per i motori di ricerca (aka slug) senza caratteri speciali da usare nelle URL viene generato automaticamente dal titolo della lingua correntemente selezionata. Sarà possibile modificarlo successivamente dopo il salvataggio se necessario."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:350
 msgid "Content:"
@@ -10860,19 +10855,19 @@ msgstr "Contenuto extra:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:357
 msgid "Codeblocks:"
-msgstr ""
+msgstr "Blocchi di codice:"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:362
 msgid "Codeblock 1"
-msgstr ""
+msgstr "Blocco di codice 1"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:363
 msgid "Codeblock 2"
-msgstr ""
+msgstr "Blocco di codice 2"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-edit.php:364
 msgid "Codeblock 3"
-msgstr ""
+msgstr "Blocco di codice 3"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-pages.php:54
 msgid "Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed."
@@ -10889,7 +10884,7 @@ msgstr "Modifica questa pagina"
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-pages.php:77
 msgid "The sort position of the indicated pages cannot be recorded because the nesting is too deep. Please move them to a higher level and save your order."
-msgstr ""
+msgstr "L'ordinamento delle pagine indicate non può essere salvato perché l'annidamento è troppo elevato. Spostare le pagine a un livello più alto e salvare l'ordine."
 
 #: zenphoto/zp-core/zp-extensions/zenpage/admin-news-articles.php:91
 msgid "Edit this article"
@@ -11149,6 +11144,122 @@ msgstr "Corrispondenze totali per <em>%1$s</em>: %2$u"
 msgid "Sorry, no image matches. Try refining your search."
 msgstr "Spiacenti, nessunna immagine corrisponde. Provare a rifinire la propria ricerca."
 
+#: zenphoto/themes/effervescence_plus/functions.php:21
+msgid "There were no images from which to select the random heading."
+msgstr "Non ci sono immagini da cui selezionare un'intestazione casuale."
+
+#: zenphoto/themes/effervescence_plus/functions.php:40
+msgid "Random picture..."
+msgstr "Immagine a caso..."
+
+#: zenphoto/themes/effervescence_plus/functions.php:98
+#, php-format
+msgid "Album %1$u of %2$u"
+msgstr "Album %1$u di %2$u"
+
+#: zenphoto/themes/effervescence_plus/functions.php:100
+#, php-format
+msgid "Photo %1$u of %2$u"
+msgstr "Foto %1$u di %2$u"
+
+#: zenphoto/themes/effervescence_plus/functions.php:104
+#, php-format
+msgid "Albums %1$u-%2$u of %3$u"
+msgstr "Album %1$u-%2$u di %3$u"
+
+#: zenphoto/themes/effervescence_plus/functions.php:106
+#, php-format
+msgid "Photos %1$u-%2$u of %3$u"
+msgstr "Foto %1$u-%2$u di %3$u"
+
+#: zenphoto/themes/effervescence_plus/functions.php:128
+#: zenphoto/themes/effervescence_plus/functions.php:133
+#, php-format
+msgid "Effervescence %s"
+msgstr "Effervescence %s"
+
+#: zenphoto/themes/effervescence_plus/functions.php:130
+#, php-format
+msgid "Effervescence %s (not found)"
+msgstr "Effervescence %s (non trovato)"
+
+#: zenphoto/themes/effervescence_plus/functions.php:136
+#, php-format
+msgid "Effervescence %1$s %2$s"
+msgstr "Effervescence %1$s %2$s"
+
+#: zenphoto/themes/effervescence_plus/functions.php:138
+#, php-format
+msgid "Effervescence %1$s %2$s (not found)"
+msgstr "Effervescence %1$s %2$s (non trovato)"
+
+#: zenphoto/themes/effervescence_plus/functions.php:172
+#, php-format
+msgid "View the Album: %s"
+msgstr "Visualizza l'album: %s"
+
+#: zenphoto/themes/effervescence_plus/functions.php:182
+#, php-format
+msgid "View the image: %s"
+msgstr "Visualizza l'immagine: %s"
+
+#: zenphoto/themes/effervescence_plus/functions.php:192
+msgid "page"
+msgstr "pagina"
+
+#: zenphoto/themes/effervescence_plus/functions.php:204
+msgid "category"
+msgstr "categoria"
+
+#: zenphoto/themes/effervescence_plus/functions.php:208
+msgid "article"
+msgstr "articolo"
+
+#: zenphoto/themes/effervescence_plus/functions.php:219
+#, php-format
+msgid "%1$u hit on this %2$s"
+msgid_plural "%1$u hits on this %2$s"
+msgstr[0] "%1$u visita per questa %2$s"
+msgstr[1] "%1$u visite per questa %2$s"
+
+#: zenphoto/themes/effervescence_plus/functions.php:227
+#, php-format
+msgid "%u Album"
+msgid_plural "%u Albums"
+msgstr[0] "%u album"
+msgstr[1] "%u album"
+
+#: zenphoto/themes/effervescence_plus/functions.php:228
+#, php-format
+msgid "%u Subalbum"
+msgid_plural "%u Subalbums"
+msgstr[0] "%u sub-album"
+msgstr[1] "%u sub-album"
+
+#: zenphoto/themes/effervescence_plus/functions.php:230
+#, php-format
+msgid "%u Image"
+msgid_plural "%u Images"
+msgstr[0] "%u immagine"
+msgstr[1] "%u immagini"
+
+#: zenphoto/themes/effervescence_plus/functions.php:267
+#, php-format
+msgid "Comments: %d"
+msgstr "Commenti: %d"
+
+#: zenphoto/themes/effervescence_plus/functions.php:281
+msgid "Categories: "
+msgstr "Categorie:"
+
+#: zenphoto/themes/effervescence_plus/functions.php:293
+msgid "next &raquo;"
+msgstr "succ &raquo;"
+
+#: zenphoto/themes/effervescence_plus/functions.php:293
+msgid "&laquo; prev"
+msgstr "&laquo; prec"
+
 #: zenphoto/themes/effervescence_plus/themeoptions.php:24
 msgid "Theme logo"
 msgstr "Logo tema"
@@ -11217,15 +11328,15 @@ msgstr "Selezionare la personalità del tema"
 msgid "*no logo selected"
 msgstr "*nessun logo selezionato"
 
-#: zenphoto/themes/effervescence_plus/register.php:81
+#: zenphoto/themes/effervescence_plus/register.php:79
 #: zenphoto/themes/effervescence_plus/pages.php:38
-#: zenphoto/themes/effervescence_plus/album.php:140
+#: zenphoto/themes/effervescence_plus/album.php:139
 msgid "Main Index"
 msgstr "Indice principale"
 
-#: zenphoto/themes/effervescence_plus/register.php:81
+#: zenphoto/themes/effervescence_plus/register.php:79
 #: zenphoto/themes/effervescence_plus/pages.php:38
-#: zenphoto/themes/effervescence_plus/album.php:140
+#: zenphoto/themes/effervescence_plus/album.php:139
 msgid "Home"
 msgstr "Pagina iniziale"
 
@@ -11260,139 +11371,23 @@ msgstr "RSS"
 msgid "News and Gallery"
 msgstr "Notizie e galleria"
 
-#: zenphoto/themes/effervescence_plus/customfunctions.php:21
-msgid "There were no images from which to select the random heading."
-msgstr "Non ci sono immagini da cui selezionare un'intestazione casuale."
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:40
-msgid "Random picture..."
-msgstr "Immagine a caso..."
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:98
-#, php-format
-msgid "Album %1$u of %2$u"
-msgstr "Album %1$u di %2$u"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:100
-#, php-format
-msgid "Photo %1$u of %2$u"
-msgstr "Foto %1$u di %2$u"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:104
-#, php-format
-msgid "Albums %1$u-%2$u of %3$u"
-msgstr "Album %1$u-%2$u di %3$u"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:106
-#, php-format
-msgid "Photos %1$u-%2$u of %3$u"
-msgstr "Foto %1$u-%2$u di %3$u"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:128
-#: zenphoto/themes/effervescence_plus/customfunctions.php:133
-#, php-format
-msgid "Effervescence %s"
-msgstr "Effervescence %s"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:130
-#, php-format
-msgid "Effervescence %s (not found)"
-msgstr "Effervescence %s (non trovato)"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:136
-#, php-format
-msgid "Effervescence %1$s %2$s"
-msgstr "Effervescence %1$s %2$s"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:138
-#, php-format
-msgid "Effervescence %1$s %2$s (not found)"
-msgstr "Effervescence %1$s %2$s (non trovato)"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:172
-#, php-format
-msgid "View the Album: %s"
-msgstr "Visualizza l'album: %s"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:182
-#, php-format
-msgid "View the image: %s"
-msgstr "Visualizza l'immagine: %s"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:192
-msgid "page"
-msgstr "pagina"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:204
-msgid "category"
-msgstr "categoria"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:208
-msgid "article"
-msgstr "articolo"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:219
-#, php-format
-msgid "%1$u hit on this %2$s"
-msgid_plural "%1$u hits on this %2$s"
-msgstr[0] "%1$u visita per questa %2$s"
-msgstr[1] "%1$u visite per questa %2$s"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:227
-#, php-format
-msgid "%u Album"
-msgid_plural "%u Albums"
-msgstr[0] "%u album"
-msgstr[1] "%u album"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:228
-#, php-format
-msgid "%u Subalbum"
-msgid_plural "%u Subalbums"
-msgstr[0] "%u sub-album"
-msgstr[1] "%u sub-album"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:230
-#, php-format
-msgid "%u Image"
-msgid_plural "%u Images"
-msgstr[0] "%u immagine"
-msgstr[1] "%u immagini"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:267
-#, php-format
-msgid "Comments: %d"
-msgstr "Commenti: %d"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:281
-msgid "Categories: "
-msgstr "Categorie:"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:293
-msgid "next &raquo;"
-msgstr "succ &raquo;"
-
-#: zenphoto/themes/effervescence_plus/customfunctions.php:293
-msgid "&laquo; prev"
-msgstr "&laquo; prec"
-
-#: zenphoto/themes/effervescence_plus/album.php:319
+#: zenphoto/themes/effervescence_plus/album.php:314
 msgid "For the best viewing experience"
 msgstr "Per la migliore esperienza di visualizzazione"
 
-#: zenphoto/themes/effervescence_plus/album.php:319
+#: zenphoto/themes/effervescence_plus/album.php:314
 msgid "Get Adobe Flash."
 msgstr "Scarica Adobe Flash."
 
-#: zenphoto/themes/effervescence_plus/album.php:328
+#: zenphoto/themes/effervescence_plus/album.php:323
 msgid "View Gallery Without Flash"
 msgstr "Visualizza galleria senza flash"
 
-#: zenphoto/themes/effervescence_plus/album.php:353
+#: zenphoto/themes/effervescence_plus/album.php:348
 msgid "Album is empty"
 msgstr "L'album è vuoto"
 
-#: zenphoto/themes/effervescence_plus/album.php:413
+#: zenphoto/themes/effervescence_plus/album.php:408
 msgid "Open In New Window"
 msgstr "Apri in nuova finestra"
 
@@ -11416,68 +11411,70 @@ msgstr "galleria Zenphoto"
 msgid "Picture of the day"
 msgstr "Foto del giorno"
 
-#: zenphoto/themes/effervescence_plus/search.php:136
+#: zenphoto/themes/effervescence_plus/search.php:134
 #, php-format
 msgid "%1$u Hit for <em>%2$s</em>"
 msgid_plural "%1$u Hits for <em>%2$s</em>"
 msgstr[0] "%1$u visita per <em>%2$s</em>"
 msgstr[1] "%1$u visite per <em>%2$s</em>"
 
-#: zenphoto/themes/effervescence_plus/search.php:151
+#: zenphoto/themes/effervescence_plus/search.php:149
 #, php-format
 msgid "Pages (%s)"
 msgstr "Pagine (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:155
-#: zenphoto/themes/effervescence_plus/search.php:187
+#: zenphoto/themes/effervescence_plus/search.php:153
+#: zenphoto/themes/effervescence_plus/search.php:185
+#: zenphoto/themes/zenpage-default/functions.php:42
 msgid "Show more results"
 msgstr "Mostra più risultati"
 
-#: zenphoto/themes/effervescence_plus/search.php:156
-#: zenphoto/themes/effervescence_plus/search.php:188
+#: zenphoto/themes/effervescence_plus/search.php:154
+#: zenphoto/themes/effervescence_plus/search.php:186
+#: zenphoto/themes/zenpage-default/functions.php:43
 msgid "Show fewer results"
 msgstr "Mostra meno risultati"
 
-#: zenphoto/themes/effervescence_plus/search.php:183
+#: zenphoto/themes/effervescence_plus/search.php:181
 #, php-format
 msgid "Articles (%s)"
 msgstr "Articoli (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:218
+#: zenphoto/themes/effervescence_plus/search.php:216
 #, php-format
 msgid "Images (%s)"
 msgstr "Immagini (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:223
+#: zenphoto/themes/effervescence_plus/search.php:220
 #, php-format
 msgid "Albums (%s)"
 msgstr "Album (%s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:226
+#: zenphoto/themes/effervescence_plus/search.php:222
 #, php-format
 msgid "Albums (%1$s) &amp; Images (%2$s)"
 msgstr "Album (%1$s) e immagini (%2$s)"
 
-#: zenphoto/themes/effervescence_plus/search.php:317
+#: zenphoto/themes/effervescence_plus/search.php:311
 msgid "get Adobe Flash."
 msgstr "scarica Adobe Flash."
 
-#: zenphoto/themes/effervescence_plus/search.php:354
+#: zenphoto/themes/effervescence_plus/search.php:348
 msgid "Enter your search criteria."
 msgstr "Inserire i criteri di ricerca."
 
-#: zenphoto/themes/effervescence_plus/search.php:356
+#: zenphoto/themes/effervescence_plus/search.php:350
 #, php-format
 msgid "Sorry, no matches for <em>%s</em>. Try refining your search."
 msgstr "Spiacenti, nessuna corrispondenza per <em>%s</em>. Provare a rifinire la propria ricerca."
 
-#: zenphoto/themes/effervescence_plus/search.php:384
+#: zenphoto/themes/effervescence_plus/search.php:378
 msgid "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled."
 msgstr "Simpleviewer richiede <em>mod_rewrite</em> per essere impostato. Simpleviewer è disabilitato."
 
 #: zenphoto/themes/zenpage-default/footer.php:1
 msgid "Zenpage-default theme by <a href=\"http://www.maltem.de\">Malte Müller</a>"
-msgstr ""
+msgstr "Tema Zenpage-default di <a href=\"http://www.maltem.de\">Malte Müller</a>"
 
 #: zenphoto/themes/zenpage-default/footer.php:1
 msgid "Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a> <span id=\"IE-clear-part\">with</span> <a href=\"http://www.zenphoto.org/2009/03/zenpage-a-cms-plugin-for-zenphoto/\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PAGE</span></a>"
@@ -11485,11 +11482,11 @@ msgstr "Basato su <a href=\"http://www.zenphoto.org\" title=\"Un semplice album 
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:22
 msgid "Use Thickbox"
-msgstr ""
+msgstr "Usare Thickbox"
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:22
 msgid "Check to display of the full size image with Thickbox."
-msgstr ""
+msgstr "Selezionare per visualizzare l'immagine alla dimensione originale con Thickbox."
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:23
 msgid "News on index page"
@@ -11497,7 +11494,7 @@ msgstr "Notizie nella pagina indice"
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:23
 msgid "Enable this if you want to show the news section's first page on the <code>index.php</code> page."
-msgstr ""
+msgstr "Abilitare questa opzione se si vuole mostrare la prima pagina della sezione delle notizie nella pagina <code>index.php</code>."
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:24
 msgid "Homepage"
@@ -11505,15 +11502,15 @@ msgstr "Homepage"
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:24
 msgid "Choose here any <em>unpublished Zenpage page</em> (listed by <em>titlelink</em>) to act as your site's homepage instead the normal gallery index. <strong>Note:</strong> This of course overrides the <em>News on index page</em> option and your theme must be setup for this feature! Visit the theming tutorial for details."
-msgstr ""
+msgstr "Scegliere una <em>pagina non pubblicata di Zenpage</em> (mostrate per <em>collegamento al titolo</em>) da usare come pagina home al posto dell'indice della galleria. <em>Nota:</strong> questa impostazione sovrascrive l'opzione <em>Notizie nella pagina indice</em> e il tema deve supportare questa funzione. Visitare la guida per la creazione di un tema per maggiori dettagli."
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:25
 msgid "Use standard contact page"
-msgstr ""
+msgstr "Usare pagina dei contatti standard"
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:25
 msgid "Disable this if you don not want to use the separate contact page with the contact form. You can also use the codeblock of a page for this. See the contact_form plugin documention for more info."
-msgstr ""
+msgstr "Disabilitare questa opzione se non si vuole usare una pagina dei contatti separata col form dei contatti. È anche possibile usare il blocco di codice di una pagina per questo scopo. Vedere la documentazione del plug-in contact_form per maggiori informazioni."
 
 #: zenphoto/themes/zenpage-default/themeoptions.php:33
 msgid "No unpublished pages available"
@@ -11521,7 +11518,7 @@ msgstr "Nessuna pagina non pubblicata disponibile"
 
 #: zenphoto/themes/zenpage-default/theme_description.php:7
 msgid "The zenpage CMS plugin default theme. It does also work without Zenpage installed as a normal theme. It containts extra support for print_album_menu plugin, the dynamic_locale plugin and the new paged_thumbs_nav plugin."
-msgstr ""
+msgstr "Il tema predefinito del plug-in zenpage CMS. Funziona anche senza Zenpage installato come un tema normale. Contiene il supporto per i plug-in print_album_menu, dynamic_locale e il nuovo paged_thumbs_nav."
 
 #: zenphoto/themes/zenpage-default/sidebar.php:15
 msgid "Gallery index"
@@ -11534,7 +11531,7 @@ msgstr "Galleria e notizie"
 #: zenphoto/themes/zenpage-default/pages.php:20
 #: zenphoto/themes/zenpage-default/archive.php:20
 #: zenphoto/themes/zenpage-default/gallery.php:21
-#: zenphoto/themes/zenpage-default/search.php:19
+#: zenphoto/themes/zenpage-default/search.php:18
 msgid "Search gallery"
 msgstr "Cerca nella galleria"
 
@@ -11556,7 +11553,7 @@ msgstr "Commenti:"
 msgid "Theme page"
 msgstr "Pagina tema"
 
-#: zenphoto/themes/zenpage-default/search.php:144
+#: zenphoto/themes/zenpage-default/search.php:143
 msgid "Sorry, no matches. Try refining your search."
 msgstr "Spiacenti, nessuna corrispondenza. Provare a rifinire la propria ricerca."
 
@@ -11822,6 +11819,8 @@ msgstr "%1$u album,&nbsp;%2$u foto"
 msgid "%u albums"
 msgstr "%u album"
 
+#~ msgid "From: %1$s <%2$s>"
+#~ msgstr "Da: %1$s <%2$s>"
 #~ msgid "%s sec"
 #~ msgstr "%s sec"
 #~ msgid "Albums (%s"
