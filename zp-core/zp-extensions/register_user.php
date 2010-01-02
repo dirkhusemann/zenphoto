@@ -147,7 +147,9 @@ if (!OFFSET_PATH) { // handle form post
 				$rights = $admin['rights'];
 			}
 		}
-		if (!is_null($adminuser)) {
+		if (is_null($adminuser)) {
+			$notify = 'not_verified';	// User ID no longer exists
+		} else {
 			$userobj = new Administrator(''); // get a transient object
 			$userobj->setUser($adminuser['user']);
 			$userobj->setPass(NULL);
@@ -166,8 +168,6 @@ if (!OFFSET_PATH) { // handle form post
 									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$userobj->getName(), $adminuser['user'], $admin_e));
 			}
 			if (empty($notify)) $notify = 'verified';
-		} else {
-			$notify = 'not_verified';
 		}
 	}
 	if (isset($_POST['register_user'])) {
@@ -298,6 +298,9 @@ function printRegistrationForm($thanks=NULL) {
 					break;
 				case 'invalidcaptcha':
 					echo gettext('The captcha you entered was not correct.');
+					break;
+				case 'not_verified':
+					echo gettext('Your registration request could not be completed.');
 					break;
 				default:
 					echo $notify;

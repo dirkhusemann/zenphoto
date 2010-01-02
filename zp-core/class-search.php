@@ -837,10 +837,24 @@ class SearchEngine
 		$sql .= "FROM ".prefix($tbl)." WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND "; }
 		$sql .= "(";
+		asort($idlist);
+		$last = $base = array_shift($idlist);
 		foreach ($idlist as $object) {
-			$sql .= '(`id`='.$object.') OR ';
+			if ($last < $object-1) {
+				if ($base == $last) {
+					$sql .= '(`id`='.$base.') OR ';
+				} else {
+					$sql .= '(`id` BETWEEN '.$base.' AND '.$last.') OR ';
+				}
+				$base = $object;
+			}
+			$last = $object;
 		}
-		$sql = substr($sql, 0, strlen($sql)-4).')';
+		if ($base == $last) {
+			$sql .= '(`id`='.$base.'))';
+		} else {
+			$sql .= '(`id` BETWEEN '.$base.' AND '.$last.'))';
+		}
 
 		switch ($tbl) {
 			case 'zenpage_news':
