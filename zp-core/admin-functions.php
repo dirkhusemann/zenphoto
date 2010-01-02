@@ -27,18 +27,16 @@ define('TEXT_INPUT_SIZE_SHORT', 30);
 function printAdminFooter($addl='') {
 	?>
 	<div id="footer">
-	<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>.">zen<strong>photo</strong></a>
-	version
-	<?php echo ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
-	if (!empty($addl)) {
-		echo ' | '. $addl;
-	}
-	?>
-	 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a>
-	 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a>
-	 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
-	 <br />
-	<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
+		<?php printf(gettext('<a href="http://www.zenphoto.org" title="A simpler web photo album">zen<strong>photo</strong></a> version %1$s [%2$s]'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE);
+		if (!empty($addl)) {
+			echo ' | '. $addl;
+		}
+		?>
+		 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a>
+		 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a>
+		 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
+		 <br />
+		<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
 	</div>
 	<?php
 }

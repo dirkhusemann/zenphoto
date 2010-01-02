@@ -7,10 +7,14 @@
 						<table border="0">
 							<tr>
 								<td>
-									<?php echo gettext("Name:"); ?>
-										<label>
-										(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)
-										</label>
+									<?php
+									echo gettext("Name:");
+									if (getOption('comment_form_anon')) {
+										?>
+										<label>(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)</label>
+										<?php 
+									}
+									?>
 								</td>
 								<td>
 									<?php
@@ -207,15 +211,19 @@
  								</tr>
 								<?php
 							}
+							if (getOption('comment_form_private')) {
+								?>
+								<tr>
+									<td colspan="2">
+										<label>
+											<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> />
+											<?php echo gettext("Private comment (don't publish)"); ?>
+										</label>
+									</td>
+								</tr>
+								<?php 
+							}
 							?>
-							<tr>
-								<td colspan="2">
-									<label>
-									<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> />
-									<?php echo gettext("Private comment (don't publish)"); ?>
-									</label>
-								</td>
-							</tr>
 						</table>
 						<textarea name="comment" rows="6" cols="42" class="textarea_inputbox"><?php echo $stored['comment']; ?></textarea>
 						<br />

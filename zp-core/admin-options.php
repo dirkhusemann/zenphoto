@@ -240,6 +240,7 @@ if (isset($_GET['action'])) {
 			setBoolOption('image_allow_upscale', isset($_POST['image_allow_upscale']));
 			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
 			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
+			setBoolOption('image_interlace', isset($_POST['image_interlace']));
 			setOption('sharpen_amount', sanitize_numeric($_POST['sharpen_amount']));
 			$num = str_replace(',', '.', sanitize($_POST['sharpen_radius']));
 			if (is_numeric($num)) setOption('sharpen_radius', $num);
@@ -1402,8 +1403,13 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			</td>
 		</tr>
 		<tr>
+			<td><?php echo gettext("Interlace:"); ?></td>
+			<td><input type="checkbox" name="image_interlace" value="1" <?php echo checked('1', getOption('image_interlace')); ?> /></td>
+			<td><?php echo gettext("If checked, resized images will be created <em>interlaced</em> (if the format permits)."); ?></td>
+		</tr>
+		<tr>
 			<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
-			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="auto_rotate"	value="1"
+			<td><input type="checkbox" name="auto_rotate"	value="1"
 				<?php echo checked('1', getOption('auto_rotate')); ?>
 				<?php if (!zp_imageCanRotate()) echo ' DISABLED'; ?>	/></td>
 			<td>
@@ -1415,7 +1421,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		</tr>
 		<tr>
 			<td><?php echo gettext("Allow upscale:"); ?></td>
-			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
+			<td><input type="checkbox" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
 			<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
 		</tr>
 		<tr>
@@ -1951,14 +1957,14 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<span style="white-space:nowrap">
 					<label>
 						<?php echo gettext('image') ?>
-						<input type="Checkbox" size="3" name="image_gray" id="image_gray"
+						<input type="checkbox" name="image_gray" id="image_gray"
 								value="1" <?php echo checked('1', getThemeOption('image_gray',$album,$themename)); ?>/>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
 						<?php echo gettext('thumbnail') ?>
-						<input type="Checkbox" size="3" name="thumb_gray" id="thumb_gray"
+						<input type="checkbox" name="thumb_gray" id="thumb_gray"
 								value="1" <?php echo checked('1', getThemeOption('thumb_gray',$album,$themename)); ?>/>
 					</label>
 				</span>

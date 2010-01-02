@@ -40,12 +40,15 @@ class register_user_options {
 		setOptionDefault('register_user_page_tip', gettext('Click here to register for this site.'));
 		setOptionDefault('register_user_page_link', gettext('Register'));
 		setOptionDefault('register_user_captcha', 0);
+		setOptionDefault('register_user_email_is_id', 1);
 		setOptionDefault('register_user_page_page', 'register');
 	}
 
 	function getOptionsSupported() {
 		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, an e-mail will be sent to the gallery admin when a new user has verified his registration.')),
+											gettext('Email ID') => array('key' => 'register_user_email_is_id', 'type' => OPTION_TYPE_CHECKBOX,
+												'desc' => gettext('If checked, The user\'s e-mail address will be used as his User ID.')),
 											gettext('Email notification text') => array('key' => 'register_user_text', 'type' => OPTION_TYPE_TEXTAREA,
 												'desc' => gettext('Text for the body of the email sent to the user. <strong>NOTE</strong>: You must include <code>%s</code> in your message where you wish the registration completion link to appear.')),
 											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM,
@@ -185,10 +188,15 @@ if (!OFFSET_PATH) { // handle form post
 		if (empty($admin_n)) {
 			$notify = 'incomplete';
 		}
-		$admin_e = trim($_POST['admin_email']);
+		if (isset($_POST['admin_email'])) {
+			$admin_e = trim($_POST['admin_email']);
+		} else {
+			$admin_e = trim($_POST['adminuser']);
+		}
 		if (!is_valid_email_zp($admin_e)) {
 			$notify = 'invalidemail';
 		}
+
 		$pass = trim($_POST['adminpass']);
 		$user = trim($_POST['adminuser']);
 		if (!empty($user) && !(empty($admin_n)) && !empty($admin_e)) {

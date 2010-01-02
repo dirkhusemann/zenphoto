@@ -58,6 +58,9 @@ if (extension_loaded('gd')) { // only define the functions if we have the proper
 	 */
 	function zp_imageOutput($im, $type, $filename=NULL, $qual=75) {
 		$qual = max(min($qual, 100),0);
+		if (getOption('image_interlace')) {
+			imageinterlace($im, true); 
+		}
 		switch ($type) {
 			case 'png':
 				$qual = max(0,9 - round($qual/10));

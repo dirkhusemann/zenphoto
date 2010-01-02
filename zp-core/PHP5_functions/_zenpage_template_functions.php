@@ -13,8 +13,9 @@ function printCodeblock($number='',$titlelink='') {
 	$codeblock = getCodeblock($number,$titlelink);
 	$context = get_context();
 	try {
-		eval("?>".$codeblock);
+		@eval("?>".$codeblock);
 	} catch (Exception $e) {
+		debugLog('printCodeblock('.$number.','.$titlelink.') exception: '.$e->getMessage());
 	}
 	set_context($context);
 }

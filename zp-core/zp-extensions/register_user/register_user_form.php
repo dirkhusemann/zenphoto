@@ -13,7 +13,7 @@
 			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo $admin_n; ?>" size="22" /></td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("User ID:"); ?></td>
+			<td><?php if (getOption('register_user_email_is_id')) echo gettext("Email:"); else echo gettext("User ID:"); ?></td>
 			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo $user; ?>" size="22" /></td>
 		</tr>
 		<tr>
@@ -41,11 +41,15 @@
 				</p>
 			</td>
 		</tr>
-		<tr>
-			<td><?php echo gettext("Email:"); ?></td>
-			<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" size="22" /></td>
-		</tr>
 		<?php
+		if (!getOption('register_user_email_is_id')) {
+			?>
+			<tr>
+				<td><?php echo gettext("Email:"); ?></td>
+				<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" size="22" /></td>
+			</tr>
+			<?php
+		}
 		$html = zp_apply_filter('register_user_form', '');
 		if (!empty($html)) echo $html;
 		if (getOption('register_user_captcha')) {

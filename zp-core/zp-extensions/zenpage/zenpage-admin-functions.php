@@ -69,16 +69,16 @@ function addPage() {
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
-	$show = getCheckboxState('show');
+	$show = getcheckboxState('show');
 	$date = sanitize($_POST['date']);
 	$expiredate = getExpiryDatePost();
-	$commentson = getCheckboxState('commentson');
-	$permalink = getCheckboxState('permalink');
+	$commentson = getcheckboxState('commentson');
+	$permalink = getcheckboxState('permalink');
 	$codeblock1 = sanitize($_POST['codeblock1'], 0);
 	$codeblock2 = sanitize($_POST['codeblock2'], 0);
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
-	$locked = getCheckboxState('locked');
+	$locked = getcheckboxState('locked');
 
 	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
@@ -121,20 +121,20 @@ function updatePage() {
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
-	$show = getCheckboxState('show');
+	$show = getcheckboxState('show');
 	$date = sanitize($_POST['date']);
 	$lastchange = sanitize($_POST['lastchange']);
 	$lastchangeauthor = sanitize($_POST['lastchangeauthor']);
 	$expiredate = getExpiryDatePost();
-	$commentson = getCheckboxState('commentson');
-	$permalink = getCheckboxState('permalink');
+	$commentson = getcheckboxState('commentson');
+	$permalink = getcheckboxState('permalink');
 	$codeblock1 = sanitize($_POST['codeblock1'], 0);
 	$codeblock2 = sanitize($_POST['codeblock2'], 0);
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
-	$locked = getCheckboxState('locked');
+	$locked = getcheckboxState('locked');
 
-	if (getCheckboxState('edittitlelink')) {
+	if (getcheckboxState('edittitlelink')) {
 		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
 		$titlelink = sanitize($_POST['titlelink-old'],3);
@@ -145,7 +145,7 @@ function updatePage() {
 	$id = sanitize($_POST['id']);
 	$rslt = true;
 	$oldtitlelink = sanitize($_POST['titlelink-old']);
-	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
+	if (getcheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
 		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.zp_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
 			$titlelink = $oldtitlelink; // force old link so data gets saved
@@ -166,7 +166,7 @@ function updatePage() {
 	$page->set('permalink',$permalink);
 	$page->set('locked',$locked);
 	$page->set('expiredate',$expiredate);
-	if (getCheckboxState('resethitcounter')) {
+	if (getcheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
 	processTags($page);
@@ -396,16 +396,16 @@ function addArticle() {
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
-	$show = getCheckboxState('show');
+	$show = getcheckboxState('show');
 	$date = sanitize($_POST['date']);
 	$expiredate = getExpiryDatePost();
-	$permalink = getCheckboxState('permalink');
-	$commentson = getCheckboxState('commentson');
+	$permalink = getcheckboxState('permalink');
+	$commentson = getcheckboxState('commentson');
 	$codeblock1 = sanitize($_POST['codeblock1'], 0);
 	$codeblock2 = sanitize($_POST['codeblock2'], 0);
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
-	$locked = getCheckboxState('locked');
+	$locked = getcheckboxState('locked');
 
 	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
@@ -455,20 +455,20 @@ function updateArticle() {
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
-	$show = getCheckboxState('show');
+	$show = getcheckboxState('show');
 	$date = sanitize($_POST['date']);
 	$expiredate = getExpiryDatePost();
-	$permalink = getCheckboxState('permalink');
+	$permalink = getcheckboxState('permalink');
 	$lastchange = sanitize($_POST['lastchange']);
 	$lastchangeauthor = sanitize($_POST['lastchangeauthor']);
-	$commentson = getCheckboxState('commentson');
+	$commentson = getcheckboxState('commentson');
 	$codeblock1 = sanitize($_POST['codeblock1'], 0);
 	$codeblock2 = sanitize($_POST['codeblock2'], 0);
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
-	$locked = getCheckboxState('locked');
+	$locked = getcheckboxState('locked');
 		
-	if (getCheckboxState('edittitlelink')) {
+	if (getcheckboxState('edittitlelink')) {
 		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
 		$titlelink = sanitize($_POST['titlelink-old'],3);
@@ -480,7 +480,7 @@ function updateArticle() {
 	$id = sanitize($_POST['id']);
 	$rslt = true;
 	$oldtitlelink = sanitize($_POST['titlelink-old']);
-	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
+	if (getcheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
 		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.zp_escape_string($titlelink).'" WHERE `id`="'.$id.'"',true);
 		if (!$rslt) {
 			$titlelink = $oldtitlelink; // force old link so data gets saved
@@ -501,7 +501,7 @@ function updateArticle() {
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
-	if(getCheckboxState('resethitcounter')) {
+	if(getcheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
 	processTags($article);
@@ -832,7 +832,7 @@ function addCategory() {
 		echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
 	} else {
 		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink) VALUES ('".zp_escape_string($catname)."', '".
-		zp_escape_string(seoFriendly($catlink))."','".getCheckboxState('permalink')."')", true)) {
+		zp_escape_string(seoFriendly($catlink))."','".getcheckboxState('permalink')."')", true)) {
 			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$catlink)."</p>";
@@ -849,14 +849,14 @@ function updateCategory() {
 	global $_zp_current_zenpage_news;
 	$result['id'] = sanitize($_POST['id']);
 	$result['cat_name'] = zp_escape_string(process_language_string_save("category",2));
-	$result['permalink'] = getCheckboxState('permalink');
+	$result['permalink'] = getcheckboxState('permalink');
 	if($result['permalink']) {
 		$result['cat_link'] = sanitize($_POST['catlink-old']);
 	}
-	if(getCheckboxState('edittitlelink')) {
+	if(getcheckboxState('edittitlelink')) {
 		$result['cat_link'] = sanitize($_POST['catlink']);
 	}
-	if(!$result['permalink'] AND !getCheckboxState('edittitlelink')) {
+	if(!$result['permalink'] AND !getcheckboxState('edittitlelink')) {
 		$result['cat_link'] = process_language_string_save("category",2);
 		$result['cat_link'] = zp_escape_string(seoFriendly(get_language_string($result['cat_link'])));
 	}

@@ -13,6 +13,7 @@ function cacheImage_protected($newfilename, $imgfile, $args, $allow_watermark=fa
 		cacheImage($newfilename, $imgfile, $args, $allow_watermark, $force_cache, $theme, $album);
 		return true;
 	} catch (Exception $e) {
+		debugLog('cacheImage('.$newfilename.') exception: '.$e->getMessage());
 		return false;
 	}
 }

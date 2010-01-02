@@ -19,7 +19,7 @@ function read_exif_data_protected($path) {
 	try {
 		$rslt = read_exif_data_raw($path, false);
 	} catch (Exception $e) {
-		if (DEBUG_EXIF) debugLog("read_exif_data_protected($path) exception: ".$e->getMessage());
+		debugLog("read_exif_data($path) exception: ".$e->getMessage());
 		$rslt = array();
 	}
 	if (DEBUG_EXIF) {

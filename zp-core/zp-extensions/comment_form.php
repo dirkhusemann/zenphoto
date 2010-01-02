@@ -41,6 +41,8 @@ class comment_form {
 		setOptionDefault('comment_form_articles', 1);
 		setOptionDefault('comment_form_pages', 1);
 		setOptionDefault('comment_form_rss', 1);
+		setOptionDefault('comment_form_private', 1);
+		setOptionDefault('comment_form_anon', 1);
 	}
 
 
@@ -63,6 +65,10 @@ class comment_form {
 									'desc' => gettext('Comment forms will be presented on the checked pages.')),
 									gettext('Only members can comment') => array('key' => 'comment_form_members_only', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, only logged in users will be allowed to post comments.')),
+									gettext('Allow private postings') => array('key' => 'comment_form_private', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('If checked, posters may mark their comments as private (not for publishing).')),
+									gettext('Allow anonomous posting') => array('key' => 'comment_form_anon', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('If checked, posters may exclude their personal information from the published post.')),
 									gettext('Include RSS link') => array('key' => 'comment_form_rss', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, an RSS link will be included at the bottom of the comment section.'))
 									);
