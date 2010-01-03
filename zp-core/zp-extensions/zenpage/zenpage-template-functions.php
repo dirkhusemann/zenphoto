@@ -53,7 +53,7 @@ function is_News() {
  * @return bool
  */
 function is_NewsArticle() {
-	return is_News() && in_context(ZP_ZENPAGE_NEWS_ARTICLE);
+	return is_News() && in_context(ZP_ZENPAGE_SINGLE);
 }
 
 
@@ -75,7 +75,6 @@ function is_NewsCategory() {
 function is_NewsArchive() {
 	return in_context(ZP_ZENPAGE_NEWS_DATE);
 }
-
 
 
 /**
