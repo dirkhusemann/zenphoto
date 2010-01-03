@@ -7,7 +7,7 @@
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independent of the album.php's thumbs. The function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.2.7';
+$plugin_version = '1.2.8';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -211,7 +211,7 @@ class pagedThumbsNav {
 			echo "<div id=\"pagedthumbsnav-prev\">\n";
 		}
 		// Prev thumbnails - show only if there is a prev page
-		echo "<a href=\"".$this->getPrevThumbsLink()."\" title=\"".gettext("previous thumbs")."\">".$this->prev."</a>\n";
+		echo "<a href=\"".htmlspecialchars($this->getPrevThumbsLink())."\" title=\"".gettext("previous thumbs")."\">".$this->prev."</a>\n";
 		echo "</div>";
 	}
 
@@ -250,15 +250,15 @@ class pagedThumbsNav {
 			} else {
 				$css = "";
 			}
-			echo "<a $css href=\"".$image->getImageLink()."\" title=\"".strip_tags($image->getTitle())."\">";
+			echo "<a $css href=\"".htmlspecialchars($image->getImageLink())."\" title=\"".strip_tags($image->getTitle())."\">";
 
 			if($this->crop) {
-				echo "<img src='".$image->getCustomImage(null, $this->width, $this->height, $this->width, $this->height, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" width='".$this->width."' height='".$this->height."' />";
+				echo "<img src='".htmlspecialchars($image->getCustomImage(null, $this->width, $this->height, $this->width, $this->height, null, null, true))."' alt=\"".strip_tags($image->getTitle())."\" width='".$this->width."' height='".$this->height."' />";
 			} else {
 				$maxwidth = $this->width; // needed because otherwise getMaxSpaceContainer will use the values of the first image for all others, too
 				$maxheight = $this->height;
 				getMaxSpaceContainer($maxwidth, $maxheight, $image, true);
-				echo "<img src=\"".$image->getCustomImage(NULL, $maxwidth, $maxheight, NULL, NULL, NULL, NULL, false)."\" alt=\"".strip_tags($image->getTitle())."\" />";
+				echo "<img src=\"".htmlspecialchars($image->getCustomImage(NULL, $maxwidth, $maxheight, NULL, NULL, NULL, NULL, false))."\" alt=\"".strip_tags($image->getTitle())."\" />";
 			}
 			echo "</a>\n";
 			$number++;
@@ -306,7 +306,7 @@ class pagedThumbsNav {
 		} else {
 			echo "<div id=\"pagedthumbsnav-next\">\n";
 		}
-		echo "<a href=\"".$this->getNextThumbsLink()."\" title=\"".gettext("next thumbs")."\">".$this->next."</a>\n";
+		echo "<a href=\"".htmlspecialchars($this->getNextThumbsLink())."\" title=\"".gettext("next thumbs")."\">".$this->next."</a>\n";
 		echo "</div>\n";
 	}
 
@@ -358,7 +358,7 @@ class pagedThumbsNav {
 			echo "<ul id=\"pagedthumbsnav-pagelist\">\n";
 			// prev page
 			if($this->pagelistprevnext AND $this->totalpages > 1 AND is_object($this->prevpageimage)) {
-				echo "<li><a href=\"".$this->prevpageimage->getImageLink()."\" title=\"".gettext("previous thumbs")."\">".$this->prev."</a></li>\n";
+				echo "<li><a href=\"".htmlspecialchars($this->prevpageimage->getImageLink())."\" title=\"".gettext("previous thumbs")."\">".$this->prev."</a></li>\n";
 			}
 			// 1st page
 			$this->printPagedThumbsNavPagelink($this->imagesperpage,$this->searchimages,$this->images,$this->currentpage,1,1);
@@ -381,7 +381,7 @@ class pagedThumbsNav {
 			}
 			// next page
 			if($this->pagelistprevnext AND $this->totalpages > 1 AND is_object($this->nextpageimage)) {
-				echo "<li><a href=\"".$this->nextpageimage->getImageLink()."\" title=\"".gettext("next thumbs")."\">".$this->next."</a></li>\n";
+				echo "<li><a href=\"".htmlspecialchars($this->nextpageimage->getImageLink())."\" title=\"".gettext("next thumbs")."\">".$this->next."</a></li>\n";
 			}
 			echo "</ul>\n";
 		}
@@ -410,7 +410,7 @@ class pagedThumbsNav {
 		if($this->currentpage == $i) {
 			echo "<li class=\"pagedthumbsnav-pagelistactive\">".$linktext."</a>\n";
 		} else {
-			echo "<li><a href=\"".$pageimage->getImageLink()."\" title=\"Seite ".$i."\">".$linktext."</a></li>\n";
+			echo "<li><a href=\"".htmlspecialchars($pageimage->getImageLink())."\" title=\"Seite ".$i."\">".$linktext."</a></li>\n";
 		}
 	}
 	
