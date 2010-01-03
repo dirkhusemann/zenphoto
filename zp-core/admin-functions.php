@@ -2165,8 +2165,8 @@ function unzip($file, $dir) { //check if zziplib is installed
 			}
 			zip_close($zip);
 		}
-	} else { // Use Zlib http://www.phpconcept.net/pclzip/index.en.php
-		require_once(dirname(__FILE__).'/lib-pclzip.php');
+	} else {
+		require_once(dirname(__FILE__).'/pclzip.lib.php');
 		$zip = new PclZip($file);
 		if ($zip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_REMOVE_ALL_PATH) == 0) {
 			die("Error : ".$zip->errorInfo(true));
