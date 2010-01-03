@@ -22,7 +22,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides trackback functionality to comments. Tracksbacks are available for images and albums as well as Zenpage news articles and pages. Trackback pings currently available only for news articles and pages. CAUTION: BETA STATUS. BETA STATUS Known bug: Does not work with sites in subdomains!");
 $plugin_author = "Malte Müller (acrylian) and Stephen Billard (sbillard) based on Ran Aroussi's trackback class";
-$plugin_version = '1.2.7';
+ $plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---class-trackback.php.html";
 $option_interface = new trackbackOptions();
 

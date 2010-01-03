@@ -30,7 +30,7 @@ $plugin_is_filter = 9;
 $plugin_description = gettext('Extracts <em>xmp</em> metadata from images and <code>xmp</code> sidecar files.');
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---xmpMetadata.html";
-$plugin_version = '1.2.7';
+ $plugin_version = '1.2.9'; 
 $option_interface = new xmpMetadata_options();
 
 zp_register_filter('new_album', 'xmpMetadata_new_album');
