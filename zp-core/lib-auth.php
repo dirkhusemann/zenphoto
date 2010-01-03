@@ -110,11 +110,15 @@ function validatePassword($pass) {
 			$pat = trim(str_replace("\t", '|', $pat));
 			if (!empty($pat)) {
 				$p2 .= '{<em>'.$pat.'</em>}, ';
-				if (preg_match('/[0-9A-Za-z]-[0-90-9A-Za-z]/', $pat)) {
-					$patrn = $pat;
-				} else {
-					$patrn = addcslashes($pat,'\\/.()[]^-');
+				
+				$patrn = '';
+				foreach (array('0-9','a-z','A-Z') as $try) {
+					if (preg_match('/['.$try.']-['.$try.']/', $pat, $r)) {
+						$patrn .= $r[0];
+						$pat = str_replace($r[0],'',$pat);
+					}
 				}
+				$patrn .= addcslashes($pat,'\\/.()[]^-');
 				if (preg_match('/(['.$patrn.'])/', $pass)) {
 					$strong = true;
 				}
