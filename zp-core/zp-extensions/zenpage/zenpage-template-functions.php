@@ -20,23 +20,6 @@ require_once(PHPScript('5.0.0', '_zenpage_template_functions.php'));
 /************************************************/
 
 /**
- * DEPRECATED FUNCTION!
- * Same as zenphoto's rewrite_path() except it's without WEBPATH, needed for some partial urls
- * 
- * @param $rewrite The path with mod_rewrite
- * @param $plain The path without
- * 
- * @return string
- */
-function rewrite_path_zenpage($rewrite='',$plain='') {
-	if (getOption('mod_rewrite')) {
-		return $rewrite;
-	} else {
-		return $plain;
-	}
-}
-
-/**
  * Checks if the current page is a news or single news article page.
  *
  * @return bool
@@ -348,7 +331,7 @@ function printNewsTitleLink($before='') {
 		if(is_NewsType("news")) {
 			echo "<a href=\"".getNewsURL(getNewsTitleLink())."\" title=\"".getBareNewsTitle()."\">".$before.getNewsTitle()."</a>";
 		} else if (is_GalleryNewsType()) {
-			echo "<a href=\"".getNewsTitleLink()."\" title=\"".getBareNewsTitle()."\">".$before.getNewsTitle()."</a>";
+			echo "<a href=\"".htmlspecialchars(getNewsTitleLink())."\" title=\"".getBareNewsTitle()."\">".$before.getNewsTitle()."</a>";
 		}
 	}
 }
@@ -417,16 +400,16 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 		case "image":
 			switch($mode) {
 				case "latestimages-sizedimage":
-					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
 					if (isImagePhoto($_zp_current_zenpage_news)) {
-						echo "<img src='".$_zp_current_zenpage_news->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+						echo "<img src='".htmlspecialchars($_zp_current_zenpage_news->getSizedImage($size))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					} else {
-						echo "<img src='".$_zp_current_zenpage_news->getThumbImageFile(WEBPATH)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+						echo "<img src='".htmlspecialchars($_zp_current_zenpage_news->getThumbImageFile(WEBPATH))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					}
 					echo "</a><br />";
 					break;
 				case "latestimages-thumbnail":
-					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
 			echo getNewsContent();
@@ -463,10 +446,10 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					} else {
 						$imgurl = $albumthumbobj->getSizedImage($size);
 					}
-					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestalbums-thumbnail":
-					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
 			echo getNewsContent();
@@ -542,7 +525,7 @@ function printNewsReadMoreLink($readmore='') {
 	if(is_NewsType("news")) {
 		$newsurl = getNewsURL(getNewsTitleLink());
 	} else {
-		$newsurl = getNewsTitleLink();
+		$newsurl = htmlspecialchars(getNewsTitleLink());
 	}
 	echo "<a href='".$newsurl."' title=\"".getBareNewsTitle()."\">".htmlspecialchars($readmore)."</a>";
 }
@@ -746,60 +729,6 @@ function inNewsCategory($catlink) {
 		}
 	}
 	return $count == 1;
-}
-
-
-/**
- * CombiNews feature: Returns a list of tags of an image.
- *
- * @return array
- */
-function getNewsImageTags() {
-	global $_zp_current_zenpage_news;
-	if(is_GalleryNewsType()) {
-		return $_zp_current_zenpage_news->getTags();
-	} else {
-		return false;
-	}
-}
-
-/**
- * CombiNews feature: Prints a list of tags of an image. These tags are not editable.
- *
- * @param string $option links by default, if anything else the
- *               tags will not link to all other photos with the same tag
- * @param string $preText text to go before the printed tags
- * @param string $class css class to apply to the UL list
- * @param string $separator what charactor shall separate the tags
- * @param bool $editable true to allow admin to edit the tags
- * @return string
- */
-function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
-	global $_zp_current_zenpage_news;
-	if(is_GalleryNewsType()) {
-		$singletag = getNewsImageTags();
-		$tagstring = implode(', ', $singletag);
-		if (empty($tagstring)) { $preText = ""; }
-		if (count($singletag) > 0) {
-			echo "<ul class=\"".$class."\">\n";
-			if (!empty($preText)) {
-				echo "<li class=\"tags_title\">".$preText."</li>";
-			}
-			$ct = count($singletag);
-			foreach ($singletag as $atag) {
-				if ($x++ == $ct) { $separator = ""; }
-				if ($option == "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
-					$links2 = "</a>";
-				}
-				echo "\t<li>".$links1.htmlspecialchars($atag, ENT_QUOTES).$links2.$separator."</li>\n";
-			}
-
-			echo "</ul>";
-
-			echo "<br clear=\"all\" />\n";
-		}
-	}
 }
 
 
@@ -1117,7 +1046,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 			if($option == "with_latest_images" OR $option == "with_latest_images_date") {
 				$categories = $item['category']->getTitle();
 				$title = htmlspecialchars($item['title']);
-				$link = $item['titlelink'];
+				$link = htmlspecialchars($item['titlelink']);
 				$content = $item['content'];
 				$thumb = "<a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title))."\"><img src=\"".$item['thumb']."\" alt=\"".strip_tags($title)."\" /></a>\n";
 				$type = "image";
@@ -1126,7 +1055,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 				//$image = newImage(new Album($_zp_gallery, $item['categorylink']), $item['titlelink']);
 				$category = $item['titlelink'];
 				$categories = "";
-				$link = $item['titlelink'];
+				$link = htmlspecialchars($item['titlelink']);
 				$title = htmlspecialchars($item['title']);
 				$thumb = "<a href=\"".$link."\" title=\"".$title."\"><img src=\"".$item['thumb']."\" alt=\"".strip_tags($title)."\" /></a>\n";
 				$content = $item['content'];

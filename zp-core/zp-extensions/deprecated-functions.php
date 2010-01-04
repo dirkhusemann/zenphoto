@@ -54,60 +54,6 @@ function getZenpageHitcounter($mode="",$obj=NULL) {
 }
 
 /**
- * THIS FUNCTION IS DEPRECATED! Use getHitcounter()!
- * 
- * Increments (optionally) and returns the hitcounter for a news category (page 1), a single news article or a page
- * Does not increment the hitcounter if the viewer is logged in as the gallery admin.
- * Also does currently not work if the static cache is enabled
- *
- * @param string $option "pages" for a page, "news" for a news article, "category" for a news category (page 1 only)
- * @param bool $viewonly set to true if you don't want to increment the counter.
- * @param int $id Optional record id of the object if not the current image or album
- * @return string
- */
-function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
-	global $_zp_current_zenpage_page, $_zp_current_zenpage_news, $_zp_loggedin;
-	trigger_error(gettext('zenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
-	switch($option) {
-		case "pages":
-			if (is_null($id)) {
-				$id = getPageID();
-			}
-			$dbtable = prefix('zenpage_pages');
-			$doUpdate = true;
-			break;
-		case "category":
-			if (is_null($id)) {
-				$id = getCurrentNewsCategoryID();
-			}
-			$dbtable = prefix('zenpage_news_categories');
-			$doUpdate = getCurrentNewsPage() == 1; // only count initial page for a hit on an album
-			break;
-		case "news":
-			if (is_null($id)) {
-				$id = getNewsID();
-			}
-			$dbtable = prefix('zenpage_news');
-			$doUpdate = true;
-			break;
-	}
-	if(($option == "pages" AND is_Pages()) OR ($option == "news" AND is_NewsArticle()) OR ($option == "category" AND is_NewsCategory())) {
-		if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) || $viewonly) { $doUpdate = false; }
-		$hitcounter = "hitcounter";
-		$whereID = " WHERE `id` = $id";
-		$sql = "SELECT `".$hitcounter."` FROM $dbtable $whereID";
-		if ($doUpdate) { $sql .= " FOR UPDATE"; }
-		$result = query_single_row($sql);
-		$resultupdate = $result['hitcounter'];
-		if ($doUpdate) {
-			$resultupdate++;
-			query("UPDATE $dbtable SET `".$hitcounter."`= $resultupdate $whereID");
-		}
-		return $resultupdate;
-	}
-}
-
-/**
  * Prints the image rating information for the current image
  * Deprecated:
  * Included for forward compatibility--use printRating() directly
@@ -294,5 +240,134 @@ function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true)
 	}
 	printEditable('album', 'location', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
+
+
+/***************************
+ * ZENPAGE PLUGIN FUNCTIONS
+ ***************************/
+
+/**
+ * THIS FUNCTION IS DEPRECATED! Use getHitcounter()!
+ * 
+ * Increments (optionally) and returns the hitcounter for a news category (page 1), a single news article or a page
+ * Does not increment the hitcounter if the viewer is logged in as the gallery admin.
+ * Also does currently not work if the static cache is enabled
+ *
+ * @param string $option "pages" for a page, "news" for a news article, "category" for a news category (page 1 only)
+ * @param bool $viewonly set to true if you don't want to increment the counter.
+ * @param int $id Optional record id of the object if not the current image or album
+ * @return string
+ */
+function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
+	global $_zp_current_zenpage_page, $_zp_current_zenpage_news, $_zp_loggedin;
+	trigger_error(gettext('zenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
+	switch($option) {
+		case "pages":
+			if (is_null($id)) {
+				$id = getPageID();
+			}
+			$dbtable = prefix('zenpage_pages');
+			$doUpdate = true;
+			break;
+		case "category":
+			if (is_null($id)) {
+				$id = getCurrentNewsCategoryID();
+			}
+			$dbtable = prefix('zenpage_news_categories');
+			$doUpdate = getCurrentNewsPage() == 1; // only count initial page for a hit on an album
+			break;
+		case "news":
+			if (is_null($id)) {
+				$id = getNewsID();
+			}
+			$dbtable = prefix('zenpage_news');
+			$doUpdate = true;
+			break;
+	}
+	if(($option == "pages" AND is_Pages()) OR ($option == "news" AND is_NewsArticle()) OR ($option == "category" AND is_NewsCategory())) {
+		if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) || $viewonly) { $doUpdate = false; }
+		$hitcounter = "hitcounter";
+		$whereID = " WHERE `id` = $id";
+		$sql = "SELECT `".$hitcounter."` FROM $dbtable $whereID";
+		if ($doUpdate) { $sql .= " FOR UPDATE"; }
+		$result = query_single_row($sql);
+		$resultupdate = $result['hitcounter'];
+		if ($doUpdate) {
+			$resultupdate++;
+			query("UPDATE $dbtable SET `".$hitcounter."`= $resultupdate $whereID");
+		}
+		return $resultupdate;
+	}
+}
+
+/**
+ * Same as zenphoto's rewrite_path() except it's without WEBPATH, needed for some partial urls
+ * 
+ * @param $rewrite The path with mod_rewrite
+ * @param $plain The path without
+ * 
+ * @return string
+ */
+function rewrite_path_zenpage($rewrite='',$plain='') {
+	if (getOption('mod_rewrite')) {
+		return $rewrite;
+	} else {
+		return $plain;
+	}
+}
+
+/**
+ * CombiNews feature: Returns a list of tags of an image.
+ *
+ * @return array
+ */
+function getNewsImageTags() {
+	global $_zp_current_zenpage_news;
+	if(is_GalleryNewsType()) {
+		return $_zp_current_zenpage_news->getTags();
+	} else {
+		return false;
+	}
+}
+
+/**
+ * CombiNews feature: Prints a list of tags of an image. These tags are not editable.
+ *
+ * @param string $option links by default, if anything else the
+ *               tags will not link to all other photos with the same tag
+ * @param string $preText text to go before the printed tags
+ * @param string $class css class to apply to the UL list
+ * @param string $separator what charactor shall separate the tags
+ * @param bool $editable true to allow admin to edit the tags
+ * @return string
+ */
+function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
+	global $_zp_current_zenpage_news;
+	if(is_GalleryNewsType()) {
+		$singletag = getNewsImageTags();
+		$tagstring = implode(', ', $singletag);
+		if (empty($tagstring)) { $preText = ""; }
+		if (count($singletag) > 0) {
+			echo "<ul class=\"".$class."\">\n";
+			if (!empty($preText)) {
+				echo "<li class=\"tags_title\">".$preText."</li>";
+			}
+			$ct = count($singletag);
+			foreach ($singletag as $atag) {
+				if ($x++ == $ct) { $separator = ""; }
+				if ($option == "links") {
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
+					$links2 = "</a>";
+				}
+				echo "\t<li>".$links1.htmlspecialchars($atag, ENT_QUOTES).$links2.$separator."</li>\n";
+			}
+
+			echo "</ul>";
+
+			echo "<br clear=\"all\" />\n";
+		}
+	}
+}
+
 
 ?>
