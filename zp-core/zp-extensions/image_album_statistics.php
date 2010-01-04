@@ -143,18 +143,18 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 		$firstimage = $firstimage[0];
 		echo $firstimage;
 		$modrewritesuffix = getOption('mod_rewrite_image_suffix');
-		$imagepath = rewrite_path("/".$firstimage.$modrewritesuffix,"&amp;image=".$firstimage,false);
+		$imagepath = htmlspecialchars(rewrite_path("/".$firstimage.$modrewritesuffix,"&amp;image=".$firstimage,false));
 	} else {
 		$imagepath = "";
 	}
-	$albumpath = rewrite_path("/".pathurlencode($tempalbum->name).$imagepath, "index.php?album=".pathurlencode($tempalbum->name).$imagepath);
+	$albumpath = htmlspecialchars(rewrite_path("/".pathurlencode($tempalbum->name).$imagepath, "index.php?album=".pathurlencode($tempalbum->name).$imagepath));
 	echo "<li><a href=\"".$albumpath."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 	$albumthumb = $tempalbum->getAlbumThumbImage();
 	$thumb = newImage($tempalbum, $albumthumb->filename);
 	if($crop) {
-		echo "<img src=\"".$albumthumb->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
+		echo "<img src=\"".htmlspecialchars($albumthumb->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE))."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
 	} else {
-		echo "<img src=\"".$albumthumb->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE)."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
+		echo "<img src=\"".htmlspecialchars($albumthumb->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE))."\" alt=\"" . html_encode($albumthumb->getTitle()) . "\" /></a>\n<br />";
 	}
 	if($showtitle) {
 		echo "<h3><a href=\"".$albumpath."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
@@ -415,14 +415,14 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
 	foreach ($images as $image) {
-		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . html_encode($image->getTitle()) . "\">\n";
+		echo "<li><a href=\"" . htmlspecialchars($image->getImageLink())."\" title=\"" . html_encode($image->getTitle()) . "\">\n";
 		if($crop) {
-			echo "<img src=\"".$image->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
+			echo "<img src=\"".htmlspecialchars($image->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE))."\" alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
 		} else {
-			echo "<img src=\"".$image->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE)."\" alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
+			echo "<img src=\"".htmlspecialchars($image->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE))."\" alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
 		}
 		if($showtitle) {
-			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . html_encode($image->getTitle()) . "\">\n";
+			echo "<h3><a href=\"".htmlspecialchars($image->getImageLink())."\" title=\"" . html_encode($image->getTitle()) . "\">\n";
 			echo $image->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {
