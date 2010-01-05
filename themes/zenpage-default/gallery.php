@@ -71,13 +71,12 @@ if(is_GalleryNewsType()) {
     <?php printNewsContent(); ?>
     <p><?php printNewsReadMoreLink(); ?></p>
     <?php printCodeblock(1); ?>
-    
+    <?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
     </div>	
 <?php
   endwhile; 
   printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 } ?> 
-
 	</div><!-- content left-->
 		
 	
