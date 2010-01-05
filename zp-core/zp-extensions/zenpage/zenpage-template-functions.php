@@ -20,7 +20,7 @@ require_once(PHPScript('5.0.0', '_zenpage_template_functions.php'));
 /************************************************/
 
 /**
- * Checks if the current page is a news or single news article page.
+ * Checks if the current page is in news context.
  *
  * @return bool
  */
@@ -29,6 +29,19 @@ function is_News() {
 	return(!is_null($_zp_current_zenpage_news));
 }
 
+/**
+ * Checks if the current page is a news or single news article page.
+ *
+ * @return bool
+ */
+function is_NewsPage() {
+	if(isset($_GET['p'])) {
+		$page = sanitize($_GET['p']);
+	}
+	if($page == getOption("zenpage_news_page")) {
+		return true;
+	}
+}
 
 /**
  * Checks if the current page is a single news article page
