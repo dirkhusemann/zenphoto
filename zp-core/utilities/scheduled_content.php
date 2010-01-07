@@ -354,6 +354,19 @@ if (count($publish_albums_list) > 0) {
 <?php
 if (count($publish_images_list) > 0) { 
 	?>
+	<script type="text/javascript">
+	function confirmdel(obj, id, msg) {
+		if (msg) {
+			if (confirm('<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')) {
+				jQuery('#'+id).css({color:'red'}); 
+				obj.checked = true;
+			}
+		} else {
+			jQuery('#'+id).css({color:'black'}); 
+			obj.checked = true;
+		}
+	}
+	</script>
 	<form name="publish" action="" method="post"><?php echo gettext('Not visible images:'); ?>
 	<input type="hidden" name="publish_images" value="true">
 	<ul class="scheduleimagechecklist">
@@ -375,19 +388,19 @@ if (count($publish_images_list) > 0) {
 						<td>
 							<span style="white-space:nowrap">
 								<label>
-									<input id="pub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio" value="pub_<?php echo $item; ?>" />
+									<input id="pub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio" value="pub_<?php echo $item; ?>" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',false)" />
 									<?php echo gettext('Publish'); ?>
 								</label>
 							</span>
 							<span style="white-space:nowrap">
 								<label>
-									<input id="notpub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="notpub_<?php echo $item; ?>"	checked="checked" />
+									<input id="notpub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="notpub_<?php echo $item; ?>"	checked="checked" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',false)" />
 									<?php echo gettext('Do not publish'); ?>
 								</label>
 							</span>
 							<span style="white-space:nowrap">
-								<label>
-									<input id="del_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="del_<?php echo $item; ?>" />
+								<label id="label_del_<?php echo $item; ?>">
+									<input id="del_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="del_<?php echo $item; ?>" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',true)" />
 									<?php echo gettext('Delete'); ?>
 								</label>
 							</span>
