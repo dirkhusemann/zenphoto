@@ -759,7 +759,7 @@ if (!$setup_checked) {
 	} else {
 		$magic_quotes_disabled = true;
 	}
-	checkMark($magic_quotes_disabled, gettext("PHP <code>magic_quotes_gpc</code>"), gettext("PHP <code>magic_quotes_gpc</code> [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information See #25 of the Zenphoto troubleshooting guide."));
+	checkMark($magic_quotes_disabled, gettext("PHP <code>magic_quotes_gpc</code>"), gettext("PHP <code>magic_quotes_gpc</code> [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information See <em>What is magic_quotes_gpc and why should it be disabled?</em> in the Zenphoto troubleshooting guide."));
 
 	if ($environ) {
 		/* Check for graphic library and image type support. */
