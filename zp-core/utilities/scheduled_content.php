@@ -95,7 +95,7 @@ printAdminHeader($webpath);
 .scheduleimagechecklist {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 20em;
+	height: 40em;
 	overflow: auto;
 	width: 50em;
 	background-color: white;
@@ -114,6 +114,12 @@ printAdminHeader($webpath);
 }
 
 .scheduleimagechecklist label:hover,.scheduleimagechecklist label.hover {
+	background: #777;
+	color: #fff;
+}
+.scheduleimagechecklist p {
+	margin-top: 5px;
+	text-align:center;
 	background: #777;
 	color: #fff;
 }
@@ -271,7 +277,7 @@ if (db_connect()) {
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		foreach ($result as $row) {
-			$publish_images_list[$row['folder']][$row['filename']] =$row['id'];
+			$publish_images_list[$row['folder']][$row['filename']] = $row['id'];
 		}
 	}
 	?>
@@ -346,14 +352,34 @@ if (count($publish_albums_list) > 0) {
 
 <?php
 if (count($publish_images_list) > 0) { 
-?>
+	?>
 	<form name="publish" action="" method="post"><?php echo gettext('Set visible:'); ?>
 	<input type="hidden" name="publish_images" value="true">
 	<ul class="scheduleimagechecklist">
 	<?php
 	foreach ($publish_images_list as $key=>$imagelist) {
-		echo '<strong>'.$key.'</strong>';
-		generateUnorderedListFromArray($imagelist, $imagelist, '', false, true, true); 
+		$album = new Album($gallery,$key);
+		$imagelist = array_flip($imagelist);
+		natcasesort($imagelist);
+		$imagelist = array_flip($imagelist);
+		?>
+		<p><strong><?php echo $key; ?></strong></p>
+		<?php 
+		foreach ($imagelist as $display=>$item) {
+			$listitem = postIndexEncode($item);
+			?>
+			<li>
+			<span style="white-space:nowrap">
+				<label>
+					<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"	checked="checked" value="<?php echo $item; ?>" />
+					<?php $image = newImage($album,$display); ?>
+					<img src="<?php echo $image->getThumb()?>" />
+					<?php printf(gettext('<strong>%1$s</strong>: %2$s'),$key,$display); ?>
+				</label>
+			</span>
+			</li>
+			<?php
+		} 
 	}
 	?>
 	</ul>
