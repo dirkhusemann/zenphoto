@@ -30,16 +30,16 @@ function is_News() {
 }
 
 /**
- * Checks if the current page is a news or single news article page.
+ * Checks if the current page is the news page in general.
  *
  * @return bool
  */
 function is_NewsPage() {
-	if(isset($_GET['p'])) {
-		$page = sanitize($_GET['p']);
-	}
-	if($page == getOption("zenpage_news_page")) {
+	global $_zp_gallery_page;
+	if($_zp_gallery_page == getOption("zenpage_news_page")) {
 		return true;
+	} else {
+		return false;
 	}
 }
 
