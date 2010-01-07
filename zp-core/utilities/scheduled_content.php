@@ -77,11 +77,6 @@ printAdminHeader($webpath);
 	text-indent: -25px;
 }
 
-.schedulealbumchecklist label:hover,.schedulealbumchecklist label.hover {
-	background: #777;
-	color: #fff;
-}
-
 * html .schedulealbumchecklist label {
 	height: 1%;
 }
@@ -113,10 +108,6 @@ printAdminHeader($webpath);
 	text-indent: -25px;
 }
 
-.scheduleimagechecklist label:hover,.scheduleimagechecklist label.hover {
-	background: #777;
-	color: #fff;
-}
 .scheduleimagechecklist p {
 	margin-top: 5px;
 	text-align:center;
@@ -180,22 +171,32 @@ if (db_connect()) {
 		if (!empty($sql)) {
 			$sql = substr($sql, 0, -4);
 			$sql = 'UPDATE '.prefix('albums').' SET `show`="1" WHERE '.$sql;
-		query($sql);
+			query($sql);
 		}
 	} else if (isset($_POST['publish_images'])) {
 		unset($_POST['publish_images']);
 		$sql = '';
-		foreach ($_POST as $key=>$imageid) {
-			$imageid = sanitize_numeric($imageid);
-			if (is_numeric($key)) {
-				$sql .= '`id`="'.$imageid.'" OR ';
+		foreach ($_POST as $action) {
+			$i = strrpos($action,'_');
+			$imageid = sanitize_numeric(substr($action,$i+1));
+			switch(substr($action,0,$i)) {
+				case 'pub':
+					if (is_numeric($imageid)) $sql .= '`id`="'.$imageid.'" OR ';
+					break;
+				case 'del':
+					$rowi = query_single_row('SELECT * FROM '.prefix('images').' WHERE `id`='.$imageid);
+					$rowa = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$rowi['albumid']);
+					$album = new Album($gallery, $rowa['folder']);
+					$image = newImage($album, $rowi['filename']);
+					$image->deleteimage();
+					break;
 			}
 		}
 		if (!empty($sql)) {
 			$sql = substr($sql, 0, -4);
 			$sql = 'UPDATE '.prefix('images').' SET `show`="1" WHERE '.$sql;
 			query($sql);
-	}
+		}
 	}
 	?>
 	<h3><?php gettext("database connected"); ?></h3>
@@ -353,7 +354,7 @@ if (count($publish_albums_list) > 0) {
 <?php
 if (count($publish_images_list) > 0) { 
 	?>
-	<form name="publish" action="" method="post"><?php echo gettext('Set visible:'); ?>
+	<form name="publish" action="" method="post"><?php echo gettext('Not visible images:'); ?>
 	<input type="hidden" name="publish_images" value="true">
 	<ul class="scheduleimagechecklist">
 	<?php
@@ -369,23 +370,47 @@ if (count($publish_images_list) > 0) {
 			$listitem = postIndexEncode($item);
 			?>
 			<li>
-			<span style="white-space:nowrap">
-				<label>
-					<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"	checked="checked" value="<?php echo $item; ?>" />
-					<?php $image = newImage($album,$display); ?>
-					<img src="<?php echo $image->getThumb()?>" />
-					<?php printf(gettext('<strong>%1$s</strong>: %2$s'),$key,$display); ?>
-				</label>
-			</span>
+				<table>
+					<tr>
+						<td>
+							<span style="white-space:nowrap">
+								<label>
+									<input id="pub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio" value="pub_<?php echo $item; ?>" />
+									<?php echo gettext('Publish'); ?>
+								</label>
+							</span>
+							<span style="white-space:nowrap">
+								<label>
+									<input id="notpub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="notpub_<?php echo $item; ?>"	checked="checked" />
+									<?php echo gettext('Do not publish'); ?>
+								</label>
+							</span>
+							<span style="white-space:nowrap">
+								<label>
+									<input id="del_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="del_<?php echo $item; ?>" />
+									<?php echo gettext('Delete'); ?>
+								</label>
+							</span>
+						</td>
+						<td>
+							<?php $image = newImage($album,$display); ?>
+							<img src="<?php echo $image->getThumb()?>" />
+						</td>
+						<td>
+							<?php printf(gettext('<strong>%s</strong>'),$key); ?><br />
+							<?php printf(gettext('%s'),$display); ?>
+						</td>
+					</tr>
+				</table>
 			</li>
 			<?php
 		} 
 	}
 	?>
 	</ul>
-	<div class="buttons pad_button" id="setvisible">
-	<button class="tooltip" type="submit" title="<?php echo gettext("Set waiting images to visible."); ?>">
-		<img src="<?php echo $webpath; ?>images/cache1.png" alt="" /> <?php echo gettext("Make images visible"); ?>
+	<div class="buttons pad_button" id="process">
+	<button class="tooltip" type="submit" title="<?php echo gettext("Process the above changes."); ?>">
+		<img src="<?php echo $webpath; ?>images/cache1.png" alt="" /> <?php echo gettext("Process changes"); ?>
 	</button>
 	</div>
 	<br clear="all" />
