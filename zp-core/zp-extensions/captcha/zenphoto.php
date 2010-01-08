@@ -51,7 +51,7 @@ class captcha {
 		<script type="text/javascript">
 			$(document).ready(function() { 	
 					$('#zenphoto_captcha_font').change(function(){
-						var imgsrc = '<img src="<?php echo $img; ?>&f='+$('#zenphoto_captcha_font').val()+'" />';
+						var imgsrc = '<img src="<?php echo $img; ?>&amp;f='+$('#zenphoto_captcha_font').val()+'" />';
 						$('#zenphoto_captcha_image_loc').html(imgsrc);
 					});	
 			});

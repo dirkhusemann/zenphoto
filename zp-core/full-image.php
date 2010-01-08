@@ -32,25 +32,44 @@ if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are d
 	header("Location: {$i}");
 	exit();
 }
-// have to check for passwords
-if (!(zp_loggedin(VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) {
-	$hash = getOption('gallery_password');
-	if (!empty($hash) && zp_getCookie('zp_gallery_auth') != $hash) {
-		require_once(dirname(__FILE__) . "/template-functions.php");
-		pageError(403, gettext("Forbidden"));
-		exit();
-	} else { // maybe there was a login screen posted
-		zp_handle_password('zp_image_auth', getOption('protected_image_password'), getOption('protected_image_user'));
-	}
-}
 
 if (!isMyAlbum($album8, ALL_RIGHTS)) {
+	//	handle password form if posted
+	zp_handle_password('zp_image_auth', getOption('protected_image_password'), getOption('protected_image_user'));
+	//check for passwords
 	$hash = getOption('protected_image_password'); 
 	$authType = 'zp_image_auth';
-	if (zp_getCookie($authType) != $hash) {
+	$hint = get_language_string(getOption('protected_image_hint'));
+	$show = getOption('protected_image_user');
+	if (empty($hash)) {	// check for album password
+		$_zp_gallery = new Gallery();
+		$album = new Album($_zp_gallery, $album8);
+		$hash = $album->getPassword();
+		$authType = "zp_album_auth_" . $album->get('id');
+		$hint = $album->getPasswordHint();
+		$show = $album->getUser();
+		if (empty($hash)) {
+			$album = $album->getParent();
+			while (!is_null($album)) {
+				$hash = $album->getPassword();
+				$authType = "zp_album_auth_" . $album->get('id');
+				$hint = $album->getPasswordHint();
+				$show = $album->getUser();
+				if (!empty($hash)) {
+					break;
+				}
+				$album = $album->getParent();
+			}
+		}
+	}
+	if (empty($hash)) {	// check for gallery password
+		$hash = getOption('gallery_password');
+		$authType = 'zp_gallery_auth';
+		$hint = get_language_string(getOption('gallery_hint'));
+		$show = getOption('gallery_user');
+	}
+	if (!empty($hash) && zp_getCookie($authType) != $hash) {
 		require_once(dirname(__FILE__) . "/template-functions.php");
-		$hint = get_language_string(getOption('protected_image_hint'));
-		$show = getOption('protected_image_user');
 		$parms = '';
 		if (isset($_GET['wmk'])) {
 			$parms = '&wmk='.$_GET['wmk'];

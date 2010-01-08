@@ -1626,11 +1626,11 @@ function printAlbumEditRow($album) {
 			$w = $h = round(getOption('thumb_size')/2);
 		}
 		?>
-		<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
+		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
 		<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
 	</td>
 	<td  style="text-align: left;font-size:110%;" width="300">
-		<a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
+		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
 	</td>
 	<?php
 	if ($album->isDynamic()) {
@@ -1644,7 +1644,7 @@ function printAlbumEditRow($album) {
 			$si = gettext('no images');
 		}
 		if ($ci > 0) {
-			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'&tab=imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
+			$si = '<a href="?page=edit&amp;album=' . urlencode($album->name) .'&amp;tab=imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
 		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) {
@@ -1653,7 +1653,7 @@ function printAlbumEditRow($album) {
 			$sa = '&nbsp;';
 		}
 		if ($ca > 0) {
-			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'&tab=subalbuminfo" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
+			$sa = '<a href="?page=edit&amp;album=' . urlencode($album->name) .'&amp;tab=subalbuminfo" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
 		}
 	}
 	?>
@@ -1676,7 +1676,7 @@ function printAlbumEditRow($album) {
 	<?php
 	if ($album->getShow()) {
 		?>
-		<a class="publish" href="?action=publish&value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
+		<a class="publish" href="?action=publish&amp;value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
 		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('Published'); ?>" /></a>
 
 	 <?php

@@ -4265,7 +4265,7 @@ function checkForGuest(&$hint, &$show) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
-	if (zp_loggedin(OVERVIEW_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return false;  // an admin is logged in
+	if (zp_loggedin(VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return false;  // an admin is logged in
 	if ($authType = checkForGuest($hint, $show)) return false;	// a guest is logged in
 	if ($silent) return true;
 	printPasswordForm($hint, true, getOption('login_user_field') || $show);
