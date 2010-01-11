@@ -988,7 +988,7 @@ if ($debug) {
 		}
 		if ($environ) {
 			if ($sqlv == 0) $sqlv = -1; // make it non-fatal
-			$good = checkMark($db, sprintf(gettext("Connect to the database <code>%s</code>"),$_zp_conf_vars['mysql_database']), '',
+			$good = checkMark($db, gettext("Connect to the database"), '',
 								sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.
 								gettext("Check the <code>user</code>, <code>password</code>, <code>database name</code>, and <code>MySQL host</code>.").'<br />' .
 								sprintf(gettext("Make sure the database has been created and that <code>%s</code> has access to it."),$_zp_conf_vars['mysql_user'])) && $good;
