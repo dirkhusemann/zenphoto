@@ -4265,7 +4265,16 @@ function checkForGuest(&$hint, &$show) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
-	if (zp_loggedin(VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return false;  // an admin is logged in
+	if (zp_loggedin()) {
+		switch ($_zp_gallery_page) {
+			case 'album.php':
+			case 'image.php':
+				if (isMyAlbum($_zp_current_album->name, ALL_RIGHTS)) return false;
+				break;
+			default:
+				return false;
+		}
+	}
 	if ($authType = checkForGuest($hint, $show)) return false;	// a guest is logged in
 	if ($silent) return true;
 	printPasswordForm($hint, true, getOption('login_user_field') || $show);
