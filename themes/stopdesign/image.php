@@ -88,7 +88,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 			<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
 			<div class="main">
-				<div class="rating"><?php if (function_exists('printImageRating')) printImageRating(); ?></div>
+				<div class="rating"><?php if (function_exists('printRating')) printRating(); ?></div>
 				<?php
 				if (function_exists('printCommentForm')) { 
 					require_once('comment.php');
