@@ -17,6 +17,13 @@ header ('Content-Type: text/html; charset=UTF-8');
 define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
 define('HTACCESS_VERSION', '1.2.8.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 
+$permission_names = array(//0700=>gettext('paranoid'), // beware of this one, it can severly break things!!!
+													0750=>gettext('strict+'),
+													0755=>gettext('strict'),
+													0775=>gettext('relaxed'),
+													0777=>gettext('loose')
+													);
+
 $debug = isset($_REQUEST['debug']);
 
 $setup_checked = isset($_GET['checked']);
@@ -35,11 +42,7 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 $serverpath = str_replace("\\", '/', dirname(dirname(__FILE__)));
 
-if ((fileperms(dirname(__FILE__))&0777)==0755) {
-	$chmod = 0755;
-} else {
-	$chmod = 0777;
-}
+$chmod = fileperms(dirname(__FILE__))&0777;
 
 $en_US = dirname(__FILE__).'/locale/en_US/';
 if (!file_exists($en_US)) {
@@ -147,16 +150,18 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 }
 
 if ($updatechmod = isset($_REQUEST['chmod_permissions'])) {
-	switch ($_REQUEST['chmod_permissions']) {
-		case 2:
-			$chmod = 0755;
-			break;
-		case 1:
-			$chmod = 0775;
-			break;
-		case 0:
-			$chmod = 0777;
-			break;
+	$selected = round($_REQUEST['chmod_permissions']);
+	$c = 0;
+	if ($selected>=0 && $selected<count($permission_names)) {
+		foreach ($permission_names as $key=>$name) {
+			if ($c == $selected) {
+				$chmod = $key;
+				break; 
+			}
+			$c++;
+		}
+	} else {
+		$updatechmod = false;
 	}
 }
 if ($updatechmod || $newconfig) {
@@ -195,7 +200,7 @@ $connectDBErr = '';
 if (file_exists(CONFIGFILE)) {
 	require(CONFIGFILE);
 	if (defined('CHMOD_VALUE')) {
-		$chmod = CHMOD_VALUE | 0755;
+		$chmod = CHMOD_VALUE;
 	}
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
@@ -234,6 +239,7 @@ if (file_exists(CONFIGFILE)) {
 		$connectDBErr = mysql_error();
 	}
 }
+
 if (!function_exists('setOption')) { // setup a primitive environment
 	$environ = false;
 	require_once(dirname(__FILE__).'/setup-primitive.php');
@@ -601,7 +607,6 @@ if (!$setup_checked) {
 			mkdir_recursive($path, $chmod);
 		}
 		$serverpath = str_replace('\\', '/', dirname(dirname(__FILE__)));
-		$severity = 1;
 		switch ($class) {
 			case 'std':
 				$append = str_replace($serverpath, '', $path);
@@ -623,17 +628,22 @@ if (!$setup_checked) {
 						return checkMark(-1, '', sprintf(gettext('<em>%1$s</em> folder%2$s [subfolder creation failure]'),$which, $f), sprintf(gettext('Setup could not create the following subfolders:<br />%s'),substr($subfolderfailed,2)));
 					}
 				}
-				if (zp_loggedin(ADMIN_RIGHTS) && (($chmod==0755) || $relaxation)) {
+				$perms = fileperms($path)&0777;
+				if (zp_loggedin(ADMIN_RIGHTS) && (($chmod<$perms) || ($relaxation && $chmod!=$perms))) {
 					@chmod($path,$chmod);
 					clearstatcache();
 					if (($perms = fileperms($path)&0777)!=$chmod) {
-						if (($perms&0755)==0755) {
-							$severity = -1;
+						if (array_key_exists($perms, $permission_names)) {
+							$perms_class = $permission_names[$perms];
 						} else {
-							$severity = 0;
+							$perms_class = gettext('unknown');
 						}
-						return checkMark($severity, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), gettext('Setup could not set the folder to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
-
+						if (array_key_exists($chmod, $permission_names)) {
+							$chmod_class = $permission_names[$chmod];
+						} else {
+							$chmod_class = gettext('unknown');
+						}
+						return checkMark(-1, '', sprintf(gettext('<em>%1$s</em> folder%2$s [permissions failure]'),$which, $f), sprintf(gettext('Setup could not change the folder permissions from <em>%1$s</em> (<code>0%2$o</code>) to <em>%3$s</em> (<code>0%4$o</code>). You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'),$perms_class,$perms,$chmod_class,$chmod));
 					} else {
 						?>
 						<script type="text/javascript">
@@ -672,9 +682,7 @@ if (!$setup_checked) {
 			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$which,$append);
 			return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> is not writeable and <strong>setup</strong> could not make it so]'),$which, $append), $msg);
 		} else {
-			if ($severity) {
-				return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
-			}
+			return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
 		}
 	}
 	
@@ -840,38 +848,32 @@ if (!$setup_checked) {
  							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
  	if ($cfg) {
   	if (zp_loggedin(ADMIN_RIGHTS)) {
-			$chmodselector =	'<form>'.
-												sprintf(gettext('Change file/folder permissions mask: %s'),
-												'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">'.
-												'	<option value="0"'.($chmod==0777?' SELECTED':'').'>'.gettext('loose (0777)').'</option>'.
-												'	<option value="1"'.($chmod==0775?' SELECTED':'').'>'.gettext('relaxed (0775)').'</option>'.
-												'	<option value="2"'.($chmod==0755?' SELECTED':'').'>'.gettext('strict (0755)').'</option>'.
-												'</select>').
+  		$selector =	'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">';
+  		$c = 0;
+  		foreach ($permission_names as $key=>$permission) {
+  			$selector .= '	<option value="'.$c.'"'.($chmod==$key?' SELECTED':'').'>'.sprintf(gettext('%1$s (0%2$o)'),$permission_names[$key],$key).'</option>';
+				$c++;
+  		}
+  		$selector .= '</select>';
+  		$chmodselector =	'<form>'.
+												sprintf(gettext('Change file/folder permissions mask: %s'),$selector).
 												'</form>';
  		} else {
  			$chmodselector = gettext('You must be logged in to change permissions.');
  		}
- 		switch ($chmod) {
- 			case 0777:
- 				$severity = -1;
- 				$value = gettext('<em>loose</em> (<code>0777</code>)');
- 				break;
- 			case 0775:
- 				$severity = -1;
- 				$value = gettext('<em>relaxed</em> (<code>0775</code>)');
- 				break;
- 			case 0755:
- 				$severity = -2;
- 				$value = gettext('<em>strict</em> (<code>0755</code>)');
- 				break;
- 			default:
- 				$severity = 0;
- 				$value = sprintf(gettext('<em>unknown</em> (<code>%o</code>)'),$chmod);
- 				break;
- 		}
+		if (array_key_exists($chmod, $permission_names)) {
+			$value = sprintf(gettext('<em>%1$s</em> (<code>0%2$o</code>)'),$permission_names[$chmod],$chmod);
+		} else {
+			$value = sprintf(gettext('<em>unknown</em> (<code>%o</code>)'),$chmod);
+		}
+		if ($chmod>0755) {
+			$severity = -1;
+		} else {
+			$severity = -2;
+		}
  		$msg = sprintf(gettext('File/Folder Permissions [are %s]'),$value);
  		checkMark($severity, $msg, $msg,
-	 							gettext('If file and folder permissions are not set to <em>strict</em> there could be a security risk. However, on some servers Zenphoto does not function correctly with <em>strict</em> file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'<br /><br />'.
+	 							gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'<br /><br />'.
 	 							$chmodselector);
  	}
 	if ($sql) {

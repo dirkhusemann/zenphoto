@@ -20,7 +20,9 @@ if (!empty($_FILES)) {
 		trigger_error(sprintf(gettext('Uploadify error on %1$s. Review your debug log.'),$name));
 	} else {
 		$tempFile = sanitize($_FILES['Filedata']['tmp_name'],3);
-		$folder = sanitize($_POST['folder'],3);
+		$albumparmas = explode(':', sanitize($_POST['folder'],3),3);
+
+		$folder = $albumparmas[1];
 		if (substr($folder,0,1) == '/') {
 			$folder = substr($folder,1);
 		}
@@ -31,6 +33,10 @@ if (!empty($_FILES)) {
 		if (!empty($folder) && isMyAlbum($folder, UPLOAD_RIGHTS)) {
 			if (!is_dir($targetPath)) {
 				mkdir_recursive($targetPath, CHMOD_VALUE);
+				$album = new Album(new Gallery(), $folder);
+				$album->setShow($albumparmas[0]!='false');
+				$album->setTitle($albumparmas[2]);
+				$album->save();
 			}
 			@chmod($targetPath, CHMOD_VALUE);
 			if (is_valid_image($name) || is_valid_other_type($name)) {

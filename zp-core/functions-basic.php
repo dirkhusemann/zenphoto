@@ -805,10 +805,11 @@ function getAlbumFolder($root=SERVERPATH) {
  * @param string $message the debug information
  * @param bool $reset set to true to reset the log to zero before writing the message
  */
-function debugLog($message, $reset=false) {
+function debugLog($message, $reset=false, $date=true) {
 	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
 	$f = fopen(dirname(dirname(__FILE__)) . '/' . DATA_FOLDER . '/debug_log.txt', $mode);
-	fwrite($f, $message . "\n");
+	if ($date) $date = '{'.gmdate('D, d M Y H:i:s').' GMT} '."\n";
+	fwrite($f, $date.$message . "\n");
 	fclose($f);
 }
 
@@ -818,18 +819,19 @@ function debugLog($message, $reset=false) {
  * @param string $name the name (or message) to display for the array
  * @param array $source
  */
-function debugLogArray($name, $source, $indent=0, $trail='') {
+function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 	if (is_array($source)) {
 		$msg = str_repeat(' ', $indent)."$name => ( ";
 		if (count($source) > 0) {
 			foreach ($source as $key => $val) {
 				if (strlen($msg) > 72) {
-					debugLog($msg);
+					debugLog($msg,false,$date);
+					$date = false;
 					$msg = str_repeat(' ', $indent);
 				}
 				if (is_array($val)) {
 					if (!empty($msg)) debugLog($msg);
-					debugLogArray($key, $val, $indent+5, ',');
+					debugLogArray($key, $val, $indent+5, ',',false);
 					$msg = '';
 				} else {
 					if (is_null($val)) {
@@ -844,7 +846,7 @@ function debugLogArray($name, $source, $indent=0, $trail='') {
 		} else {
 			$msg .= ")";
 		}
-		debugLog($msg);
+		debugLog($msg,false,$date);
 	} else {
 		debugLog($name.' parameter is not an array.');
 	}
@@ -866,13 +868,13 @@ function debugLogBacktrace($message) {
 	foreach($bt as $b) {
 		$caller = (isset($b['class']) ? $b['class'] : '')	. (isset($b['type']) ? $b['type'] : '')	. $b['function'];
 		if (!empty($line)) { // skip first output to match up functions with line where they are used.
-
 			$msg = $prefix . ' from ';
-			debugLog($msg.$caller.' ('.$line.')');
+			debugLog($msg.$caller.' ('.$line.')',false,false);
 			$prefix .= '  ';
 		} else {
-			debugLog($caller.' called');
+			debugLog($caller.' called',false,false);
 		}
+		$date = false;
 		if (isset($b['file']) && isset($b['line'])) {
 			$line = basename($b['file'])	. ' [' . $b['line'] . "]";
 		} else {
@@ -880,7 +882,7 @@ function debugLogBacktrace($message) {
 		}
 	}
 	if (!empty($line)) {
-		debugLog($prefix.' from '.$line);
+		debugLog($prefix.' from '.$line,false,false);
 	}
 }
 
@@ -896,7 +898,7 @@ function debugLogVar($message, $var) {
 	$str = ob_get_contents();
 	ob_end_clean();
 	debugLog($message);
-	debugLog($str);
+	debugLog($str,false,false);
 }
 
 
