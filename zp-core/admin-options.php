@@ -1974,7 +1974,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 			<tr>
 				<td><?php echo gettext("Image size:"); ?></td>
 				<td>
-					<?php $side = getOption('image_use_side'); ?>
+					<?php $side = getThemeOption('image_use_side',$album,$themename); ?>
 					<table>
 						<tr>
 							<td rowspan="2" style="margin:0; padding:0">
