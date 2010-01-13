@@ -316,11 +316,11 @@ class pagedThumbsNav {
 	 *
 	 */
 	function getCounter() {
-		$fromimage = $this->currentfloor;
+		$fromimage = $this->currentfloor+1;
 		if($this->totalimages < $this->currentciel) {
 			$toimage = $this->totalimages;
 		} else {
-			$toimage = $this->currentciel;
+			$toimage = $this->currentciel+1;
 		}
 		$counter = array("fromimage"=>$fromimage,"toimage"=>$toimage);
 		return $counter;
