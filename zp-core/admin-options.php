@@ -2031,7 +2031,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 							$list[] = str_replace('.php', '', filesystemToInternal($file));
 						}
 						$list = array_diff($list, standardScripts());
-						generateListFromArray(array(getOption('custom_index_page')), $list, false, false);
+						generateListFromArray(array(getThemeOption('custom_index_page',$album,$themename)), $list, false, false);
 						chdir($curdir);
 						?>
 					</select>
