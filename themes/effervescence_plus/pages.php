@@ -55,7 +55,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<div id="main2">
 			<div id="content-left">
 <h2><?php printPageTitle(); ?></h2>
-	?>
 	<div id="pagetext">
 	<?php printCodeblock(1); ?>
 	<?php printPageContent(); ?> 
