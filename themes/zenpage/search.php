@@ -25,7 +25,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 		<div id="content">
 		<div id="content-left">
-			<h2>
 		<?php
 		$numimages = getNumImages();
 		$numalbums = getNumAlbums();
@@ -47,14 +46,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			$searchwords .= $searchdate;
 		}
 		if ($total > 0 ) {
-			printf(ngettext('%1$u Hit for <em>%2$s</em>','%1$u Hits for <em>%2$s</em>',$total), $total, $searchwords);
+			printf(ngettext('<h3> %1$u Hit for <em>%2$s</em>','%1$u Hits for <em>%2$s</em></h3>',$total), $total, $searchwords);
 		}
 		if ($_zp_page == 1) { //test of zenpage searches
 			if ($numpages > 0) {
 				$number_to_show = 5;
 				$c = 0;
 				?>
-				</h2>
 				<hr />
 				<h3><?php printf(gettext('Pages (%s)'),$numpages); ?> <small><?php	printZDSearchShowMoreLink("pages",$number_to_show); ?></small></h3>
 					<ul class="searchresults">

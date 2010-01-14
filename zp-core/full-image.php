@@ -43,22 +43,22 @@ if (!isMyAlbum($album8, ALL_RIGHTS)) {
 	$show = getOption('protected_image_user');
 	if (empty($hash)) {	// check for album password
 		$_zp_gallery = new Gallery();
-		$album = new Album($_zp_gallery, $album8);
-		$hash = $album->getPassword();
-		$authType = "zp_album_auth_" . $album->get('id');
-		$hint = $album->getPasswordHint();
-		$show = $album->getUser();
+		$albumobj = new Album($_zp_gallery, $album8);
+		$hash = $albumobj->getPassword();
+		$authType = "zp_album_auth_" . $albumobj->get('id');
+		$hint = $albumobj->getPasswordHint();
+		$show = $albumobj->getUser();
 		if (empty($hash)) {
-			$album = $album->getParent();
-			while (!is_null($album)) {
-				$hash = $album->getPassword();
-				$authType = "zp_album_auth_" . $album->get('id');
-				$hint = $album->getPasswordHint();
-				$show = $album->getUser();
+			$albumobj = $albumobj->getParent();
+			while (!is_null($albumobj)) {
+				$hash = $albumobj->getPassword();
+				$authType = "zp_album_auth_" . $albumobj->get('id');
+				$hint = $albumobj->getPasswordHint();
+				$show = $albumobj->getUser();
 				if (!empty($hash)) {
 					break;
 				}
-				$album = $album->getParent();
+				$albumobj = $albumobj->getParent();
 			}
 		}
 	}
