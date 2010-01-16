@@ -34,8 +34,7 @@ class user_logout_options {
 }
 
 
-$cookiepath = WEBPATH;
-if (WEBPATH == '') { $cookiepath = '/'; }
+if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 $__redirect = '';
 if (isset($_GET['p'])) { $__redirect .= "&p=" . $_GET['p']; }
 if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . $_GET['searchfields']; }

@@ -16,8 +16,7 @@ if (file_exists(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/alt/lib-auth.php'
 $_zp_loggedin = false;
 $_zp_reset_admin = NULL;
 // Fix the cookie's path for root installs.
-$cookiepath = WEBPATH;
-if (WEBPATH == '') { $cookiepath = '/'; }
+if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 if (isset($_GET['ticket'])) { // password reset query
 	$_zp_ticket = $_GET['ticket'];
 	$post_user = $_GET['user'];

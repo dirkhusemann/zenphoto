@@ -1030,9 +1030,8 @@ function getAllSubAlbumIDs($albumfolder='') {
  * @param string $image Name of the image
  */
 function handleSearchParms($what, $album=NULL, $image=NULL) {
-	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list;
-	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
+	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list, $_zp_current_album;
+	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	$_zp_last_album = zp_getCookie('zenphoto_last_album');
 	if (is_null($album)) {
 		if (is_object($zp_request)) {
@@ -1055,6 +1054,10 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		// check to see if we are still "in the search context"
 		if (!is_null($image)) {
 			if ($_zp_current_search->getImageIndex($album->name, $image->filename) !== false) {
+				$dynamic_album = $_zp_current_search->dynalbumname;
+				if (!empty($dynamic_album)) {
+					$_zp_current_album = new Album($_zp_gallery, $dynamic_album);
+				}
 				$context = $context | ZP_SEARCH_LINKED | ZP_IMAGE_LINKED;
 			}
 		}
@@ -1814,8 +1817,7 @@ function logTime($tag) {
  */
 function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
 	global $_zp_loggedin, $_zp_login_error, $_zp_current_album;
-	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
+	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	if (empty($authType)) { // not supplied by caller
 		$check_auth = '';
 		if (isset($_GET['z']) && $_GET['p'] == 'full-image' || isset($_GET['p']) && $_GET['p'] == '*full-image') {

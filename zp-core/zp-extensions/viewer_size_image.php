@@ -50,8 +50,7 @@ class viewer_size_image_options {
 }
 
 if (!OFFSET_PATH) {
-	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
+	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	$saved = zp_getCookie('viewer_size_image_saved');
 	if (empty($saved)) {
 		$postdefault = trim(getOption('viewer_size_image_default'));
@@ -114,8 +113,7 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 			}
 		}
 	}
-	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
+	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	?>
 	<script>
 		function switchimage(obj){

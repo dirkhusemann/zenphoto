@@ -964,7 +964,8 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 		}
 		// remove parent links that are not in the search path
 		foreach ($parents as $key=>$analbum) {
-			if (!in_array($analbum->name, $_zp_search_album_list)) {
+			$target = $analbum->name;
+			if ($target!==$dynamic_album && !in_array($target, $_zp_search_album_list)) {
 				unset($parents[$key]);
 			}
 		}

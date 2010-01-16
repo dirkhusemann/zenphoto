@@ -76,8 +76,7 @@ if (isset($_GET['action'])) {
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
 			if ($newloc != $oldloc) {
-				$cookiepath = WEBPATH;
-				if (WEBPATH == '') { $cookiepath = '/'; }
+				if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';

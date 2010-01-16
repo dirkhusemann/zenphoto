@@ -7,5 +7,4 @@ jQuery UI files to get from http://ui.jquery.com/download :
 	- Core
 	- all Interaction components: Draggable, Droppable, Resizable, Selectable, Sortable
 	- the following widgets: datepicker, slider
-- Pick version: Stable (1.5.3 as of zenphoto 1.2.2)
 - Choose: No compression (we don't care as it is used only in the backend)

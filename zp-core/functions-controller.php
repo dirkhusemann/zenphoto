@@ -295,11 +295,11 @@ function zp_load_gallery() {
  */
 function zp_load_search() {
 	global $_zp_current_search;
+	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
+	zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
 	if ($_zp_current_search == NULL)
 		$_zp_current_search = new SearchEngine();
 	set_context(ZP_INDEX | ZP_SEARCH);
-	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
 	$params = $_zp_current_search->getSearchParams();
 	zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
 	return $_zp_current_search;
@@ -439,15 +439,20 @@ function zp_load_request() {
 	}
 	if (isset($_GET['p'])) {
 		$page = str_replace(array('/','\\','.'), '', $_GET['p']);
-		if ($page == "search") {
-			$success = zp_load_search();
-		}
-		if (getOption('zp_plugin_zenpage')) {
-			if ($page == ZENPAGE_PAGES) {
-				$success = zenpage_load_page();
-			} else if ($page == ZENPAGE_NEWS) {
-				$success = zenpage_load_news();
-			}
+		switch ($page) {
+			case 'search':
+				$success = zp_load_search();
+				break;
+			case ZENPAGE_PAGES:
+				if (getOption('zp_plugin_zenpage')) {
+					$success = zenpage_load_page();
+				}
+				break;
+			case ZENPAGE_NEWS:
+				if (getOption('zp_plugin_zenpage')) {
+					$success = zenpage_load_news();
+				}
+				break;
 		}
 	}
 	if ($success) add_context(ZP_INDEX);
