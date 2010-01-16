@@ -114,7 +114,7 @@ if (isset($_GET['action'])) {
 			$st = strtolower(sanitize($_POST['gallery_sorttype'],3));
 			if ($st == 'custom') $st = strtolower(sanitize($_POST['customalbumsort'],3));
 			setOption('gallery_sorttype', $st);
-			if ($st == 'manual') {
+			if (($st == 'manual') || ($st == 'random')) {
 				setBoolOption('gallery_sortdirection', 0);
 			} else {
 				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
@@ -877,6 +877,11 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						$sort = $sortby;
 						$sort[gettext('Manual')] = 'manual';
 						$sort[gettext('Custom')] = 'custom';
+/*
+ * not recommended--screws with peoples minds during pagination!
+					
+						$sort[gettext('Random')] = 'random';
+*/						
 						$cvt = $cv = strtolower(getOption('gallery_sorttype'));
 						ksort($sort);
 						$flip = array_flip($sort);
@@ -885,7 +890,7 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						} else {
 							$dspc = 'block';
 						}
-						if (($cv == 'manual') || ($cv == '')) {
+						if (($cv == 'manual') || ($cv == 'random') || ($cv == '')) {
 							$dspd = 'none';
 						} else {
 							$dspd = 'block';
@@ -908,8 +913,8 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 											<?php echo gettext("Descending"); ?>
 										</label>
 									</span>
-									</td>
-								</tr>
+								</td>
+							</tr>
 							<tr>
 								<td colspan="2">
 									<span id="customTextBox2" class="customText" style="display:<?php echo $dspc; ?>">
@@ -1300,13 +1305,13 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 
 	<table class="bordered">
 		<tr>
-					<td colspan="3">
-					<p class="buttons">
-					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-					</p>
-					</td>
-				</tr>
+			<td colspan="3">
+				<p class="buttons">
+				<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+				<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+				</p>
+			</td>
+		</tr>
 		<tr>
 			<td><?php echo gettext("Sort images by:"); ?></td>
 			<td>
@@ -1314,381 +1319,404 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				$sort = $sortby;
 				$cvt = $cv = getOption('image_sorttype');
 				$sort[gettext('Custom')] = 'custom';
+/*
+ * not recommended--screws with peoples minds during pagination!
+				$sort[gettext('Random')] = 'random';
+*/				
 				$flip = array_flip($sort);
 				if (isset($flip[$cv])) {
-					$dsp = 'none';
+					$dspc = 'none';
 				} else {
-					$dsp = 'block';
+					$dspc = 'block';
+				}
+				if (($cv == 'manual') || ($cv == 'random') || ($cv == '')) {
+					$dspd = 'none';
+				} else {
+					$dspd = 'block';
 				}
 				?>
-				<select id="imagesortselect" name="image_sorttype"  onchange="showfield(this, 'customTextBox3')">
-				<?php
-				if (array_search($cv, $sort) === false) $cv = 'custom';
-				generateListFromArray(array($cv), $sort, false, true);
-				?>
-				</select>
-				<label>
-					<input type="checkbox" name="image_sortdirection" value="1" <?php echo checked('1', getOption('image_sortdirection')); ?> />
-					<?php echo gettext("Descending"); ?>
-				</label>
-				<div id="customTextBox3" class="customText" style="display:<?php echo $dsp; ?>">
-				<?php echo gettext('custom fields:') ?>
-				<input id="customimagesort" name="customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
-				</div>
-				</td>
-			<td>
-				<p><?php	echo gettext("Default sort order for images."); ?></p>
-				<p><?php echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.') ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td width="175"><?php echo gettext("Image quality:"); ?></td>
-			<td width="350">
-				<?php echo gettext('Normal Image'); ?>&nbsp;<input type="text" size="3" id="imagequality" name="image_quality" value="<?php echo getOption('image_quality');?>" />
-				<script type="text/javascript">
-				$(function() {
-					$("#slider-imagequality").slider({
-						<?php $v = getOption('image_quality'); ?>
-						startValue: <?php echo $v; ?>,
-						value: <?php echo $v; ?>,
-						min: 0,
-						max: 100,
-						slide: function(event, ui) {
-							$("#imagequality").val( ui.value);
-						}
-					});
-					$("#imagequality").val($("#slider-imagequality").slider("value"));
-				});
-				</script>
-				<div id="slider-imagequality"></div>
-				<?php echo gettext('<em>full</em> Image'); ?>&nbsp;<input type="text" size="3" id="fullimagequality" name="full_image_quality" value="<?php echo getOption('full_image_quality');?>" />
-				<script type="text/javascript">
-				$(function() {
-					$("#slider-fullimagequality").slider({
-						<?php $v = getOption('full_image_quality'); ?>
-						startValue: <?php echo $v; ?>,
-						value: <?php echo $v; ?>,
-						min: 0,
-						max: 100,
-						slide: function(event, ui) {
-							$("#fullimagequality").val( ui.value);
-						}
-					});
-					$("#fullimagequality").val($("#slider-fullimagequality").slider("value"));
-				});
-				</script>
-				<div id="slider-fullimagequality"></div>
-				<?php echo gettext('Thumbnail'); ?>&nbsp;<input type="text" size="3" id="thumbquality" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" />
-				<script type="text/javascript">
-				$(function() {
-					$("#slider-thumbquality").slider({
-						<?php $v = getOption('thumb_quality'); ?>
-						startValue: <?php echo $v; ?>,
-						value: <?php echo $v; ?>,
-						min: 0,
-						max: 100,
-						slide: function(event, ui) {
-							$("#thumbquality").val( ui.value);
-						}
-					});
-					$("#thumbquality").val($("#slider-thumbquality").slider("value"));
-				});
-				</script>
-				<div id="slider-thumbquality"></div>
-			</td>
-			<td>
-				<p><?php echo gettext("Compression quality for images and thumbnails generated by Zenphoto.");?></p>
-				<p><?php echo gettext("Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Interlace:"); ?></td>
-			<td><input type="checkbox" name="image_interlace" value="1" <?php echo checked('1', getOption('image_interlace')); ?> /></td>
-			<td><?php echo gettext("If checked, resized images will be created <em>interlaced</em> (if the format permits)."); ?></td>
-		</tr>
-		<tr>
-			<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
-			<td><input type="checkbox" name="auto_rotate"	value="1"
-				<?php echo checked('1', getOption('auto_rotate')); ?>
-				<?php if (!zp_imageCanRotate()) echo ' DISABLED'; ?>	/></td>
-			<td>
-				<p><?php	echo gettext("Automatically rotate images based on the EXIF orientation setting."); ?></p>
-				<?php
-				if (!function_exists('imagerotate')) echo '<p>'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.").'</p>';
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Allow upscale:"); ?></td>
-			<td><input type="checkbox" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
-			<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Sharpen:"); ?></td>
-			<td>
-				<label>
-					<input type="checkbox" name="image_sharpen" value="1" <?php echo checked('1', getOption('image_sharpen')); ?> />
-					<?php echo gettext('Images'); ?>
-				</label>
-				<label>
-					<input type="checkbox" name="thumb_sharpen" value="1" <?php echo checked('1', getOption('thumb_sharpen')); ?> />
-					<?php echo gettext('Thumbs'); ?>
-				</label>
-				<br />
-				<?php echo gettext('Amount'); ?>&nbsp;<input type="text" id="sharpenamount" name="sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
-				<script type="text/javascript">
-				$(function() {
-					$("#slider-sharpenamount").slider({
-					<?php $v = getOption('sharpen_amount'); ?>
-						<?php $v = getOption('sharpen_amount'); ?>
-						startValue: <?php echo $v; ?>,
-						value: <?php echo $v; ?>,
-						min: 0,
-						max: 100,
-						slide: function(event, ui) {
-							$("#sharpenamount").val( ui.value);
-						}
-					});
-					$("#sharpenamount").val($("#slider-sharpenamount").slider("value"));
-				});
-				</script>
-				<div id="slider-sharpenamount"></div>
-				<table>
-					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Radius'); ?>&nbsp;</td>
-						<td style="margin:0; padding:0"><input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" /></td>
-					</tr>
-					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Threshold'); ?>&nbsp;</td>
-						<td style="margin:0; padding:0"><input type="text" name = "sharpen_threshold" size="3" value="<?php echo getOption('sharpen_threshold'); ?>" /></td>
-					</tr>
+					<table>
+						<tr>
+							<td>
+								<select id="imagesortselect" name="image_sorttype" onchange="update_direction(this,'image_sortdirection','customTextBox3')">
+								<?php
+								if (array_search($cv, $sort) === false) $cv = 'custom';
+								generateListFromArray(array($cv), $sort, false, true);
+								?>
+								</select>
+							</td>
+							<td>
+								<span id="image_sortdirection" style="display:<?php echo $dspd; ?>">
+									<label>
+										<input type="checkbox" name="image_sortdirection"	value="1" <?php echo checked('1', getOption('image_sortdirection')); ?> />
+										<?php echo gettext("Descending"); ?>
+									</label>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<span id="customTextBox3" class="customText" style="display:<?php echo $dspc; ?>">
+								<?php echo gettext('custom fields:') ?>
+								<input id="customimagesort" name="customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+								</span>
+							</td>
+						</tr>
 					</table>
-			</td>
-			<td>
-				<p><?php echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."); ?></p>
-				<p><?php echo gettext("<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening)."); ?></p>
-				<p><?php echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details."); ?></p>
-				<p><?php echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges."); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Watermarks:"); ?></td>
-			<td>
-				<table>
-				<?php
-				$current = getOption('fullimage_watermark');
-				?>
-				<tr>
-					<td style="margin:0; padding:0;"><?php echo gettext('Images'); ?> </td>
-					<td style="margin:0; padding:0">
-						<select id="fullimage_watermark" name="fullimage_watermark">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
-							<?php
-							$watermarks = getWatermarks();
-							generateListFromArray(array($current), $watermarks, false, false);
-							?>
-						</select>
-					</td>
-				</tr>
-				<?php
-				$imageplugins = array_unique($_zp_extra_filetypes);
-				$imageplugins[] = 'Image';
-				ksort($imageplugins);
-				foreach ($imageplugins as $plugin) {
-					$opt = $plugin.'_watermark';
-					$current = getOption($opt);
+				</td>
+				<td>
+					<p><?php	echo gettext("Default sort order for images."); ?></p>
+					<p><?php echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.') ?></p>
+				</td>
+			</tr>
+			<tr>
+				<td width="175"><?php echo gettext("Image quality:"); ?></td>
+				<td width="350">
+					<?php echo gettext('Normal Image'); ?>&nbsp;<input type="text" size="3" id="imagequality" name="image_quality" value="<?php echo getOption('image_quality');?>" />
+					<script type="text/javascript">
+					$(function() {
+						$("#slider-imagequality").slider({
+							<?php $v = getOption('image_quality'); ?>
+							startValue: <?php echo $v; ?>,
+							value: <?php echo $v; ?>,
+							min: 0,
+							max: 100,
+							slide: function(event, ui) {
+								$("#imagequality").val( ui.value);
+							}
+						});
+						$("#imagequality").val($("#slider-imagequality").slider("value"));
+					});
+					</script>
+					<div id="slider-imagequality"></div>
+					<?php echo gettext('<em>full</em> Image'); ?>&nbsp;<input type="text" size="3" id="fullimagequality" name="full_image_quality" value="<?php echo getOption('full_image_quality');?>" />
+					<script type="text/javascript">
+					$(function() {
+						$("#slider-fullimagequality").slider({
+							<?php $v = getOption('full_image_quality'); ?>
+							startValue: <?php echo $v; ?>,
+							value: <?php echo $v; ?>,
+							min: 0,
+							max: 100,
+							slide: function(event, ui) {
+								$("#fullimagequality").val( ui.value);
+							}
+						});
+						$("#fullimagequality").val($("#slider-fullimagequality").slider("value"));
+					});
+					</script>
+					<div id="slider-fullimagequality"></div>
+					<?php echo gettext('Thumbnail'); ?>&nbsp;<input type="text" size="3" id="thumbquality" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" />
+					<script type="text/javascript">
+					$(function() {
+						$("#slider-thumbquality").slider({
+							<?php $v = getOption('thumb_quality'); ?>
+							startValue: <?php echo $v; ?>,
+							value: <?php echo $v; ?>,
+							min: 0,
+							max: 100,
+							slide: function(event, ui) {
+								$("#thumbquality").val( ui.value);
+							}
+						});
+						$("#thumbquality").val($("#slider-thumbquality").slider("value"));
+					});
+					</script>
+					<div id="slider-thumbquality"></div>
+				</td>
+				<td>
+					<p><?php echo gettext("Compression quality for images and thumbnails generated by Zenphoto.");?></p>
+					<p><?php echo gettext("Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("Interlace:"); ?></td>
+				<td><input type="checkbox" name="image_interlace" value="1" <?php echo checked('1', getOption('image_interlace')); ?> /></td>
+				<td><?php echo gettext("If checked, resized images will be created <em>interlaced</em> (if the format permits)."); ?></td>
+			</tr>
+			<tr>
+				<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
+				<td><input type="checkbox" name="auto_rotate"	value="1"
+					<?php echo checked('1', getOption('auto_rotate')); ?>
+					<?php if (!zp_imageCanRotate()) echo ' DISABLED'; ?>	/></td>
+				<td>
+					<p><?php	echo gettext("Automatically rotate images based on the EXIF orientation setting."); ?></p>
+					<?php
+					if (!function_exists('imagerotate')) echo '<p>'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.").'</p>';
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("Allow upscale:"); ?></td>
+				<td><input type="checkbox" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
+				<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("Sharpen:"); ?></td>
+				<td>
+					<label>
+						<input type="checkbox" name="image_sharpen" value="1" <?php echo checked('1', getOption('image_sharpen')); ?> />
+						<?php echo gettext('Images'); ?>
+					</label>
+					<label>
+						<input type="checkbox" name="thumb_sharpen" value="1" <?php echo checked('1', getOption('thumb_sharpen')); ?> />
+						<?php echo gettext('Thumbs'); ?>
+					</label>
+					<br />
+					<?php echo gettext('Amount'); ?>&nbsp;<input type="text" id="sharpenamount" name="sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
+					<script type="text/javascript">
+					$(function() {
+						$("#slider-sharpenamount").slider({
+						<?php $v = getOption('sharpen_amount'); ?>
+							<?php $v = getOption('sharpen_amount'); ?>
+							startValue: <?php echo $v; ?>,
+							value: <?php echo $v; ?>,
+							min: 0,
+							max: 100,
+							slide: function(event, ui) {
+								$("#sharpenamount").val( ui.value);
+							}
+						});
+						$("#sharpenamount").val($("#slider-sharpenamount").slider("value"));
+					});
+					</script>
+					<div id="slider-sharpenamount"></div>
+					<table>
+						<tr>
+							<td style="margin:0; padding:0"><?php echo gettext('Radius'); ?>&nbsp;</td>
+							<td style="margin:0; padding:0"><input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" /></td>
+						</tr>
+						<tr>
+							<td style="margin:0; padding:0"><?php echo gettext('Threshold'); ?>&nbsp;</td>
+							<td style="margin:0; padding:0"><input type="text" name = "sharpen_threshold" size="3" value="<?php echo getOption('sharpen_threshold'); ?>" /></td>
+						</tr>
+						</table>
+				</td>
+				<td>
+					<p><?php echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."); ?></p>
+					<p><?php echo gettext("<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening)."); ?></p>
+					<p><?php echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details."); ?></p>
+					<p><?php echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges."); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("Watermarks:"); ?></td>
+				<td>
+					<table>
+					<?php
+					$current = getOption('fullimage_watermark');
 					?>
 					<tr>
-						<td style="margin:0; padding:0;"><?php	echo $plugin;	?> <?php echo gettext('thumbnails'); ?> </td>
+						<td style="margin:0; padding:0;"><?php echo gettext('Images'); ?> </td>
 						<td style="margin:0; padding:0">
-							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
-							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
-							<?php
-							$watermarks = getWatermarks();
-							generateListFromArray(array($current), $watermarks, false, false);
-							?>
+							<select id="fullimage_watermark" name="fullimage_watermark">
+								<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
+								<?php
+								$watermarks = getWatermarks();
+								generateListFromArray(array($current), $watermarks, false, false);
+								?>
 							</select>
 						</td>
 					</tr>
 					<?php
-					}
-				?>
-				</table>
-				<br />
-				<?php echo gettext('cover').' '; ?>
-				<input type="text" size="2" name="watermark_scale"
-						value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
-				<span style="white-space:nowrap">
-					<label>
-						<input type="checkbox" name="watermark_allow_upscale" value="1"
-						<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />
-						<?php echo gettext("allow upscale"); ?>
-					</label>
-				</span>
-				<br />
-				<?php echo gettext("offset h"); ?>
-				<input type="text" size="2" name="watermark_h_offset"
-						value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
-				<input type="text" size="2" name="watermark_w_offset"
-					value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
-			</td>
-			<td>
-				<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image."); ?></p>
-				<p><?php echo gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></p>
-				<p><?php echo gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></p>
-				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>/%s/watermarks/</code> folder.'), USER_PLUGIN_FOLDER); ?></p>
-			</td>
-												           
-		</tr>
-		<tr>
-			<td><?php echo gettext("Full image protection:"); ?></td>
-			<td style="margin:0">
-				<p>
-				<?php
-				echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
-				$protection = getOption('protect_full_image');
-				generateListFromArray(array($protection), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'), false, true);
-				echo "</select>\n";
-				?>
-				</p>
-				<p>
-					<label>
-						<input type="checkbox" name="hotlink_protection" value="1" <?php echo checked('1', getOption('hotlink_protection')); ?> />
-						<?php echo gettext('Disable hotlinking'); ?>
-					</label>
+					$imageplugins = array_unique($_zp_extra_filetypes);
+					$imageplugins[] = 'Image';
+					ksort($imageplugins);
+					foreach ($imageplugins as $plugin) {
+						$opt = $plugin.'_watermark';
+						$current = getOption($opt);
+						?>
+						<tr>
+							<td style="margin:0; padding:0;"><?php	echo $plugin;	?> <?php echo gettext('thumbnails'); ?> </td>
+							<td style="margin:0; padding:0">
+								<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
+								<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
+								<?php
+								$watermarks = getWatermarks();
+								generateListFromArray(array($current), $watermarks, false, false);
+								?>
+								</select>
+							</td>
+						</tr>
+						<?php
+						}
+					?>
+					</table>
 					<br />
-					<label>
-						<input type="checkbox" name="cache_full_image" value="1" <?php echo checked('1', getOption('cache_full_image')); ?> />
-						<?php echo gettext('cache the full image'); ?>
-					</label>
-				</p>
-				<p>
-				<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
-				<table class="compact">
-					<tr class="passwordextrashow">
-						<td style="margin:0; padding:0">
-							<a href="javascript:toggle_passwords('',true);">
-								<?php echo gettext("password:"); ?>
-							</a>
-						</td>
-						<td style="margin:0; padding:0">
-							<?php
-							$x = getOption('protected_image_password');
-							if (!empty($x)) echo "  **********";
-							?>
-						</td>
-					</tr>
-					<tr class="passwordextrashow">
-						<td style="margin:0; padding:0">
-						</td>
-						<td style="margin:0; padding:0">
-							<!-- password & repeat -->
-							<br />
-							<br />
-						</td>
-					</tr>
-					<tr class="passwordextrashow">
-						<td style="margin:0; padding:0">
-						</td>
-						<td style="margin:0; padding:0">
-							<!-- hint -->
-							<br />
-							<br />
-						</td>
-					</tr>
-					
-					<tr class="passwordextrahide" style="display:none">
-						<td style="margin:0; padding:0">
-							<a href="javascript:toggle_passwords('',false);">
-								<?php echo gettext("user:"); ?>
-							</a>
-						</td>
-						<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
-					</tr>
-					<tr class="passwordextrahide" style="display:none">
-						<td style="margin:0; padding:0">
-							<?php echo gettext("password:"); ?>
-						</td>
-						<td style="margin:0; padding:0">
-							<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
-							<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" />
-						</td>
-					</tr>
-					<tr class="passwordextrahide" style="display:none">
-						<td style="margin:0; padding:0 text-align:left">
-							<?php echo gettext("(repeat)"); ?>
-						</td>
-						<td style="margin:0; padding:0">
-							<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
-						</td>
-					</tr>
-					<tr class="passwordextrahide" style="display:none">
-						<td style="margin:0; padding:0"><?php echo gettext("hint:"); ?></td>
-						<td style="margin:0; padding:0">
-						<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', true) ?>
-						</td>
-					</tr>
-				</table>
-			</td>
-			<td>
-				<p><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?></p>
-				<p><?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?></p>
-				<p><?php echo gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?></p>
-				<p><?php echo gettext("The <em>user</em>, <em>password</em>, and <em>hint</em> apply to the <em>Download</em> and <em>Protected view</em> level of protection. If there is a password set, the viewer must supply this password to access the image."); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Use lock image"); ?></td>
-			<td>
-				<input type="checkbox" name="use_lock_image" value="1"
-				<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
-			</td>
-			<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?>
-		</tr>
-		<tr>
-			<td><?php echo gettext("EXIF display"); ?></td>
-			<td>
-			<ul class="searchchecklist">
-			<?php
-			$exifstuff = sortMultiArray($_zp_exifvars,2,'asc',true);
-			foreach ($exifstuff as $key=>$item) {
-				echo '<li><label"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
-				if ($item[3]) {
-					echo ' checked="checked" ';
-				}
-				echo ' value="1"  /> ' . $item[2] . "</label></li>"."\n";
-			}
-			?>
-			</ul>
-			</td>
-			<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?>
-		</tr>
-		<?php
-		$sets = array_merge($_zp_UTF8->iconv_sets, $_zp_UTF8->mb_sets);
-		ksort($sets);
-		if (!empty($sets)) {
-			?>
-			<tr>
-				<td><?php echo gettext("IPTC encoding:"); ?></td>
-				<td>
-					<select id="IPTC_encoding" name="IPTC_encoding">
-						<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($sets), false, true) ?>
-					</select>
+					<?php echo gettext('cover').' '; ?>
+					<input type="text" size="2" name="watermark_scale"
+							value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
+					<span style="white-space:nowrap">
+						<label>
+							<input type="checkbox" name="watermark_allow_upscale" value="1"
+							<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />
+							<?php echo gettext("allow upscale"); ?>
+						</label>
+					</span>
+					<br />
+					<?php echo gettext("offset h"); ?>
+					<input type="text" size="2" name="watermark_h_offset"
+							value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
+					<input type="text" size="2" name="watermark_w_offset"
+						value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 				</td>
-				<td><?php echo gettext("The default character encoding of image IPTC metadata."); ?></td>
+				<td>
+					<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image."); ?></p>
+					<p><?php echo gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></p>
+					<p><?php echo gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></p>
+					<p><?php printf(gettext('Images are in png-24 format and are located in the <code>/%s/watermarks/</code> folder.'), USER_PLUGIN_FOLDER); ?></p>
+				</td>
+													           
+			</tr>
+			<tr>
+				<td><?php echo gettext("Full image protection:"); ?></td>
+				<td style="margin:0">
+					<p>
+					<?php
+					echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
+					$protection = getOption('protect_full_image');
+					generateListFromArray(array($protection), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'), false, true);
+					echo "</select>\n";
+					?>
+					</p>
+					<p>
+						<label>
+							<input type="checkbox" name="hotlink_protection" value="1" <?php echo checked('1', getOption('hotlink_protection')); ?> />
+							<?php echo gettext('Disable hotlinking'); ?>
+						</label>
+						<br />
+						<label>
+							<input type="checkbox" name="cache_full_image" value="1" <?php echo checked('1', getOption('cache_full_image')); ?> />
+							<?php echo gettext('cache the full image'); ?>
+						</label>
+					</p>
+					<p>
+					<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
+					<table class="compact">
+						<tr class="passwordextrashow">
+							<td style="margin:0; padding:0">
+								<a href="javascript:toggle_passwords('',true);">
+									<?php echo gettext("password:"); ?>
+								</a>
+							</td>
+							<td style="margin:0; padding:0">
+								<?php
+								$x = getOption('protected_image_password');
+								if (!empty($x)) echo "  **********";
+								?>
+							</td>
+						</tr>
+						<tr class="passwordextrashow">
+							<td style="margin:0; padding:0">
+							</td>
+							<td style="margin:0; padding:0">
+								<!-- password & repeat -->
+								<br />
+								<br />
+							</td>
+						</tr>
+						<tr class="passwordextrashow">
+							<td style="margin:0; padding:0">
+							</td>
+							<td style="margin:0; padding:0">
+								<!-- hint -->
+								<br />
+								<br />
+							</td>
+						</tr>
+						
+						<tr class="passwordextrahide" style="display:none">
+							<td style="margin:0; padding:0">
+								<a href="javascript:toggle_passwords('',false);">
+									<?php echo gettext("user:"); ?>
+								</a>
+							</td>
+							<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
+						</tr>
+						<tr class="passwordextrahide" style="display:none">
+							<td style="margin:0; padding:0">
+								<?php echo gettext("password:"); ?>
+							</td>
+							<td style="margin:0; padding:0">
+								<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
+								<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" />
+							</td>
+						</tr>
+						<tr class="passwordextrahide" style="display:none">
+							<td style="margin:0; padding:0 text-align:left">
+								<?php echo gettext("(repeat)"); ?>
+							</td>
+							<td style="margin:0; padding:0">
+								<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
+							</td>
+						</tr>
+						<tr class="passwordextrahide" style="display:none">
+							<td style="margin:0; padding:0"><?php echo gettext("hint:"); ?></td>
+							<td style="margin:0; padding:0">
+							<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', true) ?>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<p><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?></p>
+					<p><?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?></p>
+					<p><?php echo gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?></p>
+					<p><?php echo gettext("The <em>user</em>, <em>password</em>, and <em>hint</em> apply to the <em>Download</em> and <em>Protected view</em> level of protection. If there is a password set, the viewer must supply this password to access the image."); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("Use lock image"); ?></td>
+				<td>
+					<input type="checkbox" name="use_lock_image" value="1"
+					<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
+				</td>
+				<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?>
+			</tr>
+			<tr>
+				<td><?php echo gettext("EXIF display"); ?></td>
+				<td>
+				<ul class="searchchecklist">
+				<?php
+				$exifstuff = sortMultiArray($_zp_exifvars,2,'asc',true);
+				foreach ($exifstuff as $key=>$item) {
+					echo '<li><label"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
+					if ($item[3]) {
+						echo ' checked="checked" ';
+					}
+					echo ' value="1"  /> ' . $item[2] . "</label></li>"."\n";
+				}
+				?>
+				</ul>
+				</td>
+				<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?>
 			</tr>
 			<?php
-		}
-		?>
-		<tr>
-			<td colspan="3">
-			<p class="buttons">
-			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-			</p>
-			</td>
-		</tr>
-	</table>
+			$sets = array_merge($_zp_UTF8->iconv_sets, $_zp_UTF8->mb_sets);
+			ksort($sets);
+			if (!empty($sets)) {
+				?>
+				<tr>
+					<td><?php echo gettext("IPTC encoding:"); ?></td>
+					<td>
+						<select id="IPTC_encoding" name="IPTC_encoding">
+							<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($sets), false, true) ?>
+						</select>
+					</td>
+					<td><?php echo gettext("The default character encoding of image IPTC metadata."); ?></td>
+				</tr>
+				<?php
+			}
+			?>
+			<tr>
+				<td colspan="3">
+				<p class="buttons">
+				<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+				<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+				</p>
+				</td>
+			</tr>
+		</table>
 	</form>
 	</div><!-- end of tab_image div -->
 <?php
@@ -1699,14 +1727,14 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input 	type="hidden" name="savecommentoptions" value="yes" />
 	<table class="bordered">
-	<tr>
-					<td colspan="3">
-					<p class="buttons">
-					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-					</p>
-					</td>
-				</tr>
+		<tr>
+			<td colspan="3">
+				<p class="buttons">
+				<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+				<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+				</p>
+			</td>
+		</tr>
 		<tr>
 			<td><?php echo gettext("Enable comment notification:"); ?></td>
 			<td><input type="checkbox" name="email_new_comments" value="1"
@@ -1770,7 +1798,6 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 								</label>
 							</span>
 						</td>
-						</
 					</tr>
 					<tr>
 						<td>

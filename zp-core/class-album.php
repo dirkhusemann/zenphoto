@@ -566,7 +566,7 @@ class Album extends PersistentObject {
 		$mine = isMyAlbum($this->name, ALL_RIGHTS);
 		$key = $this->getSortKey($sorttype);
 		$direction = '';
-		if ($key != '`sort_order`') { // manual sort is always ascending
+		if (($key != '`sort_order`') || ($key != 'RAND()')) { // manual sort is always ascending
 			if (!is_null($sortdirection)) {
 				$direction = ' '.$sortdirection;
 			} else {

@@ -233,6 +233,8 @@ function getUrAlbum($album) {
 function lookupSortKey($sorttype, $default, $filename) {
 	$sorttype = strtolower($sorttype);
 	switch ($sorttype) {
+		case 'random':
+			return 'RAND()';
 		case "manual":
 			return '`sort_order`';
 		case "filename":

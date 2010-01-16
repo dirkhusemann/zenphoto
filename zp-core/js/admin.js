@@ -155,16 +155,24 @@ function updateThumbPreview(selectObj) {
 	}
 }
 
-function update_direction(obj, element, element2) {
+function update_direction(obj, element1, element2) {
 	no = obj.options[obj.selectedIndex].value;
-	if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {
-		document.getElementById(element).style.display = 'none';
-	}	else {
-		document.getElementById(element).style.display = 'block';
+	switch (no) {
+		case 'custom':
+			document.getElementById(element1).style.display = 'block';
+			document.getElementById(element2).style.display = 'block';
+			break;
+		case 'manual':
+		case 'random':
+		case '':
+			document.getElementById(element1).style.display = 'none';
+			document.getElementById(element2).style.display = 'none';
+			break;
+		default:
+			document.getElementById(element1).style.display = 'block';
+			document.getElementById(element2).style.display = 'none';
+			break;
 	}
-	document.getElementById(element2).style.display = 'none';
-	if(no=='custom')
-		document.getElementById(element2).style.display = 'block';
 }
 
 // Uses jQuery

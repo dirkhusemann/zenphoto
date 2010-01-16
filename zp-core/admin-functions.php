@@ -1039,6 +1039,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		$sort[gettext('Manual')] = 'manual';
 	}
 	$sort[gettext('Custom')] = 'custom';
+/*
+ * not recommended--screws with peoples minds during pagination!
+	$sort[gettext('Random')] = 'random';
+*/	
 	?>
 	<tr>
 	<td align="left" valign="top"><?php echo gettext("Sort subalbums by:");?> </td>
@@ -1067,7 +1071,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</td>
 		<td>
 	<?php
-	if (($type == 'manual') || ($type == '')) {
+	if (($type == 'manual') || ($type == 'random') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
@@ -1136,7 +1140,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			</td>
 		<td>
 	<?php
-	if (($type == 'manual') || ($type == '')) {
+	if (($type == 'manual') || ($type == 'random') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
@@ -1772,7 +1776,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$sorttype = strtolower(sanitize($_POST[$prefix.'sortby'], 3));
 	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customimagesort'],3));
 	$album->setSortType($sorttype);
-	if ($sorttype == 'manual') {
+	if (($sorttype == 'manual') || ($sorttype == 'random')) {
 		$album->setSortDirection('image', 0);
 	} else {
 		if (empty($sorttype)) {
@@ -1785,7 +1789,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$sorttype = strtolower(sanitize($_POST[$prefix.'subalbumsortby'],3));
 	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customalbumsort'],3));
 	$album->setSubalbumSortType($sorttype);
-	if ($sorttype == 'manual') {
+	if (($sorttype == 'manual') || ($sorttype == 'random')) {
 		$album->setSortDirection('album', 0);
 	} else {
 		$album->setSortDirection('album', isset($_POST[$prefix.'album_sortdirection']));
