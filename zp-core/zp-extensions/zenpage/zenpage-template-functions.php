@@ -2447,7 +2447,6 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
  */
 function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linktext='', $next='', $printIcon=true, $class=null, $lang='') {
 	global $_zp_current_album;
-	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 	if ($printIcon) {
 		$icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" alt="RSS Feed" />';
 	} else {
@@ -2471,32 +2470,32 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
 	switch($option) {
 		case "News":
 			if (getOption('RSS_articles')) {
-				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."\" title=\"".gettext("News RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-news.php?lang=".$lang."\" title=\"".gettext("News RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Category":
 			if (getOption('RSS_articles')) {
-				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang.$categorylink."\" title=\"".gettext("News Category RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-news.php?lang=".$lang.$categorylink."\" title=\"".gettext("News Category RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "NewsWithImages":
 			if (getOption('RSS_articles')) {
-				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" title=\"".gettext("News and Gallery RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" title=\"".gettext("News and Gallery RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Comments":
 			if (getOption('RSS_article_comments')) {
-				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?lang=".$lang."\" title=\"".gettext("Zenpage Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"http://".WEBPATH."/rss-news-comments.php?lang=".$lang."\" title=\"".gettext("Zenpage Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Comments-news":
 			if (getOption('RSS_article_comments')) {
-				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?id=".getNewsID()."&amp;title=".urlencode(getNewsTitle())."&amp;type=news&amp;lang=".$lang."\" title=\"".gettext("News article comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"http://".WEBPATH."/rss-news-comments.php?id=".getNewsID()."&amp;title=".urlencode(getNewsTitle())."&amp;type=news&amp;lang=".$lang."\" title=\"".gettext("News article comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Comments-page":
 			if (getOption('RSS_article_comments')) {
-				echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-news-comments.php?id=".getPageID()."&amp;title=".urlencode(getPageTitle())."&amp;type=page&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"http://".WEBPATH."/rss-news-comments.php?id=".getPageID()."&amp;title=".urlencode(getPageTitle())."&amp;type=page&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 	}
@@ -2517,6 +2516,7 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
  */
 function getZenpageRSSHeaderLink($option='', $categorylink='', $linktext='', $lang='') {
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
+	($_SERVER["HTTPS"]) ? $serverprotocol = "https://" : $serverprotocol = "http://";
 	if(empty($lang)) {
 		$lang = getOption("locale");
 	}
@@ -2532,15 +2532,15 @@ function getZenpageRSSHeaderLink($option='', $categorylink='', $linktext='', $la
 	switch($option) {
 		case "News":
 			if (getOption('RSS_articles')) {
-				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."\" />\n";
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$serverprotocol.$host.WEBPATH."/rss-news.php?lang=".$lang."\" />\n";
 			}
 		case "Category":
 			if (getOption('RSS_articles')) {
-				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?lang=".$lang."&amp;category=".$categorylink."\" />\n";
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$serverprotocol.$host.WEBPATH."/rss-news.php?lang=".$lang."&amp;category=".$categorylink."\" />\n";
 			}
 		case "NewsWithImages":
 			if (getOption('RSS_articles')) {
-				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" />\n";
+				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$serverprotocol.$host.WEBPATH."/rss-news.php?withimages&amp;lang=".$lang."\" />\n";
 			}
 	}
 }
