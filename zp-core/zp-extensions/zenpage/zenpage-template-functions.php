@@ -36,7 +36,7 @@ function is_News() {
  */
 function is_NewsPage() {
 	global $_zp_gallery_page;
-	return $_zp_gallery_page == getOption("zenpage_news_page");
+	return $_zp_gallery_page == getOption("zenpage_news_page").'.php';
 }
 
 /**
