@@ -186,14 +186,19 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 		if($bytesofdata<=4) {
 			$data = $value;
 		} else {
-			$value = bin2hex($value);
-			if($intel==1) $value = intel2Moto($value);
-			
-			$v = fseek($seek,$globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-			if($v==0) {
-				$data = fread($seek, $bytesofdata);
-			} else if($v==-1) {
+			if (strpos('unknown',$tag_name) === false) {
 				$result['Errors'] = $result['Errors']++;
+				$data = '';
+			} else {
+				$value = bin2hex($value);
+				if($intel==1) $value = intel2Moto($value);
+				$v = fseek($seek,$globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
+				if($v==0) {
+					$data = fread($seek, $bytesofdata);
+				} else if($v==-1) {
+					$result['Errors'] = $result['Errors']++;
+					$data = '';
+				}
 			}
 		}
 		if($result['VerboseOutput']==1) {

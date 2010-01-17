@@ -57,8 +57,32 @@ function lookup_Nikon_tag($tag,$model) {
 			case "0008": $tag = "FlashSetting";break;
 			case "0009": $tag = "FlashMode";break;
 			case "000b": $tag = "WhiteBalanceFine";break;
+			case "000c": $tag = "WB_RBLevels";break;
+			case "000d": $tag = "ProgramShift";break;
+			case "000e": $tag = "ExposureDifference";break;
 			case "000f": $tag = "ISOSelection";break;
-			case "0013": $tag = "ISOSelection2";break;
+			case "0010": $tag = "DataDump";break;
+			case "0011": $tag = "NikonPreview";break;
+			case "0012": $tag = "FlashExposureComp";break;
+			case "0013": $tag = "ISOSetting2";break;
+			case "0014": $tag = "ColorBalanceA";break;
+			case "0016": $tag = "ImageBoundary";break;
+			case "0017": $tag = "FlashExposureComp";break;
+			case "0018": $tag = "FlashExposureBracketValue";break;
+			case "0019": $tag = "ExposureBracketValue";break;
+			case "001a": $tag = "ImageProcessing";break;
+			case "001b": $tag = "CropHiSpeed";break;
+			case "001c": $tag = "ExposureTuning";break;
+			case "001d": $tag = "SerialNumber";break;
+			case "001e": $tag = "ColorSpace";break;
+			case "001f": $tag = "VRInfo";break;
+			case "0020": $tag = "ImageAuthentication";break;
+			case "0022": $tag = "ActiveD-Lighting";break;
+			case "0023": $tag = "PictureControl";break;
+			case "0024": $tag = "WorldTime";break;
+			case "0025": $tag = "ISOInfo";break;
+			case "002a": $tag = "VignetteControl";break;
+			case "002b": $tag = "DistortInfo";break;
 			case "0080": $tag = "ImageAdjustment";break;
 			case "0081": $tag = "ToneCompensation";break;
 			case "0082": $tag = "Adapter";break;
@@ -68,11 +92,16 @@ function lookup_Nikon_tag($tag,$model) {
 			case "0086": $tag = "DigitalZoom";break;
 			case "0087": $tag = "FlashUsed";break;
 			case "0088": $tag = "AFFocusPosition";break;
+			case "0089": $tag = "ShootingMode";break;
+			case "008b": $tag = "LensFStops";break;
+			case "008c": $tag = "ContrastCurve";break;
 			case "008d": $tag = "ColorMode";break;
 			case "0090": $tag = "LightType";break;
+			case "0092": $tag = "HueAdjustment";break;
+			case "0093": $tag = "NEFCompression";break;
 			case "0094": $tag = "Saturation";break;
 			case "0095": $tag = "NoiseReduction";break;
-			case "0010": $tag = "DataDump";break;
+			case "009a": $tag = "SensorPixelSize";break;
 			
 			default: $tag = "unknown:".$tag;break;
 		}
@@ -113,6 +142,9 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 					break;
 				case "000a":
 					if ($model==0) $data=unRational($data,$type,$intel)."x";	//DigitalZoom
+					break;
+				default:
+					$data=unRational($data,$type,$intel);
 					break;
 			}
 			break;
