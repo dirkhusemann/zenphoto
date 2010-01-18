@@ -3821,7 +3821,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 function getRSSHeaderLink($option, $linktext='', $lang='') {
 	global $_zp_current_album;
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-	($_SERVER["HTTPS"]) ? $serverprotocol = "https://" : $serverprotocol = "http://";
+	(secureServer()) ? $serverprotocol = "https://" : $serverprotocol = "http://";
 	if(empty($lang)) {
 		$lang = getOption("locale");
 	}

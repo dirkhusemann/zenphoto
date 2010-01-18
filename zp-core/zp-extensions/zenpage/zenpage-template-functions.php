@@ -2516,7 +2516,7 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
  */
 function getZenpageRSSHeaderLink($option='', $categorylink='', $linktext='', $lang='') {
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-	($_SERVER["HTTPS"]) ? $serverprotocol = "https://" : $serverprotocol = "http://";
+	(secureServer()) ? $serverprotocol = "https://" : $serverprotocol = "http://";
 	if(empty($lang)) {
 		$lang = getOption("locale");
 	}
