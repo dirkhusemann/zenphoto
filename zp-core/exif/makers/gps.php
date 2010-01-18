@@ -189,6 +189,7 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 			if (strpos('unknown',$tag_name) === false) {
 				$result['Errors'] = $result['Errors']++;
 				$data = '';
+				$type = 'ASCII';
 			} else {
 				$value = bin2hex($value);
 				if($intel==1) $value = intel2Moto($value);
@@ -198,6 +199,7 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 				} else if($v==-1) {
 					$result['Errors'] = $result['Errors']++;
 					$data = '';
+					$type = 'ASCII';
 				}
 			}
 		}

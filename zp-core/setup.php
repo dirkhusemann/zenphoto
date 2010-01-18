@@ -897,7 +897,7 @@ if (!$setup_checked) {
 	if ($cfg) {
 		@chmod(CONFIGFILE, 0666 & $chmod);
 		if (($adminstuff = !$sql || !$connection  || !$db) && is_writable(CONFIGFILE)) {
-			$good = checkMark(false, gettext("MySQL setup in <em>zp-config.php</em>"), '', '') && $good;
+			$good = checkMark(false, '', gettext("MySQL setup in <em>zp-config.php</em>"), $connectDBErr) && $good;
 			// input form for the information
 			?>
 
@@ -960,8 +960,12 @@ if ($debug) {
 
 <?php
 		} else {
-			$good = checkMark(!$adminstuff, gettext("MySQL setup in <em>zp-config.php</em>"), '',
-											gettext("You have not correctly set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.")) && $good;
+			if ($connectDBErr) {
+				$msg = $connectDBErr;
+			} else {
+				$msg = gettext("You have not correctly set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.");
+			}
+			$good = checkMark(!$adminstuff, gettext("MySQL setup in <em>zp-config.php</em>"), '',$msg) && $good;
 		}
 	} else {
 		$good = checkMark($connection, gettext("Connect to MySQL"), gettext("Connect to MySQL [<code>CONNECT</code> query failed]"), $connectDBErr) && $good;
