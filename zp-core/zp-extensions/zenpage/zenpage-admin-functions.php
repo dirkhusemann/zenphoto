@@ -1151,27 +1151,27 @@ function printCategoriesStatistic() {
  *
  */
 function zenpageJSCSS() {
-  echo "<link rel=\"stylesheet\" href=\"../../admin.css\" type=\"text/css\" />";
-  echo "<link rel=\"stylesheet\" href=\"zenpage.css\" type=\"text/css\" />";
-  echo "<script type=\"text/javascript\" src=\"../../js/admin.js\"></script>";
-  echo "<script type=\"text/javascript\" src=\"../../js/jquery.js\"></script>";
-  echo "\n  <script src=\"../../js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
-  
-  datepickerJS('../../');
 	?>
+	<link rel="stylesheet" href="../../admin.css" type="text/css" />
+  <link rel="stylesheet" href="zenpage.css" type="text/css" />
+ 	<script type="text/javascript" src="../../js/admin.js"></script>
+  <script type="text/javascript" src="../../js/jquery.js"></script>
+	<script src="../../js/jquery.dimensions.js" type="text/javascript"></script>
+	<script src="../../js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="../../js/jqueryui/ui.zenphoto.css" type="text/css" />
+  <?php datepickerJS(); ?>
 	<script type="text/javascript" src="../../js/zenphoto.js.php"></script>
 	<script type="text/javascript" src="../../js/thickbox.js"></script>
 	<link rel="stylesheet" href="thickbox-mod.css" type="text/css" />
-	<?php
-	echo "\n  <script type=\"text/javascript\">";
-	echo "\n  \tjQuery(function( $ ){";
-	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
-	echo "\n  \t});";
-	echo "\n  </script>";
-	?>
+
+	<script type="text/javascript">
+	jQuery(function( $ ){
+		$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
+	});
+	</script>
+
 	<script type="text/javascript">
   $(document).ready(function(){
-    
     $("#tip a").click(function() {
       $("#tips").toggle("slow");
     });

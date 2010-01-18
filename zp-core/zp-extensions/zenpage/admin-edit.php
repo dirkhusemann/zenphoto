@@ -19,13 +19,13 @@ include("zp-functions.php"); ?>
 $(document).ready(function() {
 	$('#date').change(function() {
 		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$(".scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
+			$(".scheduledpublishing").html('<?php echo addslashes(gettext("Future publishing date:")); ?>');
 		} else {
 			$(".scheduledpublishing").html('');
 		}
 	});
 		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$(".scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
+			$(".scheduledpublishing").html('<?php echo addslashes(gettext("Future publishing date:")); ?>');
 		} else {
 			$(".scheduledpublishing").html('');
 		}
@@ -33,7 +33,7 @@ $(document).ready(function() {
 		if($('#expiredate').val() > '<?php echo date('Y-m-d H:i:s'); ?>' || $('#expiredate').val() === '') {
 			$(".expire").html('');
 		} else {
-			$(".expire").html('<?php echo gettext("This is not a future date!"); ?>');
+			$(".expire").html('<?php echo addslashes(gettext("This is not a future date!")); ?>');
 		}
 	});
 	if(jQuery('#edittitlelink:checked').val() != 1) {

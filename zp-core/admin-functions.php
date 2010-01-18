@@ -41,24 +41,20 @@ function printAdminFooter($addl='') {
 	<?php
 }
 
-function datepickerJS($path) {
-	?>
-	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
-	<?php
+function datepickerJS() {
 	$lang = str_replace('_', '-',getOption('locale'));
-	if (!file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
+	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
 		$lang = substr($lang, 0, 2);
-		if (!file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
+		if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
 			$lang = '';
 		}
 	}
 	if (!empty($lang)) {
 		?>
-		<script src="<?php echo $path;?>js/jqueryui/i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
+		<script src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/jqueryui/i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
 		<?php
 	}
 	?>
-	<link rel="stylesheet" href="<?php echo $path; ?>js/jqueryui/ui.zenphoto.css" type="text/css" />
 	<script type="text/javascript">
 		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd 00:00:00' });
 	</script>
@@ -90,7 +86,9 @@ function printAdminHeader($path='', $tinyMCE=NULL) {
 	<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
 	<script src="<?php echo $path; ?>js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/zenphoto.js.php" type="text/javascript" ></script>
-	<?php datepickerJS($path); ?>
+	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/ui.zenphoto.css" type="text/css" />
+	<?php datepickerJS(); ?>
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
@@ -2722,4 +2720,59 @@ function getWatermarks() {
 	$watermarks = array_keys($list);
 	return $watermarks;
 }
+
+/**
+ * POST handler for album tree sorts
+ *
+ */
+function postAlbumSort() {
+	global $gallery;
+	if (isset($_POST['order']) && !empty($_POST['order'])) {
+		$orderarray = explode("&",$_POST['order']);
+		$tree = array();
+		foreach ($orderarray as $order) {
+			$id = substr(strstr($order,"="),1);
+			$sortstring = strtr($order, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
+			$sortlevelex = explode("-",$sortstring);
+			$sortstring = '';
+			//regenerate the sort key in connical form
+			foreach($sortlevelex as $sortex) {
+				$sort = sprintf('%03u', $sortex);
+				$sortstring .= $sort.'-';
+			}
+			$sortstring = substr($sortstring, 0, -1);
+			$tree[$id] = $sortstring;
+		}
+		$order = getSortKeys($tree);
+		$sortToID = array_flip($order);
+		foreach ($order as $item=>$value) {
+			$currentalbum = query_single_row('SELECT FROM *'.prefix('albums').' WHERE `id`='.$item);
+			$sortorder = substr($value,-3);
+			if (strlen($value)>3) {
+				$newparent = $sortToID[substr($value,0,-4)];
+			} else {
+				$newparent = NULL;
+			}
+			if ($newparent == $currentalbum['parentid']) {
+				query('UPDATE '.prefix('albums').' SET `sort_order`="'.$sortorder.'" WHERE `id`='.$item);
+			} else {	// have to do a move
+				$album = new Album($gallery, $currentalbum['folder']);
+				if (is_null($newparent)) {
+					$dest = '';
+				} else {
+					$parent = query_single_row('SELECT FROM *'.prefix('albums').' WHERE `id`='.$newparent);
+					$dest = $parent['folder'].'/';
+				}
+				$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
+				if ($e = $album->moveAlbum($dest)) {
+					$notify = "&mcrerr=".$e;
+				} else {
+					$album->setSortOrder($sortorder);
+					$album->save();
+				}
+			}
+		}
+	}
+}
+
 ?>
