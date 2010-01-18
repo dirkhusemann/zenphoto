@@ -494,8 +494,7 @@ if (ini_get('safe_mode')) { ?>
 		} else {
 			?>
 			<div id="uploadboxes" style="display: none;">
-				<!-- This first one is the template that others are copied from -->
-				<div class="fileuploadbox" id="filetemplate"><input type="file" size="40" name="files[]" /></div>
+				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
 				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
 				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
 				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
@@ -504,6 +503,10 @@ if (ini_get('safe_mode')) { ?>
 				<div id="place" style="display: none;"></div>
 				<!-- New boxes get inserted before this -->
 
+				<div style="display:none">
+				<!-- This is the template that others are copied from -->
+				<div class="fileuploadbox" id="filetemplate" ><input type="file" size="40" name="files[]" value="x"/></div>
+				</div>
 				<p id="addUploadBoxes"><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
 				<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
 
@@ -515,9 +518,9 @@ if (ini_get('safe_mode')) { ?>
 					</button>
 				</p>
 				<br /><br clear: all />
-				</div>
-				<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
-				<?php
+			</div>
+			<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
+			<?php
 		}
 	} else {
 		echo gettext("There are no albums to which you can upload.");
