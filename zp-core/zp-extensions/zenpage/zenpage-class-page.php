@@ -6,9 +6,6 @@
  * @package plugins
  * @subpackage zenpage
  */
-if (!defined('ZENPAGE_PAGES')) {
-	define("ZENPAGE_PAGES",getOption("zenpage_pages_page"));
-}
 
 class ZenpagePage extends PersistentObject {
 	

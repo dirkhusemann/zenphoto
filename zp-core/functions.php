@@ -45,6 +45,11 @@ require_once(dirname(__FILE__).'/auth_zp.php');
 
 $_zp_setupCurrentLocale_result = setMainDomain();
 
+// make sure these are defined
+define('ZENPAGE_NEWS',getOption("zenpage_news_page"));
+define('ZENPAGE_PAGES',getOption("zenpage_pages_page"));
+
+
 /*
  * Note: If fields are added or deleted, setup.php should be run or the new data won't be stored 
  * (but existing fields will still work; nothing breaks).

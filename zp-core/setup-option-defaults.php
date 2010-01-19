@@ -329,4 +329,7 @@ function setDefault($option, $default) {
 	
 	setOptionDefault('site_email',"zenphoto@".$_SERVER['SERVER_NAME']);
 	
+	setOptionDefault('zenpage_news_page', 'news');
+	setOptionDefault('zenpage_pages_page', 'pages');
+	
 	?>

@@ -6,9 +6,6 @@
  * @package plugins
  * @subpackage zenpage
  */
-if (!defined('ZENPAGE_NEWS')) {
-	define("ZENPAGE_NEWS",getOption("zenpage_news_page"));
-}
 
 class ZenpageNews extends PersistentObject {
 	
