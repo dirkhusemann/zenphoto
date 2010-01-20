@@ -534,13 +534,18 @@ div.ui-sortable {
 
 /* Sortable Album Divs
 ------------------------------ */
-div.albumList {
+.albumList {
 	list-style-type: none;
 	padding: 0px;
 	margin: 0px;
 }
+.albumList li {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+	}
 
-div.albumList div {
+.albumList div {
 	margin: 2px 2px;
 	border: 1px solid #F0F3F8;
 }

@@ -10,9 +10,6 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
-require_once(dirname(__FILE__).'/class-sortable.php');
-$_zp_sortable_list = new jQuerySortable('js');
-// $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
 if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
@@ -47,6 +44,22 @@ if (isset($_GET['action'])) {
 	switch ($action) {
 		/** reorder the tag list ******************************************************/
 		/******************************************************************************/
+		case 'savealbumorder':
+			setOption('gallery_sorttype','manual');
+			setOption('gallery_sortdirection',0);
+			$notify = postAlbumSort(NULL);
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit$saved'.$notify);
+			exit();
+			break;
+		case 'savesubalbumorder':
+			$album = new Album($gallery, $folder);
+			$album->setSubalbumSortType('manual');
+			$album->setSortDirection('album', 0);
+			$album->save();
+			$notify = postAlbumSort($album->get('id'));
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$folder.'&tab=subalbuminfo&subalbumsaved'.$notify);
+			exit();
+			break;
 		case 'sorttags':
 			if (isset($_GET['subpage'])) {
 				$pg = '&subpage='.$_GET['subpage'];
@@ -84,7 +97,7 @@ if (isset($_GET['action'])) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit'.$return);
 			exit();
 			break;
-			
+
 		/** Reset hitcounters ***********************************************************/
 		/********************************************************************************/
 		case "reset_hitcounters":
@@ -109,7 +122,7 @@ if (isset($_GET['action'])) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php' . $return);
 			exit();
 			break;
-				
+
 		//** DELETEIMAGE **************************************************************/
 		/******************************************************************************/
 		case 'deleteimage':
@@ -126,7 +139,7 @@ if (isset($_GET['action'])) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.pathurlencode($albumname).'&ndeleted='.$nd);
 			exit();
 			break;
-			
+
 		/** SAVE **********************************************************************/
 		/******************************************************************************/
 		case "save":
@@ -134,7 +147,7 @@ if (isset($_GET['action'])) {
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if (isset($_POST['album'])) {
-				
+
 				$folder = sanitize_path($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
@@ -291,6 +304,8 @@ if (isset($_GET['action'])) {
 					if (!empty($rslt)) { $notify = $rslt; }
 				}
 				$qs_albumsuffix = "&massedit";
+				
+				/** SAVE GALLERY ALBUM ORDER **************************************************/
 			}
 			// Redirect to the same album we saved.
 			if (isset($folder)) {
@@ -309,7 +324,7 @@ if (isset($_GET['action'])) {
 			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$qs_albumsuffix.$notify.$pg.$returntab);
 			exit();
 			break;
-			
+
 		/** DELETION ******************************************************************/
 		/*****************************************************************************/
 		case "deletealbum":
@@ -380,7 +395,7 @@ if (isset($_GET['action'])) {
 /************************************************************************************/
 /** End Action Handling *************************************************************/
 /************************************************************************************/
-	
+
 $page = "edit";
 
 if (isset($_GET['tab'])) {
@@ -388,17 +403,10 @@ if (isset($_GET['tab'])) {
 } else {
 	$subtab = '';
 }
-if ($sortablepage = (empty($subtab) && !isset($_GET['album']) && !isset($_GET['massedit'])) || $subtab === 'subalbuminfo') {
-	$sortablepage = true;
-	zenSortablesPostHandler($_zp_sortable_list, 'albumOrder', 'albumList', 'albums');
-}
 
 // Print our header
 printAdminHeader();
 
-if ($sortablepage) {
-	zenSortablesHeader($_zp_sortable_list, 'albumList', 'albumOrder', 'div', "handle:'.handle', axis:'y', containment:'table', placeholder:'zensortable_row'");
-}
 if (empty($subtab) || $subtab=='albuminfo') {
 	?>
 	<script type="text/javascript" src="js/tag.js"></script>
@@ -445,15 +453,15 @@ echo "\n</head>";
 /************************************************************************************/
 
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
-	/** SINGLE ALBUM ********************************************************************/	
+	/** SINGLE ALBUM ********************************************************************/
 	define('IMAGES_PER_PAGE', 10);
 	// one time generation of this list.
 	$mcr_albumlist = array();
 	genAlbumUploadList($mcr_albumlist);
-	
+
 	$oldalbumimagesort = getOption('albumimagesort');
 	$direction = getOption('albumimagedirection');
-	$folder = sanitize_path($_GET['album']); 
+	$folder = sanitize_path($_GET['album']);
 	if ($folder == '/' || $folder == '.') {
 		$parent = '';
 	} else {
@@ -496,9 +504,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$parent = "&album=" . urlencode($parent);
 	}
 	if (isset($_GET['subalbumsaved'])) {
-		$album->setSubalbumSortType('manual');
-		$album->setSortDirection('album', 0);
-		$album->save();
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
 		echo '</div>';
@@ -508,7 +513,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
 		echo '</div>';
 	}
-	
+
 if($album->getParent()) {
 	$link = getAlbumBreadcrumbAdmin($album);
 } else {
@@ -596,7 +601,7 @@ $alb = removeParentAlbumNames($album);
 			</form>
 			<br clear="all" />
 			<hr />
-			
+
 			<?php printAlbumButtons($album); ?>
 		</div>
 		</div>
@@ -608,10 +613,7 @@ $alb = removeParentAlbumNames($album);
 		if (count($subalbums) > 0) {
 		?>
 		<div id="tab_subalbuminfo" class="tabbox">
-		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&subalbumsaved&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
-			<?php $_zp_sortable_list->printHiddenInputs();?>
-			<input type="hidden" name="sortableListsSubmitted" value="true">
-			<input type="hidden" name="subalbumsortby" value="manual" />
+		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&action=savesubalbumorder&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
 			<p>
 			<?php
 					$sorttype = strtolower($album->getSubalbumSortType());
@@ -638,16 +640,16 @@ $alb = removeParentAlbumNames($album);
 				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 			</p>
 			<br clear="all"/><br />
-			<table class="bordered" width="100%">	
+			<table class="bordered" width="100%">
 			<tr>
 				<td style="padding: 0px 0px;" colspan="8">
-				<div id="albumList" class="albumList">
+				<ul id="left-to-right" class="albumList">
 				<?php
 				foreach ($subalbums as $folder) {
 					$subalbum = new Album($gallery, $folder);
 					printAlbumEditRow($subalbum);
 				}
-				?></div>
+				?></ul>
 			</tr>
 		</table>
 				<ul class="iconlegend">
@@ -658,16 +660,36 @@ $alb = removeParentAlbumNames($album);
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
+					<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
+					<input name="update" type="hidden" value="Save Order" />
 					<p class="buttons">
 					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
 					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 					</p>
+									<script type="text/javascript">
+jQuery( function($) {
+$('#left-to-right').NestedSortable(
+	{
+		accept: 'page-item1',
+		noNestingClass: "no-nesting",
+		opacity: 0.4,
+		helperclass: 'helper',
+		onChange: function(serialized) {
+			$('#left-to-right-ser')
+			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
+		},
+		autoScroll: true,
+		handle: '.handle'
+	}
+);
+});
+</script>
 				</form>
 				<br clear="all"/>
 		<?php
 		} ?>
-<?php 
+<?php
 	} else if ($subtab == 'imageinfo') {
 ?>
 		<!-- Images List -->
@@ -681,7 +703,7 @@ $alb = removeParentAlbumNames($album);
 			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
 			<input type="hidden" name="tagsort" value=<?php echo $tagsort ?> />
 			<input type="hidden" name="oldalbumimagesort" value=<?php echo $oldalbumimagesort; ?> />
-		
+
 		<?php	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));	?>
 		<table class="bordered">
 			<tr>
@@ -723,13 +745,13 @@ $alb = removeParentAlbumNames($album);
 						<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 				 </p>
-			
-				
+
+
 				</td>
 			</tr>
 			<?php
 			$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
-		
+
 			$currentimage = 0;
 			if (getOption('auto_rotate')) {
 				$disablerotate = '';
@@ -740,7 +762,7 @@ $alb = removeParentAlbumNames($album);
 			foreach ($images as $filename) {
 				$image = newImage($album, $filename);
 				?>
-		
+
 			<tr <?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
 			<?php
 				if ($target_image == $filename) {
@@ -755,7 +777,7 @@ $alb = removeParentAlbumNames($album);
 				<table border="0" class="formlayout" id="image-<?php echo $currentimage; ?>">
 					<tr>
 						<td valign="top" width="150" rowspan="14">
-						
+
 						<a <?php echo $placemark; ?>href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
 										title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
 							<img
@@ -768,7 +790,7 @@ $alb = removeParentAlbumNames($album);
 						<p><strong><?php echo $image->filename; ?></strong></p>
 						<p><?php echo gettext("Dimensions:"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
 						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
-						
+
 						<p>
 							<label>
 								<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" />
@@ -781,7 +803,7 @@ $alb = removeParentAlbumNames($album);
 						</td>
 						<td style="padding-left: 1em; text-align: left;" rowspan="14" valign="top">
 						<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
-     				<div class="box-edit">
+						<div class="box-edit">
 						<label>
 							<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments" name="<?php echo $currentimage; ?>-allowcomments" value="1"
 								<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
@@ -797,7 +819,7 @@ $alb = removeParentAlbumNames($album);
 							<?php
 							$hc = $image->get('hitcounter');
 							if (empty($hc)) { $hc = '0'; }
-							
+
 							printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
 							$tv = $image->get('total_value');
 							$tc = $image->get('total_votes');
@@ -817,9 +839,9 @@ $alb = removeParentAlbumNames($album);
 							?>
 							</p>
 						</div>
-									
+
 						<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
-     				<div class="box-edit">
+						<div class="box-edit">
 						<!-- Move/Copy/Rename this image -->
 						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
@@ -882,8 +904,8 @@ $alb = removeParentAlbumNames($album);
 						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
-						<span style="line-height: 0em;"><br clear=all /></span>						
-					 
+						<span style="line-height: 0em;"><br clear=all /></span>
+
 						<?php
 						if (isImagePhoto($image)) {
 							?>
@@ -942,7 +964,7 @@ $alb = removeParentAlbumNames($album);
 						</span>
 						</td>
 					</tr>
-		
+
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Description:"); ?></td>
 						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
@@ -964,8 +986,8 @@ $alb = removeParentAlbumNames($album);
 						<td valign="top"><?php echo gettext("Date:"); ?></td>
 						<td><input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20em" name="<?php echo $currentimage; ?>-date"
 							value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
-					</tr>		
-					
+					</tr>
+
 					<?php
 					$custom = zp_apply_filter('edit_image_custom_data', '', $image, $currentimage);
 					if (empty($custom)) {
@@ -979,37 +1001,37 @@ $alb = removeParentAlbumNames($album);
 							echo $custom;
 						}
 					?>
-					
+
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("Location:"); ?></td>
 						<td><?php print_language_string_list($image->get('location'), $currentimage.'-location', false); ?>
 						</td>
 					</tr>
-		
+
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("City:"); ?></td>
 						<td><?php print_language_string_list($image->get('city'), $currentimage.'-city', false); ?>
 						</td>
 					</tr>
-		
+
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("State:"); ?></td>
 						<td><?php print_language_string_list($image->get('state'), $currentimage.'-state', false); ?>
 						</td>
 					</tr>
-		
+
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("Country:"); ?></td>
 						<td><?php print_language_string_list($image->get('country'), $currentimage.'-country', false); ?>
 						</td>
 					</tr>
-		
+
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("Credit:"); ?></td>
 						<td><?php print_language_string_list($image->get('credit'), $currentimage.'-credit', false); ?>
 						</td>
 					</tr>
-		
+
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("Copyright:"); ?></td>
 						<td><?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
@@ -1017,7 +1039,7 @@ $alb = removeParentAlbumNames($album);
 					</tr>
 					<?php
 					if ($image->get('hasMetadata')) {
-						?>						
+						?>
 						<tr class="imageextrainfo" style="display: none">
 							<td valign="top"><?php echo gettext("Metadata:"); ?></td>
 							<td>
@@ -1054,25 +1076,25 @@ $alb = removeParentAlbumNames($album);
 						<a href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', false);"><?php echo gettext('show fewer fields');?></a></span>
 						</td>
 					</tr>
-		
-		
+
+
 				</table>
 				</td>
 			</tr>
-		
+
 			<?php
 			$currentimage++;
 		}
 		?>
 			<tr <?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
 				<td colspan="4">
-				
+
 				<p class="buttons">
 					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
 					<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-		 		</p>
-					
+				</p>
+
 			</td>
 			</tr>
 		<?php
@@ -1092,11 +1114,11 @@ $alb = removeParentAlbumNames($album);
 				<?php
 			}
 			?>
-		
+
 		</table>
-		
+
 		</form>
-		
+
 		<?php
 			}
 		?>
@@ -1108,7 +1130,7 @@ if($subtab != "albuminfo") {	?>
 <!-- page trailer -->
 </div>
 
-<?php } 
+<?php }
 
 /*** MULTI-ALBUM ***************************************************************************/
 
@@ -1116,7 +1138,7 @@ if($subtab != "albuminfo") {	?>
 	// one time generation of this list.
 	$mcr_albumlist = array();
 	genAlbumUploadList($mcr_albumlist);
-	
+
 if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
 			echo "\n<div class=\"errorbox\" id=\"fade-message\">";
@@ -1186,8 +1208,6 @@ if (isset($_GET['saved'])) {
 <?php
 	displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */
 	if (isset($_GET['saved'])) {
-		setOption('gallery_sorttype', 'manual');
-		setOption('gallery_sortdirection', 0);
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Album order saved")."</h2>";
 		echo '</div>';
@@ -1235,20 +1255,18 @@ if (isset($_GET['saved'])) {
 		}
 		echo gettext('Select an album to edit its description and data, or');
 	?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
-	
+
 	<?php
-  if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-  	?>
-  	<form action="?page=edit&saved" method="post" name="sortableListForm" id="sortableListForm">
-  	<?php $_zp_sortable_list->printHiddenInputs(); ?>
-		<input type="hidden" name="sortableListsSubmitted" value="true">
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		?>
+		<form action="?page=edit&action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 		</p>
 		<br clear="all"/><br />
 		<?php
-  }
+	}
 	?>
 <table class="bordered" width="100%">
 	<tr>
@@ -1256,14 +1274,14 @@ if (isset($_GET['saved'])) {
 	</tr>
 	<tr>
 		<td style="padding: 0px 0px;" colspan="2">
-		<div id="albumList" class="albumList"><?php
+		<ul id="left-to-right" class="albumList"><?php
 		if (count($albums) > 0) {
 			foreach ($albums as $folder) {
 				$album = new Album($gallery, $folder);
 				printAlbumEditRow($album);
 			}
 		}
-		?></div>
+		?></ul>
 		</td>
 	</tr>
 </table>
@@ -1277,16 +1295,38 @@ if (isset($_GET['saved'])) {
 		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 		</ul>
 <?php
-  if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-  	?>
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		?>
+		<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
+		<input name="update" type="hidden" value="Save Order" />
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 		</p>
+
+		<script type="text/javascript">
+jQuery( function($) {
+$('#left-to-right').NestedSortable(
+	{
+		accept: 'page-item1',
+		noNestingClass: "no-nesting",
+		opacity: 0.4,
+		helperclass: 'helper',
+		onChange: function(serialized) {
+			$('#left-to-right-ser')
+			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
+		},
+		autoScroll: true,
+		handle: '.handle'
+	}
+);
+});
+</script>
+
 		</form>
 		<br clear="all"/>
 		<?php
-  }
+	}
 	?>
 </div>
 <?php
@@ -1296,7 +1336,7 @@ if (isset($_GET['saved'])) {
 }
 ?>
 </div>
-<!-- content --> 
+<!-- content -->
 <?php printAdminFooter(); ?>
 <!-- main -->
 </body>

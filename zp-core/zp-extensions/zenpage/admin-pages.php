@@ -96,7 +96,7 @@ $('#left-to-right').NestedSortable(
 		helperclass: 'helper',
 		onChange: function(serialized) {
 			$('#left-to-right-ser')
-			.html("<input name='order' size='100' maxlength='1000' type='hidden' value="+ serialized[0].hash +">");
+			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
 		},
 		autoScroll: true,
 		handle: '.sort-handle'

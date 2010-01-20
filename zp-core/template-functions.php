@@ -155,9 +155,11 @@ function printAdminToolbox($id='admin') {
 		// script is either index.php or the gallery index page
 			if ($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
 				// admin has edit rights so he can sort the gallery (at least those albums he is assigned)
-				echo "<li>";
-				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
-				echo "</li>\n";
+				?>
+				<li>
+				<?php echo printLink($zf . '/admin-edit.php?page=edit', gettext("Sort Gallery"), NULL, NULL, NULL); ?>
+				</li>
+				<?php 
 			}
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				// admin has upload rights, provide an upload link for a new album
@@ -176,9 +178,20 @@ function printAdminToolbox($id='admin') {
 				echo "<li>";
 				printSubalbumAdmin(gettext('Edit album'), '', "</li>\n");
 				if (!$_zp_current_album->isDynamic()) {
-					echo "<li>";
-					printSortableAlbumLink(gettext('Sort album'), gettext('Manual sorting'));
-					echo "</li>\n";
+					if (count($_zp_current_album->getSubAlbums())) {
+						?>
+						<li>
+						<?php echo printLink($zf . '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&tab=subalbuminfo', gettext("Sort subalbums"), NULL, NULL, NULL); ?>
+						</li>
+						<?php 
+					}
+					if ($_zp_current_album->getNumImages()>0) {
+						?>
+						<li>
+						<?php echo printLink($zf . '/admin-albumsort.php?page=edit&album=' . urlencode($albumname).'&tab=sort', gettext("Sort album images"), NULL, NULL, NULL); ?>
+						</li>
+						<?php 
+					}
 				}
 				// and a delete link
 				echo "<li><a href=\"javascript:confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=" .
@@ -1321,47 +1334,6 @@ function getAlbumLinkURL($album=NULL) {
  */
 function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
 	printLink(getAlbumLinkURL(), $text, $title, $class, $id);
-}
-
-/**
- * Print a link that allows the user to sort the current album if they are logged in.
- * If they are already sorting, the Save button is displayed.
- *
- * @param string $text Insert the link text here.
- * @param string $title Insert the title text here.
- * @param string $class Insert here the CSS-class name with with you want to style the link.
- * @param string $id Insert here the CSS-id name with with you want to style the link.
- */
-function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
-	global $_zp_sortable_list, $_zp_current_album;
-	if (zp_loggedin()) {
-		if (!isset($_GET['sortable'])) {
-			printLink(WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()),
-			$text, $title, $class, $id);
-		} else {
-			$_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', gettext('Save'), 'button');
-		}
-	}
-}
-
-/**
- * Print a link that allows the user to sort the Gallery if they are logged in.
- * If they are already sorting, the Save button is displayed.
- *
- * @param string $text Insert the link text here.
- * @param string $title Insert the title text here.
- * @param string $class Insert here the CSS-class name with with you want to style the link.
- * @param string $id Insert here the CSS-id name with with you want to style the link.
- */
-function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
-	global $_zp_sortable_list, $_zp_current_album;
-	if (zp_loggedin()) {
-		if (!isset($_GET['sortable'])) {
-			printLink(WEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit", $text, $title, $class, $id);
-		} else {
-			$_zp_sortable_list->printForm(WEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit", 'POST', gettext('Save'), 'button');
-		}
-	}
 }
 
 /**

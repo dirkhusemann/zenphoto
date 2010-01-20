@@ -89,6 +89,10 @@ function printAdminHeader($path='', $tinyMCE=NULL) {
 	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/ui.zenphoto.css" type="text/css" />
 	<?php datepickerJS(); ?>
+	<!--Nested Sortables-->
+	<script type="text/javascript" src="zp-extensions/zenpage/js/interface-1.2.js"></script>
+	<script type="text/javascript" src="zp-extensions/zenpage/js/inestedsortable.js"></script>
+	<!--Nested Sortables End-->
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
@@ -376,12 +380,12 @@ function setAlbumSubtabs($album) {
 	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
 	if (!$album->isDynamic() && count($album->getImages())) {
 		$zenphoto_tabs['edit']['subtabs'] = array_merge(
-																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&page=edit&tab=imageinfo'),
-																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&page=edit&tab=sort'),
+																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&tab=imageinfo'),
+																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&tab=sort'),
 																					$zenphoto_tabs['edit']['subtabs']);
 	}
-	if (!$album->isDynamic() && count($album->getSubalbums()) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&page=edit&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
-	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&page=edit&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
+	if (!$album->isDynamic() && count($album->getSubalbums()) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
+	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 }
 
 function checked($checked, $current) {
@@ -1611,7 +1615,7 @@ function printAlbumButtons($album) {
  **/
 function printAlbumEditRow($album) {
 	?>
-	<div id="id_<?php echo $album->getAlbumID(); ?>">
+	<li id="<?php echo $album->getAlbumID(); ?>" class="page-item1">
 	<table cellspacing="0" width="100%">
 	<tr>
 	<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album <?php echo $album->name; ?>" /></td>
@@ -1730,7 +1734,7 @@ function printAlbumEditRow($album) {
 
 	</tr>
 	</table>
-	</div>
+	</li>
 	<?php
 }
 
@@ -2723,16 +2727,18 @@ function getWatermarks() {
 
 /**
  * POST handler for album tree sorts
+ * 
+ * @param int $parentid id of owning album
  *
  */
-function postAlbumSort() {
+function postAlbumSort($parentid) {
 	global $gallery;
 	if (isset($_POST['order']) && !empty($_POST['order'])) {
 		$orderarray = explode("&",$_POST['order']);
-		$tree = array();
-		foreach ($orderarray as $order) {
-			$id = substr(strstr($order,"="),1);
-			$sortstring = strtr($order, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
+		$order = array();
+		foreach ($orderarray as $element) {
+			$id = substr(strstr($element,"="),1);
+			$sortstring = strtr($element, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
 			$sortlevelex = explode("-",$sortstring);
 			$sortstring = '';
 			//regenerate the sort key in connical form
@@ -2741,38 +2747,39 @@ function postAlbumSort() {
 				$sortstring .= $sort.'-';
 			}
 			$sortstring = substr($sortstring, 0, -1);
-			$tree[$id] = $sortstring;
+			$order[$id] = $sortstring;
 		}
-		$order = getSortKeys($tree);
 		$sortToID = array_flip($order);
 		foreach ($order as $item=>$value) {
-			$currentalbum = query_single_row('SELECT FROM *'.prefix('albums').' WHERE `id`='.$item);
+			$currentalbum = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$item);
 			$sortorder = substr($value,-3);
 			if (strlen($value)>3) {
 				$newparent = $sortToID[substr($value,0,-4)];
 			} else {
-				$newparent = NULL;
+				$newparent = $parentid;
 			}
 			if ($newparent == $currentalbum['parentid']) {
-				query('UPDATE '.prefix('albums').' SET `sort_order`="'.$sortorder.'" WHERE `id`='.$item);
+				$sql = 'UPDATE '.prefix('albums').' SET `sort_order`="'.$value.'" WHERE `id`='.$item;
+				query($sql);
 			} else {	// have to do a move
 				$album = new Album($gallery, $currentalbum['folder']);
 				if (is_null($newparent)) {
 					$dest = '';
 				} else {
-					$parent = query_single_row('SELECT FROM *'.prefix('albums').' WHERE `id`='.$newparent);
+					$parent = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$newparent);
 					$dest = $parent['folder'].'/';
 				}
-				$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
+				$dest = $dest . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 				if ($e = $album->moveAlbum($dest)) {
-					$notify = "&mcrerr=".$e;
+					return "&mcrerr=".$e;
 				} else {
-					$album->setSortOrder($sortorder);
+					$album->setSortOrder($value);
 					$album->save();
 				}
 			}
 		}
 	}
+	return false;
 }
 
 ?>
