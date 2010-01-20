@@ -210,25 +210,15 @@ function deletePage() {
  */
 function updatePageSortorder() {
 	if(!empty($_POST['order'])) { // if someone didn't sort anything there are no values!
-		$orderarray = explode("&",$_POST['order']);
+		parse_str($_POST['order'],$orderarray);
+		$order = array();
+		processOrder($orderarray['left-to-right'], $order);
 		$parents = array('NULL');
-		foreach($orderarray as $order) {
-			$id = substr(strstr($order,"="),1);
-			// clear out unnecessary info from the submitted data string
-			$sortstring = strtr($order, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
-			$sortlevelex = explode("-",$sortstring);
-			$sortstring = '';
-			//regenerate the sort key in connical form
-			foreach($sortlevelex as $sortex) {
-				$sort = sprintf('%03u', $sortex);
-				$sortstring .= $sort.'-';
-			}
-			$sortstring = substr($sortstring, 0, -1);
-			// now fix the parent ID and update the DB record
-			$level = count($sortlevelex);
+		foreach ($order as $id=>$orderlist) {
+			$level = count($orderlist);
 			$parents[$level] = $id;
 			$myparent = $parents[$level-1];
-			$sql = "UPDATE " . prefix('zenpage_pages') . " SET `sort_order` = '".$sortstring."', `parentid`= ".$myparent." WHERE `id`=" . $id;
+			$sql = "UPDATE " . prefix('zenpage_pages') . " SET `sort_order` = '".implode('-',$orderlist)."', `parentid`= ".$myparent." WHERE `id`=" . $id;
 			query($sql);
 		}
 	}

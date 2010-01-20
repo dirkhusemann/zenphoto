@@ -552,28 +552,28 @@ div.ui-sortable {
 
 td.handle {
 	cursor: move;
+	text-align: left; 
+	width: 10px;
+	border: 0px solid gray;
+}
+td.albumimage {
+	width:45px;
+	text-align: right;
 }
 
-/* Sortable placeholder
------------------------------- */
-html> /**/ body .zensortable_row,html> /**/ body .zensortable_img {
-	background: #CFF1FF;
-	float: left;
-	margin: 1px;
-	padding: 0px;
-	border: 1px solid #ff5 !important;
-	border: 0px;
-	color: #ff8;
+td.albumtitle {
+	width: 250px;
+	text-align: left;
 }
 
-.zensortable_img {
-	width: 85px;
-	height: 85px;
+td.albuminfocolumn {
+	width: 150px;
+	text-align: right;
 }
 
-.zensortable_row {
-	width: 100%;
-	height: 60px;
+td.albumicons {
+	width: 15px;
+	text-align: center;
 }
 
 /* Forms

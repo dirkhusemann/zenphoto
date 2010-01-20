@@ -8,6 +8,10 @@
 
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
+
+define('ALBUM_NESTING', 1);
+define('SUBALBUM_NESTING', 1);
+
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
@@ -304,7 +308,7 @@ if (isset($_GET['action'])) {
 					if (!empty($rslt)) { $notify = $rslt; }
 				}
 				$qs_albumsuffix = "&massedit";
-				
+
 				/** SAVE GALLERY ALBUM ORDER **************************************************/
 			}
 			// Redirect to the same album we saved.
@@ -472,7 +476,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$subalbums = array();
 		$allimages = array();
 	} else {
-		$subalbums = $album->getSubAlbums();
+		$subalbums = getNestedAlbumList($album, SUBALBUM_NESTING);
 		$allimages = $album->getImages(0, 0, $oldalbumimagesort, $direction);
 	}
 	$allimagecount = count($allimages);
@@ -645,11 +649,17 @@ $alb = removeParentAlbumNames($album);
 				<td style="padding: 0px 0px;" colspan="8">
 				<ul id="left-to-right" class="albumList">
 				<?php
-				foreach ($subalbums as $folder) {
-					$subalbum = new Album($gallery, $folder);
-					printAlbumEditRow($subalbum);
+				printNestedAlbumsList($subalbums);
+/*		TODO: remove when done with nested albums
+				foreach ($subalbums as $analbum) {
+					if (count($analbum['sort_order']) == 1) {
+						$subalbum = $analbum['album'];
+						printAlbumEditRow($subalbum);
+					}
 				}
-				?></ul>
+*/
+				?>
+				</ul>
 			</tr>
 		</table>
 				<ul class="iconlegend">
@@ -1227,13 +1237,10 @@ if (isset($_GET['saved'])) {
 		echo  "<h2>".sprintf(gettext("<em>%s</em> already exists."),sanitize($_GET['exists']))."</h2>";
 		echo '</div>';
 	}
-	$albumsprime = $gallery->getAlbums();
-	$albums = array();
-	foreach ($albumsprime as $album) { // check for rights
-		if (isMyAlbum($album, ALBUM_RIGHTS)) {
-			$albums[] = $album;
-		}
-	}
+
+
+	$albums = getNestedAlbumList(NULL, ALBUM_NESTING);
+
 	?>
 <p><?php
 	if (count($albums) > 0) {
@@ -1276,10 +1283,15 @@ if (isset($_GET['saved'])) {
 		<td style="padding: 0px 0px;" colspan="2">
 		<ul id="left-to-right" class="albumList"><?php
 		if (count($albums) > 0) {
-			foreach ($albums as $folder) {
-				$album = new Album($gallery, $folder);
-				printAlbumEditRow($album);
+			printNestedAlbumsList($albums);
+/*		TODO: remove when done with nested albums
+			foreach ($albums as $analbum) {
+				if (count($analbum['sort_order']) == 1) {
+					$album = $analbum['album'];
+					printAlbumEditRow($album);
+				}
 			}
+*/
 		}
 		?></ul>
 		</td>

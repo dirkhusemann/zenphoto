@@ -935,7 +935,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		<?php print_language_string_list($album->get('title'), $prefix."albumtitle", false); ?>
 		</td>
 		</tr>
-		 
+
 	<tr>
 	<td align="left" valign="top" ><?php echo gettext("Album Description:"); ?> </td>
 	<td>
@@ -1044,7 +1044,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 /*
  * not recommended--screws with peoples minds during pagination!
 	$sort[gettext('Random')] = 'random';
-*/	
+*/
 	?>
 	<tr>
 	<td align="left" valign="top"><?php echo gettext("Sort subalbums by:");?> </td>
@@ -1619,7 +1619,7 @@ function printAlbumEditRow($album) {
 	<table cellspacing="0" width="100%">
 	<tr>
 	<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album <?php echo $album->name; ?>" /></td>
-	<td style="text-align: left;" width="80">
+	<td class="albumimage">
 		<?php
 		$thumb = $album->getAlbumThumb();
 		if (strpos($thumb, '_%7B') !== false) { // it is the default image
@@ -1635,7 +1635,7 @@ function printAlbumEditRow($album) {
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
 		<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
 	</td>
-	<td  style="text-align: left;font-size:110%;" width="300">
+	<td class="albumtitle">
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
 	</td>
 	<?php
@@ -1663,14 +1663,13 @@ function printAlbumEditRow($album) {
 		}
 	}
 	?>
-	<td style="text-align: right;" width="80"><?php echo $sa; ?></td>
-	<td style="text-align: right;" width="80"><?php echo $si; ?></td>
+	<td class="albuminfocolumn"><?php echo $sa; ?></td>
+	<td class="albuminfocolumn"><?php echo $si; ?></td>
 	<?php	$wide='40px'; ?>
-	<td>
-		<table width="100%">
-		<tr>
-		<td>
-		<td style="text-align:center;" width='$wide'>
+
+
+
+	<td class="albumicons">
 	<?php
 	$pwd = $album->getPassword();
 	if (!empty($pwd)) {
@@ -1678,7 +1677,7 @@ function printAlbumEditRow($album) {
 	}
  ?>
 	</td>
-	<td style="text-align:center;" width="<?php echo $wide;?>">
+	<td class="albumicons">
 	<?php
 	if ($album->getShow()) {
 		?>
@@ -1694,7 +1693,7 @@ function printAlbumEditRow($album) {
 	}
 	?>
 	</td>
-	<td style="text-align:center;" width="<?php echo $wide; ?>">
+	<td class="albumicons">
 		<?php
 		if (!$album->isDynamic()) {
 			?>
@@ -1704,7 +1703,7 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td style="text-align:center;" width="<?php echo $wide; ?>";>
+	<td class="albumicons">
 		<?php
 		if (!$album->isDynamic()) {
 			?>
@@ -1714,7 +1713,7 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td style="text-align:center;" width="<?php echo $wide; ?>">
+	<td class="albumicons">
 		<?php
 		if (!$album->isDynamic()) {
 			?>
@@ -1724,12 +1723,9 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td style="text-align:center;" width="<?php echo $wide; ?>">
+	<td class="albumicons">
 		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this entire album?")); ?>','<?php echo js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
-	</td>
-	</tr>
-	</table>
 	</td>
 
 	</tr>
@@ -2726,40 +2722,77 @@ function getWatermarks() {
 }
 
 /**
- * POST handler for album tree sorts
+ * turns the serialized array from a tree sort into an array $id=>array(sort orders)
  * 
+ * @param $order the "order" array part of the serialzide tree sort order
+ * @param $result the result array
+ * @param $list used internally to keep the sort orders during recursion
+ */
+function processOrder($order, &$result, $list=array()) {
+	$cur = count($list);
+	$c = 0;
+	foreach ($order as $element) {
+		$id = $element['id'];
+		if (!array_key_exists($id,$result)) {
+			$list[$cur] = sprintf('%03u',$c);
+			$c++;
+			$result[$id] = $list;
+		}		
+		if (array_key_exists('children', $element)) {
+			processOrder($element['children'], $result, $result[$id]);
+		}
+	}
+	
+}
+
+/**
+ * POST handler for album tree sorts
+ *
  * @param int $parentid id of owning album
  *
  */
 function postAlbumSort($parentid) {
 	global $gallery;
 	if (isset($_POST['order']) && !empty($_POST['order'])) {
-		$orderarray = explode("&",$_POST['order']);
+		parse_str($_POST['order'],$orderarray);
 		$order = array();
-		foreach ($orderarray as $element) {
-			$id = substr(strstr($element,"="),1);
-			$sortstring = strtr($element, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
-			$sortlevelex = explode("-",$sortstring);
-			$sortstring = '';
-			//regenerate the sort key in connical form
-			foreach($sortlevelex as $sortex) {
-				$sort = sprintf('%03u', $sortex);
-				$sortstring .= $sort.'-';
-			}
-			$sortstring = substr($sortstring, 0, -1);
-			$order[$id] = $sortstring;
+		processOrder($orderarray['left-to-right'], $order);
+		$sortToID = array();
+		foreach ($order as $id=>$orderlist) {
+			$sortToID[implode('-',$orderlist)] = $id;
 		}
-		$sortToID = array_flip($order);
-		foreach ($order as $item=>$value) {
+/*
+echo "_POST ";var_dump($_POST);		
+echo "orderarray ";var_dump($orderarray);		
+echo "order ";var_dump($order);		
+echo "sortToID ";var_dump($sortToID);		
+*/
+		foreach ($order as $item=>$orderlist) {
 			$currentalbum = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$item);
-			$sortorder = substr($value,-3);
-			if (strlen($value)>3) {
-				$newparent = $sortToID[substr($value,0,-4)];
+
+//echo "1:";var_dump($orderlist);			
+			
+			$sortorder = array_pop($orderlist);
+			
+////echo "2:";var_dump($orderlist);			
+			
+			
+			if (count($orderlist)>0) {
+				
+echo implode('-',$orderlist)."\n";				
+				
+				$newparent = $sortToID[implode('-',$orderlist)];
 			} else {
 				$newparent = $parentid;
 			}
+			
+//echo "newparent=$newparent; currentparent=". $currentalbum['parentid']."\n";			
+			
 			if ($newparent == $currentalbum['parentid']) {
-				$sql = 'UPDATE '.prefix('albums').' SET `sort_order`="'.$value.'" WHERE `id`='.$item;
+				$sql = 'UPDATE '.prefix('albums').' SET `sort_order`="'.$sortorder.'" WHERE `id`='.$item;
+				
+//echo $sql."\n";				
+				
 				query($sql);
 			} else {	// have to do a move
 				$album = new Album($gallery, $currentalbum['folder']);
@@ -2770,16 +2803,113 @@ function postAlbumSort($parentid) {
 					$dest = $parent['folder'].'/';
 				}
 				$dest = $dest . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
+
+//echo "move to $dest\n";				
+				
 				if ($e = $album->moveAlbum($dest)) {
 					return "&mcrerr=".$e;
 				} else {
-					$album->setSortOrder($value);
+					$album->setSortOrder($sortorder);
 					$album->save();
 				}
 			}
 		}
 	}
 	return false;
+}
+
+/**
+ * generates a nested list of albums for the album tab sorting
+ * Returns an array of "albums" each element contains:
+ * 								'name' which is the folder name
+ * 								'album' which is an album object for the album
+ * 								'sort_order' which is an array of the sort order set
+ *
+ * @param $subalbum root level album (NULL is the gallery)
+ * @param $depth how far to nest
+ * @param $level internal for keeping the sort order elements
+ * @return array
+ */
+function getNestedAlbumList($subalbum, $depth, $level=array()) {
+	global $gallery;
+	$depth--; // make it zero relative
+	$cur = count($level);
+	if (is_null($subalbum)) {
+		$albums = $gallery->getAlbums();
+	} else {
+		$albums = $subalbum->getSubalbums();
+	}
+	$list = array();
+	foreach ($albums as $analbum) {
+		if(!is_null($subalbum) || isMyAlbum($analbum, ALBUM_RIGHTS)) {
+			$albumobj = new Album($_gallery, $analbum);
+			$level[$cur] = sprintf('%03u',$albumobj->getSortOrder());
+			$list[] = array('name'=>$analbum, 'album'=>$albumobj, 'sort_order'=>$level);
+			if ($cur < $depth && count($albumobj->getSubalbums()) > 0) {
+				$list = array_merge($list,getNestedAlbumList($albumobj, $depth, $level));
+			}
+		}
+	}
+	return $list;
+}
+
+/**
+ * Prints the sortable nested albums list
+ * returns true if nesting levels exceede the database container
+ *
+ * @param array $pages The array containing all pages
+ *
+ * @return bool
+ */
+function printNestedAlbumsList($albums) {
+	$indent = 1;
+	$open = array(1=>0);
+	$rslt = false;
+	foreach ($albums as $album) {
+		$albumobj = $album['album'];
+		$order = $album['sort_order'];
+		$level = max(1,count($order));
+		if ($toodeep = $level>1 && $order[$level-1] === '') {
+			$rslt = true;
+		}
+		if ($level > $indent) {
+			echo "\n".str_pad("\t",$indent,"\t")."<ul class=\"page-list\">\n";
+			$indent++;
+			$open[$indent] = 0;
+		} else if ($level < $indent) {
+				while ($indent > $level) {
+					$open[$indent]--;
+					$indent--;
+					echo "</li>\n".str_pad("\t",$indent,"\t")."</ul>\n";
+				}
+		} else { // indent == level
+			if ($open[$indent]) {
+				echo str_pad("\t",$indent,"\t")."</li>\n";
+				$open[$indent]--;
+			} else {
+				echo "\n";
+			}
+		}
+		if ($open[$indent]) {
+			echo str_pad("\t",$indent,"\t")."</li>\n";
+			$open[$indent]--;
+		}
+		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$albumobj->get('id')."\" class=\"clear-element page-item1 left\">";
+		echo printAlbumEditRow($albumobj);
+		$open[$indent]++;
+	}
+	while ($indent > 1) {
+		echo "</li>\n";
+		$open[$indent]--;
+		$indent--;
+		echo str_pad("\t",$indent,"\t")."</ul>";
+	}
+	if ($open[$indent]) {
+		echo "</li>\n";
+	} else {
+		echo "\n";
+	}
+	return $rslt;
 }
 
 ?>
