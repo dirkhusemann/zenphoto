@@ -2718,7 +2718,7 @@ function getWatermarks() {
 
 /**
  * turns the serialized array from a tree sort into an array $id=>array(sort orders)
- * 
+ *
  * @param $order the "order" array part of the serialzide tree sort order
  * @param $result the result array
  * @param $list used internally to keep the sort orders during recursion
@@ -2728,16 +2728,14 @@ function processOrder($order, &$result, $list=array()) {
 	$c = 0;
 	foreach ($order as $element) {
 		$id = $element['id'];
-		if (!array_key_exists($id,$result)) {
-			$list[$cur] = sprintf('%03u',$c);
-			$c++;
-			$result[$id] = $list;
-		}		
+		$list[$cur] = sprintf('%03u',$c);
+		$c++;
+		$result[$id] = $list;
 		if (array_key_exists('children', $element)) {
 			processOrder($element['children'], $result, $result[$id]);
 		}
 	}
-	
+
 }
 
 /**
@@ -2750,11 +2748,6 @@ function postAlbumSort($parentid) {
 	global $gallery;
 	if (isset($_POST['order']) && !empty($_POST['order'])) {
 		parse_str($_POST['order'],$orderarray);
-		
-//echo '$_POST '."\n";var_dump($_POST['order']);
-//echo '$ordrearray';var_dump($orderarray);		
-		
-		
 		$order = array();
 		processOrder($orderarray['left-to-right'], $order);
 		$sortToID = array();
@@ -2808,14 +2801,14 @@ function postAlbumSort($parentid) {
  * 								'sort_order' which is an array of the sort order set
  *
  * @param $subalbum root level album (NULL is the gallery)
- * @param $depth how far to nest
+ * @param $levels how far to nest
  * @param $level internal for keeping the sort order elements
  * @return array
  */
-function getNestedAlbumList($subalbum, $depth, $level=array()) {
+function getNestedAlbumList($subalbum, $levels, $level=array()) {
 	global $gallery;
-	$depth--; // make it zero relative
 	$cur = count($level);
+	$levels--;	// make it 0 relative to sync with $cur
 	if (is_null($subalbum)) {
 		$albums = $gallery->getAlbums();
 	} else {
@@ -2827,8 +2820,8 @@ function getNestedAlbumList($subalbum, $depth, $level=array()) {
 			$albumobj = new Album($_gallery, $analbum);
 			$level[$cur] = sprintf('%03u',$albumobj->getSortOrder());
 			$list[] = array('name'=>$analbum, 'album'=>$albumobj, 'sort_order'=>$level);
-			if ($cur < $depth && count($albumobj->getSubalbums()) > 0) {
-				$list = array_merge($list,getNestedAlbumList($albumobj, $depth, $level));
+			if ($cur < $levels && (count($albumobj->getSubalbums()) > 0) && !$albumobj->isDynamic()) {
+				$list = array_merge($list,getNestedAlbumList($albumobj, $levels+1, $level));
 			}
 		}
 	}
@@ -2893,5 +2886,63 @@ function printNestedAlbumsList($albums) {
 	}
 	return $rslt;
 }
+
+/**
+ * Prints the dropdown menu for the nesting level depth for the album sorting
+ *
+ */
+function printNestingLevelDropdown($nestinglevels = array('1','2','3','4','5')) {
+	global $subalbum_nesting, $gallery_nesting;
+	if(isset($_GET['tab'])) {
+		$link = '?page=edit&amp;album='.sanitize($_GET['album'],3).'&amp;tab=subalbuminfo&amp;nesting=';
+		$nesting = $subalbum_nesting;
+	} else {
+		$link = '?nesting=';
+		$nesting = $gallery_nesting;
+	}
+	?>
+		<form name="AutoListBox2" style="float: right">
+		<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
+		<?php
+		foreach ($nestinglevels as $nestinglevel) {
+			if($nesting == $nestinglevel) {
+				$selected = "selected";
+			} else {
+				$selected ="";
+			}
+			echo '<option '.$selected.' value="admin-edit.php'.$link.$nestinglevel.'">'.sprintf(ngettext('Show %u album level','Show %u album levels', $nestinglevel), $nestinglevel).'</option>';
+		}
+?>
+ </select>
+	<script language="JavaScript">
+	<!--
+	function gotoLink(form) {
+	var OptionIndex=form.ListBoxURL.selectedIndex;
+	parent.location = form.ListBoxURL.options[OptionIndex].value;}
+	//-->
+	</script>
+	</form>
+<?php
+}
+
+function processNestingLevelSelection() {
+	global $subalbum_nesting, $gallery_nesting;
+	if(isset($_GET['nesting'])) {
+		if(isset($_GET['tab'])) {
+			$subalbum_nesting = sanitize_numeric($_GET['nesting']);
+			zp_setCookie('subalbum_nesting',$subalbum_nesting);
+		} else {
+			$gallery_nesting = sanitize_numeric($_GET['nesting']);
+			zp_setCookie('gallery_nesting',$gallery_nesting);
+		}
+	} else {
+		if(isset($_GET['tab'])) {
+			$subalbum_nesting = zp_getCookie('subalbum_nesting');
+		} else {
+			$gallery_nesting = zp_getCookie('gallery_nesting');
+		}
+	}
+}
+
 
 ?>

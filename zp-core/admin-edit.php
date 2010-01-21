@@ -9,9 +9,6 @@
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 
-define('ALBUM_NESTING', 1);
-define('SUBALBUM_NESTING', 1);
-
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
@@ -24,8 +21,10 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
-
 $gallery = new Gallery();
+$subalbum_nesting = 1;
+$gallery_nesting = 1;
+processNestingLevelSelection();
 
 //check for security incursions
 if (isset($_GET['album'])) {
@@ -476,7 +475,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$subalbums = array();
 		$allimages = array();
 	} else {
-		$subalbums = getNestedAlbumList($album, SUBALBUM_NESTING);
+		$subalbums = getNestedAlbumList($album, $subalbum_nesting);
 		$allimages = $album->getImages(0, 0, $oldalbumimagesort, $direction);
 	}
 	$allimagecount = count($allimages);
@@ -616,26 +615,35 @@ $alb = removeParentAlbumNames($album);
 		if (count($subalbums) > 0) {
 		?>
 		<div id="tab_subalbuminfo" class="tabbox">
+		<?php printNestingLevelDropdown(); ?>
 		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&action=savesubalbumorder&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
 			<p>
 			<?php
-					$sorttype = strtolower($album->getSubalbumSortType());
-					if ($sorttype != 'manual') {
-						if ($album->getSortDirection('album')) {
-							$dir = gettext(' descending');
-						} else {
-							$dir = '';
-						}
-						$sortNames = array_flip($sortby);
-						$sorttype = $sortNames[$sorttype];
+				$sorttype = strtolower($album->getSubalbumSortType());
+				if ($sorttype != 'manual') {
+					if ($album->getSortDirection('album')) {
+						$dir = gettext(' descending');
 					} else {
 						$dir = '';
 					}
-					printf(gettext('Current sort: <em>%1$s%2$s</em>. '), $sorttype, $dir);
-					echo gettext('Drag the albums into the order you wish them displayed.').' ';
-					echo gettext("Select an album to edit its description and data, or");
-			?>
-			<a href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.
+					$sortNames = array_flip($sortby);
+					$sorttype = $sortNames[$sorttype];
+				} else {
+					$dir = '';
+				}
+				printf(gettext('Current sort: <em>%1$s%2$s</em>. '), $sorttype, $dir);
+				?>
+			</p>
+			<p>
+				<?php
+				echo gettext('Drag the albums into the order you wish them displayed. <strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');
+				$link = '<a href="?page=edit&album='.urlencode($album->name).'&massedit">'.gettext("mass-edit all album data").'</a>.';
+				?>
+			</p>
+			<p>
+				<?php
+				printf(gettext("Select an album to edit its description and data, or %s"),$link);
+				?>
 			</p>
 			<p class="buttons">
 				<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
@@ -1233,10 +1241,11 @@ if (isset($_GET['saved'])) {
 	}
 
 
-	$albums = getNestedAlbumList(NULL, ALBUM_NESTING);
+	$albums = getNestedAlbumList(NULL, $gallery_nesting);
 
 	?>
-<p><?php
+	<p>
+	<?php
 	if (count($albums) > 0) {
 		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) {
 			$sorttype = strtolower(getOption('gallery_sorttype'));
@@ -1251,15 +1260,25 @@ if (isset($_GET['saved'])) {
 			} else {
 				$dir = '';
 			}
-			printf(gettext('Current sort: <em>%1$s%2$s</em>. '), $sorttype, $dir);
-			echo gettext('Drag the albums into the order you wish them displayed.').' ';
+			printf(gettext('Current sort: <em>%1$s%2$s</em>.'), $sorttype, $dir);
+			?>
+			</p>
+			<p>
+			<?php
+			echo gettext('Drag the albums into the order you wish them displayed. <strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');
 		}
-		echo gettext('Select an album to edit its description and data, or');
-	?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
+		?>
+	</p>
+	<p>
+		<?php
+		$link = '<a href="?page=edit&massedit">'.gettext('mass-edit all album data').'</a>.';
+		printf(gettext('Select an album to edit its description and data, or %s'),$link);
+	?>
+	</p>
 
 	<?php
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		?>
+		printNestingLevelDropdown(); ?>
 		<form action="?page=edit&action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>

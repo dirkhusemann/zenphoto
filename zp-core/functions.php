@@ -1607,8 +1607,10 @@ function zp_getCookie($name) {
  * @param timestamp $time The time the cookie expires
  * @param string $path The path on the server in which the cookie will be available on
  */
-function zp_setCookie($name, $value, $time=0, $path='/', $secure=false) {
+function zp_setCookie($name, $value, $time=NULL, $path=NULL, $secure=false) {
 	if (DEBUG_LOGIN) debugLog("zp_setCookie($name, $value, $time, $path)::album_session=".getOption('album_session'));
+	if (is_null($time)) $time = time()+COOKIE_PESISTENCE;
+	if (is_null($path)) if (($path = WEBPATH) == '') $path = '/';
 	if ($time < time() || !getOption('album_session')) {
 		setcookie($name, $value, $time, $path, "", $secure);
 	}
