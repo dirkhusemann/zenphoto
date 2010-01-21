@@ -52,7 +52,7 @@ if (isset($_GET['action'])) {
 			setOption('gallery_sorttype','manual');
 			setOption('gallery_sortdirection',0);
 			$notify = postAlbumSort(NULL);
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit$saved'.$notify);
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&saved'.$notify);
 			exit();
 			break;
 		case 'savesubalbumorder':
@@ -61,7 +61,7 @@ if (isset($_GET['action'])) {
 			$album->setSortDirection('album', 0);
 			$album->save();
 			$notify = postAlbumSort($album->get('id'));
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$folder.'&tab=subalbuminfo&subalbumsaved'.$notify);
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$folder.'&tab=subalbuminfo&saved'.$notify);
 			exit();
 			break;
 		case 'sorttags':
@@ -507,11 +507,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	} else {
 		$parent = "&album=" . urlencode($parent);
 	}
-	if (isset($_GET['subalbumsaved'])) {
-		echo '<div class="messagebox" id="fade-message">';
-		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
-		echo '</div>';
-	}
 	if (isset($_GET['counters_reset'])) {
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
@@ -543,37 +538,41 @@ $alb = removeParentAlbumNames($album);
 
 			</div>
 		<?php
+		} else if (isset($_GET['mcrerr'])) {
+			?>
+			<div class="errorbox" id="fade-message2">
+				<h2>
+				<?php
+				switch (sanitize_numeric($_GET['mcrerr'])) {
+					case 2:
+						echo  gettext("Image already exists.");
+						break;
+					case 3:
+						echo  gettext("Album already exists.");
+						break;
+					case 4:
+						echo  gettext("Cannot move, copy, or rename to a subalbum of this album.");
+						break;
+					case 5:
+						echo  gettext("Cannot move, copy, or rename to a dynamic album.");
+						break;
+						default:
+						echo  gettext("There was an error with a move, copy, or rename operation.");
+						break;
+				}
+				?>
+				</h2>
+			</div>
+			<?php
 		} else {
-		?>
+			?>
 			<div class="messagebox" id="fade-message">
-			<h2><?php echo gettext("Changes saved"); ?></h2>
+				<h2>
+				<?php echo gettext("Changes saved") ?>
+				</h2>
 			</div>
 		<?php
 		}
-	}
-	if (isset($_GET['mcrerr'])) {
-		?>
-		<div class="errorbox" id="fade-message2">
-			<h2>
-			<?php
-			switch (sanitize_numeric($_GET['mcrerr'])) {
-				case 2:
-					echo  gettext("Image already exists.");
-					break;
-				case 3:
-					echo  gettext("Album already exists.");
-					break;
-				case 4:
-					echo  gettext("Cannot move, copy, or rename to a subalbum of this album.");
-					break;
-				default:
-					echo  gettext("There was an error with a move, copy, or rename operation.");
-					break;
-			}
-			?>
-			</h2>
-		</div>
-		<?php
 	}
 	if (isset($_GET['uploaded'])) {
 		echo '<div class="messagebox" id="fade-message">';
@@ -1217,11 +1216,6 @@ if (isset($_GET['saved'])) {
 <h1><?php echo gettext("Edit Gallery"); ?></h1>
 <?php
 	displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */
-	if (isset($_GET['saved'])) {
-		echo '<div class="messagebox" id="fade-message">';
-		echo  "<h2>".gettext("Album order saved")."</h2>";
-		echo '</div>';
-	}
 	if (isset($_GET['counters_reset'])) {
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Hitcounters have been reset.")."</h2>";

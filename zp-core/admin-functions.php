@@ -2755,57 +2755,44 @@ function postAlbumSort($parentid) {
 	global $gallery;
 	if (isset($_POST['order']) && !empty($_POST['order'])) {
 		parse_str($_POST['order'],$orderarray);
+		
+//echo '$_POST '."\n";var_dump($_POST['order']);
+//echo '$ordrearray';var_dump($orderarray);		
+		
+		
 		$order = array();
 		processOrder($orderarray['left-to-right'], $order);
 		$sortToID = array();
 		foreach ($order as $id=>$orderlist) {
 			$sortToID[implode('-',$orderlist)] = $id;
 		}
-/*
-echo "_POST ";var_dump($_POST);		
-echo "orderarray ";var_dump($orderarray);		
-echo "order ";var_dump($order);		
-echo "sortToID ";var_dump($sortToID);		
-*/
 		foreach ($order as $item=>$orderlist) {
 			$currentalbum = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$item);
-
-//echo "1:";var_dump($orderlist);			
-			
 			$sortorder = array_pop($orderlist);
-			
-////echo "2:";var_dump($orderlist);			
-			
-			
 			if (count($orderlist)>0) {
-				
-//echo implode('-',$orderlist)."\n";				
-				
 				$newparent = $sortToID[implode('-',$orderlist)];
 			} else {
 				$newparent = $parentid;
 			}
-			
-//echo "newparent=$newparent; currentparent=". $currentalbum['parentid']."\n";			
-			
 			if ($newparent == $currentalbum['parentid']) {
 				$sql = 'UPDATE '.prefix('albums').' SET `sort_order`="'.$sortorder.'" WHERE `id`='.$item;
-				
-//echo $sql."\n";				
-				
 				query($sql);
 			} else {	// have to do a move
-				$album = new Album($gallery, $currentalbum['folder']);
+				$albumname = $currentalbum['folder'];
+				$album = new Album($gallery, $albumname);
+				if (strpos($albumname,'/') !== false) {
+					$albumname = basename($albumname);
+				}
 				if (is_null($newparent)) {
-					$dest = '';
+					$dest = $albumname;
 				} else {
 					$parent = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$newparent);
-					$dest = $parent['folder'].'/';
+					if ($parent['dynamic']) {
+						return "&mcrerr=5";
+					} else {
+						$dest = $parent['folder'].'/' . $albumname;
+					}
 				}
-				$dest = $dest . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
-
-//echo "move to $dest\n";				
-				
 				if ($e = $album->moveAlbum($dest)) {
 					return "&mcrerr=".$e;
 				} else {
