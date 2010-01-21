@@ -1615,10 +1615,9 @@ function printAlbumButtons($album) {
  **/
 function printAlbumEditRow($album) {
 	?>
-	<li id="<?php echo $album->getAlbumID(); ?>" class="page-item1">
-	<table cellspacing="0" width="100%">
+	<table class='bordered2'>
 	<tr>
-	<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album <?php echo $album->name; ?>" /></td>
+	<td class="sort-handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album <?php echo $album->name; ?>" /></td>
 	<td class="albumimage">
 		<?php
 		$thumb = $album->getAlbumThumb();
@@ -1634,7 +1633,7 @@ function printAlbumEditRow($album) {
 		?>
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
 		<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
-	</td>
+		</td>
 	<td class="albumtitle">
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
 	</td>
@@ -1663,13 +1662,10 @@ function printAlbumEditRow($album) {
 		}
 	}
 	?>
-	<td class="albuminfocolumn"><?php echo $sa; ?></td>
-	<td class="albuminfocolumn"><?php echo $si; ?></td>
+	<td class="icons3"><?php echo $sa; ?></td>
+	<td class="icons3"><?php echo $si; ?></td>
 	<?php	$wide='40px'; ?>
-
-
-
-	<td class="albumicons">
+	<td class="icons">
 	<?php
 	$pwd = $album->getPassword();
 	if (!empty($pwd)) {
@@ -1677,7 +1673,7 @@ function printAlbumEditRow($album) {
 	}
  ?>
 	</td>
-	<td class="albumicons">
+	<td class="icons">
 	<?php
 	if ($album->getShow()) {
 		?>
@@ -1693,7 +1689,7 @@ function printAlbumEditRow($album) {
 	}
 	?>
 	</td>
-	<td class="albumicons">
+	<td class="icons">
 		<?php
 		if (!$album->isDynamic()) {
 			?>
@@ -1703,7 +1699,7 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td class="albumicons">
+	<td class="icons">
 		<?php
 		if (!$album->isDynamic()) {
 			?>
@@ -1713,7 +1709,7 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td class="albumicons">
+	<td class="icons">
 		<?php
 		if (!$album->isDynamic()) {
 			?>
@@ -1723,14 +1719,13 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td class="albumicons">
+	<td class="cons">
 		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this entire album?")); ?>','<?php echo js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
 	</td>
 
 	</tr>
 	</table>
-	</li>
 	<?php
 }
 

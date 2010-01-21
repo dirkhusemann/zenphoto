@@ -19,18 +19,6 @@ img {
 	text-align: center;
 }
 
-.icons {
-	width: 15px;
-	text-align: center;
-}
-
-.icons img {
-	border: 0;
-}
-
-.icons a {
-	outline: none;
-}
 
 h1 {
 	display: block;
@@ -39,48 +27,12 @@ h1 {
 	border: 0px solid gray;
 }
 
-.icons2 {
-	width: 20px;
-	text-align: center;
-}
-
-.icons2b { /* adjustment for the author column page-admin.php */
-	width: 62px;
-	text-align: left;
-}
-
-.icons3 {
-	width: 150px;
-	text-align: left;
-}
-
-.icons3b {
-	width: 145px;
-	text-align: left;
-}
-
 .editspan {
 	margin-left: 30px;
 }
 
 td {
 	padding-bottom: 6px;
-}
-
-table.bordered2 {
-	width: 100%;
-	padding: 0px;
-	border-spacing: 0px;
-	margin: 0px;
-	background: #F7F8F9;
-	border-top: 1px solid #F7F8F9; /*#BAC9CF; */
-	border-bottom: 1px solid #F7F8F9; /*#BAC9CF; */
-}
-
-table.bordered2 td {
-	padding: 4px 16px;
-	margin: 0px;
-	background-color: #fff;
 }
 
 /* right column on admin pages */
@@ -210,56 +162,6 @@ ul.pagelist li.next {
 
 .disabled_nav {
 	visibility: hidden;
-}
-
-/* nested sortables
--------------------------------------*/
-div.wrap {
-	border: 1px solid #BBBBBB;
-	padding: 1em 1em 1em 1em;
-}
-
-.page-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: block;
-}
-
-.clear-element {
-	clear: both;
-}
-
-.page-item1>div,.page-item2>div,.page-item3>div,.page-item4>div {
-	background: #f8f8f8;
-	margin: 0.25em 0 0 0;
-}
-
-.left {
-	text-align: left;
-}
-
-.right {
-	text-align: right;
-}
-
-.sort-handle {
-	cursor: move;
-	height: 20px;
-	padding-bottom: 10px;
-}
-
-.helper {
-	border: 1px dotted #777777;
-}
-
-.current-nesting {
-	background-color: yellow;
-}
-
-.bold {
-	color: red;
-	font-weight: bold;
 }
 
 /* tabs for additional page and article content

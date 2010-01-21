@@ -645,8 +645,8 @@ $alb = removeParentAlbumNames($album);
 			<br clear="all"/><br />
 			<table class="bordered" width="100%">
 			<tr>
-				<td style="padding: 0px 0px;" colspan="8">
-				<ul id="left-to-right" class="albumList">
+				<td style="padding: 0px" colspan="1">
+				<ul id="left-to-right" class="page-list">
 				<?php
 				printNestedAlbumsList($subalbums);
 /*		TODO: remove when done with nested albums
@@ -689,7 +689,7 @@ $('#left-to-right').NestedSortable(
 			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
 		},
 		autoScroll: true,
-		handle: '.handle'
+		handle: '.sort-handle'
 	}
 );
 });
@@ -1274,8 +1274,8 @@ if (isset($_GET['saved'])) {
 		<th style="text-align: left;"><?php echo gettext("Edit this album"); ?></th>
 	</tr>
 	<tr>
-		<td style="padding: 0px 0px;" colspan="2">
-		<ul id="left-to-right" class="albumList"><?php
+		<td style="padding: 0px" colspan="1">
+		<ul id="left-to-right" class="page-list"><?php
 		if (count($albums) > 0) {
 			printNestedAlbumsList($albums);
 /*		TODO: remove when done with nested albums
@@ -1323,7 +1323,7 @@ $('#left-to-right').NestedSortable(
 			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
 		},
 		autoScroll: true,
-		handle: '.handle'
+		handle: '.sort-handle'
 	}
 );
 });
