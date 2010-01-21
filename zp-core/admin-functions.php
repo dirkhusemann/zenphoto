@@ -2779,7 +2779,7 @@ echo "sortToID ";var_dump($sortToID);
 			
 			if (count($orderlist)>0) {
 				
-echo implode('-',$orderlist)."\n";				
+//echo implode('-',$orderlist)."\n";				
 				
 				$newparent = $sortToID[implode('-',$orderlist)];
 			} else {
