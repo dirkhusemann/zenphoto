@@ -637,12 +637,11 @@ $alb = removeParentAlbumNames($album);
 			<p>
 				<?php
 				echo gettext('Drag the albums into the order you wish them displayed. <strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');
-				$link = '<a href="?page=edit&album='.urlencode($album->name).'&massedit">'.gettext("mass-edit all album data").'</a>.';
 				?>
 			</p>
 			<p>
 				<?php
-				printf(gettext("Select an album to edit its description and data, or %s"),$link);
+				printf(gettext('Select an album to edit its description and data, or <a href="?page=edit&album=%s&massedit">mass-edit</a> all first level subalbums.'),urlencode($album->name));
 				?>
 			</p>
 			<p class="buttons">
@@ -1271,8 +1270,7 @@ if (isset($_GET['saved'])) {
 	</p>
 	<p>
 		<?php
-		$link = '<a href="?page=edit&massedit">'.gettext('mass-edit all album data').'</a>.';
-		printf(gettext('Select an album to edit its description and data, or %s'),$link);
+		echo gettext('Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit</a> all gallery level albums.');
 	?>
 	</p>
 
