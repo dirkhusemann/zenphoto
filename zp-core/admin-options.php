@@ -68,7 +68,7 @@ if (isset($_GET['action'])) {
 			setOption('time_offset', $offset);
 			setOption('server_protocol', $protocol = sanitize($_POST['server_protocol'],3));
 			if ($protocol == 'http') {
-				zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
+				zp_setcookie("zenphoto_ssl", "", time()-368000);
 			}
 			setOption('charset', sanitize($_POST['charset']),3);
 			setOption('site_email', sanitize($_POST['site_email']),3);
@@ -76,8 +76,7 @@ if (isset($_GET['action'])) {
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
 			if ($newloc != $oldloc) {
-				if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
-				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
+				zp_setCookie('dynamic_locale', $newloc, time()-368000);  // clear the language cookie
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';
 				$result = setlocale(LC_ALL, $newloc.'.'.$encoding, $newloc);

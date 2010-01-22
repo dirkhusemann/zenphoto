@@ -66,7 +66,7 @@ function processExpired($table) {
  * Gets the parent pages recursivly to the page whose parentid is passed
  *
  * @param int $parentid The parentid of the page to get the parents of
- * @param bool $initparents If the 
+ * @param bool $initparents If the
  * @return array
  */
 function getParentPages(&$parentid,$initparents=true) {
@@ -82,12 +82,12 @@ function getParentPages(&$parentid,$initparents=true) {
 			$pageobjtitlelink = $pageobj->getTitlelink();
 			$pageobjparentid = $pageobj->getParentID();
 			array_unshift($parentpages,$pageobjtitlelink);
-		 	getParentPages($pageobjparentid,false);
-		} 
+			getParentPages($pageobjparentid,false);
+		}
 	}
 	return $parentpages;
 }
-	
+
 
 /************************************/
 /* general news article functions   */
@@ -131,7 +131,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			$limit = " LIMIT ".$articles_per_page;
 		} else {
 			$limit = getLimitAndOffset($articles_per_page);
-		} 
+		}
 		/*** get articles by category ***/
 		if (!empty($category) OR in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 
@@ -146,7 +146,7 @@ function getParentPages(&$parentid,$initparents=true) {
 					$show = "";
 					break;
 			}
-	
+
 			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 				$datesearch = " AND news.date LIKE '".$postdate."%' ";
 			} else {
@@ -187,7 +187,7 @@ function getParentPages(&$parentid,$initparents=true) {
 		}
 		return $result;
 	}
-	
+
 
 /**
 	 * Counts news articles, either all or by category or archive date, published or unpublished
@@ -207,7 +207,7 @@ function getParentPages(&$parentid,$initparents=true) {
 		}
 		$show="";
 		if (empty($category)) {
-			
+
 			switch($published) {
 				case "published":
 					$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
@@ -219,7 +219,7 @@ function getParentPages(&$parentid,$initparents=true) {
 					$show = "";
 					break;
 			}
-		
+
 			// date archive query addition
 			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 				$postdate = $_zp_post_date;
@@ -258,7 +258,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			return $count;
 		}
 	}
-	
+
 /**
 	 * Gets the LIMIT and OFFSET for the MySQL query that gets the news articles
 	 *
@@ -268,7 +268,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	function getLimitAndOffset($articles_per_page) {
 		global $_zp_zenpage_total_pages;
 		if(strstr(dirname($_SERVER['REQUEST_URI']), '/'.PLUGIN_FOLDER.'/zenpage')) {
-			$page = getCurrentAdminNewsPage(); // TODO maybe useless since the $_GET['page'] is removed for getting the active main admin tab, too lazy to revert now
+			$page = getCurrentAdminNewsPage();
 		} else {
 			$page = getCurrentNewsPage();
 		}
@@ -276,7 +276,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			$_zp_zenpage_total_pages = ceil(getTotalArticles() / $articles_per_page);
 		}
 		$offset = ($page - 1) * $articles_per_page;
-			
+
 		// Prevent sql limit/offset error when saving plugin options and on the plugins page
 		if (empty($articles_per_page)) {
 			$limit = "";
@@ -348,7 +348,7 @@ function getParentPages(&$parentid,$initparents=true) {
 
 	/**
 	 * Gets news articles and images of a gallery to show them together on the news section
-	 * 
+	 *
 	 * NOTE: This feature requires MySQL 4.1 or later
 	 *
 	 * @param int $articles_per_page The number of articles to get
@@ -409,7 +409,7 @@ function getParentPages(&$parentid,$initparents=true) {
 				$result = query_full_array("
 				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
-				(SELECT albums.folder, images.filename, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums 
+				(SELECT albums.folder, images.filename, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
 				WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")
 				ORDER By date DESC $limit
 				");
@@ -422,7 +422,7 @@ function getParentPages(&$parentid,$initparents=true) {
 				$result = query_full_array("
 				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
-				(SELECT albums.folder, albums.title, albums.date, @type2 FROM ".prefix('albums')." AS albums 
+				(SELECT albums.folder, albums.title, albums.date, @type2 FROM ".prefix('albums')." AS albums
 				".$show.$albumWhere." ORDER BY ".$sortorder.")
 				ORDER By date DESC $limit
 				");
@@ -470,7 +470,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	/************************************/
 	/* general news category functions  */
 	/************************************/
-	
+
 /**
 	 * Gets the category link of a category
 	 *
@@ -514,7 +514,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			}
 		}
 	}
-	
+
 /**
 	 * Gets all categories
 	 *
@@ -524,7 +524,7 @@ function getParentPages(&$parentid,$initparents=true) {
 		global $_zp_zenpage_all_categories;
 		if(is_null($_zp_zenpage_all_categories) OR isset($_GET['delete']) OR isset($_GET['update']) OR isset($_GET['save'])) {
 			$_zp_zenpage_all_categories = query_full_array("SELECT id, cat_name, cat_link, hitcounter, permalink FROM ".prefix('zenpage_news_categories')." ORDER by cat_name");
-		} 
+		}
 		$_zp_zenpage_all_categories = sortByMultilingual($_zp_zenpage_all_categories,"cat_name",false);
 		return $_zp_zenpage_all_categories;
 	}
@@ -541,7 +541,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			return countArticles($_zp_current_category);
 		}
 	}
-	
+
 	/**
 	 * Gets a category by id
 	 *

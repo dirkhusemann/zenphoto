@@ -50,7 +50,6 @@ class viewer_size_image_options {
 }
 
 if (!OFFSET_PATH) {
-	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	$saved = zp_getCookie('viewer_size_image_saved');
 	if (empty($saved)) {
 		$postdefault = trim(getOption('viewer_size_image_default'));

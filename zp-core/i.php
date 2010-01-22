@@ -51,61 +51,59 @@ $image = str_replace(array('/',"\\"),'', sanitize_path($rimage));
 $theme = themeSetup($album); // loads the theme based image options.
 $adminrequest = isset($_GET['admin']);
 
-// Disallow abusive size requests.
-if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
-|| (isset($_GET['w']) && abs($_GET['w']) < MAX_SIZE)
-|| (isset($_GET['h']) && abs($_GET['h']) < MAX_SIZE)) {
-
-	// Extract the image parameters from the input variables
-	// This validates the input as well.
-	$args = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	if (isset($_GET['s'])) { //0
-		$args[0] = $_GET['s'];
-	}
-	if (isset($_GET['w'])) {  //1
-		$args[1] = $_GET['w'];
-	}
-	if (isset($_GET['h'])) { //2
-		$args[2] = $_GET['h'];
-	}
-	if (isset($_GET['cw'])) { //3
-		$args[3] = $_GET['cw'];
-	}
-	if (isset($_GET['ch'])) { //4
-		$args[4] = $_GET['ch'];
-	}
-	if (isset($_GET['cx'])) { //5
-		$args[5] = $_GET['cx'];
-	}
-	if (isset($_GET['cy'])) { //6
-		$args[6] = $_GET['cy'];
-	}
-	if (isset($_GET['q'])) { //7
-		$args[7] = $_GET['q'];
-	}
-	//8 thumb
-	//9 crop
-	if (isset($_GET['t'])) { //10
-		$args[10] = $_GET['t'];
-	}
-	if (isset($_GET['wmk']) && !$adminrequest) { //11
-		$args[11] = $_GET['wmk'];
-	}
-	$args [12] = $adminrequest; //12
-	if (isset($_GET['gray'])) {
-		$args[12] = $_GET['gray'];
-	}
-	$args = getImageParameters($args,filesystemToInternal($album));
-	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $passedWM, $adminrequest, $gray) = $args;
-	if (DEBUG_IMAGE) debugLog("i.php($ralbum, $rimage): \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$thumbstandin=$thumbstandin, \$passedWM=$passedWM, \$adminrequest=$adminrequest, \$gray=$gray");
-	
-	$allowWatermark = !$thumb && !$adminrequest;
-} else {
-	// No image parameters specified or are out of bounds; return the original image.
-	//TODO: this will fail when the album folder is external to zp. Maybe should force the sizes within bounds.
-	header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode(filesystemToInternal($album)) . "/" . rawurlencode(filesystemToInternal($image)));
-	return;
+// Extract the image parameters from the input variables
+// This validates the input as well.
+$args = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+if (isset($_GET['s'])) { //0
+	$args[0] = min(abs($_GET['s']), MAX_SIZE);
 }
+if (isset($_GET['w'])) {  //1
+	$args[1] = min(abs($_GET['w']), MAX_SIZE);
+}
+if (isset($_GET['h'])) { //2
+	$args[2] = min(abs($_GET['h']), MAX_SIZE);
+}
+if (isset($_GET['cw'])) { //3
+	$args[3] = $_GET['cw'];
+}
+if (isset($_GET['ch'])) { //4
+	$args[4] = $_GET['ch'];
+}
+if (isset($_GET['cx'])) { //5
+	$args[5] = $_GET['cx'];
+}
+if (isset($_GET['cy'])) { //6
+	$args[6] = $_GET['cy'];
+}
+if (isset($_GET['q'])) { //7
+	$args[7] = $_GET['q'];
+}
+//8 thumb
+//9 crop
+if (isset($_GET['t'])) { //10
+	$args[10] = $_GET['t'];
+}
+if (isset($_GET['wmk']) && !$adminrequest) { //11
+	$args[11] = $_GET['wmk'];
+}
+$args [12] = $adminrequest; //12
+if (isset($_GET['gray'])) {
+	$args[12] = $_GET['gray'];
+}
+	
+if ( !isset($_GET['s']) && !isset($_GET['w']) && !isset($_GET['h'])) {
+	// No image parameters specified
+	if (getOption('album_folder_class') !== 'external') {
+		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode(filesystemToInternal($album)) . "/" . rawurlencode(filesystemToInternal($image)));
+		return;
+	}
+	// external album, Web server cannot serve original image. Force resize to as big as we can do
+	$args[0] = MAX_SIZE;
+}
+$args = getImageParameters($args,filesystemToInternal($album));
+list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $passedWM, $adminrequest, $gray) = $args;
+if (DEBUG_IMAGE) debugLog("i.php($ralbum, $rimage): \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$thumbstandin=$thumbstandin, \$passedWM=$passedWM, \$adminrequest=$adminrequest, \$gray=$gray");
+$allowWatermark = !$thumb && !$adminrequest;
 
 // Construct the filename to save the cached image.
 $newfilename = getImageCacheFilename(filesystemToInternal($album), filesystemToInternal($image), $args);

@@ -16,7 +16,6 @@ if (file_exists(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/alt/lib-auth.php'
 $_zp_loggedin = false;
 $_zp_reset_admin = NULL;
 // Fix the cookie's path for root installs.
-if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 if (isset($_GET['ticket'])) { // password reset query
 	$_zp_ticket = $_GET['ticket'];
 	$post_user = $_GET['user'];
@@ -51,8 +50,8 @@ if (!isset($_POST['login'])) {
 	$_zp_loggedin = checkAuthorization(zp_getCookie('zenphoto_auth'));
 	if (!$_zp_loggedin) {
 		// Clear the cookie
-		zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
-		zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
+		zp_setcookie("zenphoto_auth", "", time()-368000);
+		zp_setcookie("zenphoto_ssl", "", time()-368000);
 	}
 } else {
 	// Handle the login form.
@@ -65,10 +64,10 @@ if (!isset($_POST['login'])) {
 		if ($_zp_loggedin) {
 			// https: set the 'zenphoto_ssl' marker for redirection
 			if(secureServer()) {
-				zp_setcookie("zenphoto_ssl", "needed", time()+COOKIE_PESISTENCE, $cookiepath);
+				zp_setcookie("zenphoto_ssl", "needed");
 			}
 			// set cookie as secure when in https
-			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), time()+COOKIE_PESISTENCE, $cookiepath, secureServer());
+			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), NULL, NULL, secureServer());
 			if (!empty($redirect)) {
 				if (substr($redirect,0,1) != '/') $redirect = '/'.$redirect;
 				header("Location: " . FULLWEBPATH . $redirect);
@@ -76,8 +75,8 @@ if (!isset($_POST['login'])) {
 			}
 		} else {
 			// Clear the cookie, just in case
-			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
-			zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
+			zp_setcookie("zenphoto_auth", "", time()-368000);
+			zp_setcookie("zenphoto_ssl", "", time()-368000);
 			// was it a request for a reset?
 			if (isset($_POST['code_h']) && $_zp_captcha->checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
 				require_once(dirname(__FILE__).'/class-load.php'); // be sure that the plugins are loaded for the mail handler		
@@ -139,8 +138,8 @@ if (!isset($_POST['login'])) {
 unset($saved_auth, $check_auth, $user, $pass);
 // Handle a logout action.
 if (isset($_REQUEST['logout'])) {
-	zp_setcookie("zenphoto_auth", "*", time()-368000, $cookiepath);
-	zp_setcookie("zenphoto_ssl", "", time()-368000, $cookiepath);
+	zp_setcookie("zenphoto_auth", "*", time()-368000);
+	zp_setcookie("zenphoto_ssl", "", time()-368000);
 	$redirect = '';
 	if (isset($_GET['p'])) { $redirect .= "&p=" . $_GET['p']; }
 	if (isset($_GET['searchfields'])) { $redirect .= "&searchfields=" . $_GET['searchfields']; }

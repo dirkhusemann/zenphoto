@@ -1175,6 +1175,7 @@ if ($debug) {
 	$installed_files = explode("\n", trim($package));
 	$base = dirname(dirname(__FILE__)).'/';
 	$folders = array();
+	$zenphoto_themes = array();
 	foreach ($installed_files as $key=>$value) {
 		$component_data = explode(':',$value);
 		$value = trim($component_data[0]);
@@ -1183,6 +1184,9 @@ if ($debug) {
 			if (is_dir($component)) {
 				$folders[$component] = $component;
 				unset($installed_files[$key]);
+				if (dirname($value) == THEMEFOLDER) {
+					$zenphoto_themes[] = basename($value);
+				}
 			} else {
 				if (zp_loggedin(ADMIN_RIGHTS)) {
 					@chmod($component,0666&$chmod);
@@ -2236,8 +2240,13 @@ if (file_exists(CONFIGFILE)) {
 		<p class='buttons'>
 		<?php
 		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
+		if (isset($zenphoto_themes)) {
+			$th = '&amp;themelist='.urlencode(serialize($zenphoto_themes));
+		} else {
+			$th = '';
+		}
 		?>
-		<a href="?checked&amp;<?php echo $task.$mod; ?>" title="<?php echo gettext("create and or update the database tables."); ?>" style="font-size: 15pt; font-weight: bold;"><img src="images/<?php echo $img; ?>" /><?php echo gettext("Go"); ?></a>
+		<a href="?checked&amp;<?php echo $task.$mod.$th; ?>" title="<?php echo gettext("create and or update the database tables."); ?>" style="font-size: 15pt; font-weight: bold;"><img src="images/<?php echo $img; ?>" /><?php echo gettext("Go"); ?></a>
 		</p>
 		<br clear:all /><br clear:all />
 		<?php

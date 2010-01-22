@@ -57,8 +57,7 @@ if (isset($_GET['p'])) {
 } else if (in_context(ZP_ALBUM)) {
 	if ($_zp_current_album->isDynamic()) {
 		$search = $_zp_current_album->getSearchEngine();
-		if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
-		zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0, $cookiepath);
+		zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0);
 		set_context(ZP_INDEX | ZP_ALBUM);
 	} else {
 		handleSearchParms('album', $_zp_current_album);

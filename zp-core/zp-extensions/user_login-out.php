@@ -34,7 +34,6 @@ class user_logout_options {
 }
 
 
-if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 $__redirect = '';
 if (isset($_GET['p'])) { $__redirect .= "&p=" . $_GET['p']; }
 if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . $_GET['searchfields']; }
@@ -60,7 +59,7 @@ if (!OFFSET_PATH) {
 	if (isset($_GET['userlog'])) { // process the logout.
 		if ($_GET['userlog'] == 0) {
 			foreach($cookies as $cookie) {
-				zp_setcookie($cookie, "", time()-368000, $cookiepath);
+				zp_setcookie($cookie, "", time()-368000);
 			}
 			$_zp_loggedin = false;
 			$saved_auth = NULL;

@@ -2270,18 +2270,11 @@ function isTextFile ( $file, $ok_extensions = array('css','php','js','txt','inc'
  * @param $theme theme to check
  * @param $themes array of installed themes (eg result of getThemes())
  * @return bool
- * @author Ozh
  * @since 1.3
  */
 function themeIsEditable($theme, $themes) {
-	unset($themes['default']);
-	unset($themes['effervescence_plus']);
-	unset($themes['stopdesign']);
-	unset($themes['example']);
-	unset($themes['zenpage']);
-	/* TODO: in case we change the number or names of bundled themes, need to edit this ! */
-
-	return (in_array( $theme , array_keys($themes)));
+	$zplist = unserialize(getOption('Zenphoto_theme_list'));
+	return (!in_array( $theme , $zplist));
 }
 
 
@@ -2817,7 +2810,7 @@ function getNestedAlbumList($subalbum, $levels, $level=array()) {
 	$list = array();
 	foreach ($albums as $analbum) {
 		if(!is_null($subalbum) || isMyAlbum($analbum, ALBUM_RIGHTS)) {
-			$albumobj = new Album($_gallery, $analbum);
+			$albumobj = new Album($gallery, $analbum);
 			$level[$cur] = sprintf('%03u',$albumobj->getSortOrder());
 			$list[] = array('name'=>$analbum, 'album'=>$albumobj, 'sort_order'=>$level);
 			if ($cur < $levels && (count($albumobj->getSubalbums()) > 0) && !$albumobj->isDynamic()) {

@@ -46,7 +46,6 @@ $zp_request = zp_load_request();
 zp_handle_password();
 
 // Handle any comments that might be posted.
-//TODO: Allow_comments and zenpage_comments_allowed are legacy....
 if (getOption('zp_plugin_comment_form') && 
 		( (commentsAllowed('comment_form_albums') && in_context(ZP_ALBUM) && !in_context(ZP_IMAGE) && $_zp_current_album->getCommentsAllowed()) || 
 			(commentsAllowed('comment_form_images') && in_context(ZP_IMAGE) && $_zp_current_image->getCommentsAllowed()) ||

@@ -332,4 +332,8 @@ function setDefault($option, $default) {
 	setOptionDefault('zenpage_news_page', 'news');
 	setOptionDefault('zenpage_pages_page', 'pages');
 	
+	if (isset($_GET['themelist'])) {
+		setOption('Zenphoto_theme_list',$_GET['themelist']);
+	}
+	
 	?>

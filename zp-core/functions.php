@@ -1038,7 +1038,6 @@ function getAllSubAlbumIDs($albumfolder='') {
  */
 function handleSearchParms($what, $album=NULL, $image=NULL) {
 	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list, $_zp_current_album;
-	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	$_zp_last_album = zp_getCookie('zenphoto_last_album');
 	if (is_null($album)) {
 		if (is_object($zp_request)) {
@@ -1048,7 +1047,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if ($reset) { // clear the cookie if no album and not a search
 			if (!isset($_REQUEST['preserve_serch_params'])) {
-				zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+				zp_setcookie("zenphoto_image_search_params", "", time()-368000);
 			}
 			return;
 		}
@@ -1070,7 +1069,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if (!is_null($album)) {
 			$albumname = $album->name;
-			zp_setCookie('zenphoto_last_album', $albumname, time()+COOKIE_PESISTENCE, $cookiepath);
+			zp_setCookie('zenphoto_last_album', $albumname);
 			if (hasDynamicAlbumSuffix($albumname)) $albumname = substr($albumname, 0, -4); // strip off the .alb as it will not be reflected in the search path
 			$_zp_search_album_list = $_zp_current_search->getAlbums(0);
 			foreach ($_zp_search_album_list as $searchalbum) {	
@@ -1080,13 +1079,13 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 				}
 			}
 		} else {
-			zp_setCookie('zenphoto_last_album', '', time()-368000, $cookiepath);
+			zp_setCookie('zenphoto_last_album', '', time()-368000);
 		}
 		if (($context & ZP_SEARCH_LINKED)) {
 			set_context($context);
 		} else { // not an object in the current search path
 			$_zp_current_search = null;
-			zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+			zp_setcookie("zenphoto_image_search_params", "", time()-368000);
 		}
 	}
 }
@@ -1826,7 +1825,6 @@ function logTime($tag) {
  */
 function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
 	global $_zp_loggedin, $_zp_login_error, $_zp_current_album;
-	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	if (empty($authType)) { // not supplied by caller
 		$check_auth = '';
 		if (isset($_GET['z']) && $_GET['p'] == 'full-image' || isset($_GET['p']) && $_GET['p'] == '*full-image') {
@@ -1885,10 +1883,10 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		if ($_zp_loggedin) {	// allow Admin user login
 			// https: set the 'zenphoto_ssl' marker for redirection
 			if(secureServer()) {
-				zp_setcookie("zenphoto_ssl", "needed", time()+COOKIE_PESISTENCE, $cookiepath);
+				zp_setcookie("zenphoto_ssl", "needed");
 			}
 			// set cookie as secure when in https
-			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath, secureServer());
+			zp_setcookie("zenphoto_auth", $auth, NULL, NULL, secureServer());
 			if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
 				header("Location: " . FULLWEBPATH . "/" . $redirect_to);
 				exit();
@@ -1899,7 +1897,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 			if ($success) {
 				// Correct auth info. Set the cookie.
 				if (DEBUG_LOGIN) debugLog("zp_handle_password: valid credentials");
-				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
+				zp_setcookie($authType, $auth);
 				if (isset($_POST['redirect']) && !empty($_POST['redirect'])) {
 					header("Location: " . FULLWEBPATH . "/" . $redirect_to);
 					exit();
@@ -1907,7 +1905,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 			} else {
 				// Clear the cookie, just in case
 				if (DEBUG_LOGIN) debugLog("zp_handle_password: invalid credentials");
-				zp_setcookie($authType, "", time()-368000, $cookiepath);
+				zp_setcookie($authType, "", time()-368000);
 				$_zp_login_error = true;
 			}
 		}
@@ -1923,7 +1921,7 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 		} else {
 			// Clear the cookie
 			if (DEBUG_LOGIN) debugLog("zp_handle_password: invalid cookie");
-			zp_setcookie($authType, "", time()-368000, $cookiepath);
+			zp_setcookie($authType, "", time()-368000);
 		}
 	}
 }

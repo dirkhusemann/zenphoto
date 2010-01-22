@@ -656,14 +656,6 @@ $alb = removeParentAlbumNames($album);
 				<ul id="left-to-right" class="page-list">
 				<?php
 				printNestedAlbumsList($subalbums);
-/*		TODO: remove when done with nested albums
-				foreach ($subalbums as $analbum) {
-					if (count($analbum['sort_order']) == 1) {
-						$subalbum = $analbum['album'];
-						printAlbumEditRow($subalbum);
-					}
-				}
-*/
 				?>
 				</ul>
 			</tr>
@@ -1295,14 +1287,6 @@ if (isset($_GET['saved'])) {
 		<ul id="left-to-right" class="page-list"><?php
 		if (count($albums) > 0) {
 			printNestedAlbumsList($albums);
-/*		TODO: remove when done with nested albums
-			foreach ($albums as $analbum) {
-				if (count($analbum['sort_order']) == 1) {
-					$album = $analbum['album'];
-					printAlbumEditRow($album);
-				}
-			}
-*/
 		}
 		?></ul>
 		</td>

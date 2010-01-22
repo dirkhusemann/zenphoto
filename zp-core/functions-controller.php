@@ -295,13 +295,12 @@ function zp_load_gallery() {
  */
 function zp_load_search() {
 	global $_zp_current_search;
-	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
-	zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+	zp_setcookie("zenphoto_image_search_params", "", time()-368000);
 	if ($_zp_current_search == NULL)
 		$_zp_current_search = new SearchEngine();
 	set_context(ZP_INDEX | ZP_SEARCH);
 	$params = $_zp_current_search->getSearchParams();
-	zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
+	zp_setcookie("zenphoto_image_search_params", $params, 0);
 	return $_zp_current_search;
 }
 

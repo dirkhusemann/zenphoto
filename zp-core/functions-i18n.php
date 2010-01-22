@@ -245,10 +245,9 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale);
 		if (!$result) { // failed to set the locale
 			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
-				if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 				$locale = sanitize($_POST['oldlocale'], 3);
 				setOption('locale', $locale, false);
-				zp_setCookie('dynamic_locale', '', time()-368000, $cookiepath);
+				zp_setCookie('dynamic_locale', '', time()-368000);
 			}
 		}
 		// Set the text domain as 'messages'
@@ -331,10 +330,9 @@ function parseHttpAcceptLanguage($str=NULL) {
  */
 function getUserLocale() {
 	if (DEBUG_LOCALE) debugLogBackTrace("getUserLocale()");
-	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	if (isset($_POST['dynamic-locale'])) {
 		$locale = sanitize($_POST['dynamic-locale'], 0);
-		zp_setCookie('dynamic_locale', $locale, time()+COOKIE_PESISTENCE, $cookiepath);
+		zp_setCookie('dynamic_locale', $locale);
 		if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");
 	} else {
 		$localeOption = getOption('locale');
