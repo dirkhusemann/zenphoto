@@ -2812,7 +2812,7 @@ function getNestedAlbumList($subalbum, $levels, $level=array()) {
 		if(!is_null($subalbum) || isMyAlbum($analbum, ALBUM_RIGHTS)) {
 			$albumobj = new Album($gallery, $analbum);
 			$level[$cur] = sprintf('%03u',$albumobj->getSortOrder());
-			$list[] = array('name'=>$analbum, 'album'=>$albumobj, 'sort_order'=>$level);
+			$list[] = array('name'=>$analbum, 'sort_order'=>$level);
 			if ($cur < $levels && (count($albumobj->getSubalbums()) > 0) && !$albumobj->isDynamic()) {
 				$list = array_merge($list,getNestedAlbumList($albumobj, $levels+1, $level));
 			}
@@ -2830,11 +2830,11 @@ function getNestedAlbumList($subalbum, $levels, $level=array()) {
  * @return bool
  */
 function printNestedAlbumsList($albums) {
+	global $gallery;
 	$indent = 1;
 	$open = array(1=>0);
 	$rslt = false;
 	foreach ($albums as $album) {
-		$albumobj = $album['album'];
 		$order = $album['sort_order'];
 		$level = max(1,count($order));
 		if ($toodeep = $level>1 && $order[$level-1] === '') {
@@ -2862,6 +2862,7 @@ function printNestedAlbumsList($albums) {
 			echo str_pad("\t",$indent,"\t")."</li>\n";
 			$open[$indent]--;
 		}
+		$albumobj = new Album($gallery,$album['name']);
 		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$albumobj->get('id')."\" class=\"clear-element page-item1 left\">";
 		echo printAlbumEditRow($albumobj);
 		$open[$indent]++;
