@@ -32,6 +32,7 @@ class zenpagecms {
 		setOptionDefault('zenpage_combinews_imagesize', '300');
 		setOptionDefault('zenpage_combinews_sortorder', 'mtime');
 		setOptionDefault('zenpage_combinews_gallerylink', 'image');
+		setOptionDefault('zenpage_tinymce_config', 'light');
 	}
 
 	function getOptionsSupported() {
@@ -67,7 +68,10 @@ class zenpagecms {
 										'desc' => gettext("The sort order for your gallery items within the CombiNews display. 'date' (date order), 'id' (added to db order), 'mtime' (upload order). NOTE: If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id or mtime they will be sorted by date with the articles afterwards since articles only have a date.")),
 		gettext('CombiNews: Gallery link') => array('key' => 'zenpage_combinews_gallerylink', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('image') => "image", gettext('album') => "album"),
-										'desc' => gettext("Choose if you want to link from the image entry it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>"))
+										'desc' => gettext("Choose if you want to link from the image entry it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),
+		gettext('TinyMCE configuration') => array('key' => 'zenpage_tinymce_config', 'type' => OPTION_TYPE_SELECTOR,
+										'selections' => array(gettext('full') => "full", gettext('light') => "light"),
+										'desc' => gettext("Choose if you want to load the TinyMCE text editor for pages and articles light or full featured.")),
 		);
 	}
 

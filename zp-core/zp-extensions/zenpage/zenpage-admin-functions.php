@@ -1515,5 +1515,14 @@ function getLocaleForTinyMCEandAFM() {
  * The by default included Ajax File Manager does only work with TinyMCE and FCKEditor though.
  *
  */
-require_once("editor_config.js.php");
+switch(getOption('zenpage_tinymce_config')) {
+	case "full":
+		$tinymceconfig = "editor_config.js.php";
+		break;
+	case "light":
+	default:
+		$tinymceconfig = "editor_config_light.js.php";
+		break;
+}
+require_once($tinymceconfig);
 ?>
