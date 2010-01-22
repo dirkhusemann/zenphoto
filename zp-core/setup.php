@@ -83,9 +83,11 @@ function checkAlbumParentid($albumname, $id) {
 		printf('Fixed album <strong>%1$s</strong>: parentid was %2$s should have been %3$s<br />', $albumname,$oldid, $id);
 	}
 	$id = $album->id;
-	$albums = $album->getSubalbums();
-	foreach ($albums as $albumname) {
-		checkAlbumParentid($albumname, $id);
+	if (!$album->isDynamic()) {
+		$albums = $album->getSubalbums();
+		foreach ($albums as $albumname) {
+			checkAlbumParentid($albumname, $id);
+		}
 	}
 }
 
