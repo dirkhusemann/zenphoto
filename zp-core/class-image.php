@@ -330,7 +330,7 @@ class _Image extends PersistentObject {
 			}
 			//EXIF title [sic]
 			if (empty($title)) {
-				$title = $this->get('EXIFImageDescription');
+				$title = $this->get('EXIFDescription');
 			}
 			if (!empty($title)) {
 				$this->setTitle($title);
@@ -755,13 +755,13 @@ class _Image extends PersistentObject {
 			return 2;
 		}
 		$result = true;
-		$newfilename = substr(internalToFilesystem($newfilename),0,strrpos($newfilename,'.'));
+		$newfilename = substr($imagename = internalToFilesystem($newfilename),0,strrpos($newfilename,'.'));
 		$filestomove = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
 		foreach ($filestomove as $file) {
 			$result = $result && @rename($file, $newalbum->localpath . $newfilename.strrchr($file,'.'));
 		}
 		if ($result) {
-			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
+			$result = $this->move(array('filename'=>$imagename, 'albumid'=>$newalbum->id));
 		}
 		if ($result) return 0;
 		return 1;
