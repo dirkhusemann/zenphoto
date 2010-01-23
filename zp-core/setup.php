@@ -1173,7 +1173,7 @@ if ($debug) {
 	$lowset = $cum_mean - $hours;
 	$highset = $cum_mean + $hours;
 
-	$package = file_get_contents(SERVERPATH.'/Zenphoto.package');
+	$package = file_get_contents(SERVERPATH.'/'.ZENFOLDER.'/Zenphoto.package');
 	$installed_files = explode("\n", trim($package));
 	$base = dirname(dirname(__FILE__)).'/';
 	$folders = array();

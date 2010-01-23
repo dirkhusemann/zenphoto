@@ -46,7 +46,7 @@ if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious acc
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
-printAdminHeader($webpath);
+printAdminHeader();
 ?>
 <style type="text/css">
 .schedulealbumchecklist li {

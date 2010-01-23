@@ -10,7 +10,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("An image crop tool. Places an image crop button in the image utilities box of the images tab.");
 $plugin_author = "Stephen Billard (sbillard)";
- $plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-crop_image.php.html";
 
 if (!isset($_REQUEST['performcrop'])) {
@@ -191,7 +191,7 @@ if (isset($_REQUEST['subpage'])) {
 } else {
 	$subpage = $tagsort = '';
 }
-printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
+printAdminHeader();
 ?>
 
 <script src="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.js" type="text/javascript"></script>

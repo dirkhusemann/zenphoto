@@ -43,7 +43,7 @@ $selector = array(array('field'=>'ID', 'direction'=>'DESC', 'desc'=>gettext('mos
 									array('field'=>'hitcounter', 'direction'=>'DESC', 'desc'=>gettext('most viewed'))
 									);
 
-printAdminHeader($webpath);
+printAdminHeader();
 echo '</head>';
 ?>
 

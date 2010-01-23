@@ -21,10 +21,18 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
+
+if (isset($_GET['tab'])) {
+	$subtab = sanitize($_GET['tab']);
+} else {
+	$subtab = '';
+}
+
 $gallery = new Gallery();
 $subalbum_nesting = 1;
 $gallery_nesting = 1;
-processNestingLevelSelection();
+$imagesTab_imageCount = 10;
+processEditSelection($subtab);
 
 //check for security incursions
 if (isset($_GET['album'])) {
@@ -312,7 +320,7 @@ if (isset($_GET['action'])) {
 			}
 			// Redirect to the same album we saved.
 			if (isset($folder)) {
-				$qs_albumsuffix .= '&album='.urlencode($folder);
+				$qs_albumsuffix .= '&album='.pathurlencode($folder);
 			}
 			if (isset($_POST['subpage'])) {
 				$pg = '&subpage='.$_POST['subpage'];
@@ -401,12 +409,6 @@ if (isset($_GET['action'])) {
 
 $page = "edit";
 
-if (isset($_GET['tab'])) {
-	$subtab = sanitize($_GET['tab']);
-} else {
-	$subtab = '';
-}
-
 // Print our header
 printAdminHeader();
 
@@ -457,7 +459,6 @@ echo "\n</head>";
 
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	/** SINGLE ALBUM ********************************************************************/
-	define('IMAGES_PER_PAGE', 10);
 	// one time generation of this list.
 	$mcr_albumlist = array();
 	genAlbumUploadList($mcr_albumlist);
@@ -483,7 +484,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$target_image = urldecode($_GET['image']);
 		$imageno = array_search($target_image, $allimages);
 		if ($imageno !== false) {
-			$pagenum = ceil(($imageno+1) / IMAGES_PER_PAGE);
+			$pagenum = ceil(($imageno+1) / $imagesTab_imageCount);
 		}
 	} else {
 		$target_image = '';
@@ -491,12 +492,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if (!isset($pagenum)) {
 		if (isset($_GET['subpage'])) {
 			$pagenum = max(intval($_GET['subpage']),1);
-			if (($pagenum-1) * IMAGES_PER_PAGE >= $allimagecount) $pagenum --;
+			if (($pagenum-1) * $imagesTab_imageCount >= $allimagecount) $pagenum --;
 		} else {
 			$pagenum = 1;
 		}
 	}
-	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
+	$images = array_slice($allimages, ($pagenum-1)*$imagesTab_imageCount, $imagesTab_imageCount);
 
 	$totalimages = count($images);
 
@@ -615,7 +616,7 @@ $alb = removeParentAlbumNames($album);
 		if (count($subalbums) > 0) {
 		?>
 		<div id="tab_subalbuminfo" class="tabbox">
-		<?php printNestingLevelDropdown(); ?>
+		<?php printEditDropdown('subalbuminfo'); ?>
 		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&action=savesubalbumorder&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
 			<p>
 			<?php
@@ -699,12 +700,20 @@ $('#left-to-right').NestedSortable(
 		} ?>
 <?php
 	} else if ($subtab == 'imageinfo') {
-?>
+		$numsteps = ceil(max($allimagecount,$imagesTab_imageCount)/10);
+		if ($numsteps) {
+			$steps = array();
+			for ($i=1;$i<=$numsteps;$i++) {
+				$steps[] = $i*10;
+			}
+			printEditDropdown('imageinfo',$steps);
+		}
+		?>
 		<!-- Images List -->
 		<div id="tab_imageinfo" class="tabbox">
 		<?php
 		if ($allimagecount) {
-		?>
+			?>
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
@@ -712,7 +721,7 @@ $('#left-to-right').NestedSortable(
 			<input type="hidden" name="tagsort" value=<?php echo $tagsort ?> />
 			<input type="hidden" name="oldalbumimagesort" value=<?php echo $oldalbumimagesort; ?> />
 
-		<?php	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));	?>
+		<?php	$totalpages = ceil(($allimagecount / $imagesTab_imageCount));	?>
 		<table class="bordered">
 			<tr>
 				<th><?php echo gettext("Click on the image to change the thumbnail cropping."); ?>	</th>
@@ -721,15 +730,15 @@ $('#left-to-right').NestedSortable(
 					| <a href="javascript:toggleExtraInfo('','image',false);"><?php echo gettext('collapse all fields');?></a>
 				</th>
 				<th align="right">
-				<?php
-				$sort = $sortby;
-				foreach ($sort as $key=>$value) {
-					$sort[sprintf(gettext('%s (descending)'),$key)] = $value.'_desc';
-				}
-				$sort[gettext('Manual')] = 'manual';
-				ksort($sort);
-				if ($direction) $oldalbumimagesort = $oldalbumimagesort.'_desc';
-				echo gettext("Display images by:");
+					<?php
+					$sort = $sortby;
+					foreach ($sort as $key=>$value) {
+						$sort[sprintf(gettext('%s (descending)'),$key)] = $value.'_desc';
+					}
+					$sort[gettext('Manual')] = 'manual';
+					ksort($sort);
+					if ($direction) $oldalbumimagesort = $oldalbumimagesort.'_desc';
+					echo gettext("Display images by:");
 					echo '<select id="albumimagesort" name="albumimagesort" onchange="this.form.submit()">';
 					generateListFromArray(array($oldalbumimagesort), $sort, false, true);
 					echo '</select>';
@@ -1268,7 +1277,7 @@ if (isset($_GET['saved'])) {
 
 	<?php
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		printNestingLevelDropdown(); ?>
+		printEditDropdown(''); ?>
 		<form action="?page=edit&action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>

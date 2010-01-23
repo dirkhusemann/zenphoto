@@ -39,7 +39,7 @@ if (!($_zp_loggedin & (ADMIN_RIGHTS | OVERVIEW_RIGHTS))) { // prevent nefarious 
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
-printAdminHeader($webpath);
+printAdminHeader();
 ?>
 <link rel="stylesheet" href="gallery_statistics.css" type="text/css" media="screen" />
 <?php

@@ -724,7 +724,8 @@ input.tags {
 	margin: 5px 0px 0px 0px;
 }
 
-#overview-comments {
+#overview-comments,
+#overview-news {
 	float: left;
 	width: 90%;
 	margin: 0 0 10px 0px;
@@ -737,14 +738,20 @@ input.tags {
 	margin: 0;
 }
 
-#overview-comments ul,#overview-maint ul,#overview-stats ul {
-	width: 450px;
+#overview-comments ul,
+#overview-maint ul,
+#overview-stats ul,
+#overview-news ul {
+	width: 95%;
 	list-style-type: none;
 	padding: 10px;
 }
 
-#overview-comments ul li,#overview-maint ul li {
+#overview-comments ul li,
+#overview-maint ul li, 
+#overview-news ul li{
 	margin-bottom: .5em;
+	line-height: 1.3em;
 }
 
 #overview-comments ul.plugins {
@@ -775,7 +782,7 @@ input.tags {
 }
 
 #overview-comments .commentbody {
-	font-size: 85%;
+	font-size: 100%;
 }
 
 .fileuploadbox {

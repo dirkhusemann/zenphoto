@@ -33,8 +33,10 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."-
  $plugin_version = '1.2.9'; 
 $option_interface = new xmpMetadata_options();
 
+zp_register_filter('album_instantiate', 'xmpMetadata_album_instantiate');
 zp_register_filter('new_album', 'xmpMetadata_new_album');
 zp_register_filter('album_refresh', 'xmpMetadata_new_album');
+zp_register_filter('image_instantiate', 'xmpMetadata_image_instantiate');
 zp_register_filter('new_image', 'xmpMetadata_new_image');
 zp_register_filter('image_refresh', 'xmpMetadata_new_image');
 
@@ -203,6 +205,18 @@ function xmpMetadata_to_string($meta) {
 }
 
 /**
+ * Filter called when an album object is instantiated
+ * sets the sidecars to include xmp files
+ * 
+ * @param $album album object
+ * @return $object
+ */
+function xmpMetadata_album_instantiate($album) {
+	$album->sidecars['xmp'] = 'xmp';
+	return $album;
+}
+
+/**
  * Filter for handling album objects
  *
  * @param object $album
@@ -269,6 +283,11 @@ function rationalNum($element) {
 	}
 	if (substr($v,$i,1)=='.') $i--;
 	return substr($v,0,$i+1);
+}
+
+function xmpMetadata_image_instantiate($image) {
+	$image->sidecars['xmp'] = 'xmp';
+	return $image;
 }
 
 /**

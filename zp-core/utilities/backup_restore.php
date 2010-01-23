@@ -109,7 +109,7 @@ function writeHeader($type, $value) {
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
-printAdminHeader($webpath);
+printAdminHeader();
 echo '</head>';
 ?>
 

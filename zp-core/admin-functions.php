@@ -65,16 +65,15 @@ function datepickerJS() {
  * Print the header for all admin pages. Starts at <DOCTYPE> but does not include the </head> tag,
  * in case there is a need to add something further.
  *
- * @param string $path path to the admin files for use by plugins which are not located in the zp-core
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
+ * @params $tinyMCE bool set to true to attempt to load tinyMCE, to false to inhibit the load.
  */
-function printAdminHeader($path='', $tinyMCE=NULL) {
+function printAdminHeader($tinyMCE=NULL) {
 	global $_tinyMCEPresent;
 	$_tinyMCEPresent = $tinyMCE;
 	if (is_null($tinyMCE)) {
 		$_tinyMCEPresent = $tinyMCE = getOption('tinyMCEPresent');
 	}
+	$path = WEBPATH.'/'.ZENFOLDER.'/';
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	header('Content-Type: text/html; charset=' . getOption('charset'));
 	?>
@@ -365,8 +364,13 @@ function printSubtabs($tab, $default=NULL) {
 			}
 			$tab = substr($source, $i+4);
 		}
+		if (strpos($link,'/') !== 0) {	// zp_core relative
+			$link = WEBPATH.'/'.ZENFOLDER.'/'.$link;
+		} else {
+			$link = WEBPATH.$link;
+		}
 		echo '<li'.(($current == $tab) ? ' class="current"' : '').'>'.
-				 '<a href = "'.WEBPATH.'/'.ZENFOLDER.'/'.$link.'">'.$key.'</a></li>'."\n";
+				 '<a href = "'.$link.'">'.$key.'</a></li>'."\n";
 	}
 	?>
 	</ul>
@@ -2885,17 +2889,32 @@ function printNestedAlbumsList($albums) {
  * Prints the dropdown menu for the nesting level depth for the album sorting
  *
  */
-function printNestingLevelDropdown($nestinglevels = array('1','2','3','4','5')) {
-	global $subalbum_nesting, $gallery_nesting;
-	if(isset($_GET['tab'])) {
-		$link = '?page=edit&amp;album='.sanitize($_GET['album'],3).'&amp;tab=subalbuminfo&amp;nesting=';
-		$nesting = $subalbum_nesting;
-	} else {
-		$link = '?nesting=';
-		$nesting = $gallery_nesting;
+function printEditDropdown($subtab,$nestinglevels = array('1','2','3','4','5')) {
+	global $subalbum_nesting, $gallery_nesting, $imagesTab_imageCount;
+	switch ($subtab) {
+		case '':
+			$link = '?selection=';
+			$nesting = $gallery_nesting;
+			$padding = '';
+			break;
+		case 'subalbuminfo':
+			$link = '?page=edit&amp;album='.sanitize($_GET['album'],3).'&amp;tab=subalbuminfo&amp;selection=';
+			$nesting = $subalbum_nesting;
+			$padding = '';
+			break;
+		case 'imageinfo':
+			if (isset($_GET['tagsort'])) {
+				$tagsort = '&amp;tagsort='.sanitize($_GET['tagsort'],3);
+			} else {
+				$tagsort = '';
+			}
+			$link = '?page=edit&amp;album='.sanitize($_GET['album'],3).'&amp;tab=imageinfo'.$tagsort.'&amp;selection=';
+			$nesting = $imagesTab_imageCount;
+			$padding = 'padding:10px;';
+			break;
 	}
 	?>
-		<form name="AutoListBox2" style="float: right">
+		<form name="AutoListBox2" style="float: right;<?php echo $padding; ?>">
 		<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
 		<?php
 		foreach ($nestinglevels as $nestinglevel) {
@@ -2904,7 +2923,17 @@ function printNestingLevelDropdown($nestinglevels = array('1','2','3','4','5')) 
 			} else {
 				$selected ="";
 			}
-			echo '<option '.$selected.' value="admin-edit.php'.$link.$nestinglevel.'">'.sprintf(ngettext('Show %u album level','Show %u album levels', $nestinglevel), $nestinglevel).'</option>';
+			echo '<option '.$selected.' value="admin-edit.php'.$link.$nestinglevel.'">';
+			switch($subtab) {
+				case '':
+				case 'subalbuminfo':
+					printf(ngettext('Show %u album level','Show %u album levels', $nestinglevel), $nestinglevel);
+					break;
+				case 'imageinfo':
+					printf(ngettext('%u image per page','%u images per page', $nestinglevel), $nestinglevel);
+					break;
+			}
+			echo '</option>';
 		}
 ?>
  </select>
@@ -2919,21 +2948,35 @@ function printNestingLevelDropdown($nestinglevels = array('1','2','3','4','5')) 
 <?php
 }
 
-function processNestingLevelSelection() {
-	global $subalbum_nesting, $gallery_nesting;
-	if(isset($_GET['nesting'])) {
-		if(isset($_GET['tab'])) {
-			$subalbum_nesting = sanitize_numeric($_GET['nesting']);
-			zp_setCookie('subalbum_nesting',$subalbum_nesting);
-		} else {
-			$gallery_nesting = sanitize_numeric($_GET['nesting']);
-			zp_setCookie('gallery_nesting',$gallery_nesting);
+function processEditSelection($subtab) {
+	global $subalbum_nesting, $gallery_nesting, $imagesTab_imageCount;
+	if(isset($_GET['selection'])) {
+		switch($subtab) {
+			case '':
+				$gallery_nesting = sanitize_numeric($_GET['selection']);
+				zp_setCookie('gallery_nesting',$gallery_nesting);
+				break;
+			case 'subalbuminfo':
+				$subalbum_nesting = sanitize_numeric($_GET['selection']);
+				zp_setCookie('subalbum_nesting',$subalbum_nesting);
+				break;
+			case 'imageinfo':
+				$imagesTab_imageCount = sanitize_numeric($_GET['selection']);
+				zp_setCookie('imagesTab_imageCount',$imagesTab_imageCount);
+				break;
 		}
 	} else {
-		if(isset($_GET['tab'])) {
-			$subalbum_nesting = zp_getCookie('subalbum_nesting');
-		} else {
-			$gallery_nesting = zp_getCookie('gallery_nesting');
+		switch($subtab) {
+			case '':
+				$gallery_nesting = zp_getCookie('gallery_nesting');
+				break;
+			case 'subalbuminfo':
+				$subalbum_nesting = zp_getCookie('subalbum_nesting');
+				break;
+			case 'imageinfo':
+				$count = zp_getCookie('imagesTab_imageCount');
+				if ($count) $imagesTab_imageCount = $count;
+				break;
 		}
 	}
 }

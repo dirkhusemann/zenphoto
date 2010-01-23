@@ -43,7 +43,7 @@ if (isset($_GET['action'])) {
 }
 // Print our header
 $page = 'logs';
-printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
+printAdminHeader();
 echo "\n</head>";
 ?>
 

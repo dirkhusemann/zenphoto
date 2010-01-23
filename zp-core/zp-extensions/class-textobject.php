@@ -97,12 +97,15 @@ class TextObject extends _Image {
 	 * @return TextObject
 	 */
 	function TextObject($album, $filename) {
+		global $_zp_supported_images;
+		
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
 		if (!$this->classSetup($album, $filename)) { // spoof attempt
 			$this->exists = false;
 			return;
 		}
+		$this->sidecars = $_zp_supported_images;
 		$this->objectsThumb = checkObjectsThumb($album->localpath, $filename);
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {

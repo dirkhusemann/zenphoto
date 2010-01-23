@@ -90,7 +90,7 @@ if (isset($_GET['action'])) {
 }
 $page = 'users';
 
-printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
+printAdminHeader();
 echo '</head>'."\n";
 ?>
 

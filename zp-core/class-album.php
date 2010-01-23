@@ -24,6 +24,7 @@ class Album extends PersistentObject {
 	var $lastimagesort = NULL;  // remember the order for the last album/image sorts
 	var $lastsubalbumsort = NULL;
 	var $albumthumbnail = NULL; // remember the album thumb for the duration of the script
+	var $sidecars = array();	// keeps the list of suffixes associated with this album
 
 	/**
 	 * Constructor for albums
@@ -103,6 +104,7 @@ class Album extends PersistentObject {
 				$this->save();
 			}
 		}
+		zp_apply_filter('album_instantiate', $this);
 		if ($new) zp_apply_filter('new_album', $this);
 	}
 
@@ -956,13 +958,19 @@ class Album extends PersistentObject {
 		}
 		if ($this->isDynamic()) {
 			if (@rename($this->localpath, $dest))	{
-				@rename($this->localpath.'.xmp', $dest.'.xmp');  // move the sidecar
+				$success = true;
+				$filestomove = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+				foreach ($filestomove as $file) {
+					if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
+						$success = $success && @rename($file, dirname($dest).'/'.basename($file));
+					}
+				}			
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "UPDATE " . prefix('albums') . " SET folder='" . zp_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
-				$success = query($sql);
+				$success = $success && query($sql);
 				$this->updateParent($newfolder);
 				if ($success) {
-					return $newfolder;
+					return false;
 				}
 			}
 			return 1;
@@ -1087,11 +1095,17 @@ class Album extends PersistentObject {
 		}
 		if ($this->isDynamic()) {
 			if (@copy($this->localpath, $dest)) {
-				@copy($this->localpath.'.xmp',$dest.'.xmp');  // copy the sidecar
+				$success = true;
+				$filestocopy = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+				foreach ($filestocopy as $file) {
+					if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
+						$success = $success && @copy($file, dirname($dest).'/'.basename($file));
+					}
+				}			
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
 				$subrow = query_single_row($sql);
-				$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, true);
+				$success = $success && $this->replicateDBRow($subrow, $oldfolder, $newfolder, true);
 				if ($success) return 0;
 				return 1;
 			} else {

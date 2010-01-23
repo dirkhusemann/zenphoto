@@ -367,10 +367,12 @@ if (defined('RELEASE')) {
 		<br />
 	</div>
 </div>
+
+<?php zp_apply_filter('admin_overview_left', '');?>
+
 <br clear="all" />
-
-
 </div><!-- overview leftcolumn end -->
+
 <div id="overview-rightcolumn">
 
 <?php
@@ -606,11 +608,13 @@ foreach ($comments as $comment) {
 </ul>
 </div>
 
+<?php zp_apply_filter('admin_overview_right', '');?>
 
-
+<br clear="all" />
 </div><!-- overview rightcolumn end -->
 <br clear="all" />
 </div><!-- content -->
+<br clear="all" />
 <?php
 printAdminFooter();
 } /* No admin-only content allowed after this bracket! */ ?></div>

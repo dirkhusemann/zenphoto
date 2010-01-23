@@ -68,6 +68,7 @@ class _Image extends PersistentObject {
 	var $index;         			// The index of the current image in the album array.
 	var $sortorder;     			// The position that this image should be shown in the album
 	var $filemtime;     			// Last modified time of this image
+	var $sidecars = array();	// keeps the list of suffixes associated with this image
 	
 	
 	// Plugin handler support
@@ -142,6 +143,7 @@ class _Image extends PersistentObject {
 		$this->filemtime = @filemtime($this->localpath);
 		$this->imagetype = strtolower(get_class($this)).'s';
 		$this->set('date', strftime('%Y-%m-%d %T', $this->filemtime));
+		zp_apply_filter('image_instantiate', $this);
 		return true;
 	}
 	
@@ -754,14 +756,18 @@ class _Image extends PersistentObject {
 			// If the file exists, don't overwrite it.
 			return 2;
 		}
-		$result = true;
-		$newfilename = substr($imagename = internalToFilesystem($newfilename),0,strrpos($newfilename,'.'));
-		$filestomove = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
-		foreach ($filestomove as $file) {
-			$result = $result && @rename($file, $newalbum->localpath . $newfilename.strrchr($file,'.'));
+		$filename = basename($this->localpath);
+		$result = @rename($this->localpath, $newpath);
+		if ($result) {
+			$filestomove = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+			foreach ($filestomove as $file) {
+				if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
+					$result = $result && @rename($file, $newalbum->localpath . basename($file));
+				}
+			}			
 		}
 		if ($result) {
-			$result = $this->move(array('filename'=>$imagename, 'albumid'=>$newalbum->id));
+			$result = $this->move(array('filename'=>$filename, 'albumid'=>$newalbum->id));
 		}
 		if ($result) return 0;
 		return 1;
@@ -793,13 +799,19 @@ class _Image extends PersistentObject {
 			// If the file exists, don't overwrite it.
 			return 2;
 		}
-		$result = true;
-		$filestocopy = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
-		foreach ($filestocopy as $file) {
-			$result = $result && @copy($file, $newalbum->localpath . basename($file));
-		}
+		$filename = basename($this->localpath);
+		$result = @copy($this->localpath, $newpath);
 		if ($result) {
-			$result = $this->copy(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));
+			$filestocopy = safe_glob(substr($this->localpath,0,strrpos($this->localpath,'.')).'.*');
+			foreach ($filestocopy as $file) {
+				if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
+					$result = $result && @copy($file, $newalbum->localpath . basename($file));
+				}
+			}			
+		}
+		
+		if ($result) {
+			$result = $this->copy(array('filename'=>$filename, 'albumid'=>$newalbum->id));
 		}
 		if ($result) return 0;
 		return 1;
