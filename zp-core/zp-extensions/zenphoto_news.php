@@ -1,10 +1,10 @@
 <?php
 $plugin_is_filter = 5;
-$plugin_description = gettext("An image crop tool. Places an image crop button in the image utilities box of the images tab.");
+$plugin_description = ($disable = version_compare(PHP_VERSION, '5.0.0') != 1) ? gettext("Places the latest 3 news articles from Zenphoto.org on the admin overview page.").'<br/>'.gettext('<strong>Requires PHP version 5</strong>') : gettext("Places the latest 3 news articles from Zenphoto.org on the admin overview page.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---zenphoto_news.php.html";
-$plugin_disable = version_compare(PHP_VERSION, '5.0.0') != 1;
+$plugin_disable = $disable;
 
 if (!$plugin_disable) {
 	zp_register_filter('admin_overview_left', 'printNews');
