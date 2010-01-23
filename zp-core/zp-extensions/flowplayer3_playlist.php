@@ -14,13 +14,13 @@
  */
 
 
-$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3. Important: The Flowplayer 3 plugin needs to be activated to use this plugin.");
+$plugin_description =  gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3. Important: The Flowplayer 3 plugin needs to be activated to use this plugin.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flowplayer3_playlist.php.html";
-$plugin_disable = $external;
+$plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>'):false;
 
-if ($external) {
+if ($plugin_disable) {
 	setOption('zp_plugin_flowplayer3_playlist',0);
 } else {
 	$option_interface = new flowplayer3_playlist();

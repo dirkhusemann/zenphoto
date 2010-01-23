@@ -7,21 +7,17 @@
 // force UTF-8 Ø
 
 $plugin_is_filter = 9;
-$plugin_description = ($disable = (ZENPHOTO_RELEASE < 3112))? gettext('class-image is not compatible with this zenphoto release.') : gettext('Video and MP3/4 handling for Zenphoto. This plugin must always be enabled to use multimedia content.');
+$plugin_description = gettext('Video and MP3/4 handling for Zenphoto. This plugin must always be enabled to use multimedia content.');
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.9'; 
-$plugin_disable = $disable;
 
-if ($plugin_disable) {
-	setOption('zp_plugin_class-video',0);
-} else {
-	addPluginType('flv', 'Video');
-	addPluginType('3gp', 'Video');
-	addPluginType('mov', 'Video');
-	addPluginType('mp3', 'Video');
-	addPluginType('mp4', 'Video');
-	$option_interface = new VideoObject_Options();
-}
+addPluginType('flv', 'Video');
+addPluginType('3gp', 'Video');
+addPluginType('mov', 'Video');
+addPluginType('mp3', 'Video');
+addPluginType('mp4', 'Video');
+$option_interface = new VideoObject_Options();
+
 
 /**
  * Option class for video objects

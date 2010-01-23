@@ -55,19 +55,14 @@
  */
 
 $plugin_is_filter = 9;
-$plugin_description = ($disable = (ZENPHOTO_RELEASE < 2492))? gettext('class-textobject requires Zenphoto v 1.2.1 or greater.') : gettext('Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file.');
+$plugin_description = gettext('Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file.');
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.9'; 
-$plugin_disable = $disable;
 
-if ($plugin_disable) {
-	setOption('zp_plugin_class-textobject',0);
-} else {
-	addPluginType('htm', 'TextObject');
-	addPluginType('html', 'TextObject');
-	addPluginType('txt', 'TextObject');
-	$option_interface = new textObject_Options();
-}
+addPluginType('htm', 'TextObject');
+addPluginType('html', 'TextObject');
+addPluginType('txt', 'TextObject');
+$option_interface = new textObject_Options();
 
 /**
  * Option class for textobjects objects

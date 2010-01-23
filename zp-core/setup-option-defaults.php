@@ -335,5 +335,6 @@ function setDefault($option, $default) {
 	if (isset($_GET['themelist'])) {
 		setOption('Zenphoto_theme_list',$_GET['themelist']);
 	}
+	setOptionDefault('zp_plugin_zenphoto_news', (version_compare(PHP_VERSION, '5.0.0') == 1)?5:0);
 	
 	?>

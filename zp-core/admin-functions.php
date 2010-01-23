@@ -2895,12 +2895,10 @@ function printEditDropdown($subtab,$nestinglevels = array('1','2','3','4','5')) 
 		case '':
 			$link = '?selection=';
 			$nesting = $gallery_nesting;
-			$padding = '';
 			break;
 		case 'subalbuminfo':
 			$link = '?page=edit&amp;album='.sanitize($_GET['album'],3).'&amp;tab=subalbuminfo&amp;selection=';
 			$nesting = $subalbum_nesting;
-			$padding = '';
 			break;
 		case 'imageinfo':
 			if (isset($_GET['tagsort'])) {
@@ -2910,11 +2908,10 @@ function printEditDropdown($subtab,$nestinglevels = array('1','2','3','4','5')) 
 			}
 			$link = '?page=edit&amp;album='.sanitize($_GET['album'],3).'&amp;tab=imageinfo'.$tagsort.'&amp;selection=';
 			$nesting = $imagesTab_imageCount;
-			$padding = 'padding:10px;';
 			break;
 	}
 	?>
-		<form name="AutoListBox2" style="float: right;<?php echo $padding; ?>">
+		<form name="AutoListBox2" style="float: right;">
 		<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
 		<?php
 		foreach ($nestinglevels as $nestinglevel) {

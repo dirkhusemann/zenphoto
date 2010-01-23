@@ -177,6 +177,9 @@ foreach ($filelist as $extension) {
 		if (!empty($plugin_version)) {
 			echo ' v'.$plugin_version;
 		}
+		if ($plugin_disable) {
+			echo '<p><strong>'.sprintf(gettext('This plugin is disabled: %s.'),$plugin_disable).'</strong></p>';
+		}
 		?>
 		</td>
 		<td>

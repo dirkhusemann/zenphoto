@@ -700,18 +700,23 @@ $('#left-to-right').NestedSortable(
 		} ?>
 <?php
 	} else if ($subtab == 'imageinfo') {
-		$numsteps = ceil(max($allimagecount,$imagesTab_imageCount)/10);
+		?>
+		<!-- Images List -->
+		<div id="tab_imageinfo" class="tabbox">
+		<?php
+			$numsteps = ceil(max($allimagecount,$imagesTab_imageCount)/10);
 		if ($numsteps) {
 			$steps = array();
 			for ($i=1;$i<=$numsteps;$i++) {
 				$steps[] = $i*10;
 			}
-			printEditDropdown('imageinfo',$steps);
+			?>
+			<div style="padding-bottom:10px;">
+				<?php printEditDropdown('imageinfo',$steps); ?>
+			</div>
+			<br style='clear:both'/>
+			<?php 
 		}
-		?>
-		<!-- Images List -->
-		<div id="tab_imageinfo" class="tabbox">
-		<?php
 		if ($allimagecount) {
 			?>
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
@@ -724,12 +729,12 @@ $('#left-to-right').NestedSortable(
 		<?php	$totalpages = ceil(($allimagecount / $imagesTab_imageCount));	?>
 		<table class="bordered">
 			<tr>
-				<th><?php echo gettext("Click on the image to change the thumbnail cropping."); ?>	</th>
-				<th>
-					<a href="javascript:toggleExtraInfo('','image',true);"><?php echo gettext('expand all fields');?></a>
+				<td><?php echo gettext("Click on the image to change the thumbnail cropping."); ?>	</td>
+				<td>
+				<a href="javascript:toggleExtraInfo('','image',true);"><?php echo gettext('expand all fields');?></a>
 					| <a href="javascript:toggleExtraInfo('','image',false);"><?php echo gettext('collapse all fields');?></a>
-				</th>
-				<th align="right">
+				</td>
+				<td align="right">
 					<?php
 					$sort = $sortby;
 					foreach ($sort as $key=>$value) {
@@ -743,7 +748,7 @@ $('#left-to-right').NestedSortable(
 					generateListFromArray(array($oldalbumimagesort), $sort, false, true);
 					echo '</select>';
 					?>
-				</th>
+				</td>
 			</tr>
 			<?php
 			if ($allimagecount != $totalimages) { // need pagination links
