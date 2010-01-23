@@ -9,7 +9,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Email all posters when a new comment is made on an item.");
 $plugin_author = "Stephen Billard (sbillard)";
- $plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-comments.php.html";
 
 zp_register_filter('comment_post', 'emailReply');

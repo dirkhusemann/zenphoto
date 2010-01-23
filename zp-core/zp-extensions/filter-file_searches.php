@@ -8,7 +8,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Filter out files from albums and image searches that we do not want shown. See the plugin options for configuration.");
 $plugin_author = "Stephen Billard (sbillard)";
- $plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-file_searches.php.html";
 $option_interface = new filter_file_searches_options();
 

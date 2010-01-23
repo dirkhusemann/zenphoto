@@ -9,7 +9,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Zenphoto outgoing mail handler based on the <em>PHPMailer</em> class mailing facility. Requires PHP 5 or greater.");
 $plugin_author = "Stephen Billard (sbillard)";
- $plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---PHPMailer.html";
 $plugin_disable = version_compare(PHP_VERSION, '5.0.0') != 1;
 if ($plugin_disable) {

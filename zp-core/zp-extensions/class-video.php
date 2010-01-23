@@ -9,7 +9,7 @@
 $plugin_is_filter = 9;
 $plugin_description = ($disable = (ZENPHOTO_RELEASE < 3112))? gettext('class-image is not compatible with this zenphoto release.') : gettext('Video and MP3/4 handling for Zenphoto. This plugin must always be enabled to use multimedia content.');
 $plugin_author = "Stephen Billard (sbillard)";
- $plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9'; 
 $plugin_disable = $disable;
 
 if ($plugin_disable) {
