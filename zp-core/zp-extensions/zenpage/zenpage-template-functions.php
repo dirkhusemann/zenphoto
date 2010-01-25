@@ -420,6 +420,15 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 				case "latestimages-thumbnail":
 					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
+				case "latestimages-thumbnail-customcrop":
+					$width = getOption('combinews-thumbnail-width');
+					$height = getOption('combinews-thumbnail-height');
+					$cropwidth = getOption('combinews-thumbnail-cropwidth');
+					$cropheight= getOption('combinews-thumbnail-cropheight');
+					$cropx = getOption('combinews-thumbnail-cropx');
+					$cropy = getOption('combinews-thumbnail-cropy');
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					break;
 			}
 			echo getNewsContent();
 			break;
@@ -1552,7 +1561,9 @@ function getCodeblock($number=0,$titlelink='') {
 	$getcodeblock = '';
 	if (empty($titlelink)) {
 		if(is_News()) {
-			$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+			if(get_class($_zp_current_zenpage_news) == "ZenpageNews") {
+				$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+			}
 		}
 		if(is_Pages()) {
 			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();

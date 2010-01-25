@@ -402,6 +402,7 @@ function getParentPages(&$parentid,$initparents=true) {
 		}
 		switch($mode) {
 			case "latestimages-thumbnail":
+			case "latestimages-thumbnail-customcrop":	
 			case "latestimages-sizedimage":
 				$sortorder = "images.".$combinews_sortorder;
 				$type1 = query("SET @type1:='news'");
@@ -415,6 +416,7 @@ function getParentPages(&$parentid,$initparents=true) {
 				");
 				break;
 			case "latestalbums-thumbnail":
+			case "latestalbums-thumbnail-customcrop":	
 			case "latestalbums-sizedimage":
 				$sortorder = $combinews_sortorder;
 				$type1 = query("SET @type1:='news'");
@@ -452,10 +454,12 @@ function getParentPages(&$parentid,$initparents=true) {
 				switch(getOption("zenpage_combinews_mode")) {
 					case "latestimages-sizedimage":
 					case "latestimages-thumbnail":
+					case "latestimages-thumbnail-customcrop":	
 						$countGalleryitems = $_zp_gallery->getNumImages($published);
 						break;
 					case "latestalbums-sizedimage":
 					case "latestalbums-thumbnail":
+					case "latestalbums-thumbnail-customcrop":	
 						$countGalleryitems = $_zp_gallery->getNumAlbums(true,$published);
 						break;
 				}

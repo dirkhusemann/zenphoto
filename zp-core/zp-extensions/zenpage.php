@@ -33,6 +33,13 @@ class zenpagecms {
 		setOptionDefault('zenpage_combinews_sortorder', 'mtime');
 		setOptionDefault('zenpage_combinews_gallerylink', 'image');
 		setOptionDefault('zenpage_tinymce_config', 'light');
+		setOptionDefault('combinews-thumbnail-cropwidth','');
+		setOptionDefault('combinews-thumbnail-cropheight','');
+		setOptionDefault('combinews-thumbnail-width', '');
+		setOptionDefault('combinews-thumbnail-height', '');
+		setOptionDefault('combinews-thumbnail-cropx', '');
+		setOptionDefault('combinews-thumbnail-cropy', '');
+
 	}
 
 	function getOptionsSupported() {
@@ -59,7 +66,7 @@ class zenpagecms {
 		gettext('CombiNews: Gallery page link') => array('key' => 'zenpage_combinews_readmore', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1,
 										'desc' => gettext("The text for the 'read more'/'view more' link to the gallery page for images/movies/audio.")),
 		gettext('CombiNews: Mode') => array('key' => 'zenpage_combinews_mode', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext('latest images: sized image') => "latestimages-sizedimage", gettext('latest images: thumbnail') => "latestimages-thumbnail", gettext('latest albums: sized image') => "latestalbums-sizedimage", gettext('latest albums: thumbnail') => "latestalbums-thumbnail"),
+										'selections' => array(gettext('latest images: sized image') => "latestimages-sizedimage", gettext('latest images: thumbnail') => "latestimages-thumbnail", gettext('latest albums: sized image') => "latestalbums-sizedimage", gettext('latest albums: thumbnail') => "latestalbums-thumbnail",gettext('latest albums: thumbnail-customcrop') => "latestalbums-thumbnail-customcrop",gettext('latest images: thumbnail-customcrop') => "latestimages-thumbnail-customcrop"),
 										'desc' => gettext("What you want to show within the CombiNews section.")),
 		gettext('CombiNews: Sized image size') => array('key' => 'zenpage_combinews_imagesize', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The size of the sized image shown the CombiNews section <em>(only in latest images-sizedimage or latest albums-sizedimage mode)</em>.")),
@@ -72,6 +79,18 @@ class zenpagecms {
 		gettext('TinyMCE configuration') => array('key' => 'zenpage_tinymce_config', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('full') => "full", gettext('light') => "light"),
 										'desc' => gettext("Choose if you want to load the TinyMCE text editor for pages and articles light or full featured.")),
+		gettext('CombiNews: Thumbnail crop width') => array('key' => 'combinews-thumbnail-cropwidth', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("For <em>thumbnail custom crop</em> only.Leave empty if you don't want to use it.")),
+		gettext('CombiNews: Thumbnail crop height') => array('key' => 'combinews-thumbnail-cropheight', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
+		gettext('CombiNews: Thumbnail width') => array('key' => 'combinews-thumbnail-width', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
+		gettext('CombiNews: Thumbnail height') => array('key' => 'combinews-thumbnail-height', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
+		gettext('CombiNews: Thumbnail crop x axis') => array('key' => 'combinews-thumbnail-cropx', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
+		gettext('CombiNews: Thumbnail crop y axis') => array('key' => 'combinews-thumbnail-cropy', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
 		);
 	}
 
