@@ -10,11 +10,25 @@ if (!$plugin_disable) {
 }
 
 function printNews($discard) {
-	require_once(dirname(__FILE__).'/zenphoto_news/rsslib.php'); 
+	if ($connected = is_connected()) {
+		require_once(dirname(__FILE__).'/zenphoto_news/rsslib.php'); 
+	}
 	?>
 	<div class="box" id="overview-news">
 		<h2 class="h2_bordered"><?php echo gettext("News from Zenphoto.org"); ?></h2>
-		<?php echo RSS_Display("http://www.zenphoto.org/category/News/feed", 3); ?>
+		<?php
+		if ($connected) {
+			echo RSS_Display("http://www.zenphoto.org/category/News/feed", 3);
+		} else {
+			?>
+			<ul>
+				<li>
+				<?php echo gettext('A connection to <em>Zenphoto.org</em> could not be established.'); ?>
+				</li>
+			</ul>
+			<?php
+		}
+		?>
 	</div>
 <?php 
 }

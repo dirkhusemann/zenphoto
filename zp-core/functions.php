@@ -2082,6 +2082,28 @@ function seoFriendly($source) {
 	return $string;
 }
 
+/**
+ * Returns true if there is an internet connection
+ * 
+ * @param string $host optional host name to test
+ * 
+ * @return bool
+ */
+function is_connected($host = 'www.zenphoto.org') {
+	$err_no = $err_str = false;
+	$connected = fsockopen($host, 80, $errno, $errstr, 0.5);
+	if ($connected){
+		fclose($connected);
+		return true;
+	}else{
+		
+echo "<br/>$err_str ($errno)";		
+		
+		return false;
+	}
+	return $is_conn;
+}
+
 
 //load PHP specific functions
 require_once(PHPScript('5.0.0', '_functions.php'));

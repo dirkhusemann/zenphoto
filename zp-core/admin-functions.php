@@ -1920,6 +1920,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 function checkForUpdate() {
 	global $_zp_WEB_Version;
 	if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
+	if (!is_connected()) return 'X';
 	$c = ZENPHOTO_VERSION;
 	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
 	if (empty($v)) {

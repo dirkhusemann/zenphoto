@@ -378,16 +378,18 @@ if (defined('RELEASE')) {
 <?php
 $buttonlist = array();
 
-$buttonlist[] = array(
-							'button_text'=>gettext("Check for zenphoto update"),
-							'formname'=>'check_updates',
-							'action'=>'admin.php?action=check_for_update',
-							'icon'=>'images/accept.png', 
-							'title'=>gettext("Queries the Zenphoto web site for the latest version and compares that with the one that is running."),
-							'alt'=>'',
-							'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
-							'rights'=> OVERVIEW_RIGHTS
-							);
+if (is_connected()) {
+	$buttonlist[] = array(
+								'button_text'=>gettext("Check for zenphoto update"),
+								'formname'=>'check_updates',
+								'action'=>'admin.php?action=check_for_update',
+								'icon'=>'images/accept.png', 
+								'title'=>gettext("Queries the Zenphoto web site for the latest version and compares that with the one that is running."),
+								'alt'=>'',
+								'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
+								'rights'=> OVERVIEW_RIGHTS
+								);
+}
 $buttonlist[] = array(
 							'button_text'=>gettext("Refresh the Database"),
 							'formname'=>'prune_gallery',
