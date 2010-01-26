@@ -165,7 +165,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if (!empty($size)) {
 			$dim = $size;
 			$width = $height = false;
-			if ($crop) {		
+			if ($crop) {
 				$dim = $size;
 				if (!$ch) $ch = $size;
 				if (!$cw) $cw = $size;
@@ -191,14 +191,14 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			// There's a problem up there somewhere...
 			imageError(gettext("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>"), 'err-imagegeneral.gif');
 		}
-	
+
 		$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
 		list($neww, $newh) = $sizes;
-		
+
 		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, ".
 											"\$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$dim=$dim, ".
 											"\$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache \$grayscale=$grayscale");
-		
+
 		if (!$upscale && $newh >= $h && $neww >= $w) { // image is the same size or smaller than the request
 			if (!$grayscale && !$watermark_use_image && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
 				if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
@@ -237,52 +237,42 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 		// Crop the image if requested.
 		if ($crop) {
-				if ($cw > $ch) {
-					$ir = $ch/$cw;
+			if ($cw > $ch) {
+				$ir = $ch/$cw;
+			} else {
+				$ir = $cw/$ch;
+			}
+			if ($size) {
+				$neww = $size;
+				$newh = $ir*$size;
+			} else {
+				$neww = $width;
+				$newh = $height;
+				if ($neww > $newh) {
+					if ($newh === false) {
+						$newh = $ir*$neww;
+					}
 				} else {
-					$ir = $cw/$ch;
-				}
-				if ($size) {
-					$ts = $size;
-					$neww = $size;
-					$newh = $ir*$size;
-				} else {
-					$neww = $width;
-					$newh = $height;
-					if ($neww > $newh) {
-						$ts = $neww;
-						if ($newh === false) {
-							$newh = $ir*$neww;
-						}
-					} else {
-						$ts = $newh;
-						if ($neww === false) {
-							$neww = $ir*$newh;
-						}
+					if ($neww === false) {
+						$neww = $ir*$newh;
 					}
 				}
-			
-			$cr = min($w, $h)/$ts;
-			if (is_null($cx)) {
-				if (is_null($cw)) {
-					$cw = $w;
-				} else {
-					$cw = round($cw*$cr);
-				}
-				$cx = round(($w - $cw) / 2);
-			} else { // custom crop
-				if (!$cw || $cw > $w) $cw = $w;
 			}
-			if (is_null($cy)) {
-				if (is_null($ch)) {
+			if (is_null($cx) && is_null($cy)) {	// scale crop to max of image
+				if (!$cw || $w/$cw*$ch > $h) {
+					$cw = $h/$ch*$cw;
 					$ch = $h;
+					$cx = round(($w - $cw) / 2);
 				} else {
-					$ch = round($ch*$cr);
+					$ch = $w/$cw*$ch;
+					$cw = $w;
+					$cy = round(($h - $ch) / 2);
 				}
-				$cy = round(($h - $ch) / 2);
-			} else { // custom crop
+			} else {	// custom crop
+				if (!$cw || $cw > $w) $cw = $w;
 				if (!$ch || $ch > $h) $ch = $h;
 			}
+				
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($cx < 0) {
 				$cw = $cw + $cx;
@@ -300,13 +290,13 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			if ($allowscale) {
 				$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
 				list($neww, $newh) = $sizes;
-				
+
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
 			$newim = zp_createImage($neww, $newh);
 			zp_resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h, getsuffix($imgfile));
-		}		
-		
+		}
+
 		if ($grayscale) {
 			zp_imageGray($newim);
 		}

@@ -1431,6 +1431,8 @@ function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $cro
 
 /**
  * Prints a link to a custom sized thumbnail of the current album
+ * 
+ * See getCustomImageURL() for details.
  *
  * @param string $alt Alt atribute text
  * @param int $size size
@@ -2677,6 +2679,50 @@ function getSizedImageURL($size) {
 /**
  * Returns the url to the  image in that dimensions you define with this function.
  *
+ * $size, $width, and $height are used in determining the final image size. 
+ * At least one of these must be provided. If $size is provided, $width and 
+ * $height are ignored. If both $width and $height are provided, the image 
+ * will have those dimensions regardless of the original image height/width 
+ * ratio. (Yes, this means that the image may be distorted!) 
+
+ * The $crop* parameters determine the portion of the original image that 
+ * will be incorporated into the final image. 
+
+ * $cropw and $croph "sizes" are typically proportional. That is you can 
+ * set them to values that reflect the ration of width to height that you 
+ * want for the final image. Typically you would set them to the fincal 
+ * height and width. These values will always be adjusted so that they are 
+ * not larger than the original image dimensions. 
+
+ * The $cropx and $cropy values represent the offset of the crop from the 
+ * top left corner of the image. If these values are provided, the $croph 
+ * and $cropw parameters are treated as absolute pixels not proportions of 
+ * the image. If cropx and cropy are not provided, the crop will be 
+ * "centered" in the image. 
+
+ * When $corpx and $cropy are not provided the crop is offset from the top 
+ * left proportionally to the ratio of the final image size and the crop 
+ * size. 
+
+ * Some typical croppings: 
+
+ * $size=200, $width=NULL, $height=NULL, $cropw=200, $croph=100, 
+ * $cropx=NULL, $cropy=NULL produces an image cropped to a 2x1 ratio which 
+ * will fit in a 200x200 pixel frame. 
+
+ * $size=NUL, $width=200, $height=NULL, $cropw=200, $croph=100, $cropx=100, 
+ * $cropy=10 will will take a 200x100 pixel slice from (10,100) of the 
+ * picture and create a 200x100 image 
+
+ * $size=NUL, $width=200, $height=100, $cropw=200, $croph=120, $cropx=NULL, 
+ * $cropy=NULL will produce a (distorted) image 200x100 pixels from a 1x0.6 
+ * crop of the image. 
+
+  
+ * $size=NUL, $width=200, $height=NULL, $cropw=180, $croph=120, $cropx=NULL, $cropy=NULL
+ * will produce an image that is 200x133 from a 1.5x1 crop that is 5% from the left
+ * and 15% from the top of the image.
+ * 
  * @param int $size the size of the image to have
  * @param int $width width
  * @param int $height height
@@ -2697,6 +2743,13 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 /**
  * Print normal video or custom sized images.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
+ * 
+ * Notes on cropping:
+ * 
+ * The $crop* parameters determine the portion of the original image that will be incorporated
+ * into the final image. The w and h "sizes" are typically proportional. That is you can set them to 
+ * values that reflect the ration of width to height that you want for the final image. Typically
+ * you would set them to the fincal height and width.
  *
  * @param string $alt Alt text for the url
  * @param int $size size
