@@ -479,71 +479,61 @@ function sortByMultilingual($dbresult, $field, $descending) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
+function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $sortdirection=NULL) {
 	global $_zp_gallery;
+	if (strtoupper($sortdirection) !== 'DESC') $order = 'dsc'; else $order = 'asc';
 	if (!is_object($_zp_gallery)) $_zp_gallery = new Gallery();
 	if (count($albums) == 0) return array();
 	if (is_null($parentalbum)) {
 		$albumid = ' IS NULL';
 	} else {
-		$albumid = '="'.$parentalbum->id.'"';
+		$albumid = '='.$parentalbum->id;
 	}
-	$sql = 'SELECT `folder`, `sort_order`, `title`, `show`, `dynamic`, `search_params` FROM ' .
-						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey;
-	$loop = 0;	
-	do {
-		$result = query($sql);
-		$hidden = array();
-		$results = array();
-		while ($row = mysql_fetch_assoc($result)) {
-			$results[] = $row;
-		}
-		if (strpos($sortkey,'title') !== false) {
-			$results = sortByMultilingual($results, 'title', strpos($sortkey,'DESC') !== false);
-		} else if (strpos($sortkey, 'folder') !== false) {
-			if (strpos($sortkey,'DESC') !== false) $order = 'dsc'; else $order = 'asc';
-			$results = sortMultiArray($results, 'folder', $order, true, false);
-		}
-		$i = 0;
-		$albums_r = array_flip($albums);
-		$albums_touched = array();
-		foreach ($results as $row) {
-			$folder = $row['folder'];
-			$mine = isMyALbum($folder, ALL_RIGHTS);
-			if (array_key_exists($folder, $albums_r)) {
-				$albums_r[$folder] = $i;
-				$albums_touched[] = $folder;
-				if (!($row['show'] || $mine)) {  // you can see only your own unpublished content.
-					$hidden[] = $folder;
-				}
-			}
-			$i++;
-		}
-		$albums_untouched = array_diff($albums, $albums_touched);
-		if (count($albums_untouched) > 0) { //found new albums
-			$loop ++;
-			foreach($albums_untouched as $alb) {
-				$albobj = new Album($_zp_gallery, $alb); // force load to DB
-				$albums_r[$alb] = -$i;  // place them in the front of the list
-				$i++;
-			}
-		} else {
-			$loop = 0;
-		}
-	} while ($loop==1);
-	
-	foreach($hidden as $alb) {
-		unset($albums_r[$alb]);
+	$sql = 'SELECT * FROM ' .	prefix("albums") . ' WHERE `parentid`'.$albumid;
+	$result = query($sql);
+	$results = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$results[$row['folder']] = $row;
 	}
-
-	$albums = array_flip($albums_r);
-	ksort($albums);
-
+	//	check database aganist file system
+	foreach ($results as $row) {
+		$folder = $row['folder'];
+		if (($key = array_search($folder,$albums)) !== false) {	// album exists in filesystem
+			unset($albums[$key]);
+		} else {																								// album no longer exists
+			$id = $row['id'];
+			query("DELETE FROM ".prefix('albums')." WHERE `id`=$id"); // delete the record
+			query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
+			query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`=" . $this->id);
+			query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
+			unset($results[$filename]);
+		}
+	}
+	foreach ($albums as $folder) {	// these albums are not in the database
+		$albumobj = new Album($_zp_gallery,$folder);
+		$results[$folder] = $albumobj->data;
+	}
+	//	now put the results in the right order
+	switch ($sortkey) {
+		case 'title':
+		case 'desc':
+			$results = sortByMultilingual($results, $sortkey, $order == 'dsc');
+			break;
+		case 'RAND()':
+			shuffle($results);
+			break;
+		default:
+			$results = sortMultiArray($results, $sortkey, $order, true, false);
+			break;
+	}
+	//	albums are now in the correct order
 	$albums_ordered = array();
-	foreach($albums as $album) {
-		$albums_ordered[] = $album;
+	foreach($results as $row) { // check for visible
+		$folder = $row['folder'];
+		if ($row['show'] || isMyALbum($folder, ALL_RIGHTS)) {
+			$albums_ordered[] = $folder;
+		}
 	}
-
 	return $albums_ordered;
 }
 
@@ -1404,22 +1394,16 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  *
  * @author redoc (http://codingforums.com/showthread.php?t=71904)
  */
-function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sensitive=FALSE) {
+function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sensitive=FALSE, $debug=false) {
 	if(is_array($array) && count($array)>0) {
-		foreach(array_keys($array) as $key) {
-			if (is_array($array[$key]) && array_key_exists($index, $array[$key])) {
-				$temp[$key]=$array[$key][$index];
+		foreach ($array as $key=>$row) {
+			if (is_array($row) && array_key_exists($index, $row)) {
+				$temp[$key]=$row[$index];
 			} else {
 				$temp[$key] = '';
 			}
 		}
-		if(!$natsort) {
-			if ($order=='asc') {
-				asort($temp);
-			} else {
-				arsort($temp);
-			}
-		} else {
+		if($natsort) {
 			if ($case_sensitive) {
 				natsort($temp);
 			} else {
@@ -1427,6 +1411,12 @@ function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sens
 			}
 			if($order!='asc')  {
 				$temp=array_reverse($temp,TRUE);
+			}
+		} else {
+			if ($order=='asc') {
+				asort($temp);
+			} else {
+				arsort($temp);
 			}
 		}
 		foreach(array_keys($temp) as $key) {
@@ -1440,6 +1430,7 @@ function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sens
 	}
 	return $array;
 }
+
 
 $_zp_not_viewable_album_list = NULL;
 /**

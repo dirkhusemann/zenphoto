@@ -647,8 +647,9 @@ function sanitize_string($input_string, $sanitize_level) {
  * If DEBUG_ERROR is set, supplies the calling sequence
  *
  * @param string $message
+ * @param bool $fatal set true to fail the script
  */
-function zp_error($message) {
+function zp_error($message, $fatal=true) {
 	global $_zp_error;
 	if (!$_zp_error) {
 		echo '<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">'
@@ -671,8 +672,10 @@ function zp_error($message) {
 			echo "</p>\n";
 		}
 		echo "</div>\n";
-		$_zp_error = true;
-		exit();
+		if ($fatal) {
+			$_zp_error = true;
+			exit();
+		}
 	}
 }
 

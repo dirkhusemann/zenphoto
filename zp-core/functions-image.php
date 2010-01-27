@@ -259,20 +259,25 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				}
 			}
 			if (is_null($cx) && is_null($cy)) {	// scale crop to max of image
+				// set crop scale factor
+				$cf = 1;
+				if ($cw) $cf = min($cf,$cw/$neww);
+				if ($ch) $cf = min($cf,$ch/$newh);
+				//	set the image area of the crop (use the most image possible, rule of thirds positioning)
 				if (!$cw || $w/$cw*$ch > $h) {
-					$cw = $h/$ch*$cw;
-					$ch = $h;
-					$cx = round(($w - $cw) / 2);
+					$cw = round($h/$ch*$cw*$cf);
+					$ch = round($h*$cf);
+					$cx = round(($w - $cw) / 3);
 				} else {
-					$ch = $w/$cw*$ch;
-					$cw = $w;
-					$cy = round(($h - $ch) / 2);
+					$ch = round($w/$cw*$ch*$cf);
+					$cw = round($w*$cf);
+					$cy = round(($h - $ch) / 3);
 				}
 			} else {	// custom crop
 				if (!$cw || $cw > $w) $cw = $w;
 				if (!$ch || $ch > $h) $ch = $h;
 			}
-				
+			// force the crop to be within the image
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($cx < 0) {
 				$cw = $cw + $cx;

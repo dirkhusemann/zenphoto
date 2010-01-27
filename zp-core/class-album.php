@@ -470,8 +470,8 @@ class Album extends PersistentObject {
 	 * @return array
 	 */
 
-	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
-		if (is_null($this->subalbums) || $sorttype.$sortdirection !== $this->lastsubalbumsort ) {
+	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true) {
+		if (is_null($this->subalbums) || $care && $sorttype.$sortdirection !== $this->lastsubalbumsort ) {
 			if ($this->isDynamic()) {
 				$search = $this->getSearchEngine();
 				$subalbums = $search->getAlbums($page);
@@ -483,15 +483,8 @@ class Album extends PersistentObject {
 					$subalbums[] = $dir;
 				}
 			}
-			$key = $this->getSubalbumSortKey($sorttype);
-			if ($key != '`sort_order`') {
-				if (is_null($sortdirection)) {
-					if ($this->getSortDirection('album')) { $key .= ' DESC'; }
-				} else {
-					$key .= ' ' . $sortdirection;
-				}
-			}
-			$sortedSubalbums = sortAlbumArray($this, $subalbums, $key);
+			$key = str_replace('`','',$this->getSubalbumSortKey($sorttype));
+			$sortedSubalbums = sortAlbumArray($this, $subalbums, $key, $sortdirection);
 			$this->subalbums = $sortedSubalbums;
 			$this->lastsubalbumsort = $sorttype.$sortdirection;
 		}
@@ -505,6 +498,15 @@ class Album extends PersistentObject {
 	}
 
 	/**
+	 * Returns the count of subalbums
+	 * 
+	 * @return int
+	 */
+	function getNumSubalbums() {
+		return count($this->getSubalbums(0,NULL,NULL,false));
+	}
+	
+	/**
 	 * Returns a of a slice of the images for this album. They will
 	 * also be sorted according to the sort type of this album, or by filename if none
 	 * has been set.
@@ -515,8 +517,8 @@ class Album extends PersistentObject {
 	 * @param  string $sortdirection optional sort direction
 	 * @return array
 	 */
-	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null) {
-		if (is_null($this->images) || $sorttype.$sortdirection !== $this->lastimagesort) {
+	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null, $care=true) {
+		if (is_null($this->images) || $care && $sorttype.$sortdirection !== $this->lastimagesort) {
 			if ($this->isDynamic()) {
 				$searchengine = $this->getSearchEngine();
 				$images = $searchengine->getSearchImages($sorttype, $sortdirection);
@@ -563,75 +565,66 @@ class Album extends PersistentObject {
 	 * @param  string $sortdirection optional sort direction
 	 * @return array
 	 */
-	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL) {
-
+	function sortImageArray($images, $sorttype, $sortdirection) {
 		$mine = isMyAlbum($this->name, ALL_RIGHTS);
-		$key = $this->getSortKey($sorttype);
-		$direction = '';
-		if (($key != '`sort_order`') || ($key != 'RAND()')) { // manual sort is always ascending
+		$sortkey = str_replace('`','',$this->getSortKey($sorttype));
+		if (($sortkey == '`sort_order`') || ($sortkey == 'RAND()')) { // manual sort is always ascending
+			$order = 'asc';
+		} else {
 			if (!is_null($sortdirection)) {
-				$direction = ' '.$sortdirection;
+				if (strtoupper($sortdirection) == 'DESC') {
+					$order = 'dsc';
+				} else {
+					$order = 'asc';
+				}
 			} else {
 				if ($this->getSortDirection('image')) {
-					$direction = ' DESC';
+					$order = 'dsc';
+				} else {
+					$order = 'asc';
 				}
 			}
 		}
-		$result = query($sql = "SELECT `filename`, `title`, `sort_order`, `show`, `id` FROM " . prefix("images")
-										. " WHERE `albumid`= '" . $this->id . "' ORDER BY " . $key . $direction);
-		$loop = 0;
-		do {
-			$hidden = array();
-			$results = array();
-			while ($row = mysql_fetch_assoc($result)) {
-				$results[] = $row;
+		
+		$result = query($sql = "SELECT * FROM " . prefix("images") . " WHERE `albumid`= " . $this->id);
+		$results = array();
+		while ($row = mysql_fetch_assoc($result)) {
+			$results[] = $row;
+		}
+		foreach ($results as $rowkey=>$row) {
+			$filename = $row['filename'];
+			if (($key = array_search($filename,$images)) !== false) {	// the image exists in the filesystem
+				unset($images[$key]);
+			} else {																									// the image no longer exists
+				$id = $row['id'];
+				query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
+				query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
+				unset($results[$rowkey]);
 			}
-			if ($key == 'title') {
-				$results = sortByMultilingual($results, 'title', $direction == ' DESC');
-			} else if ($key == 'filename') {
-				if ($direction == 'DESC') $order = 'dsc'; else $order = 'asc';
-				$results = sortMultiArray($results, 'filename', $order, true, false);
-			}
-			$i = 0;
-			$flippedimages = array_flip($images);
-			$images_to_keys = array();
-			$images_in_db = array();
-			$images_invisible = array();
-				foreach ($results as $row) { // see what images are in the database so we can check for visible
-				$filename = $row['filename'];
-				if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist.
-					if ($row['show'] || $mine) {  // unpublished content available only to someone with rights on the album
-						$images_to_keys[$filename] = $i;
-						$i++;
-					}
-					$images_in_db[] = $filename;
-				} else {
-					$id = $row['id'];
-					query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
-					query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
-				}
-			}
-			// Place the images not yet in the database before those with sort columns.
-			// This is consistent with the sort oder of a NULL sort_order key in manual sorts
-			// but will almost certainly be wrong in all other cases.
-			$images_not_in_db = array_diff($images, $images_in_db);
-			if (count($images_not_in_db) > 0) {
-				$loop ++;
-				foreach($images_not_in_db as $filename) {
-					$imgobj = newImage($this, $filename); // force it into the database
-					$images_to_keys[$filename] = $i;
-					$i++;
-				}
-			} else {
-				$loop = 0;
-			}
-		} while ($loop==1);
-
-		$images = array_flip($images_to_keys);
-		ksort($images);
+		}
+		foreach ($images as $filename) {	// these images are not in the database
+			$imageobj->newImage($this,$filename);
+			$results[] = $imageobj->data;
+		}
+		// now put the results into the right order
+		switch ($sortkey) {
+			case 'title':
+			case 'desc':
+				$results = sortByMultilingual($results, $sortkey, $order == 'dsc');
+				break;
+			case 'RAND()':
+				shuffle($results);
+				break;
+			default:
+				$results = sortMultiArray($results, $sortkey, $order, true, false);
+				break;
+		}
+		// the results are now in the correct order
 		$images_ordered = array();
-		foreach($images as $image) {
-			$images_ordered[] = $image;
+		foreach ($results as $key=>$row) { // check for visible
+			if ($row['show'] || $mine) {	// don't display it
+				$images_ordered[] = $row['filename'];
+			}
 		}
 		return $images_ordered;
 	}
@@ -644,7 +637,7 @@ class Album extends PersistentObject {
 	 */
 	function getNumImages() {
 		if (is_null($this->images)) {
-			$this->getImages(0);
+			return count($this->getImages(0,0,NULL,NULL,false));
 		}
 		return count($this->images);
 	}

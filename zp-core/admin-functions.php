@@ -382,13 +382,13 @@ function setAlbumSubtabs($album) {
 	global $zenphoto_tabs;
 	$albumlink = '?page=edit&album='.urlencode($album->name);
 	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
-	if (!$album->isDynamic() && count($album->getImages())) {
+	if (!$album->isDynamic() && $album->getNumImages()) {
 		$zenphoto_tabs['edit']['subtabs'] = array_merge(
 																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&tab=imageinfo'),
 																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&tab=sort'),
 																					$zenphoto_tabs['edit']['subtabs']);
 	}
-	if (!$album->isDynamic() && count($album->getSubalbums()) > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
+	if (!$album->isDynamic() && $album->getNumSubalbums() > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
 	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 }
 
@@ -1305,7 +1305,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		}
 	} else {
 		$images = $album->getImages();
-		if (count($images) == 0 && count($album->getSubalbums()) > 0) {
+		if (count($images) == 0 && $album->getNumSubalbums() > 0) {
 			$imagearray = array();
 			$albumnames = array();
 			$strip = strlen($album->name) + 1;
@@ -1597,7 +1597,7 @@ function printAlbumButtons($album) {
 		</form>
 	<?php
 	}
-	if ($imagcount || (!$album->isDynamic() && count($album->getSubalbums())>0)) {
+	if ($imagcount || (!$album->isDynamic() && $album->getNumSubalbums()>0)) {
 	?>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
@@ -1655,7 +1655,7 @@ function printAlbumEditRow($album) {
 		if ($ci > 0) {
 			$si = '<a href="?page=edit&amp;album=' . urlencode($album->name) .'&amp;tab=imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
 		}
-		$ca = count($album->getSubalbums());
+		$ca = $album->getNumSubalbums();
 		if ($ca > 0) {
 			$sa = sprintf(ngettext('%u album','%u albums', $ca), $ca);
 		} else {
@@ -2818,7 +2818,7 @@ function getNestedAlbumList($subalbum, $levels, $level=array()) {
 			$albumobj = new Album($gallery, $analbum);
 			$level[$cur] = sprintf('%03u',$albumobj->getSortOrder());
 			$list[] = array('name'=>$analbum, 'sort_order'=>$level);
-			if ($cur < $levels && (count($albumobj->getSubalbums()) > 0) && !$albumobj->isDynamic()) {
+			if ($cur < $levels && ($albumobj->getNumSubalbums() > 0) && !$albumobj->isDynamic()) {
 				$list = array_merge($list,getNestedAlbumList($albumobj, $levels+1, $level));
 			}
 		}

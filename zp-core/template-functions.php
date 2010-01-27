@@ -178,7 +178,7 @@ function printAdminToolbox($id='admin') {
 				echo "<li>";
 				printSubalbumAdmin(gettext('Edit album'), '', "</li>\n");
 				if (!$_zp_current_album->isDynamic()) {
-					if (count($_zp_current_album->getSubAlbums())) {
+					if ($_zp_current_album->getSubNumAlbums()) {
 						?>
 						<li>
 						<?php echo printLink($zf . '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&tab=subalbuminfo', gettext("Sort subalbums"), NULL, NULL, NULL); ?>
@@ -495,7 +495,7 @@ function getNumSubalbums() {
 	if (in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
 		return $_zp_current_search->getNumAlbums();
 	} else {
-		return count($_zp_current_album->getSubalbums());
+		return $_zp_current_album->getNumSubalbums();
 	}
 	return false;
 }
@@ -1290,10 +1290,10 @@ function getAlbumPage($album = NULL) {
 		if ($_zp_current_album->isDynamic()) {
 			$search = $_zp_current_album->getSearchEngine();
 			$imageindex = $search->getImageIndex($_zp_current_album->name, $_zp_current_image->filename);
-			$numalbums = count($search->getAlbums(0));
+			$numalbums = $search->getNumAlbums();
 		} else {
 			$imageindex = $_zp_current_image->getIndex();
-			$numalbums = count($album->getSubalbums());
+			$numalbums = $album->getNumSubalbums();
 		}
 		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
