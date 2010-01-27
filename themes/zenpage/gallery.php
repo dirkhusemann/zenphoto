@@ -54,11 +54,11 @@ echo "<hr />";
 while (next_news()): ;?> 
  <div class="newsarticle"> 
     <h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
-        <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span>
+        <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?></span>
 <?php
 if(is_GalleryNewsType()) {
 	if(!is_NewsType("album")) {
-		echo gettext("Album:")."<a href='".getNewsAlbumURL()."' title='".getBareNewsAlbumTitle()."'> ".getNewsAlbumTitle()."</a>";
+		echo " | ".gettext("Album:")."<a href='".getNewsAlbumURL()."' title='".getBareNewsAlbumTitle()."'> ".getNewsAlbumTitle()."</a>";
 	} else {
 		echo "<br />";
 	}
@@ -77,6 +77,23 @@ if(is_GalleryNewsType()) {
   endwhile; 
   printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 } ?> 
+
+
+<?php
+
+/*
+			$sortorder = "images.id";
+			$imgdates = query_full_array("SELECT DISTINCT mtime, albumid FROM " . prefix('images'). " WHERE `show` = 1 ORDER BY mtime DESC");
+		
+			$albums = array();
+			foreach($imgdates as $imgdate) {
+				$images = query_full_array("SELECT title, filename, mtime, albumid, date FROM ".prefix('images')." AS images WHERE mtime LIKE '".substr($imgdate['mtime'],0,6)."%' AND albumid = ".$imgdate['albumid']." ORDER BY mtime DESC");
+				echo "<pre>"; print_r($images); echo "</pre><br />";
+			}
+			echo "<pre>"; print_r($imgdates); echo "</pre>"; */
+						
+?>
+
 	</div><!-- content left-->
 		
 	

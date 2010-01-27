@@ -429,7 +429,23 @@ function getParentPages(&$parentid,$initparents=true) {
 				ORDER By date DESC $limit
 				");
 				break;
+			case "latestimagesbyalbum-thumbnail": 
+			case "latestimagesbyalbum-thumbnail-customcrop":
+			case "latestimagesbyalbum-sizedimage":
+				$type1 = query("SET @type1:='news'");
+				$type2 = query("SET @type2:='albums'");
+				$result = query_full_array("
+				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
+				UNION
+				(SELECT DISTINCT images.date, albums.folder, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+				WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY images.date)
+				ORDER By date DESC $limit
+				");
+				//echo "<pre>"; print_r($result); echo "</pre>";
+				//$result = "";
+				break;
 		}
+		//$result = "";
 		return $result;
 	}
 
@@ -441,6 +457,8 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function countCombiNews($published=NULL) {
 		global $_zp_loggedin,$_zp_gallery;
+		$countGalleryitems = 0;
+		$countArticles = 0;
 		if(getOption("zenpage_combinews")) {
 			$countArticles = countArticles();
 			if(is_null($published)) {
@@ -450,8 +468,9 @@ function getParentPages(&$parentid,$initparents=true) {
 					$published = TRUE;
 				}
 			}
+			$mode = getOption("zenpage_combinews_mode");
 			if(is_object($_zp_gallery)) { // workaround if called on the admin pages....
-				switch(getOption("zenpage_combinews_mode")) {
+				switch($mode) {
 					case "latestimages-sizedimage":
 					case "latestimages-thumbnail":
 					case "latestimages-thumbnail-customcrop":	
@@ -462,6 +481,13 @@ function getParentPages(&$parentid,$initparents=true) {
 					case "latestalbums-thumbnail-customcrop":	
 						$countGalleryitems = $_zp_gallery->getNumAlbums(true,$published);
 						break;
+					case "latestimagesbyalbum-thumbnail":
+					case "latestimagesbyalbum-thumbnail-customcrop":
+					case "latestimagesbyalbum-sizedimage":
+						($published) ? $show = "WHERE `show`= 1" : $show = "";
+						$result = query("SELECT COUNT(DISTINCT date,albumid) FROM " . prefix('images'). " ".$show);
+						$countGalleryitems = mysql_result($result, 0);
+						break;
 				}
 			} else {
 				$countGalleryitems = 0;
@@ -470,6 +496,8 @@ function getParentPages(&$parentid,$initparents=true) {
 			return $totalcount;
 		}
 	}
+	
+	
 
 	/************************************/
 	/* general news category functions  */

@@ -216,7 +216,17 @@ function next_news($combi=true) {
 						$albumobj = new Album($_zp_gallery,$news['albumname']);
 						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
 					} else if($news['type'] == "albums") {
-						$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+						switch(getOption("zenpage_combinews_mode")) {
+							case "latestimagesbyalbum-thumbnail":
+							case "latestimagesbyalbum-thumbnail-customcrop":
+							case "latestimagesbyalbum-sizedimage":
+								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['titlelink']);
+								$_zp_current_zenpage_news->set('date', $news['date']); // in this mode this stores the date of the images to group not the album (inconvenient workaround...)
+								break;
+							default:
+								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+								break;
+						}
 					} else {
 						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 					}
@@ -240,7 +250,17 @@ function next_news($combi=true) {
 						$albumobj = new Album($_zp_gallery,$news['albumname']);
 						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
 					} else if($news['type'] == "albums") {
-						$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+						switch(getOption("zenpage_combinews_mode")) {
+							case "latestimagesbyalbum-thumbnail":
+							case "latestimagesbyalbum-thumbnail-customcrop":
+							case "latestimagesbyalbum-sizedimage":
+								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['titlelink']);
+								$_zp_current_zenpage_news->set('date', $news['date']); // in this mode this stores the date of the images to group not the album (inconvenient workaround...)
+								break;
+							default:
+								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+								break;
+						}
 					} else {
 						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 					}
@@ -274,7 +294,13 @@ function getNewsID() {
 function getNewsTitle() {
 	global $_zp_current_zenpage_news;
 	if (!is_null($_zp_current_zenpage_news)) {
-		return $_zp_current_zenpage_news->getTitle();
+		if(is_NewsType("album") && (getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail"	|| getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail-customcrop" || getOption("zenpage_combinews_mode") == "latestimagesbyalbum-sizedimage")) {
+			$result = query("SELECT COUNT(date) FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+			$count = mysql_result($result, 0);
+			return sprintf(ngettext('%s (%d new item)','%s (%d new items)',$count),$_zp_current_zenpage_news->getTitle(),$count);
+		} else {
+			return $_zp_current_zenpage_news->getTitle();
+		}
 	} 
 }
 
@@ -400,6 +426,12 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 function printNewsContent($shorten=false,$shortenindicator='') {
 	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
 	$size = getOption("zenpage_combinews_imagesize");
+	$width = getOption('combinews-thumbnail-width');
+	$height = getOption('combinews-thumbnail-height');
+	$cropwidth = getOption('combinews-thumbnail-cropwidth');
+	$cropheight= getOption('combinews-thumbnail-cropheight');
+	$cropx = getOption('combinews-thumbnail-cropx');
+	$cropy = getOption('combinews-thumbnail-cropy');
 	$mode = getOption("zenpage_combinews_mode");
 	$type = getNewsType();
 	switch ($type) {
@@ -418,40 +450,16 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					echo "</a><br />";
 					break;
 				case "latestimages-thumbnail":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestimages-thumbnail-customcrop":
-					$width = getOption('combinews-thumbnail-width');
-					$height = getOption('combinews-thumbnail-height');
-					$cropwidth = getOption('combinews-thumbnail-cropwidth');
-					$cropheight= getOption('combinews-thumbnail-cropheight');
-					$cropx = getOption('combinews-thumbnail-cropx');
-					$cropy = getOption('combinews-thumbnail-cropy');
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
 			echo getNewsContent();
 			break;
 		case "video":
-			$ext = strtolower(strrchr(getFullNewsImageURL(), "."));
-			switch($ext) {
-				case '.flv':
-				case '.mp3':
-				case '.mp4':
-					if (is_null($_zp_flash_player)) {
-						echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
-					} else {
-						$_zp_current_image = $_zp_current_zenpage_news;
-						$_zp_flash_player->printPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
-					}
-					echo getNewsContent($shorten);
-					break;
-				case '.3gp':
-				case '.mov':
-					echo $_zp_current_zenpage_news->getBody();
-					echo getNewsContent($shorten);
-					break;
-			}
+			printNewsVideoContent($_zp_current_zenpage_news,$shorten);
 			break;
 		case "album":
 			$_zp_page = 1;
@@ -460,14 +468,46 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
 					$class = get_class($albumthumbobj);
 					if($class != "_Image") {
-						$imgurl = $_zp_current_zenpage_news->getAlbumThumb();
+						$imgurl = htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb());
 					} else {
-						$imgurl = $albumthumbobj->getSizedImage($size);
+						$imgurl = htmlspecialchars($albumthumbobj->getSizedImage($size));
 					}
 					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestalbums-thumbnail":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					break;
+				case "latestalbums-thumbnail":
+					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					break;
+				case "latestimagesbyalbum-thumbnail": 
+				case "latestimagesbyalbum-thumbnail-customcrop":
+				case "latestimagesbyalbum-sizedimage":
+					//echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$images = query_full_array("SELECT title, filename FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+					//echo "<pre>"; print_r($images); echo "</pre><br />";
+					foreach($images as $image) {
+						$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
+						switch($mode) {
+							case "latestimagesbyalbum-thumbnail":
+								echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getThumb())."' alt='".html_encode($imageobj->getTitle())."' /></a>";
+								break;
+							case "latestimagesbyalbum-thumbnail-customcrop":
+								if(isImageVideo($imageobj)) {
+									printNewsVideoContent($imageobj,$shorten);
+								} else {
+									echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($imageobj->getTitle())."' /></a>";
+								}
+								break;
+							case "latestimagesbyalbum-sizedimage":
+								if(isImageVideo($imageobj)) {
+									printNewsVideoContent($imageobj);
+								} else {
+									echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getSizedImage($size))."' alt='".html_encode($imageobj->getTitle())."' /></a>";
+								}
+								break;
+						}
+					}
 					break;
 			}
 			echo getNewsContent();
@@ -475,6 +515,34 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 	}
 }
 
+/**
+ * Helper function for printNewsContent to print video/audio content if $imageobj is a video/audio object if using Zenpage CombiNews
+ * 
+ * @param object $imageobj The object of an image 
+ * @param bool $shorten true or false if the description to this object should be shortened.
+ */
+function printNewsVideoContent($imageobj,$shorten=false) {
+	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_page;
+	$ext = strtolower(strrchr($imageobj->getFullImage(), "."));
+	switch($ext) {
+		case '.flv':
+		case '.mp3':
+		case '.mp4':
+			if (is_null($_zp_flash_player)) {
+				echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
+			} else {
+				$_zp_current_image = $imageobj;
+				$_zp_flash_player->printPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
+			}
+			echo getNewsContent($shorten);
+			break;
+		case '.3gp':
+		case '.mov':
+			echo $imageobj->getBody();
+			echo getNewsContent($shorten);
+			break;
+	}
+}
 
 /**
  * Gets the extracontent of a news article if in single news articles view or returns FALSE
@@ -508,7 +576,6 @@ function printNewsExtraContent() {
  */
 function getNewsReadMore() {
 	global $_zp_current_zenpage_news;
-	if(!in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
 		$type = getNewsType();
 		switch($type) {
 			case "news":
@@ -526,7 +593,7 @@ function getNewsReadMore() {
 		if((strlen($content) > $shorten) AND !empty($shorten) OR is_GalleryNewsType()) {
 			return $readmore;
 		}
-	}
+
 }
 
 
@@ -586,7 +653,9 @@ function getNewsAlbumTitle() {
 		if(!is_NewsType("album")) {
 			$albumobj = $_zp_current_zenpage_news->getAlbum();
 			return $albumobj->getTitle();
-		}
+		} else {
+			return $_zp_current_zenpage_news->getTitle();
+		} 
 	} else {
 		return false;
 	}
@@ -985,7 +1054,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 				$albums = getAlbumStatistic($number, "latest");
 				break;
 			case "with_latestupdated_albums":
-				$albums = getAlbumStatistic($number, "latest");
+				$albums = getAlbumStatistic($number, "latestupdated");
 				break;
 		}
 		$latestalbums = array();
