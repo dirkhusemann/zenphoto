@@ -603,7 +603,7 @@ class Album extends PersistentObject {
 			}
 		}
 		foreach ($images as $filename) {	// these images are not in the database
-			$imageobj->newImage($this,$filename);
+			$imageobj = newImage($this,$filename);
 			$results[] = $imageobj->data;
 		}
 		// now put the results into the right order
