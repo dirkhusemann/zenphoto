@@ -1358,14 +1358,12 @@ function printIfObject($object,$field) {
  * @return bool
  */
 function checkIfLocked($page) {
-	global $_zp_current_admin; 
-	$admins = getAdministrators();
-	$admin = array_shift($admins);
-	$adminname = $admin['user'];
+	global $_zp_current_admin;
+	if (zp_logedin(ADMIN_RIGHTS)) return true;
 	if($page->getLocked()) {
-		 return $_zp_current_admin['user'] == $page->getAuthor() OR $_zp_current_admin['user'] == $adminname;
+		 return $_zp_current_admin['user'] == $page->getAuthor();
 	} else {
-		return TRUE;
+		return true;
 	}
 }
 

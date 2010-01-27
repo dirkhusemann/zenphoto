@@ -810,6 +810,7 @@ $('#left-to-right').NestedSortable(
 								/>
 						</a>
 						<p><strong><?php echo $image->filename; ?></strong></p>
+						<p><?php printf(gettext('Image id: %u'),$image->get('id')); ?></p>
 						<p><?php echo gettext("Dimensions:"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
 						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 
