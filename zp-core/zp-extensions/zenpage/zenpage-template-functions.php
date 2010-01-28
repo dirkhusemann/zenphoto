@@ -490,28 +490,47 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 						$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
 						switch($mode) {
 							case "latestimagesbyalbum-thumbnail":
+								if(getOption('combinews-latestimagesbyalbum-imgtitle')) echo "<h4>".$imageobj->getTitle()."</h4>";
 								echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getThumb())."' alt='".html_encode($imageobj->getTitle())."' /></a>";
+								printNewsImageDescription($imageobj);
 								break;
 							case "latestimagesbyalbum-thumbnail-customcrop":
+								if(getOption('combinews-latestimagesbyalbum-imgtitle')) echo "<h4>".$imageobj->getTitle()."</h4>";
 								if(isImageVideo($imageobj)) {
 									printNewsVideoContent($imageobj,$shorten);
 								} else {
 									echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($imageobj->getTitle())."' /></a>";
 								}
+								printNewsImageDescription($imageobj);
 								break;
 							case "latestimagesbyalbum-sizedimage":
+								if(getOption('combinews-latestimagesbyalbum-imgtitle')) echo "<h4>".$imageobj->getTitle()."</h4>";
 								if(isImageVideo($imageobj)) {
 									printNewsVideoContent($imageobj);
 								} else {
 									echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getSizedImage($size))."' alt='".html_encode($imageobj->getTitle())."' /></a>";
 								}
+								printNewsImageDescription($imageobj);
 								break;
 						}
 					}
 					break;
 			}
-			echo getNewsContent();
+			//echo getNewsContent();
 			break;
+	}
+}
+
+/**
+ * Helper function for printNewsContent to print video/audio  descriptions if using Zenpage CombiNews' mode "latest images by album"
+ * 
+ * @param object $imageobj The object of an image 
+ * @param bool $shorten true or false if the description to this object should be shortened.
+ */
+function printNewsImageDescription($imageobj) {
+	$desc = $imageobj->getDesc();
+	if(getOption('combinews-latestimagesbyalbum-imgdesc') && !empty($desc)) {
+		echo '<p>'.$desc.'</p>';	
 	}
 }
 
@@ -593,7 +612,6 @@ function getNewsReadMore() {
 		if((strlen($content) > $shorten) AND !empty($shorten) OR is_GalleryNewsType()) {
 			return $readmore;
 		}
-
 }
 
 

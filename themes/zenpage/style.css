@@ -105,21 +105,22 @@ body {
 }
 
 #content-left h3 {
-	font-size: 16px;
+	font-size: 1.5em;
 	line-height: 1.1em;
 	margin-bottom: 0.3em;
 }
 
 /* "Show more results" link for search */
 #content-left h3 small {
-	font-size: 12px;
+	font-size: 1em;
 	font-weight: normal;
 	}
 
 
 #content-left h4 {
-	margin: 0;
-	font-weight: normal;
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 	
 

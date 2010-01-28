@@ -39,6 +39,8 @@ class zenpagecms {
 		setOptionDefault('combinews-thumbnail-height', '');
 		setOptionDefault('combinews-thumbnail-cropx', '');
 		setOptionDefault('combinews-thumbnail-cropy', '');
+		setOptionDefault('combinews-latestimagesbyalbum-imgdesc', false);
+		setOptionDefault('combinews-latestimagesbyalbum-imgtitle', false);
 
 	}
 
@@ -72,7 +74,7 @@ class zenpagecms {
 										'desc' => gettext("The size of the sized image shown the CombiNews section <em>(only in latest images-sizedimage or latest albums-sizedimage mode)</em>.")),
 		gettext('CombiNews: Sortorder') => array('key' => 'zenpage_combinews_sortorder', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('date') => "date", gettext('id') => "id", gettext('mtime') => "mtime"),
-										'desc' => gettext("The sort order for your gallery items within the CombiNews display. 'date' (date order), 'id' (added to db order), 'mtime' (upload order). NOTE: If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id or mtime they will be sorted by date with the articles afterwards since articles only have a date.")),
+										'desc' => gettext("The sort order for your gallery items within the CombiNews display except for <em>latest images by album</em> which is always by date. 'date' (date order), 'id' (added to db order), 'mtime' (upload order). NOTE: If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id or mtime they will be sorted by date with the articles afterwards since articles only have a date.")),
 		gettext('CombiNews: Gallery link') => array('key' => 'zenpage_combinews_gallerylink', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('image') => "image", gettext('album') => "album"),
 										'desc' => gettext("Choose if you want to link from the image entry it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),
@@ -91,6 +93,11 @@ class zenpagecms {
 															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
 		gettext('CombiNews: Thumbnail crop y axis') => array('key' => 'combinews-thumbnail-cropy', 'type' => OPTION_TYPE_TEXTBOX,
 															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
+		gettext('CombiNews: Show image desc') => array('key' => 'combinews-latestimagesbyalbum-imgdesc', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext("Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only.")),
+		gettext('CombiNews: Show image title') => array('key' => 'combinews-latestimagesbyalbum-imgtitle', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only."))
+		
 		);
 	}
 
