@@ -483,7 +483,7 @@ foreach ($filelist as $utility) {
 								
 }
 $buttonlist = zp_apply_filter('admin_utilities_buttons', $buttonlist);
-$buttonlist = sortMultiArray($buttonlist, 'button_text', 'asc', true);
+$buttonlist = sortMultiArray($buttonlist, 'button_text', false);
 $count = 0;
 foreach ($buttonlist as $key=>$button) {
 	if (zp_loggedin($button['rights'])) {

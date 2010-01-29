@@ -32,7 +32,7 @@ function printFullAlbumsList() {
  */
 function printSubLevelAlbums(&$albumobj) {
 	global $galleryobj;
-	$albumlist = $albumobj->getSubalbums();
+	$albumlist = $albumobj->getAlbums();
 	foreach($albumlist as $album) {
 		$subalbumobj = new Album($galleryobj,$album);
 		$subalbumname = $subalbumobj->name;

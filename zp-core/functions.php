@@ -51,7 +51,7 @@ define('ZENPAGE_PAGES',getOption("zenpage_pages_page"));
 
 
 /*
- * Note: If fields are added or deleted, setup.php should be run or the new data won't be stored 
+ * Note: If fields are added or deleted, setup.php should be run or the new data won't be stored
  * (but existing fields will still work; nothing breaks).
  *
  * This array should be ordered by logical associations as it will be the order that EXIF information
@@ -173,7 +173,7 @@ function is_valid_image($filename) {
  * @return string
  */
 function checkObjectsThumb($album, $image){
-	global $_zp_supported_images;	
+	global $_zp_supported_images;
 	$image = substr($image, 0, strrpos($image,'.'));
 	$candidates = safe_glob($album.$image.'.*');
 	foreach ($candidates as $file) {
@@ -226,12 +226,12 @@ function getUrAlbum($album) {
 
 /**
  * Returns a sort field part for querying
- * Note: $sorttype may be a comma separated list of field names. If so, 
- *       these are peckmarked and returned otherwise unchanged. 
+ * Note: $sorttype may be a comma separated list of field names. If so,
+ *       these are peckmarked and returned otherwise unchanged.
  *
  * @param string $sorttype the 'Display" name of the sort
  * @param string $default the default if $sorttype is empty
- * @param string $filename the value to be used if $sorttype is 'Filename' since 
+ * @param string $filename the value to be used if $sorttype is 'Filename' since
  * 												 the field is different between the album table and the image table.
  * @return string
  */
@@ -252,25 +252,6 @@ function lookupSortKey($sorttype, $default, $filename) {
 			}
 			return implode(',', $list);
 	}
-}
-
-/**
- * Returns the DB sort key for an album sort type
- *
- * @param string $sorttype The sort type option
- * @return string
- */
-function albumSortKey($sorttype) {
-	return lookupSortKey($sorttype, 'filename', 'filename');
-}
-/**
- * Returns the DB key associated with the subalbum sort type
- *
- * @param string $sorttype subalbum sort type
- * @return string
- */
-function subalbumSortKey($sorttype) {
-	return lookupSortKey($sorttype, 'sort_order', 'folder');
 }
 
 /**
@@ -379,7 +360,7 @@ function is_valid_email_zp($input_email) {
  * @param string $from_mail Optional sender for the email.
  * @param string $from_name Optional sender for the name.
  * @param array $email_list a list of email addresses
- * 
+ *
  * @return string
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
@@ -423,7 +404,7 @@ function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
 
 			$from_mail = getOption('site_email');
 			$from_name = get_language_string(getOption('gallery_title'), getOption('locale'));
-				
+
 			// Convert to UTF-8
 			if (getOption('charset') != 'UTF-8') {
 				$subject = $_zp_UTF8->convert($subject, getOption('charset'));
@@ -464,77 +445,6 @@ function sortByMultilingual($dbresult, $field, $descending) {
 		}
 	}
 	return $result;
-}
-
-/**
- * Sort the album array based on either according to the sort key.
- * Default is to sort on the `sort_order` field.
- *
- * Returns an array with the albums in the desired sort order
- *
- * @param  array $albums array of album names
- * @param  string $sortkey the sorting scheme
- * @return array
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
- */
-function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $sortdirection=NULL) {
-	global $_zp_gallery;
-	if (strtoupper($sortdirection) !== 'DESC') $order = 'dsc'; else $order = 'asc';
-	if (!is_object($_zp_gallery)) $_zp_gallery = new Gallery();
-	if (count($albums) == 0) return array();
-	if (is_null($parentalbum)) {
-		$albumid = ' IS NULL';
-	} else {
-		$albumid = '='.$parentalbum->id;
-	}
-	$sql = 'SELECT * FROM ' .	prefix("albums") . ' WHERE `parentid`'.$albumid;
-	$result = query($sql);
-	$results = array();
-	while ($row = mysql_fetch_assoc($result)) {
-		$results[$row['folder']] = $row;
-	}
-	//	check database aganist file system
-	foreach ($results as $row) {
-		$folder = $row['folder'];
-		if (($key = array_search($folder,$albums)) !== false) {	// album exists in filesystem
-			unset($albums[$key]);
-		} else {																								// album no longer exists
-			$id = $row['id'];
-			query("DELETE FROM ".prefix('albums')." WHERE `id`=$id"); // delete the record
-			query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
-			query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`=" . $this->id);
-			query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
-			unset($results[$filename]);
-		}
-	}
-	foreach ($albums as $folder) {	// these albums are not in the database
-		$albumobj = new Album($_zp_gallery,$folder);
-		$results[$folder] = $albumobj->data;
-	}
-	//	now put the results in the right order
-	switch ($sortkey) {
-		case 'title':
-		case 'desc':
-			$results = sortByMultilingual($results, $sortkey, $order == 'dsc');
-			break;
-		case 'RAND()':
-			shuffle($results);
-			break;
-		default:
-			$results = sortMultiArray($results, $sortkey, $order, true, false);
-			break;
-	}
-	//	albums are now in the correct order
-	$albums_ordered = array();
-	foreach($results as $row) { // check for visible
-		$folder = $row['folder'];
-		if ($row['show'] || isMyALbum($folder, ALL_RIGHTS)) {
-			$albums_ordered[] = $folder;
-		}
-	}
-	return $albums_ordered;
 }
 
 /**
@@ -624,7 +534,7 @@ function printLargeFileContents($dest) {
 function getPluginFiles($pattern, $folder='', $stripsuffix=true) {
 	if (!empty($folder) && substr($folder, -1) != '/') $folder .= '/';
 	$list = array();
-	
+
 	$curdir = getcwd();
 	$basepath = SERVERPATH."/".USER_PLUGIN_FOLDER.'/'.$folder;
 	if (is_dir($basepath)) {
@@ -756,7 +666,7 @@ function fetchComments($number) {
 				prefix('images').".`albumid` as albumid,".
 				prefix('images').".`id` as imageid".
 							" FROM ".prefix('comments').",".prefix('images')." WHERE ";
-					
+
 				$sql .= "(`type` IN (".zp_image_types("'").") AND (";
 				$i = 0;
 				foreach ($albumIDs as $ID) {
@@ -883,13 +793,13 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if ($goodMessage) {
 		if ($goodMessage == 1) {
 			$moderate = 1;
-		} else { 
+		} else {
 			$moderate = 0;
 		}
 		$commentobj->setInModeration($moderate);
 	}
 	$localerrors = $commentobj->getInModeration();
-	zp_apply_filter('comment_post', $commentobj, $receiver);	
+	zp_apply_filter('comment_post', $commentobj, $receiver);
 	if ($check === false)	{ // ignore filter provided errors if caller is supplying the fields to check
 		$localerrors = $commentobj->getInModeration();
 	}
@@ -944,7 +854,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				break;
 		}
 		if (($whattocheck & COMMENT_SEND_EMAIL)) {
-			$message = $action . "\n\n" . 
+			$message = $action . "\n\n" .
 					sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$commentobj->getname(), $commentobj->getEmail(), $commentobj->getWebsite(), $commentobj->getComment()) . "\n\n" .
 					sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n" .
 					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$commentobj->id);
@@ -1062,7 +972,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 			zp_setCookie('zenphoto_last_album', $albumname);
 			if (hasDynamicAlbumSuffix($albumname)) $albumname = substr($albumname, 0, -4); // strip off the .alb as it will not be reflected in the search path
 			$_zp_search_album_list = $_zp_current_search->getAlbums(0);
-			foreach ($_zp_search_album_list as $searchalbum) {	
+			foreach ($_zp_search_album_list as $searchalbum) {
 				if (strpos($albumname, $searchalbum) !== false) {
 					$context = $context | ZP_SEARCH_LINKED | ZP_ALBUM_LINKED;
 					break;
@@ -1132,7 +1042,7 @@ function setupTheme() {
 		<body>
 			<strong><?php printf(gettext('Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation.'),THEMEFOLDER); ?></strong>
 		</body>
-		</html>		
+		</html>
 		<?php
 		exit();
 	} else {
@@ -1336,7 +1246,7 @@ function generateListFromArray($currentValue, $list, $descending, $localize) {
 		}
 	}
 	foreach($list as $key=>$item) {
-		echo '<option value="' . $item . '"';		
+		echo '<option value="' . $item . '"';
 		if (in_array($item, $currentValue)) {
 			echo ' selected="selected"';
 		}
@@ -1387,14 +1297,14 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  *
  * @param array $array The multidimensional array to be sorted
  * @param string $index Which key should be sorted by
- * @param string $order The order to sort by, "asc" or "desc"
+ * @param string $order true for descending sorts
  * @param bool $natsort If natural order should be used
  * @param bool $case_sensitive If the sort should be case sensitive
  * @return array
  *
  * @author redoc (http://codingforums.com/showthread.php?t=71904)
  */
-function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sensitive=FALSE, $debug=false) {
+function sortMultiArray($array, $index, $descending=false, $natsort=true, $case_sensitive=false) {
 	if(is_array($array) && count($array)>0) {
 		foreach ($array as $key=>$row) {
 			if (is_array($row) && array_key_exists($index, $row)) {
@@ -1409,14 +1319,14 @@ function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sens
 			} else {
 				natcasesort($temp);
 			}
-			if($order!='asc')  {
+			if($descending)  {
 				$temp=array_reverse($temp,TRUE);
 			}
 		} else {
-			if ($order=='asc') {
-				asort($temp);
-			} else {
+			if ($descending) {
 				arsort($temp);
+			} else {
+				asort($temp);
 			}
 		}
 		foreach(array_keys($temp) as $key) {
@@ -1491,7 +1401,7 @@ function parseThemeDef($file) {
 
 /**
  * Emits a page error. Used for attempts to bypass password protection
- * 
+ *
  * @param string $err error code
  * @param string $text error message
  *
@@ -1802,16 +1712,16 @@ function restore_context() {
  * @param string $tag log annotation
  */
 function logTime($tag) {
-   $mtime = microtime(); 
-   $mtime = explode(" ",$mtime); 
-   $mtime = $mtime[1] + $mtime[0]; 
-   $time = $mtime;
-   debugLog($tag.' '.$time);	
+	 $mtime = microtime();
+	 $mtime = explode(" ",$mtime);
+	 $mtime = $mtime[1] + $mtime[0];
+	 $time = $mtime;
+	 debugLog($tag.' '.$time);
 }
 
 /**
  * checks password posting
- * 
+ *
  * @param string $authType override of athorization type
  */
 function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
@@ -1953,7 +1863,7 @@ function setThemeOption($key, $value, $album=NULL, $default=false) {
 		} else {
 			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid, theme) VALUES ('" . zp_escape_string($key) . "','" . zp_escape_string($value) . "',$id,$theme)";
 		}
-	}	
+	}
 	$result = query($sql);
 }
 
@@ -2075,9 +1985,9 @@ function seoFriendly($source) {
 
 /**
  * Returns true if there is an internet connection
- * 
+ *
  * @param string $host optional host name to test
- * 
+ *
  * @return bool
  */
 function is_connected($host = 'www.zenphoto.org') {
@@ -2087,9 +1997,9 @@ function is_connected($host = 'www.zenphoto.org') {
 		fclose($connected);
 		return true;
 	}else{
-		
-echo "<br/>$err_str ($errno)";		
-		
+
+echo "<br/>$err_str ($errno)";
+
 		return false;
 	}
 	return $is_conn;

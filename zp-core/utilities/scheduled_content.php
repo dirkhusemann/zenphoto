@@ -122,7 +122,7 @@ printAdminHeader();
 <?php
 function unpublishSubalbums($album) {
 	global $gallery;
-	$albums = $album->getSubalbums();
+	$albums = $album->getAlbums();
 	foreach ($albums as $albumname) {
 		$subalbum = new Album($gallery, $albumname);
 		$subalbum->setShow(false);

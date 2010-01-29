@@ -25,7 +25,7 @@ class SearchEngine
 	var $search_structure;		// relates translatable names to search fields
 	var $lastimagesort = NULL;  // remember the order for the last album/image sorts
 	var $lastsubalbumsort = NULL;
-	
+
 	/**
 	 * Constuctor
 	 *
@@ -95,7 +95,7 @@ class SearchEngine
 		}
 		return $list;
 	}
-	
+
 	/**
 	 * Returns an array of the enabled search fields
 	 *
@@ -116,7 +116,7 @@ class SearchEngine
 		}
 		return $setlist;
 	}
-	
+
 	/**
 	 * converts old style bitmask field spec into field list array
 	 *
@@ -131,10 +131,10 @@ class SearchEngine
 		if ($fields & 0x08) $list['filename'] = $this->search_structure['filename'];
 		return $list;
 	}
-	
+
 	/**
 	 * creates a search query from the search words
-	 * 
+	 *
 	 * @param bool $long set to false to omit albumname and page parts
 	 *
 	 * @return string
@@ -145,7 +145,7 @@ class SearchEngine
 		$w = urlencode(trim($this->codifySearchString()));
 		if (!empty($w)) { $r .= '&words=' . $w; }
 		$d = trim($this->dates);
-		if (!empty($d)) { 
+		if (!empty($d)) {
 			$r .= '&date=' . $d;
 			$d = trim($this->whichdates);
 			if ($d != 'date') {
@@ -166,10 +166,10 @@ class SearchEngine
 		}
 		return $r;
 	}
-	
+
 	/**
 	 * Returns the "searchstring" element of a query parameter set
-	 * 
+	 *
 	 * @param array $fields the fields required
 	 * @param string $param the query parameter (possibly with the intro character
 	 * @return string
@@ -181,11 +181,11 @@ class SearchEngine
 			foreach ($fields as $field) {
 				$param .= $field.',';
 			}
-			return substr($param,0,-1); 
+			return substr($param,0,-1);
 		}
 		return '';
 	}
-	
+
 	/**
 	 * Parses and stores a search string
 	 * NOTE!! this function assumes that the 'words' part of the list has been urlencoded!!!
@@ -258,9 +258,9 @@ class SearchEngine
 	/**
 	 * Returns the search fields variable
 	 *
-	 * @param bool $array set to true to return the fields as array elements. Otherwise 
+	 * @param bool $array set to true to return the fields as array elements. Otherwise
 	 * a comma delimited string is returned
-	 * 
+	 *
 	 * @return mixed
 	 */
 	function getSearchFields($array=false) {
@@ -416,7 +416,7 @@ class SearchEngine
 		$lasttoken = '';
 		foreach ($result as $key=>$token) {
 			if ($token=='|' && $lasttoken=='|') { // remove redundant OR ops
-				unset($result[$key]); 
+				unset($result[$key]);
 			}
 			$lasttoken = $token;
 		}
@@ -426,9 +426,9 @@ class SearchEngine
 
 	/**
 	 * recodes the search words replacing the boolean operators with text versions
-	 * 
+	 *
 	 * @param string $quote how to represent quoted strings
-	 * 
+	 *
 	 * @return string
 	 *
 	 */
@@ -481,7 +481,7 @@ class SearchEngine
 	 */
 	function getNumAlbums() {
 		if (is_null($this->albums)) {
-			$this->getAlbums(0);
+			$this->getAlbums(0, NULL, NULL, false);
 		}
 		return count($this->albums);
 	}
@@ -570,8 +570,8 @@ class SearchEngine
 					} else {
 						$gallery = new Gallery();
 						$album = new Album($gallery, $this->dynalbumname);
-						$key = $album->getSubalbumSortKey();
-						if ($key != '`sort_order`') {
+						$key = $album->getAlbumSortKey();
+						if ($key != '`sort_order`' && $key != 'RAND()') {
 							if ($album->getSortDirection('album')) {
 								$key .= " DESC";
 							}
@@ -600,8 +600,8 @@ class SearchEngine
 					} else {
 						$gallery = new Gallery();
 						$album = new Album($gallery, $this->dynalbumname);
-						$key = $album->getSortKey();
-						if ($key != '`sort_order`') {
+						$key = $album->getImageSortKey();
+						if ($key != '`sort_order`' && $key != 'RAND()') {
 							if ($album->getSortDirection('image')) {
 								$key .= " DESC";
 							}
@@ -667,7 +667,7 @@ class SearchEngine
 				$tag_objects = $objects;
 			}
 		}
-		
+
 		// create an array of [name, objectid] pairs for the search fields.
 		$field_objects = array();
 		if (count($fields)>0) {
@@ -691,7 +691,7 @@ class SearchEngine
 						$targetfound = true;
 						query('SET @serachtarget="'.zp_escape_string($singlesearchstring).'"');
 						$fieldsql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE (';
-	
+
 						foreach ($fields as $fieldname) {
 							if ($tbl=='albums' && $fieldname='filename') {
 								$fieldname = 'folder';
@@ -705,10 +705,10 @@ class SearchEngine
 						if (is_array($objects)) {
 							$field_objects = array_merge($field_objects, $objects);
 						}
-				}	
+				}
 			}
 		}
-		
+
 		$objects = array_merge($tag_objects, $field_objects);
 		if (count($objects) != 0) {
 			$tagid = '';
@@ -871,8 +871,8 @@ class SearchEngine
 					} else {
 						$gallery = new Gallery();
 						$album = new Album($gallery, $this->dynalbumname);
-						$key = $album->getSubalbumSortKey();
-						if ($key != '`sort_order`') {
+						$key = $album->getAlbumSortKey();
+						if ($key != '`sort_order`' && $key != 'RAND()') {
 							if ($album->getSortDirection('album')) {
 								$key .= " DESC";
 							}
@@ -891,20 +891,20 @@ class SearchEngine
 					} else {
 						$gallery = new Gallery();
 						$album = new Album($gallery, $this->dynalbumname);
-						$key = $album->getSortKey();
+						$key = $album->getImageSortKey();
 						if ($key != '`sort_order`') {
 							if ($album->getSortDirection('image')) {
 								$key .= " DESC";
 							}
 						}
 					}
-				} else {				
+				} else {
 					$sorttype = lookupSortKey($sorttype, 'sort_order', 'filename');
 					$key = trim($sorttype.' '.$sortdirection);
 				}
 				break;
 		}
-		
+
 		$sql .= " ORDER BY ".$key;
 		$result = query_full_array($sql);
 		return $result;
@@ -948,10 +948,12 @@ class SearchEngine
 	 * @param int $page the page number we are on
 	 * @param string $sorttype what to sort on
 	 * @param string $sortdirection what direction
+	 * @param bool $care set to false if the order of the albums does not matter
+	 *
 	 * @return array
 	 */
-	function getAlbums($page=0, $sorttype=NULL, $sortdirection=NULL) {
-		if (is_null($this->albums) || $sorttype.$sortdirection !== $this->lastsubalbumsort) {
+	function getAlbums($page=0, $sorttype=NULL, $sortdirection=NULL, $care=false) {
+		if (is_null($this->albums) || $care && $sorttype.$sortdirection !== $this->lastsubalbumsort) {
 			$this->albums = $this->getSearchAlbums($sorttype, $sortdirection);
 			$this->lastsubalbumsort = $sorttype.$sortdirection;
 		}
@@ -1033,8 +1035,8 @@ class SearchEngine
 		if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
 		$albumfolder = getAlbumFolder();
 		if (empty($searchdate)) {
-			$search_results = $this->searchFieldsAndTags($searchstring, 'images', $sorttype, $sortdirection);	
-		} else {	
+			$search_results = $this->searchFieldsAndTags($searchstring, 'images', $sorttype, $sortdirection);
+		} else {
 			$search_results = $this->SearchDate($searchstring, $searchdate, 'images', $sorttype, $sortdirection);
 		}
 		if (isset($search_results) && is_array($search_results)) {
@@ -1142,8 +1144,8 @@ class SearchEngine
 			$searchdate = $this->dates;
 			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find
 			if (empty($searchdate)) {
-				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_pages', false, false);	
-			} else {	
+				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_pages', false, false);
+			} else {
 				$search_results = $this->SearchDate($searchstring, $searchdate, 'zenpage_pages', false, false);
 			}
 			return $search_results;
@@ -1163,15 +1165,15 @@ class SearchEngine
 			$searchdate = $this->dates;
 			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find
 			if (empty($searchdate)) {
-				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_news', false, false);	
-			} else {	
+				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_news', false, false);
+			} else {
 				$search_results = $this->SearchDate($searchstring, $searchdate, 'zenpage_news', false, false,$this->whichdates);
 			}
 			return $search_results;
 		}
 		return false;
 	}
-	
+
 } // search class end
 
 ?>

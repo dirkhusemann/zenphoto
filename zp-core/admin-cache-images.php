@@ -20,7 +20,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 
 function loadAlbum($album) {
 	global $gallery, $_zp_current_album, $_zp_current_image;
-	$subalbums = $album->getSubAlbums();
+	$subalbums = $album->getAlbums();
 	$count = 0;
 	foreach ($subalbums as $folder) {
 		$subalbum = new Album($gallery, $folder);

@@ -620,7 +620,7 @@ $alb = removeParentAlbumNames($album);
 		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&action=savesubalbumorder&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
 			<p>
 			<?php
-				$sorttype = strtolower($album->getSubalbumSortType());
+				$sorttype = strtolower($album->getAlbumSortType());
 				if ($sorttype != 'manual') {
 					if ($album->getSortDirection('album')) {
 						$dir = gettext(' descending');
@@ -1178,7 +1178,7 @@ if (isset($_GET['saved'])) {
 		$folder = sanitize_path($_GET['album']);
 		if (isMyAlbum($folder, ALBUM_RIGHTS)) {
 			$album = new Album($gallery, $folder);
-			$albums = $album->getSubAlbums();
+			$albums = $album->getAlbums();
 			$pieces = explode('/', $folder);
 			$albumdir = "&album=" . urlencode($folder).'&tab=subalbuminfo';
 		} else {

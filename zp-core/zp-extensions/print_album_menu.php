@@ -125,7 +125,7 @@ function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topact
 	}
 
 	if ($option == 'list-sub' && in_context(ZP_ALBUM)) {
-		$albums = $_zp_current_album->getSubalbums();
+		$albums = $_zp_current_album->getAlbums();
 	} else {
 		$albums = $_zp_gallery->getAlbums();
 	}
@@ -180,7 +180,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 					$topalbumnumimages = $topalbum->getNumImages();
 					$count = "<small>".sprintf(ngettext(' (%u image)', ' (%u images)',$topalbumnumimages),$topalbumnumimages)."</small>";
 				}
-				$toplevelsubalbums = $topalbum->getSubalbums();
+				$toplevelsubalbums = $topalbum->getAlbums();
 				$toplevelsubalbums = count($toplevelsubalbums);
 				if($toplevelsubalbums > 0) {
 					$count = "<small>".sprintf(ngettext(' (%u album)', ' (%u albums)',$toplevelsubalbums),$toplevelsubalbums)."</small>";
@@ -201,7 +201,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 			echo $link;
 		}
 		if ($process) { // listing subalbums
-			$subalbums = $topalbum->getSubAlbums();
+			$subalbums = $topalbum->getAlbums();
 			if (!empty($subalbums)) {
 				echo "\n<ul".$css_class.">\n";
 				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
@@ -290,7 +290,7 @@ function printAlbumMenuJumpAlbum($albums,$option,$albumpath,$firstimagelink,$lev
 			$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($subalbum->name))."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
 		}
 		echo $link;
-		$subalbums = $subalbum->getSubAlbums();
+		$subalbums = $subalbum->getAlbums();
 		if (!empty($subalbums)) {
 			printAlbumMenuJumpAlbum($subalbums,$option,$albumpath,$firstimagelink,$level+1);
 		}

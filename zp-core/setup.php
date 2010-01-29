@@ -84,7 +84,7 @@ function checkAlbumParentid($albumname, $id) {
 	}
 	$id = $album->id;
 	if (!$album->isDynamic()) {
-		$albums = $album->getSubalbums();
+		$albums = $album->getAlbums();
 		foreach ($albums as $albumname) {
 			checkAlbumParentid($albumname, $id);
 		}

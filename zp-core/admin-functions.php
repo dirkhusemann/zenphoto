@@ -408,7 +408,7 @@ function genAlbumUploadList(&$list, $curAlbum=NULL) {
 			}
 		}
 	} else {
-		$albums = $curAlbum->getSubAlbums(0);
+		$albums = $curAlbum->getAlbums(0);
 	}
 	if (is_array($albums)) {
 		foreach ($albums as $folder) {
@@ -2810,7 +2810,7 @@ function getNestedAlbumList($subalbum, $levels, $level=array()) {
 	if (is_null($subalbum)) {
 		$albums = $gallery->getAlbums();
 	} else {
-		$albums = $subalbum->getSubalbums();
+		$albums = $subalbum->getAlbums();
 	}
 	$list = array();
 	foreach ($albums as $analbum) {

@@ -45,7 +45,7 @@ class Gallery {
 	function getTitle() {
 		return(get_language_string(getOption('gallery_title')));
 	}
-	
+
 	/**
 	 * Returns the gallery description
 	 *
@@ -54,7 +54,7 @@ class Gallery {
 	function getDesc() {
 		return(get_language_string(getOption('Gallery_description')));
 	}
-	
+
 	/**
 	 * Returns the hashed password for guest gallery access
 	 *
@@ -63,7 +63,7 @@ class Gallery {
 	function getPassword() {
 		return(getOption('gallery_password'));
 	}
-	
+
 	/**
 	 * Returns the hind associated with the gallery password
 	 *
@@ -72,11 +72,11 @@ class Gallery {
 	function getPasswordHint() {
 		return(get_language_string(getOption('gallery_hint')));
 	}
-	
+
 	function getUser() {
 		return(getOption('gallery_user'));
 	}
-	
+
 	/**
 	 * Returns the main albums directory
 	 *
@@ -85,16 +85,19 @@ class Gallery {
 	function getAlbumDir() { return $this->albumdir; }
 
 	/**
-	 * Returns the DB field corresponding to the sort type desired
+	 * Returns the DB field corresponding to the album sort type desired
 	 *
 	 * @param string $sorttype the desired sort
 	 * @return string
 	 */
-	function getGallerySortKey($sorttype=null) {
+	function getAlbumSortKey($sorttype=null) {
 		if (empty($sorttype)) { $sorttype = getOption('gallery_sorttype'); }
 		return lookupSortKey($sorttype, 'sort_order', 'folder');
 	}
 
+	function getSortDirection() {
+		return getOption('gallery_sortdirection');
+	}
 
 	/**
 	 * Get Albums will create our $albums array with a fully populated set of Album
@@ -105,17 +108,18 @@ class Gallery {
 	 * @param int $page An option parameter that can be used to return a slice of the array.
 	 * @param string $sorttype the kind of sort desired
 	 * @param string $direction set to a direction to override the default option
+	 * @param bool $care set to false if the order of the albums does not matter
 	 *
 	 * @return  array
 	 */
-	function getAlbums($page=0, $sorttype=null, $direction=null) {
+	function getAlbums($page=0, $sorttype=null, $direction=null, $care=true) {
 
 		// Have the albums been loaded yet?
-		if (is_null($this->albums) || $sorttype.$direction !== $this->lastalbumsort) {
+		if (is_null($this->albums) || $care && $sorttype.$direction !== $this->lastalbumsort) {
 
 			$albumnames = $this->loadAlbumNames();
-			$key = $this->getGallerySortKey($sorttype);
-			$albums = sortAlbumArray(NULL, $albumnames, $key, $direction);
+			$key = $this->getAlbumSortKey($sorttype);
+			$albums = $this->sortAlbumArray(NULL, $albumnames, $key, $direction);
 
 			// Store the values
 			$this->albums = $albums;
@@ -186,7 +190,7 @@ class Gallery {
 	function getNumAlbums($db=false, $publishedOnly=false) {
 		$count = -1;
 		if (!$db) {
-			$this->getAlbums();
+			$this->getAlbums(0, NULL, NULL, false);
 			$count = count($this->albums);
 		} else {
 			$sql = "SELECT count(*) FROM " . prefix('albums');
@@ -417,7 +421,7 @@ class Gallery {
 						zp_apply_filter('album_refresh',$album);
 					}
 				}
-					
+
 				/* Delete all image entries that don't belong to an album at all. */
 
 				$albumids = query_full_array("SELECT `id` FROM " . prefix('albums'));                  /* all the album IDs */
@@ -623,6 +627,85 @@ class Gallery {
 			}
 			closedir($handle);
 		}
+	}
+
+	/**
+	 * Sort the album array based on either according to the sort key.
+	 * Default is to sort on the `sort_order` field.
+	 *
+	 * Returns an array with the albums in the desired sort order
+	 *
+	 * @param  array $albums array of album names
+	 * @param  string $sortkey the sorting scheme
+	 * @return array
+	 *
+	 * @author Todd Papaioannou (lucky@luckyspin.org)
+	 * @since  1.0.0
+	 */
+	function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $sortdirection=NULL) {
+		if (($sortkey == '`sort_order`') || ($sortkey == 'RAND()')) { // manual sort is always ascending
+			$order = false;
+		} else {
+			if (!is_null($sortdirection)) {
+				$order = strtoupper($sortdirection) == 'DESC';
+			} else {
+				$order = $this->getSortDirection('image');
+			}
+		}
+		if (count($albums) == 0) return array();
+		if (is_null($parentalbum)) {
+			$albumid = ' IS NULL';
+		} else {
+			$albumid = '='.$parentalbum->id;
+		}
+		$sql = 'SELECT * FROM ' .	prefix("albums") . ' WHERE `parentid`'.$albumid;
+		$result = query($sql);
+		$results = array();
+		while ($row = mysql_fetch_assoc($result)) {
+			$results[$row['folder']] = $row;
+		}
+		//	check database aganist file system
+		foreach ($results as $row) {
+			$folder = $row['folder'];
+			if (($key = array_search($folder,$albums)) !== false) {	// album exists in filesystem
+				unset($albums[$key]);
+			} else {																								// album no longer exists
+				$id = $row['id'];
+				query("DELETE FROM ".prefix('albums')." WHERE `id`=$id"); // delete the record
+				query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
+				query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`=" . $this->id);
+				query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
+				unset($results[$filename]);
+			}
+		}
+		if (get_class($gall = $this) == 'Album') $gall = $this->gallery;
+		foreach ($albums as $folder) {	// these albums are not in the database
+			$albumobj = new Album($gall,$folder);
+			$results[$folder] = $albumobj->data;
+		}
+		//	now put the results in the right order
+		$sortkey = str_replace('`','',$sortkey);
+		switch ($sortkey) {
+			case 'title':
+			case 'desc':
+				$results = sortByMultilingual($results, $sortkey, $order);
+				break;
+			case 'RAND()':
+				shuffle($results);
+				break;
+			default:
+				$results = sortMultiArray($results, $sortkey, $order);
+				break;
+		}
+		//	albums are now in the correct order
+		$albums_ordered = array();
+		foreach($results as $row) { // check for visible
+			$folder = $row['folder'];
+			if ($row['show'] || isMyALbum($folder, ALL_RIGHTS)) {
+				$albums_ordered[] = $folder;
+			}
+		}
+		return $albums_ordered;
 	}
 
 }

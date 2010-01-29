@@ -79,7 +79,7 @@ function is_Pages() {
 }
 
 /**
- * Gets the news type of a news item. 
+ * Gets the news type of a news item.
  * "news" for a news article or if using the CombiNews feature
  * "flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
  *  *
@@ -131,7 +131,7 @@ function is_GalleryNewsType() {
 
 /**
  * Wrapper function to get the author of a news article or page: Used by getNewsAuthor() and getPageAuthor().
- * 
+ *
  * @param bool $fullname False for the user name, true for the full name
  *
  * @return string
@@ -164,7 +164,7 @@ function getAuthor($fullname=false) {
 
 /**
  * Returns the number of news articles.
- * 
+ *
  * When in search context this is the count of the articles found. Otherwise
  * it is the count of articles that match the criteria.
  *
@@ -188,7 +188,7 @@ function getNumNews($combi=true) {
  * Returns the next news item on a page.
  * sets $_zp_current_zenpage_news to the next news item
  * Returns true if there is an new item to be shown
- * 
+ *
  * @param bool $combi
  *
  * @return bool
@@ -301,7 +301,7 @@ function getNewsTitle() {
 		} else {
 			return $_zp_current_zenpage_news->getTitle();
 		}
-	} 
+	}
 }
 
 
@@ -318,7 +318,7 @@ function printNewsTitle($before='') {
 
 /**
  * Returns the raw title of a news article.
- * 
+ *
  * @param string $before insert if you want to use for the breadcrumb navigation or in the html title tag
  *
  * @return string
@@ -330,7 +330,7 @@ function getBareNewsTitle($before='') {
 
 /**
  * Returns the titlelink (url name) of the current news article.
- * 
+ *
  * If using the CombiNews feature this also returns the full path to a image.php page if the item is an image.
  *
  * @return string
@@ -374,7 +374,7 @@ function printNewsTitleLink($before='') {
 
 /**
  * Gets the content of a news article
- * 
+ *
  * If using the CombiNews feature this returns the description for gallery items (see printNewsContent for more)
  *
  * @param int $shorten The optional length of the content for the news list for example, will override the plugin option setting if set, "" (empty) for full content (not used for image descriptions!)
@@ -480,7 +480,7 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 				case "latestalbums-thumbnail":
 					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
-				case "latestimagesbyalbum-thumbnail": 
+				case "latestimagesbyalbum-thumbnail":
 				case "latestimagesbyalbum-thumbnail-customcrop":
 				case "latestimagesbyalbum-sizedimage":
 					//echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
@@ -523,21 +523,21 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 
 /**
  * Helper function for printNewsContent to print video/audio  descriptions if using Zenpage CombiNews' mode "latest images by album"
- * 
- * @param object $imageobj The object of an image 
+ *
+ * @param object $imageobj The object of an image
  * @param bool $shorten true or false if the description to this object should be shortened.
  */
 function printNewsImageDescription($imageobj) {
 	$desc = $imageobj->getDesc();
 	if(getOption('combinews-latestimagesbyalbum-imgdesc') && !empty($desc)) {
-		echo '<p>'.$desc.'</p>';	
+		echo '<p>'.$desc.'</p>';
 	}
 }
 
 /**
  * Helper function for printNewsContent to print video/audio content if $imageobj is a video/audio object if using Zenpage CombiNews
- * 
- * @param object $imageobj The object of an image 
+ *
+ * @param object $imageobj The object of an image
  * @param bool $shorten true or false if the description to this object should be shortened.
  */
 function printNewsVideoContent($imageobj,$shorten=false) {
@@ -565,10 +565,10 @@ function printNewsVideoContent($imageobj,$shorten=false) {
 
 /**
  * Gets the extracontent of a news article if in single news articles view or returns FALSE
- * 
+ *
  * @return string
  */
-function getNewsExtraContent() { 
+function getNewsExtraContent() {
 	global $_zp_current_zenpage_news;
 	if(is_News()) {
 		$extracontent = $_zp_current_zenpage_news->getExtraContent();
@@ -581,10 +581,10 @@ function getNewsExtraContent() {
 
 /**
  * Prints the extracontent of a news article if in single news articles view
- * 
+ *
  * @return string
  */
-function printNewsExtraContent() { 
+function printNewsExtraContent() {
 	echo getNewsExtraContent();
 }
 
@@ -641,7 +641,7 @@ function printNewsReadMoreLink($readmore='') {
  *
  * @return string
  */
-function getNewsAuthor($fullname=false) { 
+function getNewsAuthor($fullname=false) {
 	if(is_News() AND is_NewsType("news")) {
 		return getAuthor($fullname);
 	}
@@ -673,7 +673,7 @@ function getNewsAlbumTitle() {
 			return $albumobj->getTitle();
 		} else {
 			return $_zp_current_zenpage_news->getTitle();
-		} 
+		}
 	} else {
 		return false;
 	}
@@ -698,7 +698,7 @@ function getNewsAlbumName() {
 	if(is_GalleryNewsType()) {
 		if(!is_NewsType("album")) {
 			$albumobj = $_zp_current_zenpage_news->getAlbum();
-			return $albumobj->getFolder();	
+			return $albumobj->getFolder();
 		} else {
 			return $_zp_current_zenpage_news->getFolder();
 		}
@@ -730,7 +730,7 @@ function getFullNewsImageURL() {
 	global $_zp_current_zenpage_news;
 	if(is_GalleryNewsType()) {
 		return $_zp_current_zenpage_news->getFullImage();
-	} else { 
+	} else {
 		return false;
 	}
 }
@@ -901,8 +901,8 @@ function printNewsArchive($class='archive', $yearid='year', $monthid='month') {
 
 /**
  * Gets the current select news date (year-month) or formatted
- * 
- * @param string $mode "formatted" for a formatted date or "plain" for the pure year-month (for example "2008-09") archive date 
+ *
+ * @param string $mode "formatted" for a formatted date or "plain" for the pure year-month (for example "2008-09") archive date
  * @param string $format If $mode="formatted" how the date should be printed (see PHP's strftime() function for the requirements)
  * @return string
  */
@@ -922,9 +922,9 @@ function getCurrentNewsArchive($mode='formatted',$format='%B %Y') {
 
 /**
  * Prints the current select news date (year-month) or formatted
- * 
+ *
  * @param string $before What you want to print before the archive if using in a breadcrumb navigation for example
- * @param string $mode "formatted" for a formatted date or "plain" for the pure year-month (for example "2008-09") archive date 
+ * @param string $mode "formatted" for a formatted date or "plain" for the pure year-month (for example "2008-09") archive date
  * @param string $format If $mode="formatted" how the date should be printed (see PHP's strftime() function for the requirements)
  * @return string
  */
@@ -937,9 +937,9 @@ function printCurrentNewsArchive($before='',$mode='formatted',$format='%B %Y') {
 
 /**
  * Prints all news categories as a unordered html list
- * 
+ *
  * @param string $newsindex How you want to call the link the main news page without a category, leave empty if you don't want to print it at all.
- * @param bool $counter TRUE or FALSE (default TRUE). If you want to show the number of articles behind the category name within brackets, 
+ * @param bool $counter TRUE or FALSE (default TRUE). If you want to show the number of articles behind the category name within brackets,
  * @param string $css_id The CSS id for the list
  * @param string $css_class_active The css class for the active menu item
  *
@@ -963,7 +963,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 			echo "<li $css_class_active>".htmlspecialchars($newsindex);
 		} else {
 			echo "<li><a href=\"".getNewsIndexURL()."\" title=\"".strip_tags(htmlspecialchars($newsindex))."\">".htmlspecialchars($newsindex)."</a>";
-		} 
+		}
 		if($counter) {
 			if(getOption("zenpage_combinews")) {
 				$totalcount = countCombiNews($pub);
@@ -999,7 +999,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 
 /**
  * Gets the latest news either only news articles or with the latest images or albums
- * 
+ *
  * NOTE: Latest images and albums require Zenphoto's image_album_statistic plugin
  *
  * @param int $number The number of news items to get
@@ -1025,12 +1025,12 @@ function getLatestNews($number=5,$option='none', $category='') {
 		$article = new ZenpageNews($news['titlelink']);
 		$latestnews[$counter] = array(
 					"id" => $article->getID(),
-					"title" => $article->getTitle(), 
+					"title" => $article->getTitle(),
 					"titlelink" => $article->getTitlelink(),
-				  "category" => $article->getCategories(),
+					"category" => $article->getCategories(),
 					"content" => $article->getContent(),
 					"date" => $article->getDateTime(),
-				  "thumb" => "",
+					"thumb" => "",
 					"filename" => ""
 		);
 	}
@@ -1053,18 +1053,18 @@ function getLatestNews($number=5,$option='none', $category='') {
 			$counter++;
 			$latestimages[$counter] = array(
 					"id" => $image->get("id"),
-					"title" => $image->getTitle(), 
+					"title" => $image->getTitle(),
 					"titlelink" => $image->getImageLink(),
-				  "category" => $image->getAlbum(),
+					"category" => $image->getAlbum(),
 					"content" => $image->getDesc(),
 					"date" => $image->getDateTime(),
-				  "thumb" => $image->getThumb(),
+					"thumb" => $image->getThumb(),
 					"filename" => $image->getFileName()
 			);
 		}
 		//$latestimages = array_merge($latestimages, $item);
 		$latest = array_merge($latest, $latestimages);
-		$latest = sortMultiArray($latest,"date","desc",true,false);
+		$latest = sortMultiArray($latest,"date",true);
 	}
 	if($option == "with_latest_albums" OR $option == "with_latestupdated_albums") {
 		switch($option) {
@@ -1083,7 +1083,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 			$tempalbumthumb = $tempalbum->getAlbumThumbImage();
 			$latestalbums[$counter] = array(
 					"id" => $tempalbum->getAlbumID(),
-					"title" => $tempalbum->getTitle(), 
+					"title" => $tempalbum->getTitle(),
 					"titlelink" => $tempalbum->getFolder(),
 					"category" => "",
 					"content" => $tempalbum->getDesc(),
@@ -1094,7 +1094,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 		}
 		//$latestalbums = array_merge($latestalbums, $item);
 		$latest = array_merge($latestnews, $latestalbums);
-		$latest = sortMultiArray($latest,"date","desc",true,false);
+		$latest = sortMultiArray($latest,"date",true);
 	}
 	return $latest;
 }
@@ -1104,7 +1104,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 
 /**
  * Prints the latest news either only news articles or with the latest images or albums as a unordered html list
- * 
+ *
  * NOTE: Latest images and albums require the image_album_statistic plugin
  *
  * @param int $number The number of news items to get
@@ -1128,7 +1128,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 	$count = "";
 	foreach($latest as $item) {
 		$count++;
-		$category = ""; 
+		$category = "";
 		$categories = "";
 		//get the type of the news item
 		if(empty($item['thumb'])) {
@@ -1143,7 +1143,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 					$categories = $categories.", ";
 				}
 				$categories = $categories.get_language_string($cat['cat_name']);
-			} 
+			}
 			$thumb = "";
 			$content = strip_tags($item['content']);
 			$type = "news";
@@ -1168,11 +1168,11 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 			}
 		}
 		echo "<li>";
-		if(!empty($thumb)) { 
-			echo $thumb; 
+		if(!empty($thumb)) {
+			echo $thumb;
 		}
 		echo "<h3><a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title,ENT_QUOTES))."\">".htmlspecialchars($title)."</a></h3>\n";;
-	  if($showdate) {
+		if($showdate) {
 			if($option == "with_latest_image_date" AND $type == "image") {
 				$date = zpFormattedDate(getOption('date_format'),$item['date']);
 			} else {
@@ -1201,7 +1201,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 
 /**
  * Returns the full path to a news category
- * 
+ *
  * @param string $catlink The category link of a category
  *
  * @return string
@@ -1213,10 +1213,10 @@ function getNewsCategoryURL($catlink='') {
 
 /**
  * Prints the full link to a news category
- * 
+ *
  * @param string $before If you want to print text before the link
  * @param string $catlink The category link of a category
-  *
+	*
  * @return string
  */
 function printNewsCategoryURL($before='',$catlink='') {
@@ -1253,7 +1253,7 @@ function printNewsIndexURL($name='', $before='') {
 
 
 /**
- * Returns the base /news or index.php?p=news url 
+ * Returns the base /news or index.php?p=news url
  *
  * @return string
  */
@@ -1296,14 +1296,14 @@ function getNewsTitlePath() {
  *
  * @return string
  */
-function getNewsPagePath() { 
+function getNewsPagePath() {
 	return rewrite_path("/","&amp;page=",false);
 }
 
 
 /**
  * Returns the url to a news article
- * 
+ *
  * @param string $titlelink The titlelink of a news article
  *
  * @return string
@@ -1318,7 +1318,7 @@ function getNewsURL($titlelink='') {
 
 /**
  * Prints the url to a news article
- * 
+ *
  * @param string $titlelink The titlelink of a news article
  *
  * @return string
@@ -1335,7 +1335,7 @@ function printNewsURL($titlelink='') {
 
 /**
  * News cat path only for use in the news article pagination
- * 
+ *
  * @return string
  */
 function getNewsCategoryPathNav() {
@@ -1349,7 +1349,7 @@ function getNewsCategoryPathNav() {
 
 /**
  * news archive path only for use in the news article pagination
- * 
+ *
  * @return string
  */
 function getNewsArchivePathNav() {
@@ -1363,7 +1363,7 @@ function getNewsArchivePathNav() {
 
 /**
  * Returns the url to the previous news page
- * 
+ *
  * @return string
  */
 function getPrevNewsPageURL() {
@@ -1386,10 +1386,10 @@ function getPrevNewsPageURL() {
 
 /**
  * Prints the link to the previous news page
- * 
+ *
  * @param string $prev The linktext
  * @param string $class The CSS class for the disabled link
- * 
+ *
  * @return string
  */
 function printPrevNewsPageLink($prev='&laquo; prev',$class='disabledlink') {
@@ -1404,7 +1404,7 @@ function printPrevNewsPageLink($prev='&laquo; prev',$class='disabledlink') {
 
 /**
  * Returns the url to the next news page
- * 
+ *
  * @return string
  */
 function getNextNewsPageURL() {
@@ -1421,10 +1421,10 @@ function getNextNewsPageURL() {
 
 /**
  * Prints the link to the next news page
- * 
+ *
  * @param string $next The linktext
  * @param string $class The CSS class for the disabled link
- * 
+ *
  * @return string
  */
 function printNextNewsPageLink($next='next &raquo;', $class='disabledlink') {
@@ -1437,10 +1437,10 @@ function printNextNewsPageLink($next='next &raquo;', $class='disabledlink') {
 }
 
 /**
- * Prints the page number list for news page navigation 
- * 
+ * Prints the page number list for news page navigation
+ *
  * @param string $class The CSS class for the disabled link
- * 
+ *
  * @return string
  */
 function printNewsPageList($class='pagelist') {
@@ -1450,12 +1450,12 @@ function printNewsPageList($class='pagelist') {
 
 /**
  * Prints the full news page navigation with prev/next links and the page number list
- * 
+ *
  * @param string $next The next page link text
  * @param string $prev The prev page link text
  * @param bool $nextprev If the prev/next links should be printed
  * @param string $class The CSS class for the disabled link
- * 
+ *
  * @return string
  */
 function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $nextprev=true, $class='pagelist') {
@@ -1514,11 +1514,11 @@ function getTotalNewsPages() {
 /**
  * Returns the title and the titlelink of the next or previous article in single news article pagination as an array
  * Returns false if there is none (or option is empty)
- * 
- * NOTE: This is not available if using the CombiNews feature 
- * 
+ *
+ * NOTE: This is not available if using the CombiNews feature
+ *
  * @param string $option "prev" or "next"
- * 
+ *
  * @return mixed
  */
 function getNextPrevNews($option='') {
@@ -1568,9 +1568,9 @@ function getNextPrevNews($option='') {
 /**
  * Returns the title and the titlelink of the next article in single news article pagination as an array
  * Returns false if there is none (or option is empty)
- * 
- * NOTE: This is not available if using the CombiNews feature 
- * 
+ *
+ * NOTE: This is not available if using the CombiNews feature
+ *
  * @return mixed
  */
 function getNextNewsURL() {
@@ -1581,9 +1581,9 @@ function getNextNewsURL() {
 /**
  * Returns the title and the titlelink of the previous article in single news article pagination as an array
  * Returns false if there is none (or option is empty)
- * 
- * NOTE: This is not available if using the CombiNews feature 
- * 
+ *
+ * NOTE: This is not available if using the CombiNews feature
+ *
  * @return mixed
  */
 function getPrevNewsURL() {
@@ -1593,11 +1593,11 @@ function getPrevNewsURL() {
 
 /**
  * Prints the link of the next article in single news article pagination if available
- * 
- * NOTE: This is not available if using the CombiNews feature 
- * 
+ *
+ * NOTE: This is not available if using the CombiNews feature
+ *
  * @param string $next If you want to show something with the title of the article like a symbol
- * 
+ *
  * @return string
  */
 function printNextNewsLink($next=" &raquo;") {
@@ -1610,11 +1610,11 @@ function printNextNewsLink($next=" &raquo;") {
 
 /**
  * Prints the link of the previous article in single news article pagination if available
- * 
- * NOTE: This is not available if using the CombiNews feature 
- * 
+ *
+ * NOTE: This is not available if using the CombiNews feature
+ *
  * @param string $next If you want to show something with the title of the article like a symbol
- * 
+ *
  * @return string
  */
 function printPrevNewsLink($prev="&laquo; ") {
@@ -1632,15 +1632,15 @@ function printPrevNewsLink($prev="&laquo; ") {
 /**
  * Gets the content of a codeblock for a page or news article.
  * Additionally you can print codeblocks of a published or unpublished specific page (not news artcle!) by request directly.
- * 
+ *
  * Note: Echoing this array's content does not execute it. Also no special chars will be escaped.
  * Use printCodeblock() if you need to execute script code.
- * 
+ *
  * Note: Meant for script code this field is not multilingual.
- * 
+ *
  * @param int $number The codeblock you want to get
  * @param string $titlelink The titlelink of a specific page you want to get the codeblock of (only for pages!)
- * 
+ *
  * @return string
  */
 function getCodeblock($number=0,$titlelink='') {
@@ -1667,7 +1667,7 @@ function getCodeblock($number=0,$titlelink='') {
 
 /**
  * Gets the statistic for pages, news articles or categories as an unordered list
- * 
+ *
  * @param int $number The number of news items to get
  * @param string $option "all" pages, articles  and categories
  * 											 "news" for news articles
@@ -1696,14 +1696,14 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 		$counter++;
 			$statsarticles[$counter] = array(
 					"id" => $article['id'],
-					"title" => htmlspecialchars(get_language_string($article['title'])), 
+					"title" => htmlspecialchars(get_language_string($article['title'])),
 					"titlelink" => getNewsURL($article['titlelink']),
-				  "hitcounter" => $article['hitcounter'],
+					"hitcounter" => $article['hitcounter'],
 					"total_votes" => $article['total_votes'],
 					"rating" => $article['rating'],
 					"type" => "News"
 			);
-		}	
+		}
 		$stats = $statsarticles;
 	}
 	if(($option == "all" OR $option == "categories") AND ($mode != "mostrated" OR $mode != "toprated")) {
@@ -1714,14 +1714,14 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 		$counter++;
 			$statscats[$counter] = array(
 					"id" => $cat['id'],
-					"title" => htmlspecialchars(get_language_string($cat['title'])), 
+					"title" => htmlspecialchars(get_language_string($cat['title'])),
 					"titlelink" => getNewsCategoryURL($cat['titlelink']),
-				  "hitcounter" => $cat['hitcounter'],
+					"hitcounter" => $cat['hitcounter'],
 					"total_votes" => "",
 					"rating" => "",
 					"type" => "Category"
 			);
-		}		
+		}
 		$stats = $statscats;
 	}
 	if($option == "all" OR $option == "pages") {
@@ -1732,9 +1732,9 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 			$counter++;
 			$statspages[$counter] = array(
 					"id" => $cat['id'],
-					"title" => htmlspecialchars(get_language_string($page['title'])), 
+					"title" => htmlspecialchars(get_language_string($page['title'])),
 					"titlelink" => getPageLinkURL($page['titlelink']),
-				  "hitcounter" => $page['hitcounter'],
+					"hitcounter" => $page['hitcounter'],
 					"total_votes" => $page['total_votes'],
 					"rating" => $page['rating'],
 					"type" => "Page"
@@ -1745,13 +1745,13 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 	if($option == "all") {
 		$stats = array_merge($statsarticles,$statscats,$statspages);
 	}
-	$stats = sortMultiArray($stats,$sortorder,"desc",true,false);
+	$stats = sortMultiArray($stats,$sortorder,true);
 	return $stats;
 }
 
 /**
  * Prints the statistics Zenpage items as an unordered list
- * 
+ *
  * @param int $number The number of news items to get
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
@@ -1759,7 +1759,7 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
  * @param string $mode "popular" most viewed for pages, news articles and categories
  * 										 "mostrated" for news articles and pages
  * 										 "toprated" for news articles and pages
- * @param bool $showstats if the value should be shown									
+ * @param bool $showstats if the value should be shown
  */
 function printZenpageStatistic($number=10, $option="all",$mode="popular",$showstats=true) {
 	$stats = getZenpageStatistic($number, $option,$mode);
@@ -1790,7 +1790,7 @@ function printZenpageStatistic($number=10, $option="all",$mode="popular",$showst
 
 /**
  * Prints the most popular pages, news articles and categories as an unordered list
- * 
+ *
  * @param int $number The number of news items to get
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
@@ -1803,7 +1803,7 @@ function printMostPopularItems($number=10, $option="all",$showstats=true) {
 
 /**
  * Prints the most rated pages and news articles as an unordered list
- * 
+ *
  * @param int $number The number of news items to get
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
@@ -1816,7 +1816,7 @@ function printMostRatedItems($number=10, $option="all",$showstats=true) {
 
 /**
  * Prints the top rated pages and news articles as an unordered list
- * 
+ *
  * @param int $number The number of news items to get
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
@@ -1837,7 +1837,7 @@ $_zp_zenpage_pagelist = NULL;
 
 /**
  * Returns a count of the pages
- * 
+ *
  * If in search context, the count is the number of items found. Otherwise it is
  * the total number of pages.
  *
@@ -1884,20 +1884,20 @@ function next_page() {
 
 /**
  * Returns title of a page
- * 
+ *
  * @return string
  */
 function getPageTitle() {
 	global $_zp_current_zenpage_page;
 	if (!is_null($_zp_current_zenpage_page)) {
 		return $_zp_current_zenpage_page->getTitle();
-	} 
+	}
 }
 
 
 /**
  * Prints the title of a page
- * 
+ *
  * @return string
  */
 function printPageTitle($before='') {
@@ -1915,7 +1915,7 @@ function getBarePageTitle() {
 
 /**
  * Returns titlelink of a page
- * 
+ *
  * @return string
  */
 function getPageTitleLink() {
@@ -1928,7 +1928,7 @@ function getPageTitleLink() {
 
 /**
  * Prints titlelink of a page
- * 
+ *
  * @return string
  */
 function printPageTitleLink() {
@@ -1939,7 +1939,7 @@ function printPageTitleLink() {
 
 /**
  * Returns the id of a page
- * 
+ *
  * @return int
  */
 function getPageID() {
@@ -1952,7 +1952,7 @@ function getPageID() {
 
 /**
  * Prints the id of a page
- * 
+ *
  * @return string
  */
 function printPageID() {
@@ -1962,7 +1962,7 @@ function printPageID() {
 
 /**
  * Returns the id of the parent page of a page
- * 
+ *
  * @return int
  */
 function getPageParentID() {
@@ -1975,14 +1975,14 @@ function getPageParentID() {
 
 /**
  * Returns the creation date of a page
- * 
+ *
  * @return string
  */
 function getPageDate() {
 	global $_zp_current_zenpage_page;
 	if (!is_null($_zp_current_zenpage_page)) {
 		$d = $_zp_current_zenpage_page->getDatetime();
-		return zpFormattedDate(getOption('date_format'),strtotime($d)); 
+		return zpFormattedDate(getOption('date_format'),strtotime($d));
 	}
 	return false;
 }
@@ -1990,7 +1990,7 @@ function getPageDate() {
 
 /**
  * Prints the creation date of a page
- * 
+ *
  * @return string
  */
 function printPageDate() {
@@ -2000,14 +2000,14 @@ function printPageDate() {
 
 /**
  * Returns the last change date of a page if available
- * 
+ *
  * @return string
  */
 function getPageLastChangeDate() {
 	global $_zp_current_zenpage_page;
 	if (!is_null($_zp_current_zenpage_page)) {
 		$d = $_zp_current_zenpage_page->getLastchange();
-		return zpFormattedDate(getOption('date_format'),strtotime($d)); 
+		return zpFormattedDate(getOption('date_format'),strtotime($d));
 	}
 	return false;
 }
@@ -2015,7 +2015,7 @@ function getPageLastChangeDate() {
 
 /**
  * Prints the last change date of a page
- * 
+ *
  * @param string $before The text you want to show before the link
  * @return string
  */
@@ -2027,17 +2027,17 @@ function printPageLastChangeDate() {
 /**
  * Returns page content either of the current page or if requested by titlelink directly. If not both return false
  * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
- * 
+ *
  * @param string $titlelink the titlelink of the page to print the content from
  * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's content. True is default
- * 
+ *
  * @return mixed
  */
 function getPageContent($titlelink='',$published=true) {
 	global $_zp_current_zenpage_page;
 	if (is_Pages() AND empty($titlelink)) {
 		return $_zp_current_zenpage_page->getContent();
-	} 
+	}
 	// print content of a page directly on a normal zenphoto theme page or any other page for example
 	if(!empty($titlelink)) {
 		$page = new ZenpagePage($titlelink);
@@ -2051,7 +2051,7 @@ function getPageContent($titlelink='',$published=true) {
 /**
  * Print page content either of the current page or if requested by titlelink directly. If not both return false
  * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
- * 
+ *
  * @param string $titlelink the titlelink of the page to print the content from
  * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's content. True is default
  * @return mixed
@@ -2064,7 +2064,7 @@ function printPageContent($titlelink='',$published=true) {
 /**
  * Returns page extra content either of the current page or if requested by titlelink directly. If not both return false
  * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
- * 
+ *
  * @param string $titlelink the titlelink of the page to print the content from
  * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's extra content. True is default
  * @return mixed
@@ -2073,7 +2073,7 @@ function getPageExtraContent($titlelink='',$published=true) {
 	global $_zp_current_zenpage_page;
 	if (is_Pages() AND empty($titlelink)) {
 		return $_zp_current_zenpage_page->getExtracontent();
-	} 
+	}
 	// print content of a page directly on a normal zenphoto theme page for example
 	if(!empty($titlelink)) {
 		$page = new ZenpagePage($titlelink);
@@ -2088,7 +2088,7 @@ function getPageExtraContent($titlelink='',$published=true) {
 /**
  * Prints page extra content if on a page either of the current page or if requested by titlelink directly. If not both return false
  * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
- * 
+ *
  * @param string $titlelink the titlelink of the page to print the content from
  * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's extra content. True is default
  * @return mixed
@@ -2099,10 +2099,10 @@ function printPageExtraContent($titlelink='',$published=true) {
 
 
 /**
- * Returns the author of a page 
- * 
+ * Returns the author of a page
+ *
  * @param bool $fullname True if you want to get the full name if set, false if you want the login/screenname
- * 
+ *
  * @return string
  */
 function getPageAuthor($fullname=false) {
@@ -2115,7 +2115,7 @@ function getPageAuthor($fullname=false) {
 
 /**
  * Prints the author of a page
- * 
+ *
  * @param bool $fullname True if you want to get the full name if set, false if you want the login/screenname
  * @return string
  */
@@ -2128,7 +2128,7 @@ function printPageAuthor($fullname=false) {
 
 /**
  * Returns the sortorder of a page
- * 
+ *
  * @return string
  */
 function getPageSortorder() {
@@ -2143,7 +2143,7 @@ function getPageSortorder() {
 
 /**
  * Returns path to the pages.php page
- * 
+ *
  * @return string
  */
 function getPageLinkPath() {
@@ -2153,7 +2153,7 @@ function getPageLinkPath() {
 
 /**
  * Returns full path to a specific page
- * 
+ *
  * @return string
  */
 function getPageLinkURL($titlelink) {
@@ -2163,7 +2163,7 @@ function getPageLinkURL($titlelink) {
 
 /**
  * Prints full path to a specific page
- * 
+ *
  * @return string
  */
 function printPageLinkURL($titlelink) {
@@ -2181,7 +2181,7 @@ function printPageLinkURL($titlelink) {
  * <p>page content excerpt</p>
  * <p>read more</p>
  * </div>
- * 
+ *
  * @param int $excerptlength The length of the page content, if nothing specifically set, the plugin option value for 'news article text length' is used
  * @param string $readmore The text for the link to the full page. If empty the read more setting from the options is used.
  * @param string $shortenindicator The optional placeholder that indicates that the content is shortened, if this is not set the plugin option "news article text shorten indicator" is used.
@@ -2191,7 +2191,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	global  $_zp_current_zenpage_page, $_zp_loggedin;
 	if(empty($readmore)) {
 		$readmore = getOption("zenpage_read_more");
-	} 
+	}
 	if(empty($shortenindicator)) {
 		$shortenindicator = getOption("zenpage_textshorten_indicator");
 	}
@@ -2212,12 +2212,12 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 			$pagetitle = $pageobj->getTitle();
 			$pagecontent = $pageobj->getContent();
 			if(strlen($pagecontent) > $excerptlength) {
-				$pagecontent = shortenContent($pagecontent, $excerptlength, $shortenindicator. 
+				$pagecontent = shortenContent($pagecontent, $excerptlength, $shortenindicator.
 						" <a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$readmore."</a>\n");
 			}
 			echo "\n<div class='pageexcerpt'>\n";
 			echo "<h4><a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$pagetitle."</a></h4>";
-			echo $pagecontent; 
+			echo $pagecontent;
 			echo "</div>\n";
 		}
 	}
@@ -2293,7 +2293,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	$order = explode('-', getPageSortorder());
 	$mylevel = count($order);
 	$myparentsort = array_shift($order);
-	
+
 	for ($c=0; $c<=$mylevel; $c++) {
 		$parents[$c] = NULL;
 	}
@@ -2335,12 +2335,12 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 					echo "\n";
 				}
 			}
-	
+
 			if ($open[$indent]) { // close an open LI if it exists
 				echo "</li>\n";
 				$open[$indent]--;
 			}
-			
+
 			echo str_pad("\t",$indent-1,"\t");
 			$open[$indent]++;
 			$parents[$indent] = $pageobj->getID();
@@ -2350,7 +2350,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 				$class = $css_class_active;
 			}
 			if(!is_null($_zp_current_zenpage_page)) {
-				$gettitle = $_zp_current_zenpage_page->getTitlelink(); 
+				$gettitle = $_zp_current_zenpage_page->getTitlelink();
 			} else {
 				$gettitle = "";
 			}
@@ -2384,7 +2384,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 /**
  * If the titlelink is valid this will setup for the page
  * Returns true if page is setup and valid, otherwise returns false
- * 
+ *
  * @param string $titlelink The page to setup
  *
  * @return bool
@@ -2420,7 +2420,7 @@ function zenpage_setup_page($titlelink) {
 
 /**
  * Returns if comments are open for this news article or page (TRUE or FALSE)
- * 
+ *
  * @return bool
  */
 function zenpageOpenedForComments() {
@@ -2442,7 +2442,7 @@ function zenpageOpenedForComments() {
  * @param string $type 	"all" for all latest comments for all news articles and all pages
  * 											"news" for the lastest comments of one specific news article
  * 											"page" for the lastest comments of one specific page
- * @param int $itemID the ID of the element to get the comments for if $type != "all" 
+ * @param int $itemID the ID of the element to get the comments for if $type != "all"
  */
 function getLatestZenpageComments($number,$type="all",$itemID="") {
 	$itemID = sanitize_numeric($itemID);
@@ -2454,7 +2454,7 @@ function getLatestZenpageComments($number,$type="all",$itemID="") {
 			$wherePages = " WHERE pages.show = 1 AND pages.id = ".$itemID." AND c.ownerid = pages.id AND c.type = 'pages' AND c.private = 0 AND c.inmoderation = 0";
 			break;
 		case "all":
-			$whereNews = " WHERE news.show = 1 AND c.ownerid = news.id AND c.type = 'news'";			
+			$whereNews = " WHERE news.show = 1 AND c.ownerid = news.id AND c.type = 'news'";
 			$wherePages = " WHERE pages.show = 1 AND c.ownerid = pages.id AND c.type = 'pages'";
 			break;
 	}
@@ -2514,7 +2514,7 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
 		$titlelink = $comment['titlelink'];
 		$website = $comment['website'];
 		$shortcomment = truncate_string($comment['comment'], $shorten);
-		
+
 		echo "<li><a href=\"".getNewsURL($titlelink)."\" class=\"commentmeta\">".$title.$author."</a><br />\n";
 		echo "<span class=\"commentbody\">".$shortcomment."</span></li>";
 	}
@@ -2555,13 +2555,13 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
 	}
 	if(empty($lang)) {
 		$lang = getOption("locale");
-	} 
+	}
 	if($option == "Category" AND empty($categorylink) AND issset($_GET['category'])) {
 		$categorylink = "&amp;category=".sanitize($_GET['category']);
-	} 
+	}
 	if ($option == "Category" AND !empty($categorylink)) {
 		$categorylink = "&amp;category=".sanitize($categorylink);
-	} 
+	}
 	if ($option == "Category" AND !empty($categorylink) AND !issset($_GET['category'])) {
 		$categorylink = "";
 	}
@@ -2657,8 +2657,8 @@ function printZenpageRSSHeaderLink($option, $linktext) {
 
 /**
  * support to show an image from an album
- * The imagename is optional. If absent the album thumb image will be 
- * used and the link will be to the album. If present the link will be 
+ * The imagename is optional. If absent the album thumb image will be
+ * used and the link will be to the album. If present the link will be
  * to the image.
  *
  * @param string $albumname

@@ -178,7 +178,7 @@ function printAdminToolbox($id='admin') {
 				echo "<li>";
 				printSubalbumAdmin(gettext('Edit album'), '', "</li>\n");
 				if (!$_zp_current_album->isDynamic()) {
-					if ($_zp_current_album->getSubNumAlbums()) {
+					if ($_zp_current_album->getNumAlbums()) {
 						?>
 						<li>
 						<?php echo printLink($zf . '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&tab=subalbuminfo', gettext("Sort subalbums"), NULL, NULL, NULL); ?>
@@ -454,7 +454,7 @@ function next_album($all=false, $sorttype=null, $sortdirection=NULL) {
 		if (in_context(ZP_SEARCH)) {
 			$_zp_albums = $_zp_current_search->getAlbums($all ? 0 : $_zp_page);
 		} else if (in_context(ZP_ALBUM)) {
-			$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
+			$_zp_albums = $_zp_current_album->getAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
 		} else {
 			$_zp_albums = $_zp_gallery->getAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
 		}
@@ -510,7 +510,7 @@ function getAllSubalbums($album = NULL) {
 	global $_zp_current_album, $_zp_gallery;
 	if (is_null($album)) $album = $_zp_current_album;
 	$list = array();
-	$subalbums = $album->getSubalbums(0);
+	$subalbums = $album->getAlbums(0);
 	if (is_array($subalbums)) {
 		foreach ($subalbums as $subalbum) {
 			$list[] = $subalbum;
@@ -859,10 +859,10 @@ function albumNumber() {
 			if (is_null($parent)) {
 				$albums = $_zp_gallery->getAlbums();
 			} else {
-				$albums = $parent->getSubalbums();
+				$albums = $parent->getAlbums();
 			}
 		} else {
-			$albums = $_zp_dynamic_album->getSubalbums();
+			$albums = $_zp_dynamic_album->getAlbums();
 		}
 	}
 	$c = 0;
@@ -1692,7 +1692,7 @@ function getNumImages() {
 function getTotalImagesIn($album) {
 	global $_zp_gallery;
 	$sum = $album->getNumImages();
-	$subalbums = $album->getSubalbums(0);
+	$subalbums = $album->getAlbums(0);
 	while (count($subalbums) > 0) {
 		$albumname = array_pop($subalbums);
 		$album = new Album($_zp_gallery, $albumname);

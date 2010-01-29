@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * Zenpage CMS plugin
- * 
+ *
  * @package plugins
  */
-$plugin_version = '1.2.9'; 
-$plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />" 
+$plugin_version = '1.2.9';
+$plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />"
 				."<strong>NOTE:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>zenpage default</code> and <code>effervescence+</code> themes support Zenpage.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_".PLUGIN_FOLDER."---zenpage---zenpage-template-functions.php.html";
@@ -25,7 +25,7 @@ class zenpagecms {
 		setOptionDefault('zenpage_admin_articles', '15');
 		setOptionDefault('zenpage_news_page', 'news');
 		setOptionDefault('zenpage_pages_page', 'pages');
-		setOptionDefault('zenpage_indexhitcounter', false); 
+		setOptionDefault('zenpage_indexhitcounter', false);
 		setOptionDefault('zenpage_combinews', false);
 		setOptionDefault('zenpage_combinews_readmore', 'Visit gallery page');
 		setOptionDefault('zenpage_combinews_mode', 'latestimage-sizedimage');
@@ -47,9 +47,9 @@ class zenpagecms {
 	function getOptionsSupported() {
 		return array(gettext('Articles per page (theme)') => array('key' => 'zenpage_articles_per_page', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("How many news articles you want to show per page on the news or news category pages.")),
-		gettext('News article text length') => array('key' => 'zenpage_text_length', 'type' => OPTION_TYPE_TEXTBOX, 
+		gettext('News article text length') => array('key' => 'zenpage_text_length', 'type' => OPTION_TYPE_TEXTBOX,
 									'desc' => gettext("The length of news article excerpts in news or news category pages. Leave blank for full text.")),
-		gettext('News article text shorten indicator') => array('key' => 'zenpage_textshorten_indicator', 'type' => OPTION_TYPE_TEXTBOX, 
+		gettext('News article text shorten indicator') => array('key' => 'zenpage_textshorten_indicator', 'type' => OPTION_TYPE_TEXTBOX,
 									'desc' => gettext("Something that indicates that the article text is shortened, ' (...)' by default.")),
 		gettext('Read more') => array('key' => 'zenpage_read_more', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1,
 										'desc' => gettext("The text for the link to the full article.")),
@@ -97,7 +97,7 @@ class zenpagecms {
 										'desc' => gettext("Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only.")),
 		gettext('CombiNews: Show image title') => array('key' => 'combinews-latestimagesbyalbum-imgtitle', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only."))
-		
+
 		);
 	}
 

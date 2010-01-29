@@ -1677,7 +1677,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<td>
 				<ul class="searchchecklist">
 				<?php
-				$exifstuff = sortMultiArray($_zp_exifvars,2,'asc',true);
+				$exifstuff = sortMultiArray($_zp_exifvars,2,false);
 				foreach ($exifstuff as $key=>$item) {
 					echo '<li><label"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
 					if ($item[3]) {

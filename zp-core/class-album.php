@@ -358,7 +358,7 @@ class Album extends PersistentObject {
 	}
 
 	/**
-	 * Returns the sort type of the album
+	 * Returns the sort type of the album images
 	 * Will return a parent sort type if the sort type for this album is empty
 	 *
 	 * @return string
@@ -390,14 +390,14 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getSubalbumSortType() {
+	function getAlbumSortType() {
 		$type = $this->get('subalbum_sort_type');
 		if (empty($type)) {
 			$parentalbum = $this->getParent();
 			if (is_null($parentalbum)) {
 				$type = getOption('gallery_sorttype');
 			} else {
-				$type = $parentalbum->getSubalbumSortType();
+				$type = $parentalbum->getAlbumSortType();
 			}
 		}
 		return $type;
@@ -425,14 +425,14 @@ class Album extends PersistentObject {
 	function setSortOrder($sortorder) { $this->set('sort_order', $sortorder); }
 
 	/**
-	 * Returns the DB key associated with the sort type
+	 * Returns the DB key associated with the image sort type
 	 *
 	 * @param string $sorttype the sort type
 	 * @return string
 	 */
-	function getSortKey($sorttype=null) {
+	function getImageSortKey($sorttype=null) {
 		if (is_null($sorttype)) { $sorttype = $this->getSortType(); }
-		return albumSortKey($sorttype);
+		return lookupSortKey($sorttype, 'filename', 'filename');
 	}
 
 	/**
@@ -441,9 +441,9 @@ class Album extends PersistentObject {
 	 * @param string $sorttype subalbum sort type
 	 * @return string
 	 */
-	function getSubalbumSortKey($sorttype=null) {
-		if (empty($sorttype)) { $sorttype = $this->getSubalbumSortType(); }
-		return subalbumSortKey($sorttype);
+	function getAlbumSortKey($sorttype=null) {
+		if (empty($sorttype)) { $sorttype = $this->getAlbumSortType(); }
+		return lookupSortKey($sorttype, 'sort_order', 'folder');
 	}
 
 
@@ -467,14 +467,15 @@ class Album extends PersistentObject {
 	 * @param string $page  Which page of subalbums to display.
 	 * @param string $sorttype The sort strategy
 	 * @param string $sortdirection The direction of the sort
+	 * @param bool $care set to false if the order does not matter
 	 * @return array
 	 */
 
-	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true) {
+	function getAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true) {
 		if (is_null($this->subalbums) || $care && $sorttype.$sortdirection !== $this->lastsubalbumsort ) {
 			if ($this->isDynamic()) {
 				$search = $this->getSearchEngine();
-				$subalbums = $search->getAlbums($page);
+				$subalbums = $search->getAlbums($page,NULL,NULL,false);
 			} else {
 				$dirs = $this->loadFileNames(true);
 				$subalbums = array();
@@ -483,9 +484,8 @@ class Album extends PersistentObject {
 					$subalbums[] = $dir;
 				}
 			}
-			$key = str_replace('`','',$this->getSubalbumSortKey($sorttype));
-			$sortedSubalbums = sortAlbumArray($this, $subalbums, $key, $sortdirection);
-			$this->subalbums = $sortedSubalbums;
+			$key = $this->getAlbumSortKey($sorttype);
+			$this->subalbums = $this->gallery->sortAlbumArray($this, $subalbums, $key, $sortdirection);
 			$this->lastsubalbumsort = $sorttype.$sortdirection;
 		}
 
@@ -499,22 +499,24 @@ class Album extends PersistentObject {
 
 	/**
 	 * Returns the count of subalbums
-	 * 
+	 *
 	 * @return int
 	 */
 	function getNumSubalbums() {
-		return count($this->getSubalbums(0,NULL,NULL,false));
+		return count($this->getAlbums(0,NULL,NULL,false));
 	}
-	
+
 	/**
 	 * Returns a of a slice of the images for this album. They will
 	 * also be sorted according to the sort type of this album, or by filename if none
 	 * has been set.
 	 *
-	 * @param  string $page  Which page of images should be returned. If zero, all images are returned.
+	 * @param string $page  Which page of images should be returned. If zero, all images are returned.
 	 * @param int $firstPageCount count of images that go on the album/image transition page
-	 * @param  string $sorttype optional sort type
-	 * @param  string $sortdirection optional sort direction
+	 * @param string $sorttype optional sort type
+	 * @param string $sortdirection optional sort direction
+	 * @parem bool $care set to false if the order of the images does not matter
+	 *
 	 * @return array
 	 */
 	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null, $care=true) {
@@ -567,25 +569,17 @@ class Album extends PersistentObject {
 	 */
 	function sortImageArray($images, $sorttype, $sortdirection) {
 		$mine = isMyAlbum($this->name, ALL_RIGHTS);
-		$sortkey = str_replace('`','',$this->getSortKey($sorttype));
+		$sortkey = str_replace('`','',$this->getImageSortKey($sorttype));
 		if (($sortkey == '`sort_order`') || ($sortkey == 'RAND()')) { // manual sort is always ascending
-			$order = 'asc';
+			$order = false;
 		} else {
 			if (!is_null($sortdirection)) {
-				if (strtoupper($sortdirection) == 'DESC') {
-					$order = 'dsc';
-				} else {
-					$order = 'asc';
-				}
+				$order = strtoupper($sortdirection) == 'DESC';
 			} else {
-				if ($this->getSortDirection('image')) {
-					$order = 'dsc';
-				} else {
-					$order = 'asc';
-				}
+				$order = $this->getSortDirection('image');
 			}
 		}
-		
+
 		$result = query($sql = "SELECT * FROM " . prefix("images") . " WHERE `albumid`= " . $this->id);
 		$results = array();
 		while ($row = mysql_fetch_assoc($result)) {
@@ -610,13 +604,13 @@ class Album extends PersistentObject {
 		switch ($sortkey) {
 			case 'title':
 			case 'desc':
-				$results = sortByMultilingual($results, $sortkey, $order == 'dsc');
+				$results = sortByMultilingual($results, $sortkey, $order);
 				break;
 			case 'RAND()':
 				shuffle($results);
 				break;
 			default:
-				$results = sortMultiArray($results, $sortkey, $order, true, false);
+				$results = sortMultiArray($results, $sortkey, $order);
 				break;
 		}
 		// the results are now in the correct order
@@ -735,7 +729,7 @@ class Album extends PersistentObject {
 				}
 			}
 			// Otherwise, look in sub-albums.
-			$subalbums = $this->getSubAlbums();
+			$subalbums = $this->getAlbums();
 			if (!is_null($subalbums)) {
 				if ($shuffle) {
 					shuffle($subalbums);
@@ -836,7 +830,7 @@ class Album extends PersistentObject {
 		if (is_null($parent = $this->getParent())) {
 			$albums = $this->gallery->getAlbums(0);
 		} else {
-			$albums = $parent->getSubAlbums(0);
+			$albums = $parent->getAlbums(0);
 		}
 		$inx = array_search($this->name, $albums)+1;
 		if ($inx >= 0 && $inx < count($albums)) {
@@ -854,7 +848,7 @@ class Album extends PersistentObject {
 		if (is_null($parent = $this->getParent())) {
 			$albums = $this->gallery->getAlbums(0);
 		} else {
-			$albums = $parent->getSubAlbums(0);
+			$albums = $parent->getAlbums(0);
 		}
 		$inx = array_search($this->name, $albums)-1;
 		if ($inx >= 0 && $inx < count($albums)) {
@@ -900,7 +894,7 @@ class Album extends PersistentObject {
 	 */
 	function deleteAlbum() {
 		if (!$this->isDynamic()) {
-			foreach ($this->getSubAlbums() as $folder) {
+			foreach ($this->getAlbums() as $folder) {
 				$subalbum = new Album($this->gallery, $folder);
 				$subalbum->deleteAlbum();
 			}
@@ -957,7 +951,7 @@ class Album extends PersistentObject {
 					if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
 						$success = $success && @rename($file, dirname($dest).'/'.basename($file));
 					}
-				}			
+				}
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "UPDATE " . prefix('albums') . " SET folder='" . zp_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
 				$success = $success && query($sql);
@@ -1094,7 +1088,7 @@ class Album extends PersistentObject {
 					if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
 						$success = $success && @copy($file, dirname($dest).'/'.basename($file));
 					}
-				}			
+				}
 				$oldf = zp_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
 				$subrow = query_single_row($sql);
@@ -1222,7 +1216,7 @@ class Album extends PersistentObject {
 		}
 
 		if ($deep) {
-			foreach($this->getSubAlbums(0) as $dir) {
+			foreach($this->getAlbums(0) as $dir) {
 				$subalbum = new Album($this->gallery, $dir);
 				// Could have been deleted if it didn't exist above...
 				if ($subalbum->exists)
@@ -1239,7 +1233,7 @@ class Album extends PersistentObject {
 	function preLoad() {
 		if (!$this->isDynamic()) return; // nothing to do
 		$images = $this->getImages(0);
-		$subalbums = $this->getSubAlbums(0);
+		$subalbums = $this->getAlbums(0);
 		foreach($subalbums as $dir) {
 			$album = new Album($this->gallery, $dir);
 			$album->preLoad();

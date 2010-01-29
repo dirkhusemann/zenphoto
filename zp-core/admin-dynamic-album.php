@@ -26,7 +26,7 @@ function getSubalbumImages($folder) {
 	foreach ($images as $image) {
 		$imagelist[] = '/'.$folder.'/'.$image;
 	}
-	$albums = $album->getSubalbums();
+	$albums = $album->getAlbums();
 	foreach ($albums as $folder) {
 		getSubalbumImages($folder);
 	}
