@@ -382,7 +382,7 @@ function printNewsTitleLink($before='') {
  * * @return string
  */
 function getNewsContent($shorten=false, $shortenindicator='') {
-	global $_zp_current_zenpage_news;
+	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
 	$excerptbreak = false;
 	if(empty($shortenindicator)) {
 		$shortenindicator = getOption("zenpage_textshorten_indicator");
@@ -390,6 +390,15 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 	if(!$shorten && !is_NewsArticle()) {
 		$shorten = getOption("zenpage_text_length");
 	}
+	$articlecontent = "";
+	$size = getOption("zenpage_combinews_imagesize");
+	$width = getOption('combinews-thumbnail-width');
+	$height = getOption('combinews-thumbnail-height');
+	$cropwidth = getOption('combinews-thumbnail-cropwidth');
+	$cropheight= getOption('combinews-thumbnail-cropheight');
+	$cropx = getOption('combinews-thumbnail-cropx');
+	$cropy = getOption('combinews-thumbnail-cropy');
+	$mode = getOption("zenpage_combinews_mode");
 	$newstype = getNewsType();
 	switch($newstype) {
 		case "news":
@@ -400,69 +409,36 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 				if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
 					$articlecontent = str_replace($shortenindicator, '', $articlecontent);
 				}
+			} else {
+				$articlecontent = getNewsContentShorten($articlecontent,$shorten,$shortenindicator);
 			}
-			break;
-		case "image":
-		case "video":
-		case "album":
-			$articlecontent = $_zp_current_zenpage_news->getDesc();
-			break;
-	}
-	if(!empty($shorten) && strlen($articlecontent) > $shorten) {
-		$articlecontent = shortenContent($articlecontent,$shorten,$shortenindicator);
-	}
-	return $articlecontent;
-}
-
-
-/**
- * Prints the news article content. Note: TinyMCE used by Zenpage for news articles by default already adds a surrounding <p></p> to the content.
- *
- * If using the CombiNews feature this prints the thumbnail or sized image for a gallery item.
- * If using the 'CombiNews sized image' mode it shows movies directly and the description below.
- *
- * @param int $shorten $shorten The lengths of the content for the news main page for example (only for video/audio descriptions, not for normal image descriptions)
- */
-function printNewsContent($shorten=false,$shortenindicator='') {
-	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
-	$size = getOption("zenpage_combinews_imagesize");
-	$width = getOption('combinews-thumbnail-width');
-	$height = getOption('combinews-thumbnail-height');
-	$cropwidth = getOption('combinews-thumbnail-cropwidth');
-	$cropheight= getOption('combinews-thumbnail-cropheight');
-	$cropx = getOption('combinews-thumbnail-cropx');
-	$cropy = getOption('combinews-thumbnail-cropy');
-	$mode = getOption("zenpage_combinews_mode");
-	$type = getNewsType();
-	switch ($type) {
-		case "news":
-			echo getNewsContent($shorten,$shortenindicator);
 			break;
 		case "image":
 			switch($mode) {
 				case "latestimages-sizedimage":
 					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
 					if (isImagePhoto($_zp_current_zenpage_news)) {
-						echo "<img src='".htmlspecialchars($_zp_current_zenpage_news->getSizedImage($size))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+						$articlecontent = "<img src='".htmlspecialchars($_zp_current_zenpage_news->getSizedImage($size))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					} else {
-						echo "<img src='".htmlspecialchars($_zp_current_zenpage_news->getThumbImageFile(WEBPATH))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+						$articlecontent = "<img src='".htmlspecialchars($_zp_current_zenpage_news->getThumbImageFile(WEBPATH))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					}
-					echo "</a><br />";
+					echo "</a>";
 					break;
 				case "latestimages-thumbnail":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestimages-thumbnail-customcrop":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
-			echo getNewsContent();
+			$articlecontent .= "<p>".getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator)."</p>";
 			break;
 		case "video":
-			printNewsVideoContent($_zp_current_zenpage_news,$shorten);
+			$articlecontent = getNewsVideoContent($_zp_current_zenpage_news,$shorten);
 			break;
 		case "album":
 			$_zp_page = 1;
+			$albumdesc = "<p>".getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator)."</p>";
 			switch($mode) {
 				case "latestalbums-sizedimage":
 					$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
@@ -472,13 +448,13 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					} else {
 						$imgurl = htmlspecialchars($albumthumbobj->getSizedImage($size));
 					}
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />".$albumdesc;
 					break;
 				case "latestalbums-thumbnail":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />".$albumdesc;
 					break;
-				case "latestalbums-thumbnail":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
+				case "latestalbums-thumbnail-customcrop":
+					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />".$albumdesc;
 					break;
 				case "latestimagesbyalbum-thumbnail":
 				case "latestimagesbyalbum-thumbnail-customcrop":
@@ -488,79 +464,98 @@ function printNewsContent($shorten=false,$shortenindicator='') {
 					//echo "<pre>"; print_r($images); echo "</pre><br />";
 					foreach($images as $image) {
 						$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
+						$imagedesc = $imageobj->getDesc();
+						if(getOption('combinews-latestimagesbyalbum-imgdesc') && !empty($imagedesc)) {
+							$imagedesc = "<p>".getNewsContentShorten($imagedesc,$shorten,$shortenindicator)."</p>";
+						}
 						switch($mode) {
 							case "latestimagesbyalbum-thumbnail":
-								if(getOption('combinews-latestimagesbyalbum-imgtitle')) echo "<h4>".$imageobj->getTitle()."</h4>";
-								echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getThumb())."' alt='".html_encode($imageobj->getTitle())."' /></a>";
-								printNewsImageDescription($imageobj);
+								if(getOption('combinews-latestimagesbyalbum-imgtitle')) $articlecontent .= "<h4>".$imageobj->getTitle()."</h4>";
+								$articlecontent .= "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getThumb())."' alt='".html_encode($imageobj->getTitle())."' /></a>".$imagedesc;
 								break;
 							case "latestimagesbyalbum-thumbnail-customcrop":
-								if(getOption('combinews-latestimagesbyalbum-imgtitle')) echo "<h4>".$imageobj->getTitle()."</h4>";
+								if(getOption('combinews-latestimagesbyalbum-imgtitle')) $articlecontent .= "<h4>".$imageobj->getTitle()."</h4>";
 								if(isImageVideo($imageobj)) {
-									printNewsVideoContent($imageobj,$shorten);
+									$articlecontent .= getNewsVideoContent($imageobj,$shorten).$imagedesc;
 								} else {
-									echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($imageobj->getTitle())."' /></a>";
+									$articlecontent .= "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy))."' alt='".html_encode($imageobj->getTitle())."' /></a>".$imagedesc;
 								}
-								printNewsImageDescription($imageobj);
 								break;
 							case "latestimagesbyalbum-sizedimage":
-								if(getOption('combinews-latestimagesbyalbum-imgtitle')) echo "<h4>".$imageobj->getTitle()."</h4>";
+								if(getOption('combinews-latestimagesbyalbum-imgtitle')) $articlecontent .= "<h4>".$imageobj->getTitle()."</h4>";
 								if(isImageVideo($imageobj)) {
-									printNewsVideoContent($imageobj);
+									$articlecontent = getNewsVideoContent($imageobj).$imagedesc;
 								} else {
-									echo "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getSizedImage($size))."' alt='".html_encode($imageobj->getTitle())."' /></a>";
+									$articlecontent = "<a href='".htmlspecialchars($imageobj->getImageLink())."' title='".html_encode($imageobj->getTitle())."'><img src='".htmlspecialchars($imageobj->getSizedImage($size))."' alt='".html_encode($imageobj->getTitle())."' /></a>".$imagedesc;
 								}
-								printNewsImageDescription($imageobj);
 								break;
-						}
-					}
+						} // switch "latest images by album end"
+					} // foreach end
 					break;
-			}
-			//echo getNewsContent();
-			break;
+			} // switch "albums mode end"
+	} // main switch end
+	return $articlecontent;
+}
+
+
+
+/**
+ * Prints the news article content. Note: TinyMCE used by Zenpage for news articles may already add a surrounding <p></p> to the content.
+ *
+ * If using the CombiNews feature this prints the thumbnail or sized image for a gallery item.
+ * If using the 'CombiNews sized image' mode it shows movies directly and the description below.
+ *
+ * @param int $shorten $shorten The lengths of the content for the news main page for example (only for video/audio descriptions, not for normal image descriptions)
+ */
+function printNewsContent($shorten=false,$shortenindicator='') {
+	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
+	echo getNewsContent($shorten,$shortenindicator);
+}
+
+/**
+ * Helper function for getNewsContent to shorten the news article content or if using Zenpage CombiNews' the image/album description
+ * If shorten is disable it sjust returns the string passed.
+ *
+ * @param string $articlecontent Then news article content or image/album description to shorten
+ * @param bool $shorten true or false if the description to this object should be shortened.
+ */
+function getNewsContentShorten($articlecontent,$shorten,$shortenindicator) {
+	if(!empty($shorten) && strlen($articlecontent) > $shorten) {
+		return shortenContent($articlecontent,$shorten,$shortenindicator);
+	} else {
+		return $articlecontent;
 	}
 }
 
 /**
- * Helper function for printNewsContent to print video/audio  descriptions if using Zenpage CombiNews' mode "latest images by album"
+ * Helper function for getNewsContent to get video/audio content if $imageobj is a video/audio object if using Zenpage CombiNews
  *
  * @param object $imageobj The object of an image
  * @param bool $shorten true or false if the description to this object should be shortened.
  */
-function printNewsImageDescription($imageobj) {
-	$desc = $imageobj->getDesc();
-	if(getOption('combinews-latestimagesbyalbum-imgdesc') && !empty($desc)) {
-		echo '<p>'.$desc.'</p>';
-	}
-}
-
-/**
- * Helper function for printNewsContent to print video/audio content if $imageobj is a video/audio object if using Zenpage CombiNews
- *
- * @param object $imageobj The object of an image
- * @param bool $shorten true or false if the description to this object should be shortened.
- */
-function printNewsVideoContent($imageobj,$shorten=false) {
+function getNewsVideoContent($imageobj,$shorten=false) {
 	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_page;
+	$videocontent = "";
 	$ext = strtolower(strrchr($imageobj->getFullImage(), "."));
 	switch($ext) {
 		case '.flv':
 		case '.mp3':
 		case '.mp4':
 			if (is_null($_zp_flash_player)) {
-				echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
+				$videocontent = "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
 			} else {
 				$_zp_current_image = $imageobj;
-				$_zp_flash_player->printPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
+				$videocontent = $_zp_flash_player->getPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
 			}
-			echo getNewsContent($shorten);
+			$videocontent .= $_zp_current_image->getDesc();
 			break;
 		case '.3gp':
 		case '.mov':
-			echo $imageobj->getBody();
-			echo getNewsContent($shorten);
+			$videocontent = $imageobj->getBody();
+			$videocontent .= $imageobj->getDesc();
 			break;
 	}
+	return $videocontent;
 }
 
 /**
