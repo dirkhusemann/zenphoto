@@ -1444,6 +1444,15 @@ class Album extends PersistentObject {
 	function setAlbumTheme($theme) {
 		$this->set('album_theme', $theme);
 	}
+	
+	/**
+	 * deprecated function.
+	 */
+	// TODO: remove this function
+	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
+		trigger_error(gettext('getSubAlbums is deprecated. Use getAlbums().'), E_USER_NOTICE);
+		return $this->getAlbums($page, $sorttype, $sortdirection);
+	}
 
 }
 ?>

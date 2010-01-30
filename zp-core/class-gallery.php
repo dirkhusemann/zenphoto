@@ -665,7 +665,7 @@ class Gallery {
 			$results[$row['folder']] = $row;
 		}
 		//	check database aganist file system
-		foreach ($results as $row) {
+		foreach ($results as $dbrow=>$row) {
 			$folder = $row['folder'];
 			if (($key = array_search($folder,$albums)) !== false) {	// album exists in filesystem
 				unset($albums[$key]);
@@ -673,9 +673,9 @@ class Gallery {
 				$id = $row['id'];
 				query("DELETE FROM ".prefix('albums')." WHERE `id`=$id"); // delete the record
 				query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
-				query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`=" . $this->id);
-				query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
-				unset($results[$filename]);
+				query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`=" . $id);
+				query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $id);
+				unset($results[$dbrow]);
 			}
 		}
 		if (get_class($gall = $this) == 'Album') $gall = $this->gallery;
