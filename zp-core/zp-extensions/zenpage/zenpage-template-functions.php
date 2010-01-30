@@ -1403,10 +1403,9 @@ function printPrevNewsPageLink($prev='&laquo; prev',$class='disabledlink') {
  * @return string
  */
 function getNextNewsPageURL() {
-	global $_zp_zenpage_total_pages;
 	$page =  getCurrentNewsPage();
-	$total_pages = $_zp_zenpage_total_pages;;
-	if ($page != $total_pages)	{
+	$total_pages = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
+	if ($page != $total_pages) {
 		return getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().($page + 1);
 	} else {
 		return false;
@@ -1454,7 +1453,6 @@ function printNewsPageList($class='pagelist') {
  * @return string
  */
 function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $nextprev=true, $class='pagelist') {
-	global $_zp_zenpage_total_pages;
 	$total = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
 	$current = getCurrentNewsPage();
 	if($total > 1) {
