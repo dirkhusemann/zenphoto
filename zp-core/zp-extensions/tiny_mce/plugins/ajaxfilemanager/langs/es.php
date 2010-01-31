@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * Archivo de idioma
 	 * @autor PandaBoy (argoflo@hotmail.com)
