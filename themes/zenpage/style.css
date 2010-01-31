@@ -791,6 +791,10 @@ ul.archive li {
 	margin-right: 9px;
 }
 
+ul.archive .archive-active a {
+	color: black;
+}
+
 #archive h3 {
 	background-color: transparent;
 	font-size: 1.3em;

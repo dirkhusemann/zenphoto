@@ -297,7 +297,22 @@ function getNewsTitle() {
 		if(is_NewsType("album") && (getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail"	|| getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail-customcrop" || getOption("zenpage_combinews_mode") == "latestimagesbyalbum-sizedimage")) {
 			$result = query("SELECT COUNT(date) FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
 			$count = mysql_result($result, 0);
-			return sprintf(ngettext('%s (%d new item)','%s (%d new items)',$count),$_zp_current_zenpage_news->getTitle(),$count);
+			$result2 = query_full_array("SELECT filename FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+			$imagetitles = "";
+			$countresult = count($result2);
+			$count2 = "";
+			foreach($result2 as $image) {
+				$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
+				$imagetitles .= $imageobj->getTitle();
+				$count2++;
+				if($count2 < $countresult && $countresult != 1) {
+					$imagetitles .= ", ";
+				} else if($count2 > 3) {
+					$imagetitles .= ",...";
+				}
+			}
+			//$imagetitles = truncate_string($imagetitles,50,"...");
+			return sprintf(ngettext('%1$u new item in <em>%2$s</em>: %3$s','%1$u new items in <em>%2$s</em>: %3$s',$count),$count,$_zp_current_zenpage_news->getTitle(),$imagetitles);
 		} else {
 			return $_zp_current_zenpage_news->getTitle();
 		}
@@ -862,13 +877,15 @@ function printNewsDate() {
  * NOTE: This does only include news articles.
  *
  * @param string $class optional class
- * @param string $yearid optional class for "year"
- * @param string $monthid optional class for "month"
+ * @param string $yearclass optional class for "year"
+ * @param string $monthclass optional class for "month"
+ * @param string $activeclass optional class for the currently active archive
  */
-function printNewsArchive($class='archive', $yearid='year', $monthid='month') {
+function printNewsArchive($class='archive', $yearclass='year', $monthclass='month', $activeclass="archive-active") {
 	if (!empty($class)){ $class = "class=\"$class\""; }
-	if (!empty($yearid)){ $yearid = "class=\"$yearid\""; }
-	if (!empty($monthid)){ $monthid = "class=\"$monthid\""; }
+	if (!empty($yearclass)){ $yearclass = "class=\"$yearclass\""; }
+	if (!empty($monthclass)){ $monthclass = "class=\"$monthclass\""; }
+	if (!empty($activeclass)){ $activeclass = "class=\"$activeclass\""; }
 	$datecount = getAllArticleDates();
 	$lastyear = "";
 	$nr = "";
@@ -885,10 +902,15 @@ function printNewsArchive($class='archive', $yearid='year', $monthid='month') {
 		}
 		if ($lastyear != $year) {
 			$lastyear = $year;
-			if($nr != 1) {  echo "</ul>\n</li>\n";}
-			echo "<li $yearid>$year\n<ul $monthid>\n";
+			if($nr != 1) { echo "</ul>\n</li>\n";}
+			echo "<li $yearclass>$year\n<ul $monthclass>\n";
 		}
-		echo "<li><a href=\"".getNewsBaseURL().getNewsArchivePath().substr($key,0,7)."\" title=\"".$month." (".$val.")\" rel=\"nofollow\">$month ($val)</a></li>\n";
+		if(getCurrentNewsArchive('plain') == strftime('%Y-%m', strtotime($key))) {
+			$active = $activeclass;
+		} else {
+			$active = "";
+		}
+		echo "<li $active><a href=\"".getNewsBaseURL().getNewsArchivePath().substr($key,0,7)."\" title=\"".$month." (".$val.")\" rel=\"nofollow\">$month ($val)</a></li>\n";
 	}
 	echo "</ul>\n</li>\n</ul>\n";
 }
@@ -905,12 +927,12 @@ function getCurrentNewsArchive($mode='formatted',$format='%B %Y') {
 	global $_zp_post_date;
 	if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 		$archivedate = $_zp_post_date;
-		if($mode = "formatted") {
+		if($mode == "formatted") {
 		 $archivedate = strtotime($archivedate);
 		 $archivedate = strftime($format,$archivedate);
-		}
+		} 
 		return $archivedate;
-	}
+	} 
 	return false;
 }
 
@@ -1009,7 +1031,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
  */
 function getLatestNews($number=5,$option='none', $category='') {
 	global $_zp_current_zenpage_news;
-	if(!empty($category) AND $option="none") {
+	if(!empty($category) AND $option =="none") {
 		$latest = getNewsArticles($number,$category,NULL,true);
 	} else {
 		$latest = getNewsArticles($number,'',NULL,true);
