@@ -163,7 +163,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			$folder = implode('/', $pieces);
 			$albumx = new Album($gallery, $folder);
 			$image = newImage($albumx, $filename);
-			if (is_valid_image($filename)) {
+			if (isImagePhoto($image) || !is_null($image->objectsThumb)) {
 				echo "\n<option class=\"thumboption\"";
 				if ($showThumb) {
 					echo " style=\"background-image: url(" . $image->getThumb() .
