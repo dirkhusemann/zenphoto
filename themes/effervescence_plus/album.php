@@ -201,7 +201,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if (function_exists('printAlbumMap')) {
 				printAlbumMap(NULL, NULL, NULL, NULL, gettext('Google Map'), true, 'googlemap', $firstPageImages);
 			}
-			printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums());
+			printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums());
 			?>
 		</div> <!-- submain -->
 
@@ -340,7 +340,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	 			}
 	 		} /* image loop */
 	 	} else { /* no images to display */
-			if (getNumSubalbums() == 0){
+			if (getNumAlbums() == 0){
 			?>
 				<div id="main3">
 					<div id="main2">
@@ -356,7 +356,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!-- Page Numbers -->
 		<div id="pagenumbers">
 		<?php
-		if ((getNumSubalbums() != 0) || !$oneImagePage){
+		if ((getNumAlbums() != 0) || !$oneImagePage){
 			printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage);
 		}
 		?>

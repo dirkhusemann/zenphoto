@@ -404,9 +404,11 @@ function getGalleryIndexURL($relative=true) {
  * @return int
  */
 function getNumAlbums() {
-	global $_zp_gallery, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	global $_zp_gallery, $_zp_current_album, $_zp_current_search;
+	if (in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
 		return $_zp_current_search->getNumAlbums();
+	} else if (in_context(ZP_ALBUM)) {
+		return $_zp_current_album->getNumAlbums();
 	} else {
 		return $_zp_gallery->getNumAlbums();
 	}
@@ -486,27 +488,12 @@ function getCurrentPage() {
 }
 
 /**
- * Returns the count of subalbums in the album
- *
- * @return int
- */
-function getNumSubalbums() {
-	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
-		return $_zp_current_search->getNumAlbums();
-	} else {
-		return $_zp_current_album->getNumSubalbums();
-	}
-	return false;
-}
-
-/**
- * Returns a list of all subalbums decendent from an album
+ * Returns a list of all albums decendent from an album
  *
  * @param object $album optional album. If absent the current album is used
  * @return array
  */
-function getAllSubalbums($album = NULL) {
+function getAllAlbums($album = NULL) {
 	global $_zp_current_album, $_zp_gallery;
 	if (is_null($album)) $album = $_zp_current_album;
 	$list = array();
@@ -515,7 +502,7 @@ function getAllSubalbums($album = NULL) {
 		foreach ($subalbums as $subalbum) {
 			$list[] = $subalbum;
 			$sub = new Album($_zp_gallery, $subalbum);
-			$list = array_merge($list, getAllSubalbums($sub));
+			$list = array_merge($list, getAllAlbums($sub));
 		}
 	}
 	return $list;
@@ -544,7 +531,7 @@ function getTotalPages($oneImagePage=false) {
 		if (in_context(ZP_SEARCH)) {
 			$pageCount = ceil(getNumAlbums() / $albums_per_page);
 		} else {
-			$pageCount = ceil(getNumSubalbums() / $albums_per_page);
+			$pageCount = ceil(getNumAlbums() / $albums_per_page);
 		}
 		$imageCount = getNumImages();
 		if ($oneImagePage) {
@@ -1293,7 +1280,7 @@ function getAlbumPage($album = NULL) {
 			$numalbums = $search->getNumAlbums();
 		} else {
 			$imageindex = $_zp_current_image->getIndex();
-			$numalbums = $album->getNumSubalbums();
+			$numalbums = $album->getNumAlbums();
 		}
 		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
@@ -1656,7 +1643,7 @@ function isAlbumPage() {
 	if (in_context(ZP_SEARCH)) {
 		$pageCount = Ceil(getNumAlbums() / getOption('albums_per_page'));
 	} else {
-		$pageCount = Ceil(getNumSubalbums() / getOption('albums_per_page'));
+		$pageCount = Ceil(getNumAlbums() / getOption('albums_per_page'));
 	}
 	return ($_zp_page <= $pageCount);
 }
@@ -4203,7 +4190,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 			$count = getNumAlbums();
 		} else {
 
-			$count = GetNumSubalbums();
+			$count = GetNumAlbums();
 
 		}
 		if ($count == 0) {

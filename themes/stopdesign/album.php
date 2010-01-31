@@ -53,7 +53,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 					<?php
-						$anumber = getNumSubalbums();
+						$anumber = getNumAlbums();
 						$inumber = getNumImages();
 						if ($anumber > 0 || $inumber > 0) {
 							echo '<p><em>(';

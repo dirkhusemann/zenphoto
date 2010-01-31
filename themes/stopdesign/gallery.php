@@ -40,7 +40,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
 		<p>
 		<?php
-			$anumber = getNumSubalbums();
+			$anumber = getNumAlbums();
 			$inumber = getNumImages();
 			if ($anumber > 0 || $inumber > 0) {
 				echo '<p><em>(';

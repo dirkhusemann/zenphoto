@@ -10,7 +10,7 @@ function get_subalbum_count() {
 }
 
 function show_sub_count_index() {
-	echo getNumSubalbums();
+	echo getNumAlbums();
 }
 
 function printHeadingImage($randomImage) {
@@ -61,7 +61,7 @@ function getCustomAlbumDesc() {
 	return $desc;
 }
 function getImage_AlbumCount() {
-	$c = getNumSubalbums();
+	$c = getNumAlbums();
 	if ($c > 0) {
 		$result = "\n ".sprintf(ngettext("%u album","%u albums",$c),$c);
 	} else {

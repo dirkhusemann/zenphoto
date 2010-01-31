@@ -309,6 +309,7 @@ function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
  * @return string
  */
 function rewrite_path_zenpage($rewrite='',$plain='') {
+	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
 	if (getOption('mod_rewrite')) {
 		return $rewrite;
 	} else {
@@ -322,6 +323,7 @@ function rewrite_path_zenpage($rewrite='',$plain='') {
  * @return array
  */
 function getNewsImageTags() {
+	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
 	global $_zp_current_zenpage_news;
 	if(is_GalleryNewsType()) {
 		return $_zp_current_zenpage_news->getTags();
@@ -342,6 +344,7 @@ function getNewsImageTags() {
  * @return string
  */
 function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
+	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
 	global $_zp_current_zenpage_news;
 	if(is_GalleryNewsType()) {
 		$singletag = getNewsImageTags();
@@ -367,6 +370,16 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
 			echo "<br clear=\"all\" />\n";
 		}
 	}
+}
+
+function getNumSubalbums() {
+	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	return getNumAlbums();
+}
+
+function getAllSubalbums($param=NULL) {
+	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	return getAllAlbums($param);
 }
 
 

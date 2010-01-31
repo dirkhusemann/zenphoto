@@ -504,7 +504,7 @@ class Album extends PersistentObject {
 	 *
 	 * @return int
 	 */
-	function getNumSubalbums() {
+	function getNumAlbums() {
 		return count($this->getAlbums(0,NULL,NULL,false));
 	}
 
@@ -692,6 +692,7 @@ class Album extends PersistentObject {
 				return $this->albumthumbnail;
 			}
 		} else {
+			$mine = isMyAlbum($this->name,ALL_RIGHTS);
 			if ($this->isDynamic()) {
 				$this->getImages(0, 0, $field, $direction);
 				$thumbs = $this->images;
@@ -704,7 +705,7 @@ class Album extends PersistentObject {
 						$thumb = array_shift($thumbs);
 						$alb = new Album($this->gallery, $thumb['folder']);
 						$thumb = newImage($alb, $thumb['filename']);
-						if ($thumb->getShow()) {
+						if ($mine || $thumb->getShow()) {
 							if (isImagePhoto($thumb)) {	// legitimate image
 								$this->albumthumbnail = $thumb;
 								return $this->albumthumbnail;
@@ -730,15 +731,27 @@ class Album extends PersistentObject {
 					if ($shuffle) {
 						shuffle($thumbs);
 					}
-					while (count($thumbs) > 0) {
+					$other = NULL;
+					while (count($thumbs) > 0) {	// first check for images
 						$thumb = array_shift($thumbs);
-						if (is_valid_image($thumb)) {
-							$thumb = newImage($this, $thumb);
-							if ($thumb->getShow()) {
+						$thumb = newImage($this, $thumb);
+						if ($mine || $thumb->getShow()) {
+							if (isImagePhoto($thumb)) {	// legitimate image
 								$this->albumthumbnail = $thumb;
-								return $thumb;
+								return $this->albumthumbnail;
+							} else {
+								if (!is_null($thumb->objectsThumb)) {	//	"other" image with a thumb sidecar
+									$this->albumthumbnail = $thumb;
+									return $this->albumthumbnail;
+								} else {
+									if (is_null($other)) $other = $thumb;
+								}
 							}
 						}
+					}
+					if (!is_null($other)) {	//	"other" image, default thumb
+						$this->albumthumbnail = $other;
+						return $this->albumthumbnail;
 					}
 				}
 			}
@@ -1459,14 +1472,21 @@ class Album extends PersistentObject {
 		$this->set('album_theme', $theme);
 	}
 	
+// TODO: remove these functions
 	/**
 	 * deprecated function.
 	 */
-	// TODO: remove this function
 	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
 		trigger_error(gettext('getSubAlbums is deprecated. Use getAlbums().'), E_USER_NOTICE);
 		return $this->getAlbums($page, $sorttype, $sortdirection);
 	}
-
+	/**
+	 * deprecated function.
+	 */
+		function getNumSubAlbums() {
+		trigger_error(gettext('getNumSubAlbums is deprecated. Use getNumAlbums().'), E_USER_NOTICE);
+		return $this->getNumAlbums();
+	}
+	
 }
 ?>
