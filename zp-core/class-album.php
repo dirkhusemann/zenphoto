@@ -699,16 +699,28 @@ class Album extends PersistentObject {
 					if ($shuffle) {
 						shuffle($thumbs);
 					}
-					while (count($thumbs) > 0) {
+					$other = NULL;
+					while (count($thumbs) > 0) {	// first check for images
 						$thumb = array_shift($thumbs);
-						if (is_valid_image($thumb['filename'])) {
-							$alb = new Album($this->gallery, $thumb['folder']);
-							$thumb = newImage($alb, $thumb['filename']);
-							if ($thumb->getShow()) {
+						$alb = new Album($this->gallery, $thumb['folder']);
+						$thumb = newImage($alb, $thumb['filename']);
+						if ($thumb->getShow()) {
+							if (isImagePhoto($thumb)) {	// legitimate image
 								$this->albumthumbnail = $thumb;
-								return $thumb;
+								return $this->albumthumbnail;
+							} else {
+								if (!is_null($thumb->objectsThumb)) {	//	"other" image with a thumb sidecar
+									$this->albumthumbnail = $thumb;
+									return $this->albumthumbnail;
+								} else {
+									if (is_null($other)) $other = $thumb;
+								}
 							}
 						}
+					}
+					if (!is_null($other)) {	//	"other" image, default thumb
+						$this->albumthumbnail = $other;
+						return $this->albumthumbnail;
 					}
 				}
 			} else {
