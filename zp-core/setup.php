@@ -73,7 +73,7 @@ function updateItem($item, $value) {
 
 function checkAlbumParentid($albumname, $id) {
 	Global $_zp_gallery;
-	$album = new Album($_zp_gallery, $albumname);
+	$album = new Album($_zp_gallery, $albumname);	
 	$oldid = $album->get('parentid');
 	if ($oldid !== $id) {
 		$album->set('parentid', $id);

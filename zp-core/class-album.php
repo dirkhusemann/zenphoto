@@ -51,12 +51,13 @@ class Album extends PersistentObject {
 			$this->exists = false;
 			return;
 		}
-		if (hasDynamicAlbumSuffix($folder8)) {
+		if ($dynamic = hasDynamicAlbumSuffix($folder8)) {
 			$localpath = substr($localpath, 0, -1);
+			$this->set('dynamic', 1);
 		}
 
 		// Must be a valid (local) folder:
-		$valid = file_exists($localpath) && (hasDynamicAlbumSuffix($localpath) || is_dir($localpath));
+		$valid = file_exists($localpath) && ($dynamic || is_dir($localpath));
 		if(!$valid || strpos($localpath, '..') !== false) {
 			$this->exists = false;
 			return;
@@ -65,7 +66,8 @@ class Album extends PersistentObject {
 		$this->name = $folder8;
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder8));
 
-		if (hasDynamicAlbumSuffix($folder8)) {
+		if ($dynamic) {
+			$new = !$this->get('search_params');
 			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
 				$data = file_get_contents($this->localpath);
 				while (!empty($data)) {
@@ -94,13 +96,13 @@ class Album extends PersistentObject {
 					$this->set('search_params', $words.$fields);
 				}
 
-				$this->set('dynamic', 1);
 				$this->set('mtime', filemtime($this->localpath));
 				if ($new) {
 					$title = $this->get('title');
 					$this->set('title', substr($title, 0, -4)); // Strip the .'.alb' suffix
 					$this->setDateTime(strftime('%Y-%m-%d %T', $this->get('mtime')));
 				}
+				$this->set('dynamic', 1);
 				$this->save();
 			}
 		}
@@ -1259,7 +1261,7 @@ class Album extends PersistentObject {
 			} else {
 				$msg = sprintf(gettext("Error: The album %s is not readable."), $this->name);
 			}
-			echo $msg;
+			zp_error($msg,false);
 			return array();
 		}
 		$dir = opendir($albumdir);

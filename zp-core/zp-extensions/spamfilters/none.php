@@ -18,7 +18,6 @@ class SpamFilter  {
 	 * @return SpamFilter
 	 */
 	function SpamFilter() {
-		global $gallery;
 		setOptionDefault('Action', 'pass');
 	}
 

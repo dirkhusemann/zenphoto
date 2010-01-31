@@ -77,7 +77,6 @@ if (isset($_REQUEST['clear'])) {
 } else {
 	$clear = sprintf(gettext('Refreshing cache for %s'), $object);
 }
-global $_zp_gallery;
 $count = 0;
 
 $gallery = new Gallery();

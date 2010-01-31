@@ -7,7 +7,7 @@
 // force UTF-8 Ø
 
 // functions-db.php - HEADERS NOT SENT YET!
-
+global $mysql_connection,$_zp_query_count;
 $mysql_connection = null;
 
 /**
@@ -22,7 +22,9 @@ function db_connect() {
 		zp_error(gettext('MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add MySQL support to your PHP installation.'));
 		return false;
 	}
-
+	if (!is_array($_zp_conf_vars)) {
+		zp_error(gettext('The <code>$_zp_conf_vars</code> variable is not an array. Zenphoto has not been instantiated correctly.'));
+	}
 	$mysql_connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass']);
 	if (!$mysql_connection) {
 		zp_error(gettext('MySQL Error: Zenphoto could not connect to the database server.')
