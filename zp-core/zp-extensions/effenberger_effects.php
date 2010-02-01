@@ -133,7 +133,7 @@ function effenberger_insert_class($html, $effect) {
 	$i = strpos($html, 'class=');
 	if ($i === false) {
 		$i = strpos($html, '/>');
-		$html = substr($html, 0, $i).'class="'.$reflect.'" />';
+		$html = substr($html, 0, $i).'class="'.$reflect.'" '.substr($html,$i);
 	} else {
 		$quote = substr($html, $i+6,1);
 		$i = strpos($html, $quote, $i+7);
