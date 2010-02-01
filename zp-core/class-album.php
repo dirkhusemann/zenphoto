@@ -675,10 +675,10 @@ class Album extends PersistentObject {
 			$thumb = substr($thumb, 1); // strip off the slash
 			$albumdir = getAlbumFolder();
 		}
-		$shuffle = $thumb != '1';
+		$shuffle = empty($thumb);
 		$field = getOption('AlbumThumbSelectField');
 		$direction = getOption('AlbumThumbSelectDirection');
-		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.internalToFilesystem($thumb))) {
+		if (!empty($thumb) && !is_numeric($thumb) && file_exists($albumdir.internalToFilesystem($thumb))) {
 			if ($i===false) {
 				return newImage($this, $thumb);
 			} else {
@@ -692,103 +692,57 @@ class Album extends PersistentObject {
 				return $this->albumthumbnail;
 			}
 		} else {
-			$mine = isMyAlbum($this->name,ALL_RIGHTS);
-			if ($this->isDynamic()) {
-				$this->getImages(0, 0, $field, $direction);
-				$thumbs = $this->images;
-				if (!is_null($thumbs)) {
-					if ($shuffle) {
-						shuffle($thumbs);
-					}
-					$other = NULL;
-					while (count($thumbs) > 0) {	// first check for images
-						$thumb = array_shift($thumbs);
+			$this->getImages(0, 0, $field, $direction);
+			$thumbs = $this->images;
+			if (!is_null($thumbs)) {
+				if ($shuffle) {
+					shuffle($thumbs);
+				}
+				$mine = isMyAlbum($this->name,ALL_RIGHTS);
+				$other = NULL;
+				while (count($thumbs) > 0) {	// first check for images
+					$thumb = array_shift($thumbs);
+					if (is_array($thumb)) {
 						$alb = new Album($this->gallery, $thumb['folder']);
 						$thumb = newImage($alb, $thumb['filename']);
-						if ($mine || $thumb->getShow()) {
-							if (isImagePhoto($thumb)) {	// legitimate image
-								$this->albumthumbnail = $thumb;
-								return $this->albumthumbnail;
-							} else {
-								if (!is_null($thumb->objectsThumb)) {	//	"other" image with a thumb sidecar
-									$this->albumthumbnail = $thumb;
-									return $this->albumthumbnail;
-								} else {
-									if (is_null($other)) $other = $thumb;
-								}
-							}
-						}
-					}
-					if (!is_null($other)) {	//	"other" image, default thumb
-						$this->albumthumbnail = $other;
-						return $this->albumthumbnail;
-					}
-				}
-			} else {
-				$this->getImages(0, 0, $field, $direction);
-				$thumbs = $this->images;
-				if (!is_null($thumbs)) {
-					if ($shuffle) {
-						shuffle($thumbs);
-					}
-					$other = NULL;
-					while (count($thumbs) > 0) {	// first check for images
-						$thumb = array_shift($thumbs);
+					} else {
 						$thumb = newImage($this, $thumb);
-						if ($mine || $thumb->getShow()) {
-							if (isImagePhoto($thumb)) {	// legitimate image
+					}
+					if ($mine || $thumb->getShow()) {
+						if (isImagePhoto($thumb)) {	// legitimate image
+							$this->albumthumbnail = $thumb;
+							return $this->albumthumbnail;
+						} else {
+							if (!is_null($thumb->objectsThumb)) {	//	"other" image with a thumb sidecar
 								$this->albumthumbnail = $thumb;
 								return $this->albumthumbnail;
 							} else {
-								if (!is_null($thumb->objectsThumb)) {	//	"other" image with a thumb sidecar
-									$this->albumthumbnail = $thumb;
-									return $this->albumthumbnail;
-								} else {
-									if (is_null($other)) $other = $thumb;
-								}
+								if (is_null($other)) $other = $thumb;
 							}
 						}
 					}
-					if (!is_null($other)) {	//	"other" image, default thumb
-						$this->albumthumbnail = $other;
-						return $this->albumthumbnail;
-					}
+				}
+				if (!is_null($other)) {	//	"other" image, default thumb
+					$this->albumthumbnail = $other;
+					return $this->albumthumbnail;
 				}
 			}
-			// Otherwise, look in sub-albums.
-			$subalbums = $this->getAlbums();
-			if (!is_null($subalbums)) {
-				if ($shuffle) {
-					shuffle($subalbums);
-				}
-				while (count($subalbums) > 0) {
-					$folder = array_pop($subalbums);
-					$subalbum = new Album($this->gallery, $folder);
-					$pwd = $subalbum->getPassword();
-					if (($subalbum->getShow() && empty($pwd)) || isMyALbum($folder, ALL_RIGHTS)) {
-						$thumb = $subalbum->getAlbumThumbImage();
-						if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
-							$this->albumthumbnail =  $thumb;
-							return $thumb;
-						}
-					}
-				}
+		}
+		// Otherwise, look in sub-albums.
+		$subalbums = $this->getAlbums();
+		if (!is_null($subalbums)) {
+			if ($shuffle) {
+				shuffle($subalbums);
 			}
-			if (!$this->isDynamic()) {
-				// no images, no subalbums, check for standins
-				$dp = @opendir($albumdir);
-				if ($dp) {
-					while ($thumb = readdir($dp)) {
-						if (is_file($albumdir.$thumb) && is_valid_other($thumb)) {
-							$othersThumb = checkObjectsThumb($albumdir, $thumb);
-							if (!empty($othersThumb)) {
-								$thumb = newImage($this, $othersThumb);
-								if ($this->getShow()) {
-									$this->albumthumbnail = $thumb;
-									return $thumb;
-								}
-							}
-						}
+			while (count($subalbums) > 0) {
+				$folder = array_pop($subalbums);
+				$subalbum = new Album($this->gallery, $folder);
+				$pwd = $subalbum->getPassword();
+				if (($subalbum->getShow() && empty($pwd)) || isMyALbum($folder, ALL_RIGHTS)) {
+					$thumb = $subalbum->getAlbumThumbImage();
+					if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
+						$this->albumthumbnail =  $thumb;
+						return $thumb;
 					}
 				}
 			}
