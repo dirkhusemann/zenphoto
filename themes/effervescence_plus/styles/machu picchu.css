@@ -60,9 +60,7 @@ blockquote {
 }
 #imagemetadata {
 	text-align: center;
-	position: relative;
 	color: #607848;
-	display: none;
 }
 #imgmetadata_data a {
 	color: #607848;

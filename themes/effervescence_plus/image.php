@@ -12,10 +12,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
-	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
-
+	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/colorbox.css" type="text/css" />
+	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
+		});
+	</script>
 </head>
 
 <body onload="blurAnchors()">
@@ -105,9 +109,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						?>
 					</div>
 					<?php
-					if (getImageMetaData()) {
-						echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=500&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
-						printImageMetadata('', false);
+					if (getImageMetaData()) {echo "<div id=\"exif_link\"><a href=\"#\" title=\"".gettext("Image Info")."\" class=\"colorbox\">".gettext("Image Info")."</a></div>";
+						echo "<div style='display:none'>"; printImageMetadata('', false); echo "</div>";
 					}
 					?>
 			</div>

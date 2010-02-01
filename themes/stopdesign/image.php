@@ -8,9 +8,15 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 	<title><?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript">var blogrelurl = "<?php echo $_zp_themeroot ?>";</script>
-	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js"></script>
+	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/colorbox.css" type="text/css" />
+	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
+			$("a.thickbox").colorbox({maxWidth:"98%", maxHeight:"98%"});
+		});
+  </script>
 	<?php
 		printRSSHeaderLink('Gallery','Gallery RSS');
 		setOption('thumb_crop_width', 85, false);
@@ -71,8 +77,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 					<li class="tags"><?php echo getAlbumLocation(); ?></li>
 					<li class="exif">
 				<?php
-					if (getImageMetaData()) {echo "<a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
-						printImageMetadata('', false);
+					if (getImageMetaData()) {echo "<a href=\"#\" title=\"".gettext("Image Info")."\" class=\"colorbox\">".gettext("Image Info")."</a>";
+						echo "<div style='display:none'>"; printImageMetadata('', false); echo "</div>";
 						if (isImagePhoto()) echo "&nbsp;/&nbsp;";
 					}
 					$fullimage = getFullImageURL();

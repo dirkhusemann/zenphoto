@@ -8,9 +8,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
-	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/colorbox.css" type="text/css" />
+	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
+			$("a.thickbox").colorbox({maxWidth:"98%", maxHeight:"98%"});
+		});
 		function toggleComments() {
 			var commentDiv = document.getElementById("comments");
 			if (commentDiv.style.display == "block") {
@@ -55,7 +59,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	
 	<div id="image">
 		<?php if(getOption("Use_thickbox")) {
-			$thickboxclass = " class=\"thickbox\"";
+			$boxclass = " class=\"thickbox\"";
 			$tburl = getUnprotectedImageURL();
 		} else {
 			$thickboxclass = "";
@@ -63,7 +67,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		}
 		if (!empty($tburl)) {
 			?>
-			<a href="<?php echo htmlspecialchars($tburl); ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
+			<a href="<?php echo htmlspecialchars($tburl); ?>"<?php echo $boxclass; ?> title="<?php echo getBareImageTitle();?>">
 			<?php
 		}
 		printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
@@ -80,8 +84,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 		<br />
 		<?php
-			if (getImageMetaData()) { echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
-				printImageMetadata('', false);
+			if (getImageMetaData()) {echo "<div id=\"exif_link\"><a href=\"#\" title=\"".gettext("Image Info")."\" class=\"colorbox\">".gettext("Image Info")."</a></div>";
+				echo "<div style='display:none'>"; printImageMetadata('', false); echo "</div>";
 			}
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>

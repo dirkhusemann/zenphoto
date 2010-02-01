@@ -7,9 +7,12 @@
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
-	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/colorbox.css" type="text/css" />
+	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
+		});
 		function toggleComments() {
 			var commentDiv = document.getElementById("comments");
 			if (commentDiv.style.display == "block") {
@@ -73,8 +76,8 @@
 		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 		<hr /><br />
 		<?php
-			if (getImageMetaData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&amp;width=400&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
-				printImageMetadata('', false);
+			if (getImageMetaData()) {echo "<div id=\"exif_link\"><a href=\"#\" title=\"".gettext("Image Info")."\" class=\"colorbox\">".gettext("Image Info")."</a></div>";
+				echo "<div style='display:none'>"; printImageMetadata('', false); echo "</div>";
 			}
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>

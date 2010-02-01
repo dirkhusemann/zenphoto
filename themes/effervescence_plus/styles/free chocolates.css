@@ -67,9 +67,7 @@ color: #ECEBE1; /*whenever a paragraph is held within blockquote tags.*/
 }
 #imagemetadata {
   text-align: center;
-  position: relative;
   color: #996B3F;
-  display: none;
 }
 #imgmetadata_data a {
   color: #996B3F;

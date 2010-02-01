@@ -250,15 +250,12 @@ blockquote {
 
 #imagemetadata {
 	text-align: right;
-	position: relative;
-	display: none;
 }
 
 #imagemetadata table {
 	text-align: left;
 	line-height: 1em;
 	border: 1px solid #ccc;
-	position: absolute;
 	top: 2em;
 	right: 0px;
 	background-color: #fafafa;
