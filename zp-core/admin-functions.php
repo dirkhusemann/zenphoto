@@ -95,9 +95,12 @@ function printAdminHeader($tinyMCE=NULL) {
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
-	<script src="<?php echo $path; ?>js/thickbox.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="<?php echo $path; ?>js/thickbox.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $path; ?>js/colorbox/colorbox.css" type="text/css" />
+	<script src="<?php echo $path; ?>js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script language="javascript" type="text/javascript">
+		$(document).ready(function(){
+			$("a[rel='colorbox']").colorbox({ maxWidth:"98%", maxHeight:"98%"});
+		});
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 			$("#fade-message2").fadeTo(5000, 1).fadeOut(1000);

@@ -809,11 +809,11 @@ $('#left-to-right').NestedSortable(
 								title="<?php printf(gettext('crop %s'), $image->filename); ?>"
 								/>
 						</a>
-						<p><strong><?php echo $image->filename; ?></strong></p>
-						<p><?php printf(gettext('Image id: %u'),$image->get('id')); ?></p>
-						<p><?php echo gettext("Dimensions:"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
-						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
-
+						<p class="buttons"><a href="<?php echo $image->getFullImage();?>" rel="colorbox"><img src="images/magnify.png" alt="" /><strong>Zoom</strong></a></p><br style="clear: both" />
+						<p><?php echo gettext('<strong>Filename:</strong'); ?><br /><?php echo $image->filename; ?></p>
+						<p><?php echo gettext('<strong>Image id:</strong>'); ?> <?php echo $image->get('id'); ?></p>
+						<p><?php echo gettext("<strong>Dimensions:</strong>"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
+						<p><?php echo gettext("<strong>Size:</strong>"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 						<p>
 							<label>
 								<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" />
