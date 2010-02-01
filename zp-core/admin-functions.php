@@ -89,8 +89,8 @@ function printAdminHeader($tinyMCE=NULL) {
 	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/ui.zenphoto.css" type="text/css" />
 	<?php datepickerJS(); ?>
 	<!--Nested Sortables-->
-	<script type="text/javascript" src="zp-extensions/zenpage/js/interface-1.2.js"></script>
-	<script type="text/javascript" src="zp-extensions/zenpage/js/inestedsortable.js"></script>
+	<script type="text/javascript" src="<?php echo $path; ?>js/nestedsortables/interface-1.2.js"></script>
+	<script type="text/javascript" src="<?php echo $path; ?>js/nestedsortables/inestedsortable.js"></script>
 	<!--Nested Sortables End-->
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>

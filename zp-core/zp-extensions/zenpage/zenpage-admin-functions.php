@@ -1151,24 +1151,22 @@ function zenpageJSCSS() {
 	<link rel="stylesheet" href="../../js/jqueryui/ui.zenphoto.css" type="text/css" />
   <?php datepickerJS(); ?>
 	<script type="text/javascript" src="../../js/zenphoto.js.php"></script>
-	<script type="text/javascript" src="../../js/thickbox.js"></script>
-	<link rel="stylesheet" href="thickbox-mod.css" type="text/css" />
-
+	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
+	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
 	<script type="text/javascript">
-	jQuery(function( $ ){
-		$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
-	});
-	</script>
-
-	<script type="text/javascript">
-  $(document).ready(function(){
-    $("#tip a").click(function() {
+		$(document).ready(function(){
+			$("a.colorbox").colorbox({iframe:true, width:"810",height:"480" });
+		});
+		jQuery(function( $ ){
+			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
+		});
+  	$(document).ready(function(){
+    	$("#tip a").click(function() {
       $("#tips").toggle("slow");
     });
-   
-  });
+   });
   </script>
-	<?php
+<?php
 }
 
 /**
