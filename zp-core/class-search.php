@@ -561,7 +561,7 @@ class SearchEngine
 			case 'albums':
 				if (is_null($sorttype)) {
 					if (empty($this->dynalbumname)) {
-						$key = subalbumSortKey(getOption('gallery_sorttype'));
+						$key = lookupSortKey(getOption('gallery_sorttype'), 'sort_order', 'folder');
 						if ($key != '`sort_order`') {
 							if (getOption('gallery_sortdirection')) {
 								$key .= " DESC";
@@ -578,7 +578,7 @@ class SearchEngine
 						}
 					}
 				} else {
-					$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
+					$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
 					$key = trim($sorttype.' '.$sortdirection);
 				}
 				break;
@@ -591,7 +591,7 @@ class SearchEngine
 				}
 				if (is_null($sorttype)) {
 					if (empty($this->dynalbumname)) {
-						$key = albumSortKey(getOption('image_sorttype'));
+						$key = lookupSortKey(getOption('image_sorttype'), 'filename', 'filename');
 						if ($key != '`sort_order`') {
 							if (getOption('image_sortdirection')) {
 								$key .= " DESC";
@@ -608,7 +608,7 @@ class SearchEngine
 						}
 					}
 				} else {
-					$sorttype = lookupSortKey($sorttype, 'sort_order', 'folder');
+					$sorttype = lookupSortKey($sorttype, 'filename', 'filename');
 					$key = trim($sorttype.' '.$sortdirection);
 				}
 				break;
