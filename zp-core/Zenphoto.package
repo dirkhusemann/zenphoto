@@ -307,6 +307,7 @@ zp-core/images/imageDefault.png
 zp-core/images/lock.png
 zp-core/images/lock_2.png
 zp-core/images/lock_open.png
+zp-core/images/magnify.png
 zp-core/images/marker.png
 zp-core/images/mask.png
 zp-core/images/movie.jpg
@@ -436,8 +437,6 @@ zp-core/js/nestedsortables/grippie.png
 zp-core/js/nestedsortables/inestedsortable.js
 zp-core/js/nestedsortables/interface-1.2.js
 zp-core/js/tag.js
-zp-core/js/thickbox.css
-zp-core/js/thickbox.js
 zp-core/js/toggleElements.css
 zp-core/js/zenphoto.js.php
 zp-core/lib-auth.php

@@ -1144,8 +1144,9 @@ function loadLocalOptions($albumid, $theme) {
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list;
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS | VIEW_ALL_RIGHTS)) {
-		return $_zp_loggedin & (ADMIN_RIGHTS | $action);
+		if ($_zp_loggedin & (ADMIN_RIGHTS | $action)) return true;
 	}
+	if (zp_apply_filter('check_album_credentials', false)) return true;
 	if (empty($albumfolder) || $albumfolder == '/') {
 		return false;
 	}
