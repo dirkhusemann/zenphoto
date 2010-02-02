@@ -2642,10 +2642,13 @@ function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
  */
 function processRights($i) {
 	global $_admin_rights;
-	$rights = 0;
-	if (isset($_POST[$i.'-confirmed'])) $rights = $rights | NO_RIGHTS;
+	if (isset($_POST[$i.'-confirmed'])) {
+		$rights = NO_RIGHTS;
+	} else {
+		$rights = 0;
+	}
 	foreach ($_admin_rights as $name=>$right) {
-		if (isset($_POST[$i.'-'.$name])) $rights = $rights | $right;
+		if (isset($_POST[$i.'-'.$name])) $rights = $rights | $right | NO_RIGHTS;
 	}
 	return $rights;
 }

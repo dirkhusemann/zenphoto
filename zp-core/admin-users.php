@@ -284,9 +284,8 @@ if (empty($alterrights)) {
 				$userobj->setValid(1);
 			}
 			$groupname = $userobj->getGroup();
-			if ($pending = $userobj->getRights() == 0 && empty($groupname)) {
+			if ($pending = $userobj->getRights() == 0) {
 				$master = '(<em>'.gettext('pending verification').'</em>)';
-				$local_alterrights = ' DISABLED';
 			} else {
 				$master = '&nbsp;';
 			}
@@ -367,16 +366,16 @@ if (empty($alterrights)) {
 							<?php
 						} else {
 							echo $master;
-							if ($pending) {
+						}
+						if ($pending) {
+						?>
+							<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
+							<?php echo gettext("Authenticate user"); ?>
+							<?php
+						} else {
 							?>
-								<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $local_alterrights; ?>>
-								<?php echo gettext("Authenticate user"); ?>
-								<?php
-							} else {
-								?>
-								<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
-								<?php 
-							}
+							<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
+							<?php 
 						}
 			 			?>
 		 			</td>
