@@ -643,21 +643,23 @@ class Gallery {
 	 * @since  1.0.0
 	 */
 	function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $sortdirection=NULL) {
+		if (is_null($parentalbum)) {
+			$albumid = ' IS NULL';
+			$obj = $this;
+		} else {
+			$albumid = '='.$parentalbum->id;
+			$obj = $parentalbum;
+		}
 		if (($sortkey == '`sort_order`') || ($sortkey == 'RAND()')) { // manual sort is always ascending
 			$order = false;
 		} else {
 			if (!is_null($sortdirection)) {
 				$order = strtoupper($sortdirection) == 'DESC';
 			} else {
-				$order = $this->getSortDirection('image');
+				$order = $obj->getSortDirection('album');
 			}
 		}
 		if (count($albums) == 0) return array();
-		if (is_null($parentalbum)) {
-			$albumid = ' IS NULL';
-		} else {
-			$albumid = '='.$parentalbum->id;
-		}
 		$sql = 'SELECT * FROM ' .	prefix("albums") . ' WHERE `parentid`'.$albumid;
 		$result = query($sql);
 		$results = array();
@@ -678,9 +680,8 @@ class Gallery {
 				unset($results[$dbrow]);
 			}
 		}
-		if (get_class($gall = $this) == 'Album') $gall = $this->gallery;
 		foreach ($albums as $folder) {	// these albums are not in the database
-			$albumobj = new Album($gall,$folder);
+			$albumobj = new Album($this,$folder);
 			$results[$folder] = $albumobj->data;
 		}
 		//	now put the results in the right order
