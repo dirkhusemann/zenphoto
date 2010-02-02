@@ -295,9 +295,9 @@ function getNewsTitle() {
 	global $_zp_current_zenpage_news;
 	if (!is_null($_zp_current_zenpage_news)) {
 		if(is_NewsType("album") && (getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail"	|| getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail-customcrop" || getOption("zenpage_combinews_mode") == "latestimagesbyalbum-sizedimage")) {
-			$result = query("SELECT COUNT(date) FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+			$result = query("SELECT COUNT(date) FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
 			$count = mysql_result($result, 0);
-			$result2 = query_full_array("SELECT filename FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+			$result2 = query_full_array("SELECT filename FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
 			$imagetitles = "";
 			$countresult = count($result2);
 			$count2 = "";
@@ -305,9 +305,9 @@ function getNewsTitle() {
 				$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
 				$imagetitles .= $imageobj->getTitle();
 				$count2++;
-				if($count2 < $countresult && $countresult != 1) {
+				if($countresult != 1 && $count2 <= 3 && $count >= $countresult) {
 					$imagetitles .= ", ";
-				} else if($count2 > 3) {
+				} else if($countresult != 1 && $count2 <= 3 && $count != $countresult){
 					$imagetitles .= ",...";
 				}
 			}
@@ -475,7 +475,7 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 				case "latestimagesbyalbum-thumbnail-customcrop":
 				case "latestimagesbyalbum-sizedimage":
 					//echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getAlbumLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
-					$images = query_full_array("SELECT title, filename FROM ".prefix('images')." AS images WHERE date = '".$_zp_current_zenpage_news->getDateTime()."' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+					$images = query_full_array("SELECT title, filename FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
 					//echo "<pre>"; print_r($images); echo "</pre><br />";
 					foreach($images as $image) {
 						$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);

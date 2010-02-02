@@ -434,11 +434,25 @@ function getParentPages(&$parentid,$initparents=true) {
 			case "latestimagesbyalbum-sizedimage":
 				$type1 = query("SET @type1:='news'");
 				$type2 = query("SET @type2:='albums'");
+				if(empty($combinews_sortorder) || $combinews_sortorder != "date" || $combinews_sortorder != "mtime" ) {
+					$combinews_sortorder = "date";
+				}
+				$combinews_sortorder = "date";
+				$sortorder = "images.".$combinews_sortorder;
+				switch(		$combinews_sortorder) {
+					case "date":
+						$imagequery = "(SELECT DISTINCT DATE_FORMAT(".$sortorder.",'%Y-%m-%d'), albums.folder, DATE_FORMAT(images.`date`,'%Y-%m-%d'), @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+						WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY DATE_FORMAT(".$sortorder.",'%Y-%m-%d'))";
+						break;
+					case "mtime":
+						$imagequery = "(SELECT DISTINCT FROM_UNIXTIME(".$sortorder.",'%Y-%m-%d'), albums.folder, DATE_FORMAT(images.`date`,'%Y-%m-%d'), @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+						WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY FROM_UNIXTIME(".$sortorder.",'%Y-%m-%d'))";
+						break;
+				}
 				$result = query_full_array("
 				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
-				(SELECT DISTINCT images.date, albums.folder, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
-				WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY images.date)
+				".$imagequery."
 				ORDER By date DESC $limit
 				");
 				//echo "<pre>"; print_r($result); echo "</pre>";
