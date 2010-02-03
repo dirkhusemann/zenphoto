@@ -122,10 +122,10 @@ function printAdminToolbox($id='admin') {
 		<?php
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript:toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
-		
+
 		// open the list--all links go between here and the close of the list below
 		echo "<ul style='list-style-type: none;'>";
-		
+
 		// generic link to Admin.php
 		echo "<li>";
 		printAdminLink(gettext('Admin'), '', "</li>\n");
@@ -136,7 +136,7 @@ function printAdminToolbox($id='admin') {
 		if ($page>1) {
 			$redirect .= "&amp;page=$page";
 		}
-		
+
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		// options link for all admins with options rights
 			echo "<li>";
@@ -144,14 +144,14 @@ function printAdminToolbox($id='admin') {
 			echo "</li>\n";
 		}
 		zp_apply_filter('admin_toolbox_global');
-		
+
 		$gal = getOption('custom_index_page');
 		if (empty($gal) || !file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($gal).'.php')) {
 			$gal = 'index.php';
 		} else {
 			$gal .= '.php';
 		}
-		if ($_zp_gallery_page === $gal) { 
+		if ($_zp_gallery_page === $gal) {
 		// script is either index.php or the gallery index page
 			if ($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
 				// admin has edit rights so he can sort the gallery (at least those albums he is assigned)
@@ -159,7 +159,7 @@ function printAdminToolbox($id='admin') {
 				<li>
 				<?php echo printLink($zf . '/admin-edit.php?page=edit', gettext("Sort Gallery"), NULL, NULL, NULL); ?>
 				</li>
-				<?php 
+				<?php
 			}
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				// admin has upload rights, provide an upload link for a new album
@@ -170,7 +170,7 @@ function printAdminToolbox($id='admin') {
 				<?php
 			}
 			zp_apply_filter('admin_toolbox_gallery');
-		} else if ($_zp_gallery_page === 'album.php') { 
+		} else if ($_zp_gallery_page === 'album.php') {
 		// script is album.php
 			$albumname = $_zp_current_album->name;
 			if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
@@ -183,14 +183,14 @@ function printAdminToolbox($id='admin') {
 						<li>
 						<?php echo printLink($zf . '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&tab=subalbuminfo', gettext("Sort subalbums"), NULL, NULL, NULL); ?>
 						</li>
-						<?php 
+						<?php
 					}
 					if ($_zp_current_album->getNumImages()>0) {
 						?>
 						<li>
 						<?php echo printLink($zf . '/admin-albumsort.php?page=edit&album=' . urlencode($albumname).'&tab=sort', gettext("Sort album images"), NULL, NULL, NULL); ?>
 						</li>
-						<?php 
+						<?php
 					}
 				}
 				// and a delete link
@@ -213,7 +213,7 @@ function printAdminToolbox($id='admin') {
 			// set the return to this album/page
 			zp_apply_filter('admin_toolbox_album', $albumname);
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
-			
+
 		} else if ($_zp_gallery_page === 'image.php') {
 			// script is image.php
 			if (!$_zp_current_album->isDynamic()) { // don't provide links when it is a dynamic album
@@ -240,7 +240,7 @@ function printAdminToolbox($id='admin') {
 			zp_apply_filter('admin_toolbox_search');
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
-		
+
 		// zenpage script pages
 		if(function_exists('is_NewsArticle')) {
 				if (is_NewsArticle()) {
@@ -259,7 +259,7 @@ function printAdminToolbox($id='admin') {
 				if (is_NewsArticle()) {
 					// page is a NewsArticle--provide zenpage edit, delete, and Add links
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Article")."</a></li>";
-					?> 
+					?>
 					<li><a href="javascript:confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 					<?php
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
@@ -269,19 +269,19 @@ function printAdminToolbox($id='admin') {
 				if (is_Pages()) {
 					// page is zenpage page--provide edit, delete, and add links
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Page")."</a></li>";
-					?> 
+					?>
 					<li><a href="javascript:confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
-					<?php	
+					<?php
 					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
 					zp_apply_filter('admin_toolbox_page', $titlelink);
 				}
 			}
-		}	
-		
+		}
+
 		// logout link
 		if (getOption('server_protocol')=='https') $sec=1; else $sec=0;
 		echo "<li><a href=\"".$zf."/admin.php?logout={$sec}{$redirect}\">".gettext("Logout")."</a></li>\n";
-		
+
 		// close the list
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -720,7 +720,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	$ilim = min($total, max($navlen-round($extralinks/2), $current+floor($len)));
 	$k1 = round(($j-2)/2)+1;
 	$k2 = $total-round(($total-$ilim)/2);
-	
+
 	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
 	echo "<ul class=\"$class\">\n";
 	if ($nextprev) {
@@ -772,7 +772,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
  */
 function makeAlbumCurrent($album) {
 	global $_zp_current_album;
-	$_zp_current_album = $album; 
+	$_zp_current_album = $album;
 	set_context(ZP_INDEX | ZP_ALBUM);
 }
 
@@ -807,7 +807,7 @@ function getAnnotatedAlbumTitle() {
 	$pwd = $_zp_current_album->getPassword();
 	if (zp_loggedin() && !empty($pwd)) {
 		$title .= "\n".gettext('The album is password protected.');
-	} 
+	}
 	if (!$_zp_current_album->getShow()) {
 		$title .= "\n".gettext('The album is not published.');
 	}
@@ -1136,7 +1136,7 @@ function printAlbumDesc($editable=false, $editclass='', $messageIfEmpty = true )
  * @author Ozh
  */
 function printEditable($context, $field, $editable = false, $editclass = 'editable', $messageIfEmpty = true, $convertBR = false, $override = false, $label='') {
-	
+
 	if (!$context or !$field) {
 		trigger_error(gettext('printEditable() incomplete function call.'), E_USER_NOTICE);
 		return false;
@@ -1169,7 +1169,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\n", "<br />", $text);
 	}
-	
+
 	if (empty($text)) {
 		if ( $editable && zp_loggedin() ) {
 			if ( $messageIfEmpty === true ) {
@@ -1418,7 +1418,7 @@ function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $cro
 
 /**
  * Prints a link to a custom sized thumbnail of the current album
- * 
+ *
  * See getCustomImageURL() for details.
  *
  * @param string $alt Alt atribute text
@@ -1496,7 +1496,7 @@ function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 		$s_height = $image->get('height');
 		if ($s_height == 0) $s_height = max($width,$height);
 	}
-	
+
 	$newW = round($height/$s_height*$s_width);
 	$newH = round($width/$s_width*$s_height);
 	if (DEBUG_IMAGE) debugLog("getMaxSpaceContainer($width, $height, $imagename, $thumb): \$s_width=$s_width; \$s_height=$s_height; \$newW=$newW; \$newH=$newH; \$upscale=$upscale;");
@@ -1519,7 +1519,7 @@ function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 
 	/**
  * Returns a link to a uncropped custom sized version of the current album thumb within the given height and width dimensions.
-  *
+	*
  * @param int $width width
  * @param int $height height
  * @return string
@@ -1534,7 +1534,7 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
 /**
  * Prints a uncropped custom sized album thumb within the given height and width dimensions.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
- * 
+ *
  * @param string $alt Alt text for the url
  * @param int $width width
  * @param int $height height
@@ -1708,7 +1708,7 @@ function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirec
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
 				 $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
 	if (!$overridePassword) { if (checkforPassword()) { return false; } }
-	if (is_null($firstPageCount)) $firstPageCount = $_zp_conf_vars['images_first_page']; 
+	if (is_null($firstPageCount)) $firstPageCount = $_zp_conf_vars['images_first_page'];
 	$imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
 	if ($all) {
 		$imagePage = 1;
@@ -1731,11 +1731,7 @@ function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirec
 		if (empty($_zp_images)) { return false; }
 		$_zp_current_image_restore = $_zp_current_image;
 		$img = array_shift($_zp_images);
-		if (is_array($img)) {
-			$_zp_current_image = newImage(new Album($_zp_gallery, $img['folder']), $img['filename']);
-		} else {
-			$_zp_current_image = newImage($_zp_current_album, $img);
-		}
+		$_zp_current_image = newImage($_zp_current_album, $img);
 		save_context();
 		add_context(ZP_IMAGE);
 		return true;
@@ -1746,11 +1742,7 @@ function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirec
 		return false;
 	} else {
 		$img = array_shift($_zp_images);
-		if (is_array($img)) {
-			$_zp_current_image = newImage(new Album($_zp_gallery, $img['folder']), $img['filename']);
-		} else {
-			$_zp_current_image = newImage($_zp_current_album, $img);
-		}
+		$_zp_current_image = newImage($_zp_current_album, $img);
 		return true;
 	}
 }
@@ -1767,7 +1759,7 @@ function makeImageCurrent($image) {
 	if (!is_object($image)) return;
 	global $_zp_current_album, $_zp_current_image;
 	$_zp_current_image = $image;
-	$_zp_current_album = $_zp_current_image->getAlbum(); 
+	$_zp_current_album = $_zp_current_image->getAlbum();
 	set_context(ZP_INDEX | ZP_ALBUM | ZP_IMAGE);
 }
 
@@ -1901,7 +1893,7 @@ function printImageDate($before='', $nonemessage='', $format=null, $editable=fal
 			$messageIfEmpty = gettext('(No date...)');
 		}
 	}
-	
+
 	printEditable('image', 'date', $editable, $editclass, $messageIfEmpty, false, $date);
 }
 
@@ -2289,13 +2281,13 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 
 	if (is_null($title))
 		$title = gettext('Image Info');
-	
+
 	// Metadata values will be editable only with sufficient privileges
 	$editable = ( $editable && zp_loggedin());
 
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No data)');
-	}			
+	}
 
 	$dataid = $id . '_data';
 	echo "<div" . (($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . ">\n";
@@ -2314,7 +2306,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 		}
 	}
 	echo "</table>\n</div>\n";
-	
+
 }
 
 /**
@@ -2340,7 +2332,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	}
 	$h = $_zp_current_image->getHeight();
 	$w = $_zp_current_image->getWidth();
-	$side = getOption('image_use_side'); 
+	$side = getOption('image_use_side');
 	$us = getOption('image_allow_upscale');
 
 	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null),$_zp_current_album->name);
@@ -2368,7 +2360,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	} else {
 		$wprop = round(($w / $h) * $dim);
 	}
-	
+
 	if (($size && ($side == 'longest' && $h > $w) || ($side == 'height') || ($side == 'shortest' && $h < $w))	|| $height) {
 		// Scale the height
 		$newh = $dim;
@@ -2659,50 +2651,50 @@ function getSizedImageURL($size) {
 /**
  * Returns the url to the  image in that dimensions you define with this function.
  *
- * $size, $width, and $height are used in determining the final image size. 
- * At least one of these must be provided. If $size is provided, $width and 
- * $height are ignored. If both $width and $height are provided, the image 
- * will have those dimensions regardless of the original image height/width 
- * ratio. (Yes, this means that the image may be distorted!) 
+ * $size, $width, and $height are used in determining the final image size.
+ * At least one of these must be provided. If $size is provided, $width and
+ * $height are ignored. If both $width and $height are provided, the image
+ * will have those dimensions regardless of the original image height/width
+ * ratio. (Yes, this means that the image may be distorted!)
 
- * The $crop* parameters determine the portion of the original image that 
- * will be incorporated into the final image. 
+ * The $crop* parameters determine the portion of the original image that
+ * will be incorporated into the final image.
 
- * $cropw and $croph "sizes" are typically proportional. That is you can 
- * set them to values that reflect the ration of width to height that you 
- * want for the final image. Typically you would set them to the fincal 
- * height and width. These values will always be adjusted so that they are 
- * not larger than the original image dimensions. 
+ * $cropw and $croph "sizes" are typically proportional. That is you can
+ * set them to values that reflect the ration of width to height that you
+ * want for the final image. Typically you would set them to the fincal
+ * height and width. These values will always be adjusted so that they are
+ * not larger than the original image dimensions.
 
- * The $cropx and $cropy values represent the offset of the crop from the 
- * top left corner of the image. If these values are provided, the $croph 
- * and $cropw parameters are treated as absolute pixels not proportions of 
- * the image. If cropx and cropy are not provided, the crop will be 
- * "centered" in the image. 
+ * The $cropx and $cropy values represent the offset of the crop from the
+ * top left corner of the image. If these values are provided, the $croph
+ * and $cropw parameters are treated as absolute pixels not proportions of
+ * the image. If cropx and cropy are not provided, the crop will be
+ * "centered" in the image.
 
- * When $corpx and $cropy are not provided the crop is offset from the top 
- * left proportionally to the ratio of the final image size and the crop 
- * size. 
+ * When $corpx and $cropy are not provided the crop is offset from the top
+ * left proportionally to the ratio of the final image size and the crop
+ * size.
 
- * Some typical croppings: 
+ * Some typical croppings:
 
- * $size=200, $width=NULL, $height=NULL, $cropw=200, $croph=100, 
- * $cropx=NULL, $cropy=NULL produces an image cropped to a 2x1 ratio which 
- * will fit in a 200x200 pixel frame. 
+ * $size=200, $width=NULL, $height=NULL, $cropw=200, $croph=100,
+ * $cropx=NULL, $cropy=NULL produces an image cropped to a 2x1 ratio which
+ * will fit in a 200x200 pixel frame.
 
- * $size=NUL, $width=200, $height=NULL, $cropw=200, $croph=100, $cropx=100, 
- * $cropy=10 will will take a 200x100 pixel slice from (10,100) of the 
- * picture and create a 200x100 image 
+ * $size=NUL, $width=200, $height=NULL, $cropw=200, $croph=100, $cropx=100,
+ * $cropy=10 will will take a 200x100 pixel slice from (10,100) of the
+ * picture and create a 200x100 image
 
- * $size=NUL, $width=200, $height=100, $cropw=200, $croph=120, $cropx=NULL, 
- * $cropy=NULL will produce a (distorted) image 200x100 pixels from a 1x0.6 
- * crop of the image. 
+ * $size=NUL, $width=200, $height=100, $cropw=200, $croph=120, $cropx=NULL,
+ * $cropy=NULL will produce a (distorted) image 200x100 pixels from a 1x0.6
+ * crop of the image.
 
-  
+	
  * $size=NUL, $width=200, $height=NULL, $cropw=180, $croph=120, $cropx=NULL, $cropy=NULL
  * will produce an image that is 200x133 from a 1.5x1 crop that is 5% from the left
  * and 15% from the top of the image.
- * 
+ *
  * @param int $size the size of the image to have
  * @param int $width width
  * @param int $height height
@@ -2723,11 +2715,11 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 /**
  * Print normal video or custom sized images.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
- * 
+ *
  * Notes on cropping:
- * 
+ *
  * The $crop* parameters determine the portion of the original image that will be incorporated
- * into the final image. The w and h "sizes" are typically proportional. That is you can set them to 
+ * into the final image. The w and h "sizes" are typically proportional. That is you can set them to
  * values that reflect the ration of width to height that you want for the final image. Typically
  * you would set them to the fincal height and width.
  *
@@ -2767,7 +2759,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	if ($id) $id = ' id="'.$id.'"';
 	if ($class) $id = ' class="'.$class.'"';
 	if (isImagePhoto() || $thumbStandin) {
-		$html = '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' . 
+		$html = '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' .
 			' alt="' . html_encode($alt) . '"' .
 			$id .
 			$sizing .
@@ -2817,7 +2809,7 @@ function getCustomSizedImageThumbMaxSpace($width, $height) {
  * @param int $height height
  * @param string $class Optional style class
  * @param string $id Optional style id
-  */
+	*/
 function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL) {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return;
@@ -2828,7 +2820,7 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
 /**
  * Print normal video or uncropped within the given height and width dimensions. Use for sized images or thumbnails in an album.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
- * 
+ *
  * @param string $alt Alt text for the url
  * @param int $width width
  * @param int $height height
@@ -2926,7 +2918,7 @@ function next_comment($desc=false) {
 		$_zp_current_comment = NULL;
 		rem_context(ZP_COMMENT);
 		return false;
-	} 
+	}
 	$_zp_current_comment = array_shift($_zp_comments);
 	if ($_zp_current_comment['anon']) {
 		$_zp_current_comment['email'] = $_zp_current_comment['name'] = '<'.gettext("Anonymous").'>';
@@ -3100,7 +3092,7 @@ function getLatestComments($number,$type="all",$itemID="") {
 		. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
 		. $whereImages
 		. " ORDER BY c.id DESC LIMIT $number");
-	} 
+	}
 	if ($type === "all" OR $type === "album") {
 		$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
 		. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
@@ -3215,7 +3207,7 @@ function getProtectedAlbumsWhere() {
 	$max_depth = $result['max_depth'];
 
 	$sql = "SELECT level0.id FROM " . prefix('albums') . " AS level0 ";
-        $where = " WHERE (level0.password > ''";
+				$where = " WHERE (level0.password > ''";
 	$i = 1;
 	while ($i <= $max_depth) {
 		$sql = $sql . " LEFT JOIN " . prefix('albums') . "AS level" . $i . " ON level" . $i . ".id = level" . ($i - 1) . ".parentid";
@@ -3234,7 +3226,7 @@ function getProtectedAlbumsWhere() {
 	} else {
 		$albumWhere = '';
 	}
-	
+
 	if (!empty($albumWhere)) $albumWhere = ' AND '.$albumWhere;
 	return $albumWhere;
 }
@@ -3265,14 +3257,14 @@ function getRandomImages($daily = false) {
 	$c = 0;
 	while ($c < 10) {
 		$result = query_single_row('SELECT COUNT(*) AS row_count ' .
-                                ' FROM '.prefix('images'). ', '.prefix('albums').
-                                ' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' .
+																' FROM '.prefix('images'). ', '.prefix('albums').
+																' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' .
 																prefix('albums') . '.id ' .    $albumWhere . $imageWhere );
 		$rand_row = rand(1, $result['row_count']);
 
 		$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
-                                ' FROM '.prefix('images').', '.prefix('albums') .
-                                ' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumWhere .
+																' FROM '.prefix('images').', '.prefix('albums') .
+																' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumWhere .
 																$imageWhere . ' LIMIT ' . $rand_row . ', 1');
 
 		$imageName = $result['filename'];
@@ -3329,7 +3321,7 @@ function getRandomImagesAlbum($rootAlbum=null,$showunpublished=false) {
 		}
 
 		$query = "SELECT id FROM " . prefix('albums') . " WHERE ";
-		if ($albumInWhere) $query .= $albumInWhere.' AND '; 
+		if ($albumInWhere) $query .= $albumInWhere.' AND ';
 		$query .= "folder LIKE '" . zp_escape_string($albumfolder) . "%'";
 		$result = query_full_array($query);
 		if (is_array($result) && count($result) > 0) {
@@ -3444,7 +3436,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 	global $_zp_current_search;
 	$singletag = getTags();
 	$tagstring = implode(', ', $singletag);
- 	if ($tagstring === '' or $tagstring === NULL ) {
+	if ($tagstring === '' or $tagstring === NULL ) {
 		$preText = '';
 		if ( $messageIfEmpty === true && $editable && zp_loggedin() ) {
 			$tagstring = gettext('(No tags...)');
@@ -3515,7 +3507,7 @@ define('ALLTAGS_MINFONTSIZE', 0.8);
  * @param bool $counter TRUE if you want the tag count within brackets behind the tag
  * @param bool $links set to TRUE to have tag search links included with the tag.
  * @param int $maxfontsize largest font size the cloud should display
- * @param int $maxcount the floor count for setting the cloud font size to $maxfontsize 
+ * @param int $maxcount the floor count for setting the cloud font size to $maxfontsize
  * @param int $mincount the minimum count for a tag to appear in the output
  * @param int $limit set to limit the number of tags displayed to the top $numtags
  * @since 1.1
@@ -3597,7 +3589,7 @@ function getAllDates($order='asc') {
 	if (!zp_loggedin()) {
 		$sql .= " WHERE `show` = 1";
 	}
-	$hidealbums = getNotViewableAlbums();	
+	$hidealbums = getNotViewableAlbums();
 	if (!is_null($hidealbums)) {
 		if (zp_loggedin()) {
 			$sql .= ' WHERE ';
@@ -3859,7 +3851,7 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
 			if (getOption('RSS_album_image')) {
 				return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"".$serverprotocol.$host.WEBPATH."/rss.php?lang=".$lang."&amp;albumsmode\" />\n";
 			}
-		
+
 	}
 }
 
@@ -3881,7 +3873,7 @@ function printRSSHeaderLink($option, $linktext) {
 
 /**
  * tests if a search page is an "archive" page
- * 
+ *
  * @return bool
  */
 function isArchive() {
@@ -3943,7 +3935,7 @@ function getSearchURL($words, $dates, $fields, $page, $inalbums='') {
 		} else {
 			$url .= '&'.$urls;
 		}
-		
+
 	}
 	if (!empty($inalbums)) {
 		if ($mr&empty($urls)) {
@@ -4039,7 +4031,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 		<ul style="display:none;" id="searchextrashow">
 		<?php
 		foreach ($fields as $display=>$key) {
-			echo '<li><label><input id="_SEARCH_'.$key.'" name="_SEARCH_'.$key.'" type="checkbox"';		
+			echo '<li><label><input id="_SEARCH_'.$key.'" name="_SEARCH_'.$key.'" type="checkbox"';
 			if (in_array($key,$query_fields)) {
 				echo ' checked="checked" ';
 			}
@@ -4047,7 +4039,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 		}
 		?>
 		</ul>
-		<?php 
+		<?php
 	}
 	?>
 	</form>
@@ -4207,7 +4199,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 
 /**
  * returns the auth type of a guest login
- * 
+ *
  * @param string $hint
  * @param string $show
  * @return string
@@ -4407,7 +4399,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"captchainputbox\" />";
 		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\" />" .
- 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" style=\"vertical-align:bottom\"/></label>&nbsp;";
+						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" style=\"vertical-align:bottom\"/></label>&nbsp;";
 
 		echo $preText;
 		echo $captcha;
@@ -4422,7 +4414,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
  *
  */
 function printZenphotoLink() {
-	echo gettext("Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>");	
+	echo gettext("Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>");
 }
 
 /**

@@ -702,12 +702,7 @@ class Album extends PersistentObject {
 				$other = NULL;
 				while (count($thumbs) > 0) {	// first check for images
 					$thumb = array_shift($thumbs);
-					if (is_array($thumb)) {
-						$alb = new Album($this->gallery, $thumb['folder']);
-						$thumb = newImage($alb, $thumb['filename']);
-					} else {
-						$thumb = newImage($this, $thumb);
-					}
+					$thumb = newImage($this, $thumb);
 					if ($mine || $thumb->getShow()) {
 						if (isImagePhoto($thumb)) {	// legitimate image
 							$this->albumthumbnail = $thumb;

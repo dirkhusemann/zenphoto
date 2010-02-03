@@ -82,8 +82,6 @@ function emailApproval($comment) {
 				$row = query_single_row($sql);
 				if (is_array($row)) {
 					$album = new Album(New Gallery(), $row['folder']);
-				}
-				if (is_array($row)) {
 					$owner = newImage($album, $imagerow['filename']);
 				}
 			}
