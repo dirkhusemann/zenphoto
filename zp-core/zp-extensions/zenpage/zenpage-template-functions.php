@@ -431,13 +431,13 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 		case "image":
 			switch($mode) {
 				case "latestimages-sizedimage":
-					echo "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
+					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'>";
 					if (isImagePhoto($_zp_current_zenpage_news)) {
-						$articlecontent = "<img src='".htmlspecialchars($_zp_current_zenpage_news->getSizedImage($size))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+						$articlecontent .= "<img src='".htmlspecialchars($_zp_current_zenpage_news->getSizedImage($size))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					} else {
-						$articlecontent = "<img src='".htmlspecialchars($_zp_current_zenpage_news->getThumbImageFile(WEBPATH))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
+						$articlecontent .= "<img src='".htmlspecialchars($_zp_current_zenpage_news->getThumbImageFile(WEBPATH))."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' />";
 					}
-					echo "</a>";
+					$articlecontent .= "</a>";
 					break;
 				case "latestimages-thumbnail":
 					$articlecontent = "<a href='".htmlspecialchars($_zp_current_zenpage_news->getImageLink())."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".htmlspecialchars($_zp_current_zenpage_news->getThumb())."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
