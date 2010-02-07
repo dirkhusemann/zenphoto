@@ -192,7 +192,7 @@ class flowplayer3 {
 				{
 					url:"' . $moviepath . '",
 					autoPlay: '.$autoplay.',
-					autoBuffering: true,
+					autoBuffering: '.$autoplay.',
 					scaling: "'.getOption('flow_player3_scaling').'"
 				}
 			}); 
@@ -206,7 +206,7 @@ class flowplayer3 {
 				{
 					url:"' . $moviepath . '",
 					autoPlay: '.$autoplay.',
-					autoBuffering: true,
+					autoBuffering: '.$autoplay.',
 					scaling: "'.getOption('flow_player3_scaling').'"
 				}
 			]

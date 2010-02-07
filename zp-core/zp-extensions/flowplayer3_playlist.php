@@ -180,7 +180,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 					url:"'.getAlbumFolder(WEBPATH).$album->name.'/'.$item.'",
 					autoPlay: '.$autoplay.',
 					title: "'.$image->getTitle().' <small>('.$ext.')</small>",
-					autoBuffering: true
+					autoBuffering: '.$autoplay.'
 				},';
 				} // if ext end
 			} // foreach end
