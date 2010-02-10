@@ -189,11 +189,16 @@ function getNumNews($combi=true) {
  * sets $_zp_current_zenpage_news to the next news item
  * Returns true if there is an new item to be shown
  *
- * @param bool $combi
+ * @param string $sortorder "date" for sorting by date (default)
+ * 													"title" for sorting by title
+ * 													This parameter is not used for date archives and CombiNews mode
+ * @param string $sortdirection "desc" (default) for descending sort order
+ * 													    "asc" for ascending sort order
+ * 											        This parameter is not used for date archives and CombiNews mode
  *
  * @return bool
  */
-function next_news($combi=true) {
+function next_news($sortorder="date", $sortdirection="desc") {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery, $_zp_current_search;
 	if(!checkforPassword()) {
 		if (is_null($_zp_zenpage_articles)) {
@@ -203,7 +208,7 @@ function next_news($combi=true) {
 			} else if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
 				$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
 			} else {
-				$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"));
+				$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"),'',NULL,false,$sortorder,$sortdirection);
 			}
 			//print_r($_zp_zenpage_articles); // debugging
 			if (empty($_zp_zenpage_articles)) { return false; }
@@ -2226,9 +2231,16 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 			$subcount++;
 			$pagetitle = $pageobj->getTitle();
 			$pagecontent = $pageobj->getContent();
-			if(strlen($pagecontent) > $excerptlength) {
-				$pagecontent = shortenContent($pagecontent, $excerptlength, $shortenindicator.
-						" <a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$readmore."</a>\n");
+			$readmorelink = " <a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$readmore."</a>\n";
+			if(stristr($pagecontent,"<!-- pagebreak -->") !== FALSE) {
+				$array = explode("<!-- pagebreak -->",$pagecontent);
+				$shortenindicator .= $readmorelink;
+				$pagecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
+				if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
+					$pagecontent = str_replace($shortenindicator, '', $pagecontent);
+				} 
+			} else if(strlen($pagecontent) > $excerptlength) {
+				$pagecontent = shortenContent($pagecontent, $excerptlength, $shortenindicator.$readmorelink);
 			}
 			echo "\n<div class='pageexcerpt'>\n";
 			echo "<h4><a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$pagetitle."</a></h4>";

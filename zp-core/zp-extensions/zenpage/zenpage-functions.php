@@ -102,9 +102,15 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * 													"unpublished" for an unpublised articles,
 	 * 													"all" for all articles
 	 * @param boolean $ignorepagination Since also used for the news loop this function automatically paginates the results if the "page" GET variable is set. To avoid this behaviour if using it directly to get articles set this TRUE (default FALSE)
+	 * @param string $sortorder "date" for sorting by date (default)
+	 * 													"title" for sorting by title
+	 * 													This parameter is not used for date archives
+	 * @param string $sortdirection "desc" (default) for descending sort order
+	 * 													    "asc" for ascending sort order
+	 * 											        This parameter is not used for date archives
 	 * @return array
 	 */
-	function getNewsArticles($articles_per_page='', $category='', $published=NULL,$ignorepagination=false) {
+	function getNewsArticles($articles_per_page='', $category='', $published=NULL,$ignorepagination=false,$sortorder="date", $sortdirection="desc") {
 		global $_zp_current_category, $_zp_post_date;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
@@ -132,6 +138,29 @@ function getParentPages(&$parentid,$initparents=true) {
 		} else {
 			$limit = getLimitAndOffset($articles_per_page);
 		}
+		// sortorder and sortdirection (only used for all news articles and categories naturally)
+		$sortorder = sanitize($sortorder);
+		switch($sortorder) {
+			case "date":
+			default:
+				$sort1 = "news.date";
+				$sort2 = "date";
+			break;
+			case "title":
+				$sort1 = "news.title";
+				$sort2 = "title";
+			break;
+		}
+		$sortdirection = sanitize($sortdirection);
+		switch($sortdirection) {
+			case "desc":
+			default:
+				$dir = "DESC";
+			break;
+			case "asc":
+				$dir = "ASC";
+			break;
+		}
 		/*** get articles by category ***/
 		if (!empty($category) OR in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 
@@ -149,10 +178,12 @@ function getParentPages(&$parentid,$initparents=true) {
 
 			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 				$datesearch = " AND news.date LIKE '".$postdate."%' ";
+				$order = " ORDER BY news.date DESC";
 			} else {
 				$datesearch = "";
+				$order = " ORDER BY ".$sort1." ".$dir;
 			}
-			$result = query_full_array("SELECT news.titlelink FROM ".prefix('zenpage_news')." as news, ".prefix('zenpage_news2cat')." as cat WHERE".$cat.$show.$datesearch." ORDER BY news.date DESC".$limit);
+			$result = query_full_array("SELECT news.titlelink FROM ".prefix('zenpage_news')." as news, ".prefix('zenpage_news2cat')." as cat WHERE".$cat.$show.$datesearch.$order.$limit);
 
 			/***get all articles ***/
 		} else {
@@ -180,10 +211,12 @@ function getParentPages(&$parentid,$initparents=true) {
 						$datesearch = " WHERE date LIKE '$postdate%' ";
 						break;
 				}
+				$order = " ORDER BY date DESC";
 			} else {
 				$datesearch = "";
+				$order = " ORDER BY ".$sort2." ".$dir;
 			}
-			$result = query_full_array("SELECT titlelink FROM ".prefix('zenpage_news').$show.$datesearch." ORDER BY date DESC".$limit);
+			$result = query_full_array("SELECT titlelink FROM ".prefix('zenpage_news').$show.$datesearch." ".$order.$limit);
 		}
 		return $result;
 	}
