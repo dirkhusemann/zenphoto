@@ -1354,6 +1354,11 @@ $('#left-to-right').NestedSortable(
 <?php
 	} else {
 		echo gettext("There are no albums for you to edit.");
+		?>
+		<p class="buttons">
+			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
+		</p>
+	<?php
 	}
 }
 ?>
