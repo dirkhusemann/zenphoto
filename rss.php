@@ -40,7 +40,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <generator>ZenPhoto RSS Generator</generator>
 	<?php
 	if ($rssmode == "albums") {
-		$result = getAlbumStatistic($items,getOption("feed_sortorder_albums"));
+		$result = getAlbumStatistic($items,getOption("feed_sortorder_albums"),$albumfolder);
 	} else {
 		$result = getImageStatistic($items,getOption("feed_sortorder"),$albumfolder,$collection);
 	}
@@ -78,6 +78,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 				$itemcontent = '<![CDATA[<a title="'.$title.'" href="'.$serverprotocol.'://'.$itemlink.'">'.$thumburl.'</a>'.
 						'<p><br />'.$imagenumber.'</p>'.
 						'<p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
+				$videocontent = '';
 				$datecontent = '<![CDATA['.sprintf(gettext("Last update: %s"),zpFormattedDate(getOption('date_format'),$filechangedate)).']]>';
 			} else {
 				if($totalimages == 1) {

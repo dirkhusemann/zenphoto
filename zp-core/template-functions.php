@@ -3739,6 +3739,7 @@ function getAlbumId() {
  * 																		"Comments-image" for latest comments of only the image it is called from
  * 																		"Comments-album" for latest comments of only the album it is called from
  * 																		"AlbumsRSS" for latest albums
+ * 																		"AlbumsRSScollection" only for latest subalbums with the album it is called from 
  * @param string $prev text to before before the link
  * @param string $linktext title of the link
  * @param string $next text to appear after the link
@@ -3747,7 +3748,7 @@ function getAlbumId() {
  * @param string $lang optional to display a feed link for a specific language. Enter the locale like "de_DE" (the locale must be installed on your Zenphoto to work of course). If empty the locale set in the admin option or the language selector (getOption('locale') is used.
  * @since 1.1
  */
-function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=null, $lang='') {
+function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=null,$lang='') {
 	global $_zp_current_album;
 	if ($printIcon) {
 		$icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" alt="RSS Feed" />';
@@ -3794,6 +3795,11 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 		case "AlbumsRSS":
 			if (getOption('RSS_album_image')) {
 				echo $prev."<a $class href=\"".WEBPATH."/rss.php?lang=".$lang."&amp;albumsmode\" title=\"".gettext("Latest albums RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
+			break;
+		case "AlbumsRSScollection":
+			if (getOption('RSS_album_image')) {
+				echo $prev."<a $class href=\"".WEBPATH."/rss.php?folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."&amp;albumsmode\" title=\"".gettext("Latest albums RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 	}
