@@ -603,7 +603,7 @@ if (!$setup_checked) {
 	}
 	
 	function folderCheck($which, $path, $class, $relaxation=true, $subfolders=NULL) {
-		global $const_webpath, $serverpath, $chmod;
+		global $const_webpath, $serverpath, $chmod, $permission_names;
 		$path = str_replace('\\', '/', $path);
 		if (!is_dir($path) && $class == 'std') {
 			mkdir_recursive($path, $chmod);
