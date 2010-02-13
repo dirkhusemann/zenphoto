@@ -773,7 +773,7 @@ class _Image extends PersistentObject {
 			}			
 		}
 		if ($result) {
-			$result = $this->move(array('filename'=>$filename, 'albumid'=>$newalbum->id));
+			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
 		}
 		if ($result) return 0;
 		return 1;

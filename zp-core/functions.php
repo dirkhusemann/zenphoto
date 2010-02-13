@@ -432,8 +432,8 @@ function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
  */
 function sortByMultilingual($dbresult, $field, $descending) {
 	$temp = array();
-	foreach ($dbresult as $row) {
-		$temp[] = get_language_string($row[$field]);
+	foreach ($dbresult as $key=>$row) {
+		$temp[$key] = get_language_string($row[$field]);
 	}
 	natcasesort($temp);
 	$result = array();
