@@ -1997,9 +1997,6 @@ function is_connected($host = 'www.zenphoto.org') {
 		fclose($connected);
 		return true;
 	}else{
-
-echo "<br/>$err_str ($errno)";
-
 		return false;
 	}
 	return $is_conn;

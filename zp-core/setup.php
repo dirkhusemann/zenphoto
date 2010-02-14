@@ -2243,7 +2243,7 @@ if (file_exists(CONFIGFILE)) {
 		<?php
 		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
 		if (isset($zenphoto_themes)) {
-			$th = '&amp;themelist='.urlencode(serialize($zenphoto_themes));
+			$th = '&amp;themelist='.rawurlencode(serialize($zenphoto_themes));
 		} else {
 			$th = '';
 		}

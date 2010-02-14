@@ -316,7 +316,7 @@ setOptionDefault('zenpage_news_page', 'news');
 setOptionDefault('zenpage_pages_page', 'pages');
 
 if (isset($_GET['themelist'])) {
-	$list = $_GET['themelist'];
+	$list = sanitize($_GET['themelist']);
 	setOption('Zenphoto_theme_list',$list);
 	$gallery = new Gallery();
 	$themes = array_diff($gallery->getThemes(), unserialize($list));
