@@ -743,7 +743,7 @@ function getNewsAlbumURL() {
  */
 function getFullNewsImageURL() {
 	global $_zp_current_zenpage_news;
-	if(is_GalleryNewsType()) {
+	if(is_NewsType('image') || is_NewsType('video')) {
 		return $_zp_current_zenpage_news->getFullImage();
 	} else {
 		return false;
