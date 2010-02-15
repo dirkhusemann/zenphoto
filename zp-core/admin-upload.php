@@ -30,6 +30,7 @@ $gallery = new Gallery();
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'upload') {
 		// Check for files.
+		$error = false;
 		$files_empty = true;
 		if (isset($_FILES['files'])) {
 			foreach($_FILES['files']['name'] as $name) {
@@ -39,9 +40,11 @@ if (isset($_GET['action'])) {
 		$newAlbum = ((isset($_POST['existingfolder']) && $_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
 		// Make sure the folder exists. If not, create it.
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
-			$folder = sanitize_path($_POST['folder']);
+			$folder = trim(sanitize_path($_POST['folder']));
 			// see if he has rights to the album.
-			$error = !isMyAlbum($folder, UPLOAD_RIGHTS);
+			if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
+				$error = UPLOAD_ERR_CANT_WRITE;
+			}
 			if (!$error) {
 
 				$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
@@ -69,7 +72,7 @@ if (isset($_GET['action'])) {
 					if ($_FILES['files']['name'][$key] == "") continue;
 					if ($error == UPLOAD_ERR_OK) {
 						$tmp_name = $_FILES['files']['tmp_name'][$key];
-						$name = $_FILES['files']['name'][$key];
+						$name = trim($_FILES['files']['name'][$key]);
 						$soename = seoFriendly($name);
 						if (is_valid_image($name) || is_valid_other_type($name)) {
 							if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
@@ -83,17 +86,21 @@ if (isset($_GET['action'])) {
 							}
 						} else if (is_zip($name)) {
 							unzip($tmp_name, $uploaddir);
+						} else {
+							$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
+							break;
 						}
 					}
 				}
-				header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
-				exit();
+				if (!$error) {
+					header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
+					exit();
+				}
 			}
 		}
 		// Handle the error and return to the upload page.
 		$page = "upload";
 		$_GET['page'] = 'upload';
-		$error = true;
 		if ($files_empty && !isset($_POST['newalbum'])) {
 			$errormsg = gettext("You must upload at least one file.");
 		} else if (empty($_POST['folder'])) {
@@ -101,9 +108,19 @@ if (isset($_GET['action'])) {
 		} else if (!isset($_POST['processed'])) {
 			$errormsg = gettext("You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.");
 		} else {
-			$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!");
+			switch ($error) {
+				case UPLOAD_ERR_CANT_WRITE:
+					$errormsg = gettext('You have attempted to upload to an album for which you do not have upload rights');
+					break;
+				case UPLOAD_ERR_EXTENSION:
+					$errormsg = gettext('You have attempted to upload one or more files which are not Zenphoto supported file types');
+					break;
+				default:
+					$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!");
+					break;
+			}
 		}
-
+		$error = true;
 	}
 }
 
@@ -505,7 +522,7 @@ if (ini_get('safe_mode')) { ?>
 
 				<div style="display:none">
 				<!-- This is the template that others are copied from -->
-				<div class="fileuploadbox" id="filetemplate" ><input type="file" size="40" name="files[]" value="x"/></div>
+				<div class="fileuploadbox" id="filetemplate" ><input type="file" size="40" name="files[]" value="x" /></div>
 				</div>
 				<p id="addUploadBoxes"><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
 				<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>

@@ -752,7 +752,13 @@ class _Image extends PersistentObject {
 	 */
 	function moveImage($newalbum, $newfilename=null) {
 		if (is_string($newalbum)) $newalbum = new Album($this->album->gallery, $newalbum, false);
-		if ($newfilename == null) $newfilename = $this->filename;
+		if ($newfilename == null) {
+			$newfilename = $this->filename;
+		} else {
+			if (getSuffix($this->filename) != getSuffix($newfilename)) {	// that is a no-no
+				return 6;
+			}
+		}
 		if ($newalbum->id == $this->album->id && $newfilename == $this->filename) {
 			// Nothing to do - moving the file to the same place.
 			return 2;
@@ -773,9 +779,12 @@ class _Image extends PersistentObject {
 			}			
 		}
 		if ($result) {
-			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
+			if ($this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id))) {
+				$this->set('mtime',filemtime($newpath));
+				$this->save();
+				return 0;
+			}
 		}
-		if ($result) return 0;
 		return 1;
 	}
 
@@ -817,9 +826,11 @@ class _Image extends PersistentObject {
 		}
 		
 		if ($result) {
-			$result = $this->copy(array('filename'=>$filename, 'albumid'=>$newalbum->id));
+			if ($this->copy(array('filename'=>$filename, 'albumid'=>$newalbum->id))) {
+				query('UPDATE '.prefix('images').' SET `mtime`='.filemtime($newpath).' WHERE `filename`="'.$filename.'" AND `albumid`='.$newalbum->id);
+				return 0;
+			}
 		}
-		if ($result) return 0;
 		return 1;
 	}
 

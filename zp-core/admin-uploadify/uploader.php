@@ -14,7 +14,7 @@ if (!zp_loggedin()) {
 	}
 }
 if (!empty($_FILES)) {
-	$name = basename(sanitize($_FILES['Filedata']['name'],3));
+	$name = trim(basename(sanitize($_FILES['Filedata']['name'],3)));
 	if (isset($_FILES['Filedata']['error']) && $_FILES['Filedata']['error']) {
 		debugLogArray('Uploadify error:', $_FILES);
 		trigger_error(sprintf(gettext('Uploadify error on %1$s. Review your debug log.'),$name));
@@ -22,7 +22,7 @@ if (!empty($_FILES)) {
 		$tempFile = sanitize($_FILES['Filedata']['tmp_name'],3);
 		$albumparmas = explode(':', sanitize($_POST['folder'],3),3);
 
-		$folder = $albumparmas[1];
+		$folder = trim($albumparmas[1]);
 		if (substr($folder,0,1) == '/') {
 			$folder = substr($folder,1);
 		}

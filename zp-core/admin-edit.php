@@ -254,7 +254,7 @@ if (isset($_GET['action'])) {
 
 									// Process move/copy/rename
 									if ($movecopyrename_action == 'move') {
-										$dest = sanitize_path($_POST[$i.'-albumselect'], 3);
+										$dest = trim(sanitize_path($_POST[$i.'-albumselect'], 3));
 										if ($dest && $dest != $folder) {
 											if ($e = $image->moveImage($dest)) {
 												$notify = "&mcrerr=".$e;
@@ -264,7 +264,7 @@ if (isset($_GET['action'])) {
 											$notify = "&mcrerr=2";
 										}
 									} else if ($movecopyrename_action == 'copy') {
-										$dest = sanitize_path($_POST[$i.'-albumselect'],2);
+										$dest = trim(sanitize_path($_POST[$i.'-albumselect'],2));
 										if ($dest && $dest != $folder) {
 											if($e = $image->copyImage($dest)) {
 												$notify = "&mcrerr=".$e;
@@ -275,7 +275,7 @@ if (isset($_GET['action'])) {
 											$notify = "&mcrerr=2";
 										}
 									} else if ($movecopyrename_action == 'rename') {
-										$renameto = sanitize_path($_POST[$i.'-renameto'],3);
+										$renameto = trim(sanitize_path($_POST[$i.'-renameto'],3));
 										if ($e = $image->renameImage($renameto)) {
 											$notify = "&mcrerr=".$e;
 										}
@@ -525,55 +525,59 @@ $alb = removeParentAlbumNames($album);
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 	<?php
-	if (isset($_GET['saved'])) {
-		if (isset($_GET['mismatch'])) {
-			?>
-			<div class="errorbox" id="fade-message">
-			<?php if ($_GET['mismatch'] == 'user') {
-				echo '<h2>'.gettext("You must supply a  password.").'</h2>';
-			} else {
-				echo '<h2>'.gettext("Your passwords did not match.").'</h2>';
+	if (isset($_GET['mismatch'])) {
+		?>
+		<div class="errorbox" id="fade-message">
+		<?php if ($_GET['mismatch'] == 'user') {
+			echo '<h2>'.gettext("You must supply a  password.").'</h2>';
+		} else {
+			echo '<h2>'.gettext("Your passwords did not match.").'</h2>';
+		}
+		?>
+
+		</div>
+	<?php
+	} else if (isset($_GET['mcrerr'])) {
+		?>
+		<div class="errorbox" id="fade-message2">
+			<h2>
+			<?php
+			switch (sanitize_numeric($_GET['mcrerr'])) {
+				case 2:
+					echo  gettext("Image already exists.");
+					break;
+				case 3:
+					echo  gettext("Album already exists.");
+					break;
+				case 4:
+					echo  gettext("Cannot move, copy, or rename to a subalbum of this album.");
+					break;
+				case 5:
+					echo  gettext("Cannot move, copy, or rename to a dynamic album.");
+					break;
+				case 6:
+					echo	gettext('Cannot rename an image to a different suffix');
+					break;
+				default:
+					echo  gettext("There was an error with a move, copy, or rename operation.");
+					break;
 			}
 			?>
-
-			</div>
+			</h2>
+		</div>
 		<?php
-		} else if (isset($_GET['mcrerr'])) {
-			?>
-			<div class="errorbox" id="fade-message2">
-				<h2>
-				<?php
-				switch (sanitize_numeric($_GET['mcrerr'])) {
-					case 2:
-						echo  gettext("Image already exists.");
-						break;
-					case 3:
-						echo  gettext("Album already exists.");
-						break;
-					case 4:
-						echo  gettext("Cannot move, copy, or rename to a subalbum of this album.");
-						break;
-					case 5:
-						echo  gettext("Cannot move, copy, or rename to a dynamic album.");
-						break;
-						default:
-						echo  gettext("There was an error with a move, copy, or rename operation.");
-						break;
-				}
-				?>
-				</h2>
-			</div>
-			<?php
-		} else {
-			?>
-			<div class="messagebox" id="fade-message">
-				<h2>
-				<?php echo gettext("Changes saved") ?>
-				</h2>
-			</div>
-		<?php
-		}
 	}
+	if (isset($_GET['saved'])) {
+
+		?>
+		<div class="messagebox" id="fade-message">
+			<h2>
+			<?php echo gettext("Changes saved") ?>
+			</h2>
+		</div>
+	<?php
+	}
+
 	if (isset($_GET['uploaded'])) {
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Images uploaded")."</h2>";
