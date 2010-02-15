@@ -298,26 +298,28 @@ function getNewsID() {
  */
 function getNewsTitle() {
 	global $_zp_current_zenpage_news;
+	$shortenindicator = getOption('zenpage_textshorten_indicator');
 	if (!is_null($_zp_current_zenpage_news)) {
 		if(is_NewsType("album") && (getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail"	|| getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail-customcrop" || getOption("zenpage_combinews_mode") == "latestimagesbyalbum-sizedimage")) {
-			$result = query("SELECT COUNT(date) FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
-			$count = mysql_result($result, 0);
-			$result2 = query_full_array("SELECT filename FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
+			$result = query_full_array("SELECT filename FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
 			$imagetitles = "";
-			$countresult = count($result2);
-			$count2 = "";
-			foreach($result2 as $image) {
+			$countresult = count($result);
+			$limit = 6;
+			$count = "";
+			foreach($result as $image) {
 				$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
 				$imagetitles .= $imageobj->getTitle();
-				$count2++;
-				if($countresult != 1 && $count2 <= 3 && $count >= $countresult) {
-					$imagetitles .= ", ";
-				} else if($countresult != 1 && $count2 <= 3 && $count != $countresult){
-					$imagetitles .= ",...";
+				$count++;
+				$append = ', ';
+				if($count < $countresult) {
+					$imagetitles .= $append;
+				}
+				if($count === $limit && $count != $countresult) {
+					$imagetitles .= $shortenindicator;
+					break;
 				}
 			}
-			//$imagetitles = truncate_string($imagetitles,50,"...");
-			return sprintf(ngettext('%1$u new item in <em>%2$s</em>: %3$s','%1$u new items in <em>%2$s</em>: %3$s',$count),$count,$_zp_current_zenpage_news->getTitle(),$imagetitles);
+			return sprintf(ngettext('%1$u new item in <em>%2$s</em>: %3$s','%1$u new items in <em>%2$s</em>: %3$s',$countresult),$countresult,$_zp_current_zenpage_news->getTitle(),$imagetitles);
 		} else {
 			return $_zp_current_zenpage_news->getTitle();
 		}
@@ -484,8 +486,8 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 					//echo "<pre>"; print_r($images); echo "</pre><br />";
 					foreach($images as $image) {
 						$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
-						$imagedesc = $imageobj->getDesc();
-						if(getOption('combinews-latestimagesbyalbum-imgdesc') && !empty($imagedesc)) {
+						if(getOption('combinews-latestimagesbyalbum-imgdesc')) {
+							$imagedesc = $imageobj->getDesc();
 							$imagedesc = "<p>".getNewsContentShorten($imagedesc,$shorten,$shortenindicator)."</p>";
 						}
 						switch($mode) {

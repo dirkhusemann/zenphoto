@@ -41,7 +41,6 @@ class zenpagecms {
 		setOptionDefault('combinews-thumbnail-cropy', '');
 		setOptionDefault('combinews-latestimagesbyalbum-imgdesc', false);
 		setOptionDefault('combinews-latestimagesbyalbum-imgtitle', false);
-
 	}
 
 	function getOptionsSupported() {
@@ -94,9 +93,9 @@ class zenpagecms {
 		gettext('CombiNews: Thumbnail crop y axis') => array('key' => 'combinews-thumbnail-cropy', 'type' => OPTION_TYPE_TEXTBOX,
 															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
 		gettext('CombiNews: Show image desc') => array('key' => 'combinews-latestimagesbyalbum-imgdesc', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only. Printed with <p>.")),
+										'desc' => gettext("Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as a paragraph.")),
 		gettext('CombiNews: Show image title') => array('key' => 'combinews-latestimagesbyalbum-imgtitle', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as <h4>."))
+										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as h4-headline."))
 
 		);
 	}
