@@ -308,17 +308,19 @@ function getNewsTitle() {
 			$imagetitles = "";
 			$countresult = count($result);
 			$count = "";
-			foreach($result as $image) {
-				$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
-				$imagetitles .= $imageobj->getTitle();
-				$count++;
-				$append = ', ';
-				if($count < $countresult) {
-					$imagetitles .= $append;
-				}
-				if($count === $limit && $count != $countresult) {
-					$imagetitles .= $shortenindicator;
-					break;
+			if($limit != 0) {
+				foreach($result as $image) {
+					$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
+					$imagetitles .= $imageobj->getTitle();
+					$count++;
+					$append = ', ';
+					if($count < $countresult) {
+						$imagetitles .= $append;
+					}
+					if($count >= $limit && $count != $countresult) {
+						$imagetitles .= $shortenindicator;
+						break;
+					}
 				}
 			}
 			return sprintf(ngettext($singular,$plural,$countresult),$countresult,$_zp_current_zenpage_news->getTitle(),$imagetitles);
