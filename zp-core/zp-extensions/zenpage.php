@@ -99,7 +99,7 @@ class zenpagecms {
 										'desc' => gettext("Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as a paragraph.")),
 		gettext('CombiNews: Show image title') => array('key' => 'combinews-latestimagesbyalbum-imgtitle', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as h4-headline.")),
-		gettext('CombiNews: Custom title (singlular)') => array('key' => 'combinews-customtitle-singular', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1,
+		gettext('CombiNews: Custom title (singular)') => array('key' => 'combinews-customtitle-singular', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1,
 															'desc' => gettext("Custom title for the article in sprintf() syntax. %1\$u = number of new itmes, %2\$s = title of the album they are in, %3\$s = titles of the new items. Never leave any of these three out! (<em>latest images by album</em> option only).")),
 		gettext('CombiNews: Custom title (plural)') => array('key' => 'combinews-customtitle-plural', 'type' => OPTION_TYPE_TEXTBOX,'multilingual' => 1,
 															'desc' => gettext("Custom title for the article in sprintf() syntax. %1\$u = number of new itmes, %2\$s = title of the album they are in, %3\$s = titles of the new items. Never leave any of these three out! (<em>latest images by album</em> option only).")),
