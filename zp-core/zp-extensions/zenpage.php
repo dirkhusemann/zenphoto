@@ -41,6 +41,9 @@ class zenpagecms {
 		setOptionDefault('combinews-thumbnail-cropy', '');
 		setOptionDefault('combinews-latestimagesbyalbum-imgdesc', false);
 		setOptionDefault('combinews-latestimagesbyalbum-imgtitle', false);
+		setOptionDefault('combinews-customtitle-singular', '%1$u new item in <em>%2$s</em>: %3$s');
+		setOptionDefault('combinews-customtitle-plural', '%1$u new items in <em>%2$s</em>: %3$s');
+		setOptionDefault('combinews-customtitle-imagetitles', '6');
 	}
 
 	function getOptionsSupported() {
@@ -95,8 +98,13 @@ class zenpagecms {
 		gettext('CombiNews: Show image desc') => array('key' => 'combinews-latestimagesbyalbum-imgdesc', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as a paragraph.")),
 		gettext('CombiNews: Show image title') => array('key' => 'combinews-latestimagesbyalbum-imgtitle', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as h4-headline."))
-
+										'desc' => gettext("Set to show the image title with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as h4-headline.")),
+		gettext('CombiNews: Custom title (singlular)') => array('key' => 'combinews-customtitle-singular', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1,
+															'desc' => gettext("Custom title for the article in sprintf() syntax (<em>latest images by album</em> option only).")),
+		gettext('CombiNews: Custom title (plural)') => array('key' => 'combinews-customtitle-plural', 'type' => OPTION_TYPE_TEXTBOX,'multilingual' => 1,
+															'desc' => gettext("Custom title for the article in sprintf() syntax (<em>latest images by album</em> option only).")),
+		gettext('CombiNews: Custom title - Number of image titles') => array('key' => 'combinews-customtitle-imagetitles', 'type' => OPTION_TYPE_TEXTBOX,
+															'desc' => gettext("How many images titles you want to show with the custom title (<em>latest images by album</em> option only)."))
 		);
 	}
 

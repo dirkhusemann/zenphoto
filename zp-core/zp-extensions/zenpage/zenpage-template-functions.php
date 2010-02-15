@@ -299,12 +299,14 @@ function getNewsID() {
 function getNewsTitle() {
 	global $_zp_current_zenpage_news;
 	$shortenindicator = getOption('zenpage_textshorten_indicator');
+	$singular = get_language_string(getOption('combinews-customtitle-singular'));
+	$plural =	get_language_string(getOption('combinews-customtitle-plural'));
+	$limit = getOption('combinews-customtitle-imagetitles');
 	if (!is_null($_zp_current_zenpage_news)) {
 		if(is_NewsType("album") && (getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail"	|| getOption("zenpage_combinews_mode") == "latestimagesbyalbum-thumbnail-customcrop" || getOption("zenpage_combinews_mode") == "latestimagesbyalbum-sizedimage")) {
 			$result = query_full_array("SELECT filename FROM ".prefix('images')." AS images WHERE date LIKE '".$_zp_current_zenpage_news->getDateTime()."%' AND albumid = ".$_zp_current_zenpage_news->id." ORDER BY date DESC");
 			$imagetitles = "";
 			$countresult = count($result);
-			$limit = 6;
 			$count = "";
 			foreach($result as $image) {
 				$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
@@ -319,7 +321,7 @@ function getNewsTitle() {
 					break;
 				}
 			}
-			return sprintf(ngettext('%1$u new item in <em>%2$s</em>: %3$s','%1$u new items in <em>%2$s</em>: %3$s',$countresult),$countresult,$_zp_current_zenpage_news->getTitle(),$imagetitles);
+			return sprintf(ngettext($singular,$plural,$countresult),$countresult,$_zp_current_zenpage_news->getTitle(),$imagetitles);
 		} else {
 			return $_zp_current_zenpage_news->getTitle();
 		}
