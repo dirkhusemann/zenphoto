@@ -76,22 +76,26 @@ if (isset($_GET['refresh']) && db_connect()) {
 		$r = '';
 	}
 	if (empty($imageid)) {
-		echo "<h3>".$finished."</h3>";
 		if (empty($r)) {
 			$backurl = 'admin.php';
 		} else {
 			$backurl = 'admin-edit.php'.$r;
 		}
-		echo '<p>'.gettext('you should return automatically. If not press: ').'</p>';
-		echo "<p><a href=\"$backurl\">&laquo; ".gettext('Back')."</a></p>";
-		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$backurl.'">';
+		?>
+		<h3><?php echo $finished; ?></h3>
+		<p><?php echo gettext('you should return automatically. If not press: '); ?></p>
+		<p><a href="<?php echo $backurl; ?>">&laquo; <?php echo gettext('Back'); ?></a></p>
+		<meta HTTP-EQUIV="REFRESH" content="1; url=<?php echo $backurl; ?>">
+		<?php
 	} else {
-		echo '<h3>'.$incomplete.'</h3>';
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
 		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret; 
-		echo '<p>'.gettext('This process should continue automatically. If not press: ').'</p>';
-		echo "<p><a href=".$redirecturl."\" title=\"".$continue."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Continue!")."</a></p>";
-		echo '<meta HTTP-EQUIV="REFRESH" content="2; url='.$redirecturl.'">';
+		?>
+		<h3><?php echo $incomplete; ?></h3>
+		<p><?php echo gettext('This process should continue automatically. If not press: '); ?></p>
+		<p><a href="<?php echo $redirecturl; ?>" title="<?php echo $continue; ?>" style="font-size: 15pt; font-weight: bold;"><?php echo gettext("Continue!"); ?></a></p>
+		<meta HTTP-EQUIV="REFRESH" content="1; url=<?php echo $redirecturl; ?>">
+		<?php 
 	}
 		
 } else if (db_connect()) {
@@ -139,7 +143,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 		$starturl = '?'.$type.'refresh=start'.$album.$ret;
 		echo '<p>'.gettext('This process should start automatically. If not press: ').'</p>';
 		echo "<p><a href=\"$starturl\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
-		echo '<meta HTTP-EQUIV="REFRESH" content="2; url='.$starturl.'">';
+		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$starturl.'">';
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
