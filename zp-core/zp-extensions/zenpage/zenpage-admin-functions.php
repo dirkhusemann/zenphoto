@@ -222,7 +222,7 @@ function updatePageSortorder() {
 			query($sql);
 		}
 	}
-	echo "<br clear: all><p class='messagebox' id='fade-message'>".gettext("Sort order saved.")."</p>";
+	echo "<br clear=\"all\"><p class='messagebox' id='fade-message'>".gettext("Sort order saved.")."</p>";
 }
 
 
@@ -349,7 +349,7 @@ function printPagesList($pages) {
 			echo str_pad("\t",$indent,"\t")."</li>\n";
 			$open[$indent]--;
 		} 
-		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
+		echo str_pad("\t",$indent-1,"\t")."<li id=\"id_".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
 		echo printPagesListTable($pageobj, $toodeep);
 		$open[$indent]++;
 	}
@@ -596,11 +596,11 @@ function printArticleDatesDropdown() {
   $lastyear = "";
   $nr = "";
  ?>
-  <form name="AutoListBox1" style="float:left; margin-left: 10px;">
+  <form name="AutoListBox1" style="float:left; margin-left: 10px;" action="#" >
   <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
  <?php
  		if(!isset($_GET['date'])) {
-			$selected = "selected";
+			$selected = 'selected="selected"';
 		 } else {
 				$selected = "";
 			}
@@ -634,7 +634,7 @@ function printArticleDatesDropdown() {
 	}
 ?>
 	</select>
-	<script language="JavaScript">
+	<script language="JavaScript" type="text/javascript" >
 	<!--
 	function gotoLink(form) {
 	var OptionIndex=form.ListBoxURL.selectedIndex;
@@ -704,7 +704,7 @@ function printCategoryDropdown() {
     $datelinkall ="";
   }
 ?>
-  <form name ="AutoListBox2" style="float:left">
+  <form name ="AutoListBox2" style="float:left" action="#" >
   <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
 <?php
 if(!isset($_GET['category'])) {
@@ -729,7 +729,7 @@ if(!isset($_GET['category'])) {
 	
 ?>
  </select>
-  <script language="JavaScript">
+  <script language="JavaScript" type="text/javascript" >
 	<!--
 	function gotoLink(form) {
 	var OptionIndex=form.ListBoxURL.selectedIndex;
@@ -776,7 +776,7 @@ function printUnpublishedDropdown() {
 	global $_zp_current_zenpage_news;
   $currentpage = getCurrentAdminNewsPage();
 ?>
-  <form name="AutoListBox3" style="float:left; margin-left: 10px;">
+  <form name="AutoListBox3" style="float:left; margin-left: 10px;" action="#" >
   <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
  <?php
  		$all="";
@@ -796,7 +796,7 @@ function printUnpublishedDropdown() {
 	echo "<option $unpublished value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=no'>".gettext("Unpublished")."</option>\n"; 
 	?>
 	</select>
-	<script language="JavaScript">
+	<script language="JavaScript" type="text/javascript" >
 	<!--
 	function gotoLink(form) {
 	var OptionIndex=form.ListBoxURL.selectedIndex;
@@ -1316,7 +1316,7 @@ function printPublishIconLink($object,$type) {
  */
 function checkIfChecked($field) {
 	if ($field) {
-		echo "checked='checked'";
+		echo 'checked="checked"';
 	} 
 }
 

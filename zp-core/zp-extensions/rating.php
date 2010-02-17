@@ -286,11 +286,11 @@ function optionVoteStatus($before, $object, $prefix) {
 	$output = gettext('Vote Status:').'<br />'."\n";
 	foreach($me->ratingstate as $text=>$value) {
 		if($value == $currentvalue) {
-			$checked = "checked='checked' ";
+			$checked = 'checked="checked"';
 		} else {
 			$checked = '';
 		} 
-		$output .= "<label style='padding-right: .5em'><span style='white-space:nowrap'>\n<input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/> ".$text."</span>\n</label>"."\n";
+		$output .= "<label style='padding-right: .5em'><span style='white-space:nowrap'>\n<input type='radio' name='".$prefix."rating_status' id='rating_status".$value."-".$prefix."' value='".$value."' ".$checked."/> ".$text."</span>\n</label>"."\n";
 	}
 	$output = $before.'<hr />'."\n".$output;
 	return $output;
@@ -314,7 +314,7 @@ function rating_purgebutton($buttons) {
 								'icon'=>'images/reset1.png', 
 								'title'=>gettext('Sets all ratings to unrated.'),
 								'alt'=>'',
-								'hidden'=> '<input type="hidden" name="action" value="clear_rating">',
+								'hidden'=> '<input type="hidden" name="action" value="clear_rating" />',
 								'rights'=> ADMIN_RIGHTS
 								);
 	return $buttons;

@@ -60,7 +60,7 @@
 				</div>
 				<?php endwhile; ?>
 			</div>
-		<br clear=all>
+		<br clear="all">
 		<?php
 		if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow'));
 		if ($c == 0) {

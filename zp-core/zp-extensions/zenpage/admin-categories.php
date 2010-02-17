@@ -76,7 +76,7 @@ printLogoAndLinks();
 				<a href="admin-categories.php?tab=categories"><img src="images/add.png" alt="" /><?php echo gettext("Add New Category"); ?></a>
 			<?php } ?>
 			</p>
-			<br clear: all /><br clear: all />
+			<br clear="all" /><br clear="all" />
 			<div id="tips" style="display:none">	
 				<p><?php echo gettext("A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically if a new category is added. You can edit it later manually if necessary."); ?></p> 
 				<p><?php echo gettext("If you are editing a category check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting."); ?></p> 
@@ -113,7 +113,7 @@ printLogoAndLinks();
 				     	?>
 				      <td class="topalign-padding"><?php echo $cattitlemessage; ?></td>
 				      <td><?php if(isset($_GET['edit'])) { print_language_string_list_zenpage($result['cat_name'],"category",false) ; } else { print_language_string_list_zenpage("","category",false) ;} ?>
-				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo "checked='checked'"; } ?> /> <?php echo gettext("Enable permaTitleLink"); ?>
+				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo 'checked="checked"'; } ?> /> <?php echo gettext("Enable permaTitleLink"); ?>
 				      </td>
 				    </tr>
 						<?php

@@ -142,12 +142,12 @@ echo '</head>'."\n";
 							echo gettext("Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
 							?>
 						</p>
-						<form action="?action=savegroups&tab=groups" method="post" AUTOCOMPLETE=OFF>
+						<form action="?action=savegroups&tab=groups" method="post" AUTOCOMPLETE="OFF">
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 							</p>
-							<br clear="al" /><br /><br />
+							<br clear="all" /><br /><br />
 							<input type="hidden" name="savegroups" value="yes" /> 
 							<table class="bordered">
 								<?php
@@ -166,7 +166,7 @@ echo '</head>'."\n";
 											if (empty($groupname)) {
 												?>
 												<em>
-													<label><input type="radio" name="<?php echo $id; ?>-type" value="group" CHECKED="CHECKED" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('group'); ?></label>
+													<label><input type="radio" name="<?php echo $id; ?>-type" value="group" checked="checked" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('group'); ?></label>
 													<label><input type="radio" name="<?php echo $id; ?>-type" value="template" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('template'); ?></label>
 												</em>
 												<br />
@@ -198,7 +198,7 @@ echo '</head>'."\n";
 													foreach ($groups as $user) {
 														$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
 														if ($groupname == $user['user']) {
-															$selected = ' SELECTED="SELECTED"';
+															$selected = ' selected="selected"';
 															} else {
 															$selected = '';
 														}
@@ -286,12 +286,12 @@ echo '</head>'."\n";
 							echo gettext("Assign users to groups.");
 							?>
 						</p>
-						<form action="?action=saveauserassignments" method="post" AUTOCOMPLETE=OFF>
+						<form action="?action=saveauserassignments" method="post" AUTOCOMPLETE="OFF">
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 							</p>
-							<br clear="al"><br /><br />
+							<br clear="all"><br /><br />
 							<input type="hidden" name="saveauserassignments" value="yes" /> 
 							<table class="bordered">
 								<?php
@@ -313,7 +313,7 @@ echo '</head>'."\n";
 													foreach ($groups as $user) {
 														$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
 														if ($group == $user['user']) {
-															$selected = ' SELECTED="SELECTED"';
+															$selected = ' selected="selected"';
 															$selected_hint = $hint;
 															} else {
 															$selected = '';

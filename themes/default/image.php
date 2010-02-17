@@ -81,7 +81,7 @@
 			}
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
-		<br clear=all />
+		<br clear="all" />
 
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
 

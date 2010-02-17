@@ -11,7 +11,7 @@
 									echo gettext("Name:");
 									if (getOption('comment_form_anon')) {
 										?>
-										<label>(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)</label>
+										<label>(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo ' checked="checked"'; ; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)</label>
 										<?php 
 									}
 									?>
@@ -199,7 +199,7 @@
  								$captchaCode=generateCaptcha($img); ?>
  								<tr>
 	 								<td>
-	 									<label for="code">
+	 									<label>
 		 									<?php echo gettext("Enter Captcha:"); ?>
 		 									<img src=<?php echo "\"$img\"";?> alt="Code" align="middle" />
 	 									</label>
@@ -216,7 +216,7 @@
 								<tr>
 									<td colspan="2">
 										<label>
-											<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> />
+											<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo ' checked="checked"'; ; ?> />
 											<?php echo gettext("Private comment (don't publish)"); ?>
 										</label>
 									</td>

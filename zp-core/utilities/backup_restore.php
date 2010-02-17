@@ -414,7 +414,7 @@ if (db_connect()) {
 	<?php
 	for ($v=0; $v<=9; $v++) {
 	?>
-		<option value="<?php echo $v;?>"<?php if($compression_level == $v) echo ' SELECTED'; ?>><?php echo $v; ?></option>
+		<option value="<?php echo $v;?>"<?php if($compression_level == $v) echo ' selected="selected"'; ?>><?php echo $v; ?></option>
 	<?php
 	}
 	?>

@@ -272,8 +272,15 @@ function getAdministrators() {
  * @return bit
  */
 function checkAuthorization($authCode) {
-	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
 	global $_zp_current_admin;
+	
+/* remove comment to allow for HTML validator to access back end	
+$admins = getAdministrators();
+$_zp_current_admin = array_shift($admins);
+return ADMIN_RIGHTS | $_zp_current_admin['rights']	;	
+*/
+	
+	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
 	$admins = getAdministrators();
 	foreach ($admins as $key=>$user) {
 		if (!$user['valid']) {	// no groups!

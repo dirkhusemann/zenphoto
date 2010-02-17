@@ -123,7 +123,7 @@ while ($old != $albumname) {
 		<?php
 		if (isMyAlbum('/', UPLOAD_RIGHTS)) {
 			?>
-			<option value="" selected="SELECTED" style="font-weight: bold;">/</option>
+			<option value="" selected="selected" style="font-weight: bold;">/</option>
 			<?php
 }
 $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');

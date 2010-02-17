@@ -422,7 +422,7 @@ if (empty($subtab) || $subtab=='albuminfo') {
 	function newAlbum(folder,albumtab) {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {
-			window.location = '?action=newalbum&album='+encodeURIComponent(folder)+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
+			window.location = '?action=newalbum&amp;album='+encodeURIComponent(folder)+'&amp;name='+encodeURIComponent(album)+'&amp;albumtab='+albumtab;
 		}
 	}
 </script>
@@ -469,7 +469,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if ($folder == '/' || $folder == '.') {
 		$parent = '';
 	} else {
-		$parent = '&album='.$folder.'&tab=subalbuminfo';
+		$parent = '&amp;album='.$folder.'&amp;tab=subalbuminfo';
 	}
 	$album = new Album($gallery, $folder);
 	if ($album->isDynamic()) {
@@ -505,7 +505,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if (($parent == '/') || ($parent == '.') || empty($parent)) {
 		$parent = '';
 	} else {
-		$parent = "&album=" . urlencode($parent);
+		$parent = "&amp;album=" . urlencode($parent);
 	}
 	if (isset($_GET['counters_reset'])) {
 		echo '<div class="messagebox" id="fade-message">';
@@ -601,7 +601,7 @@ $alb = removeParentAlbumNames($album);
 	?>
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
-			<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+			<form name="albumedit1" AUTOCOMPLETE="OFF" action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post">
 				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 				<input type="hidden"	name="savealbuminfo" value="1" />
 				<?php printAlbumEditForm(0, $album, true); ?>
@@ -610,10 +610,10 @@ $alb = removeParentAlbumNames($album);
 			<hr />
 
 			<?php printAlbumButtons($album); ?>
-		</div>
+
 		</div>
 		<?php
-		} else if ($subtab == 'subalbuminfo' && !$album->isDynamic())  {
+	} else if ($subtab == 'subalbuminfo' && !$album->isDynamic())  {
 		?>
 		<!-- Subalbum list goes here -->
 		<?php
@@ -621,7 +621,7 @@ $alb = removeParentAlbumNames($album);
 		?>
 		<div id="tab_subalbuminfo" class="tabbox">
 		<?php printEditDropdown('subalbuminfo'); ?>
-		<form action="?page=edit&album=<?php echo urlencode($album->name); ?>&action=savesubalbumorder&tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
+		<form action="?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;action=savesubalbumorder&amp;tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
 			<p>
 			<?php
 				$sorttype = strtolower($album->getAlbumSortType());
@@ -646,7 +646,7 @@ $alb = removeParentAlbumNames($album);
 			</p>
 			<p>
 				<?php
-				printf(gettext('Select an album to edit its description and data, or <a href="?page=edit&album=%s&massedit">mass-edit</a> all first level subalbums.'),urlencode($album->name));
+				printf(gettext('Select an album to edit its description and data, or <a href="?page=edit&amp;album=%s&amp;massedit">mass-edit</a> all first level subalbums.'),urlencode($album->name));
 				?>
 			</p>
 			<p class="buttons">
@@ -654,15 +654,16 @@ $alb = removeParentAlbumNames($album);
 				<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
 			</p>
-			<br clear="all"/><br />
+			<br clear="all" /><br />
 			<table class="bordered" width="100%">
 			<tr>
 				<td style="padding: 0px" colspan="1">
-				<ul id="left-to-right" class="page-list">
-				<?php
-				printNestedAlbumsList($subalbums);
-				?>
-				</ul>
+					<ul id="left-to-right" class="page-list">
+					<?php
+					printNestedAlbumsList($subalbums);
+					?>
+					</ul>
+				</td>
 			</tr>
 		</table>
 				<ul class="iconlegend">
@@ -690,7 +691,7 @@ $('#left-to-right').NestedSortable(
 		helperclass: 'helper',
 		onChange: function(serialized) {
 			$('#left-to-right-ser')
-			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
+			.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
 		},
 		autoScroll: true,
 		handle: '.sort-handle'
@@ -699,7 +700,7 @@ $('#left-to-right').NestedSortable(
 });
 </script>
 				</form>
-				<br clear="all"/>
+				<br clear="all" />
 		<?php
 		} ?>
 <?php
@@ -723,12 +724,12 @@ $('#left-to-right').NestedSortable(
 		}
 		if ($allimagecount) {
 			?>
-		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
+		<form name="albumedit2"	action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE="OFF">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
-			<input type="hidden" name="tagsort" value=<?php echo $tagsort ?> />
-			<input type="hidden" name="oldalbumimagesort" value=<?php echo $oldalbumimagesort; ?> />
+			<input type="hidden" name="tagsort" value="<?php echo $tagsort ?>" />
+			<input type="hidden" name="oldalbumimagesort" value="<?php echo $oldalbumimagesort; ?>" />
 
 		<?php	$totalpages = ceil(($allimagecount / $imagesTab_imageCount));	?>
 		<table class="bordered">
@@ -782,7 +783,7 @@ $('#left-to-right').NestedSortable(
 			if (getOption('auto_rotate')) {
 				$disablerotate = '';
 			} else {
-				$disablerotate = ' DISABLED';
+				$disablerotate = ' disabled="disabled"';
 			}
 			$target_image_nr = '';
 			foreach ($images as $filename) {
@@ -807,20 +808,20 @@ $('#left-to-right').NestedSortable(
 						<a <?php echo $placemark; ?>href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
 										title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
 							<img
-								id="thumb-<?php echo $currentimage; ?>"
+								id="thumb_img-<?php echo $currentimage; ?>"
 								src="<?php echo $image->getThumb(); ?>"
 								alt="<?php printf(gettext('crop %s'), $image->filename); ?>"
 								title="<?php printf(gettext('crop %s'), $image->filename); ?>"
 								/>
 						</a>
 						<p class="buttons"><a href="<?php echo $image->getFullImage();?>" rel="colorbox"><img src="images/magnify.png" alt="" /><strong>Zoom</strong></a></p><br style="clear: both" />
-						<p><?php echo gettext('<strong>Filename:</strong'); ?><br /><?php echo $image->filename; ?></p>
+						<p><?php echo gettext('<strong>Filename:</strong>'); ?><br /><?php echo $image->filename; ?></p>
 						<p><?php echo gettext('<strong>Image id:</strong>'); ?> <?php echo $image->get('id'); ?></p>
 						<p><?php echo gettext("<strong>Dimensions:</strong>"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
 						<p><?php echo gettext("<strong>Size:</strong>"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 						<p>
 							<label>
-								<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" />
+								<input type="radio" id="thumb-<?php echo $currentimage; ?>" name="thumb" value="<?php echo $currentimage ?>" />
 								<?php echo ' '.gettext("Select as album thumbnail."); ?>
 							</label>
 						</p>
@@ -832,14 +833,14 @@ $('#left-to-right').NestedSortable(
 						<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
 						<div class="box-edit">
 						<label>
-							<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments" name="<?php echo $currentimage; ?>-allowcomments" value="1"
-								<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
+							<input type="checkbox" id="allowcomments-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-allowcomments" value="1"
+								<?php if ($image->getCommentsAllowed()) { echo 'checked="checked"'; } ?> />
 							<?php echo gettext("Allow Comments"); ?>
 						</label>
 						&nbsp;&nbsp;
 						<label>
-							<input type="checkbox" id="<?php echo $currentimage; ?>-Visible" name="<?php echo $currentimage; ?>-Visible" value="1"
-								<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
+							<input type="checkbox" id="Visible-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-Visible" value="1"
+								<?php if ($image->getShow()) { echo 'checked="checked"'; } ?> />
 							<?php echo gettext("Visible"); ?>
 						</label>
 						<p style="margin-top: 0; margin-bottom: 1em;">
@@ -847,7 +848,7 @@ $('#left-to-right').NestedSortable(
 							$hc = $image->get('hitcounter');
 							if (empty($hc)) { $hc = '0'; }
 
-							printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
+							printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"reset_hitcounter-$currentimage\" name=\"$currentimage-reset_hitcounter\" value=\"1\" /> ".gettext("Reset")."</label> ";
 							$tv = $image->get('total_value');
 							$tc = $image->get('total_votes');
 							echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -856,7 +857,7 @@ $('#left-to-right').NestedSortable(
 								?>
 								<?php  printf(gettext('Rating: <strong>%u</strong>'),$hc) ?>
 								<label>
-									<input type="checkbox" id="<?php echo $currentimage; ?>-reset_rating" name="<?php echo $currentimage; ?>-reset_rating" value=1 />
+									<input type="checkbox" id="reset_rating-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-reset_rating" value=1 />
 									<?php echo gettext("Reset"); ?>
 								</label>
 								<?php
@@ -872,32 +873,32 @@ $('#left-to-right').NestedSortable(
 						<!-- Move/Copy/Rename this image -->
 						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
-								<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
+								<input type="radio" id="move-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Move");?>
 							</span>
 						</label>
 						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
-								<input type="radio" id="<?php echo $currentimage; ?>-copy" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
+								<input type="radio" id="copy-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Copy");?>
 							</span>
 						</label>
 						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
-								<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
+								<input type="radio" id="rename-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" style="display:inline" /> <?php echo gettext("Rename File");?>
 							</span>
 						</label>
 						<label style="padding-right: .5em">
 							<span style="white-space:nowrap">
-								<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
+								<input type="radio" id="Delete-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
 									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image") ?>
 							</span>
 						</label>
-						<div id="<?php echo $currentimage; ?>-movecopydiv"
+						<div id="movecopydiv-<?php echo $currentimage; ?>"
 							style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
-						<select id="<?php echo $currentimage; ?>-albumselectmenu"
-							name="<?php echo $currentimage; ?>-albumselect" onChange="">
+						<select id="albumselectmenu-<?php echo $currentimage; ?>"
+							name="<?php echo $currentimage; ?>-albumselect" onchange="">
 							<?php
 											foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
 												$singlefolder = $fullfolder;
@@ -905,7 +906,7 @@ $('#left-to-right').NestedSortable(
 												$salevel = 0;
 												$selected = "";
 												if ($album->name == $fullfolder) {
-													$selected = " SELECTED=\"true\" ";
+													$selected = " selected=\"selected\" ";
 												}
 												// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
 												while (strstr($singlefolder, '/') !== false) {
@@ -921,7 +922,7 @@ $('#left-to-right').NestedSortable(
 						<br /><p class="buttons"><a href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
-						<div id="<?php echo $currentimage; ?>-renamediv" style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
+						<div id="renamediv-<?php echo $currentimage; ?>" style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
 						<input name="<?php echo $currentimage; ?>-renameto" type="text" value="<?php echo $image->filename;?>" /><br />
 						<br /><p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
@@ -931,7 +932,7 @@ $('#left-to-right').NestedSortable(
 						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
-						<span style="line-height: 0em;"><br clear=all /></span>
+						<span style="line-height: 0em;"><br clear="all" /></span>
 
 						<?php
 						if (isImagePhoto($image)) {
@@ -947,25 +948,25 @@ $('#left-to-right').NestedSortable(
 							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
 							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
-									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> />
+									<input type="radio" id="rotation_none-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('none'); ?>
 								</span>
 							</label>
 							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
-									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> />
+									<input type="radio" id="rotation_90-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('90 degrees'); ?>
 								</span>
 							</label>
 							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
-									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> />
+									<input type="radio" id="rotation_180-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('180 degrees'); ?>
 								</span>
 							</label>
 							<label style="padding-right: .5em">
 								<span style="white-space:nowrap">
-									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> />
+									<input type="radio" id="rotation_270-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('270 degrees'); ?>
 								</span>
 							</label>
@@ -976,19 +977,19 @@ $('#left-to-right').NestedSortable(
 									<img src="images/shape_handles.png" alt="" /><?php echo gettext("Crop thumbnail"); ?>
 								</a>
 							</p>
-							<span style="line-height: 0em;"><br clear=all /></span>
+							<span style="line-height: 0em;"><br clear="all" /></span>
 							<?php
 						}
 						echo zp_apply_filter('edit_image_utilities', '<!--image-->', $image, $currentimage, $pagenum, $tagsort); //pass space as HTML because there is already a button shown for cropimage
 						?>
-						<span style="line-height: 0em;"><br clear=all /></span>
+						<span style="line-height: 0em;"><br clear="all" /></span>
 						</div>
-						<span class="imageextrainfo" style="display: none">
-						<h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
-						<div class="box-edit-unpadded">
+
+						<h2 class="h2_bordered_edit imageextrainfo" style="display: none"><?php echo gettext("Tags"); ?></h2>
+						<div class="box-edit-unpadded imageextrainfo" style="display: none">
 							<?php	tagSelector($image, 'tags_'.$currentimage.'-', false, $tagsort);	?>
 						</div>
-						</span>
+
 						</td>
 					</tr>
 
@@ -1135,7 +1136,7 @@ $('#left-to-right').NestedSortable(
 			}
 			if (!empty($target_image)) {
 				?>
-				<script language="Javascript">
+				<script language="Javascript" type="text/javascript" >
 				javascript:toggleExtraInfo('<?php echo $target_image_nr;?>', 'image', true);
 				</script>
 				<?php
@@ -1155,7 +1156,6 @@ $('#left-to-right').NestedSortable(
 
 if($subtab != "albuminfo") {	?>
 <!-- page trailer -->
-</div>
 
 <?php }
 
@@ -1203,7 +1203,7 @@ if (isset($_GET['saved'])) {
 	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 <div class="tabbox">
 
-<form name="albumedit" AUTOCOMPLETE=OFF	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
+<form name="albumedit" AUTOCOMPLETE="OFF"	action="?page=edit&amp;action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
 	$currentalbum = 0;
@@ -1281,19 +1281,19 @@ if (isset($_GET['saved'])) {
 	</p>
 	<p>
 		<?php
-		echo gettext('Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit</a> all gallery level albums.');
+		echo gettext('Select an album to edit its description and data, or <a href="?page=edit&amp;massedit">mass-edit</a> all gallery level albums.');
 	?>
 	</p>
 
 	<?php
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		printEditDropdown(''); ?>
-		<form action="?page=edit&action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
+		<form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 		</p>
-		<br clear="all"/><br />
+		<br clear="all" /><br />
 		<?php
 	}
 	?>
@@ -1303,23 +1303,25 @@ if (isset($_GET['saved'])) {
 	</tr>
 	<tr>
 		<td style="padding: 0px" colspan="1">
-		<ul id="left-to-right" class="page-list"><?php
-		if (count($albums) > 0) {
-			printNestedAlbumsList($albums);
-		}
-		?></ul>
+			<ul id="left-to-right" class="page-list"><?php
+			if (count($albums) > 0) {
+				printNestedAlbumsList($albums);
+			}
+			?>
+			</ul>
 		</td>
 	</tr>
 </table>
 <div>
-<ul class="iconlegend">
+	<ul class="iconlegend">
 		<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
 		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li>
 		<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
 		<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
 		<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
-		</ul>
+	</ul>
+</div>
 <?php
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		?>
@@ -1340,7 +1342,7 @@ $('#left-to-right').NestedSortable(
 		helperclass: 'helper',
 		onChange: function(serialized) {
 			$('#left-to-right-ser')
-			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
+			.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
 		},
 		autoScroll: true,
 		handle: '.sort-handle'
@@ -1350,11 +1352,11 @@ $('#left-to-right').NestedSortable(
 </script>
 
 		</form>
-		<br clear="all"/>
+		<br clear="all" />
 		<?php
 	}
 	?>
-</div>
+
 <?php
 	} else {
 		echo gettext("There are no albums for you to edit.");
@@ -1369,6 +1371,7 @@ $('#left-to-right').NestedSortable(
 </div>
 <!-- content -->
 <?php printAdminFooter(); ?>
+</div>
 <!-- main -->
 </body>
 <?php // to fool the validator

@@ -79,7 +79,7 @@ echo '<input type="hidden" name="saveplugins" value="yes" />'."\n";
 <p class="buttons">
 <button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 <button type="reset" value="<?php echo gettext('Reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-</p><br clear: all /><br /><br />
+</p><br clear="all" /><br /><br />
 <?php
 echo "<table class=\"bordered\" width=\"100%\">\n";
 ?>
@@ -147,13 +147,13 @@ foreach ($filelist as $extension) {
 	if (false !== $str) {
 		if (false !== eval($str)) {
 			if ($plugin_is_filter) {
-				$loadtype = $plugin_is_filter;				
+				$loadtype = $plugin_is_filter;
 			}
 		}
 	}
 	$optionlink = isolate('$option_interface', $pluginStream);
 	if (!empty($optionlink)) {
-		$optionlink = FULLWEBPATH.'/'.ZENFOLDER.'/admin-options.php?page=options&tab=plugin&_show-'.$extension;
+		$optionlink = FULLWEBPATH.'/'.ZENFOLDER.'/admin-options.php?page=options&amp;tab=plugin&amp;_show-'.$extension;
 	}
 	?>
 	<tr>
@@ -163,10 +163,10 @@ foreach ($filelist as $extension) {
 				<?php
 				if ($parserr || $plugin_disable) {
 					$optionlink = false;
-					echo 'DISABLED';
+					echo ' disabled="disabled"';
 				} else {
 					if (getOption($opt)) {
-						echo 'CHECKED="CHECKED"';
+						echo ' checked="checked"';
 					} else {
 						$optionlink = false;
 					}

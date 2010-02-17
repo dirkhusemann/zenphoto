@@ -50,8 +50,8 @@ if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_R
 
 	$zenphoto_tabs['articles'] = array('text'=>gettext("news"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-news-articles.php',
-							'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&tab=articles', 
-																gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&tab=categories'),
+							'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&amp;tab=articles', 
+																gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&amp;tab=categories'),
 																'default'=>'articles');
 }
 
@@ -75,25 +75,25 @@ $subtabs = array();
 $optiondefault='';
 if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
 	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-		$optiondefault='&tab=general';
-		$subtabs[gettext("general")] = 'admin-options.php?page=options&tab=general';
-		$subtabs[gettext("gallery")] = 'admin-options.php?page=options&tab=gallery';
-		$subtabs[gettext("image")] = 'admin-options.php?page=options&tab=image';
-		$subtabs[gettext("comment")] = 'admin-options.php?page=options&tab=comments';
+		$optiondefault='&amp;tab=general';
+		$subtabs[gettext("general")] = 'admin-options.php?page=options&amp;tab=general';
+		$subtabs[gettext("gallery")] = 'admin-options.php?page=options&amp;tab=gallery';
+		$subtabs[gettext("image")] = 'admin-options.php?page=options&amp;tab=image';
+		$subtabs[gettext("comment")] = 'admin-options.php?page=options&amp;tab=comments';
 	}
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		if (empty($optiondefault)) $optiondefault='&tab=plugin';
-		$subtabs[gettext("plugin")] = 'admin-options.php?page=options&tab=plugin';
+		if (empty($optiondefault)) $optiondefault='&amp;tab=plugin';
+		$subtabs[gettext("plugin")] = 'admin-options.php?page=options&amp;tab=plugin';
 	}
 	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-		$subtabs[gettext("search")] = 'admin-options.php?page=options&tab=search';
+		$subtabs[gettext("search")] = 'admin-options.php?page=options&amp;tab=search';
 	}
 	if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-		if (empty($optiondefault)) $optiondefault='&tab=theme';
-		$subtabs[gettext("theme")] = 'admin-options.php?page=options&tab=theme';
+		if (empty($optiondefault)) $optiondefault='&amp;tab=theme';
+		$subtabs[gettext("theme")] = 'admin-options.php?page=options&amp;tab=theme';
 	}
 	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-		$subtabs[gettext("rss")] = 'admin-options.php?page=options&tab=rss';
+		$subtabs[gettext("rss")] = 'admin-options.php?page=options&amp;tab=rss';
 	}
 }
 if (!empty($subtabs)) {

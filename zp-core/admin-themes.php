@@ -75,13 +75,13 @@ jQuery(document).ready(function(){
 			if (targetname) {
 				var targetdir = prompt('<?php echo gettext('New directory name? (eg. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
 				if (targetdir) {
-					window.location =('?action=copytheme&source='+encodeURIComponent(source)+'&target='+encodeURIComponent(targetdir)+'&name='+encodeURIComponent(targetname));
+					window.location =('?action=copytheme&amp;source='+encodeURIComponent(source)+'&amp;target='+encodeURIComponent(targetdir)+'&amp;name='+encodeURIComponent(targetname));
 					return false;
 				}
 			}
 			return false;
 		});
-		
+
 	});
 });
 </script>
@@ -181,13 +181,12 @@ echo "\n" . '<div id="content">';
 <p>
 	<?php echo gettext("You can edit files from custom themes. Official themes shipped with Zenphoto are not editable, since your changes would be lost on next update."); ?>
 	<?php echo gettext("If you want to customize an official theme, please first <em>duplicate</em> it. This will place a copy in your <code>/themes</code> folder for you to edit."); ?>
-</p>	
+</p>
 <table class="bordered">
-	<thead>
+	<tr>
 		<th colspan="2"><b><?php echo gettext('Installed themes'); ?></b></th>
 		<th><b><?php echo gettext('Action'); ?></b></th>
-	</thead>
-	<tbody>
+	</tr>
 	<?php
 $themes = $gallery->getThemes();
 $current_theme_style = "background-color: #ECF1F2;";
@@ -222,63 +221,67 @@ foreach($themes as $theme => $themeinfo) {
 			if ($theme != $current_theme) {
 				?>
 				<li>
-				<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
-				<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?>
-				</a></p><br />
-			  </li>
+				<p class="buttons">
+				<a href="?action=settheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
+				<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?></a>
+				</p>
+				<br />
+				</li>
 			<?php
 			} else {
 				if ($gallerydefault) {
 					?>
 					<li>
-					<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
-					<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
-					</a></p><br />	
-				  </li>
+					<p class="buttons">
+					<a href="?action=settheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
+					<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?></a>
+					</p>
+					<br />
+					</li>
 					<?php
 				} else {
 					echo "<li><strong>".gettext("Current Theme")."</strong></li>";
 				}
 			}
-			
+
 			if (themeIsEditable($theme, $themes)) {
 				?>
 				<li>
 				<p class="buttons">
 				<a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
 				<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?></a>
-				</p><br />	
-			  </li>
-			  <?php
-			  if ($theme != $current_theme) {
-			  	?>
+				</p><br />
+				</li>
+				<?php
+				if ($theme != $current_theme) {
+					?>
 					<li>
 					<p class="buttons">
-					<a href="?action=deletetheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Delete this theme"); ?>">
+					<a href="?action=deletetheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Delete this theme"); ?>">
 					<img src="images/edit-delete.png" alt="" /><?php echo gettext("Delete"); ?></a>
-					</p>	
-				  </li>
+					</p>
+					</li>
 					<?php
-			  }
+				}
 			} else {
-			
+
 				?>
 				<li class="zp_copy_theme">
 				<p class="buttons">
 				<a href="?" title="<?php echo $theme; ?>">
 				<img src="images/page_white_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
-				</p>	
-			  </li>
+				</p>
+				</li>
 				<?php
 			}
 			?>
+			</ul>
 		</td>
 	</tr>
 
 	<?php
 	}
 	?>
-	</tbody>
 </table>
 
 

@@ -44,7 +44,7 @@ function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
 							'&amp;i='.urlencode($imagename).'&amp;performcrop=backend&amp;subpage='.$subpage.'&amp;tagsort='.$tagsort.'">'."\n".
 							'<img src="images/shape_handles.png" alt="" />'.gettext("Crop image").'</a>'."\n".
 			'</p>'."\n".
-			'<span style="line-height: 0em;"><br clear=all /></span>'."\n";
+			'<span style="line-height: 0em;"><br clear="all" /></span>'."\n";
 	}
 	return $output;
 }
@@ -196,7 +196,7 @@ printAdminHeader();
 
 <script src="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.js" type="text/javascript"></script>
 <link rel="stylesheet" href="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.css" type="text/css" />
-<script language="javascript">
+<script language="javascript" type="text/javascript" >
 	jQuery(window).load(function(){
 		jQuery('#cropbox').Jcrop({
 			onChange: showCoords,

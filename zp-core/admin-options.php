@@ -430,14 +430,14 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 	</script>
 	<?php
 }
-
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
-echo "\n" . '<div id="main">';
-printTabs($_current_tab);
-echo "\n" . '<div id="content">';
-
+?>
+</head>
+<body>
+<?php printLogoAndLinks(); ?>
+<div id="main">
+<?php printTabs($_current_tab); ?>
+<div id="content">
+<?php
 /* Page code */
 ?>
 <div id="container">
@@ -454,7 +454,7 @@ printSubtabs($_current_tab, 'general');
 if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 			<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
 				<tr>
@@ -470,15 +470,14 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td width="350">
 						<select id="server_protocol" name="server_protocol">
 							<?php $protocol = getOption('server_protocol'); ?>
-							<option value="http" <?php if ($protocol == 'http') echo 'SELECTED'; ?>>http</option>
-							<option value="https" <?php if ($protocol == 'https') echo 'SELECTED'; ?>>https</option>
-							<option value="https_admin" <?php if ($protocol == 'https_admin') echo 'SELECTED'; ?>><?php echo gettext('secure admin'); ?></option>
+							<option value="http" <?php if ($protocol == 'http') echo 'selected="selected"'; ?>>http</option>
+							<option value="https" <?php if ($protocol == 'https') echo 'selected="selected"'; ?>>https</option>
+							<option value="https_admin" <?php if ($protocol == 'https_admin') echo 'selected="selected"'; ?>><?php echo gettext('secure admin'); ?></option>
 						</select>
 					</td>
 					<td>
-						<p><?php echo gettext("Normally this option should be set to <em>http</em>. If you're running a secure server, change this to <em>https</em>. Select <em>secure admin</em> to insure secure access to <code>admin</code> pages."); ?>
+						<p><?php echo gettext("Normally this option should be set to <em>http</em>. If you're running a secure server, change this to <em>https</em>. Select <em>secure admin</em> to insure secure access to <code>admin</code> pages."); ?></p>
 						<p><?php echo gettext("<strong>Note:</strong> Login from the front-end user login form is secure only if <em>https</em> is selected.");?></p>
-
 					</td>
 				</tr>
 				<tr>
@@ -512,10 +511,11 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						</td>
 						<td>
 						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+						</td>
 						<?php
 					}
 					?>
-					</td>
+
 				</tr>
 				<tr>
 					<td><?php echo gettext("URL options:"); ?></td>
@@ -527,7 +527,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 								if (is_null($mod_rewrite)) {
 									$state = ' DISABLED';
 								} else if ($mod_rewrite) {
-									$state = ' CHECKED';
+									$state = ' checked="checked"';
 								} else {
 									$state = '';
 								}
@@ -642,7 +642,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						asort($totalsets);
 						foreach ($totalsets as $key=>$char) {
 							?>
-							<option value="<?php echo  $key; ?>" <?php if ($key == getOption('charset')) echo 'selected="SELECTED"'; if (!array_key_exists($key,$sets)) echo 'style="color: gray"'; ?>><?php echo $char; ?></option>
+							<option value="<?php echo  $key; ?>" <?php if ($key == getOption('charset')) echo 'selected="selected"'; if (!array_key_exists($key,$sets)) echo 'style="color: gray"'; ?>><?php echo $char; ?></option>
 							<?php
 						}
 						?>
@@ -696,9 +696,10 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td><?php echo gettext("TinyMCE editing:"); ?></td>
 					<td>
 						<label>
-							<input type="checkbox" name="tinyMCEPresent" <?php if ($_tinyMCEPresent>=0) {echo 'value="1"'; if ($_tinyMCEPresent) echo ' CHECKED';} else { echo 'DISABLED value= "0"';} ?> />
+							<input type="checkbox" name="tinyMCEPresent" <?php if ($_tinyMCEPresent>=0) {echo 'value="1"'; if ($_tinyMCEPresent) echo ' checked="checked"';} else { echo 'disabled="disabled" value= "0"';} ?> />
 							<?php echo gettext('enabled'); ?>
 						</label>
+					</td>
 					<td>
 						<?php
 						if ($_tinyMCEPresent>=0) {
@@ -723,7 +724,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						<td><?php echo gettext("Imagick:"); ?></td>
 						<td>
 							<label>
-								<input type="checkbox" name="use_Imagick" value="1" <?php if (getOption('use_Imagick')) echo ' CHECKED'; ?> />
+								<input type="checkbox" name="use_Imagick" value="1" <?php if (getOption('use_Imagick')) echo ' checked="checked"'; ?> />
 								<?php echo gettext('enabled'); ?>
 							</label>
 						</td>
@@ -752,9 +753,9 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 			<input	type="hidden" name="savegalleryoptions" value="yes" />
-			<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
+			<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 			<table class="bordered">
 				<tr>
 					<td colspan="3">
@@ -898,7 +899,7 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						<table>
 							<tr>
 								<td>
-									<select id="sortselect" name="gallery_sorttype" onchange="update_direction(this,'gallery_sortdirection','customTextBox2')">
+									<select id="gallerysortselect" name="gallery_sorttype" onchange="update_direction(this,'gallery_sortdirection','customTextBox2')">
 									<?php
 									if (array_search($cv, $sort) === false) $cv = 'custom';
 									generateListFromArray(array($cv), $sort, false, true);
@@ -1024,9 +1025,9 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_search" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 			<input	type="hidden" name="savesearchoptions" value="yes" />
-			<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
+			<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 			<table class="bordered">
 				<tr>
 					<td colspan="3">
@@ -1089,9 +1090,9 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					$exact = ' <input type="radio" id="exact_tags" name="tag_match" value="1" ';
 					$partial = ' <input type="radio" id="exact_tags" name="tag_match" value="0" ';
 					if (getOption('exact_tag_match')) {
-						$exact .= ' CHECKED ';
+						$exact .= ' checked="checked" ';
 					} else {
-						$partial .= ' CHECKED ';
+						$partial .= ' checked="checked" ';
 					}
 					$exact .= '/>'. gettext('exact');
 					$partial .= '/>'. gettext('partial');
@@ -1171,7 +1172,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_rss" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 		<input	type="hidden" name="saverssoptions" value="yes" />
 	<table class="bordered">
 		<tr>
@@ -1187,22 +1188,22 @@ if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			<td>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('Gallery'); ?>
+						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('Gallery'); ?>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_comments" value=<?php if (getOption('RSS_comments')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('Comments'); ?>
+						<input type="checkbox" name="RSS_comments" value=<?php if (getOption('RSS_comments')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('Comments'); ?>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_articles" value=<?php if (getOption('RSS_articles')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('All news'); ?>
+						<input type="checkbox" name="RSS_articles" value=<?php if (getOption('RSS_articles')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('All news'); ?>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_article_comments" value=<?php if (getOption('RSS_article_comments')) echo '1 CHECKED'; else echo '0'; ?> /> <?php echo gettext('News/Page comments'); ?>
+						<input type="checkbox" name="RSS_article_comments" value=<?php if (getOption('RSS_article_comments')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('News/Page comments'); ?>
 					</label>
 				</span>
 			</td>
@@ -1296,7 +1297,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	}
 		?>
 	<div id="tab_image" class="tabbox">
-	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+	<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 	<input type="hidden" name="saveimageoptions" value="yes" /> 
 	<p align="center">
 	<?php echo gettext('See also the <a href="?tab=theme">Theme Options</a> tab for theme specific image options.'); ?>
@@ -1437,7 +1438,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
 				<td><input type="checkbox" name="auto_rotate"	value="1"
 					<?php echo checked('1', getOption('auto_rotate')); ?>
-					<?php if (!zp_imageCanRotate()) echo ' DISABLED'; ?>	/></td>
+					<?php if (!zp_imageCanRotate()) echo ' disabled="disabled"'; ?>	/></td>
 				<td>
 					<p><?php	echo gettext("Automatically rotate images based on the EXIF orientation setting."); ?></p>
 					<?php
@@ -1509,7 +1510,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						<td style="margin:0; padding:0;"><?php echo gettext('Images'); ?> </td>
 						<td style="margin:0; padding:0">
 							<select id="fullimage_watermark" name="fullimage_watermark">
-								<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
+								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 								<?php
 								$watermarks = getWatermarks();
 								generateListFromArray(array($current), $watermarks, false, false);
@@ -1529,7 +1530,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<td style="margin:0; padding:0;"><?php	echo $plugin;	?> <?php echo gettext('thumbnails'); ?> </td>
 							<td style="margin:0; padding:0">
 								<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
-								<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
+								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 								<?php
 								$watermarks = getWatermarks();
 								generateListFromArray(array($current), $watermarks, false, false);
@@ -1590,7 +1591,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						</label>
 					</p>
 					<p>
-					<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
+					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<table class="compact">
 						<tr class="passwordextrashow">
 							<td style="margin:0; padding:0">
@@ -1609,7 +1610,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<td style="margin:0; padding:0">
 							</td>
 							<td style="margin:0; padding:0">
-								<!-- password & repeat -->
+								<!-- password AND repeat -->
 								<br />
 								<br />
 							</td>
@@ -1723,7 +1724,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_comments" class="tabbox">
-	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+	<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 	<input 	type="hidden" name="savecommentoptions" value="yes" />
 	<table class="bordered">
 		<tr>
@@ -1876,7 +1877,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 		}
 	}
 	?>
-	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+	<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 		<input type="hidden" name="savethemeoptions" value="yes" />
 		<input type="hidden" name="optiontheme" value="<?php echo $optiontheme; ?>" />
 		<input type="hidden" name="old_themealbum" value="<?php echo urlencode($alb); ?>" />
@@ -2008,12 +2009,12 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 							<td style="margin:0; padding:0">
 								<label>
 									<input type="radio" id="image_use_side1" name="image_use_side" id="image_use_side"
-											value="height" <?php if ($side=='height') echo " CHECKED"?> />
+											value="height" <?php if ($side=='height') echo ' checked="checked"'; ?> />
 										<?php echo gettext('height') ?>
 								</label>
 								<label>
 									<input type="radio" id="image_use_side2" name="image_use_side" id="image_use_side"
-												value="width" <?php if ($side=='width') echo " CHECKED"?> />
+												value="width" <?php if ($side=='width') echo ' checked="checked"'; ?> />
 									<?php echo gettext('width') ?>
 								</label>
 							</td>
@@ -2022,12 +2023,12 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 							<td style="margin:0; padding:0">
 								<label>
 									<input type="radio" id="image_use_side3" name="image_use_side" id="image_use_side"
-											value="shortest" <?php if ($side=='shortest') echo " CHECKED"?> />
+											value="shortest" <?php if ($side=='shortest') echo ' checked="checked"'; ?> />
 									<?php echo gettext('shortest side') ?>
 								</label>
 								<label>
 									<input type="radio" id="image_use_side4" name="image_use_side" id="image_use_side"
-											value="longest" <?php if ($side=='longest') echo " CHECKED"?> />
+											value="longest" <?php if ($side=='longest') echo ' checked="checked"'; ?> />
 									<?php echo gettext('longest side') ?>
 								</label>
 							</td>
@@ -2106,7 +2107,7 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 	$_zp_plugin_count = 0;
 	?>
 	<div id="tab_plugin" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
 			<input type="hidden" name="savepluginoptions" value="yes" />
 			<table class="bordered">
 				<tr>
@@ -2208,17 +2209,13 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 <?php
 }
 ?>
+</div><!-- end of container -->
 
-<!-- end of container -->
-<?php
-echo '</div>'; // content
-printAdminFooter();
-echo '</div>'; // main
-
-
-echo "\n</body>";
-echo "\n</html>";
-?>
+</div><!-- end of content -->
+</div><!-- end of main -->
+<?php printAdminFooter(); ?>
 
 
+</body>
+</html>
 

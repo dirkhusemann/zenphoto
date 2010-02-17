@@ -148,7 +148,7 @@ printSubtabs($_current_tab, 'users');
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		if ($_zp_null_account && isset($_zp_reset_admin)) {
 			$admins = array($_zp_reset_admin['user'] => $_zp_reset_admin);
-			$alterrights = ' DISABLED';
+			$alterrights = ' disabled="disabled"';
 			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
 		} else {
 			$admins = getAdministrators();
@@ -163,7 +163,7 @@ printSubtabs($_current_tab, 'users');
 			$alterrights = '';
 		}
 	} else {
-		$alterrights = ' DISABLED';
+		$alterrights = ' disabled="disabled"';
 		$admins = array($_zp_current_admin['user'] => $_zp_current_admin);
 	}
 	if (isset($_GET['deleted'])) {
@@ -223,7 +223,7 @@ printSubtabs($_current_tab, 'users');
 	
 	
 ?> 
-<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&ticket='.$_zp_ticket.'&user='.$post_user; ?>" method="post" AUTOCOMPLETE=OFF>
+<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" AUTOCOMPLETE="OFF">
 <input type="hidden" name="saveadminoptions" value="yes" />
 <?php			
 if (empty($alterrights)) {
@@ -236,7 +236,7 @@ if (empty($alterrights)) {
 					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 					</p>
-					<br clear=all /><br />
+					<br clear="all" /><br />
 <table class="bordered"> <!-- main table -->
 
 	<tr>
@@ -443,7 +443,7 @@ if (empty($alterrights)) {
 						if ($_zp_loggedin & (MANAGE_ALL_ALBUM_RIGHTS | ADMIN_RIGHTS)) {
 							$album_alter_rights = $local_alterrights;
 						} else {
-							$album_alter_rights = ' DISABLED';
+							$album_alter_rights = ' disabled="disabled"';
 						}
 						if ($current && $ismaster) {
 							echo gettext("The <em>master</em> account has full rights to all albums.");
@@ -497,7 +497,7 @@ if (empty($alterrights)) {
 	}
 </script>
 
-<br clear: all />
+<br clear="all" />
 <br />
 </div>
 <!-- end of tab_admin div -->

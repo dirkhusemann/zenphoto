@@ -58,7 +58,7 @@
 				<td>
 					<?php
 					$captchaCode = generateCaptcha($img);
-					$html = "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
+					$html = "<label><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
 					?>
 					<input type="hidden" name="code_h" value="<?php echo $captchaCode; ?>" size="22" />
 					<?php

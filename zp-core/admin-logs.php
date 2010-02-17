@@ -85,34 +85,34 @@ echo "\n</head>";
 			<!-- A log -->
 			<div id="theme-editor" class="tabbox">
 			
-				<form name="delete_log" action="?action=delete&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
-					<input type="hidden" name="action" value="delete">
-					<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
+				<form name="delete_log" action="?action=delete&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+					<input type="hidden" name="action" value="delete" />
+					<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 					<div class="buttons">
-						<button type="submit" class="tooltip" id="delete_log" title="<?php printf(gettext("Delete <em>%s</em>"),$logfiletext);?>">
-							<img src="images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Delete");?>
+						<button type="submit" class="tooltip" id="delete_log" title="<?php printf(gettext("Delete %s"),$logfiletext);?>">
+							<img src="images/edit-delete.png" style="border: 0px;" alt="delete" /> <?php echo gettext("Delete");?>
 						</button>
 					</div>
 				</form>
 				<?php
 				if (!empty($logtext)) {
 					?>
-					<form name="clear_log" action="?action=clear&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
-						<input type="hidden" name="action" value="clear">
-						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
+					<form name="clear_log" action="?action=clear&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+						<input type="hidden" name="action" value="clear" />
+						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">
-							<button type="submit" class="tooltip" id="clear_log" title="<?php printf(gettext("Reset <em>%s</em>"),$logfiletext);?>">
-								<img src="images/refresh.png" style="border: 0px;" /> <?php echo gettext("Reset");?>
+							<button type="submit" class="tooltip" id="clear_log" title="<?php printf(gettext("Reset %s"),$logfiletext);?>">
+								<img src="images/refresh.png" style="border: 0px;" alt="clear" /> <?php echo gettext("Reset");?>
 							</button>
 						</div>
 					</form>
 					
-					<form name="download_log" action="?action=download&page=logs&tab=<?php echo $subtab; ?>" method="post" style="float: left">
-						<input type="hidden" name="action" value="download">
-						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt">
+					<form name="download_log" action="?action=download&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+						<input type="hidden" name="action" value="download" />
+						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">
-							<button type="submit" class="tooltip" id="download_log" title="<?php printf(gettext("Download <em>%s</em> zipfile"),$logfiletext);?>">
-								<img src="images/down.png" style="border: 0px;" /> <?php echo gettext("Download");?>
+							<button type="submit" class="tooltip" id="download_log" title="<?php printf(gettext("Download %s zipfile"),$logfiletext);?>">
+								<img src="images/down.png" style="border: 0px;" alt="download" /> <?php echo gettext("Download");?>
 							</button>
 						</div>
 					</form>
@@ -189,6 +189,7 @@ echo "\n</head>";
 </div>
 <?php printAdminFooter(); ?>
 <?php // to fool the validator
+echo "\n</body>";
 echo "\n</html>";
 
 ?>

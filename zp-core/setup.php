@@ -507,7 +507,7 @@ li {
 
 <div id="main">
 
-<h1><img src="images/zen-logo.gif" title="<?php echo gettext('Zen Photo Setup'); ?>" align="absbottom" />
+<h1><img src="images/zen-logo.gif" title="<?php echo gettext('Zen Photo Setup'); ?>" align="bottom" />
 <?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?>
 </h1>
 
@@ -853,7 +853,7 @@ if (!$setup_checked) {
   		$selector =	'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">';
   		$c = 0;
   		foreach ($permission_names as $key=>$permission) {
-  			$selector .= '	<option value="'.$c.'"'.($chmod==$key?' SELECTED':'').'>'.sprintf(gettext('%1$s (0%2$o)'),$permission_names[$key],$key).'</option>';
+  			$selector .= '	<option value="'.$c.'"'.($chmod==$key?' selected="selected"':'').'>'.sprintf(gettext('%1$s (0%2$o)'),$permission_names[$key],$key).'</option>';
 				$c++;
   		}
   		$selector .= '</select>';
@@ -2250,7 +2250,7 @@ if (file_exists(CONFIGFILE)) {
 		?>
 		<a href="?checked&amp;<?php echo $task.$mod.$th; ?>" title="<?php echo gettext("create and or update the database tables."); ?>" style="font-size: 15pt; font-weight: bold;"><img src="images/<?php echo $img; ?>" /><?php echo gettext("Go"); ?></a>
 		</p>
-		<br clear:all /><br clear:all />
+		<br clear="all" /><br clear="all" />
 		<?php
 	} else {
 		?>

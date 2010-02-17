@@ -98,12 +98,12 @@ if (!isset($_GET['album'])) {
 		if ($parent == '/' || $parent == '.' || empty($parent)) {
 			$parent = '';
 		} else {
-			$parent = '&album='.$parent.'&tab=subalbuminfo';
+			$parent = '&amp;album='.$parent.'&amp;tab=subalbuminfo';
 		}
 		?>
 		
 		<div class="tabbox">
-			<form action="?page=edit&album=<?php echo $album->getFolder(); ?>&saved&tab=sort" method="post" name="sortableListForm" id="sortableListForm">
+			<form action="?page=edit&amp;album=<?php echo $album->getFolder(); ?>&amp;saved&amp;tab=sort" method="post" name="sortableListForm" id="sortableListForm">
 				<script language="javascript" type="text/javascript">
 					function postSort(form) {
 						$('#sortableList').val($('#images').sortable('serialize'));
@@ -134,7 +134,7 @@ if (!isset($_GET['album'])) {
 						function saveOrder() {
 						}
 					</script>
-					<input type="hidden" id="sortableList" name="sortableList" value="">
+					<input type="hidden" id="sortableList" name="sortableList" value="" />
 					<p class="buttons">
 						<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
 						<button type="button" title="<?php echo gettext("Save order"); ?>" onclick="postSort(this.form);" ><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>

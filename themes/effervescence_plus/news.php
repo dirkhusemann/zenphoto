@@ -35,11 +35,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php
 				if (getOption('custom_index_page') === 'gallery') {
 				?>
-				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
-				<?php	
-				}					
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> |
+				<?php
+				}
 				?>
-				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span> 
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>
 				<?php printNewsIndexURL(gettext("News")," | ");  printCurrentNewsCategory(" | ".gettext('Category')." - "); ?><?php printNewsTitle(" | "); ?>
 			</div>
 		</div> <!-- wrapnav -->
@@ -50,20 +50,20 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 	<!-- Wrap Main Body -->
 	<div id="content">
-	
+
 		<small>&nbsp;</small>
 		<div id="main2">
 			<div id="content-left">
-	<?php 
-	if(is_NewsArticle()) { // single news article 
-		?>  
-	  <?php if(getPrevNewsURL()) { ?><div class="singlenews_prev"><?php printPrevNewsLink(); ?></div><?php } ?>
-	  <?php if(getPrevNewsURL()) { ?><div class="singlenews_next"><?php printNextNewsLink(); ?></div><?php } ?>
-	  <?php if(getPrevNewsURL() OR getPrevNewsURL()) { ?><br clear:both /><?php } ?>
-	  <h3><?php printNewsTitle(); ?></h3> 
-	
-	  <div class="newsarticlecredit">
-	  	<span class="newsarticlecredit-left"> <?php 
+	<?php
+	if(is_NewsArticle()) { // single news article
+		?>
+		<?php if(getPrevNewsURL()) { ?><div class="singlenews_prev"><?php printPrevNewsLink(); ?></div><?php } ?>
+		<?php if(getPrevNewsURL()) { ?><div class="singlenews_next"><?php printNextNewsLink(); ?></div><?php } ?>
+		<?php if(getPrevNewsURL() OR getPrevNewsURL()) { ?><br clear:both /><?php } ?>
+		<h3><?php printNewsTitle(); ?></h3>
+
+		<div class="newsarticlecredit">
+			<span class="newsarticlecredit-left"> <?php
 			$count = getCommentCount();
 			$cat = getNewsCategories();
 			printNewsDate();
@@ -74,18 +74,18 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if (!empty($cat)) {
 				echo ' | ';
 			}
-			?> 
-			</span> 
-			<?php 
+			?>
+			</span>
+			<?php
 			if (!empty($cat)) {
-				printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
+				printNewsCategories(", ",gettext("Categories: "),"newscategories");
 			}
 			?>
 		<?php printCodeblock(1); ?>
 		<?php printNewsContent(); ?>
-	   <?php printCodeblock(2); ?>
-	  </div>  
-	<?php 
+		 <?php printCodeblock(2); ?>
+		</div>
+	<?php
 	if (function_exists('printRating')) printRating();
 	// COMMENTS TEST
 	if (function_exists('printCommentForm')) {
@@ -97,8 +97,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		} // comments allowed - end
 	} else { 	// news article loop
 		commonNewsLoop();
-	} 
-	?> 
+	}
+	?>
 
 	</div><!-- content left-->
 	<div id="sidebar">
@@ -106,7 +106,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	</div><!-- sidebar -->
 	<br style="clear:both" />
 	</div> <!-- main2 -->
-		
+
 </div> <!-- content -->
 
 <?php printFooter(); ?>

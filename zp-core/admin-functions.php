@@ -77,9 +77,10 @@ function printAdminHeader($tinyMCE=NULL) {
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	header('Content-Type: text/html; charset=' . getOption('charset'));
 	?>
-	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<title><?php echo gettext("zenphoto administration") ?></title>
 	<link rel="stylesheet" href="<?php echo $path; ?>admin.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
@@ -183,7 +184,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	?>
 	<div id="loginform">
 	<?php
-	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
+	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" alt=\"Zen Photo\" /></p>";
 	switch ($_zp_login_error) {
 		case 1:
 			?>
@@ -229,7 +230,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	<?php
 	if ($star == '*') {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
-		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"middle\"/></label>";
+		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label><img src=\"" . $img . "\" alt=\"Code\" align=\"middle\"/></label>";
 		?>
 		<tr>
 			<td align="left"><?php echo gettext("*Enter captcha in place of <em>Password</em> to request a password reset."); ?></td>
@@ -260,14 +261,14 @@ function printLoginForm($redirect=null, $logo=true) {
 function printLogoAndLinks() {
 	global $_zp_current_admin;
 	?>
-	<span id="administration"><img id="logo" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/zen-logo.gif" title="<?php echo gettext('Zenphoto Administration'); ?>" align="absbottom" /></span>
+	<span id="administration"><img id="logo" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/zen-logo.gif" title="<?php echo gettext('Zenphoto Administration'); ?>" alt="<?php echo gettext('Zenphoto Administration'); ?>" align="bottom" /></span>
 	<?php
 	echo "\n<div id=\"links\">";
 	echo "\n  ";
 	if (!is_null($_zp_current_admin)) {
 		if (getOption('server_protocol')=='https') $sec=1; else $sec=0;
 		printf(gettext("Logged in as %s"), $_zp_current_admin['user']);
-		echo " &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout=".$sec."\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
+		echo " &nbsp; | &nbsp; <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout=".$sec."\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
 	echo "<a href=\"".WEBPATH."/index.php";
 	if ($specialpage = getOption('custom_index_page')) {
@@ -383,16 +384,16 @@ function printSubtabs($tab, $default=NULL) {
 
 function setAlbumSubtabs($album) {
 	global $zenphoto_tabs;
-	$albumlink = '?page=edit&album='.urlencode($album->name);
+	$albumlink = '?page=edit&amp;album='.urlencode($album->name);
 	if (!is_array($zenphoto_tabs['edit']['subtabs'])) $zenphoto_tabs['edit']['subtabs'] = array();
 	if (!$album->isDynamic() && $album->getNumImages()) {
 		$zenphoto_tabs['edit']['subtabs'] = array_merge(
-																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&tab=imageinfo'),
-																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&tab=sort'),
+																					array(gettext('Images') => 'admin-edit.php'.$albumlink.'&amp;tab=imageinfo'),
+																					array(gettext('Image order') => 'admin-albumsort.php'.$albumlink.'&amp;tab=sort'),
 																					$zenphoto_tabs['edit']['subtabs']);
 	}
-	if (!$album->isDynamic() && $album->getNumAlbums() > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
-	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
+	if (!$album->isDynamic() && $album->getNumAlbums() > 0) $zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Subalbums') => 'admin-edit.php'.$albumlink.'&amp;tab=subalbuminfo'), $zenphoto_tabs['edit']['subtabs']);
+	$zenphoto_tabs['edit']['subtabs'] = array_merge(array(gettext('Album') => 'admin-edit.php'.$albumlink.'&amp;tab=albuminfo'),$zenphoto_tabs['edit']['subtabs']);
 }
 
 function checked($checked, $current) {
@@ -500,7 +501,6 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 			natcasesort($options);
 		}
 		foreach($options as $option) {
-			$optionID = $whom.'_'.$option;
 			$row = $supportedOptions[$option];
 			$type = $row['type'];
 			$desc = $row['desc'];
@@ -520,6 +520,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 				$key = $option;
 				$option = str_replace('_', ' ', $option);
 			}
+			$optionID = $whom.'_'.$key;
 			if ($theme) {
 				$v = getThemeOption($key, $album, $theme);
 			} else {
@@ -534,11 +535,11 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 
 			if ($showhide) {
 				?>
-				<tr id="<?php echo $optionID; ?>_tr" class="<?php echo $showhide; ?>extrainfo" style="display:<?php echo $initial; ?>">
+				<tr id="tr_<?php echo $optionID; ?>" class="<?php echo $showhide; ?>extrainfo" style="display:<?php echo $initial; ?>">
 				<?php
 			} else {
 				?>
-				<tr id="<?php echo $optionID; ?>_tr">
+				<tr id="tr_<?php echo $optionID; ?>">
 				<?php
 			}
 				?>
@@ -556,7 +557,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						}
 						?>
 						<td width="350px">
-							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.$clear.'text-'.$key; ?>" value=0 />
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.$clear.'text-'.$key; ?>" value="0" />
 							<?php
 							if ($multilingual) {
 								print_language_string_list($v, $key, $type, NULL, $editor);
@@ -571,7 +572,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						break;
 					case OPTION_TYPE_CHECKBOX:
 						?>
-						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$key; ?>" value=0 />
+						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$key; ?>" value="0" />
 						<td width="350px">
 							<input type="checkbox" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="1" <?php echo checked('1', $v); ?> />
 						</td>
@@ -580,7 +581,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 					case OPTION_TYPE_CUSTOM:
 						?>
 						<td width="350px">
-							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'custom-'.$key; ?>" value=0 />
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'custom-'.$key; ?>" value="0" />
 							<?php	$optionHandler->handleOption($key, $v); ?>
 						</td>
 						<?php
@@ -588,7 +589,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 					case OPTION_TYPE_RADIO:
 						?>
 						<td width="350px">
-							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'radio-'.$key; ?>" value=0 />
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'radio-'.$key; ?>" value="0" />
 							<?php generateRadiobuttonsFromArray($v,$row['buttons'],$key); ?>
 						</td>
 						<?php
@@ -596,12 +597,12 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 					case OPTION_TYPE_SELECTOR:
 						?>
 						<td width="350px">
-							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'selector-'.$key?>" value=0 />
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'selector-'.$key?>" value="0" />
 							<select id="<?php echo $key; ?>" name="<?php echo $key; ?>">
 								<?php
 								if (array_key_exists('null_selection', $row)) {
 									?>
-									<option value=""<?php if (empty($v)) echo "SELECTED"; ?>><?php echo $row['null_selection']; ?></option>
+									<option value=""<?php if (empty($v)) echo 'selected="selected"'; ?>><?php echo $row['null_selection']; ?></option>
 									<?php
 								}
 								?>
@@ -624,7 +625,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 								}
 								$display = str_replace(' ', '&nbsp;', $display);
 								?>
-								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
+								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value="0" />
 
 								<span style="white-space:nowrap">
 									<label>
@@ -646,7 +647,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 							$c = 0;
 							foreach ($row['checkboxes'] as $display=>$checkbox) {
 								?>
-								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
+								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value="0" />
 								<?php
 								$ck_sql = str_replace($key, $checkbox, $sql);
 								$db = query_single_row($ck_sql);
@@ -665,7 +666,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						if (empty($v)) $v = '#000000';
 						?>
 						<td width="350px" style="margin:0; padding:0">
-						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value=0 />
+						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value="0" />
 						<script type="text/javascript">
 							$(document).ready(function() {
 								$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
@@ -772,12 +773,12 @@ function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
 	foreach($list as $text=>$value) {
 		$checked ="";
 		if($value == $currentvalue) {
-			$checked = "checked='checked' "; //the checked() function uses quotes the other way round...
+			$checked = ' checked="checked" '; //the checked() function uses quotes the other way round...
 		}
 		?>
 		<label>
 			<span style="white-space:nowrap">
-				<input type="radio" name="<?php echo $option; ?>" id="<?php echo $value.'-'.$option; ?>" value="<?php echo $value; ?>"<?php echo $checked; ?> />
+				<input type="radio" name="<?php echo $option; ?>" id="<?php echo $option.'-'.$value; ?>" value="<?php echo $value; ?>"<?php echo $checked; ?> />
 				<?php echo $text; ?>
 			</span>
 		</label>
@@ -816,7 +817,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 		<span style="white-space:nowrap">
 			<label>
 				<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
-					<?php if (isset($cv[$item])) {echo 'checked="checked"';	} ?> value="<?php echo $item; ?>"
+					<?php if (isset($cv[$item])) {echo ' checked="checked"';	} ?> value="<?php echo $item; ?>"
 					<?php echo $alterrights; ?> />
 				<?php echo $display; ?>
 			</label>
@@ -880,7 +881,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	}
 	if (count($tags) > 0) {
 		generateUnorderedListFromArray($tags, $tags, $postit, false, !$mostused, $showCounts);
-		echo '<hr />';
+		echo '<li><hr /></li>';
 	}
 	generateUnorderedListFromArray(array(), $displaylist, $postit, false, !$mostused, $showCounts);
 	echo '</ul>';
@@ -910,14 +911,14 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
  ?>
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
-	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value=0 />
+	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value="0" />
 	<p class="buttons">
 		<?php
 		$parent = dirname($album->name);
 		if ($parent == '/' || $parent == '.' || empty($parent)) {
 			$parent = '';
 		} else {
-			$parent = '&album='.$parent.'&tab=subalbuminfo';
+			$parent = '&amp;album='.$parent.'&amp;tab=subalbuminfo';
 		}
 		?>
 		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
@@ -934,80 +935,85 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	</p>
 <br clear="all" /><br />
 	<table>
-		<td width="70%" valign="top">
-		<table>
 		<tr>
-		<td align="left" valign="top" width="150"><?php echo gettext("Album Title"); ?>: </td>
-		<td>
-		<?php print_language_string_list($album->get('title'), $prefix."albumtitle", false); ?>
-		</td>
-		</tr>
+			<td width="70%" valign="top">
+				<table>
+					<tr>
+						<td align="left" valign="top" width="150">
+						<?php echo gettext("Album Title"); ?>:
+						</td>
+						<td>
+						<?php print_language_string_list($album->get('title'), $prefix."albumtitle", false); ?>
+						</td>
+					</tr>
 
-	<tr>
-	<td align="left" valign="top" ><?php echo gettext("Album Description:"); ?> </td>
-	<td>
-	<?php	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor'); ?>
-	</td>
-	</tr>
-	<tr class="<?php echo $prefix; ?>passwordextrashow">
-		<td align="left" value="top">
-			<p>
-				<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',true);">
-					<?php echo gettext("Album password:"); ?>
-				</a>
-			</p>
-		</td>
-		<td>
-		<?php
-		$x = $album->getPassword();
-		if (!empty($x)) echo "**********";
-		?>
-		</td>
-	</tr>
-	<tr class="<?php echo $prefix; ?>passwordextrahide" style="display:none" >
-		<td align="left" value="top">
-			<p>
-			<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',false);">
-				<?php echo gettext("Album guest user:"); ?>
-			</a>
-			</p>
-			<p>
-			<?php echo gettext("Album password:");?>
-			<br />
-			<?php echo gettext("repeat:");?>
-			</p>
-			<p>
-			<?php echo gettext("Password hint:"); ?>
-			</p>
-		</td>
-		<td>
-			<p>
-				<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
-			</p>
-			<p>
-			<?php
-			$x = $album->getPassword();
+					<tr>
+						<td align="left" valign="top" >
+						<?php echo gettext("Album Description:"); ?>
+						</td>
+						<td>
+						<?php	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor'); ?>
+						</td>
+					</tr>
+					<tr class="<?php echo $prefix; ?>passwordextrashow">
+						<td align="left" valign="top">
+							<p>
+								<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',true);">
+								<?php echo gettext("Album password:"); ?>
+								</a>
+							</p>
+						</td>
+						<td>
+						<?php
+						$x = $album->getPassword();
+						if (!empty($x)) echo "**********";
+						?>
+						</td>
+					</tr>
+					<tr class="<?php echo $prefix; ?>passwordextrahide" style="display:none" >
+						<td align="left" valign="top">
+							<p>
+							<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',false);">
+								<?php echo gettext("Album guest user:"); ?>
+							</a>
+							</p>
+							<p>
+							<?php echo gettext("Album password:");?>
+							<br />
+							<?php echo gettext("repeat:");?>
+							</p>
+							<p>
+							<?php echo gettext("Password hint:"); ?>
+							</p>
+						</td>
+						<td>
+							<p>
+								<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
+							</p>
+							<p>
+							<?php
+							$x = $album->getPassword();
+				
+							if (!empty($x)) {
+								$x = '			 ';
+							}
+							?>
+							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" />
+							<br />
+							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
+							</p>
+							<p>
+							<?php print_language_string_list($album->get('password_hint'), $prefix."albumpass_hint", false); ?>
+							</p>
+						</td>
+					</tr>
 
-			if (!empty($x)) {
-				$x = '			 ';
-			}
-			?>
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" />
-			<br />
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
-			</p>
-			<p>
-			<?php print_language_string_list($album->get('password_hint'), $prefix."albumpass_hint", false); ?>
-			</p>
-		</td>
-	</tr>
-
-	<?php
-	$d = $album->getDateTime();
-	if ($d == "0000-00-00 00:00:00") {
-		$d = "";
-	}
-	?>
+					<?php
+					$d = $album->getDateTime();
+					if ($d == "0000-00-00 00:00:00") {
+						$d = "";
+					}
+					?>
 
 	<script type="text/javascript">
 		$(function() {
@@ -1020,25 +1026,25 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		});
 	</script>
 
-	<tr>
-		<td align="left" valign="top"><?php echo gettext("Date:");?> </td>
-		<td width="400">
-		<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
-	</tr>
-	<tr>
-		<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td>
-		<td>
-		<?php print_language_string_list($album->getLocation(), $prefix."albumlocation", false); ?>
-		</td>
-	</tr>
+					<tr>
+						<td align="left" valign="top"><?php echo gettext("Date:");?> </td>
+						<td width="400">
+						<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
+					</tr>
+					<tr>
+						<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td>
+						<td>
+						<?php print_language_string_list($album->getLocation(), $prefix."albumlocation", false); ?>
+						</td>
+					</tr>
 	<?php
 	$custom = zp_apply_filter('edit_album_custom_data', '', $album, $prefix);
 	if (empty($custom)) {
 		?>
-		<tr>
-			<td align="left" valign="top"><?php echo gettext("Custom data:"); ?></td>
-			<td><?php print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true); ?></td>
-		</tr>
+					<tr>
+						<td align="left" valign="top"><?php echo gettext("Custom data:"); ?></td>
+						<td><?php print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true); ?></td>
+					</tr>
 		<?php
 	} else {
 		echo $custom;
@@ -1052,33 +1058,33 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
  * not recommended--screws with peoples minds during pagination!
 	$sort[gettext('Random')] = 'random';
 */
-	?>
-	<tr>
-	<td align="left" valign="top"><?php echo gettext("Sort subalbums by:");?> </td>
-	<td>
-	<?php
+					?>
+					<tr>
+						<td align="left" valign="top"><?php echo gettext("Sort subalbums by:");?> </td>
+						<td>
+					<?php
 
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 
 	?>
-	<table>
-		<tr>
-			<td>
-			<select id="sortselect" name="<?php echo $prefix; ?>subalbumsortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>album_direction_div','<?php echo $javaprefix; ?>album_custom_div')">
-			<?php
-			if (is_null($album->getParent())) {
-				$globalsort = gettext("*gallery album sort order");
-			} else {
-				$globalsort = gettext("*parent album subalbum sort order");
-			}
-			echo "\n<option value =''>$globalsort</option>";
-			$cvt = $type = strtolower($album->get('subalbum_sort_type'));
-			generateListFromArray(array($type), $sort, false, true);
-			?>
-			</select>
-			</td>
-		<td>
+						<table>
+							<tr>
+								<td>
+									<select id="albumsortselect<?php echo $prefix; ?>" name="<?php echo $prefix; ?>subalbumsortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>album_direction_div','<?php echo $javaprefix; ?>album_custom_div')">
+									<?php
+									if (is_null($album->getParent())) {
+										$globalsort = gettext("*gallery album sort order");
+									} else {
+										$globalsort = gettext("*parent album subalbum sort order");
+									}
+									echo "\n<option value =''>$globalsort</option>";
+									$cvt = $type = strtolower($album->get('subalbum_sort_type'));
+									generateListFromArray(array($type), $sort, false, true);
+									?>
+									</select>
+								</td>
+								<td>
 	<?php
 	if (($type == 'manual') || ($type == 'random') || ($type == '')) {
 		$dsp = 'none';
@@ -1086,12 +1092,12 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		$dsp = 'block';
 	}
 	?>
-	<span id="<?php echo $javaprefix; ?>album_direction_div" style="display:<?php echo $dsp; ?>">
-		<label>
-			<?php echo gettext("Descending"); ?>
-			<input type="checkbox" name="<?php echo $prefix; ?>album_sortdirection" value="1" <?php if ($album->getSortDirection('album')) {	echo "CHECKED";	}; ?>>
-		</label>
-	</span>
+									<span id="<?php echo $javaprefix; ?>album_direction_div" style="display:<?php echo $dsp; ?>">
+										<label>
+											<?php echo gettext("Descending"); ?>
+											<input type="checkbox" name="<?php echo $prefix; ?>album_sortdirection" value="1" <?php if ($album->getSortDirection('album')) {	echo "CHECKED";	}; ?> />
+										</label>
+									</span>
 	<?php
 	$flip = array_flip($sort);
 	if (empty($type) || isset($flip[$type])) {
@@ -1100,453 +1106,455 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		$dsp = 'block';
 	}
 	?>
-		</td>
-	</tr>
-	<script type="text/javascript">
-		$(function () {
-			$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
-				tags: [<?php echo $albumdbfields; ?>]
-			});
-		});
-	</script>
-	<tr>
-		<td colspan="2">
-		<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
-		<?php echo gettext('custom fields:') ?>
-		<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
-		</span>
+								</td>
+							</tr>
+							<script type="text/javascript">
+								$(function () {
+									$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
+										tags: [<?php echo $albumdbfields; ?>]
+									});
+								});
+							</script>
+							<tr>
+								<td colspan="2">
+								<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
+								<?php echo gettext('custom fields:') ?>
+								<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+								</span>
+						
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
 
-		</td>
-	</tr>
-</table>
-	</td>
-	</tr>
-
-	<tr>
-	<td align="left" valign="top"><?php echo gettext("Sort images by:"); ?> </td>
-	<td>
+				<tr>
+					<td align="left" valign="top"><?php echo gettext("Sort images by:"); ?> </td>
+						<td>
 	<?php
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 	?>
-	<table>
-		<tr>
-			<td>
-			<select id="sortselect" name="<?php echo $prefix; ?>sortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>image_direction_div','<?php echo $javaprefix; ?>image_custom_div')">
-			<?php
-			if (is_null($album->getParent())) {
-				$globalsort = gettext("*gallery image sort order");
-			} else {
-				$globalsort = gettext("*parent album image sort order");
-			}
-			?>
-			<option value =""><?php echo $globalsort; ?></option>
-			<?php
-			$cvt = $type = strtolower($album->get('sort_type'));
-			generateListFromArray(array($type), $sort, false, true);
-			?>
-			</select>
-			</td>
-		<td>
-	<?php
-	if (($type == 'manual') || ($type == 'random') || ($type == '')) {
-		$dsp = 'none';
-	} else {
-		$dsp = 'block';
-	}
-	?>
-	<span id="<?php echo $javaprefix;?>image_direction_div" style="display:<?php echo $dsp; ?>">
-		<label>
-			<?php echo gettext("Descending"); ?>
-			<input type="checkbox" name="<?php echo $prefix; ?>image_sortdirection" value="1"
-				<?php if ($album->getSortDirection('image')) { echo "CHECKED"; }?> >
-		</label>
-	</span>
-	<?php
-	$flip = array_flip($sort);
-	if (empty($type) || isset($flip[$type])) {
-		$dsp = 'none';
-	} else {
-		$dsp = 'block';
-	}
-	?>
-			</td>
-		</tr>
-		<script type="text/javascript">
-			$(function () {
-				$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
-					tags: [<?php echo $imagedbfields; ?>]
-				});
-			});
-		</script>
-		<tr>
-			<td align="left" colspan="2">
-			<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
-			<?php echo gettext('custom fields:') ?>
-			<input id="<?php echo $javaprefix; ?>customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
-			</span>
-			</td>
-		</tr>
-	</table>
- </td>
-	</tr>
+							<table>
+								<tr>
+									<td>
+									<select id="imagesortselect<?php echo $prefix; ?>" name="<?php echo $prefix; ?>sortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>image_direction_div','<?php echo $javaprefix; ?>image_custom_div')">
+									<?php
+									if (is_null($album->getParent())) {
+										$globalsort = gettext("*gallery image sort order");
+									} else {
+										$globalsort = gettext("*parent album image sort order");
+									}
+									?>
+									<option value =""><?php echo $globalsort; ?></option>
+									<?php
+									$cvt = $type = strtolower($album->get('sort_type'));
+									generateListFromArray(array($type), $sort, false, true);
+									?>
+									</select>
+									</td>
+								<td>
+							<?php
+							if (($type == 'manual') || ($type == 'random') || ($type == '')) {
+								$dsp = 'none';
+							} else {
+								$dsp = 'block';
+							}
+							?>
+							<span id="<?php echo $javaprefix;?>image_direction_div" style="display:<?php echo $dsp; ?>">
+								<label>
+									<?php echo gettext("Descending"); ?>
+									<input type="checkbox" name="<?php echo $prefix; ?>image_sortdirection" value="1"
+										<?php if ($album->getSortDirection('image')) { echo ' checked="checked"'; }?> />
+								</label>
+							</span>
+							<?php
+							$flip = array_flip($sort);
+							if (empty($type) || isset($flip[$type])) {
+								$dsp = 'none';
+							} else {
+								$dsp = 'block';
+							}
+							?>
+									</td>
+								</tr>
+								<script type="text/javascript">
+									$(function () {
+										$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
+											tags: [<?php echo $imagedbfields; ?>]
+										});
+									});
+								</script>
+								<tr>
+									<td align="left" colspan="2">
+									<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
+									<?php echo gettext('custom fields:') ?>
+									<input id="<?php echo $javaprefix; ?>customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+									</span>
+									</td>
+								</tr>
+							</table>
+					 </td>
+				</tr>
 
 	<?php	if (is_null($album->getParent())) {	?>
-		<tr>
-		<td align="left" valign="top"><?php echo gettext("Album theme:"); ?> </td>
-		<td>
-		<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"	<?php if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo "DISABLED "; ?>	>
-		<?php
-		$themes = $gallery->getThemes();
-		$oldtheme = $album->getAlbumTheme();
-		if (empty($oldtheme)) {
-			$selected = 'SELECTED';
-		} else {
-			$selected = '';;
-		}
-		?>
-		<option value="" <?php echo $selected; ?> ><?php echo gettext('*gallery theme')?></option>
-		<?php
-		foreach ($themes as $theme=>$themeinfo) {
-			if ($oldtheme == $theme) {
-				$selected = 'SELECTED';
-			} else {
-				$selected = '';;
-			}
-			?>
-			<option value = "<?php echo $theme; ?>" <?php echo $selected; ?> ><?php echo $themeinfo['name']; ?></option>
-		<?php
-		}
-		?>
-		</select>
-		</td>
-		</tr>
+					<tr>
+						<td align="left" valign="top"><?php echo gettext("Album theme:"); ?> </td>
+						<td>
+							<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"	<?php if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo 'disabled="disabled" '; ?>	>
+							<?php
+							$themes = $gallery->getThemes();
+							$oldtheme = $album->getAlbumTheme();
+							if (empty($oldtheme)) {
+								$selected = 'selected="selected"';
+							} else {
+								$selected = '';;
+							}
+							?>
+							<option value="" <?php echo $selected; ?> ><?php echo gettext('*gallery theme')?></option>
+							<?php
+							foreach ($themes as $theme=>$themeinfo) {
+								if ($oldtheme == $theme) {
+									$selected = 'selected="selected"';
+								} else {
+									$selected = '';;
+								}
+								?>
+								<option value = "<?php echo $theme; ?>" <?php echo $selected; ?> ><?php echo $themeinfo['name']; ?></option>
+							<?php
+							}
+							?>
+							</select>
+						</td>
+					</tr>
 	<?php
 	}
 	if (!$album->isDynamic()) {
 		$current = $album->get('watermark');
 		?>
-		<tr>
-			<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
-			<td>
-				<select id="album_watermark" name="album_watermark">
-					<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
-					<?php
-					$watermarks = getWatermarks();
-					generateListFromArray(array($current), $watermarks, false, false);
-					?>
-				</select>
-			</td>
-		</tr>
-		<?php
-	}
-	?>
-	<tr>
-	<td align="left" valign="top" width="150"><?php echo gettext("Thumbnail:"); ?> </td>
-	<td>
-	<?php
-	$showThumb = getOption('thumb_select_images');
-	$thumb = $album->get('thumb');
-	if ($showThumb)  {
-		?>
-		<script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
-		<?php
-	}
-	?>
-	<select style="width:320px" <?php	if ($showThumb) {	?>class="thumbselect" onChange="updateThumbPreview(this)"	<?php	}	?> name="<?php echo $prefix; ?>thumb">
-		<option <?php if ($showThumb) {	?>class="thumboption" style="background-color:#B1F7B6"<?php		}
-			if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo getOption('AlbumThumbSelecorText'); ?>
-		</option>
-	<option <?php if ($showThumb) { ?>class="thumboption" value="\" style="background-color:#B1F7B6" <?php } ?>
-		<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
-	</option>
-	<?php
-	if ($album->isDynamic()) {
-		$params = $album->getSearchParams();
-		$search = new SearchEngine(true);
-		$search->setSearchParams($params);
-		$images = $search->getImages(0);
-		$thumb = $album->get('thumb');
-		$imagelist = array();
-		foreach ($images as $imagerow) {
-			$folder = $imagerow['folder'];
-			$filename = $imagerow['filename'];
-			$imagelist[] = '/'.$folder.'/'.$filename;
-		}
-		if (count($imagelist) == 0) {
-			$subalbums = $search->getAlbums(0);
-			foreach ($subalbums as $folder) {
-				$newalbum = new Album($gallery, $folder);
-				if (!$newalbum->isDynamic()) {
-					$images = $newalbum->getImages(0);
-					foreach ($images as $filename) {
-						$imagelist[] = '/'.$folder.'/'.$filename;
-					}
-				}
-			}
-		}
-		foreach ($imagelist as $imagepath) {
-			$list = explode('/', $imagepath);
-			$filename = $list[count($list)-1];
-			unset($list[count($list)-1]);
-			$folder = implode('/', $list);
-			$albumx = new Album($gallery, $folder);
-			$image = newImage($albumx, $filename);
-			$selected = ($imagepath == $thumb);
-			echo "\n<option";
-			if ($showThumb) {
-				echo " class=\"thumboption\"";
-				echo " style=\"background-image: url(" . $image->getThumb() .	"); background-repeat: no-repeat;\"";
-			}
-			echo " value=\"".$imagepath."\"";
-			if ($selected) {
-				echo " selected=\"selected\"";
-			}
-			echo ">" . $image->getTitle();
-			echo  " ($imagepath)";
-			echo "</option>";
-		}
-	} else {
-		$images = $album->getImages();
-		if (count($images) == 0 && $album->getNumAlbums() > 0) {
-			$imagearray = array();
-			$albumnames = array();
-			$strip = strlen($album->name) + 1;
-			$subIDs = getAllSubAlbumIDs($album->name);
-			if(!is_null($subIDs)) {
-				foreach ($subIDs as $ID) {
-					$albumnames[$ID['id']] = $ID['folder'];
-					$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
-					$ID['id'] .'"';
-					$imagearray = array_merge($imagearray, query_full_array($query));
-				}
-				foreach ($imagearray as $imagerow) {
-					$filename = $imagerow['filename'];
-					$folder = $albumnames[$imagerow['albumid']];
-					$imagepath = substr($folder, $strip).'/'.$filename;
-					if (substr($imagepath, 0, 1) == '/') { $imagepath = substr($imagepath, 1); }
-					$albumx = new Album($gallery, $folder);
-					$image = newImage($albumx, $filename);
-					if (is_valid_image($filename)) {
-						$selected = ($imagepath == $thumb);
-						echo "\n<option";
-						if (getOption('thumb_select_images')) {
-							echo " class=\"thumboption\"";
-							echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
-						}
-						echo " value=\"".$imagepath."\"";
-						if ($selected) {
-							echo " selected=\"selected\"";
-						}
-						echo ">" . $image->getTitle();
-						echo  " ($imagepath)";
-						echo "</option>";
-					}
-				}
-			}
-		} else {
-			foreach ($images as $filename) {
-				$image = newImage($album, $filename);
-				$selected = ($filename == $album->get('thumb'));
-				if (is_valid_image($filename)) {
-					echo "\n<option";
-					if (getOption('thumb_select_images')) {
-						echo " class=\"thumboption\"";
-						echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
-					}
-					echo " value=\"" . $filename . "\"";
-					if ($selected) {
-						echo " selected=\"selected\"";
-					}
-					echo ">" . $image->getTitle();
-					if ($filename != $image->getTitle()) {
-						echo  " ($filename)";
-					}
-					echo "</option>";
-				}
-			}
-		}
-	}
-	?>
-	</select>
-	</td>
-	</tr>
-	</table>
-	</td>
-	<td valign="top">
-		<h2 class="h2_bordered_edit"><?php echo gettext("Publish"); ?></h2>
-		<div class="box-edit">
-			<?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
-			<p>
-				<label>
-					<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />
-					<?php echo gettext("Published");?>
-				</label>
-			</p>
-		</div>
-
-		<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
-		<div class="box-edit">
-			<p>
-				<label>
-					<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo "CHECKED"; } ?> />
-					<?php echo gettext("Allow Comments"); ?>
-				</label>
-			</p>
-			<p>
-				<?php
-				$hc = $album->get('hitcounter');
-				if (empty($hc)) { $hc = '0'; }
-				?>
-				<label>
-					<input type="checkbox" name="reset_hitcounter">
-					<?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?>
-				</label>
-			</p>
-			<p>
-				<?php
-				$tv = $album->get('total_value');
-				$tc = $album->get('total_votes');
-
-				if ($tc > 0) {
-					$hc = $tv/$tc;
-					printf(gettext('Rating: <strong>%u</strong>'), $hc);
-					?>
-					<label>
-						<input type="checkbox" id="<?php echo $prefix; ?>reset_rating" name="<?php echo $prefix; ?>reset_rating" value=1 />
-						<?php echo gettext("Reset"); ?>
-					</label>
-					<?php
-				} else {
-					echo gettext("Rating: Unrated");
-				}
-				?>
-			</p>
-		</div>
-		<!-- **************** Move/Copy/Rename ****************** -->
-		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
-		<div class="box-edit">
-
-			<span style="white-space:nowrap">
-				<label style="padding-right: .5em">
-					<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
-						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-					<?php echo gettext("Move");?>
-				</label>
-			</span>
-
-			<span style="white-space:nowrap">
-				<label style="padding-right: .5em">
-					<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
-						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-					<?php echo gettext("Copy");?>
-				</label>
-			</span>
-
-			<span style="white-space:nowrap">
-				<label style="padding-right: .5em">
-					<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
-						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
-					<?php echo gettext("Rename Folder");?>
-				</label>
-			</span>
-
-
-
-			<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
-				<?php echo gettext("to:"); ?>
-				<select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
-					<?php
-					$exclude = $album->name;
-					if (count(explode('/', $exclude))>1 && $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-						?>
-						<option value="" selected="selected">/</option>
-						<?php
-					}
-					foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
-						// don't allow copy in place or to subalbums
-						if ($fullfolder==dirname($exclude) || $fullfolder==$exclude || strpos($fullfolder, $exclude.'/')===0) {
-							$disabled =' disabled';
-						} else {
-							$disabled = '';
-						}
-						// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
-						$singlefolder = $fullfolder;
-						$saprefix = '';
-						$salevel = 0;
-
-						while (strstr($singlefolder, '/') !== false) {
-							$singlefolder = substr(strstr($singlefolder, '/'), 1);
-							$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
-							$salevel++;
-						}
-						echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
-						. "$disabled>". $saprefix . $singlefolder ."</option>\n";
-					}
-					?>
-				</select>
-				<br clear: all /><br />
-				<p class="buttons">
-					<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
-				</p>
-			</div>
-			<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
-				<?php echo gettext("to:"); ?>
-				<input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
-				<br clear: all />
-				<p class="buttons">
-				<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
-				</p>
-			</div>
-			<span style="line-height: 0em;"><br clear=all /></span>
-			<?php
-			echo zp_apply_filter('edit_album_utilities', '', $album, $prefix);
-			?>
-			<span style="line-height: 0em;"><br clear=all /></span>
-			</div>
-			<h2 class="h2_bordered_edit">
-				<?php
-				if ($collapse_tags) {
-					?>
-					<a href="javascript:toggle('<?php echo $prefix; ?>taglist_hide');" >
-					<?php
-				}
-				echo gettext("Tags");
-				if ($collapse_tags) {
-					?>
-					</a>
-					<?php
-				}
-				?>
-			</h2>
-			<div class="box-edit-unpadded">
-				<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?> >
-					<?php
-					$tagsort = getTagOrder();
-					tagSelector($album, 'tags_'.$prefix, false, $tagsort);
-					?>
-				</div>
-			</div>
-	</td>
-	</tr>
-	</table>
-	<table>
-	<?php
-	if ($album->isDynamic()) {
-		?>
-		<tr>
-			<td align="left" valign="top" width="150"><?php echo gettext("Dynamic album search:"); ?></td>
-			<td>
-				<table class="noinput">
 					<tr>
-						<td><?php echo htmlspecialchars(urldecode($album->getSearchParams(true))); ?></td>
+						<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
+						<td>
+							<select id="album_watermark" name="album_watermark">
+								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
+								<?php
+								$watermarks = getWatermarks();
+								generateListFromArray(array($current), $watermarks, false, false);
+								?>
+							</select>
+						</td>
+					</tr>
+		<?php
+	}
+	?>
+					<tr>
+						<td align="left" valign="top" width="150"><?php echo gettext("Thumbnail:"); ?> </td>
+						<td>
+						<?php
+						$showThumb = getOption('thumb_select_images');
+						$thumb = $album->get('thumb');
+						if ($showThumb)  {
+							?>
+							<script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
+							<?php
+						}
+						?>
+						<select style="width:320px" <?php	if ($showThumb) {	?>class="thumbselect" onchange="updateThumbPreview(this)"	<?php	}	?> name="<?php echo $prefix; ?>thumb">
+							<option <?php if ($showThumb) {	?>class="thumboption" style="background-color:#B1F7B6"<?php		}
+								if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo getOption('AlbumThumbSelecorText'); ?>
+							</option>
+						<option <?php if ($showThumb) { ?>class="thumboption" value="\" style="background-color:#B1F7B6" <?php } ?>
+							<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
+						</option>
+						<?php
+						if ($album->isDynamic()) {
+							$params = $album->getSearchParams();
+							$search = new SearchEngine(true);
+							$search->setSearchParams($params);
+							$images = $search->getImages(0);
+							$thumb = $album->get('thumb');
+							$imagelist = array();
+							foreach ($images as $imagerow) {
+								$folder = $imagerow['folder'];
+								$filename = $imagerow['filename'];
+								$imagelist[] = '/'.$folder.'/'.$filename;
+							}
+							if (count($imagelist) == 0) {
+								$subalbums = $search->getAlbums(0);
+								foreach ($subalbums as $folder) {
+									$newalbum = new Album($gallery, $folder);
+									if (!$newalbum->isDynamic()) {
+										$images = $newalbum->getImages(0);
+										foreach ($images as $filename) {
+											$imagelist[] = '/'.$folder.'/'.$filename;
+										}
+									}
+								}
+							}
+							foreach ($imagelist as $imagepath) {
+								$list = explode('/', $imagepath);
+								$filename = $list[count($list)-1];
+								unset($list[count($list)-1]);
+								$folder = implode('/', $list);
+								$albumx = new Album($gallery, $folder);
+								$image = newImage($albumx, $filename);
+								$selected = ($imagepath == $thumb);
+								echo "\n<option";
+								if ($showThumb) {
+									echo " class=\"thumboption\"";
+									echo " style=\"background-image: url(" . $image->getThumb() .	"); background-repeat: no-repeat;\"";
+								}
+								echo " value=\"".$imagepath."\"";
+								if ($selected) {
+									echo " selected=\"selected\"";
+								}
+								echo ">" . $image->getTitle();
+								echo  " ($imagepath)";
+								echo "</option>";
+							}
+						} else {
+							$images = $album->getImages();
+							if (count($images) == 0 && $album->getNumAlbums() > 0) {
+								$imagearray = array();
+								$albumnames = array();
+								$strip = strlen($album->name) + 1;
+								$subIDs = getAllSubAlbumIDs($album->name);
+								if(!is_null($subIDs)) {
+									foreach ($subIDs as $ID) {
+										$albumnames[$ID['id']] = $ID['folder'];
+										$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
+										$ID['id'] .'"';
+										$imagearray = array_merge($imagearray, query_full_array($query));
+									}
+									foreach ($imagearray as $imagerow) {
+										$filename = $imagerow['filename'];
+										$folder = $albumnames[$imagerow['albumid']];
+										$imagepath = substr($folder, $strip).'/'.$filename;
+										if (substr($imagepath, 0, 1) == '/') { $imagepath = substr($imagepath, 1); }
+										$albumx = new Album($gallery, $folder);
+										$image = newImage($albumx, $filename);
+										if (is_valid_image($filename)) {
+											$selected = ($imagepath == $thumb);
+											echo "\n<option";
+											if (getOption('thumb_select_images')) {
+												echo " class=\"thumboption\"";
+												echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
+											}
+											echo " value=\"".$imagepath."\"";
+											if ($selected) {
+												echo " selected=\"selected\"";
+											}
+											echo ">" . $image->getTitle();
+											echo  " ($imagepath)";
+											echo "</option>";
+										}
+									}
+								}
+							} else {
+								foreach ($images as $filename) {
+									$image = newImage($album, $filename);
+									$selected = ($filename == $album->get('thumb'));
+									if (is_valid_image($filename)) {
+										echo "\n<option";
+										if (getOption('thumb_select_images')) {
+											echo " class=\"thumboption\"";
+											echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
+										}
+										echo " value=\"" . $filename . "\"";
+										if ($selected) {
+											echo " selected=\"selected\"";
+										}
+										echo ">" . $image->getTitle();
+										if ($filename != $image->getTitle()) {
+											echo  " ($filename)";
+										}
+										echo "</option>";
+									}
+								}
+							}
+						}
+						?>
+						</select>
+						</td>
 					</tr>
 				</table>
 			</td>
+			<td valign="top">
+				<h2 class="h2_bordered_edit"><?php echo gettext("Publish"); ?></h2>
+				<div class="box-edit">
+					<?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
+					<p>
+						<label>
+							<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo ' checked="checked"';	?> />
+							<?php echo gettext("Published");?>
+						</label>
+					</p>
+				</div>
+		
+				<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
+				<div class="box-edit">
+					<p>
+						<label>
+							<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo ' checked="checked"'; } ?> />
+							<?php echo gettext("Allow Comments"); ?>
+						</label>
+					</p>
+					<p>
+						<?php
+						$hc = $album->get('hitcounter');
+						if (empty($hc)) { $hc = '0'; }
+						?>
+						<label>
+							<input type="checkbox" name="reset_hitcounter" />
+							<?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?>
+						</label>
+					</p>
+					<p>
+						<?php
+						$tv = $album->get('total_value');
+						$tc = $album->get('total_votes');
+		
+						if ($tc > 0) {
+							$hc = $tv/$tc;
+							printf(gettext('Rating: <strong>%u</strong>'), $hc);
+							?>
+							<label>
+								<input type="checkbox" id="<?php echo $prefix; ?>reset_rating" name="<?php echo $prefix; ?>reset_rating" value=1 />
+								<?php echo gettext("Reset"); ?>
+							</label>
+							<?php
+						} else {
+							echo gettext("Rating: Unrated");
+						}
+						?>
+					</p>
+				</div>
+				<!-- **************** Move/Copy/Rename ****************** -->
+				<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
+				<div class="box-edit">
+		
+					<span style="white-space:nowrap">
+						<label style="padding-right: .5em">
+							<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
+								onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+							<?php echo gettext("Move");?>
+						</label>
+					</span>
+		
+					<span style="white-space:nowrap">
+						<label style="padding-right: .5em">
+							<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
+								onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+							<?php echo gettext("Copy");?>
+						</label>
+					</span>
+		
+					<span style="white-space:nowrap">
+						<label style="padding-right: .5em">
+							<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
+								onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
+							<?php echo gettext("Rename Folder");?>
+						</label>
+					</span>
+		
+		
+		
+					<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
+						<?php echo gettext("to:"); ?>
+						<select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onchange="">
+							<?php
+							$exclude = $album->name;
+							if (count(explode('/', $exclude))>1 && $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+								?>
+								<option value="" selected="selected">/</option>
+								<?php
+							}
+							foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
+								// don't allow copy in place or to subalbums
+								if ($fullfolder==dirname($exclude) || $fullfolder==$exclude || strpos($fullfolder, $exclude.'/')===0) {
+									$disabled =' disabled="disabled"';
+								} else {
+									$disabled = '';
+								}
+								// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
+								$singlefolder = $fullfolder;
+								$saprefix = '';
+								$salevel = 0;
+		
+								while (strstr($singlefolder, '/') !== false) {
+									$singlefolder = substr(strstr($singlefolder, '/'), 1);
+									$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
+									$salevel++;
+								}
+								echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
+								. "$disabled>". $saprefix . $singlefolder ."</option>\n";
+							}
+							?>
+						</select>
+						<br clear="all" /><br />
+						<p class="buttons">
+							<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+						</p>
+					</div>
+					<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
+						<?php echo gettext("to:"); ?>
+						<input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
+						<br clear="all" />
+						<p class="buttons">
+						<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+						</p>
+					</div>
+					<span style="line-height: 0em;"><br clear="all" /></span>
+					<?php
+					echo zp_apply_filter('edit_album_utilities', '', $album, $prefix);
+					?>
+					<span style="line-height: 0em;"><br clear="all" /></span>
+					</div>
+					<h2 class="h2_bordered_edit">
+						<?php
+						if ($collapse_tags) {
+							?>
+							<a href="javascript:toggle('<?php echo $prefix; ?>taglist_hide');" >
+							<?php
+						}
+						echo gettext("Tags");
+						if ($collapse_tags) {
+							?>
+							</a>
+							<?php
+						}
+						?>
+					</h2>
+					<div class="box-edit-unpadded">
+						<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?> >
+							<?php
+							$tagsort = getTagOrder();
+							tagSelector($album, 'tags_'.$prefix, false, $tagsort);
+							?>
+						</div>
+					</div>
+			</td>
 		</tr>
-	<?php } ?>
-
 	</table>
+	<?php
+	if ($album->isDynamic()) {
+		?>
+		<table>
+			<tr>
+				<td align="left" valign="top" width="150"><?php echo gettext("Dynamic album search:"); ?></td>
+				<td>
+					<table class="noinput">
+						<tr>
+							<td><?php echo htmlspecialchars(urldecode($album->getSearchParams(true))); ?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	<?php
+	}
+?>
+
 
 <br clear="all" />
 	<p class="buttons">
@@ -1575,38 +1583,45 @@ function printAlbumButtons($album) {
 	if ($imagcount = $album->getNumImages() > 0) {
 		?>
 		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
-		<input type="hidden" name="action" value="clear_cache">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
+		<input type="hidden" name="action" value="clear_cache" />
+		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>" />
 		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Clears the album's cached images.");?>"><img src="images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Clear album cache"); ?></button>
+		<button type="submit" class="tooltip" id="edit_hitcounter_album" title="<?php echo gettext("Clears the album's cached images.");?>">
+			<img src="images/edit-delete.png" style="border: 0px;" alt="delete" />
+			<?php echo gettext("Clear album cache"); ?>
+		</button>
 		</div>
 		</form>
 
 		<form name="cache_images" action="admin-cache-images.php" method="post">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
-		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
+		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>" />
+		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>" />
 		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>"><img src="images/cache1.png" style="border: 0px;" />
+		<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>">
+		<img src="images/cache1.png" style="border: 0px;" alt="cache" />
 		<?php echo gettext("Pre-Cache Images"); ?></button>
 		</div>
 		</form>
 		<form name="reset_hitcounters" action="?action=reset_hitcounters" method="post">
-		<input type="hidden" name="action" value="reset_hitcounters">
-		<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
+		<input type="hidden" name="action" value="reset_hitcounters" />
+		<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>" />
+		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>" />
 		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Resets all hitcounters in the album."); ?>"><img src="images/reset1.png" style="border: 0px;" /> <?php echo gettext("Reset hitcounters"); ?></button>
+		<button type="submit" class="tooltip" id="edit_hitcounter_all" title="<?php echo gettext("Resets all hitcounters in the album."); ?>">
+		<img src="images/reset1.png" style="border: 0px;" alt="reset" /> <?php echo gettext("Reset hitcounters"); ?>
+		</button>
 		</div>
 		</form>
 	<?php
 	}
 	if ($imagcount || (!$album->isDynamic() && $album->getNumAlbums()>0)) {
 	?>
-		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
-		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
+		<form name="refresh_metadata" action="admin-refresh-metadata.php?album=<?php echo urlencode($album->name); ?>" method="post">
+		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>" />
+		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>" />
 		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/refresh.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
+		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>">
+		<img src="images/refresh.png" style="border: 0px;" alt="refresh" /> <?php echo gettext("Refresh Metadata"); ?></button>
 		</div>
 		</form>
 	<?php
@@ -1639,7 +1654,7 @@ function printAlbumEditRow($album) {
 		}
 		?>
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
-		<img src="<?php echo $thumb; ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" /></a>
+		<img src="<?php echo htmlspecialchars($thumb); ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" alt="album thumb" /></a>
 		</td>
 	<td class="albumtitle">
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
@@ -1691,7 +1706,7 @@ function printAlbumEditRow($album) {
 	} else {
 		?>
 		<a class="publish" href="?action=publish&amp;value=1&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>">
-		<img src="images/action.png" style="border: 0px;" alt="Publish the album <?php echo $album->name; ?>" /></a>
+		<img src="images/action.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>" /></a>
 	 <?php
 	}
 	?>
@@ -1967,7 +1982,7 @@ function adminPageNav($pagenum,$totalpages,$adminpage,$parms,$tab='') {
 	}
 	echo '<ul class="pagelist"><li class="prev">';
 	if ($pagenum > 1) {
-		echo '<a href='.$url.'subpage='.($p=$pagenum-1).$tab.' title="'.sprintf(gettext('page %u'),$p).'">'.'&laquo; '.gettext("Previous page").'</a>';
+		echo '<a href="'.$url.'subpage='.($p=$pagenum-1).$tab.'" title="'.sprintf(gettext('page %u'),$p).'">'.'&laquo; '.gettext("Previous page").'</a>';
 	} else {
 		echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
 	}
@@ -1979,13 +1994,13 @@ function adminPageNav($pagenum,$totalpages,$adminpage,$parms,$tab='') {
 		if ($i == $pagenum) {
 			echo "<li class=\"current\">".$i.'</li>';
 		} else {
-			echo '<li><a href='.$url.'subpage='.$i.$tab.' title="'.sprintf(gettext('page %u'),$i).'">'.$i.'</a></li>';
+			echo '<li><a href="'.$url.'subpage='.$i.$tab.'" title="'.sprintf(gettext('page %u'),$i).'">'.$i.'</a></li>';
 		}
 	}
 	if ($i < $totalpages) { echo "\n <li><a href=".$url.'subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="'.sprintf(gettext('page %u'),$p).'">. . .</a></li>'; }
 	echo "<li class=\"next\">";
 	if ($pagenum<$totalpages) {
-		echo '<a href='.$url.'subpage='.($p=$pagenum+1).$tab.' title="'.sprintf(gettext('page %u'),$p).'">'.gettext("Next page").' &raquo;'.'</a>';
+		echo '<a href="'.$url.'subpage='.($p=$pagenum+1).$tab.'" title="'.sprintf(gettext('page %u'),$p).'">'.gettext("Next page").' &raquo;'.'</a>';
 	} else {
 		echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
 	}
@@ -2558,7 +2573,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<span style="white-space:nowrap">
 						<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $id.'-'.$rightselement; ?>"
-								value=<?php echo $rightsvalue; if ($rights & $rightsvalue) echo ' checked';
+								value=<?php echo $rightsvalue; if ($rights & $rightsvalue) echo ' checked="checked"';
 								echo $alterrights; ?> /> <?php echo $name; ?></label>
 					</span>
 				</td>
@@ -2756,9 +2771,11 @@ function postAlbumSort($parentid) {
 		processOrder($orderarray['left-to-right'], $order);
 		$sortToID = array();
 		foreach ($order as $id=>$orderlist) {
+			$id = str_replace('id_','',$id);
 			$sortToID[implode('-',$orderlist)] = $id;
 		}
 		foreach ($order as $item=>$orderlist) {
+			$item = str_replace('id_','',$item);
 			$currentalbum = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$item);
 			$sortorder = array_pop($orderlist);
 			if (count($orderlist)>0) {
@@ -2874,7 +2891,7 @@ function printNestedAlbumsList($albums) {
 			$open[$indent]--;
 		}
 		$albumobj = new Album($gallery,$album['name']);
-		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$albumobj->get('id')."\" class=\"clear-element page-item1 left\">";
+		echo str_pad("\t",$indent-1,"\t")."<li id=\"id_".$albumobj->get('id')."\" class=\"clear-element page-item1 left\">";
 		echo printAlbumEditRow($albumobj);
 		$open[$indent]++;
 	}
@@ -2918,12 +2935,12 @@ function printEditDropdown($subtab,$nestinglevels = array('1','2','3','4','5')) 
 			break;
 	}
 	?>
-		<form name="AutoListBox2" style="float: right;">
+		<form name="AutoListBox2" style="float: right;" action="#" >
 		<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
 		<?php
 		foreach ($nestinglevels as $nestinglevel) {
 			if($nesting == $nestinglevel) {
-				$selected = "selected";
+				$selected = 'selected="selected"';
 			} else {
 				$selected ="";
 			}
@@ -2941,7 +2958,7 @@ function printEditDropdown($subtab,$nestinglevels = array('1','2','3','4','5')) 
 		}
 ?>
  </select>
-	<script language="JavaScript">
+	<script language="JavaScript" type="text/javascript" >
 	<!--
 	function gotoLink(form) {
 	var OptionIndex=form.ListBoxURL.selectedIndex;

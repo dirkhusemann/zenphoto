@@ -19,37 +19,37 @@ require_once("zp-functions.php");
 <script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
 </head>
 <body>
-<?php 
+<?php
 	printLogoAndLinks();
 	echo "<div id=\"main\">";
-	printTabs("pages"); 
+	printTabs("pages");
 	echo "<div id=\"content\">";
-	checkRights("pages");  
+	checkRights("pages");
 // update page sort order
 if(isset($_POST['update'])) {
 	updatePageSortorder();
 }
 // remove the page from the database
 if(isset($_GET['del'])) {
-  deletePage(); 
+	deletePage();
 }
 // publish or unpublish page by click
-if(isset($_GET['publish'])) { 
+if(isset($_GET['publish'])) {
 	publishPageOrArticle("page",$_GET['id']);
 }
 if(isset($_GET['skipscheduling'])) {
 	skipScheduledPublishing("page",$_GET['id']);
 }
-if(isset($_GET['commentson'])) { 
-  enableComments("page");
+if(isset($_GET['commentson'])) {
+	enableComments("page");
 }
 if(isset($_GET['hitcounter'])) {
 	resetPageOrArticleHitcounter("page");
 }
 ?>
-<h1><?php echo gettext("Pages"); ?><span class="zenpagestats"><?php printPagesStatistic();?></span></h1> 				
+<h1><?php echo gettext("Pages"); ?><span class="zenpagestats"><?php printPagesStatistic();?></span></h1>
  <form action="admin-pages.php" method="post" name="update">
- 
+
 <div>
 <p><?php echo gettext("Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed."); ?></p>
 <p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
@@ -59,8 +59,8 @@ if(isset($_GET['hitcounter'])) {
 </div>
 <br clear: both /><br clear: both />
 <table class="bordered" style="margin-top: 10px">
- <tr> 
-  <th><strong><?php echo gettext("Edit this page"); ?></strong></th>
+ <tr>
+	<th><strong><?php echo gettext("Edit this page"); ?></strong></th>
  </tr>
  <tr><td colspan="1" style="padding: 0;">
 	<ul id="left-to-right" class="page-list">
@@ -79,10 +79,10 @@ if(isset($_GET['hitcounter'])) {
 	}
 	?>
 <div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
- 				<input name="update" type="hidden" value="Save Order" />
- 				<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
-				
- 			
+				<input name="update" type="hidden" value="Save Order" />
+				<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
+
+			
 </form>
 <?php printZenpageIconLegend(); ?>
 </div>
@@ -96,7 +96,7 @@ $('#left-to-right').NestedSortable(
 		helperclass: 'helper',
 		onChange: function(serialized) {
 			$('#left-to-right-ser')
-			.html("<input name='order' type='hidden' value="+ serialized[0].hash +">");
+			.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
 		},
 		autoScroll: true,
 		handle: '.sort-handle'

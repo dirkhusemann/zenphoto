@@ -92,7 +92,7 @@ class register_user_options {
 			<tr>
 				<td style="margin:0; padding:0"><?php echo gettext('script'); ?></td>
 				<td style="margin:0; padding:0">
-					<input type="hidden" name="_ZP_CUSTOM_selector-register_user_page_page" value=0 />
+					<input type="hidden" name="_ZP_CUSTOM_selector-register_user_page_page" value="0" />
 					<select id="register_user_page_page" name="register_user_page_page">
 						<option value=""><?php echo gettext('*no page selected'); ?></option>
 						<?php
@@ -114,14 +114,14 @@ class register_user_options {
 			<tr>
 				<td style="margin:0; padding:0"><?php echo gettext('Link text'); ?></td>
 				<td style="margin:0; padding:0">
-					<input type="hidden" name="_ZP_CUSTOM_text-register_user_page_link" value=0 />
+					<input type="hidden" name="_ZP_CUSTOM_text-register_user_page_link" value="0" />
 					<?php print_language_string_list(getOption('register_user_page_link'), 'register_user_page_link', false, NULL, '', true); ?>
 				</td>
 			</tr>
 			<tr>
 				<td style="margin:0; padding:0"><?php echo gettext('Hint text'); ?></td>
 				<td style="margin:0; padding:0">
-					<input type="hidden" name="_ZP_CUSTOM_text-register_user_page_tip" value=0 />
+					<input type="hidden" name="_ZP_CUSTOM_text-register_user_page_tip" value="0" />
 					<?php print_language_string_list(getOption('register_user_page_tip'), 'register_user_page_tip', false, NULL, '', true); ?>
 				</td>
 			</tr>

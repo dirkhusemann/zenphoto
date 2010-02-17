@@ -166,13 +166,13 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		$status_moderation = gettext('Comment is unapproved');
 		$link_moderation = gettext('Approve');
 		$title_moderation = gettext('Approve this comment');
-		$url_moderation = '?action=moderation&id='.$id;
+		$url_moderation = '?action=moderation&amp;id='.$id;
 		$linkimage = "images/pass.png";
 	} else {
 		$status_moderation = gettext('Comment is approved');
 		$link_moderation = gettext('Unapprove');
 		$title_moderation = gettext('Unapprove this comment');
-		$url_moderation = '?action=unapprove&id='.$id;
+		$url_moderation = '?action=unapprove&amp;id='.$id;
 		$linkimage = "images/warn.png";
 	}
 	
@@ -191,7 +191,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 ?>
 <p><?php echo $status_moderation; ?>. <div class="buttons"><a href="<?php echo $url_moderation; ?>" title="<?php echo $title_moderation; ?>" ><img src="<?php echo $linkimage; ?>" alt="" /><?php echo $link_moderation; ?></a></div></p>
-<br clear=all />
+<br clear="all" />
 <hr />
 <p><?php echo $status_private; ?></p>
 <p><?php echo $status_anon; ?></p>
@@ -212,7 +212,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 </div><!-- div box-edit-unpadded end -->
 </div>
 </form>
-<br clear=all />
+<br clear="all" />
 </div> <!-- div box end -->
 <?php
 // end of $page == "editcomment"
@@ -269,7 +269,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<th><?php echo gettext("Date/Time"); ?></th>
 		<th><?php echo gettext("Comment"); ?>
 		<?php if(!$fulltext) { ?>(
-			<a href="?fulltext=1<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a> ) <?php
+			<a href="?fulltext=1<?php echo $viewall ? "&amp;viewall":""; ?>"><?php echo gettext("View full text"); ?></a> ) <?php
 		} else {
 			?>( <a	href="admin-comments.php?fulltext=0"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a> )<?php
 		} ?>
@@ -389,14 +389,14 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		</td>
 		<td align="center"><?php
 		if ($inmoderation) {
-			echo "<a href=\"?action=notspam&id=" . $id . "\" title=\"".gettext('Approve this message (not SPAM)')."\">";
+			echo "<a href=\"?action=notspam&amp;id=" . $id . "\" title=\"".gettext('Approve this message (not SPAM)')."\">";
 			echo '<img src="images/lock_open.png" style="border: 0px;" alt="'. gettext("Approve this message (not SPAM").'" /></a>';
 		} else {
-			echo "<a href=\"?action=spam&id=" . $id . "\" title=\"".gettext('Mark this message as SPAM')."\">";
+			echo "<a href=\"?action=spam&amp;id=" . $id . "\" title=\"".gettext('Mark this message as SPAM')."\">";
 			echo '<img src="images/lock_2.png" style="border: 0px;" alt="'. gettext("Mark this message as SPAM").'" /></a>';
 		}
 		?></td>
-		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
+		<td align="center"><a href="?page=editcomment&amp;id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
 		<td align="center">
 			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"

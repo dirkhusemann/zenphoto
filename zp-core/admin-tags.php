@@ -114,7 +114,7 @@ printLogoAndLinks();
 			</p>
 			<br />
 			<br />
-			<br clear: all />
+			<br clear="all" />
 			<?php
 		} else{
 			?>
@@ -125,25 +125,26 @@ printLogoAndLinks();
 			</p>
 			<br />
 			<br />
-			<br clear: all />
+			<br clear="all" />
 			<?php
 		}
 		?>
-		<table class=\"bordered\">
+		<table class="bordered">
+			<tr>
 			<td valign='top'>
 				<h2 class="h2_bordered_edit"><?php echo gettext("Delete tags from the gallery"); ?></h2>
-				<form name="tag_delete" action="?delete=true&amp;tagsort='.$tagsort.'" method="post">
+				<form name="tag_delete" action="?delete=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
 					<div class="box-tags-unpadded">
 						<?php
 						tagSelector(NULL, '', true, $tagsort);
 						?>
 					</div>
 					<p class="buttons">
-						<button type="submit" id='delete_tags' value="<?php echo gettext("Delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" />
+						<button type="submit" id='delete_tags' value="<?php echo gettext("Delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" >
 						<img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?>
 						</button>
 					</p>
-					<br clear: all />
+					<br clear="all" />
 					<br />
 					<br />
 				
@@ -155,7 +156,7 @@ printLogoAndLinks();
 			
 			<td valign='top'>
 				<h2 class="h2_bordered_edit"><?php echo gettext("Rename tags"); ?></h2>
-				<form name="tag_rename" action="?rename=true&amp;tagsort='.$tagsort.'" method="post">
+				<form name="tag_rename" action="?rename=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
 					<div class="box-tags-unpadded">
 						<ul class="tagrenamelist">
 							<?php
@@ -175,9 +176,11 @@ printLogoAndLinks();
 						</ul>
 					</div>
 					<p class="buttons">
-					<button type="submit" id='rename_tags' value="<?php echo gettext("Rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Rename tags"); ?></button>
+						<button type="submit" id='rename_tags' value="<?php echo gettext("Rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" >
+							<img src="images/pass.png" alt="" /><?php echo gettext("Rename tags"); ?>
+						</button>
 					</p>
-					<br clear: all />
+					<br clear="all" />
 					<br />
 					<br />
 				</form>
@@ -188,7 +191,7 @@ printLogoAndLinks();
 			
 			<td valign='top'>
 				<h2 class="h2_bordered_edit"><?php echo gettext("New tags"); ?></h2>
-				<form name="new_tags" action="?newtags=true&amp;tagsort='.$tagsort.'"method="post">
+				<form name="new_tags" action="?newtags=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
 					<div class="box-tags-unpadded">
 						<ul class="tagnewlist">
 							<?php
@@ -203,9 +206,11 @@ printLogoAndLinks();
 						</ul>
 					</div>
 					<p class="buttons">
-					<button type="submit" id='save_tags' value="<?php echo gettext("Add tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" /><img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?></button>
+						<button type="submit" id='save_tags' value="<?php echo gettext("Add tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" >
+							<img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?>
+						</button>
 					</p>
-					<br clear: all />
+					<br clear="all" />
 					<br />
 					<br />
 				

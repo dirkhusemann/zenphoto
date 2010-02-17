@@ -27,7 +27,7 @@
 						}
 						?>
 						<label>
-						(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext('<em>anonymous</em>'); ?>)
+						(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo ' checked="checked"'; ; ?> /> <?php echo gettext('<em>anonymous</em>'); ?>)
 						</label>
 					</td>
 				</tr>
@@ -66,12 +66,12 @@
 						?>
 					</td>
 				</tr>
-				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha').' ', ":</label></th><td>", "</td></tr>\n", 8); ?>
+				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label>" .gettext('Enter Captcha').' ', ":</label></th><td>", "</td></tr>\n", 8); ?>
 				<tr valign="top" align="left">
 					<th><?php echo gettext('Private comment:'); ?></th>
 					<td>
 						<label>
-						<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("(don't publish)"); ?>
+						<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo ' checked="checked"'; ; ?> /> <?php echo gettext("(don't publish)"); ?>
 						</label>
 					</td>
 				</tr>

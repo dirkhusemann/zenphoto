@@ -133,7 +133,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				</div>
 				<?php endwhile; ?>
 			</div>
-		<br clear=all>
+		<br clear="all">
 <?php } ?>
 		<?php
 		if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow'));

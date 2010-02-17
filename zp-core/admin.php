@@ -174,7 +174,7 @@ if (!empty($msg)) {
 ?>
 <div id="overview-leftcolumn">
 <div class="boxouter">
-<div class="box" id="overview-comments">
+<div class="box" id="overview-gallerystats">
 <h2 class="h2_bordered"><?php echo gettext("Gallery Stats"); ?></h2>
 <ul>
 <li>
@@ -245,7 +245,7 @@ if(getOption('zp_plugin_zenpage')) { ?>
 </div>
 </div>
 
-<div class="box" id="overview-comments">
+<div class="box" id="overview-info">
 <h2 class="h2_bordered"><?php echo gettext("Installation information"); ?></h2> 
 <ul>
 <?php
@@ -386,7 +386,7 @@ if (is_connected()) {
 								'icon'=>'images/accept.png', 
 								'title'=>gettext("Queries the Zenphoto web site for the latest version and compares that with the one that is running."),
 								'alt'=>'',
-								'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
+								'hidden'=> '<input type="hidden" name="action" value="check_for_update" />',
 								'rights'=> OVERVIEW_RIGHTS
 								);
 }
@@ -397,7 +397,7 @@ $buttonlist[] = array(
 							'icon'=>'images/refresh.png', 
 							'title'=>gettext("Cleans the database and removes any orphan entries for comments, images, and albums."),
 							'alt'=>'',
-							'hidden'=> '<input type="hidden" name="prune" value="true">',
+							'hidden'=> '<input type="hidden" name="prune" value="true" />',
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
@@ -407,7 +407,7 @@ $buttonlist[] = array(
 							'icon'=>'images/edit-delete.png', 
 							'title'=>gettext("Clears the image cache. Images will be re-cached as they are viewed."),
 							'alt'=>'',
-							'hidden'=> '<input type="hidden" name="action" value="clear_cache">',
+							'hidden'=> '<input type="hidden" name="action" value="clear_cache" />',
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
@@ -417,7 +417,7 @@ $buttonlist[] = array(
 							'icon'=>'images/edit-delete.png', 
 							'title'=>gettext("Clears the RSS cache. RSS files will be re-cached as they are viewed."),
 							'alt'=>'',
-							'hidden'=> '<input type="hidden" name="action" value="clear_rss_cache">',
+							'hidden'=> '<input type="hidden" name="action" value="clear_rss_cache" />',
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
@@ -425,7 +425,7 @@ $buttonlist[] = array(
 							'formname'=>'cache_images',
 							'action'=>'admin-cache-images.php',
 							'icon'=>'images/cache1.png', 
-							'title'=>gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."),
+							'title'=>gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the pre-cache image link for each album to avoid swamping your browser."),
 							'alt'=>'',
 							'hidden'=> '',
 							'rights'=> ADMIN_RIGHTS
@@ -447,11 +447,11 @@ $buttonlist[] = array(
 							'icon'=>'images/reset1.png', 
 							'title'=>gettext("Sets all hitcounters to zero."),
 							'alt'=>'Reset hitcounters',
-							'hidden'=> '<input type="hidden" name="action" value="reset_hitcounters">',
+							'hidden'=> '<input type="hidden" name="action" value="reset_hitcounters" />',
 							'rights'=> ADMIN_RIGHTS
 							);
 ?>
-<div class="box" id="overview-maint">
+<div class="box" id="overview-utility">
 <h2 class="h2_bordered"><?php echo gettext("Utility functions"); ?></h2>
 <?php
 $curdir = getcwd();
@@ -501,7 +501,7 @@ $count = round($count/2);
 		?>
 		<form name="<?php echo $button['formname']; ?>"	action="<?php echo $button['action']; ?>">
 			<?php echo $button['hidden']; ?>
-			<div class="buttons" id="home_exif">
+			<div class="buttons">
 			<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>">
 			<?php
 			if(!empty($button_icon)) {
@@ -529,7 +529,7 @@ $count = round($count/2);
 	<br clear="all" />
 	</div>
 </div>
-<div class="box" id="overview-maint">
+<div class="box" id="overview-comments">
 <h2 class="h2_bordered"><?php echo gettext("10 Most Recent Comments"); ?></h2>
 <ul>
 <?php

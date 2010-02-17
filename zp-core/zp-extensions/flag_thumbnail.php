@@ -8,7 +8,7 @@
  * @author Stephen Billard (sbillard)
  * @package plugins
  */
-$plugin_description = sprintf(gettext('Apply <img src="%1$s/images/lock.png"/> over thumbnails of <em>password protected</em> albums and <img src="%1$s/images/action.png"/> over thumbnails of <em>not published</em> albums and <em>not visible</em> images.'),WEBPATH.'/'.ZENFOLDER);
+$plugin_description = sprintf(gettext('Apply <img src="%1$s/images/lock.png" alt=""/> over thumbnails of <em>password protected</em> albums and <img src="%1$s/images/action.png" alt=""/> over thumbnails of <em>not published</em> albums and <em>not visible</em> images.'),WEBPATH.'/'.ZENFOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.2.9'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flag_thumbnail.php.html";
@@ -30,7 +30,7 @@ function flag_thumbnail_insert_class($html) {
 		if ($img) {
 			$html = '<div style="position:relative; display:block;">'."\n".
 							$html."\n".
-							'<img src="'.$img.'" style="position: absolute;top: 4px;left: 4px;"/>'."\n".'</div>'."\n";
+							'<img src="'.$img.'" alt="" style="position: absolute;top: 4px;left: 4px;"/>'."\n".'</div>'."\n";
 		}
 	}
 	return $html;

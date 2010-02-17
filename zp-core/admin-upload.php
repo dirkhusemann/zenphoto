@@ -254,7 +254,7 @@ if (ini_get('safe_mode')) { ?>
 }
 ?>
 
-<form name="uploadform" enctype="multipart/form-data" action="?action=upload&uploadtype=http" method="POST"
+<form name="uploadform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="POST"
 												onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" />
 	<input type="hidden" name="existingfolder" value="false" />
@@ -265,7 +265,7 @@ if (ini_get('safe_mode')) { ?>
 	if ($rootrights || !empty($albumlist)) {
 		echo gettext("Upload to:");
 		if (isset($_GET['new'])) {
-			$checked = "checked=\"checked\"";
+			$checked = ' checked="checked"';
 		} else {
 			$checked = '';
 		}
@@ -316,11 +316,11 @@ if (ini_get('safe_mode')) { ?>
 				return validateFolder(folder, msg1, msg2);
 			}
 		</script>
-		<select id="albumselectmenu" name="albumselect" onChange="albumSelect()">
+		<select id="albumselectmenu" name="albumselect" onchange="albumSelect()">
 			<?php
 				if ($rootrights) {
 				?>
-				<option value="" selected="SELECTED" style="font-weight: bold;">/</option>
+				<option value="" selected="selected" style="font-weight: bold;">/</option>
 				<?php
 			}
 			$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
@@ -334,7 +334,7 @@ if (ini_get('safe_mode')) { ?>
 				$saprefix = "";
 				$salevel = 0;
 				if (!is_null($passedalbum) && ($passedalbum == $fullfolder)) {
-					$selected = " SELECTED=\"true\" ";
+					$selected = " selected=\"selected\" ";
 				} else {
 					$selected = "";
 				}
@@ -349,7 +349,7 @@ if (ini_get('safe_mode')) { ?>
 			}
 			if (isset($_GET['publishalbum'])) {
 				if ($_GET['publishalbum']=='true') {
-					$publishchecked = ' CHECKED="CHECKED"';
+					$publishchecked = ' checked="checked"';
 				} else {
 					$publishchecked = '';
 				}
@@ -366,7 +366,7 @@ if (ini_get('safe_mode')) { ?>
 					}
 				}
 				if ($albpublish) {
-					$publishchecked = ' CHECKED="CHECKED"';
+					$publishchecked = ' checked="checked"';
 				} else {
 					$publishchecked = '';
 				}
@@ -392,9 +392,9 @@ if (ini_get('safe_mode')) { ?>
 
 			<div style="position: relative; margin-top: 4px;"><?php echo gettext("with the folder name:"); ?>
 				<div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
-				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="DISABLED"
+				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="disabled"
 											onKeyUp="buttonstate(validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));" />
-				<label><input type="checkbox" name="autogenfolder" id="autogen" CHECKED="CHECKED"
+				<label><input type="checkbox" name="autogenfolder" id="autogen" checked="checked"
 											onclick="buttonstate(toggleAutogen('folderdisplay', 'albumtitle', this));" />
 											<?php echo gettext("Auto-generate"); ?></label>
 				<br />
@@ -503,7 +503,7 @@ if (ini_get('safe_mode')) { ?>
 					<a href="javascript:$('#fileUpload').uploadifySettings('folder','/'+$('#publishalbum').attr('checked')+':'+$('#folderdisplay').val()+':'+$('#albumtitle').val());
 															$('#fileUpload').uploadifyUpload()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
 					<a href="javascript:$('#fileUpload').uploadifyClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
-				<br clear: all /><br />
+				<br clear="all" /><br />
 				</p>
 				<p><?php echo gettext('If your upload does not work try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=http\');" >http-browser single file upload</a> or use FTP instead.'); ?></p>
 			</div>
@@ -534,7 +534,7 @@ if (ini_get('safe_mode')) { ?>
 						<img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?>
 					</button>
 				</p>
-				<br /><br clear: all />
+				<br /><br clear="all" />
 			</div>
 			<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
 			<?php

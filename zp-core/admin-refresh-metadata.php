@@ -32,7 +32,7 @@ if (isset($_GET['refresh'])) {
 }
 
 if (isset($_GET['prune'])) {
-	$type = 'prune&';
+	$type = 'prune&amp;';
 	$title = gettext('Refresh Database');
 	$finished = gettext('Finished refreshing the database');
 	$incomplete = gettext('Database refresh is incomplete');
@@ -101,7 +101,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
 	$folder = $albumwhere = $imagewhere = $id = $r = '';
-	if ($type !== 'prune&') {
+	if ($type !== 'prune&amp;') {
 		if (isset($_REQUEST['album'])) {
 			if (isset($_POST['album'])) {
 				$alb = urldecode($_POST['album']);

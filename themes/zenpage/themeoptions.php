@@ -35,7 +35,7 @@ class ThemeOptions {
 				// so that the normal gallery index appears and no page is accidentally set if set to unpublished again.
 				setOption("zenpage_homepage", "none", true); 
 			} else {
-				echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-zenpage_homepage" value=0 />' . "\n";
+				echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-zenpage_homepage" value="0" />' . "\n";
 				echo '<select id="'.$option.'" name="zenpage_homepage">'."\n";
 				if($currentValue === "none") {
 					$selected = " selected = 'selected'";
