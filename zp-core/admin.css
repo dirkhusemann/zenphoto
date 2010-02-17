@@ -705,7 +705,8 @@ input.tags {
 	padding: 0px;
 }
 
-#overview-maint {
+#overview-maint,
+#overview-utility {
 	float: left;
 	width: 480px;
 	margin: 0 0 10px 0px;
@@ -725,6 +726,8 @@ input.tags {
 }
 
 #overview-comments,
+#overview-gallerystats,
+#overview-info,
 #overview-news {
 	float: left;
 	width: 90%;
@@ -732,13 +735,19 @@ input.tags {
 	padding: 0px;
 }
 
-#overview-comments h3 {
+#overview-comments h3,
+#overview-gallerystats h3,
+#overview-utility h2,
+#overview-info h3 {
 	font-weight: bold;
 	padding-left: 10px;
 	margin: 0;
 }
 
 #overview-comments ul,
+#overview-gallerystats ul,
+#overview-utility ul,
+#overview-info ul,
 #overview-maint ul,
 #overview-stats ul,
 #overview-news ul {
@@ -748,6 +757,9 @@ input.tags {
 }
 
 #overview-comments ul li,
+#overview-gallerystats ul li,
+#overview-utility ul li,
+#overview-info ul li,
 #overview-maint ul li, 
 #overview-news ul li{
 	margin-bottom: .5em;

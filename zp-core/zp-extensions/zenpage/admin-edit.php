@@ -7,7 +7,8 @@
  * @subpackage zenpage
  */
 include("zp-functions.php"); ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><?php echo gettext("zenphoto administration"); ?></title>
@@ -163,13 +164,13 @@ if(is_object($result)) {
 	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
 <?php } ?>
 <strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
-							<img src="images/folder.png" /> <?php echo gettext("Manage files"); ?></a></strong>
+							<img src="images/folder.png" alt=""/> <?php echo gettext("Manage files"); ?></a></strong>
 <span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
 <?php if(is_object($result)) { ?>
 	<a href="../../../index.php?p=<?php echo $themepage; ?>&amp;title=<?php printIfObject($result,"titlelink") ;?>" title="<?php echo gettext("View"); ?>"><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></a>
 <?php } ?>
 </p>
-<br clear: both /><br clear: both />
+<br style="clear: both" /><br style="clear: both" />
 
 <div id="tips" style="display:none">
 <br />
@@ -197,10 +198,10 @@ if(is_object($result)) {
 <?php if(is_object($result)) { ?>
 <form method="post" action="admin-edit.php?<?php echo $admintype; ?>&amp;update<?php echo $page; ?>" name="update">
 <input type="hidden" name="id" value="<?php printIfObject($result,"id");?>" />
-<input type="hidden" name="titlelink-old" type="text" id="titlelink-old" value="<?php printIfObject($result,"titlelink"); ?>" />
-<input type="hidden" name="lastchange" type="text" id="lastchange" value="<?php echo date('Y-m-d H:i:s'); ?>" />
-<input type="hidden" name="lastchangeauthor" type="text" id="lastchangeauthor" value="<?php echo $_zp_current_admin['user']; ?>" />
-<input type="hidden" name="hitcounter" type="text" id="hitcounter" value="<?php printIfObject($result,"hitcounter"); ?>" />
+<input type="hidden" name="titlelink-old" id="titlelink-old" value="<?php printIfObject($result,"titlelink"); ?>" />
+<input type="hidden" name="lastchange" id="lastchange" value="<?php echo date('Y-m-d H:i:s'); ?>" />
+<input type="hidden" name="lastchangeauthor" id="lastchangeauthor" value="<?php echo $_zp_current_admin['user']; ?>" />
+<input type="hidden" name="hitcounter" id="hitcounter" value="<?php printIfObject($result,"hitcounter"); ?>" />
 <?php } else { ?>
 	<form method="post" name="addnews" action="admin-edit.php?<?php echo $admintype; ?>&amp;save">
 <?php } ?>
@@ -218,8 +219,8 @@ if(is_object($result)) {
 				<p class="checkbox">
 				<input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" />
 				<label for="edittitlelink"><?php echo gettext("Edit TitleLink"); ?></label>
-				<?php } ?>
 				</p>
+				<?php } ?>
 				<p class="checkbox">
 				<input name="permalink" type="checkbox" id="permalink" value="1" <?php if (is_object($result)) { checkIfChecked($result->getPermalink()); } else { echo 'checked="checked"'; } ?> />
 				<label for="permalink"><?php echo gettext("Enable permaTitlelink"); ?></label>
@@ -229,7 +230,7 @@ if(is_object($result)) {
 				<label for="show"><?php echo gettext("Published"); ?></label>
 				</p>
 				<p class="checkbox">
-				<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked"));?>; />
+				<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked")); ?> />
 				<label for="locked"><?php echo gettext("Locked for changes"); ?></label>
 				</p>
 
@@ -297,7 +298,7 @@ if(is_object($result)) {
 				<div class="box-edit-zenpage">
 		
 				<p class="checkbox">
-				<input name="commentson" type="checkbox" id="commentson"value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> />
+				<input name="commentson" type="checkbox" id="commentson" value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> />
 				<label for="commentson"> <?php echo gettext("Comments on"); ?></label>
 				</p>
 				<?php if(is_object($result)) { ?>
@@ -313,9 +314,9 @@ if(is_object($result)) {
 				if (is_object($result)) {
 					?>
 					<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Tags"); ?></h2>
-					<span id="zenpagetags">
+					<div id="zenpagetags">
 						<?php	tagSelector($result, 'tags_', false, getTagOrder());	?>
-				</span>
+				</div>
 				<br />
 				<?php
 				}
@@ -354,6 +355,7 @@ if(is_object($result)) {
 		<tr>
 			<td class="topalign-padding"><?php echo gettext("ExtraContent:"); ?></td>
 			<td><?php print_language_string_list_zenpage(getIfObject($result,"extracontent"),"extracontent",TRUE) ;?></td>
+		</tr>
 		<tr>
 		<td class="topalign-nopadding"><br /><?php echo gettext("Codeblocks:"); ?></td>
 		<td>
@@ -375,13 +377,13 @@ if(is_object($result)) {
 							}
 							?>
 				<div id="first">
-					<textarea name="codeblock1" id="codeblock1"><?php echo $codeblock[1]; ?></textarea>
+					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo $codeblock[1]; ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="codeblock2" id="codeblock2"><?php echo $codeblock[2]; ?></textarea>
+					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo $codeblock[2]; ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="codeblock3" id="codeblock3"><?php echo $codeblock[3]; ?></textarea></div>
+					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo $codeblock[3]; ?></textarea>
 				</div>
 			</div>
 		</td>
@@ -390,13 +392,10 @@ if(is_object($result)) {
 </form>
 </div>
 </div>
-
-<?php
-if (is_AdminEditPage("newsarticle")) {
-	?>
-	</div>
-	<?php
-}
-printAdminFooter(); ?>
+</div>
+<?php if(is_AdminEditPage("newsarticle")) { ?>
+</div>
+<?php } ?>
+<?php printAdminFooter(); ?>
 </body>
 </html>

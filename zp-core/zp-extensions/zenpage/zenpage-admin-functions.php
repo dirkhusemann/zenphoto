@@ -622,7 +622,7 @@ function printArticleDatesDropdown() {
 	    }
 		$check = $month."-".$year;
 		 if(isset($_GET['date']) AND $_GET['date'] == substr($key,0,7)) {
-				$selected = "selected";
+				$selected = "selected='selected'";
 		 } else {
 		 		$selected = "";
 		 	}
@@ -708,7 +708,7 @@ function printCategoryDropdown() {
   <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
 <?php
 if(!isset($_GET['category'])) {
-			$selected = "selected";
+			$selected = "selected='selected'";
     } else {
     	$selected ="";
     } 
@@ -718,7 +718,7 @@ if(!isset($_GET['category'])) {
     $count = countArticles($cat['cat_link'],false);
     $count = " (".$count.")";
     if(isset($_GET['category']) AND $_GET['category'] === $cat['cat_link']) {
-    	$selected = "selected";
+    	$selected = "selected='selected'";
     } else {
     	$selected ="";
     }
@@ -783,13 +783,13 @@ function printUnpublishedDropdown() {
 		$published="";
 		$unpublished="";
 		 if(isset($_GET['published']) AND $_GET['published'] == "no") {
-				$unpublished="selected";
+				$unpublished="selected='selected'";
 		 }
 		 if(isset($_GET['published']) AND $_GET['published'] == "yes") {
-				$published="selected";
+				$published="selected='selected'";
 		 	}
 		 	if(!isset($_GET['published'])) {
-		 	 	$all="selected";
+		 	 	$all="selected='selected'";
 		 	}
  	echo "<option $all value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."'>".gettext("All articles")."</option>\n";
 	echo "<option $published value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=yes'>".gettext("Published")."</option>\n";
@@ -1205,7 +1205,7 @@ function AuthorSelector($currentadmin='') {
 foreach($admins as $admin) {
 	if($admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 		if($currentadmin == $admin['user']) {
-			echo "<option selected value='".$admin['user']."'>".$admin['user']."</option>";
+			echo "<option selected='selected' value='".$admin['user']."'>".$admin['user']."</option>";
 		} else {
 			echo "<option value='".$admin['user']."'>".$admin['user']."</option>";
 		}

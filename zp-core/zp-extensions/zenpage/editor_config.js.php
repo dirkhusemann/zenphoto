@@ -55,16 +55,16 @@ function printTextEditorConfigJS($locale='') {
 <?php	echo "var ajaxfilemanagerurl = \"".FULLWEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER."/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=tinymce\";"; ?>
 			switch (type) {
 				case "image":
-					ajaxfilemanagerurl += "&type=img&language=<?php echo $locale; ?>";
+					ajaxfilemanagerurl += "&amp;type=img&amp;language=<?php echo $locale; ?>";
 					break;
 				case "media":
-					ajaxfilemanagerurl += "&type=media&language=<?php echo $locale; ?>";
+					ajaxfilemanagerurl += "&amp;type=media&amp;language=<?php echo $locale; ?>";
 					break;
 				case "flash": //for older versions of tinymce
-					ajaxfilemanagerurl += "&type=media&language=<?php echo $locale; ?>";
+					ajaxfilemanagerurl += "&amp;type=media&amp;language=<?php echo $locale; ?>";
 					break;
 				case "file":
-					ajaxfilemanagerurl += "&type=files&language=<?php echo $locale; ?>";
+					ajaxfilemanagerurl += "&amp;type=files&amp;language=<?php echo $locale; ?>";
 					break;
 				default:
 					return false;
