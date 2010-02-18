@@ -603,7 +603,7 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 <?php printBarGraph("toprated","news"); ?>
 <hr />
 
-<h2>Statistics for news categories</h2>
+<h2><?php echo gettext('Statistics for news categories'); ?></h2>
 <a name="newscategories-popular"></a>
 <?php printBarGraph("popular","newscategories"); ?>
 

@@ -911,7 +911,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
  ?>
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
-	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value="0" />
+	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="password_enabled<?php echo $prefix; ?>" value="0" />
 	<p class="buttons">
 		<?php
 		$parent = dirname($album->name);

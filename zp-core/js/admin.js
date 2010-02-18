@@ -189,22 +189,22 @@ function image_deleteconfirm(obj, id, msg) {
 // field for new filename) or none.
 function toggleMoveCopyRename(id, operation) {
 	if (operation == '') {
-		jQuery('#'+id+'-movecopydiv').hide();
-		jQuery('#'+id+'-renamediv').hide();
+		jQuery('#movecopydiv-'+id).hide();
+		jQuery('#renamediv-'+id).hide();
 		jQuery('#deletemsg'+id).hide();
-		jQuery('#'+id+'-move').attr('checked',false);
-		jQuery('#'+id+'-copy').attr('checked',false);
-		jQuery('#'+id+'-rename').attr('checked',false);
-		jQuery('#'+id+'-Delete').attr('checked',false);
+		jQuery('#move-'+id).attr('checked',false);
+		jQuery('#copy-'+id).attr('checked',false);
+		jQuery('#rename-'+id).attr('checked',false);
+		jQuery('#Delete-'+id).attr('checked',false);
 	} else if (operation == 'movecopy') {
-		jQuery('#'+id+'-movecopydiv').show();
-		jQuery('#'+id+'-renamediv').hide();
-		jQuery('#'+id+'-Delete').attr('checked',false);
+		jQuery('#movecopydiv-'+id).show();
+		jQuery('#renamediv-'+id).hide();
+		jQuery('#Delete-+id').attr('checked',false);
 		jQuery('#deletemsg'+id).hide();
-	} else if (operation == 'rename') {
-		jQuery('#'+id+'-movecopydiv').hide();
-		jQuery('#'+id+'-renamediv').show();
-		jQuery('#'+id+'-Delete').attr('checked',false);
+	} else if (operation == 'rename'+id) {
+		jQuery('#movecopydiv-'+id).hide();
+		jQuery('#renamediv-'+id).show();
+		jQuery('#Delete-'+id).attr('checked',false);
 		jQuery('#deletemsg'+id).hide();
 	}
 }
@@ -252,10 +252,10 @@ function showfield(obj, fld) {
 
 // password field hide/disable
 function toggle_passwords(id, pwd_enable) {
-	toggleExtraInfo('',id+'password',pwd_enable);
+	toggleExtraInfo('','password'+id,pwd_enable);
 	if (pwd_enable) {
-		jQuery('#'+id+'password_enabled').val('1');
+		jQuery('#password_enabled'+id).val('1');
 	} else {
-		jQuery('#'+id+'password_enabled').val('0');
+		jQuery('#password_enabled'+id).val('0');
 	}
 }
