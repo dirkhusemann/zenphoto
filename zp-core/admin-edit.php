@@ -422,7 +422,7 @@ if (empty($subtab) || $subtab=='albuminfo') {
 	function newAlbum(folder,albumtab) {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {
-			window.location = '?action=newalbum&amp;album='+encodeURIComponent(folder)+'&amp;name='+encodeURIComponent(album)+'&amp;albumtab='+albumtab;
+			window.location = '?action=newalbum&album='+folder+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
 		}
 	}
 </script>
@@ -650,9 +650,18 @@ $alb = removeParentAlbumNames($album);
 				?>
 			</p>
 			<p class="buttons">
-				<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
-				<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
-				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+				<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+				<img	src="images/arrow_left_blue_round.png" alt="" />
+				<strong><?php echo gettext("Back"); ?></strong>
+				</button>
+				<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons">
+				<img src="images/pass.png" alt="" />
+				<strong><?php echo gettext("Save Order"); ?></strong>
+				</button>
+				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);">
+				<img src="images/folder.png" alt="" />
+				<strong><?php echo gettext('New subalbum'); ?></strong>
+				</button>
 			</p>
 			<br clear="all" /><br />
 			<table class="bordered" width="100%">
@@ -677,9 +686,18 @@ $alb = removeParentAlbumNames($album);
 					<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
 					<input name="update" type="hidden" value="Save Order" />
 					<p class="buttons">
-					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
-					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
-					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+					<img	src="images/arrow_left_blue_round.png" alt="" />
+					<strong><?php echo gettext("Back"); ?></strong>
+					</button>
+					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons">
+					<img src="images/pass.png" alt="" />
+					<strong><?php echo gettext("Save Order"); ?></strong>
+					</button>
+					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);">
+					<img src="images/folder.png" alt="" />
+					<strong><?php echo gettext('New subalbum'); ?></strong>
+					</button>
 					</p>
 									<script type="text/javascript">
 jQuery( function($) {
@@ -701,6 +719,7 @@ $('#left-to-right').NestedSortable(
 </script>
 				</form>
 				<br clear="all" />
+		</div><!-- subalbum -->
 		<?php
 		} ?>
 <?php
@@ -768,9 +787,18 @@ $('#left-to-right').NestedSortable(
 			<tr>
 				<td colspan="4">
 					<p class="buttons">
-						<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
-						<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-						<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+						<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+						<img	src="images/arrow_left_blue_round.png" alt="" />
+						<strong><?php echo gettext("Back"); ?></strong>
+						</button>
+						<button type="submit" title="<?php echo gettext("Save"); ?>">
+						<img src="images/pass.png" alt="" />
+						<strong><?php echo gettext("Save"); ?></strong>
+						</button>
+						<button type="reset" title="<?php echo gettext("Reset"); ?>">
+						<img src="images/fail.png" alt="" />
+						<strong><?php echo gettext("Reset"); ?></strong>
+						</button>
 				 </p>
 
 
@@ -857,7 +885,7 @@ $('#left-to-right').NestedSortable(
 								?>
 								<?php  printf(gettext('Rating: <strong>%u</strong>'),$hc) ?>
 								<label>
-									<input type="checkbox" id="reset_rating-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-reset_rating" value=1 />
+									<input type="checkbox" id="reset_rating-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-reset_rating" value="1" />
 									<?php echo gettext("Reset"); ?>
 								</label>
 								<?php
@@ -999,21 +1027,23 @@ $('#left-to-right').NestedSortable(
 						</td>
 					</tr>
 
-					<script type="text/javascript">
-						$(function() {
-							$("#datepicker_<?php echo $currentimage; ?>").datepicker({
-											showOn: 'button',
-											buttonImage: 'images/calendar.png',
-											buttonText: '<?php echo gettext('calendar'); ?>',
-											buttonImageOnly: true
-											});
-						});
-					</script>
 
 					<tr align="left" valign="top">
 						<td valign="top"><?php echo gettext("Date:"); ?></td>
-						<td><input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20em" name="<?php echo $currentimage; ?>-date"
-							value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
+						<td>
+							<script type="text/javascript">
+								$(function() {
+									$("#datepicker_<?php echo $currentimage; ?>").datepicker({
+													showOn: 'button',
+													buttonImage: 'images/calendar.png',
+													buttonText: '<?php echo gettext('calendar'); ?>',
+													buttonImageOnly: true
+													});
+								});
+							</script>
+							<input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20em" name="<?php echo $currentimage; ?>-date"
+								value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" />
+						</td>
 					</tr>
 
 					<?php
@@ -1118,9 +1148,18 @@ $('#left-to-right').NestedSortable(
 				<td colspan="4">
 
 				<p class="buttons">
-					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
-					<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-					<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+					<img	src="images/arrow_left_blue_round.png" alt="" />
+					<strong><?php echo gettext("Back"); ?></strong>
+					</button>
+					<button type="submit" title="<?php echo gettext("Save"); ?>">
+					<img src="images/pass.png" alt="" />
+					<strong><?php echo gettext("Save"); ?></strong>
+					</button>
+					<button type="reset" title="<?php echo gettext("Reset"); ?>">
+					<img src="images/fail.png" alt="" />
+					<strong><?php echo gettext("Reset"); ?></strong>
+					</button>
 				</p>
 
 			</td>
@@ -1150,7 +1189,7 @@ $('#left-to-right').NestedSortable(
 		<?php
 			}
 		?>
-		</div>
+		</div><!-- images -->
 <?php
 	}
 
@@ -1368,11 +1407,9 @@ $('#left-to-right').NestedSortable(
 	}
 }
 ?>
-</div>
-<!-- content -->
+</div><!-- content -->
+</div><!-- main -->
 <?php printAdminFooter(); ?>
-</div>
-<!-- main -->
 </body>
 <?php // to fool the validator
 echo "\n</html>";

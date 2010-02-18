@@ -285,9 +285,9 @@ if (db_connect()) {
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="set_publication" action="" method="post">
 <input type="hidden" name="set_defaults" value="true">
-		<input type="checkbox" name="album_default"	value=1<?php if ($albpublish) echo ' checked'; ?>> <?php echo gettext("Publish albums by default"); ?>
+		<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked'; ?>> <?php echo gettext("Publish albums by default"); ?>
 		<br />
-		<input type="checkbox" name="image_default"	value=1<?php if ($imgpublish) echo ' checked'; ?>> <?php echo gettext("Make images visible by default"); ?>
+		<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked'; ?>> <?php echo gettext("Make images visible by default"); ?>
 		<br />
 <div class="buttons pad_button" id="setdefaults">
 <button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">

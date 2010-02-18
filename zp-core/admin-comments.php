@@ -202,11 +202,17 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<?php echo gettext('Delete'); ?></a></p>
 		<br style="clear:both" />
 <p class="buttons" style="margin-top: 10px">
-		<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+		<button type="submit" title="<?php echo gettext("Save"); ?>">
+		<img src="images/pass.png" alt="" />
+		<strong><?php echo gettext("Save"); ?></strong>
+		</button>
 		</p>
 		<br style="clear:both;" />
 <p class="buttons" style="margin-top: 10px">
-		<button type="button" title="<?php echo gettext("Cancel"); ?>" onclick="window.location = 'admin-comments.php';"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+		<button type="button" title="<?php echo gettext("Cancel"); ?>" onclick="window.location = 'admin-comments.php';">
+		<img src="images/reset.png" alt="" />
+		<strong><?php echo gettext("Cancel"); ?></strong>
+		</button>
 		</p>
 		<br style="clear:both" />
 </div><!-- div box-edit-unpadded end -->
@@ -259,7 +265,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	</div>
 	<?php } ?>
 
-<form name="comments" action="?action=deletecomments" method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
+<form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
 <input type="hidden" name="subpage" value="<?php echo $pagenum ?>">
 <table class="bordered">
 	<tr>

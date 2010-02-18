@@ -1246,7 +1246,7 @@ function generateListFromArray($currentValue, $list, $descending, $localize) {
 		}
 	}
 	foreach($list as $key=>$item) {
-		echo '<option value="' . $item . '"';
+		echo '<option value="' . htmlentities($item) . '"';
 		if (in_array($item, $currentValue)) {
 			echo ' selected="selected"';
 		}
@@ -1992,14 +1992,12 @@ function seoFriendly($source) {
  */
 function is_connected($host = 'www.zenphoto.org') {
 	$err_no = $err_str = false;
-	$connected = fsockopen($host, 80, $errno, $errstr, 0.5);
+	$connected = @fsockopen($host, 80, $errno, $errstr, 0.5);
 	if ($connected){
 		fclose($connected);
 		return true;
-	}else{
-		return false;
 	}
-	return $is_conn;
+	return false;
 }
 
 

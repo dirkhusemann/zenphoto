@@ -214,7 +214,7 @@ echo '</head>'."\n";
 											?>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-											<input type="hidden" name="<?php echo $id ?>-confirmed" value=1>
+											<input type="hidden" name="<?php echo $id ?>-confirmed" value="1">
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
 											?>
@@ -350,3 +350,4 @@ echo '</head>'."\n";
 		</div>
 	</div>
 </body>
+</html>

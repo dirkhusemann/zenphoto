@@ -572,8 +572,8 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						break;
 					case OPTION_TYPE_CHECKBOX:
 						?>
-						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$key; ?>" value="0" />
 						<td width="350px">
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$key; ?>" value="0" />
 							<input type="checkbox" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="1" <?php echo checked('1', $v); ?> />
 						</td>
 						<?php
@@ -602,7 +602,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 								<?php
 								if (array_key_exists('null_selection', $row)) {
 									?>
-									<option value=""<?php if (empty($v)) echo 'selected="selected"'; ?>><?php echo $row['null_selection']; ?></option>
+									<option value=""<?php if (empty($v)) echo ' selected="selected"'; ?>><?php echo $row['null_selection']; ?></option>
 									<?php
 								}
 								?>
@@ -613,7 +613,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						break;
 					case OPTION_TYPE_CHECKBOX_ARRAY:
 						?>
-						<td width=\"350px>
+						<td width="350px">
 							<?php
 							foreach ($row['checkboxes'] as $display=>$checkbox) {
 								$ck_sql = str_replace($key, $checkbox, $sql);
@@ -641,7 +641,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						break;
 					case OPTION_TYPE_CHECKBOX_UL:
 						?>
-						<td width=\"350px>
+						<td width="350px">
 							<?php
 							$cvarray = array();
 							$c = 0;
@@ -666,18 +666,18 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						if (empty($v)) $v = '#000000';
 						?>
 						<td width="350px" style="margin:0; padding:0">
-						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value="0" />
-						<script type="text/javascript">
-							$(document).ready(function() {
-								$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
-							});
-						</script>
-						<table style="margin:0; padding:0" >
-							<tr>
-								<td><input type="text" id="<?php echo $key; ?>" name="<?php echo $key; ?>"	value="<?php echo $v; ?>"style="height:100px; width:100px; float:right;" /></td>
-								<td><div id="<?php echo $key; ?>_colorpicker"></div></td>
-							</tr>
-						</table>
+							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value="0" />
+							<script type="text/javascript">
+								$(document).ready(function() {
+									$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
+								});
+							</script>
+							<table style="margin:0; padding:0" >
+								<tr>
+									<td><input type="text" id="<?php echo $key; ?>" name="<?php echo $key; ?>"	value="<?php echo $v; ?>" style="height:100px; width:100px; float:right;" /></td>
+									<td><div id="<?php echo $key; ?>_colorpicker"></div></td>
+								</tr>
+							</table>
 						</td>
 						<?php
 						break;
@@ -921,17 +921,32 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			$parent = '&amp;album='.$parent.'&amp;tab=subalbuminfo';
 		}
 		?>
-		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
-		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
-		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+		<img	src="images/arrow_left_blue_round.png" alt="" />
+		<strong><?php echo gettext("Back"); ?></strong>
+		</button>
+		<button type="submit" title="<?php echo gettext("Save"); ?>">
+		<img	src="images/pass.png" alt="" />
+		<strong><?php echo gettext("Save"); ?></strong>
+		</button>
+		<button type="reset" title="<?php echo gettext("Reset"); ?>">
+		<img	src="images/fail.png" alt="" />
+		<strong><?php echo gettext("Reset"); ?></strong>
+		</button>
 		<?php
 		if (!$album->isDynamic()) {
 			?>
-			<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+			<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);">
+			<img src="images/folder.png" alt="" />
+			<strong><?php echo gettext('New subalbum'); ?></strong>
+			</button>
 			<?php
 		}
 		?>
-		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" >
+		<img src="images/view.png" alt="" />
+		<strong><?php echo gettext('View Album'); ?></strong>
+		</button>
 	</p>
 <br clear="all" /><br />
 	<table>
@@ -1015,21 +1030,22 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					}
 					?>
 
-	<script type="text/javascript">
-		$(function() {
-			$("#datepicker_<?php echo $prefix; ?>").datepicker({
-							showOn: 'button',
-							buttonImage: 'images/calendar.png',
-							buttonText: '<?php echo gettext('calendar'); ?>',
-							buttonImageOnly: true
-							});
-		});
-	</script>
 
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Date:");?> </td>
 						<td width="400">
-						<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
+							<script type="text/javascript">
+								$(function() {
+									$("#datepicker_<?php echo $prefix; ?>").datepicker({
+													showOn: 'button',
+													buttonImage: 'images/calendar.png',
+													buttonText: '<?php echo gettext('calendar'); ?>',
+													buttonImageOnly: true
+													});
+								});
+							</script>
+							<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" />
+						</td>
 					</tr>
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td>
@@ -1108,19 +1124,19 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	?>
 								</td>
 							</tr>
-							<script type="text/javascript">
-								$(function () {
-									$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
-										tags: [<?php echo $albumdbfields; ?>]
-									});
-								});
-							</script>
 							<tr>
 								<td colspan="2">
-								<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
-								<?php echo gettext('custom fields:') ?>
-								<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
-								</span>
+									<script type="text/javascript">
+										$(function () {
+											$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
+												tags: [<?php echo $albumdbfields; ?>]
+											});
+										});
+									</script>
+									<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
+									<?php echo gettext('custom fields:') ?>
+									<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+									</span>
 						
 								</td>
 							</tr>
@@ -1178,15 +1194,15 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							?>
 									</td>
 								</tr>
-								<script type="text/javascript">
-									$(function () {
-										$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
-											tags: [<?php echo $imagedbfields; ?>]
-										});
-									});
-								</script>
 								<tr>
 									<td align="left" colspan="2">
+									<script type="text/javascript">
+										$(function () {
+											$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
+												tags: [<?php echo $imagedbfields; ?>]
+											});
+										});
+									</script>
 									<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
 									<input id="<?php echo $javaprefix; ?>customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
@@ -1419,7 +1435,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							printf(gettext('Rating: <strong>%u</strong>'), $hc);
 							?>
 							<label>
-								<input type="checkbox" id="<?php echo $prefix; ?>reset_rating" name="<?php echo $prefix; ?>reset_rating" value=1 />
+								<input type="checkbox" id="<?php echo $prefix; ?>reset_rating" name="<?php echo $prefix; ?>reset_rating" value="1" />
 								<?php echo gettext("Reset"); ?>
 							</label>
 							<?php
@@ -1558,17 +1574,32 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 
 <br clear="all" />
 	<p class="buttons">
-		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></button>
-		<button type="submit" title="<?php echo gettext("Save"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save"); ?></strong></button>
-		<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+		<img	src="images/arrow_left_blue_round.png" alt="" />
+		<strong><?php echo gettext("Back"); ?></strong>
+		</button>
+		<button type="submit" title="<?php echo gettext("Save"); ?>">
+		<img	src="images/pass.png" alt="" />
+		<strong><?php echo gettext("Save"); ?></strong>
+		</button>
+		<button type="reset" title="<?php echo gettext("Reset"); ?>">
+		<img	src="images/fail.png" alt="" />
+		<strong><?php echo gettext("Reset"); ?></strong>
+		</button>
 		<?php
 		if (!$album->isDynamic()) {
 			?>
-			<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New subalbum'); ?></strong></button>
+			<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',true);">
+			<img src="images/folder.png" alt="" />
+			<strong><?php echo gettext('New subalbum'); ?></strong>
+			</button>
 			<?php
 		}
 		?>
-		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" ><img src="images/view.png" alt="" /><strong><?php echo gettext('View Album'); ?></strong></button>
+		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" >
+		<img src="images/view.png" alt="" />
+		<strong><?php echo gettext('View Album'); ?></strong>
+		</button>
 	</p>
 <br clear="all" />
 <?php
@@ -2060,7 +2091,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 						if ($textbox) {
 							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
 						} else {
-							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 						}
 						?>
 					</li>
@@ -2095,7 +2126,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		if ($textbox) {
 			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
 		} else {
-			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 		}
 	}
 }
@@ -2573,7 +2604,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<span style="white-space:nowrap">
 						<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $id.'-'.$rightselement; ?>"
-								value=<?php echo $rightsvalue; if ($rights & $rightsvalue) echo ' checked="checked"';
+								value="<?php echo $rightsvalue; ?>"<?php if ($rights & $rightsvalue) echo ' checked="checked"';
 								echo $alterrights; ?> /> <?php echo $name; ?></label>
 					</span>
 				</td>

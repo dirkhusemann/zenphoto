@@ -624,8 +624,9 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						if (array_search($cv, $formatlist) === false) $cv = 'custom';
 						generateListFromArray(array($cv), $formatlist, false, true);
 						?>
-						</select><br />
+						</select>
 						<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
+						<br />
 						<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="date_format"
 						value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
 						</div>
@@ -1087,7 +1088,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<tr>
 					<td><?php echo gettext("Search behavior settings:"); ?></td>
 					<?php 
-					$exact = ' <input type="radio" id="exact_tags" name="tag_match" value="1" ';
+					$exact = ' <input type="radio" id="partia_tagsl" name="tag_match" value="1" ';
 					$partial = ' <input type="radio" id="exact_tags" name="tag_match" value="0" ';
 					if (getOption('exact_tag_match')) {
 						$exact .= ' checked="checked" ';
@@ -1188,22 +1189,22 @@ if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			<td>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('Gallery'); ?>
+						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('Gallery'); ?>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_comments" value=<?php if (getOption('RSS_comments')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('Comments'); ?>
+						<input type="checkbox" name="RSS_comments" value=<?php if (getOption('RSS_comments')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('Comments'); ?>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_articles" value=<?php if (getOption('RSS_articles')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('All news'); ?>
+						<input type="checkbox" name="RSS_articles" value=<?php if (getOption('RSS_articles')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('All news'); ?>
 					</label>
 				</span>
 				<span style="white-space:nowrap">
 					<label>
-						<input type="checkbox" name="RSS_article_comments" value=<?php if (getOption('RSS_article_comments')) echo '1 checked="checked"'; else echo '0'; ?> /> <?php echo gettext('News/Page comments'); ?>
+						<input type="checkbox" name="RSS_article_comments" value=<?php if (getOption('RSS_article_comments')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('News/Page comments'); ?>
 					</label>
 				</span>
 			</td>
@@ -1590,7 +1591,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<?php echo gettext('cache the full image'); ?>
 						</label>
 					</p>
-					<p>
+
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<table class="compact">
 						<tr class="passwordextrashow">
@@ -1671,7 +1672,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<input type="checkbox" name="use_lock_image" value="1"
 					<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 				</td>
-				<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?>
+				<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("EXIF display"); ?></td>
@@ -1680,7 +1681,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<?php
 				$exifstuff = sortMultiArray($_zp_exifvars,2,false);
 				foreach ($exifstuff as $key=>$item) {
-					echo '<li><label"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
+					echo '<li><label><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
 					if ($item[3]) {
 						echo ' checked="checked" ';
 					}
@@ -1689,7 +1690,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				?>
 				</ul>
 				</td>
-				<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?>
+				<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?></td>
 			</tr>
 			<?php
 			$sets = array_merge($_zp_UTF8->iconv_sets, $_zp_UTF8->mb_sets);
@@ -1771,7 +1772,7 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<span style="white-space:nowrap">
 								<label>
 									<input type="checkbox" name="comment_name_required" id="comment_name_required"
-											value=1 <?php checked('1', getOption('comment_name_required')); ?>>
+											value="1" <?php checked('1', getOption('comment_name_required')); ?> />
 									<?php echo gettext("Name"); ?>
 								</label>
 							</span>
@@ -1782,7 +1783,7 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<span style="white-space:nowrap">
 								<label>
 								<input type="checkbox" name="comment_email_required" id="comment_email_required"
-										value=1 <?php checked('1', getOption('comment_email_required')); ?>>
+										value="1" <?php checked('1', getOption('comment_email_required')); ?> />
 								<?php echo gettext("Email"); ?>
 								</label>
 							</span>
@@ -1793,7 +1794,7 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<span style="white-space:nowrap">
 								<label>
 									<input type="checkbox" name="comment_web_required" id="comment_web_required"
-											value=1 <?php checked('1', getOption('comment_web_required')); ?>>
+											value="1" <?php checked('1', getOption('comment_web_required')); ?> />
 									<?php echo gettext("Website"); ?>
 								</label>
 							</span>
@@ -1804,7 +1805,7 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<span style="white-space:nowrap">
 								<label>
 									<input type="checkbox" name="Use_Captcha" id="Use_Captcha"
-											value=1 <?php checked('1', getOption('Use_Captcha')); ?>>
+											value="1" <?php checked('1', getOption('Use_Captcha')); ?> />
 									<?php echo gettext("Captcha"); ?>
 								</label>
 							</span>
@@ -2008,12 +2009,12 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 							</td>
 							<td style="margin:0; padding:0">
 								<label>
-									<input type="radio" id="image_use_side1" name="image_use_side" id="image_use_side"
+									<input type="radio" id="image_use_side1" name="image_use_side" 
 											value="height" <?php if ($side=='height') echo ' checked="checked"'; ?> />
 										<?php echo gettext('height') ?>
 								</label>
 								<label>
-									<input type="radio" id="image_use_side2" name="image_use_side" id="image_use_side"
+									<input type="radio" id="image_use_side2" name="image_use_side" 
 												value="width" <?php if ($side=='width') echo ' checked="checked"'; ?> />
 									<?php echo gettext('width') ?>
 								</label>
@@ -2022,12 +2023,12 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 						<tr>
 							<td style="margin:0; padding:0">
 								<label>
-									<input type="radio" id="image_use_side3" name="image_use_side" id="image_use_side"
+									<input type="radio" id="image_use_side3" name="image_use_side" 
 											value="shortest" <?php if ($side=='shortest') echo ' checked="checked"'; ?> />
 									<?php echo gettext('shortest side') ?>
 								</label>
 								<label>
-									<input type="radio" id="image_use_side4" name="image_use_side" id="image_use_side"
+									<input type="radio" id="image_use_side4" name="image_use_side" 
 											value="longest" <?php if ($side=='longest') echo ' checked="checked"'; ?> />
 									<?php echo gettext('longest side') ?>
 								</label>
@@ -2127,68 +2128,77 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 					</span>
 				</th>
 			</tr>
-			<tr>
-			<td style="padding: 0;margin:0" colspan="3">
-			<?php
-			$showlist = array();
-			$plugins = array_keys(getEnabledPlugins());
-			natcasesort($plugins);
-			foreach ($plugins as $extension) {
-				$option_interface = NULL;
-				if (array_key_exists($extension, $class_optionInterface)) {
-					$option_interface = $class_optionInterface[$extension];
-				}
-				require_once(getPlugin($extension.'.php'));
-				if (!is_null($option_interface)) {
-					$showlist[] = '#_show-'.$extension;
-					$_zp_plugin_count++;
-					?>
-					<!-- <?php echo $extension; ?> -->
-					<table class="bordered" style="border: 0" id="plugin-<?php echo $extension; ?>">
-						<tr>
-						<input type="hidden" name="_show-<?php echo $extension;?>" id="_show-<?php echo $extension;?>" value="0" />
-						<?php
-						if (isset($_GET['_show-'.$extension])) {
-							$show_show = 'none';
-							$show_hide = 'block';
-						} else {
-							$show_show = 'block';
-							$show_hide = 'none';
-						}
-						?>
-						<th colspan="3" style="text-align:left">
-							<span style="display:<?php echo $show_show; ?>;" class="pluginextrashow">
-								<a href="javascript:$('#_show-<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
-							</span>
-							<span style="display:<?php echo $show_hide; ?>;" class="pluginextrahide">
-								<a href="javascript:$('#_show-<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
-							</span>
-						</th>
-					</tr>
-					<?php
-					$supportedOptions = $option_interface->getOptionsSupported();
-					if (count($supportedOptions) > 0) {
-						customOptions($option_interface, '', NULL, 'plugin', $supportedOptions, NULL, $show_hide);
-					}
-				?>
-				</table>
-				
 				<?php
+				$showlist = array();
+				$plugins = array_keys(getEnabledPlugins());
+				natcasesort($plugins);
+				foreach ($plugins as $extension) {
+					$option_interface = NULL;
+					if (array_key_exists($extension, $class_optionInterface)) {
+						$option_interface = $class_optionInterface[$extension];
+					}
+					require_once(getPlugin($extension.'.php'));
+					if (!is_null($option_interface)) {
+						$showlist[] = '#_show-'.$extension;
+						$_zp_plugin_count++;
+						?>
+				<tr>
+					<td style="padding: 0;margin:0" colspan="3">
+						<!-- <?php echo $extension; ?> -->
+						<table class="bordered" style="border: 0" id="plugin-<?php echo $extension; ?>">
+							<tr>
+							<?php
+							if (isset($_GET['_show-'.$extension])) {
+								$show_show = 'none';
+								$show_hide = 'block';
+							} else {
+								$show_show = 'block';
+								$show_hide = 'none';
+							}
+							?>
+							<th colspan="3" style="text-align:left">
+								<input type="hidden" name="_show-<?php echo $extension;?>" id="_show-<?php echo $extension;?>" value="0" />
+								<span style="display:<?php echo $show_show; ?>;" class="pluginextrashow">
+									<a href="javascript:$('#_show-<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
+								</span>
+								<span style="display:<?php echo $show_hide; ?>;" class="pluginextrahide">
+									<a href="javascript:$('#_show-<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
+								</span>
+							</th>
+						</tr>
+						<?php
+						$supportedOptions = $option_interface->getOptionsSupported();
+						if (count($supportedOptions) > 0) {
+							customOptions($option_interface, '', NULL, 'plugin', $supportedOptions, NULL, $show_hide);
+						}
+					?>
+						</table>
+					</td>
+				</tr>
+					<?php
+					}
 				}
-			}
-			if ($_zp_plugin_count == 0) {
-				echo gettext("There are no plugin options to administer.");
-			} else {
-			?>
-					<tr>
-						<td colspan="3">
-						<p class="buttons">
-						<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-						<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-						</p>
-						</td>
-					</tr>
-				</table> <!-- plugin page table -->
+				if ($_zp_plugin_count == 0) {
+					?>
+				<tr>
+					<td style="padding: 0;margin:0" colspan="3">
+					<?php
+						echo gettext("There are no plugin options to administer.");
+						?>
+					</td>
+				</tr>
+				<?php 
+				} else {
+				?>
+				<tr>
+					<td colspan="3">
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+				</tr>
+			</table> <!-- plugin page table -->
 			<?php
 			}
 			?>

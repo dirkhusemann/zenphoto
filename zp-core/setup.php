@@ -298,6 +298,7 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 
 <head>
 
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title><?php echo $upgrade ? gettext("Zenphoto upgrade") : gettext("Zenphoto setup") ; ?></title>
 <link rel="stylesheet" href="admin.css" type="text/css" />
 
@@ -507,7 +508,7 @@ li {
 
 <div id="main">
 
-<h1><img src="images/zen-logo.gif" title="<?php echo gettext('Zen Photo Setup'); ?>" align="bottom" />
+<h1><img src="images/zen-logo.gif" title="<?php echo gettext('ZenPhoto Setup'); ?>" alt="<?php echo gettext('ZenPhoto Setup'); ?>" align="bottom" />
 <?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?>
 </h1>
 
@@ -577,14 +578,14 @@ if (!$setup_checked) {
 					//					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
 					echo "<div class='warning' id='more".$moreid."' style='display:block'>";
 					echo gettext('Warning!');
-					echo "<p>".$msg."</p>";
+					echo "<br />".$msg;
 					echo "</div>";
 				} else {
 					$moreid++;
 					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Notice!</strong> click for details').'</a>';
 					echo "<div class='notice' id='more".$moreid."' style='display:none'>";
 					echo gettext('Notice!');
-					echo "<p>".$msg."</p>";
+					echo "<br />".$msg;
 					echo "</div>";
 				}
 				$dsp .= ' '.trim($msg);
@@ -857,11 +858,11 @@ if (!$setup_checked) {
 				$c++;
   		}
   		$selector .= '</select>';
-  		$chmodselector =	'<form>'.
+  		$chmodselector =	'<form action="#">'.
 												sprintf(gettext('Change file/folder permissions mask: %s'),$selector).
-												'</form>';
+												'</form><br />';
  		} else {
- 			$chmodselector = gettext('You must be logged in to change permissions.');
+ 			$chmodselector = '<p>'.gettext('You must be logged in to change permissions.').'</p>';
  		}
 		if (array_key_exists($chmod, $permission_names)) {
 			$value = sprintf(gettext('<em>%1$s</em> (<code>0%2$o</code>)'),$permission_names[$chmod],$chmod);
@@ -875,7 +876,7 @@ if (!$setup_checked) {
 		}
  		$msg = sprintf(gettext('File/Folder Permissions [are %s]'),$value);
  		checkMark($severity, $msg, $msg,
-	 							gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'<br /><br />'.
+	 							'<p>'.gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'</p>'.
 	 							$chmodselector);
  	}
 	if ($sql) {
@@ -902,7 +903,7 @@ if (!$setup_checked) {
 			$good = checkMark(false, '', gettext("MySQL setup in <em>zp-config.php</em>"), $connectDBErr) && $good;
 			// input form for the information
 			?>
-
+<li>
 <div class="sqlform">
 <p>
 <?php echo gettext("Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
@@ -959,7 +960,7 @@ if ($debug) {
 </table>
 </form>
 </div>
-
+</li>
 <?php
 		} else {
 			if ($connectDBErr) {
@@ -1331,7 +1332,7 @@ if ($debug) {
 		}
 		if (!empty($rw)) {
 			$msg = sprintf(gettext("<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
-			$mod = "&mod_rewrite=$rw";
+			$mod = "&amp;mod_rewrite=$rw";
 		}
 	}
 	if ($Apache || $ch != -2) {
@@ -1379,7 +1380,7 @@ if ($debug) {
 		checkmark(-1, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup could not find the  <em>example_robots.txt</em> file.'));
 	} else {
 		if (file_exists(dirname(dirname(__FILE__)).'/robots.txt')) {
-			checkmark(-2, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), gettext('Setup did not create a <em>robots.txt</em> file because one already exists.'));
+			checkmark(-2, gettext('<em>robots.txt</em> file'), gettext('<em>robots.txt</em> file [Not created]'), '<p>'.gettext('Setup did not create a <em>robots.txt</em> file because one already exists.').'</p>');
 		} else {
 			$text = explode('****delete all lines above and including this one *******'."\n", $robots);
 			$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -1449,7 +1450,8 @@ if ($debug) {
 			require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
 			printLanguageSelector();
 		}
-		echo "</div>";
+		echo "\n</div><!-- content -->";
+		echo "\n</div><!-- main -->";
 		printadminfooter();
 		echo "</body>";
 		echo "</html>";
@@ -1505,7 +1507,8 @@ if (file_exists(CONFIGFILE)) {
 					require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
 					printLanguageSelector();
 				}
-				echo "\n</div>";
+				echo "\n</div><!-- content -->";
+				echo "\n</div><!-- main -->";
 				printAdminFooter();
 				echo "\n</body>";
 				echo "\n</html>";
@@ -2248,7 +2251,9 @@ if (file_exists(CONFIGFILE)) {
 			$th = '';
 		}
 		?>
-		<a href="?checked&amp;<?php echo $task.$mod.$th; ?>" title="<?php echo gettext("create and or update the database tables."); ?>" style="font-size: 15pt; font-weight: bold;"><img src="images/<?php echo $img; ?>" /><?php echo gettext("Go"); ?></a>
+		<a href="?checked&amp;<?php echo $task.$mod.$th; ?>" title="<?php echo gettext("create and or update the database tables."); ?>" style="font-size: 15pt; font-weight: bold;">
+		<img src="images/<?php echo $img; ?>" alt=""/>
+		<?php echo gettext("Go"); ?></a>
 		</p>
 		<br clear="all" /><br clear="all" />
 		<?php
@@ -2272,7 +2277,9 @@ if (file_exists(CONFIGFILE)) {
 }
 
 ?>
-</div>
+</div><!-- content -->
+</div><!-- main -->
+
 <?php
 if ($noxlate > 0) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
@@ -2280,7 +2287,7 @@ if ($noxlate > 0) {
 }
 printAdminFooter();
 ?>
-</div>
+
 </body>
 </html>
 

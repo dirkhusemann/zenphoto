@@ -369,12 +369,12 @@ if (empty($alterrights)) {
 						}
 						if ($pending) {
 						?>
-							<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
+							<input type="checkbox" name="<?php echo $id ?>-confirmed" value="<?php echo NO_RIGHTS; echo $alterrights; ?>" />
 							<?php echo gettext("Authenticate user"); ?>
 							<?php
 						} else {
 							?>
-							<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
+							<input type = "hidden" name="<?php echo $id ?>-confirmed"	value="<?php echo NO_RIGHTS; ?>" />
 							<?php 
 						}
 			 			?>

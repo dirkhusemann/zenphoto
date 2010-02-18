@@ -75,7 +75,7 @@ jQuery(document).ready(function(){
 			if (targetname) {
 				var targetdir = prompt('<?php echo gettext('New directory name? (eg. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
 				if (targetdir) {
-					window.location =('?action=copytheme&amp;source='+encodeURIComponent(source)+'&amp;target='+encodeURIComponent(targetdir)+'&amp;name='+encodeURIComponent(targetname));
+					window.location =('?action=copytheme&source='+encodeURIComponent(source)+'&target='+encodeURIComponent(targetdir)+'&name='+encodeURIComponent(targetname));
 					return false;
 				}
 			}

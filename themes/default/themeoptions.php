@@ -24,7 +24,7 @@ class ThemeOptions {
 		if ($option == 'Theme_colors') {
 			$theme = basename(dirname(__FILE__));
 			$themeroot = SERVERPATH . "/themes/$theme/styles";
-			echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+			echo '<select id="Default_themeselect_colors" name="' . $option . '"' . ">\n";
 			generateListFromFiles($currentValue, $themeroot , '.css');
 			echo "</select>\n";
 		}

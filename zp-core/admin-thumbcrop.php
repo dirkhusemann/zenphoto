@@ -245,8 +245,14 @@ printAdminHeader();
 								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br />
 								<br />	
 								<p class="buttons">
-								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onclick="window.location='admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>">
+								<img src="images/pass.png" alt="" />
+								<strong><?php echo gettext("Save"); ?></strong>
+								</button>
+								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onclick="window.location='admin-edit.php?page=edit&album=<?php echo urlencode($albumname); ?>&subpage=<?php echo $subpage; ?>&tagsort=<?php echo $tagsort; ?>&tab=imageinfo'">
+								<img src="images/reset.png" alt="" />
+								<strong><?php echo gettext("Reset"); ?></strong>
+								</button>
 								</p><br />
 								
 								<?php

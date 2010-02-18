@@ -38,7 +38,7 @@ class ThemeOptions {
 			case 'Theme_colors':
 				$theme = basename(dirname(__FILE__));
 				$themeroot = SERVERPATH . "/themes/$theme/styles";
-				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				echo '<select id="EF_themeselect_colors" name="' . $option . '"' . ">\n";
 				generateListFromFiles($currentValue, $themeroot , '.css');
 				echo "</select>\n";
 				break;
@@ -47,7 +47,7 @@ class ThemeOptions {
 				$gallery = new Gallery();
 				$theme = $gallery->getCurrentTheme();
 				$themeroot = SERVERPATH . "/themes/$theme/images";
-				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				echo '<select id="EF_themeselect_logo" name="' . $option . '"' . ">\n";
 				echo '<option value="">'.gettext('*no logo selected').'</option>';
 				generateListFromFiles($currentValue, $themeroot , '.png');
 				echo "</select>\n";

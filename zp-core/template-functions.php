@@ -115,7 +115,7 @@ function printAdminToolbox($id='admin') {
 			function newAlbum(folder,albumtab) {
 				var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 				if (album) {
-					window.location = '<?php echo $zf; ?>/admin-edit.php?action=newalbum&amp;album='+encodeURIComponent(folder)+'&amp;name='+encodeURIComponent(album)+'&amp;albumtab='+albumtab;
+					window.location = '<?php echo $zf; ?>/admin-edit.php?action=newalbum&album='+encodeURIComponent(folder)+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
 				}
 			}
 		</script>
