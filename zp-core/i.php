@@ -87,8 +87,9 @@ if (isset($_GET['wmk']) && !$adminrequest) { //11
 	$args[11] = $_GET['wmk'];
 }
 $args [12] = $adminrequest; //12
-if (isset($_GET['gray'])) {
-	$args[12] = $_GET['gray'];
+
+if (isset($_GET['gray'])) {	//13
+	$args[13] = $_GET['gray'];
 }
 	
 if ( !isset($_GET['s']) && !isset($_GET['w']) && !isset($_GET['h'])) {

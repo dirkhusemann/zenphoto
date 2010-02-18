@@ -974,7 +974,7 @@ class _Image extends PersistentObject {
 		} else {
 			$wmt = NULL;
 		}
-		$args = getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, $wmt, NULL, NULL), $this->album->name);
+		$args = getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, $wmt, NULL, $gray), $this->album->name);
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,	$args);
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
