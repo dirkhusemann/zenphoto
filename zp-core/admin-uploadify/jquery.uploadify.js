@@ -1,6 +1,6 @@
 /*
-Uploadify v2.0.3
-Release Date: August 3, 2009
+Uploadify v2.1.0
+Release Date: August 24, 2009
 
 Copyright (c) 2009 Ronnie Garcia, Travis Nickels
 
@@ -96,6 +96,9 @@ if(jQuery)(
 					if (settings.queueID == false) {
 						jQuery("#" + jQuery(this).attr('id') + "Uploader").after('<div id="' + jQuery(this).attr('id') + 'Queue" class="uploadifyQueue"></div>');
 					}
+				}
+				if (typeof(settings.onOpen) == 'function') {
+					jQuery(this).bind("uploadifyOpen", settings.onOpen);
 				}
 				jQuery(this).bind("uploadifySelect", {'action': settings.onSelect, 'queueID': settings.queueID}, function(event, ID, fileObj) {
 					if (event.data.action(event, ID, fileObj) !== false) {

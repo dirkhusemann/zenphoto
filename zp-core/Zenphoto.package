@@ -436,8 +436,10 @@ zp-core/js/nestedsortables
 zp-core/js/nestedsortables/grippie.png
 zp-core/js/nestedsortables/inestedsortable.js
 zp-core/js/nestedsortables/interface-1.2.js
+zp-core/js/sprintf.js
 zp-core/js/tag.js
 zp-core/js/toggleElements.css
+zp-core/js/upload.js
 zp-core/js/zenphoto.js.php
 zp-core/lib-auth.php
 zp-core/lib-encryption.php

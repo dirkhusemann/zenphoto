@@ -5,9 +5,14 @@ if(!function_exists("json_encode")) {
 	require_once('../lib-json.php');
 }
 $fileArray = array();
+if (isset($_POST['folder'])) {
+	$albumparmas = explode(':', sanitize($_POST['folder'],3),3);
+	$folder = $albumparmas[1];
+} else {
+	$folder = '';
+}
 foreach ($_POST as $key => $value) {
-	if ($key != 'folder') {
-		$folder = str_replace('/'.ZENFOLDER.'/','',sanitize($_POST['folder'])); // hack to remove the 
+	if ($key != 'folder') {	
 		$name = seoFriendly($value);
 		if (strpos($name,'.')===0) $name = md5($value).$name; // soe stripped out all the name.
 		$targetPath = getAlbumFolder().internalToFilesystem($folder.'/'.$name);
@@ -16,5 +21,12 @@ foreach ($_POST as $key => $value) {
 		}
 	}
 }
-echo json_encode($fileArray);
+
+if (count($fileArray) > 0) {
+	$r =  json_encode($fileArray);
+} else {
+	$r = '{}';
+}
+echo $r;
+
 ?>
