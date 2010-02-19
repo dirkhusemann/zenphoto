@@ -28,9 +28,9 @@ function flag_thumbnail_insert_class($html) {
 			$img = WEBPATH.'/'.ZENFOLDER.'/images/action.png';
 		}
 		if ($img) {
-			$html = '<div style="position:relative; display:block;">'."\n".
+			$html = '<span style="position:relative; display:block;">'."\n".
 							$html."\n".
-							'<img src="'.$img.'" alt="" style="position: absolute;top: 4px;left: 4px;"/>'."\n".'</div>'."\n";
+							'<img src="'.$img.'" alt="" style="position: absolute;top: 4px;left: 4px;"/>'."\n".'</span>'."\n";
 		}
 	}
 	return $html;
