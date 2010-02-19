@@ -6,7 +6,7 @@
  * @package plugins
  * @subpackage zenpage
  */
-include("zp-functions.php"); ?>
+include('zp-functions.php'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -16,17 +16,17 @@ include("zp-functions.php"); ?>
 <?php printTextEditorConfigJS(); ?>
 <?php zenpageJSCSS(); codeblocktabsJS(); ?>
 <script type="text/javascript">
-<?php if(!isset($_GET["add"])) { // prevent showing the message when adding page or article ?>
+<?php if(!isset($_GET['add'])) { // prevent showing the message when adding page or article ?>
 $(document).ready(function() {
 	$('#date').change(function() {
 		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$(".scheduledpublishing").html('<?php echo addslashes(gettext("Future publishing date:")); ?>');
+			$(".scheduledpublishing").html('<?php echo addslashes(gettext('Future publishing date:')); ?>');
 		} else {
 			$(".scheduledpublishing").html('');
 		}
 	});
 		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$(".scheduledpublishing").html('<?php echo addslashes(gettext("Future publishing date:")); ?>');
+			$(".scheduledpublishing").html('<?php echo addslashes(gettext('Future publishing date:')); ?>');
 		} else {
 			$(".scheduledpublishing").html('');
 		}
@@ -34,7 +34,7 @@ $(document).ready(function() {
 		if($('#expiredate').val() > '<?php echo date('Y-m-d H:i:s'); ?>' || $('#expiredate').val() === '') {
 			$(".expire").html('');
 		} else {
-			$(".expire").html('<?php echo addslashes(gettext("This is not a future date!")); ?>');
+			$(".expire").html('<?php echo addslashes(gettext('This is not a future date!')); ?>');
 		}
 	});
 	if(jQuery('#edittitlelink:checked').val() != 1) {
@@ -56,22 +56,22 @@ $(document).ready(function() {
 	$result = '';
 	$saveitem = '';
 	printLogoAndLinks();
-	echo "<div id=\"main\">";
-	if(is_AdminEditPage("newsarticle")) {
-		printTabs("articles");
+	echo '<div id="main">';
+	if(is_AdminEditPage('newsarticle')) {
+		printTabs('articles');
 	} else {
-		printTabs("pages");
+		printTabs('pages');
 	}
-	echo "<div id=\"content\">";
+	echo '<div id="content">';
 
 	if(empty($_GET['pagenr'])) {
 		$page = "";
 	} else {
-		$page = "&amp;pagenr=".$_GET['pagenr'];
+		$page = '&amp;pagenr='.$_GET['pagenr'];
 	}
 
-	if(is_AdminEditPage("newsarticle")) {
-		checkRights("articles");
+	if(is_AdminEditPage('newsarticle')) {
+		checkRights('articles');
 		if (!empty($page)) {
 			$zenphoto_tabs['articles']['subtabs'][gettext('articles')] .= $page;
 		}
@@ -90,16 +90,16 @@ $(document).ready(function() {
 		if(isset($_GET['del'])) {
 			deleteArticle();
 		}
-		$admintype = "newsarticle";
-		$additem = gettext("Add Article");
-		$updateitem = gettext("Update Article");
-		$saveitem = gettext("Save Article");
-		$deleteitem = gettext("Delete Article");
-		$deletemessage = js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"));
+		$admintype = 'newsarticle';
+		$additem = gettext('Add Article');
+		$updateitem = gettext('Update Article');
+		$saveitem = gettext('Save Article');
+		$deleteitem = gettext('Delete Article');
+		$deletemessage = js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!'));
 		$themepage = ZENPAGE_NEWS;
 	}
 
-	if(is_AdminEditPage("page")) {
+	if(is_AdminEditPage('page')) {
 		if(isset($_GET['titlelink'])) {
 			$result = new ZenpagePage(urldecode($_GET['titlelink']));
 		} else if(isset($_GET['update'])) {
@@ -111,12 +111,12 @@ $(document).ready(function() {
 		if(isset($_GET['del'])) {
 			deletePage();
 		}
-		$admintype = "page";
-		$additem = gettext("Add Page");
-		$updateitem = gettext("Update Page");
-		$saveitem = gettext("Save Page");
-		$deleteitem = gettext("Delete Page");
-		$deletemessage = js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!"));
+		$admintype = 'page';
+		$additem = gettext('Add Page');
+		$updateitem = gettext('Update Page');
+		$saveitem = gettext('Save Page');
+		$deleteitem = gettext('Delete Page');
+		$deletemessage = js_encode(gettext('Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!'));
 		$themepage = ZENPAGE_PAGES;
 	}
 
@@ -124,35 +124,35 @@ $(document).ready(function() {
 <h1>
 <?php
 if(is_object($result)) {
-	if(is_AdminEditPage("newsarticle")) {
-		echo gettext("Edit Article:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"news");
+	if(is_AdminEditPage('newsarticle')) {
+		echo gettext('Edit Article:'); ?> <em><?php checkForEmptyTitle($result->getTitle(),'news');
 		if(is_object($result)) {
 			if($result->getDatetime() >= date('Y-m-d H:i:s')) {
-				echo " <small><strong id='scheduldedpublishing'>".gettext("(Article scheduled for publishing)")."</strong></small>";
+				echo ' <small><strong id="cheduldedpublishing">'.gettext('(Article scheduled for publishing)').'</strong></small>';
 				if($result->getShow() != 1) {
-					echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the article is also set to 'published'")."</small></p>";
+					echo '<p class="scheduledate"><small>'.gettext('Note: Scheduled publishing is not active unless the article is also set to <em>published</em>').'</small></p>';
 				}
 			}
 		}
 	 ?>
 		</em>
-<? } else if(is_AdminEditPage("page")) {
-	echo gettext("Edit Page:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"page");
+<? } else if(is_AdminEditPage('page')) {
+	echo gettext('Edit Page:'); ?> <em><?php checkForEmptyTitle($result->getTitle(),'page');
 	if(is_object($result)) {
 		if($result->getDatetime() >= date('Y-m-d H:i:s')) {
-			echo " <small><strong id='scheduldedpublishing'>".gettext("(Page scheduled for publishing)")."</strong></small>";
+			echo ' <small><strong id="scheduldedpublishing">'.gettext('(Page scheduled for publishing)').'</strong></small>';
 			if($result->getShow() != 1) {
-				echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the page is also set to 'published'")."</small></p>";
+				echo '<p class="scheduledate"><small>'.gettext('Note: Scheduled publishing is not active unless the page is also set to <em>published</em>').'</small></p>';
 			}
 		}
 	}
 	?> </em>
 <?php } ?>
 <?php } else {
-	if(is_AdminEditPage("newsarticle")) {
-		echo gettext("Add Article");
-	} else if(is_AdminEditPage("page")) {
-		echo gettext("Add Page");
+	if(is_AdminEditPage('newsarticle')) {
+		echo gettext('Add Article');
+	} else if(is_AdminEditPage('page')) {
+		echo gettext('Add Page');
 	}
 } ?>
 </h1>

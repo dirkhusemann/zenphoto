@@ -11,7 +11,7 @@ include("zp-functions.php"); ?>
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
    <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title><?php echo gettext("zenphoto administration"); ?></title>
+<title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php zenpageJSCSS(); ?>  
 <script type="text/javascript">
@@ -37,11 +37,11 @@ printLogoAndLinks();
 ?>
 <div id="main">
 	<?php
-	printTabs("articles");
+	printTabs('articles');
 	?>
 	<div id="content">
 		<?php
-		checkRights("categories"); 
+		checkRights('categories'); 
 		printSubtabs('articles');
 		?>
 		<div id="tab_articles" class="tabbox">
@@ -51,7 +51,7 @@ printLogoAndLinks();
 			  deleteCategory();
 			}
 			if(isset($_GET['hitcounter'])) {
-				resetPageOrArticleHitcounter("cat");
+				resetPageOrArticleHitcounter('cat');
 			}
 			if(isset($_GET['save'])) {
 			  addCategory();
@@ -64,17 +64,17 @@ printLogoAndLinks();
 			?> 
 			<h1>
 			<?php 
-			if(isset($_GET["edit"])) {
-				echo gettext("Edit Category:")."<em> "; checkForEmptyTitle(get_language_string($result['cat_name']),"category"); echo "</em>";
+			if(isset($_GET['edit'])) {
+				echo gettext('Edit Category:').'<em> '; checkForEmptyTitle(get_language_string($result['cat_name']),'category'); echo '</em>';
 			} else {
-				echo gettext("Categories"); 
+				echo gettext('Categories'); 
 			}
 			?>
 			<span class="zenpagestats"><?php printCategoriesStatistic();?></span></h1>
 			<p class="buttons">
-			<span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
-			<?php if(isset($_GET["edit"])) { ?>
-				<a href="admin-categories.php?tab=categories"><img src="images/add.png" alt="" /><?php echo gettext("Add New Category"); ?></a>
+			<span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext('Usage tips'); ?></a></span>
+			<?php if(isset($_GET['edit'])) { ?>
+				<a href="admin-categories.php?tab=categories"><img src="images/add.png" alt="" /><?php echo gettext('Add New Category'); ?></a>
 			<?php } ?>
 			</p>
 			<br clear="all" /><br clear="all" />
@@ -86,44 +86,44 @@ printLogoAndLinks();
 			</div>
 			<div style="padding:15px; margin-top: 10px">
 				<?php
-				if(isset($_GET["edit"])) {
+				if(isset($_GET['edit'])) {
 					$formname = 'update';
-					$formaction = "admin-categories.php?edit&amp;update&amp;tab=categories";
+					$formaction = 'admin-categories.php?edit&amp;update&amp;tab=categories';
 				} else {
 					$formname = 'addcat';
-					$formaction = "admin-categories.php?save&amp;tab=categories";
+					$formaction = 'admin-categories.php?save&amp;tab=categories';
 				}
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
 				<?php
-				if(isset($_GET["edit"])) {
+				if(isset($_GET['edit'])) {
 					?>
 					<input type="hidden" name="id" value="<?php echo $result['id'];?>" />
-					<input type="hidden" name="catlink-old" type="text" id="catlink-old" value="<?php echo $result['cat_link']; ?>" />
+					<input type="hidden" name="catlink-old" id="catlink-old" value="<?php echo $result['cat_link']; ?>" />
 					<?php
 				}
 				?>
 					<table>
 			    	<tr> 
 				     <?php
-				     if(isset($_GET["edit"])) {
-				     	$cattitlemessage = gettext("Category Title:");
+				     if(isset($_GET['edit'])) {
+				     	$cattitlemessage = gettext('Category Title:');
 				     } else {
-				     	$cattitlemessage =  gettext("New Category Title:");
+				     	$cattitlemessage =  gettext('New Category Title:');
 				     }
 				     	?>
 				      <td class="topalign-padding"><?php echo $cattitlemessage; ?></td>
-				      <td><?php if(isset($_GET['edit'])) { print_language_string_list_zenpage($result['cat_name'],"category",false) ; } else { print_language_string_list_zenpage("","category",false) ;} ?>
-				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo 'checked="checked"'; } ?> /> <?php echo gettext("Enable permaTitleLink"); ?>
+				      <td><?php if(isset($_GET['edit'])) { print_language_string_list_zenpage($result['cat_name'],'category',false) ; } else { print_language_string_list_zenpage('','category',false) ;} ?>
+				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo 'checked="checked"'; } ?> /> <?php echo gettext('Enable permaTitleLink'); ?>
 				      </td>
 				    </tr>
 						<?php
 						if(isset($_GET['edit'])) {
 							?>
 					    <tr> 
-					      <td class="topalign-padding"><?php echo gettext("Category TitleLink:"); ?></td>
+					      <td class="topalign-padding"><?php echo gettext('Category TitleLink:'); ?></td>
 					      <td><input name="catlink" type="text" size="85" id="catlink" value="<?php echo $result['cat_link']; ?>" />
-					      <input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext("Edit TitleLink"); ?>
+					      <input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext('Edit TitleLink'); ?>
 					      </td>
 					    </tr>
 							<?php
@@ -133,9 +133,9 @@ printLogoAndLinks();
 				      <td colspan="3">
 				    	<?php 
 				    	if(isset($_GET['edit'])) { 
-				     		$submittext =  gettext("Update Category");
+				     		$submittext =  gettext('Update Category');
 				    	} else {
-				     		$submittext =  gettext("Save New Category");
+				     		$submittext =  gettext('Save New Category');
 				    	}
 				     	?>
 				      	<p class="buttons">
@@ -145,27 +145,27 @@ printLogoAndLinks();
 					      	</button>
 				      	</p>
 								<p class="buttons">
-									<button type="reset" title="<?php echo gettext("Reset"); ?>">
+									<button type="reset" title="<?php echo gettext('Reset'); ?>">
 										<img src="../../images/reset.png" alt="" />
-										<strong><?php echo gettext("Reset"); ?></strong>
+										<strong><?php echo gettext('Reset'); ?></strong>
 									</button>
 								</p>
-								<br style="clear:both" /><br />
+								<br clear="all" /><br />
 							</td>	
 			    	</tr>
 			 		</table>
 				</form>
 				<table class="bordered">
 				 <tr> 
-				  <th colspan="4"><strong><?php echo gettext("Edit this Category"); ?></strong></th>
+				  <th colspan="4"><strong><?php echo gettext('Edit this Category'); ?></strong></th>
 				  </tr>
 					<?php printCategoryList(); ?>
 				</table>
 				
 			</div> <!-- box -->
 			<ul class="iconlegend">
-				<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>
-				<li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete category"); ?></li>
+				<li><img src="../../images/reset.png" alt="" /><?php echo gettext('Reset hitcounter'); ?></li>
+				<li><img src="../../images/fail.png" alt="" /><?php echo gettext('Delete category'); ?></li>
 			</ul>
 		</div> <!-- tab_articles -->
 	</div> <!-- content -->
