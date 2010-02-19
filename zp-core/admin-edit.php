@@ -601,7 +601,7 @@ $alb = removeParentAlbumNames($album);
 	?>
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
-			<form name="albumedit1" AUTOCOMPLETE="OFF" action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post">
+			<form name="albumedit1" autocomplete="off" action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post">
 				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 				<input type="hidden"	name="savealbuminfo" value="1" />
 				<?php printAlbumEditForm(0, $album, true); ?>
@@ -745,7 +745,7 @@ $alb = removeParentAlbumNames($album);
 		}
 		if ($allimagecount) {
 			?>
-		<form name="albumedit2"	action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE="OFF">
+		<form name="albumedit2"	action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post" autocomplete="off">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
@@ -1244,7 +1244,7 @@ if (isset($_GET['saved'])) {
 	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 <div class="tabbox">
 
-<form name="albumedit" AUTOCOMPLETE="OFF"	action="?page=edit&amp;action=save<?php echo $albumdir ?>" method="POST">
+<form name="albumedit" autocomplete="off"	action="?page=edit&amp;action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
 	$currentalbum = 0;

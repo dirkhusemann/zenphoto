@@ -142,7 +142,7 @@ echo '</head>'."\n";
 							echo gettext("Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
 							?>
 						</p>
-						<form action="?action=savegroups&amp;tab=groups" method="post" AUTOCOMPLETE="OFF">
+						<form action="?action=savegroups&amp;tab=groups" method="post" autocomplete="off">
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
@@ -283,7 +283,7 @@ echo '</head>'."\n";
 							echo gettext("Assign users to groups.");
 							?>
 						</p>
-						<form action="?action=saveauserassignments" method="post" AUTOCOMPLETE="OFF">
+						<form action="?action=saveauserassignments" method="post" autocomplete="off">
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>

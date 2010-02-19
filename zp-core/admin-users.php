@@ -224,7 +224,7 @@ printSubtabs($_current_tab, 'users');
 	
 	
 ?> 
-<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" AUTOCOMPLETE="OFF">
+<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" autocomplete="off">
 <input type="hidden" name="saveadminoptions" value="yes" />
 <?php			
 if (empty($alterrights)) {

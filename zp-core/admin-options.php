@@ -454,7 +454,7 @@ printSubtabs($_current_tab, 'general');
 if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+		<form action="?action=saveoptions" method="post" autocomplete="off">
 			<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
 				<tr>
@@ -754,7 +754,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+		<form action="?action=saveoptions" method="post" autocomplete="off">
 			<input	type="hidden" name="savegalleryoptions" value="yes" />
 			<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 			<table class="bordered">
@@ -1026,7 +1026,7 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_search" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+		<form action="?action=saveoptions" method="post" autocomplete="off">
 			<input	type="hidden" name="savesearchoptions" value="yes" />
 			<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 			<table class="bordered">
@@ -1173,7 +1173,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_rss" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+		<form action="?action=saveoptions" method="post" autocomplete="off">
 		<input	type="hidden" name="saverssoptions" value="yes" />
 	<table class="bordered">
 		<tr>
@@ -1298,7 +1298,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	}
 		?>
 	<div id="tab_image" class="tabbox">
-	<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+	<form action="?action=saveoptions" method="post" autocomplete="off">
 	<input type="hidden" name="saveimageoptions" value="yes" /> 
 	<p align="center">
 	<?php echo gettext('See also the <a href="?tab=theme">Theme Options</a> tab for theme specific image options.'); ?>
@@ -1725,7 +1725,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_comments" class="tabbox">
-	<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+	<form action="?action=saveoptions" method="post" autocomplete="off">
 	<input 	type="hidden" name="savecommentoptions" value="yes" />
 	<table class="bordered">
 		<tr>
@@ -1878,7 +1878,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 		}
 	}
 	?>
-	<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+	<form action="?action=saveoptions" method="post" autocomplete="off">
 		<input type="hidden" name="savethemeoptions" value="yes" />
 		<input type="hidden" name="optiontheme" value="<?php echo $optiontheme; ?>" />
 		<input type="hidden" name="old_themealbum" value="<?php echo urlencode($alb); ?>" />
@@ -2108,7 +2108,7 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 	$_zp_plugin_count = 0;
 	?>
 	<div id="tab_plugin" class="tabbox">
-		<form action="?action=saveoptions" method="post" AUTOCOMPLETE="OFF">
+		<form action="?action=saveoptions" method="post" autocomplete="off">
 			<input type="hidden" name="savepluginoptions" value="yes" />
 			<table class="bordered">
 				<tr>

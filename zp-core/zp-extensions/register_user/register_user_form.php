@@ -5,7 +5,7 @@
  * @package plugins 
  */
 ?>
-	<form action="?action=register_user" method="post" AUTOCOMPLETE="OFF">
+	<form action="?action=register_user" method="post" autocomplete="off">
 		<input type="hidden" name="register_user" value="yes" />
 		<table class="register_user">
 		<tr>
