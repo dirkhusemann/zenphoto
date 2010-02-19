@@ -129,7 +129,6 @@ printAdminHeader();
 <link rel="stylesheet" href="admin-uploadify/uploadify.css" type="text/css" />
 <script type="text/javascript">
 var uploadifier_replace_message =  "<?php echo gettext('Do you want to replace the file %s?'); ?>";
-// sprintf function for javascript
 </script>
 
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/sprintf.js"></script>
@@ -215,6 +214,7 @@ if (ini_get('safe_mode')) { ?>
 		}
 		$defaultjs = "
 			<script type=\"text/javascript\">
+				//<![CDATA[
 				function soejs(fname) {
 					fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
 					fname = fname.replace(/^\s+|\s+$/g, '');
@@ -222,9 +222,11 @@ if (ini_get('safe_mode')) { ?>
 					fname = fname.replace(/--*/g, '-');
 					return fname;
 				}
+				//]]>
 			</script>
 		";
-		echo zp_apply_filter('seoFriendly_js', $defaultjs);
+
+		echo zp_apply_filter('seoFriendly_js', $defaultjs);	
 		?>
 		<script type="text/javascript">
 			function buttonstate(good) {
@@ -239,7 +241,6 @@ if (ini_get('safe_mode')) { ?>
 				var sel = document.getElementById('albumselectmenu');
 				buttonstate(albumSwitch(sel, true, '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));
 			}
-
 		</script>
 		<select id="albumselectmenu" name="albumselect" onchange="albumSelect()">
 			<?php
@@ -401,7 +402,7 @@ if (ini_get('safe_mode')) { ?>
 																		if (data.errors) {
 																			return false;
 																		} else {
-																			window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+encodeURIComponent($('#folderdisplay').val());
+																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
 																		}
 																	},
 								<?php

@@ -679,7 +679,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<tr>
 					<td><?php echo gettext("Allowed tags:"); ?></td>
 					<td>
-						<p><textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea></p>
+						<p><textarea name="allowed_tags" style="width: 340px" rows="10" cols="35"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea></p>
 						<p>
 							<label>
 								<input type="checkbox" name="allowed_tags_reset" value="1" />

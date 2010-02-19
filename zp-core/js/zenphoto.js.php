@@ -60,3 +60,6 @@ function confirmDeleteImage(url, message) {
 	}
 }
 
+function launchScript(script, params) {
+	window.location = script+'?'+params.join('&');
+}

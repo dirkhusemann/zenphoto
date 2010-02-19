@@ -46,60 +46,43 @@ if (isset($_GET['prune'])) {
 	$allset = gettext("We're all set to refresh the metadata");
 	$continue = gettext('Continue refreshing the metadata.');
 }
+
 printAdminHeader();
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
-echo "\n" . '<div id="main">';
+
 if (isset($_REQUEST['album'])) {
 	$tab = 'edit';
 } else {
 	$tab = 'home';
 }
-printTabs($tab);
-echo "\n" . '<div id="content">';
-echo "<h1>".$title."</h1>";
-$ret = '';
-if (isset($_GET['refresh']) && db_connect()) {
-	if (isset($_REQUEST['return'])) {
-		$ret = sanitize_path($_REQUEST['return']);
-		if (substr($ret, 0, 1) == '*') {
-			if (empty($ret) || $ret == '*.' || $ret == '*/') {
-				$r = '?page=edit';
-			} else {
-				$r = '?page=edit&amp;album='.urlencode(substr($ret, 1)).'&amp;tab=subalbuminfo';
-			}
+if (isset($_REQUEST['return'])) {
+	$ret = sanitize_path($_REQUEST['return']);
+	if (substr($ret, 0, 1) == '*') {
+		if (empty($ret) || $ret == '*.' || $ret == '*/') {
+			$r = '?page=edit';
 		} else {
-			$r = '?page=edit&amp;album='.urlencode($ret);
+			$r = '?page=edit&amp;album='.urlencode(substr($ret, 1)).'&amp;tab=subalbuminfo';
 		}
 	} else {
-		$r = '';
+		$r = '?page=edit&amp;album='.urlencode($ret);
 	}
+	$backurl = 'admin-edit.php'.$r;
+} else {
+	$ret = $r = '';
+	$backurl = 'admin.php';
+}
+if (isset($_GET['refresh']) && db_connect()) {
 	if (empty($imageid)) {
-		if (empty($r)) {
-			$backurl = 'admin.php';
-		} else {
-			$backurl = 'admin-edit.php'.$r;
-		}
 		?>
-		<h3><?php echo $finished; ?></h3>
-		<p><?php echo gettext('you should return automatically. If not press: '); ?></p>
-		<p><a href="<?php echo $backurl; ?>">&laquo; <?php echo gettext('Back'); ?></a></p>
-		<meta HTTP-EQUIV="REFRESH" content="1; url=<?php echo $backurl; ?>">
+		<meta http-equiv="refresh" content="1; url=<?php echo $backurl; ?>" />
 		<?php
 	} else {
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
 		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret; 
 		?>
-		<h3><?php echo $incomplete; ?></h3>
-		<p><?php echo gettext('This process should continue automatically. If not press: '); ?></p>
-		<p><a href="<?php echo $redirecturl; ?>" title="<?php echo $continue; ?>" style="font-size: 15pt; font-weight: bold;"><?php echo gettext("Continue!"); ?></a></p>
-		<meta HTTP-EQUIV="REFRESH" content="1; url=<?php echo $redirecturl; ?>">
-		<?php 
+		<meta http-equiv="refresh" content="1; url=<?php echo $redirecturl; ?>" />
+		<?php
 	}
-		
 } else if (db_connect()) {
-	echo "<h3>".gettext("database connected")."</h3>";
 	$folder = $albumwhere = $imagewhere = $id = $r = '';
 	if ($type !== 'prune&amp;') {
 		if (isset($_REQUEST['album'])) {
@@ -120,6 +103,47 @@ if (isset($_GET['refresh']) && db_connect()) {
 			$r = " $folder";
 			$albumwhere = "WHERE `parentid`=$id";
 		}
+	}
+	if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
+	if (empty($folder)) {
+		$album = '';
+	} else {
+		$album = '&amp;album='.$folder;
+	}
+	if (!empty($ret)) $ret = '&amp;return='.$ret;
+	$starturl = '?'.$type.'refresh=start'.$album.$ret;
+	if (!empty($id)) {
+		
+	}
+	?>
+	<meta http-equiv="refresh" content="1; url=<?php  echo$starturl; ?>" />
+	<?php
+}
+echo "\n</head>";
+echo "\n<body>";
+printLogoAndLinks();
+echo "\n" . '<div id="main">';
+printTabs($tab);
+echo "\n" . '<div id="content">';
+echo "<h1>".$title."</h1>";
+if (isset($_GET['refresh']) && db_connect()) {
+	if (empty($imageid)) {
+		?>
+		<h3><?php echo $finished; ?></h3>
+		<p><?php echo gettext('you should return automatically. If not press: '); ?></p>
+		<p><a href="<?php echo $backurl; ?>">&laquo; <?php echo gettext('Back'); ?></a></p>
+		<?php
+	} else {
+		?>
+		<h3><?php echo $incomplete; ?></h3>
+		<p><?php echo gettext('This process should continue automatically. If not press: '); ?></p>
+		<p><a href="<?php echo $redirecturl; ?>" title="<?php echo $continue; ?>" style="font-size: 15pt; font-weight: bold;"><?php echo gettext("Continue!"); ?></a></p>
+		<?php 
+	}
+		
+} else if (db_connect()) {
+	echo "<h3>".gettext("database connected")."</h3>";
+	if ($type !== 'prune&amp;') {
 		$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 $albumwhere";
 		query($sql);
 		$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $imagewhere;";
@@ -128,22 +152,13 @@ if (isset($_GET['refresh']) && db_connect()) {
 	if (!empty($folder) && empty($id)) {
 		echo "<p> ".sprintf(gettext("<em>%s</em> not found"),$folder)."</p>";
 	} else {
-		if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
 		if (empty($r)) {
 			echo "<p>".$allset."</p>";
 		} else {
 			echo "<p>".sprintf(gettext("We're all set to refresh the metadata for <em>%s</em>"),$r)."</p>";
 		}
-		if (empty($folder)) {
-			$album = '';
-		} else {
-			$album = '&amp;album='.$folder;
-		}
-		if (!empty($ret)) $ret = '&amp;return='.$ret;
-		$starturl = '?'.$type.'refresh=start'.$album.$ret;
 		echo '<p>'.gettext('This process should start automatically. If not press: ').'</p>';
 		echo "<p><a href=\"$starturl\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
-		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$starturl.'">';
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";

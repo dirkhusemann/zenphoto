@@ -215,6 +215,7 @@ function updatePageSortorder() {
 		processOrder($orderarray['left-to-right'], $order);
 		$parents = array('NULL');
 		foreach ($order as $id=>$orderlist) {
+			$id = str_replace('id_','',$id);
 			$level = count($orderlist);
 			$parents[$level] = $id;
 			$myparent = $parents[$level-1];

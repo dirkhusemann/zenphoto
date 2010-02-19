@@ -1084,6 +1084,7 @@ function filterAccentedCharacters_js($string) {
 	}
 	$js = "
 	<script type=\"text/javascript\">
+		// <![CDATA[
 		function soejs(fname) {
 			fname = fname.replace(/[\/,; ]/g, '-');\n";
 	
@@ -1100,6 +1101,7 @@ function filterAccentedCharacters_js($string) {
 			fname = fname.replace(/--*/g, '-');
 			return fname;
 		}
+		// ]]>
 	</script>";
 	return $js;
 }

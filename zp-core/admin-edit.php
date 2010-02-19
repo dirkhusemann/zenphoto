@@ -422,7 +422,7 @@ if (empty($subtab) || $subtab=='albuminfo') {
 	function newAlbum(folder,albumtab) {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {
-			window.location = '?action=newalbum&album='+folder+'&name='+encodeURIComponent(album)+'&albumtab='+albumtab;
+			launchScript('',['action=newalbum','album='+folder,'name='+encodeURIComponent(album),'albumtab='+albumtab]);
 		}
 	}
 </script>
@@ -699,24 +699,26 @@ $alb = removeParentAlbumNames($album);
 					<strong><?php echo gettext('New subalbum'); ?></strong>
 					</button>
 					</p>
-									<script type="text/javascript">
-jQuery( function($) {
-$('#left-to-right').NestedSortable(
-	{
-		accept: 'page-item1',
-		noNestingClass: "no-nesting",
-		opacity: 0.4,
-		helperclass: 'helper',
-		onChange: function(serialized) {
-			$('#left-to-right-ser')
-			.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
-		},
-		autoScroll: true,
-		handle: '.sort-handle'
-	}
-);
-});
-</script>
+					<script type="text/javascript">
+					// <![CDATA[
+					jQuery( function($) {
+					$('#left-to-right').NestedSortable(
+						{
+							accept: 'page-item1',
+							noNestingClass: "no-nesting",
+							opacity: 0.4,
+							helperclass: 'helper',
+							onChange: function(serialized) {
+								$('#left-to-right-ser')
+								.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
+							},
+							autoScroll: true,
+							handle: '.sort-handle'
+						}
+					);
+					});
+					// ]]>
+					</script>
 				</form>
 				<br clear="all" />
 		</div><!-- subalbum -->
@@ -1372,23 +1374,25 @@ if (isset($_GET['saved'])) {
 		</p>
 
 		<script type="text/javascript">
-jQuery( function($) {
-$('#left-to-right').NestedSortable(
-	{
-		accept: 'page-item1',
-		noNestingClass: "no-nesting",
-		opacity: 0.4,
-		helperclass: 'helper',
-		onChange: function(serialized) {
-			$('#left-to-right-ser')
-			.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
-		},
-		autoScroll: true,
-		handle: '.sort-handle'
-	}
-);
-});
-</script>
+		// <![CDATA[
+		jQuery( function($) {
+		$('#left-to-right').NestedSortable(
+			{
+				accept: 'page-item1',
+				noNestingClass: "no-nesting",
+				opacity: 0.4,
+				helperclass: 'helper',
+				onChange: function(serialized) {
+					$('#left-to-right-ser')
+					.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
+				},
+				autoScroll: true,
+				handle: '.sort-handle'
+			}
+		);
+		});
+		// ]]>
+		</script>
 
 		</form>
 		<br clear="all" />

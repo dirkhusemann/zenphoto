@@ -49,12 +49,14 @@ class captcha {
 		$captchaCode = $this->generateCaptcha($img);
 		?>
 		<script type="text/javascript">
-			$(document).ready(function() { 	
-					$('#zenphoto_captcha_font').change(function(){
-						var imgsrc = '<img src="<?php echo $img; ?>&amp;f='+$('#zenphoto_captcha_font').val()+'" alt="" />';
-						$('#zenphoto_captcha_image_loc').html(imgsrc);
-					});	
-			});
+		// <![CDATA[
+		$(document).ready(function() { 	
+				$('#zenphoto_captcha_font').change(function(){
+					var imgsrc = '<img src="<?php echo $img; ?>&amp;f='+$('#zenphoto_captcha_font').val()+'" alt="" />';
+					$('#zenphoto_captcha_image_loc').html(imgsrc);
+				});	
+		});
+		// ]]>
 		</script>
 		<span id="zenphoto_captcha_image_loc"><img src="<?php echo $img; ?>" alt="" /></span>
 		<?php
