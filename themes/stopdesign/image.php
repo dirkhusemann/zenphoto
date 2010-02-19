@@ -55,7 +55,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 				if ($ls) {
 					$wide = '';
 				} else {
-					$wide = "style=\"width:".($w+22)."px;\"";
+					$wide = " style=\"width:".($w+22)."px;\"";
 				}
 			?>
 			<div class="main" <?php echo $wide; ?>>

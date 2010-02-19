@@ -164,7 +164,7 @@ if(is_object($result)) {
 	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
 <?php } ?>
 <strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
-							<img src="images/folder.png" alt=""/> <?php echo gettext("Manage files"); ?></a></strong>
+							<img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a></strong>
 <span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
 <?php if(is_object($result)) { ?>
 	<a href="../../../index.php?p=<?php echo $themepage; ?>&amp;title=<?php printIfObject($result,"titlelink") ;?>" title="<?php echo gettext("View"); ?>"><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></a>

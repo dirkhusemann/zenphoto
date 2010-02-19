@@ -2603,7 +2603,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 			?>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 					<span style="white-space:nowrap">
-						<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $id.'-'.$rightselement; ?>"
+						<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $rightselement.'-'.$id; ?>"
 								value="<?php echo $rightsvalue; ?>"<?php if ($rights & $rightsvalue) echo ' checked="checked"';
 								echo $alterrights; ?> /> <?php echo $name; ?></label>
 					</span>

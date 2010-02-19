@@ -332,15 +332,6 @@ if (ini_get('safe_mode')) { ?>
 
 		<hr />
 
-		<script type="text/javascript">
-			function switchUploader(url) {
-				var urlx = url+'&album='+$('#albumselectmenu').val()+'&publishalbum='+$('#publishalbum').attr("checked")+
-												'&albumtitle='+encodeURIComponent($('#albumtitle').val())+'&folderdisplay='+encodeURIComponent($('#folderdisplay').val())+
-												'&autogen='+$('#autogen').attr("checked");
-				if ($('#newalbumcheckbox').attr("checked")) urlx = urlx+'&new';
-				window.location = urlx;
-			}
-		</script>
 		<?php
 		$extensions = '*.zip';
 		$types = array_merge($_zp_supported_images, array_keys($_zp_extra_filetypes)); // supported extensions
@@ -523,11 +514,13 @@ if (ini_get('safe_mode')) { ?>
 	?>
 </script>
 </div>
+</div>
 <?php
 printAdminFooter();
-echo "\n</body>";
-echo "\n</html>";
 ?>
+</body>
+</html>
+
 
 
 

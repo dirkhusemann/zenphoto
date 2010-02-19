@@ -234,30 +234,30 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
 		
 	return $html.
 	 '<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Website:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_website" value="'.$address['website'].'"></td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Website:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_website" value="'.$address['website'].'" /></td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" ></td>
 		</tr>'.
 	 '<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Street:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_street" value="'.$address['street'].'"></td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Street:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_street" value="'.$address['street'].'" /></td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" rowspan="5">'.gettext('Address information').'</td>
 		</tr>'.
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("City:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_city" value="'.$address['city'].'"></td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("City:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_city" value="'.$address['city'].'" /></td>
 		</tr>'.
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("State:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_state" value="'.$address['state'].'"></td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("State:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_state" value="'.$address['state'].'" /></td>
 		</tr>'.
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Country:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_country" value="'.$address['country'].'"></td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Country:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_country" value="'.$address['country'].'" /></td>
 		</tr>'.
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Postal code:").'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_postal" value="'.$address['postal'].'"></td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Postal code:").'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top"><input type="text" name="'.$i.'-comment_form_postal" value="'.$address['postal'].'" /></td>
 		</tr>';
 }
 
@@ -405,15 +405,15 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			if (zp_loggedin()) {
 				if (!empty($_zp_current_admin['name'])) {
 					$stored['name'] = $_zp_current_admin['name'];
-					$disabled['name'] = ' DISABLED';
+					$disabled['name'] = ' disabled="disabled"';
 				}
 				if (!empty($_zp_current_admin['email'])) {
 					$stored['email'] = $_zp_current_admin['email'];
-					$disabled['email'] = ' DISABLED';
+					$disabled['email'] = ' disabled="disabled"';
 				}
 				if (!empty($address['website'])) {
 					$stored['website'] = $address['website'];
-					$disabled['website'] = ' DISABLED';
+					$disabled['website'] = ' disabled="disabled"';
 				}
 			}
 			

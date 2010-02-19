@@ -86,7 +86,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<!-- The Image -->
 			<?php
 				$s = getDefaultWidth() + 22;
-				$wide = "style=\"width:".$s."px;";
+				$wide = " style=\"width:".$s."px;";
 				$s = getDefaultHeight() + 22;
 				$high = " height:".$s."px;\"";
 			?>

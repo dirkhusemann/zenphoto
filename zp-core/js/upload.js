@@ -19,3 +19,11 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
 	folder.value = parentfolder + fname + fnamesuffix;
 	return validateFolder(folder, msg1, msg2);
 }
+
+function switchUploader(url) {
+	var urlx = url+'&album='+$('#albumselectmenu').val()+'&publishalbum='+$('#publishalbum').attr("checked")+
+									'&albumtitle='+encodeURIComponent($('#albumtitle').val())+'&folderdisplay='+encodeURIComponent($('#folderdisplay').val())+
+									'&autogen='+$('#autogen').attr("checked");
+	if ($('#newalbumcheckbox').attr("checked")) urlx = urlx+'&new';
+	window.location = urlx;
+}

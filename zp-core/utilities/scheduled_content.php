@@ -108,7 +108,7 @@ printAdminHeader();
 	text-indent: -25px;
 }
 
-.scheduleimagechecklist p {
+.scheduleimagechecklist li p {
 	margin-top: 5px;
 	text-align:center;
 	background: #777;
@@ -284,10 +284,10 @@ if (db_connect()) {
 	?>
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="set_publication" action="" method="post">
-<input type="hidden" name="set_defaults" value="true">
-		<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked'; ?>> <?php echo gettext("Publish albums by default"); ?>
+<input type="hidden" name="set_defaults" value="true" />
+		<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Publish albums by default"); ?>
 		<br />
-		<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked'; ?>> <?php echo gettext("Make images visible by default"); ?>
+		<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Make images visible by default"); ?>
 		<br />
 <div class="buttons pad_button" id="setdefaults">
 <button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">
@@ -302,9 +302,9 @@ if (db_connect()) {
 if (count($publish_albums_list) > 0) { 
 ?>
 	<form name="publish" action="" method="post"><?php echo gettext('Unpublished albums:'); ?>
-	<input type="hidden" name="publish_albums" value="true">
+	<input type="hidden" name="publish_albums" value="true" />
 	<ul class="schedulealbumchecklist">
-	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, '', false, true, true); ?>
+	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, 'sched_', false, true, true); ?>
 	</ul>
 	<div class="buttons pad_button" id="publishalbums">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Publish waiting albums."); ?>">
@@ -315,7 +315,7 @@ if (count($publish_albums_list) > 0) {
 	<br clear="all" />
 	</form>
 	<p class="buttons">
-		<a href="?propagate_unpublished" alt="<?php echo gettext('Set all subalbums of an unpublished album to unpublished.'); ?>">
+		<a href="?propagate_unpublished" title="<?php echo gettext('Set all subalbums of an unpublished album to unpublished.'); ?>">
 		<img src="<?php echo $webpath; ?>images/redo.png" alt="" />
 			<?php echo gettext('Propagate unpublished state'); ?>
 		</a>
@@ -340,7 +340,7 @@ if (count($publish_albums_list) > 0) {
 </script>
 <form name="review" action="" method="post">
 <?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" id="publish_date" name="publish_date" value="'.$requestdate.'" />'); ?>
-<input type="hidden" name="review" value="true">
+<input type="hidden" name="review" value="true" />
 
 <div class="buttons pad_button" id="reviewobjects">
 <button class="tooltip" type="submit" title="<?php echo gettext("Review not visible images."); ?>">
@@ -368,7 +368,7 @@ if (count($publish_images_list) > 0) {
 	}
 	</script>
 	<form name="publish" action="" method="post"><?php echo gettext('Not visible images:'); ?>
-	<input type="hidden" name="publish_images" value="true">
+	<input type="hidden" name="publish_images" value="true" />
 	<ul class="scheduleimagechecklist">
 	<?php
 	foreach ($publish_images_list as $key=>$imagelist) {
@@ -377,7 +377,7 @@ if (count($publish_images_list) > 0) {
 		natcasesort($imagelist);
 		$imagelist = array_flip($imagelist);
 		?>
-		<p><strong><?php echo $key; ?></strong></p>
+		<li><p><strong><?php echo $key; ?></strong></p></li>
 		<?php 
 		foreach ($imagelist as $display=>$item) {
 			$listitem = postIndexEncode($item);
@@ -407,7 +407,7 @@ if (count($publish_images_list) > 0) {
 						</td>
 						<td>
 							<?php $image = newImage($album,$display); ?>
-							<img src="<?php echo $image->getThumb()?>" />
+							<img src="<?php echo $image->getThumb()?>" alt="<?php echo $image->filename; ?>"/>
 						</td>
 						<td>
 							<?php printf(gettext('<strong>%s</strong>'),$key); ?><br />

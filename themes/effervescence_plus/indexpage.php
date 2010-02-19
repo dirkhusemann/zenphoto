@@ -46,7 +46,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	 			$size = floor(getOption('image_size') * $imagereduction);
 	 			if ($imagereduction != 1) setOption('image_size', $size, false);
 				$s = getDefaultWidth() + 22;
-				$wide = "style=\"width:".$s."px;";
+				$wide = " style=\"width:".$s."px;";
 				$s = getDefaultHeight() + 72;
 				$high = " height:".$s."px;\"";
 			?>

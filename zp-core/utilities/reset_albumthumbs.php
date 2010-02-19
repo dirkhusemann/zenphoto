@@ -85,10 +85,10 @@ if (isset($_REQUEST['thumbtype']) && db_connect()) {
 if (db_connect()) {
 	?>
 	<form name="set_random" action="">
-		<input type="hidden" name="thumbtype" value="">
+		<input type="hidden" name="thumbtype" value="" />
 		<div class="buttons pad_button" id="set_random">
-		<button class="tooltip" type="submit" title="<?php echo gettext("Sets all album thumbs to <em>random</em>."); ?>">
-			<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Set to random"); ?>
+		<button class="tooltip" type="submit" title="<?php echo gettext("Sets all album thumbs to random."); ?>">
+			<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Set to <em>random</em>"); ?>
 		</button>
 		</div>
 		<br clear="all" />
@@ -100,10 +100,10 @@ if (db_connect()) {
 		<tr>
 			<td>
 				<form name="set_first" action="">
-					<input type="hidden" name="thumbtype" value="1">
+					<input type="hidden" name="thumbtype" value="1" />
 					<div class="buttons pad_button" id="set_first">
-					<button class="tooltip" type="submit" title="<?php printf(gettext("Set all album thumbs to use the <em>%s</em> image."),$current); ?>">
-						<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php printf(gettext("Set to %s"),$current); ?>
+					<button class="tooltip" type="submit" title="<?php printf(gettext("Set all album thumbs to use the %s image."),$current); ?>">
+						<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php printf(gettext("Set to <em>%s</em>"),$current); ?>
 					</button>
 					</div>
 				</form>
@@ -114,6 +114,7 @@ if (db_connect()) {
 					<select id="thumbselector" name="thumbselector" onchange="this.form.submit()">
 					<?php
 					$selections = array();
+					$currentkey = '';
 					foreach ($selector as $key=>$selection) {
 						$selections[$selection['desc']] = $key;
 						if ($selection['desc'] == $current) $currentkey=$key;

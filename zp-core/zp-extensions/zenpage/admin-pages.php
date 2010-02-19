@@ -54,7 +54,7 @@ if(isset($_GET['hitcounter'])) {
 <div>
 <p><?php echo gettext("Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed."); ?></p>
 <p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
-<p class="buttons"><strong><a href="admin-edit.php?page&amp;add"" title="<?php echo gettext("Add Page"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Page"); ?></a></strong>
+<p class="buttons"><strong><a href="admin-edit.php?page&amp;add" title="<?php echo gettext("Add Page"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Page"); ?></a></strong>
 <strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox"><img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a></strong>
 </p>
 </div>
@@ -105,7 +105,7 @@ $('#left-to-right').NestedSortable(
 );
 });
 </script>
-
+</div>
 <?php printAdminFooter(); ?>
 
 </body>

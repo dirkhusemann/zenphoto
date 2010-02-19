@@ -242,7 +242,7 @@ function printPagesListTable($page, $flag) {
  <table class='bordered2'>
    <tr>
     <td class='sort-handle' style="padding-bottom: 15px; ">
-       <img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
+       <img src="<?php echo $img; ?>" alt="" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
   	<?php if(checkIfLocked($page)) { 
   		echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."' title='".truncate_string(strip_tags($page->getContent()),300)."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
   	} else { 
@@ -266,7 +266,7 @@ function printPagesListTable($page, $flag) {
 	</td>
 	<td class="icons">
 		<a href="?commentson=<?php echo $page->getCommentsAllowed(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
-		<?php echo checkIfCommentsAllowed($page->getCommentsAllowed()); ?>
+		<?php echo checkIfCommentsAllowed($page->getCommentsAllowed()); ?></a>
 	</td>
 	<?php } else { ?>
 	<td class="icons">
@@ -286,7 +286,7 @@ function printPagesListTable($page, $flag) {
   
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
-		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>"" title="<?php echo gettext("Reset hitcounter"); ?>">
+		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Reset hitcounter"); ?>">
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
@@ -1287,7 +1287,7 @@ function printPublishIconLink($object,$type) {
 			$title = gettext("Un-publish");
 			?>
 			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>"> 
-			<img src="../../images/pass.png" alt\""<?php echo gettext("Published"); ?>" title="<?php echo $title; ?>" /></a>
+			<img src="../../images/pass.png" alt="<?php echo gettext("Published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		} else {
 			$dt = $object->getExpireDate();

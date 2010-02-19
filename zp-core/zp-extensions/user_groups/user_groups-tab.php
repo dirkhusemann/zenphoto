@@ -142,7 +142,7 @@ echo '</head>'."\n";
 							echo gettext("Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
 							?>
 						</p>
-						<form action="?action=savegroups&tab=groups" method="post" AUTOCOMPLETE="OFF">
+						<form action="?action=savegroups&amp;tab=groups" method="post" AUTOCOMPLETE="OFF">
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
@@ -161,13 +161,13 @@ echo '</head>'."\n";
 									$grouptype = $user['name'];
 									?>
 									<tr>
-										<td style="border-top: 4px solid #D1DBDF;" valign="top" style="width:20em;">
+										<td style="border-top:4px solid #D1DBDF;width:20em;" valign="top" >
 											<?php
 											if (empty($groupname)) {
 												?>
 												<em>
-													<label><input type="radio" name="<?php echo $id; ?>-type" value="group" checked="checked" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('group'); ?></label>
-													<label><input type="radio" name="<?php echo $id; ?>-type" value="template" onclick="javascrpt:toggle('users<?php echo $id; ?>');"><?php echo gettext('template'); ?></label>
+													<label><input type="radio" name="<?php echo $id; ?>-type" value="group" checked="checked" onclick="javascrpt:toggle('users<?php echo $id; ?>');" /><?php echo gettext('group'); ?></label>
+													<label><input type="radio" name="<?php echo $id; ?>-type" value="template" onclick="javascrpt:toggle('users<?php echo $id; ?>');" /><?php echo gettext('template'); ?></label>
 												</em>
 												<br />
 												<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
@@ -203,7 +203,7 @@ echo '</head>'."\n";
 															$selected = '';
 														}
 														?>
-														<option<?php echo $selected; ?> title="<?php echo $hint; ?>"><?php echo $user['user']; ?></option>
+														<option<?php echo $selected; ?> title="<?php echo htmlspecialchars($hint); ?>"><?php echo $user['user']; ?></option>
 														<?php
 													}
 													?>
@@ -214,15 +214,12 @@ echo '</head>'."\n";
 											?>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
-											<input type="hidden" name="<?php echo $id ?>-confirmed" value="1">
+											<input type="hidden" name="<?php echo $id ?>-confirmed" value="1" />
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
+											printManagedAlbums($albumlist, '', $groupid, $id);
 											?>
-											<p>
-												<?php												
-												printManagedAlbums($albumlist, '', $groupid, $id);
-												?>
-											</p>
+											
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 											<div id="users<?php echo $id; ?>" <?php if ($grouptype=='template') echo ' style="display:none"' ?>>
@@ -244,7 +241,7 @@ echo '</head>'."\n";
 												</div>
 											</div>
 										</td>
-										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
+										<td style="border-top: 4px solid #D1DBDF;" valign="top">
 										<?php
 										if (!empty($groupname)) {
 											$msg = gettext('Are you sure you want to delete this group?');
@@ -291,7 +288,7 @@ echo '</head>'."\n";
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 							</p>
-							<br clear="all"><br /><br />
+							<br clear="all" /><br /><br />
 							<input type="hidden" name="saveauserassignments" value="yes" /> 
 							<table class="bordered">
 								<?php
@@ -300,9 +297,9 @@ echo '</head>'."\n";
 									if ($user['valid']) {
 										$group = $user['group'];
 										?>
-										<input type="hidden" name="<?php echo $id; ?>-user" value="<?php echo $user['user']; ?>" />
 										<tr>
 											<td width="20%" style="border-top: 1px solid #D1DBDF;" valign="top">
+												<input type="hidden" name="<?php echo $id; ?>-user" value="<?php echo $user['user']; ?>" />
 												<?php echo $user['user']; ?>
 											</td>
 											<td style="border-top: 1px solid #D1DBDF;" valign="top" >
@@ -319,7 +316,7 @@ echo '</head>'."\n";
 															$selected = '';
 														}
 														?>
-														<option<?php echo $selected; ?> title="<?php echo $hint; ?>"><?php echo $user['user']; ?></option>
+														<option<?php echo $selected; ?> title="<?php echo htmlspecialchars($hint); ?>"><?php echo $user['user']; ?></option>
 														<?php
 													}
 													?>

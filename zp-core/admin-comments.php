@@ -266,7 +266,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	<?php } ?>
 
 <form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
-<input type="hidden" name="subpage" value="<?php echo $pagenum ?>">
+<input type="hidden" name="subpage" value="<?php echo $pagenum ?>" />
 <table class="bordered">
 	<tr>
 		<th>&nbsp;</th>
@@ -285,8 +285,8 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<th><?php echo gettext("Private"); ?></th>
 		<th><?php echo gettext("SPAM"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
-		<th><?php echo gettext("Delete"); ?>
-
+		<th><?php echo gettext("Delete"); ?></th>
+	</tr>
 	<?php
 	foreach ($comments as $comment) {
 		$id = $comment['id'];

@@ -78,7 +78,7 @@ printLogoAndLinks();
 						<div class="buttons">
 							<strong><a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext("Add Article"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
 							<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
-							<img src="images/folder.png" /> <?php echo gettext("Manage files"); ?></a></strong>
+							<img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a></strong>
 						</div>
 					</div>
 					<?php printCategoryDropdown(); printArticleDatesDropdown(); printUnpublishedDropdown(); ?>

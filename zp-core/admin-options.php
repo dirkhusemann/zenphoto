@@ -525,7 +525,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 								<?php
 								$mod_rewrite = getOption('mod_rewrite');
 								if (is_null($mod_rewrite)) {
-									$state = ' DISABLED';
+									$state = ' disabled="disabled"';
 								} else if ($mod_rewrite) {
 									$state = ' checked="checked"';
 								} else {

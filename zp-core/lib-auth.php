@@ -275,6 +275,12 @@ function checkAuthorization($authCode) {
 	global $_zp_current_admin;
 	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
 	$admins = getAdministrators();
+	
+/** uncomment to auto-login for backend HTML validation	
+	$_zp_current_admin = array_shift($admins);
+	return $_zp_current_admin['rights'] | ADMIN_RIGHTS;
+*/
+	
 	foreach ($admins as $key=>$user) {
 		if (!$user['valid']) {	// no groups!
 			unset($admins[$key]);

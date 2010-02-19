@@ -174,7 +174,6 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 		
 		$grouppart .= '
 			</script>';
-		
 		$grouppart .= '<select name="'.$i.'group" onchange="javascript:groupchange'.$i.'(this);"'.'>'."\n";
 		$grouppart .= '<option value="" title="'.gettext('*no group affiliation').'">'.gettext('*no group selected').'</option>'."\n";
 		$selected_hint = gettext('no group affiliation');
@@ -191,7 +190,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 				} else {
 				$selected = '';
 			}
-			$grouppart .= '<option'.$selected.' value="'.$user['user'].'" title="'.$hint.'">'.$user['user'].'</option>'."\n";
+			$grouppart .= '<option'.$selected.' value="'.$user['user'].'" title="'.sanitize($hint,3).'">'.$user['user'].'</option>'."\n";
 		}
 		$grouppart .= '</select>'."\n";
 		$grouppart .= '<span class="hint'.$i.'" id="hint'.$i.'" style="width:15em;">'.$selected_hint."</span>\n";
@@ -200,7 +199,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	}
 	$result = 
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
-			<td width="20%"'.((!empty($background)) ? 'style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Group:").'</td>
+			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Group:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
 				$grouppart.
 			'</td>
@@ -225,7 +224,7 @@ function user_groups_admin_tabs($tabs, $current) {
 function user_groups_admin_alterrights($alterrights, $userobj) {
 	$group = $userobj->getGroup();
 	if (empty($group)) return $alterrights;
-	return ' DISABLED';
+	return ' disabled="disabled"';
 }
 
 ?>

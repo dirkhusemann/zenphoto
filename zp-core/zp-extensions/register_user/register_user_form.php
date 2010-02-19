@@ -35,7 +35,7 @@
 						?>
 						<br />
 						<?php
-						echo  $msg;
+						echo  htmlspecialchars($msg);
 					}
 					?>
 				</p>

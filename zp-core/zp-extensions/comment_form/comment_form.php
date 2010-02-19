@@ -86,7 +86,7 @@
 								?>
 								<tr>
 									<td>
-										<label for="0-comment_form_street"><?php echo gettext('street:'); ?></label>
+										<label for="comment_form_street-0"><?php echo gettext('street:'); ?></label>
 									</td>
 									<td>
 										<?php
@@ -96,7 +96,7 @@
 													<?php
 													echo $stored['street'];
 													?>
-														<input type="hidden" id="0-comment_form_street" name="0-comment_form_street" value="<?php echo $stored['street'];?>" />
+														<input type="hidden" id="comment_form_street-0" name="0-comment_form_street" value="<?php echo $stored['street'];?>" />
 												</div>
 												<?php
 											} else {
@@ -109,7 +109,7 @@
 								</tr>
 								<tr>
 									<td>
-										<label for="0-comment_form_city"><?php echo gettext('city:'); ?></label>
+										<label for="comment_form_city-0"><?php echo gettext('city:'); ?></label>
 									</td>
 									<td>
 										<?php
@@ -119,7 +119,7 @@
 												<?php
 												echo $stored['city'];
 												?>
-												<input type="hidden" id="0-comment_form_city" name="0-comment_form_city" value="<?php echo $stored;?>" />
+												<input type="hidden" id="comment_form_city-0" name="0-comment_form_city" value="<?php echo $stored;?>" />
 											</div>
 											<?php
 										} else {
@@ -140,19 +140,19 @@
 												<?php
 												echo $stored['state'];
 												?>
-												<input type="hidden" id="0-comment_form_state" name="0-comment_form_state" value="<?php echo $stored['state'];?>" />
+												<input type="hidden" id="comment_form_state-0" name="0-comment_form_state" value="<?php echo $stored['state'];?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="0-comment_form_state" id="comment_form_state" class="inputbox" size="22" value="<?php echo $stored['state']; ?>" />
+											<input type="text" name="comment_form_state-0" id="comment_form_state" class="inputbox" size="22" value="<?php echo $stored['state']; ?>" />
 											<?php									
 										}
 										?>
 									</td>
 								</tr>
 								<tr>
-									<td><label for="0-comment_form_country"><?php echo gettext('country:'); ?></label></td>
+									<td><label for="comment_form_country-0"><?php echo gettext('country:'); ?></label></td>
 									<td>
 										<?php
 										if ($disabled['country']) {
@@ -161,19 +161,19 @@
 												<?php
 												echo $stored['country'];
 												?>
-												<input type="hidden" id="0-comment_form_country" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
+												<input type="hidden" id="comment_form_country-0" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="0-comment_form_country" id="comment_form_country" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
+											<input type="text" name="comment_form_country-0" id="comment_form_country" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
 											<?php									
 										}
 										?>
 									</td>
 								</tr>
 								<tr>
-									<td><label for="0-comment_form_postal"><?php echo gettext('postal code:'); ?></label></td>
+									<td><label for="comment_form_postal-0"><?php echo gettext('postal code:'); ?></label></td>
 									<td>
 										<?php
 										if ($disabled['postal']) {
@@ -187,7 +187,7 @@
 											<?php
 										} else {
 											?>
-											<input type="text" id="0-comment_form_country" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="22" value="<?php echo $stored['postal']; ?>" />
+											<input type="text" id="comment_form_country-0" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="22" value="<?php echo $stored['postal']; ?>" />
 											<?php									
 										}
 										?>

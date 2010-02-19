@@ -117,13 +117,14 @@ printAdminHeader();
 <?php
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
 $subtab = getSubtabs($_current_tab, 'users');
-
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
-echo "\n" . '<div id="main">';
-printTabs($_current_tab);
-echo "\n" . '<div id="content">';
+?>
+</head>
+<body>
+<?php printLogoAndLinks(); ?>
+<div id="main">
+<?php printTabs($_current_tab); ?>
+<div id="content">
+<?php 
 if ($_zp_null_account) {
 	echo "<div class=\"errorbox space\">";
 	echo "<h2>".gettext("Password reset request.<br />You may now set admin usernames and passwords.")."</h2>";
@@ -303,7 +304,7 @@ if (empty($alterrights)) {
 			if ($background) {
 				$background = "";
 			} else {
-				$background = " background-color: #ECF1F2;";
+				$background = "background-color:#ECF1F2;";
 			}
 			
 			?>
@@ -313,9 +314,9 @@ if (empty($alterrights)) {
 			<?php $custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current); ?>
 			<!-- finished with filters -->
 			<tr>
-				<input type="hidden" name="_show-<?php echo $userid; ?>" id="_show-<?php echo $userid; ?>" value="<?php echo ($current);?>" /> 
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
 				<!-- individual admin table -->
+				<input type="hidden" name="_show-<?php echo $userid; ?>" id="_show-<?php echo $userid; ?>" value="<?php echo ($current);?>" /> 
 				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
 				<tr>
 					<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
@@ -397,12 +398,12 @@ if (empty($alterrights)) {
 						</td>
 					</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-				<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<td width="20%" <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?>
 					<br />
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 				</td>
-				<td  width="320em" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
+				<td  width="320em" <?php if (!empty($background)) echo " style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
 					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 						value="<?php echo $x; ?>" />
 					<br />
@@ -413,23 +414,23 @@ if (empty($alterrights)) {
 					if (!empty($msg)) {
 						?>
 						<p>
-						<?php echo  $msg; ?>
+						<?php echo  htmlspecialchars($msg); ?>
 						</p>
 						<?php
 					}
 					?>
 				</td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					<?php printAdminRightsTable($id, $background, $local_alterrights, $userobj->getRights()); ?>	
 				</td>
 			</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-				<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?> valign="top">
+				<td width="20%" <?php if (!empty($background)) echo " style=\"$background\""; ?> valign="top">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 					<br />
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
 				</td>
-				<td  width="320" <?php if (!empty($background)) echo "style=\"$background\""; ?>  valign="top">
+				<td  width="320" <?php if (!empty($background)) echo " style=\"$background\""; ?>  valign="top">
 					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
 						value="<?php echo $userobj->getName();?>" />
 					<br />
@@ -437,8 +438,7 @@ if (empty($alterrights)) {
 					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
 						value="<?php echo $userobj->getEmail();?>" />
 				</td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<p>
+				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 						<?php
 						if ($_zp_loggedin & (MANAGE_ALL_ALBUM_RIGHTS | ADMIN_RIGHTS)) {
 							$album_alter_rights = $local_alterrights;
@@ -446,12 +446,11 @@ if (empty($alterrights)) {
 							$album_alter_rights = ' disabled="disabled"';
 						}
 						if ($current && $ismaster) {
-							echo gettext("The <em>master</em> account has full rights to all albums.");
+							echo '<p>'.gettext("The <em>master</em> account has full rights to all albums.").'</p>';
 						} else {
 							printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
 						}
 						?>
-					</p>
 					<p>
 						<?php
 							if (!$ismaster) {
@@ -499,20 +498,16 @@ if (empty($alterrights)) {
 
 <br clear="all" />
 <br />
-</div>
-<!-- end of tab_admin div -->
+</div><!-- end of tab_admin div -->
 
-</div>
-<!-- end of container -->
+</div><!-- end of container -->
+</div><!-- end of content -->
+</div><!-- end of main -->
 <?php
-echo '</div>'; // content
 printAdminFooter();
-echo '</div>'; // main
-
-
-echo "\n</body>";
-echo "\n</html>";
 ?>
+</body>
+</html>
 
 
 

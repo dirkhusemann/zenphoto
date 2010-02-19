@@ -309,7 +309,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 		}
 		// counter to have a gray background of every second line
 		if($countlines === 1) {
-			$style = "style='background-color: #f4f4f4'";	// a little ugly but the already attached class for the table is so easiest overriden...	
+			$style = " style='background-color: #f4f4f4'";	// a little ugly but the already attached class for the table is so easiest overriden...	
 			$countlines = 0;
 		} else {
 			$style = "";
@@ -335,18 +335,18 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$title = get_language_string($item['title']);
 				break;
 			case "pages":
-				$editurl=  $webpath.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&titlelink=".$name;
-				$viewurl = WEBPATH."/index.php?p=pages&title=".$name;
+				$editurl=  $webpath.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;titlelink=".$name;
+				$viewurl = WEBPATH."/index.php?p=pages&amp;title=".$name;
 				$title = get_language_string($item['title']);
 				break;
 			case "news":
-				$editurl=  $webpath.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?news&titlelink=".$name;
-				$viewurl = WEBPATH."/index.php?p=news&title=".$name;
+				$editurl=  $webpath.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?news&amp;titlelink=".$name;
+				$viewurl = WEBPATH."/index.php?p=news&amp;title=".$name;
 				$title = get_language_string($item['title']);
 				break;
 			case "newscategories":
-				$editurl=  $webpath.'/'.PLUGIN_FOLDER."/zenpage/admin-categories.php?edit&id=".$item['id'];
-				$viewurl = WEBPATH."/index.php?p=news&category=".$name;
+				$editurl=  $webpath.'/'.PLUGIN_FOLDER."/zenpage/admin-categories.php?edit&amp;id=".$item['id'];
+				$viewurl = WEBPATH."/index.php?p=news&amp;category=".$name;
 				$title = get_language_string($item['cat_name']);
 				break;
 			case "tags":
@@ -372,12 +372,19 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			}
 		?>
 		<tr class="statistic_wrapper">
-		<td class="statistic_counter" <?php echo $style; ?>><?php echo $count; ?></td>
-		<td class="statistic_title" <?php echo $style; ?>><strong<?php echo $show; ?>><?php echo $title; ?></strong> <?php echo $name; ?></td>
-		<td class="statistic_graphwrap" <?php echo $style; ?>><div class="statistic_bargraph" style="width: <?php echo $barsize; ?>px"></div><div class="statistic_value"><?php echo $value; ?></div></td>
+		<td class="statistic_counter" <?php echo $style; ?>>
+		<?php echo $count; ?>
+		</td>
+		<td class="statistic_title" <?php echo $style; ?>>
+		<strong<?php echo $show; ?>><?php echo $title; ?></strong> <?php echo $name; ?>
+		</td>
+		<td class="statistic_graphwrap" <?php echo $style; ?>>
+		<div class="statistic_bargraph" style="width: <?php echo $barsize; ?>px"></div>
+		<div class="statistic_value"><?php echo $value; ?></div>
+		</td>
 		<td class="statistic_link" <?php echo $style; ?>>
 		<?php
-		echo "<a href='".$editurl."' title='".$name."'>".gettext("Edit")."</a> | <a href='".$viewurl."' title='".$name."'>".gettext("View")."</a></td";
+		echo "<a href='".$editurl."' title='".$name."'>".gettext("Edit")."</a> | <a href='".$viewurl."' title='".$name."'>".gettext("View")."</a></td>";
 		echo "</tr>";
 		$count++; 	
 		if($count === $limit) { break; }
