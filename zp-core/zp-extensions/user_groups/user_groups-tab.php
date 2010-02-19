@@ -203,7 +203,7 @@ echo '</head>'."\n";
 															$selected = '';
 														}
 														?>
-														<option<?php echo $selected; ?> title="<?php echo htmlspecialchars($hint); ?>"><?php echo $user['user']; ?></option>
+														<option<?php echo $selected; ?> title="<?php echo $hint; ?>"><?php echo $user['user']; ?></option>
 														<?php
 													}
 													?>
@@ -316,7 +316,7 @@ echo '</head>'."\n";
 															$selected = '';
 														}
 														?>
-														<option<?php echo $selected; ?> title="<?php echo htmlspecialchars($hint); ?>"><?php echo $user['user']; ?></option>
+														<option<?php echo $selected; ?> title="<?php echo $hint; ?>"><?php echo $user['user']; ?></option>
 														<?php
 													}
 													?>

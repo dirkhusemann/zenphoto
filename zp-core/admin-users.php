@@ -414,7 +414,7 @@ if (empty($alterrights)) {
 					if (!empty($msg)) {
 						?>
 						<p>
-						<?php echo  htmlspecialchars($msg); ?>
+						<?php echo $msg; ?>
 						</p>
 						<?php
 					}

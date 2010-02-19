@@ -146,7 +146,7 @@ function passwordNote() {
 			$pat = trim(str_replace("\t", '|', $pat));
 			if (!empty($pat)) {
 				$c++;
-				$text .= ', <span style="white-space:nowrap;"><strong>{</strong><em>'.$pat.'</em><strong>}</strong></span>';
+				$text .= ', <span style="white-space:nowrap;"><strong>{</strong><em>'.htmlspecialchars($pat).'</em><strong>}</strong></span>';
 			}		
 		}
 		$text = substr($text, 2);
