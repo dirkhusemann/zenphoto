@@ -989,7 +989,7 @@ if ($debug) {
 			checkMark($severity, sprintf(gettext('Database <code>%s</code> created'), $_zp_conf_vars['mysql_database']),sprintf(gettext('Database <code>%s</code> not created [<code>CREATE DATABASE</code> query failed]'), $_zp_conf_vars['mysql_database']),$connectDBErr);
 		}
 		if (empty($_zp_conf_vars['mysql_database'])) {
-			$good = checkmark(0, '', gettext('Connect to the database [You have not provided a database name]'),gettext('Privode the name of your database in the form above.'));
+			$good = checkmark(0, '', gettext('Connect to the database [You have not provided a database name]'),gettext('Provide the name of your database in the form above.'));
 		} else {
 			if ($oktocreate) {
 				$good = checkmark(0, '', gettext('Connect to the database [Database does not exist]'),sprintf(gettext('Click here to attempt to create <a href="?Create_Database" >%s</a>.'),$_zp_conf_vars['mysql_database']));
