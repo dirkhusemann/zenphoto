@@ -129,10 +129,10 @@ printLogoAndLinks();
 						 	</td>
 						 		 <?php } else { ?>
 							<td class="icons">
-						    	<img src="images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+						    	<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 							</td>
 							<td class="icons">
-						    	<img src="images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+						    	<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 							</td>
 						  <?php } ?>
 						 
@@ -155,10 +155,10 @@ printLogoAndLinks();
 								</td>
 								<?php } else { ?>
 								<td class="icons">
-									<img src="images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 								</td>
 								<td class="icons">
-									<img src="images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 								</td>
 								<?php
 							}

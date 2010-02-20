@@ -303,6 +303,7 @@ zp-core/images/err-nogd.gif
 zp-core/images/err-passwordprotected.gif
 zp-core/images/fail.png
 zp-core/images/folder.png
+zp-core/images/icon_inactive.png
 zp-core/images/imageDefault.png
 zp-core/images/lock.png
 zp-core/images/lock_2.png
@@ -314,6 +315,7 @@ zp-core/images/movie.jpg
 zp-core/images/page_white_copy.png
 zp-core/images/pass.png
 zp-core/images/pencil.png
+zp-core/images/place_holder_icon.png
 zp-core/images/quest.png
 zp-core/images/redo.png
 zp-core/images/redo1.png
@@ -1691,7 +1693,6 @@ zp-core/zp-extensions/zenpage/images/clock.png
 zp-core/zp-extensions/zenpage/images/comments-off.png
 zp-core/zp-extensions/zenpage/images/comments-on.png
 zp-core/zp-extensions/zenpage/images/folder.png
-zp-core/zp-extensions/zenpage/images/icon_inactive.png
 zp-core/zp-extensions/zenpage/images/info.png
 zp-core/zp-extensions/zenpage/images/loadingAnimation.gif
 zp-core/zp-extensions/zenpage/images/pass_blue.png

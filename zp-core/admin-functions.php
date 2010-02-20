@@ -1744,7 +1744,11 @@ function printAlbumEditRow($album) {
 	</td>
 	<td class="icons">
 		<?php
-		if (!$album->isDynamic()) {
+		if ($album->isDynamic()) {
+			?>
+			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" /></a>
+			<?php
+		} else {
 			?>
 			<a class="cache" href="admin-cache-images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?> " title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
 			<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
@@ -1754,7 +1758,11 @@ function printAlbumEditRow($album) {
 	</td>
 	<td class="icons">
 		<?php
-		if (!$album->isDynamic()) {
+		if ($album->isDynamic()) {
+			?>
+			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" /></a>
+			<?php
+		} else {
 			?>
 			<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
 			<img src="images/refresh1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh metadata in the album %s'), $album->name); ?>" /></a>
@@ -1764,7 +1772,11 @@ function printAlbumEditRow($album) {
 	</td>
 	<td class="icons">
 		<?php
-		if (!$album->isDynamic()) {
+		if ($album->isDynamic()) {
+			?>
+			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" /></a>
+			<?php
+		} else {
 			?>
 			<a class="reset" href="?action=reset_hitcounters&amp;albumid=<?php echo $album->getAlbumID(); ?>&amp;album=<?php echo urlencode($album->name);?>&amp;subalbum=true" title="<?php echo sprintf(gettext('Reset hitcounters for album %s'), $album->name); ?>">
 			<img src="images/reset.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Reset hitcounters for the album %s'), $album->name); ?>" /></a>
