@@ -199,9 +199,9 @@ function toggleMoveCopyRename(id, operation) {
 	} else if (operation == 'movecopy') {
 		jQuery('#movecopydiv-'+id).show();
 		jQuery('#renamediv-'+id).hide();
-		jQuery('#Delete-+id').attr('checked',false);
+		jQuery('#Delete-'+id).attr('checked',false);
 		jQuery('#deletemsg'+id).hide();
-	} else if (operation == 'rename'+id) {
+	} else if (operation == 'rename') {
 		jQuery('#movecopydiv-'+id).hide();
 		jQuery('#renamediv-'+id).show();
 		jQuery('#Delete-'+id).attr('checked',false);
