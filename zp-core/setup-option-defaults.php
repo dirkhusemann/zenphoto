@@ -41,12 +41,12 @@ setOptionDefault('time_offset', 0);
 if (isset($_GET['mod_rewrite'])) {
 	if ($_GET['mod_rewrite'] == 'ON') {
 		?>
-<script type="text/javascript">
-				$.ajax({   
-					type: 'POST',   
-					url: '<?php echo WEBPATH; ?>/page/setup_set-mod_rewrite?z'
-				});
-			</script>
+		<script type="text/javascript">
+			$.ajax({   
+				type: 'POST',   
+				url: '<?php echo WEBPATH; ?>/page/setup_set-mod_rewrite?z'
+			});
+		</script>
 		<?php
 	} else {
 		setOption('mod_rewrite', 0);

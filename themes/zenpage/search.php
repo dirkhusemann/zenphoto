@@ -46,7 +46,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			$searchwords .= $searchdate;
 		}
 		if ($total > 0 ) {
-			printf(ngettext('<h3> %1$u Hit for <em>%2$s</em>','%1$u Hits for <em>%2$s</em></h3>',$total), $total, $searchwords);
+			?>
+			<h3>
+			<?php
+			printf(ngettext('%1$u Hit for <em>%2$s</em>','%1$u Hits for <em>%2$s</em>',$total), $total, $searchwords);
+			?>
+			</h3>
+			<?php
 		}
 		if ($_zp_page == 1) { //test of zenpage searches
 			if ($numpages > 0) {
