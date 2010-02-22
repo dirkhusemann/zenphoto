@@ -442,7 +442,7 @@ zp-core/js/sprintf.js
 zp-core/js/tag.js
 zp-core/js/toggleElements.css
 zp-core/js/upload.js
-zp-core/js/zenphoto.js.php
+zp-core/js/zenphoto.js
 zp-core/lib-auth.php
 zp-core/lib-encryption.php
 zp-core/lib-GD.php

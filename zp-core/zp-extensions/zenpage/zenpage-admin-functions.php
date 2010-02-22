@@ -1151,7 +1151,7 @@ function zenpageJSCSS() {
 	<script src="../../js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="../../js/jqueryui/ui.zenphoto.css" type="text/css" />
   <?php datepickerJS(); ?>
-	<script type="text/javascript" src="../../js/zenphoto.js.php"></script>
+	<script type="text/javascript" src="../../js/zenphoto.js"></script>
 	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
 	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
 	<script type="text/javascript">

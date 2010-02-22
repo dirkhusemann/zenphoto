@@ -85,7 +85,7 @@ function printAdminHeader($tinyMCE=NULL) {
 	<link rel="stylesheet" href="<?php echo $path; ?>admin.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
 	<script src="<?php echo $path; ?>js/jquery.js" type="text/javascript"></script>
-	<script src="<?php echo $path; ?>js/zenphoto.js.php" type="text/javascript" ></script>
+	<script src="<?php echo $path; ?>js/zenphoto.js" type="text/javascript" ></script>
 	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/ui.zenphoto.css" type="text/css" />
 	<?php datepickerJS(); ?>

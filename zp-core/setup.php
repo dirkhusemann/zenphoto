@@ -303,7 +303,7 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 <link rel="stylesheet" href="admin.css" type="text/css" />
 
 <script src="js/jquery.js" type="text/javascript"></script>
-<script src="js/zenphoto.js.php" type="text/javascript" ></script>
+<script src="js/zenphoto.js" type="text/javascript" ></script>
 
 <style type="text/css">
 body {

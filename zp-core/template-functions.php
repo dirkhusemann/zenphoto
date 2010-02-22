@@ -78,10 +78,10 @@ function printSubalbumAdmin($text, $before='', $after='') {
  */
 function zenJavascript() {
 	global $_zp_current_album, $_zp_plugin_scripts;
-
-	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
-	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/zenphoto.js.php\"></script>\n";
-
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/zenphoto.js"></script>
+	<?php 
 	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
 		if (in_context(ZP_ALBUM)) {
 			$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
@@ -89,7 +89,18 @@ function zenJavascript() {
 			$grant = $rights & ADMIN_RIGHTS;
 		}
 		if ($grant) {
-			echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.editinplace.js\"></script>\n";
+			?>
+			<script type="text/javascript">
+			var zpstrings = {
+				/* Used in jquery.editinplace.js */
+				'Save' : "<?php echo gettext('Save'); ?>",
+				'Cancel' : "<?php echo gettext('Cancel'); ?>",
+				'Saving' : "<?php echo gettext('Saving'); ?>",
+				'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
+			};
+			</script>
+			<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
+			<?php
 		}
 	}
 	if (is_array($_zp_plugin_scripts)) {
