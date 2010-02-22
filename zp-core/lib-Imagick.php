@@ -6,9 +6,28 @@
 
 // force UTF-8 Ø
 
-if (class_exists('Imagick')) {
-	$_lib_Imagick_msg = gettext('<strong><em>Imagick</em></strong> is not yet supported.');
-} else {
-	$_lib_Imagick_msg = '';
+$_zp_graphics_optionhandlers[] = new lib_Imagik_Options(); // register option handler
+/**
+ * Option class for lib-GD
+ *
+ */
+class lib_Imagik_Options {
+
+	/**
+	 * Standard option interface
+	 *
+	 * @return array
+	 */
+	function getOptionsSupported() {
+		return array();
+	}
+	function canLoadMsg() {
+		if (class_exists('Imagick')) {
+			return gettext('<strong><em>Imagick</em></strong> is not yet supported.');
+		} else {
+			return '';
+		}
+	}
 }
+
 ?>

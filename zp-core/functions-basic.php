@@ -70,10 +70,12 @@ if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol']
 $_zp_imagick_present = false;
 require_once(dirname(__FILE__).'/functions-db.php');
 
+// load graphics libraries in priority order
+// once a library has concented to load, all others will 
+// abdicate.
+$_zp_graphics_optionhandlers = array();
 require_once(dirname(__FILE__).'/lib-Imagick.php');
-if (!function_exists('zp_graphicsLibInfo')) {
-	require_once(dirname(__FILE__).'/lib-GD.php');
-}
+require_once(dirname(__FILE__).'/lib-GD.php');
 
 if (function_exists('zp_graphicsLibInfo')) {
 	$_zp_supported_images = zp_graphicsLibInfo();

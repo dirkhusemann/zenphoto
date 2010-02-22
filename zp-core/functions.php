@@ -39,11 +39,11 @@ if (getOption('album_session') && session_id() == '') {
 	}
 	session_start();
 }
-require_once(dirname(__FILE__).'/class-load.php');
-require_once(dirname(__FILE__).'/auth_zp.php');
-
 
 $_zp_setupCurrentLocale_result = setMainDomain();
+
+require_once(dirname(__FILE__).'/class-load.php');
+require_once(dirname(__FILE__).'/auth_zp.php');
 
 // make sure these are defined
 define('ZENPAGE_NEWS',getOption("zenpage_news_page"));

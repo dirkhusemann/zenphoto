@@ -811,7 +811,11 @@ if (!$setup_checked) {
 				}
 			}
 		} else {
-			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support.').' '.$_lib_GD_msg.' '.$_lib_Imagick_msg);
+			$graphicsmsg = '';
+			foreach ($_zp_graphics_optionhandlers as $handler) {
+				$graphicsmsg .= $handler->canLoadMsg($handler); 
+			}
+			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support.').' '.trim($graphicsmsg));
 		}
 	}
 	checkMark($noxlate, gettext('PHP <code>gettext()</code> support'), gettext('PHP <code>gettext()</code> support [is not present]'), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
