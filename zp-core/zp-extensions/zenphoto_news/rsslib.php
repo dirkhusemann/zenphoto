@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package plugins
+ * @subpackage zenphoto_news
+ */
+
+
 /*
 	RSS Extractor and Displayer
 	(c) 2007-2009  Scriptol.com - Licence Mozilla 1.1.
