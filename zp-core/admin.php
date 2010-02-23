@@ -381,6 +381,7 @@ $buttonlist = array();
 if (is_connected()) {
 	$buttonlist[] = array(
 								'button_text'=>gettext("Check for zenphoto update"),
+	//TODO:								'button_text'=>gettext("Check for update"), 
 								'formname'=>'check_updates',
 								'action'=>'admin.php?action=check_for_update',
 								'icon'=>'images/accept.png', 
