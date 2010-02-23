@@ -708,15 +708,15 @@ input.tags {
 #overview-maint,
 #overview-utility {
 	float: left;
-	width: 480px;
-	margin: 0 0 10px 0px;
+	width: 520px;
+	margin: 0 0px 10px 0px;
 	padding: 0px;
 }
 
 #overview-maint_l {
 	float: left;
 	width: 50%;
-	margin: 5px 0px 0px 8px;
+	margin: 5px 0px 0px 16px;
 }
 
 #overview-maint_r {
@@ -764,6 +764,7 @@ input.tags {
 #overview-news ul li{
 	margin-bottom: .5em;
 	line-height: 1.3em;
+	margin-left: 0px;
 }
 
 #overview-comments ul.plugins {

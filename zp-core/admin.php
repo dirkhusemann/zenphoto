@@ -514,7 +514,6 @@ $count = round($count/2);
 			</button>
 			</div>
 			<br clear="all" />
-			<br clear="all" />
 		</form>&nbsp;
 		<?php
 		$count --;
