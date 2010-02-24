@@ -1194,8 +1194,8 @@ function storeTags($tags, $id, $tbl) {
 	foreach ($tags as $tag) {
 		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
-			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')",true);
-			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')",true); 
+			$dbtag = array('id' => mysql_insert_id());
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
 	}
