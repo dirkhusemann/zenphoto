@@ -96,7 +96,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php
 		} // comments allowed - end
 	} else { 	// news article loop
-		commonNewsLoop();
+		commonNewsLoop(true);
 	}
 	?>
 

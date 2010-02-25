@@ -44,10 +44,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php
 	 			makeImageCurrent(getRandomImages(true));
 	 			$size = floor(getOption('image_size') * $imagereduction);
-	 			if ($imagereduction != 1) setOption('image_size', $size, false);
-				$s = getDefaultWidth() + 22;
+				$s = getDefaultWidth($size) + 22;
 				$wide = " style=\"width:".$s."px;";
-				$s = getDefaultHeight() + 72;
+				$s = getDefaultHeight($size) + 72;
 				$high = " height:".$s."px;\"";
 			?>
 			<div id="image" <?php echo $wide.$high; ?>>
@@ -73,7 +72,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<small>&nbsp;</small>
 		<div id="main2">
 			<div id="content-left">
-			<?php commonNewsLoop(); ?>	
+			<?php commonNewsLoop(false); ?>	
 			</div><!-- content left-->
 			
 			<div id="sidebar">

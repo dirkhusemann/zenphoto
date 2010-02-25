@@ -251,7 +251,7 @@ function printFooter() {
 	printAdminToolbox();
 }
 
-function commonNewsLoop() {
+function commonNewsLoop($paged) {
 	while (next_news()) {
 	?> 
  		<div class="newsarticle"> 
@@ -290,7 +290,9 @@ function commonNewsLoop() {
     	</div>	
 	<?php
 	} 
-  printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
+	if ($paged) {
+  	printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
+	}
 }
 
 function exerpt($content,$length) {

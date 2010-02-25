@@ -2393,11 +2393,14 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 
 /**
  * Returns an array [width, height] of the default-sized image.
+ * 
+ * @param int $size override the 'image_zize' option
  *
  * @return array
  */
-function getSizeDefaultImage() {
-	return getSizeCustomImage(getOption('image_size'));
+function getSizeDefaultImage($size=NULL) {
+	if (is_null($size)) $size = getOption('image_size');
+	return getSizeCustomImage($size);
 }
 
 /**
@@ -2413,20 +2416,26 @@ function getSizeFullImage() {
 
 /**
  * The width of the default-sized image (in printDefaultSizedImage)
+ * 
+ * @param int $size override the 'image_zize' option
  *
  * @return int
  */
-function getDefaultWidth() {
-	$size = getSizeDefaultImage(); return $size[0];
+function getDefaultWidth($size=NULL) {
+	$size_a = getSizeDefaultImage($size);
+	return $size_a[0];
 }
 
 /**
  * Returns the height of the default-sized image (in printDefaultSizedImage)
+ * 
+ * @param int $size override the 'image_zize' option
  *
  * @return int
  */
-function getDefaultHeight() {
-	$size = getSizeDefaultImage(); return $size[1];
+function getDefaultHeight($size=NULL) {
+	$size_a = getSizeDefaultImage($size);
+	return $size_a[1];
 }
 
 /**
