@@ -1246,7 +1246,7 @@ function generateListFromArray($currentValue, $list, $descending, $localize) {
 		}
 	}
 	foreach($list as $key=>$item) {
-		echo '<option value="' . htmlentities($item) . '"';
+		echo '<option value="' . htmlentities($item,ENT_COMPAT,getOption("charset")) . '"';
 		if (in_array($item, $currentValue)) {
 			echo ' selected="selected"';
 		}

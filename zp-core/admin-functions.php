@@ -2103,7 +2103,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 						if ($textbox) {
 							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
 						} else {
-							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string,ENT_COMPAT,getOption("charset")).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 						}
 						?>
 					</li>
@@ -2136,9 +2136,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
+			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'</textarea>';
 		} else {
-			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 		}
 	}
 }
@@ -2442,11 +2442,11 @@ $theme_description["author"] = "%s";
 $theme_description["version"] = "%s";
 $theme_description["date"] = "%s";
 $theme_description["desc"] = "%s";
-?'.'>' , htmlentities($theme_description['name'], ENT_COMPAT),
-		htmlentities($theme_description['author'], ENT_COMPAT),
-		htmlentities($theme_description['version'], ENT_COMPAT),
-		htmlentities($theme_description['date'], ENT_COMPAT),
-		htmlentities($theme_description['desc'], ENT_COMPAT));
+?'.'>' , htmlentities($theme_description['name'],ENT_COMPAT,getOption("charset")),
+		htmlentities($theme_description['author'],ENT_COMPAT,getOption("charset")),
+		htmlentities($theme_description['version'],ENT_COMPAT,getOption("charset")),
+		htmlentities($theme_description['date'],ENT_COMPAT,getOption("charset")),
+		htmlentities($theme_description['desc'],ENT_COMPAT,getOption("charset")));
 
 	$f = fopen($target.'/theme_description.php', 'w');
 	if ($f !== FALSE) {
