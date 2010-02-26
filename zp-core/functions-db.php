@@ -24,20 +24,24 @@ function db_connect() {
 	}
 	if (!is_array($_zp_conf_vars)) {
 		zp_error(gettext('The <code>$_zp_conf_vars</code> variable is not an array. Zenphoto has not been instantiated correctly.'));
+		return false;
 	}
 	$mysql_connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass']);
 	if (!$mysql_connection) {
-		zp_error(gettext('MySQL Error: Zenphoto could not connect to the database server.')
-		.gettext('Check your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, <strong>user name</strong>, and <strong>password</strong></em>.')
-		. gettext('Note that you may need to change the <em>host</em> from localhost if your web server uses a separate MySQL server, which is common in large shared hosting environments like Dreamhost and GoDaddy.')
-		. gettext('Also make sure the server is running, if you control it.'));
+		
+//TODO: when strings are unfrozen
+//		zp_error(sprintf(gettext('MySQL Error: Zenphoto received the error <em>%s</em> when connecting to the database server.'),mysql_error()));
+
+		zp_error(gettext('MySQL Error: Zenphoto could not connect to the database server.').' (<em>'.mysql_error().'</em>) ');
 		return false;
 	}
 
 	if (!@mysql_select_db($db)) {
-		zp_error(sprintf(gettext('MySQL Error: The database is connected, but Zenphoto could not select the database %s.'),$db)
-			. gettext('Make sure it already exists, create it if you need to.')
-			. gettext('Also make sure the user you\'re trying to connect with has privileges to use this database.'));
+		
+//TODO: when strings are unfrozen	
+//		zp_error(sprintf(gettext('MySQL Error: The database is connected, but MySQL returned the error <em>%1$s</em> when Zenphoto tried to select the database %2$s.'),mysql_error(),$db));
+		
+		zp_error(sprintf(gettext('MySQL Error: The database is connected, but Zenphoto could not select the database %s.'),$db).' (<em>'.mysql_error().'</em>) ');
 		return false;
 	}
 	if (array_key_exists('UTF-8', $_zp_conf_vars) && $_zp_conf_vars['UTF-8']) {
@@ -65,19 +69,18 @@ function query($sql, $noerrmsg = false) {
 	if ($mysql_connection == null) {
 		db_connect();
 	}
+	// Changed this to mysql_query - *never* call query functions recursively...
 	$result = mysql_query($sql, $mysql_connection);
 	if (!$result) {
 		if($noerrmsg) {
 			return false;
 		} else {
 			$sql = sanitize($sql, 3);
-			$error = sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,mysql_error());
-			// Changed this to mysql_query - *never* call query functions recursively...
-			if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
-				$error .= "<br />".gettext("It looks like your zenphoto tables haven't been created.").' '.
-				sprintf(gettext('You may need to run <a href="%s/%s/setup.php">the setup script.</a>'),WEBPATH,ZENFOLDER);
-			}
-			zp_error($error);
+			
+//TODO when strings are unfrozen			
+//			zp_error(sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. MySQL returned the error <em>%2$s</em>' ),$sql,mysql_error()));
+			
+			zp_error(sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,mysql_error()));
 			return false;
 		}
 	}
