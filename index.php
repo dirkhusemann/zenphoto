@@ -161,7 +161,7 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 	} else {
 		include(ZENFOLDER. '/404.php');
 	}
-
+	$_zp_HTML_cache = NULL;
 }
 
 exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );

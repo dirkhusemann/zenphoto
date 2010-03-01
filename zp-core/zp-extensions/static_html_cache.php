@@ -2,7 +2,18 @@
 /**
  * Static HTML Cache
  *
- * Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php
+ * Used to cache Theme pages (i.e. those pages launched by the Zenphoto index.php script.)
+ * 
+ * Exceptions to this are the password.php and 404.php pages, any page listed in the 
+ * Excluded pages option, and any page whose script makes a call on the 
+ * static_cache_html_disable_cache() function. NOTE: this function only prevents the
+ * creation of a cache image of the page being viewed. If there is already an existing 
+ * cached page and none of the other exclusions are in effect, the cached page will be
+ * shown.
+ * 
+ * In addition, caching does not occur for pages viewed by Zenphoto users if the user has
+ * ADMIN priviledges or if he is the manager of an album being viewed or whose images are
+ * being viewed. Likewise, Zenpage News and Pages are not cached when viewed by the author.
  *
  * @author Malte Müller (acrylian)
  * @package plugins
@@ -82,17 +93,39 @@ class staticCache {
 	 *
 	 */
 	function checkIfAllowedPage() {
-		global $_zp_gallery_page, $_zp_current_image, $_zp_current_album;
+		global $_zp_gallery_page, $_zp_current_image, $_zp_current_album, $_zp_current_zenpage_page,
+						$_zp_current_zenpage_news, $_zp_current_admin, $_zp_disallow_HTML_cache;
+		if ($_zp_disallow_HTML_cache || zp_loggedin(ADMIN_RIGHTS)) {
+			return false;	// don't cache pages the admin views!
+		}
 		if(!isset($_GET['p'])) {
 			switch ($_zp_gallery_page) {
 				case "index.php":
 					$title = "";
 					break;
 				case "image.php": // does it really makes sense to exclude images and albums?
+					if (zp_loggedin() && isMyAlbum($_zp_current_album->name,ALL_RIGHTS)) {
+						return true; // it is his album, no caching!
+					}
 					$title = $_zp_current_image->filename;
 					break;
 				case "album.php":
+					if (zp_loggedin() && isMyAlbum($_zp_current_album->name,ALL_RIGHTS)) {
+						return true; // it is his album, no caching!
+					}
 					$title = $_zp_current_album->name;
+					break;
+				case ZENPAGE_PAGES.'.php':
+					if (zp_loggedin() && $_zp_current_admin['user'] == $_zp_current_zenpage_page->getAuthor()) {
+						return false;	// don't cache author's pages
+					}
+			
+					break;
+				case ZENPAGE_NEWS.'.php':
+					if (zp_loggedin() && $_zp_current_admin['user'] == $_zp_current_zenpage_news->getAuthor()) {
+						return false;	// don't cache author's pages
+					}
+					break;
 			}
 		} else {
 			if(isset($_GET['title'])) {
@@ -102,27 +135,17 @@ class staticCache {
 			}
 		}
 		$pages = getOption("static_cache_excludedpages");
-		$array = explode(",",$pages);
-		foreach($array as $item) {
+		$excludeList = explode(",",$pages);
+		foreach($excludeList as $item) {
 			$page_to_exclude = explode("/",$item);
 			if ($_zp_gallery_page === trim($page_to_exclude[0])) {
 				$exclude = trim($page_to_exclude[1]);
-				if(empty($exclude)) {
-					$pagecheck =  FALSE;
-					break;
-				} else {
-					if($title === $exclude) {
-						$pagecheck =  FALSE;
-						break;
-					} else {
-						$pagecheck =  TRUE;
-					}
+				if(empty($exclude) || $title === $exclude) {
+					return false;
 				}
-			} else {
-				$pagecheck = TRUE;
 			}
 		}
-		return $pagecheck;
+		return true;
 	}
 
 	/**
@@ -208,13 +231,13 @@ class staticCache {
 		}
 
 		// index.php
-		if($_zp_gallery_page === "index.php" AND $this->checkIfAllowedPage()) {
+		if($_zp_gallery_page === "index.php") {
 			$cachesubfolder = "index";
 			$cachefilepath = $cachesubfolder."/index".$page.$locale.".html";
 		}
 
 		// album.php/image.php
-		if($_zp_gallery_page === "album.php" OR $_zp_gallery_page === "image.php" AND $this->checkIfAllowedPage()) {
+		if($_zp_gallery_page === "album.php" OR $_zp_gallery_page === "image.php") {
 			$cachesubfolder = "albums";
 			$album = $_zp_current_album->name;
 			$album = str_replace("/","_",$album);
@@ -227,7 +250,7 @@ class staticCache {
 		}
 
 		// custom pages except error page and search
-		if(isset($_GET['p']) AND $this->checkIfAllowedPage()) {
+		if(isset($_GET['p'])) {
 			$cachesubfolder = "pages";
 			$custompage = $_zp_gallery_page;
 			if(isset($_GET['title'])) {
@@ -283,6 +306,11 @@ class staticCache {
 	}
 } // class
 
+/**
+ * creates the Utilities button to purge the static html cache
+ * @param array $buttons
+ * @return array
+ */
 function static_cache_html_purgebutton($buttons) {
 	$buttons[] = array(
 								'button_text'=>gettext('Purge HTML cache'),
@@ -295,6 +323,14 @@ function static_cache_html_purgebutton($buttons) {
 								'rights'=> ADMIN_RIGHTS
 								);
 	return $buttons;
+}
+
+/**
+ * call to disable caching a page
+ */
+function static_cache_html_disable_cache() {
+	global $_zp_disallow_HTML_cache;
+	$_zp_disallow_HTML_cache = true;
 }
 
 ?>
