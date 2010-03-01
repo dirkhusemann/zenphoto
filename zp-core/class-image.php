@@ -8,6 +8,10 @@
 
 $_zp_extra_filetypes = array(); // contains file extensions and the handler class
 
+define('WATERMARK_IMAGE', 1);
+define('WATERMARK_THUMB', 2);
+define('WATERMARK_FULL', 4);
+
 /**
  * Returns a new "image" object based on the file extension
  *
@@ -943,7 +947,12 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getSizedImage($size) {
-		$args = getImageParameters(array($size), $this->album->name);
+		if ($this->getWMUse() & WATERMARK_IMAGE) {
+			$wmt = $this->getWatermark();
+		} else {
+			$wmt = NULL;
+		}
+		$args = getImageParameters(array($size, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, $wmt), $this->album->name);
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename, $args);
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
@@ -971,9 +980,16 @@ class _Image extends PersistentObject {
 	 */
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {
 		if ($thumbStandin) {
-			$wmt = getOption('Image_watermark');
+			$wmt = $this->getWatermark();
+			if (empty($wmt) || !($this->getWMUse() & WATERMARK_THUMB)) {
+				$wmt = getOption('Image_watermark');
+			}
 		} else {
-			$wmt = NULL;
+			if ($this->getWMUse() & WATERMARK_IMAGE) {
+				$wmt = $this->getWatermark();
+			} else {
+				$wmt = '';
+			}
 		}
 		$args = getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, $wmt, NULL, $gray), $this->album->name);
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,	$args);
@@ -1029,7 +1045,10 @@ class _Image extends PersistentObject {
 			return $this->getCustomImage(NULL, $sw, $sh, $cw, $ch, $cx, $cy, true);
 		}
 		$filename = $this->filename;
-		$wmt = getOption('Image_watermark');
+		$wmt = $this->getWatermark();
+		if (empty($wmt) || !($this->getWMUse() & WATERMARK_THUMB)) {
+			$wmt = getOption('Image_watermark');
+		}
 		$args = getImageParameters(array('thumb', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, $wmt, NULL, NULL), $this->album->name);
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, $args);
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
@@ -1131,7 +1150,43 @@ class _Image extends PersistentObject {
 	function getImageFootprint() {
 		return filesize($this->localpath); 
 	}
+	
+	/**
+	 * Returns the custom watermark name
+	 * 
+	 * @return string
+	 */
+	function getWatermark() {
+		return $this->get('watermark');
+	}
+	
+	/**
+	 * Set custom watermark
+	 * 
+	 * @param string $wm
+	 */
+	function setWatermark($wm) {
+		$this->set('watermark', $wm);
+	}
 
+	/**
+	 * Returns the custom watermark usage
+	 * 
+	 * @return bool
+	 */
+	function getWMUse() {
+		return $this->get('watermark_use');
+	}
+	
+	/**
+	 * Sets the custom watermark usage
+	 * 
+	 * @param $use
+	 */
+	function setWMUse($use) {
+		$this->set('watermark_use', $use);
+		
+	}
 }
 
 ?>

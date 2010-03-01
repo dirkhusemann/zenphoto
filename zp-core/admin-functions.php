@@ -1227,7 +1227,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								$selected = '';;
 							}
 							?>
-							<option value="" <?php echo $selected; ?> ><?php echo gettext('*gallery theme')?></option>
+							<option value="" style="background-color:LightGray" <?php echo $selected; ?> ><?php echo gettext('*gallery theme')?></option>
 							<?php
 							foreach ($themes as $theme=>$themeinfo) {
 								if ($oldtheme == $theme) {
@@ -1252,7 +1252,8 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
 						<td>
 							<select id="album_watermark" name="album_watermark">
-								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
+								<option value="!" <?php if ($current=='!') echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*no watermark'); ?></option>
+								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*default'); ?></option>
 								<?php
 								$watermarks = getWatermarks();
 								generateListFromArray(array($current), $watermarks, false, false);

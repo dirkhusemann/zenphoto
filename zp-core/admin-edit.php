@@ -158,7 +158,6 @@ if (isset($_GET['action'])) {
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if (isset($_POST['album'])) {
-
 				$folder = sanitize_path($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
@@ -179,6 +178,7 @@ if (isset($_GET['action'])) {
 					if (getOption('albumimagedirection')) $oldsort = $oldsort.'_desc';
 					$newsort = sanitize($_POST['albumimagesort'],3);
 					if ($oldsort == $newsort) {
+						$invalidatecache = false;
 						for ($i = 0; $i < $_POST['totalimages']; $i++) {
 							$filename = sanitize($_POST["$i-filename"]);
 							// The file might no longer exist
@@ -247,6 +247,19 @@ if (isset($_GET['action'])) {
 									if (isset($_POST["$i-reset_hitcounter"])) {
 										$image->set('hitcounter', 0);
 									}
+									$wmt = sanitize($_POST["$i-image_watermark"],3);
+									if ($wmt != $image->getWatermark()) {
+										$invalidatecache = true;
+										$image->setWatermark($wmt);
+										$wmuse = 0;
+										if (isset($_POST['wm_image-'.$i])) $wmuse = $wmuse | WATERMARK_IMAGE;
+										if (isset($_POST['wm_thumb-'.$i])) $wmuse = $wmuse | WATERMARK_THUMB;
+										if (isset($_POST['wm_full-'.$i])) $wmuse = $wmuse | WATERMARK_FULL;
+										if ($wmuse != $image->getWMUse()) {
+											$invalidatecache = true; 
+											$image->setWMUse($wmuse);
+										}
+									}
 									$custom = process_language_string_save("$i-custom_data", 1);
 									$image->setCustomData(zp_apply_filter('save_image_custom_data', $custom, $i));
 									zp_apply_filter('save_image_utilities_data', $image, $i);
@@ -282,6 +295,9 @@ if (isset($_GET['action'])) {
 									}
 								}
 							}
+						}
+						if ($invalidatecache) {
+							$gallery->clearCache(SERVERCACHE . '/' . $image->album->name);
 						}
 					} else {
 						if (strpos($newsort, '_desc')) {
@@ -833,7 +849,7 @@ $alb = removeParentAlbumNames($album);
 				<input type="hidden" name="<?php echo $currentimage; ?>-filename"	value="<?php echo $image->filename; ?>" />
 				<table border="0" class="formlayout" id="image-<?php echo $currentimage; ?>">
 					<tr>
-						<td valign="top" width="150" rowspan="14">
+						<td valign="top" width="150" rowspan="17">
 
 						<a <?php echo $placemark; ?>href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
 										title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
@@ -1025,8 +1041,7 @@ $alb = removeParentAlbumNames($album);
 
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Description:"); ?></td>
-						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
-						</td>
+						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?></td>
 					</tr>
 
 
@@ -1049,6 +1064,28 @@ $alb = removeParentAlbumNames($album);
 					</tr>
 
 					<?php
+					$current = $image->getWatermark();
+					?>
+					<tr>
+						<td align="left" valign="top" width="150"><?php echo gettext("Image watermark:"); ?> </td>
+						<td>
+							<select id="image_watermark-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-image_watermark" onclick="javascript:toggleWMUse(<?php echo $currentimage; ?>);">
+								<option value="!" <?php if ($current=='!') echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*no watermark'); ?></option>
+								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*default'); ?></option>
+								<?php
+								$watermarks = getWatermarks();
+								generateListFromArray(array($current), $watermarks, false, false);
+								?>
+							</select>
+							<span id="WMUSE_<?php echo $currentimage; ?>" style="display:<?php if ($current == '') echo 'none'; else echo 'inline';?>">
+								<?php $wmuse = $image->getWMUse(); ?>
+								<label><input type="checkbox" value="1" id="wm_image-<?php echo $currentimage; ?>" name="wm_image-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_IMAGE) echo 'checked="checeked"';?> /><?php echo gettext('image')?></label>
+								<label><input type="checkbox" value="1" id="wm_thumb-<?php echo $currentimage; ?>" name="wm_thumb-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_THUMB) echo 'checked="checeked"';?> /><?php echo gettext('thumb')?></label>
+								<label><input type="checkbox" value="1" id="wm_full-<?php echo $currentimage; ?>"name="wm_full-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_FULL) echo 'checked="checeked"';?> /><?php echo gettext('full image')?></label>
+							</span>
+						</td>
+					</tr>
+		<?php
 					$custom = zp_apply_filter('edit_image_custom_data', '', $image, $currentimage);
 					if (empty($custom)) {
 						?>

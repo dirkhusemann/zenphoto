@@ -2640,15 +2640,24 @@ function getProtectedImageURL($image=NULL, $disposal=NULL) {
 		$image = $_zp_current_image;
 	}
 	$album = $image->getAlbum();
-	$args = array('FULL', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	$wmt = $image->getWatermark();
+	if (!empty($wmt) || !($image->getWMUse() & WATERMARK_FULL)) {
+		$wmt = NULL;
+	}
+	$args = array('FULL', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, $wmt, NULL);
 	$cache_file = getImageCacheFilename($album->name, $image->filename, $args);
 	$cache_path = SERVERCACHE.$cache_file;
 	if (empty($disposal) && file_exists($cache_path)) {
 		return WEBPATH.'/'.CACHEFOLDER.pathurlencode(imgSrcURI($cache_file));
 	} else {
 		$params = '&q='.getOption('full_image_quality');
-		$watermark_use_image = getAlbumInherited($album->name, 'watermark', $id);
-		if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
+		$watermark_use_image = $image->getWatermark();
+		if (empty($watermark_use_image) || !($image->getWMUse() & WATERMARK_FULL)) {
+			$watermark_use_image = getAlbumInherited($album->name, 'watermark', $id);
+		}
+		if (empty($watermark_use_image)) {
+			$watermark_use_image = getOption('fullimage_watermark');
+		}
 		if (!empty($watermark_use_image)) {
 			$params .= '&wmk='.$watermark_use_image;
 		}

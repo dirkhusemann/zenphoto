@@ -424,41 +424,62 @@ cite {
 
 .error {
 	line-height: 1;
-	text-align: center;
+	text-align: left;
 	border-top: 1px solid #FF9595;
 	border-bottom: 1px solid #FF9595;
 	background-color: #FFEAEA;
 	padding: 2px 8px 0px 8px;
 	color: red;
+}
+.error h1 {
+	color: red;
 	font-weight : bold;
+	text-align:center;
+}
+.error select {
+	color: red;
+	background-color: #FFEAEA;
 }
 
 .warning {
 	line-height: 1;
-	text-align: center;
+	text-align: left;
 	border-top: 1px solid #FF6600;
 	border-bottom: 1px solid #FF6600;
 	background-color: #FFDDAA;
 	padding: 2px 8px 0px 8px;
 	color: #FF6600;
+}
+.warning h1 {
+	color: #FF6600;
+	text-align:center;
 	font-weight : bold;
+}
+.warning select {
+	color: #FF6600;
+	background-color: #FFDDAA;
 }
 
 .notice {
 	line-height: 1;
-	text-align: center;
+	text-align: left;
 	border-top: 1px solid #009966;
 	border-bottom: 1px solid #009966;
 	background-color: #B1F7B6;
 	padding: 2px 8px 0px 8px;
 	color: #009966;
+}
+.notice h1 {
+	color: #009966;
 	font-weight : bold;
+	text-align:center;
+}
+.notice select {
+	color: #009966;
+	background-color: #B1F7B6;
 }
 
-.sqlform p,
-.warning p,
-.error p,
-.notice p {
+.sqlform p {
 	text-align: left;
 	color: black;
 	font-weight : normal;
@@ -569,23 +590,21 @@ if (!$setup_checked) {
 			if (!empty($msg)) {
 				if ($check == 0) {
 					echo '<div class="error">';
-					echo gettext('Error!');
-					echo "<p>".$msg."</p>";
+					echo '<h1>'.gettext('Error!').'</h1>';
+					echo $msg;
 					echo "</div>";
 				} else if ($check == -1) {
 					$moreid++;
-					// should warnings start out hidden?
-					//					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
 					echo "<div class='warning' id='more".$moreid."' style='display:block'>";
-					echo gettext('Warning!');
-					echo "<br />".$msg;
+					echo '<h1>'.gettext('Warning!').'</h1>';
+					echo $msg;
 					echo "</div>";
 				} else {
 					$moreid++;
 					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Notice!</strong> click for details').'</a>';
 					echo "<div class='notice' id='more".$moreid."' style='display:none'>";
-					echo gettext('Notice!');
-					echo "<br />".$msg;
+					echo '<h1>'.gettext('Notice!').'</h1>';
+					echo $msg;
 					echo "</div>";
 				}
 				$dsp .= ' '.trim($msg);
@@ -1952,7 +1971,7 @@ if (file_exists(CONFIGFILE)) {
 			}
 		}
 	}
-	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `watermark` varchar(255)';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `watermark` varchar(255) DEFAULT NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `commentson` `commentson` int(1) UNSIGNED default 0';
 	//v1.2.7
@@ -1967,7 +1986,10 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // empty dates should be NULL
 	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // force metadata refresh
 	//v1.2.8
-	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `location` TEXT";
+	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' CHANGE `place` `location` TEXT';
+	//v1.3
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `watermark` varchar(255) DEFAULT NULL';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `watermark_use` int(1) DEFAULT 7';
 	
 	
 	// do this last incase there are any field changes of like names!

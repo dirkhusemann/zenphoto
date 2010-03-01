@@ -125,6 +125,8 @@ if (isset($_GET['wmk'])) {
 	$watermark_use_image = getAlbumInherited($album, 'watermark', $id);
 	if (empty($watermark_use_image)) $watermark_use_image = getOption('fullimage_watermark');
 }
+if ($watermark_use_image=='!') $watermark_use_image = '';
+
 if (isset($_GET['q'])) {
 	$quality = sanitize_numeric($_GET['q']);
 } else {
@@ -135,7 +137,7 @@ if (isset($_GET['dsp'])) {
 } else {
 	$disposal = getOption('protect_full_image');
 }
-if (!$watermark_use_image && !$rotate) { // no processing needed
+if (empty($watermark_use_image) && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && $disposal != 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
 		

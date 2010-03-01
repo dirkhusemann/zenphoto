@@ -259,3 +259,12 @@ function toggle_passwords(id, pwd_enable) {
 		jQuery('#password_enabled'+id).val('0');
 	}
 }
+
+// toggels the checkboxes for custom image watermarks
+function toggleWMUse(id) {
+	if (jQuery('#image_watermark-'+id).val() == '') {
+		jQuery('#WMUSE_'+id).hide();
+	} else {
+		jQuery('#WMUSE_'+id).show();
+	}
+}

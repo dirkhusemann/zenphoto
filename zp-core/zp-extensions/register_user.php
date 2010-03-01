@@ -94,7 +94,7 @@ class register_user_options {
 				<td style="margin:0; padding:0">
 					<input type="hidden" name="_ZP_CUSTOM_selector-register_user_page_page" value="0" />
 					<select id="register_user_page_page" name="register_user_page_page">
-						<option value=""><?php echo gettext('*no page selected'); ?></option>
+						<option value="" style="background-color:LightGray"><?php echo gettext('*no page selected'); ?></option>
 						<?php
 						$curdir = getcwd();
 						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$gallery->getCurrentTheme().'/';

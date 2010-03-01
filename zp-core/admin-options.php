@@ -492,7 +492,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							$zones = getTimezones();
 							?>
 							<select id="time_zone" name="time_zone">
-							<option value=""><?php echo gettext('*not specified'); ?></option>
+							<option value="" style="background-color:LightGray"><?php echo gettext('*not specified'); ?></option>
 							<?php generateListFromArray(array($tz = getOption('time_zone')), $zones, false, false); ?>
 							</select>
 						</td>
@@ -2033,7 +2033,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td><?php echo gettext("Gallery index page link:"); ?></td>
 				<td>
 					<select id="custom_index_page" name="custom_index_page">
-						<option value=""><?php echo gettext('*none'); ?></option>
+						<option value="" style="background-color:LightGray"><?php echo gettext('*none'); ?></option>
 						<?php
 						$curdir = getcwd();
 						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
