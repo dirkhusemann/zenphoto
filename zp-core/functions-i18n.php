@@ -242,7 +242,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		$locale = getOption("locale");
 		@putenv("LANG=$locale");
 		// gettext setup
-		$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale);
+		$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale, NULL);
 		if (!$result) { // failed to set the locale
 			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
 				$locale = sanitize($_POST['oldlocale'], 3);
