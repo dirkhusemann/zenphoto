@@ -6,6 +6,14 @@
 
 // force UTF-8 Ø
 
+// leave this as the first executable statement to avoid problems with PHP not having gettext support.
+if(!function_exists("gettext")) {
+	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
+	$noxlate = -1;
+} else {
+	$noxlate = 1;
+}
+
 define('OFFSET_PATH', 2);
 
 require_once(dirname(__FILE__).'/folder-definitions.php');
@@ -28,13 +36,6 @@ $debug = isset($_REQUEST['debug']);
 
 $setup_checked = isset($_GET['checked']);
 $upgrade = false;
-
-if(!function_exists("gettext")) {
-	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
-	$noxlate = -1;
-} else {
-	$noxlate = 1;
-}
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
