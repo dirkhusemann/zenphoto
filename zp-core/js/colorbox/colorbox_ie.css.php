@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/colorbox.css" type="text/css" />
 <?php 
 /*
     The following fixes png-transparency for IE6.  

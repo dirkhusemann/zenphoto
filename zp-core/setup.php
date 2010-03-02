@@ -25,13 +25,6 @@ header ('Content-Type: text/html; charset=UTF-8');
 define('CONFIGFILE',dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
 define('HTACCESS_VERSION', '1.2.8.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 
-$permission_names = array(//0700=>gettext('paranoid'), // beware of this one, it can severly break things!!!
-													0750=>gettext('strict+'),
-													0755=>gettext('strict'),
-													0775=>gettext('relaxed'),
-													0777=>gettext('loose')
-													);
-
 $debug = isset($_REQUEST['debug']);
 
 $setup_checked = isset($_GET['checked']);
@@ -152,17 +145,11 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 	}
 }
 
+$permissions = array(0750,0755,0775,0777); // NOTE: also $permission_names array below
 if ($updatechmod = isset($_REQUEST['chmod_permissions'])) {
 	$selected = round($_REQUEST['chmod_permissions']);
-	$c = 0;
-	if ($selected>=0 && $selected<count($permission_names)) {
-		foreach ($permission_names as $key=>$name) {
-			if ($c == $selected) {
-				$chmod = $key;
-				break; 
-			}
-			$c++;
-		}
+	if ($selected>=0 && $selected<count($permissions)) {
+		$chmod = $permissions[$selected];
 	} else {
 		$updatechmod = false;
 	}
@@ -289,6 +276,13 @@ if (!isset($_zp_setupCurrentLocale_result) || empty($_zp_setupCurrentLocale_resu
 	$_zp_setupCurrentLocale_result = setMainDomain();
 	if (DEBUG_LOCALE) debugLog('$_zp_setupCurrentLocale_result = '.$_zp_setupCurrentLocale_result);
 }
+
+// NOTE: see also $permissions array avove
+$permission_names = array(0750=>gettext('strict+'),
+													0755=>gettext('strict'),
+													0775=>gettext('relaxed'),
+													0777=>gettext('loose')
+													);
 
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>

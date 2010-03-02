@@ -8,7 +8,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/colorbox.css" type="text/css" />
 	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php')?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -40,24 +39,24 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php } if (hasNextImage()) { ?>
 			<div class="imgnext"><a href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext("Next Image"); ?>"><?php echo gettext("next"); ?> &raquo;</a></div>
 			<?php } ?>
-		</div> 
+		</div>
 	</div>
-	
+
 	<div id="breadcrumb">
 	<h2><a href="<?php echo getGalleryIndexURL(false);?>" title="<?php gettext('Index'); ?>"><?php echo gettext("Index"); ?></a> &raquo; <?php echo gettext("Gallery"); ?><?php printParentBreadcrumb(" &raquo; "," &raquo; "," &raquo; "); printAlbumBreadcrumb(" ", " &raquo; "); ?>
 			 <strong><?php printImageTitle(true); ?></strong> (<?php echo imageNumber()."/".getNumImages(); ?>)
 			</h2>
 		</div>
-		
+
 <div id="content">
 	<div id="content-left">
-		
+
 	<!-- The Image -->
- <?php 
- if(function_exists("printPagedThumbsNav")) { 
- 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40); 
+ <?php
+ if(function_exists("printPagedThumbsNav")) {
+		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40);
  } ?>
-	
+
 	<div id="image">
 		<?php if(getOption("Use_thickbox")) {
 			$boxclass = " class=\"thickbox\"";
@@ -75,8 +74,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php
 		if (!empty($tburl)) {
 			?>
-	  	</a>
-	  	<?php
+			</a>
+			<?php
 		}
 		?>
 	</div>
@@ -90,10 +89,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			}
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
-    <br style="clear:both;" /><br />
+		<br style="clear:both;" /><br />
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
 
-    <?php if (function_exists('printRating')) { printRating(); }?>
+		<?php if (function_exists('printRating')) { printRating(); }?>
 
 		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
@@ -103,17 +102,17 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php printCommentForm(); ?>
 			</div>
 		<?php } ?>
-	
+
 </div><!-- content-left -->
-					
+
 <div id="sidebar">
 <?php include("sidebar.php"); ?>
 </div>
-	
+
 	<div id="footer">
 	<?php include("footer.php"); ?>
 	</div>
-	
+
 
 	</div><!-- content -->
 

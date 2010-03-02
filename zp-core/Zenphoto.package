@@ -200,7 +200,6 @@ themes/zenpage/style.css
 themes/zenpage/theme.png
 themes/zenpage/themeoptions.php
 themes/zenpage/theme_description.php
-trackback.php
 zp-core
 zp-core/404.php
 zp-core/admin-albumsort.php

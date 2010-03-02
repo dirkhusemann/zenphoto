@@ -66,6 +66,7 @@ if (isset($_GET['action']) && $_GET['action']=='clear_html_cache' && zp_loggedin
 class staticCache {
 
 	var $startmtime;
+	var $disable = false; // manual disable caching a page
 	
 	function staticCache() {
 		setOptionDefault('static_cache_expire', 86400);
@@ -94,8 +95,8 @@ class staticCache {
 	 */
 	function checkIfAllowedPage() {
 		global $_zp_gallery_page, $_zp_current_image, $_zp_current_album, $_zp_current_zenpage_page,
-						$_zp_current_zenpage_news, $_zp_current_admin, $_zp_disallow_HTML_cache;
-		if ($_zp_disallow_HTML_cache || zp_loggedin(ADMIN_RIGHTS)) {
+						$_zp_current_zenpage_news, $_zp_current_admin;
+		if ($this->disable || zp_loggedin(ADMIN_RIGHTS)) {
 			return false;	// don't cache pages the admin views!
 		}
 		if(!isset($_GET['p'])) {
@@ -181,7 +182,6 @@ class staticCache {
 	 *
 	 */
 	function endHTMLCache() {
-		global $_zp_gallery_page;
 		if($this->checkIfAllowedPage()) {
 			$cachefilepath = $this->createCacheFilepath();
 			if(!empty($cachefilepath)) {
@@ -198,6 +198,7 @@ class staticCache {
 				echo $pagecontent;
 			}
 		}
+		@ob_end_clean(); // clean up any dangling output buffer
 	}
 
 	/**
@@ -329,8 +330,10 @@ function static_cache_html_purgebutton($buttons) {
  * call to disable caching a page
  */
 function static_cache_html_disable_cache() {
-	global $_zp_disallow_HTML_cache;
-	$_zp_disallow_HTML_cache = true;
+	global $_zp_HTML_cache;
+	if(is_object($_zp_HTML_cache)) {
+		$_zp_HTML_cache->disable = true; 
+	}
 }
 
 ?>
