@@ -929,7 +929,7 @@ class SearchEngine
 				$albumname = $row['folder'];
 				if ($albumname != $this->dynalbumname) {
 					if (file_exists($albumfolder . internalToFilesystem($albumname))) {
-						if (isMyAlbum($albumname, ALL_RIGHTS) || checkAlbumPassword($albumname, $hint) && $row['show']) {
+						if (isMyAlbum($albumname, VIEW_ALL_RIGHTS) || checkAlbumPassword($albumname, $hint) && $row['show']) {
 							if (empty($this->album_list) || in_array($albumname, $this->album_list)) {
 								$albums[] = $albumname;
 							}
@@ -1046,7 +1046,7 @@ class SearchEngine
 				$row2 = query_single_row($query); // id is unique
 				$albumname = $row2['folder'];
 				if (file_exists($albumfolder . internalToFilesystem($albumname) . '/' . internalToFilesystem($row['filename']))) {
-					if (isMyAlbum($albumname, ALL_RIGHTS) || checkAlbumPassword($albumname, $hint) && $row2['show']) {
+					if (isMyAlbum($albumname, VIEW_ALL_RIGHTS) || checkAlbumPassword($albumname, $hint) && $row2['show']) {
 						if (empty($this->album_list) || in_array($albumname, $this->album_list)) {
 							$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
 						}

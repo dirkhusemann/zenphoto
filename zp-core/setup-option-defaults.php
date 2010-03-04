@@ -31,6 +31,12 @@ if (defined('LIBAUTH_VERSION')) {
 		setOption('libauth_version',LIBAUTH_VERSION);
 	}
 }
+$admins = getAdministrators();
+foreach ($admins as $user) {
+	if (($user['rights'] & (MANAGE_ALL_ALBUM_RIGHTS | VIEW_ALL_RIGHTS))==MANAGE_ALL_ALBUM_RIGHTS) {
+		saveAdmin($user['user'], NULL, $user['name'], $user['email'], $user['rights'] | VIEW_ALL_RIGHTS, NULL, $user['custom_data'], $user['group']);
+	}
+}
 
 // old zp-config.php opitons. preserve them
 $conf = $_zp_conf_vars;

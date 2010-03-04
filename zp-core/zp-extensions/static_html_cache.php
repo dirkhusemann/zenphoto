@@ -70,7 +70,7 @@ class staticCache {
 	
 	function staticCache() {
 		setOptionDefault('static_cache_expire', 86400);
-		setOptionDefault('static_cache_excludedpages', 'search.php/');
+		setOptionDefault('static_cache_excludedpages', 'search.php/,contact.php/,register.php/');
 	}
 
 	function getOptionsSupported() {
@@ -105,13 +105,13 @@ class staticCache {
 					$title = "";
 					break;
 				case "image.php": // does it really makes sense to exclude images and albums?
-					if (zp_loggedin() && isMyAlbum($_zp_current_album->name,ALL_RIGHTS)) {
+					if (zp_loggedin() && isMyAlbum($_zp_current_album->name, VIEW_ALL_RIGHTS)) {
 						return true; // it is his album, no caching!
 					}
 					$title = $_zp_current_image->filename;
 					break;
 				case "album.php":
-					if (zp_loggedin() && isMyAlbum($_zp_current_album->name,ALL_RIGHTS)) {
+					if (zp_loggedin() && isMyAlbum($_zp_current_album->name, VIEW_ALL_RIGHTS)) {
 						return true; // it is his album, no caching!
 					}
 					$title = $_zp_current_album->name;

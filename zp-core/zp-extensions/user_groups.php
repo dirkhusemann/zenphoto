@@ -89,7 +89,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 		}
 		$rights = array();
 		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-			$rights[] = "'#".$i.'-'.$rightselement."'";
+			$rights[] = "'#".$rightselement.'-'.$i."'";
 		}
 		$grouppart =	'
 			<script type="text/javascript">
@@ -214,7 +214,7 @@ function user_groups_admin_tabs($tabs, $current) {
 										gettext('groups')=>PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&amp;tab=groups');
 	if ((zp_loggedin(ADMIN_RIGHTS))) {
 		$tabs['users'] = array(	'text'=>gettext("admin"),
-														'link'=>WEBPATH."/".ZENFOLDER.'/admin-users.php?page=users',
+														'link'=>WEBPATH."/".ZENFOLDER.'/admin-users.php?page=users&amp;tab=users',
 														'subtabs'=>$subtabs,
 														'default'=>'users');
 	}

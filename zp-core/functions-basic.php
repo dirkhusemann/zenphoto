@@ -71,7 +71,7 @@ $_zp_imagick_present = false;
 require_once(dirname(__FILE__).'/functions-db.php');
 
 // load graphics libraries in priority order
-// once a library has concented to load, all others will 
+// once a library has concented to load, all others will
 // abdicate.
 $_zp_graphics_optionhandlers = array();
 require_once(dirname(__FILE__).'/lib-Imagick.php');
@@ -654,9 +654,9 @@ function sanitize_string($input_string, $sanitize_level) {
 function zp_error($message, $fatal=true) {
 	global $_zp_error;
 	if (!$_zp_error) {
-		
-//TODO: gettext calls for the messages		
-		
+
+//TODO: gettext calls for the messages
+
 		?>
 		<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">
 			<h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto encountered an error</h2>
@@ -1164,8 +1164,11 @@ function loadLocalOptions($albumid, $theme) {
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS | VIEW_ALL_RIGHTS)) {
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | $action)) return true;
+	}
+	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == VIEW_ALL_RIGHTS)) {	// sees all
+		return true;
 	}
 	if (zp_apply_filter('check_album_credentials', false)) return true;
 	if (empty($albumfolder) || $albumfolder == '/') {

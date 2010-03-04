@@ -47,7 +47,7 @@ if (isset($_GET['p'])) {
 	handleSearchParms('image', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
-	if (!isMyALbum($_zp_current_album->name, ALL_RIGHTS)) { //update hit counter
+	if (!isMyALbum($_zp_current_album->name, VIEW_ALL_RIGHTS)) { //update hit counter
 		$hc = $_zp_current_image->get('hitcounter')+1;
 		$_zp_current_image->set('hitcounter', $hc);
 		$_zp_current_image->save();
@@ -65,7 +65,7 @@ if (isset($_GET['p'])) {
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 	// update hit counter
-	if (!isMyALbum($_zp_current_album->name, ALL_RIGHTS) && getCurrentPage() == 1) {
+	if (!isMyALbum($_zp_current_album->name, VIEW_ALL_RIGHTS) && getCurrentPage() == 1) {
 		$hc = $_zp_current_album->get('hitcounter')+1;
 		$_zp_current_album->set('hitcounter', $hc);
 		$_zp_current_album->save();

@@ -459,7 +459,7 @@ function sortByMultilingual($dbresult, $field, $descending) {
 function checkAlbumPassword($albumname, &$hint) {
 	global $_zp_pre_authorization, $_zp_loggedin, $_zp_gallery;
 	if (zp_loggedin(ADMIN_RIGHTS | VIEW_ALL_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return 'zp_master_admin';
-	if (isMyAlbum($albumname, ALL_RIGHTS)) return 'zp_album_admin';  // he is allowed to see it.
+	if (isMyAlbum($albumname, VIEW_ALL_RIGHTS)) return 'zp_album_admin';  // he is allowed to see it.
 	if (isset($_zp_pre_authorization[$albumname])) {
 		return $_zp_pre_authorization[$albumname];
 	}
@@ -1361,7 +1361,7 @@ function getNotViewableAlbums() {
 				if (!checkAlbumPassword($row['folder'], $hint)) {
 					$_zp_not_viewable_album_list[] = $row['id'];
 				} else {
-					if (!($row['show'] || isMyAlbum($row['folder'], ALL_RIGHTS))) {
+					if (!($row['show'] || isMyAlbum($row['folder'], VIEW_ALL_RIGHTS))) {
 						$_zp_not_viewable_album_list[] = $row['id'];
 					}
 				}

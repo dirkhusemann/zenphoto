@@ -2702,23 +2702,44 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
 	global $_zp_gallery;
 	echo '<br />';
 	$album = new Album($_zp_gallery, $albumname);
-	if (is_null($size)) {
-		$size = floor(getOption('image_size') * 0.5);
-	}
-	if (is_null($imagename)) {
-		makeImageCurrent($album->getAlbumThumbImage());
-		rem_context(ZP_IMAGE);
-		echo '<a href="'.htmlspecialchars(getAlbumLinkURL($album)).'"   title="'.sprintf(gettext('View the %s album'), $albumname).'">';
-		add_context(ZP_IMAGE);
-		printCustomSizedImage(sprintf(gettext('View the photo album %s'), $albumname), $size);
-		echo '</a>';
+	if ($album->loaded) {
+		if (is_null($size)) {
+			$size = floor(getOption('image_size') * 0.5);
+		}
+		if (is_null($imagename)) {
+			makeImageCurrent($album->getAlbumThumbImage());
+			rem_context(ZP_IMAGE);
+			echo '<a href="'.htmlspecialchars(getAlbumLinkURL($album)).'"   title="'.sprintf(gettext('View the %s album'), $albumname).'">';
+			add_context(ZP_IMAGE);
+			printCustomSizedImage(sprintf(gettext('View the photo album %s'), $albumname), $size);
+			rem_context(ZP_IMAGE | ZP_ALBUM);
+			echo '</a>';
+		} else {
+			$image = newImage($album, $imagename);
+			if ($image->loaded) {
+				makeImageCurrent($image);
+				echo '<a href="'.htmlspecialchars(getImageLinkURL($image)).'" title="'.sprintf(gettext('View %s'), $imagename).'">';
+				printCustomSizedImage(sprintf(gettext('View %s'), $imagename), $size);
+				rem_context(ZP_IMAGE | ZP_ALBUM);
+				echo '</a>';
+			} else {
+				?>
+				<span style="background:red;color:black;">
+				<?php
+				printf(gettext('<code>zenpageAlbumImage()</code> did not find the image %1$s:%2$s'), $albumname, $imagename);
+				?>
+				</span>
+				<?php
+			}
+		}
 	} else {
-		$image = newImage($album, $imagename);
-		makeImageCurrent($image);
-		echo '<a href="'.htmlspecialchars(getImageLinkURL($image)).'"   title="'.sprintf(gettext('View %s'), $imagename).'">';
-		printCustomSizedImage(sprintf(gettext('View %s'), $imagename), $size);
-		echo '</a>';
+		?>
+		<span style="background:red;color:black;">
+		<?php
+		printf(gettext('<code>zenpageAlbumImage()</code> did not find the album %1$s'), $albumname);
+		?>
+		</span>
+		<?php
 	}
-	rem_context(ZP_IMAGE | ZP_ALBUM);
 }
 ?>

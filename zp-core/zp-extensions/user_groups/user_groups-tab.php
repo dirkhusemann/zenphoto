@@ -110,7 +110,7 @@ echo '</head>'."\n";
 				echo  "<h2>Saved</h2>";
 				echo '</div>';
 			}
-			$subtab = printSubtabs('users');
+			$subtab = printSubtabs('users','users');
 			?>
 			<div id="tab_users" class="tabbox">
 				<?php

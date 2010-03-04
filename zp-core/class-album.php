@@ -570,7 +570,7 @@ class Album extends PersistentObject {
 	 * @return array
 	 */
 	function sortImageArray($images, $sorttype, $sortdirection) {
-		$mine = isMyAlbum($this->name, ALL_RIGHTS);
+		$mine = isMyAlbum($this->name, VIEW_ALL_RIGHTS);
 		$sortkey = str_replace('`','',$this->getImageSortKey($sorttype));
 		if (($sortkey == '`sort_order`') || ($sortkey == 'RAND()')) { // manual sort is always ascending
 			$order = false;
@@ -698,7 +698,7 @@ class Album extends PersistentObject {
 				if ($shuffle) {
 					shuffle($thumbs);
 				}
-				$mine = isMyAlbum($this->name,ALL_RIGHTS);
+				$mine = isMyAlbum($this->name, VIEW_ALL_RIGHTS);
 				$other = NULL;
 				while (count($thumbs) > 0) {	// first check for images
 					$thumb = array_shift($thumbs);
@@ -733,7 +733,7 @@ class Album extends PersistentObject {
 				$folder = array_pop($subalbums);
 				$subalbum = new Album($this->gallery, $folder);
 				$pwd = $subalbum->getPassword();
-				if (($subalbum->getShow() && empty($pwd)) || isMyALbum($folder, ALL_RIGHTS)) {
+				if (($subalbum->getShow() && empty($pwd)) || isMyALbum($folder, VIEW_ALL_RIGHTS)) {
 					$thumb = $subalbum->getAlbumThumbImage();
 					if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
 						$this->albumthumbnail =  $thumb;

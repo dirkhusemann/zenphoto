@@ -349,7 +349,10 @@ function getSubtabs($tab, $default) {
 function printSubtabs($tab, $default=NULL) {
 	global $zenphoto_tabs, $main_tab_space;
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
-
+	if (is_null($default) && isset($zenphoto_tabs[$tab]['default'])) {
+		$default = $zenphoto_tabs[$tab]['default'];
+	} 
+	
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
 	?>
@@ -359,7 +362,7 @@ function printSubtabs($tab, $default=NULL) {
 		$i = strrpos($link, 'tab=');
 		$amp = strrpos($link, '&');
 		if ($i===false) {
-			$tab = '';
+			$tab = $default;
 		} else {
 			if ($amp > $i) {
 				$source = substr($link, 0, $amp);
@@ -2707,7 +2710,12 @@ function processRights($i) {
 		$rights = 0;
 	}
 	foreach ($_admin_rights as $name=>$right) {
-		if (isset($_POST[$i.'-'.$name])) $rights = $rights | $right | NO_RIGHTS;
+		if (isset($_POST[$i.'-'.$name])) {
+			$rights = $rights | $right | NO_RIGHTS;
+		}
+	}
+	if ($rights & MANAGE_ALL_ALBUM_RIGHTS) {	// these are lock-step linked!
+		$rights = $rights | VIEW_ALL_RIGHTS;
 	}
 	return $rights;
 }
