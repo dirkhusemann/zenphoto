@@ -8,7 +8,7 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tin
 			theme : "zenphoto",
 			language: "en",
 		  editor_selector: "texteditor",
-		  plugins : "safari,fullscreen",
+		  plugins : "safari,fullscreen,inlinepopups",
 			theme_zenphoto_toolbar_location : "top",
 			theme_zenphoto_toolbar_align : "left",
 			theme_zenphoto_statusbar_location : "bottom",
