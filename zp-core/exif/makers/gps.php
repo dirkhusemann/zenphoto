@@ -123,8 +123,8 @@ function formatGPSData($type,$tag,$intel,$data) {
 												".". hexdec(substr($data,6,2));
 
 		} else if($tag=="0005"){ // Altitude Reference
-			if($data == "00000000"){ $data = 'Above Sea Level'; }
-			else if($data == "01000000"){ $data = 'Below Sea Level'; }
+			if($data == "00000000"){ $data = '+'; }
+			else if($data == "01000000"){ $data = '-'; }
 		}
 
 	} else {
@@ -186,7 +186,7 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 		if($bytesofdata<=4) {
 			$data = $value;
 		} else {
-			if (strpos('unknown',$tag_name) === false) {
+			if (strpos('unknown',$tag_name) !== false || $bytesofdata > 1024) {
 				$result['Errors'] = $result['Errors']++;
 				$data = '';
 				$type = 'ASCII';
@@ -196,7 +196,7 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 				$v = fseek($seek,$globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
 				if($v==0) {
 					$data = fread($seek, $bytesofdata);
-				} else if($v==-1) {
+				} else {
 					$result['Errors'] = $result['Errors']++;
 					$data = '';
 					$type = 'ASCII';
