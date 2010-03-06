@@ -27,10 +27,10 @@ class VideoObject_Options {
 	
 	
 	function VideoObject_Options() {
-		setOption('zp_plugin_class-video_mov_w',520);
-		setOption('zp_plugin_class-video_mov_h',390);
-		setOption('zp_plugin_class-video_3gp_w',520);
-		setOption('zp_plugin_class-video_3gp_h',390);
+		setOptionDefault('zp_plugin_class-video_mov_w',520);
+		setOptionDefault('zp_plugin_class-video_mov_h',390);
+		setOptionDefault('zp_plugin_class-video_3gp_w',520);
+		setOptionDefault('zp_plugin_class-video_3gp_h',390);
 	}
 	/**
 	 * Standard option interface
