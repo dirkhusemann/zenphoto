@@ -420,7 +420,7 @@ if (ini_get('safe_mode')) { ?>
 					}
 				</script>
 				<div id="fileUpload" style="color:red">
-					<?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?>
+					<?php echo gettext("There appears to be no <em>Flash</em> plugin installed in your browser."); ?>
 				</div>
 				<p class="buttons" id="fileUploadbuttons" style="display: none;">
 					<a href="javascript:$('#fileUpload').uploadifySettings('folder','/'+$('#publishalbum').attr('checked')+':'+$('#folderdisplay').val()+':'+$('#albumtitle').val());
