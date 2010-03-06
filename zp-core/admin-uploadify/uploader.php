@@ -4,10 +4,10 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 if (!zp_loggedin()) {
 	if (isset($_POST['auth'])) {
 		$auth = $_POST['auth'];
-		$admins = getAdministrators();
+		$admins = $_zp_authority->getAdministrators();
 		foreach ($admins as $admin) {
 			if (md5(serialize($admin)) == $auth && $admin['rights'] & UPLOAD_RIGHTS) {
-				$_zp_loggedin = checkAuthorization($admin['pass']);
+				$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
 				break;
 			}
 		}

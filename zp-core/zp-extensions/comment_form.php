@@ -1,22 +1,22 @@
 <?php
 /**
  * Provides a unified comment handling facility
- * 
+ *
  * Place a call on the function printCommentForm() in your script where you
  * wish the comment items to appear.
- * 
+ *
  * Normally the plugin uses the form plugins/comment_form/comment_form.php.
  * However, you may override this form by placing a script of the same name in your theme folder.
  * This will allow you to customize the appearance of the comments on your site.
- * 
- * There are several options to tune what the plugin will do. 
- * 
+ *
+ * There are several options to tune what the plugin will do.
+ *
  * @package plugins
  */
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides a unified comment handling facility.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---comment_form.php.html";
 $option_interface = new comment_form();
 
@@ -52,11 +52,11 @@ class comment_form {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		$checkboxes = array(gettext('Albums') => 'comment_form_albums', gettext('Images') => 'comment_form_images');	
-		if (getOption('zp_plugin_zenpage')) {					
+		$checkboxes = array(gettext('Albums') => 'comment_form_albums', gettext('Images') => 'comment_form_images');
+		if (getOption('zp_plugin_zenpage')) {
 			$checkboxes = array_merge($checkboxes, array(gettext('Pages') => 'comment_form_pages', gettext('News') => 'comment_form_articles'));
 		}
-		
+
 		return array(	gettext('Address fields') => array('key' => 'comment_form_addresses', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => array(gettext('Omit')=>0, gettext('Show')=>1, gettext('Require')=>'required'),
 										'desc' => gettext('If <em>Address fields</em> are shown or required, the form will include positions for address information. If required, the poster must supply data in each address field.')),
@@ -103,27 +103,27 @@ function comment_form_edit_comment($discard, $raw) {
 		$address = unserialize($raw);
 	}
 	return
-			 '<tr> 
+			 '<tr>
 					<td>'.
 						gettext('street:').
 				 '</td>
-			 		<td>
+					<td>
 						<input type="text" name="0-comment_form_street" id="comment_form_street" class="inputbox" size="40" value="'.$address['street'].'">
 					</td>
 				</tr>
 				<tr>
 					<td>'.
 						gettext('city:').
-			 		'</td>
+					'</td>
 					<td>
 						<input type="text" name="0-comment_form_city" id="comment_form_city" class="inputbox" size="40" value="'.$address['city'].'">
 					</td>
-			 	</tr>
-			 	<tr>
+				</tr>
+				<tr>
 					<td>'.
 						gettext('state:').
 				 '</td>
-			 		<td>
+					<td>
 						<input type="text" name="0-comment_form_state" id="comment_form_state" class="inputbox" size="40" value="'.$address['state'].'">
 					</td>
 				</tr>
@@ -231,7 +231,7 @@ function comment_form_edit_admin($html, $userobj, $i, $background, $current) {
 			}
 		}
 	}
-		
+
 	return $html.
 	 '<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Website:").'</td>
@@ -270,11 +270,11 @@ function getCommentErrors() {
 	if (isset($_zp_comment_error)) {
 		switch ($_zp_comment_error) {
 			case   0: return false;
-			case -10: return gettext('You must supply the street field'); 
-			case -11: return gettext('You must supply the city field'); 
-			case -12: return gettext('You must supply the state field'); 
+			case -10: return gettext('You must supply the street field');
+			case -11: return gettext('You must supply the city field');
+			case -12: return gettext('You must supply the state field');
 			case -13: return gettext('You must supply the country field');
-			case -14: return gettext('You must supply the postal code field'); 
+			case -14: return gettext('You must supply the postal code field');
 			case  -1: return gettext("You must supply an e-mail address.");
 			case  -2: return gettext("You must enter your name.");
 			case  -3: return gettext("You must supply an WEB page URL.");
@@ -285,7 +285,7 @@ function getCommentErrors() {
 			default: return sprintf(gettext('Comment error "%d" not defined.'), $_zp_comment_error);
 		}
 	}
-	return false; 
+	return false;
 }
 
 /**
@@ -295,7 +295,7 @@ function getCommentErrors() {
  */
 function printCommentErrors($class = 'error') {
 	$s = getCommentErrors();
-	if ($s) {	
+	if ($s) {
 		?>
 		<div class="<?php echo $class ?>">
 		<?php echo $s; ?>
@@ -310,7 +310,7 @@ function printCommentErrors($class = 'error') {
  *
  */
 function printCommentForm($showcomments=true, $addcommenttext=NULL) {
-	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin, $_zp_current_comment;
+	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin_obj, $_zp_current_comment;
 	if (is_null($addcommenttext)) $addcommenttext = gettext('Add a comment:');
 	switch ($_zp_gallery_page) {
 		case 'album.php':
@@ -344,7 +344,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 	<div id="commentcontent">
 		<?php
 		if ($showcomments) {
-			$num = getCommentCount(); 
+			$num = getCommentCount();
 			switch ($num) {
 				case 0:
 					echo '<h3>'.gettext('No Comments').'</h3><br />';
@@ -390,7 +390,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			}
 
 			if (zp_loggedin()) {
-				$raw = $_zp_current_admin['custom_data'];
+				$raw = $_zp_current_admin_obj->getCustomData();
 				if (preg_match($arraytest, $raw)) {
 					$address = unserialize($raw);
 					foreach ($address as $key=>$value) {
@@ -403,12 +403,14 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			}
 
 			if (zp_loggedin()) {
-				if (!empty($_zp_current_admin['name'])) {
-					$stored['name'] = $_zp_current_admin['name'];
+				$name = $_zp_current_admin_obj->getName();
+				if (!empty($name)) {
+					$stored['name'] = $name;
 					$disabled['name'] = ' disabled="disabled"';
 				}
-				if (!empty($_zp_current_admin['email'])) {
-					$stored['email'] = $_zp_current_admin['email'];
+				$email = $_zp_current_admin_obj->getEmail();
+				if (!empty($email)) {
+					$stored['email'] = $email;
 					$disabled['email'] = ' disabled="disabled"';
 				}
 				if (!empty($address['website'])) {
@@ -416,7 +418,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 					$disabled['website'] = ' disabled="disabled"';
 				}
 			}
-			
+
 			$theme = getCurrentTheme();
 			$form = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).$formname;
 			if (file_exists($form)) {
@@ -449,7 +451,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 		}
 	?>
 </div>
-<?php 
+<?php
 if (getOption('comment_form_rss')) {
 	switch($_zp_gallery_page) {
 		case "image.php":

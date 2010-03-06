@@ -25,18 +25,19 @@ zp_register_filter('edit_admin_custom_data', 'user_groups_edit_admin');
  * @return string
  */
 function user_groups_save_admin($discard, $userobj, $i) {
-	$administrators = getAdministrators();
+	global $_zp_authority;
+	$administrators = $_zp_authority->getAdministrators();
 	if (isset($_POST[$i.'group'])) {
 		$groupname = sanitize($_POST[$i.'group']);
 		if (empty($groupname)) {
 			$oldgroup = $userobj->getGroup();
 			if (!empty($oldgroup)) {
-				$group = new Administrator($oldgroup, 0);
+				$group = $_zp_authority->newAdministrator($oldgroup, 0);
 				$userobj->setRights($group->getRights());
 				$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
 			}
 		} else {
-			$group = new Administrator($groupname, 0);
+			$group = $_zp_authority->newAdministrator($groupname, 0);
 			$userobj->setRights($group->getRights());
 			$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
 			if ($group->getName() == 'template') $groupname = '';
@@ -56,9 +57,9 @@ function user_groups_save_admin($discard, $userobj, $i) {
  * @return string
  */
 function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
-	global $_admin_rights, $gallery;
+	global $_admin_rights, $gallery, $_zp_authority;
 	$group = $userobj->getGroup();
-	$admins = getAdministrators();
+	$admins = $_zp_authority->getAdministrators();
 	$ordered = array();
 	$groups = array();
 	$hisgroup = NULL;
@@ -88,8 +89,10 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 			$allo[] = "'#managed_albums_".$i.'_'.postIndexEncode($folder)."'";
 		}
 		$rights = array();
-		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-			$rights[] = "'#".$rightselement.'-'.$i."'";
+		foreach ($_admin_rights as $rightselement=>$right) {
+			if ($right['display']) {
+				$rights[] = "'#".$rightselement.'-'.$i."'";
+			}
 		}
 		$grouppart =	'
 			<script type="text/javascript">
@@ -103,7 +106,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 					var allalbums = ['.implode(',', $allo).'];
 					var allc = '.count($allo).';
 					var rights = ['.implode(',',$rights).'];
-					var rightsc = '.count($_admin_rights).';
+					var rightsc = '.count($rights).';
 					for (i=0;i<rightsc;i++) {
 						$(rights[i]).attr(\'disabled\',disable);
 					}

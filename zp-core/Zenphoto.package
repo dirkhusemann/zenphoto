@@ -363,6 +363,7 @@ zp-core/js/colorbox/jquery.colorbox-min.js
 zp-core/js/editor_config.js.php
 zp-core/js/farbtastic.css
 zp-core/js/farbtastic.js
+zp-core/js/flash_detect_min.js
 zp-core/js/Jcrop.gif
 zp-core/js/jquery.dimensions.js
 zp-core/js/jquery.editinplace.js

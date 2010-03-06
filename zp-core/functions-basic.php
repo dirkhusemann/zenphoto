@@ -654,9 +654,6 @@ function sanitize_string($input_string, $sanitize_level) {
 function zp_error($message, $fatal=true) {
 	global $_zp_error;
 	if (!$_zp_error) {
-
-//TODO: gettext calls for the messages
-
 		?>
 		<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">
 			<h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto encountered an error</h2>
@@ -671,7 +668,7 @@ function zp_error($message, $fatal=true) {
 			$prefix = '  ';
 			?>
 			<p>
-				<strong>Backtrace:</strong>
+				<?php echo gettext('strong>Backtrace:</strong>'); ?>
 				<br />
 				<pre>
 					<?php

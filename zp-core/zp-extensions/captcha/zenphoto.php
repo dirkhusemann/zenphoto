@@ -69,9 +69,10 @@ class captcha {
 	 * @return string
 	 */
 	function getCaptchaKey() {
+		global $_zp_authority;
 		$key = getOption('zenphoto_captcha_key');
 		if (empty($key)) {
-			$admins = getAdministrators();
+			$admins = $_zp_authority->getAdministrators();
 			if (count($admins) > 0) {
 				$admin = array_shift($admins);
 				$key = $admin['pass'];

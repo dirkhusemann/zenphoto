@@ -145,8 +145,6 @@ printLogoAndLinks();
 						<img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?>
 						</button>
 					</p>
-<?php
-/* TODO: enable 					
 					<label id="autocheck">
 						<input type="checkbox" name="checkAllAuto" id="checkAllAuto" />
 						<span id="autotext"><?php echo gettext('all')?></span>
@@ -164,8 +162,6 @@ printLogoAndLinks();
 					   }
 					)			
 					</script>	
-*/		
-?>
 					<br clear="all" />
 					<br />
 					<br />

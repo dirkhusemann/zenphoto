@@ -8,7 +8,7 @@
  */
 include('zp-functions.php'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><?php echo gettext("zenphoto administration"); ?></title>
@@ -200,7 +200,7 @@ if(is_object($result)) {
 <input type="hidden" name="id" value="<?php printIfObject($result,"id");?>" />
 <input type="hidden" name="titlelink-old" id="titlelink-old" value="<?php printIfObject($result,"titlelink"); ?>" />
 <input type="hidden" name="lastchange" id="lastchange" value="<?php echo date('Y-m-d H:i:s'); ?>" />
-<input type="hidden" name="lastchangeauthor" id="lastchangeauthor" value="<?php echo $_zp_current_admin['user']; ?>" />
+<input type="hidden" name="lastchangeauthor" id="lastchangeauthor" value="<?php echo $_zp_current_admin_obj->getUser(); ?>" />
 <input type="hidden" name="hitcounter" id="hitcounter" value="<?php printIfObject($result,"hitcounter"); ?>" />
 <?php } else { ?>
 	<form method="post" name="addnews" action="admin-edit.php?<?php echo $admintype; ?>&amp;save">
@@ -210,8 +210,8 @@ if(is_object($result)) {
 			<td class="topalign-padding"><?php echo gettext("Title:"); ?></td>
 			<td class="middlecolumn"><?php print_language_string_list_zenpage(getIfObject($result,"title"),"title",false);?></td>
 			<td class="rightcolumnmiddle" rowspan="5">
-			
-			
+
+
 			<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Publish"); ?></h2>
 				<div class="box-edit-zenpage">
 				<p><?php echo gettext("Author:"); ?> <?php AuthorSelector(getIfObject($result,"author")) ;?></p>
@@ -255,7 +255,7 @@ if(is_object($result)) {
 				<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
 				<div class="box-edit-zenpage">
 				<p>
-				
+
 				<script type="text/javascript">
 					$(function() {
 						$("#date").datepicker({
@@ -273,7 +273,7 @@ if(is_object($result)) {
 				<hr />
 				<strong class='expire'></strong>
 				<p>
-				
+
 				<script type="text/javascript">
 					$(function() {
 						$("#expiredate").datepicker({
@@ -293,10 +293,10 @@ if(is_object($result)) {
 				</p>
 				<?php	} ?>
 				</div>
-			
+
 				<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("General"); ?></h2>
 				<div class="box-edit-zenpage">
-		
+
 				<p class="checkbox">
 				<input name="commentson" type="checkbox" id="commentson" value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> />
 				<label for="commentson"> <?php echo gettext("Comments on"); ?></label>
@@ -309,7 +309,7 @@ if(is_object($result)) {
 				<?php } ?>
 				<?php echo zp_apply_filter('general_zenpage_utilities', '', $result); ?>
 				</div>
-				
+
 				<?php
 				if (is_object($result)) {
 					?>
@@ -320,7 +320,7 @@ if(is_object($result)) {
 				<br />
 				<?php
 				}
-				
+
 				if (is_AdminEditPage("newsarticle")) {
 					?>
 					<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>

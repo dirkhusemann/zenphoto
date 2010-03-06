@@ -151,7 +151,7 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printLoginForm($redirect=null, $logo=true) {
-	global $_zp_login_error, $_zp_captcha;
+	global $_zp_login_error, $_zp_captcha, $_zp_authority;
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
 	if (isset($_POST['user'])) {
 		$requestor = sanitize($_POST['user'], 3);
@@ -164,7 +164,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		}
 	}
 	$star = '';
-	$admins = getAdministrators();
+	$admins = $_zp_authority->getAdministrators();
 	$mails = array();
 	if (!empty($requestor)) {
 		$user = null;
@@ -259,15 +259,15 @@ function printLoginForm($redirect=null, $logo=true) {
  * @since  1.0.0
  */
 function printLogoAndLinks() {
-	global $_zp_current_admin;
+	global $_zp_current_admin_obj;
 	?>
 	<span id="administration"><img id="logo" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/zen-logo.gif" title="<?php echo gettext('Zenphoto Administration'); ?>" alt="<?php echo gettext('Zenphoto Administration'); ?>" align="bottom" /></span>
 	<?php
 	echo "\n<div id=\"links\">";
 	echo "\n  ";
-	if (!is_null($_zp_current_admin)) {
+	if (!is_null($_zp_current_admin_obj)) {
 		if (getOption('server_protocol')=='https') $sec=1; else $sec=0;
-		printf(gettext("Logged in as %s"), $_zp_current_admin['user']);
+		printf(gettext("Logged in as %s"), $_zp_current_admin_obj->getUser());
 		echo " &nbsp; | &nbsp; <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout=".$sec."\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
 	echo "<a href=\"".WEBPATH."/index.php";
@@ -351,8 +351,8 @@ function printSubtabs($tab, $default=NULL) {
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
 	if (is_null($default) && isset($zenphoto_tabs[$tab]['default'])) {
 		$default = $zenphoto_tabs[$tab]['default'];
-	} 
-	
+	}
+
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
 	?>
@@ -1011,7 +1011,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<p>
 							<?php
 							$x = $album->getPassword();
-				
+
 							if (!empty($x)) {
 								$x = '			 ';
 							}
@@ -1140,7 +1140,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 									<?php echo gettext('custom fields:') ?>
 									<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
 									</span>
-						
+
 								</td>
 							</tr>
 						</table>
@@ -1410,7 +1410,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						</label>
 					</p>
 				</div>
-		
+
 				<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
 				<div class="box-edit">
 					<p>
@@ -1433,7 +1433,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<?php
 						$tv = $album->get('total_value');
 						$tc = $album->get('total_votes');
-		
+
 						if ($tc > 0) {
 							$hc = $tv/$tc;
 							printf(gettext('Rating: <strong>%u</strong>'), $hc);
@@ -1452,7 +1452,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				<!-- **************** Move/Copy/Rename ****************** -->
 				<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 				<div class="box-edit">
-		
+
 					<span style="white-space:nowrap">
 						<label style="padding-right: .5em">
 							<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
@@ -1460,7 +1460,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<?php echo gettext("Move");?>
 						</label>
 					</span>
-		
+
 					<span style="white-space:nowrap">
 						<label style="padding-right: .5em">
 							<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
@@ -1468,7 +1468,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<?php echo gettext("Copy");?>
 						</label>
 					</span>
-		
+
 					<span style="white-space:nowrap">
 						<label style="padding-right: .5em">
 							<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
@@ -1476,9 +1476,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<?php echo gettext("Rename Folder");?>
 						</label>
 					</span>
-		
-		
-		
+
+
+
 					<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
 						<?php echo gettext("to:"); ?>
 						<select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onchange="">
@@ -1500,7 +1500,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								$singlefolder = $fullfolder;
 								$saprefix = '';
 								$salevel = 0;
-		
+
 								while (strstr($singlefolder, '/') !== false) {
 									$singlefolder = substr(strstr($singlefolder, '/'), 1);
 									$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
@@ -2358,7 +2358,7 @@ function themeIsEditable($theme, $themes) {
  * @since 1.3
  */
 function copyThemeDirectory($source, $target, $newname) {
-	global $_zp_current_admin;
+	global $_zp_current_admin_obj;
 	$message = true;
 	$source  = SERVERPATH . '/themes/'.internalToFilesystem($source);
 	$target  = SERVERPATH . '/themes/'.internalToFilesystem($target);
@@ -2435,7 +2435,7 @@ function copyThemeDirectory($source, $target, $newname) {
 		$theme_description['desc'] = gettext('Your theme');
 	}
 	$theme_description['name'] = $newname;
-	$theme_description['author'] = $_zp_current_admin['user'];
+	$theme_description['author'] = $_zp_current_admin_obj->getUser();
 	$theme_description['version'] = '1.0';
 	$theme_description['date']  = zpFormattedDate(getOption('date_format'), time());
 
@@ -2493,7 +2493,6 @@ $theme_description["desc"] = "%s";
 }
 
 function deleteThemeDirectory($source) {
-	global $_zp_current_admin;
 	if (is_dir($source)) {
 		$result = true;
 		$handle = opendir($source);
@@ -2598,7 +2597,7 @@ function removeParentAlbumNames($album) {
  * @param bit $rights rights of the admin
  */
 function printAdminRightsTable($id, $background, $alterrights, $rights) {
-	global $_admin_rights, $_admin_rights_names;
+	global $_admin_rights;
 	?>
 	<table class="checkboxes" > <!-- checkbox table -->
 		<tr>
@@ -2608,28 +2607,30 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 		</tr>
 		<?php
 		$element = 3;
-		foreach ($_admin_rights as $rightselement=>$rightsvalue) {
-			$name = $_admin_rights_names[$rightsvalue];
-			if ($element>2) {
-				$element = 0;
+		foreach ($_admin_rights as $rightselement=>$right) {
+			if ($right['display']) {
+				$name = $right['name'];
+				if ($element>2) {
+					$element = 0;
+					?>
+					<tr>
+					<?php
+				}
 				?>
-				<tr>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+						<span style="white-space:nowrap">
+							<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $rightselement.'-'.$id; ?>"
+									value="<?php echo $right['value']; ?>"<?php if ($rights & $right['value']) echo ' checked="checked"';
+									echo $alterrights; ?> /> <?php echo $name; ?></label>
+						</span>
+					</td>
 				<?php
-			}
-			?>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-					<span style="white-space:nowrap">
-						<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $rightselement.'-'.$id; ?>"
-								value="<?php echo $rightsvalue; ?>"<?php if ($rights & $rightsvalue) echo ' checked="checked"';
-								echo $alterrights; ?> /> <?php echo $name; ?></label>
-					</span>
-				</td>
-			<?php
-			$element++;
-			if ($element > 2) {
-				?>
-				</tr>
-				<?php
+				$element++;
+				if ($element > 2) {
+					?>
+					</tr>
+					<?php
+				}
 			}
 		}
 
@@ -2711,7 +2712,7 @@ function processRights($i) {
 	}
 	foreach ($_admin_rights as $name=>$right) {
 		if (isset($_POST[$i.'-'.$name])) {
-			$rights = $rights | $right | NO_RIGHTS;
+			$rights = $rights | $right['value'] | NO_RIGHTS;
 		}
 	}
 	if ($rights & MANAGE_ALL_ALBUM_RIGHTS) {	// these are lock-step linked!

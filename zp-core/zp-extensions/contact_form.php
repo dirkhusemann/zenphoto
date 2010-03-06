@@ -27,6 +27,7 @@ $option_interface = new contactformOptions();
 class contactformOptions {
 	
 	function contactformOptions() {
+		global $_zp_authority;
 		setOptionDefault('contactform_introtext', '<p>Fields with <strong>*</strong> are required. HTML or any other code is not allowed. A copy of your e-mail will automatically be sent to the address you provided for your own records.</p>');
 		setOptionDefault('contactform_confirmtext', '<p>Please confirm that you really want to send this email. Thanks.</p>');
 		setOptionDefault('contactform_thankstext', '<p>Thanks for your message. A copy has been sent to your provided e-mail adress for your own records.</p>');
@@ -43,7 +44,7 @@ class contactformOptions {
 		setOptionDefault('contactform_captcha', 0);
 		setOptionDefault('contactform_subject', "required");
 		setOptionDefault('contactform_message', "required");
-		$mailings = getAdminEmail();
+		$mailings = $_zp_authority->getAdminEmail();
 		$email_list = '';
 		foreach ($mailings as $email) {
 			$email_list .= ';'.$email;

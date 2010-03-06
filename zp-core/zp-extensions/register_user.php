@@ -45,6 +45,7 @@ class register_user_options {
 	}
 
 	function getOptionsSupported() {
+		global $_zp_authority;
 		$options = array(	gettext('Notify') => array('key' => 'register_user_notify', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, an e-mail will be sent to the gallery admin when a new user has verified his registration.')),
 											gettext('Email ID') => array('key' => 'register_user_email_is_id', 'type' => OPTION_TYPE_CHECKBOX,
@@ -56,7 +57,7 @@ class register_user_options {
 											gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, captcha validation will be required for user registration.'))
 											);
-		$admins = getAdministrators();
+		$admins = $_zp_authority->getAdministrators();
 		$ordered = array();
 		$groups = array();
 		$adminordered = array();
@@ -133,7 +134,7 @@ class register_user_options {
 if (!OFFSET_PATH) { // handle form post
 	if (isset($_GET['verify'])) {
 		$notify = '';
-		$currentadmins = getAdministrators();
+		$currentadmins = $_zp_authority->getAdministrators();
 		$params = unserialize(pack("H*", $_GET['verify']));
 		$adminuser = NULL;
 		$rights = getOption('register_user_rights');
@@ -150,7 +151,7 @@ if (!OFFSET_PATH) { // handle form post
 		if (is_null($adminuser)) {
 			$notify = 'not_verified';	// User ID no longer exists
 		} else {
-			$userobj = new Administrator(''); // get a transient object
+			$userobj = $_zp_authority->newAdministrator(''); // get a transient object
 			$userobj->setUser($adminuser['user']);
 			$userobj->setPass(NULL);
 			$userobj->setName($admin_n = $adminuser['name']);
@@ -158,11 +159,11 @@ if (!OFFSET_PATH) { // handle form post
 			$userobj->setRights($rights | NO_RIGHTS);
 			$userobj->setGroup($group);
 			if (!empty($group)) {
-				$membergroup = new Administrator($group, 0);
+				$membergroup = $_zp_authority->newAdministrator($group, 0);
 				$userobj->setAlbums(populateManagedAlbumList($membergroup->get('id')));
 			}
 			zp_apply_filter('register_user_verified', $userobj);
-			$notify = saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+			$notify = $_zp_authority->saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 			if (getOption('register_user_notify') && !$notify) {
 				$notify = zp_mail(gettext('Zenphoto Gallery registration'),
 									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$userobj->getName(), $adminuser['user'], $admin_e));
@@ -201,7 +202,7 @@ if (!OFFSET_PATH) { // handle form post
 		$user = trim($_POST['adminuser']);
 		if (!empty($user) && !(empty($admin_n)) && !empty($admin_e)) {
 			if ($pass == trim($_POST['adminpass_2'])) {
-				$currentadmins = getAdministrators();
+				$currentadmins = $_zp_authority->getAdministrators();
 				foreach ($currentadmins as $admin) {
 					if ($admin['user'] == $user) {
 						$notify = 'exists';
@@ -209,7 +210,7 @@ if (!OFFSET_PATH) { // handle form post
 					}
 				}
 				if (empty($notify)) {
-					$userobj = new Administrator(''); // get a transient object
+					$userobj = $_zp_authority->newAdministrator(''); // get a transient object
 					$userobj->setUser($user);
 					$userobj->setPass(NULL);
 					$userobj->setName($admin_n);
@@ -219,7 +220,7 @@ if (!OFFSET_PATH) { // handle form post
 					$userobj->setGroup('');
 					$userobj->setCustomData('');
 					zp_apply_filter('register_user_registered', $userobj);
-					$notify = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+					$notify = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
 						$message = sprintf(getOption('register_user_text'), $link);
@@ -242,7 +243,7 @@ if (!OFFSET_PATH) { // handle form post
  * @param string $thanks the message shown on successful registration
  */
 function printRegistrationForm($thanks=NULL) {
-	global $notify, $admin_e, $admin_n, $user;
+	global $notify, $admin_e, $admin_n, $user, $_zp_authority;;
 	if (zp_loggedin()) {
 		if (isset($_GET['userlog']) && $_GET['userlog'] == 1) {
 			echo '<meta http-equiv="refresh" content="2; url='.WEBPATH.'/">';

@@ -28,20 +28,12 @@ function db_connect() {
 	}
 	$mysql_connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass']);
 	if (!$mysql_connection) {
-		
-//TODO: when strings are unfrozen
-//		zp_error(sprintf(gettext('MySQL Error: Zenphoto received the error <em>%s</em> when connecting to the database server.'),mysql_error()));
-
-		zp_error(gettext('MySQL Error: Zenphoto could not connect to the database server.').' (<em>'.mysql_error().'</em>) ');
+		zp_error(sprintf(gettext('MySQL Error: Zenphoto received the error <em>%s</em> when connecting to the database server.'),mysql_error()));
 		return false;
 	}
 
 	if (!@mysql_select_db($db)) {
-		
-//TODO: when strings are unfrozen	
-//		zp_error(sprintf(gettext('MySQL Error: The database is connected, but MySQL returned the error <em>%1$s</em> when Zenphoto tried to select the database %2$s.'),mysql_error(),$db));
-		
-		zp_error(sprintf(gettext('MySQL Error: The database is connected, but Zenphoto could not select the database %s.'),$db).' (<em>'.mysql_error().'</em>) ');
+		zp_error(sprintf(gettext('MySQL Error: The database is connected, but MySQL returned the error <em>%1$s</em> when Zenphoto tried to select the database %2$s.'),mysql_error(),$db));
 		return false;
 	}
 	if (array_key_exists('UTF-8', $_zp_conf_vars) && $_zp_conf_vars['UTF-8']) {
@@ -76,11 +68,7 @@ function query($sql, $noerrmsg = false) {
 			return false;
 		} else {
 			$sql = sanitize($sql, 3);
-			
-//TODO when strings are unfrozen			
-//			zp_error(sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. MySQL returned the error <em>%2$s</em>' ),$sql,mysql_error()));
-			
-			zp_error(sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,mysql_error()));
+			zp_error(sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. MySQL returned the error <em>%2$s</em>' ),$sql,mysql_error()));
 			return false;
 		}
 	}

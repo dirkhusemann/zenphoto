@@ -133,6 +133,7 @@ var uploadifier_replace_message =  "<?php echo gettext('Do you want to replace t
 
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/sprintf.js"></script>
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/upload.js"></script>
+<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/flash_detect_min.js"></script>
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/admin-uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/admin-uploadify/swfobject.js"></script>
 <?php
@@ -340,39 +341,42 @@ if (ini_get('safe_mode')) { ?>
 			$extensions .= ';*.'.$ext.';*.'.strtoupper($ext);
 		}
 		if($uploadtype != 'http') {
+			$admins = $_zp_authority->getAdministrators();
+			$curadmin = $admins[$_zp_current_admin_obj->get('id')];
 			?>
 			<div id="uploadboxes" style="display: none;"></div> <!--  need this so that toggling it does not fail. -->
 			<div>
 			<!-- UPLOADIFY JQUERY/FLASH MULTIFILE UPLOAD TEST -->
 				<script type="text/javascript">
-					$(document).ready(function() {
-						$('#fileUpload').uploadify({
-							'uploader': 'admin-uploadify/uploadify.swf',
-							'cancelImg': 'images/fail.png',
-							'script': 'admin-uploadify/uploader.php',
-							'scriptData': {	'auth': '<?php echo md5(serialize($_zp_current_admin)); ?>' },
-							'folder': '/',
-							'multi': true,
-							<?php
-							$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/'.getOption('locale').'/select_files_button.png';
-							if(!file_exists($uploadbutton)) {
-								$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/images/select_files_button.png';
-							}
-							$discard = NULL;
-							$info = zp_imageDims($uploadbutton, $discard);
-							if ($info['height']>60) {
-								$info['height'] = round($info['height']/3);
-								$rollover = "'rollover': true,";
-							} else {
-								$rollover = "";
-							}
-							$uploadbutton = str_replace(SERVERPATH, WEBPATH, $uploadbutton);
-							?>
-							'buttonImg': '<?php echo $uploadbutton; ?>',
-							'height': '<?php echo $info['height'] ?>',
-							'width': '<?php echo $info['width'] ?>',
-							<?php echo $rollover; ?>
-							'checkScript': 'admin-uploadify/check.php',
+					if (FlashDetect.installed) {
+						$(document).ready(function() {
+							$('#fileUpload').uploadify({
+								'uploader': 'admin-uploadify/uploadify.swf',
+								'cancelImg': 'images/fail.png',
+								'script': 'admin-uploadify/uploader.php',
+								'scriptData': {	'auth': '<?php echo md5(serialize($curadmin)); ?>' },
+								'folder': '/',
+								'multi': true,
+								<?php
+								$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/'.getOption('locale').'/select_files_button.png';
+								if(!file_exists($uploadbutton)) {
+									$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/images/select_files_button.png';
+								}							
+								$discard = NULL;
+								$info = zp_imageDims($uploadbutton, $discard);
+								if ($info['height']>60) {
+									$info['height'] = round($info['height']/3);
+									$rollover = "'rollover': true,";
+								} else {
+									$rollover = "";
+								}
+								$uploadbutton = str_replace(SERVERPATH, WEBPATH, $uploadbutton);	
+								?>				
+								'buttonImg': '<?php echo $uploadbutton; ?>',
+								'height': '<?php echo $info['height'] ?>',
+								'width': '<?php echo $info['width'] ?>',
+								<?php echo $rollover; ?>
+								'checkScript': 'admin-uploadify/check.php',
 <?php
 /* Uploadify does not really support this onCheck facility (it is unusable as implemented, this gets called fore each element
 										passing the whole queue each time!)
@@ -392,29 +396,30 @@ if (ini_get('safe_mode')) { ?>
 													},
 */
 ?>
-							'displayData': 'speed',
-							'simUploadLimit': 3,
-							'sizeLimit': <?php echo parse_size($maxupload); ?>,
-							<?php
-							if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-								?>
-								'onAllComplete':	function(event, data) {
-																		if (data.errors) {
-																			return false;
-																		} else {
-																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
-																		}
-																	},
+								'displayData': 'speed',
+								'simUploadLimit': 3,
+								'sizeLimit': <?php echo parse_size($maxupload); ?>,
 								<?php
-								}
-							?>
-							'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
-							'fileExt': '<?php echo $extensions.'|*.*'; ?>'
-						});
-					buttonstate($('#folderdisplay').val() != "");
-				});
+								if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+									?>
+									'onAllComplete':	function(event, data) {
+																			if (data.errors) {
+																				return false;
+																			} else {
+																				launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
+																			}
+																		},
+									<?php
+									}
+								?>
+								'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
+								'fileExt': '<?php echo $extensions.'|*.*'; ?>'
+							});
+						buttonstate($('#folderdisplay').val() != "");
+					});
+					}
 				</script>
-				<div id="fileUpload">
+				<div id="fileUpload" style="color:red">
 					<?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?>
 				</div>
 				<p class="buttons" id="fileUploadbuttons" style="display: none;">

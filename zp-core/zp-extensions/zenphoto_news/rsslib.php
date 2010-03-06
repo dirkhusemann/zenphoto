@@ -93,7 +93,7 @@ function RSS_Retrieve($url) {
 		?>
 		<ul>
 			<li>
-			<?php //TODO: printf(gettext('Failed to retrieve link <em>%s</em>'),$url); ?>
+			<?php printf(gettext('Failed to retrieve link <em>%s</em>'),$url); ?>
 			</li>
 		</ul>
 		<?php

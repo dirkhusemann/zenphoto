@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
 		$id = sanitize_numeric($_GET['adminuser']);
-		deleteAdmin(array('id'=>$id));
+		$_zp_authority->deleteAdmin(array('id'=>$id));
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
@@ -66,7 +66,7 @@ if (isset($_GET['action'])) {
 						if (empty($pass)) {
 							$pass = NULL;
 						}
-						$userobj = new Administrator(''); // get a transient object
+						$userobj = $_zp_authority->newAdministrator(''); // get a transient object
 						$userobj->setuser($user);
 						$userobj->setPass(NULL);
 						$userobj->setName($admin_n);
@@ -74,7 +74,7 @@ if (isset($_GET['action'])) {
 						$userobj->setRights($rights);
 						$userobj->setAlbums($albums);
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-						$msg = saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
+						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());		
 						if (empty($msg)) {
 							if (isset($_POST[$i.'-newuser'])) {
 								$newuser = $user;
@@ -143,6 +143,7 @@ if ($_zp_null_account) {
 ?>
 <?php
 printSubtabs($_current_tab, 'users');
+	global $_zp_authority;
 ?>
 <div id="tab_admin" class="tabbox">
 <?php
@@ -152,7 +153,7 @@ printSubtabs($_current_tab, 'users');
 			$alterrights = ' disabled="disabled"';
 			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
 		} else {
-			$admins = getAdministrators();
+			$admins = $_zp_authority->getAdministrators();
 			if (empty($admins) || $_zp_null_account) {
 				$rights = ALL_RIGHTS;
 				$groupname = 'administrators';
@@ -165,7 +166,16 @@ printSubtabs($_current_tab, 'users');
 		}
 	} else {
 		$alterrights = ' disabled="disabled"';
-		$admins = array($_zp_current_admin['user'] => $_zp_current_admin);
+		$admins = array($_zp_current_admin_obj->getUser() => 
+													array('id' => $_zp_current_admin_obj->get('id'), 
+																'user' => $_zp_current_admin_obj->getUser(),
+																'pass' => $_zp_current_admin_obj->getPass(),
+																'name' => $_zp_current_admin_obj->getName(),
+																'email' => $_zp_current_admin_obj->getEmail(),
+																'rights' => $_zp_current_admin_obj->getRights(),
+																'custom_data' => $_zp_current_admin_obj->getCustomData(),
+																'valid' => 1,
+																'group' => $_zp_current_admin_obj->getGroup()));
 	}
 	if (isset($_GET['deleted'])) {
 		echo '<div class="messagebox" id="fade-message">';
@@ -278,7 +288,7 @@ if (empty($alterrights)) {
 			$local_alterrights = $alterrights;
 			$userid = $user['user'];
 			$showlist[] = '#_show-'.$userid;
-			$userobj = new Administrator($userid);
+			$userobj = $_zp_authority->newAdministrator($userid);
 			if (empty($userid)) {
 				$userobj->setGroup($user['group']);
 				$userobj->setRights($user['rights']);
@@ -410,7 +420,7 @@ if (empty($alterrights)) {
 					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
 						value="<?php echo $x; ?>" />
 					<?php
-					$msg = passwordNote();
+					$msg = $_zp_authority->passwordNote();
 					if (!empty($msg)) {
 						?>
 						<p>

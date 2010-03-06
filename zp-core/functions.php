@@ -367,9 +367,10 @@ function is_valid_email_zp($input_email) {
  * @since  1.0.0
  */
 function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
+	global $_zp_authority;
 	$result = '';
 	if (is_null($email_list)) {
-		$email_list = getAdminEmail();
+		$email_list = $_zp_authority->getAdminEmail();
 	}
 	if (is_null($cc_addresses)) {
 		$cc_addresses = array();
@@ -632,8 +633,8 @@ function fetchComments($number) {
 	}
 
 	$comments = array();
-	if (zp_loggedin(COMMENT_RIGHTS)) {
-		if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+	if (zp_loggedin(ADMIN_RIGHTS | COMMENT_RIGHTS)) {
+		if (zp_loggedin(ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 			$sql = "SELECT *, (date + 0) AS date FROM ".prefix('comments') . " ORDER BY id DESC$limit";
 			$comments = query_full_array($sql);
 		} else {
@@ -720,7 +721,7 @@ define ('COMMENT_SEND_EMAIL', 32);
  * @return object
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon, $check=false) {
-	global $_zp_captcha, $_zp_gallery;
+	global $_zp_captcha, $_zp_gallery, $_zp_authority;
 	if ($check === false) {
 		$whattocheck = 0;
 		if (getOption('comment_email_required')) $whattocheck = $whattocheck | COMMENT_EMAIL_REQUIRED;
@@ -738,7 +739,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$name = trim($name);
 	$email = trim($email);
 	$website = trim($website);
-	$admins = getAdministrators();
+	$admins = $_zp_authority->getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
 	if (!empty($website) && substr($website, 0, 7) != "http://") {
@@ -859,7 +860,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 					sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n" .
 					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$commentobj->id);
 			$emails = array();
-			$admin_users = getAdministrators();
+			$admin_users = $_zp_authority->getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone with full rights
 				if (($admin['rights'] & ADMIN_RIGHTS) && !empty($admin['email'])) {
 					$emails[] = $admin['email'];
@@ -894,14 +895,14 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  * @return array
  */
 function getManagedAlbumList() {
-	global $_zp_admin_album_list, $_zp_current_admin;
+	global $_zp_admin_album_list, $_zp_current_admin_obj;
 	$_zp_admin_album_list = array();
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$sql = "SELECT `folder` FROM ".prefix('albums').' WHERE `parentid` IS NULL';
 	} else {
 		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
 						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-						$_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+						$_zp_current_admin_obj->get('id')." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
 	}
 	$albums = query_full_array($sql);
 	foreach($albums as $album) {
@@ -1725,7 +1726,7 @@ function logTime($tag) {
  * @param string $authType override of athorization type
  */
 function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
-	global $_zp_loggedin, $_zp_login_error, $_zp_current_album;
+	global $_zp_loggedin, $_zp_login_error, $_zp_current_album, $_zp_authority;
 	if (empty($authType)) { // not supplied by caller
 		$check_auth = '';
 		if (isset($_GET['z']) && $_GET['p'] == 'full-image' || isset($_GET['p']) && $_GET['p'] == '*full-image') {
@@ -1766,9 +1767,9 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 			$post_user = '';
 		}
 		$post_pass = $_POST['pass'];
-		$auth = passwordHash($post_user, $post_pass);
+		$auth = $_zp_authority->passwordHash($post_user, $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
-		$_zp_loggedin = checkLogon($post_user, $post_pass, false);
+		$_zp_loggedin = $_zp_authority->checkLogon($post_user, $post_pass, false);
 
 		$redirect_to = $_POST['redirect'];
 		if (substr($redirect_to,0,1)=='/') {

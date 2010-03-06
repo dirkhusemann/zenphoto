@@ -8,7 +8,7 @@ define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 
-$admins = getAdministrators();
+$admins = $_zp_authority->getAdministrators();
 $ordered = array();
 foreach ($admins as $key=>$admin) {
 	$ordered[$key] = $admin['user'];
@@ -22,12 +22,12 @@ if (isset($_GET['action'])) {
 	$themeswitch = false;
 	if ($action == 'deletegroup') {
 		$id = sanitize_numeric($_GET['groupid']);
-		deleteAdmin(array('id'=>$id));
+		$_zp_authority->deleteAdmin(array('id'=>$id));
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
 		//first clear out existing user assignments
 		$groupname = sanitize($_GET['group'],3);
-		updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
+		$_zp_authority->updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=groups&deleted');
 		exit();
 	} else if ($action == 'savegroups') {
@@ -35,10 +35,10 @@ if (isset($_GET['action'])) {
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
 			$groupname = str_replace('"','',$groupname);
 			if (!empty($groupname)) {
-				$group = new Administrator($groupname, 0);
+				$group = $_zp_authority->newAdministrator($groupname, 0);
 				if (isset($_POST[$i.'-initgroup']) && !empty($_POST[$i.'-initgroup'])) {
 					$initgroupname = trim(sanitize($_POST[$i.'-initgroup'],3));
-					$initgroup = new Administrator($initgroupname, 0);
+					$initgroup = $_zp_authority->newAdministrator($initgroupname, 0);
 					$group->setRights($initgroup->getRights());
 					$group->setAlbums(populateManagedAlbumList($initgroup->get('id')));
 				} else {
@@ -48,23 +48,23 @@ if (isset($_GET['action'])) {
 				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
 				$grouptype = trim(sanitize($_POST[$i.'-type'], 3));
 								
-				saveAdmin($groupname, NULL, $grouptype, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
+				$_zp_authority->saveAdmin($groupname, NULL, $grouptype, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
 				if ($group->getName()=='group') {
 					//have to update any users who have this group designate.
 					foreach ($admins as $admin) {
 						if ($admin['valid'] && $admin['group']===$groupname) {
-							$user = new Administrator($admin['user'], 1);
-							saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+							$user = $_zp_authority->newAdministrator($admin['user'], 1);
+							$_zp_authority->saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
 						}
 					}
 					//user assignments: first clear out existing ones
-					updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
+					$_zp_authority->updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
 					//then add the ones marked
 					$target = 'user_'.$i.'-';
 					foreach ($_POST as $item=>$username) {
 						if (strpos($item, $target)!==false) {
-							$user = new Administrator($username, 1);
-							saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+							$user = $_zp_authority->newAdministrator($username, 1);
+							$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
 						}
 					}
 				}
@@ -75,13 +75,13 @@ if (isset($_GET['action'])) {
 	} else if ($action == 'saveauserassignments') {
 		for ($i = 0; $i < $_POST['totalusers']; $i++) {
 			$username = trim(sanitize($_POST[$i.'-user'],3));
-			$user = new Administrator($username, 1);
+			$user = $_zp_authority->newAdministrator($username, 1);
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
-			$group = new Administrator($groupname, 0);
+			$group = $_zp_authority->newAdministrator($groupname, 0);
 			if (empty($groupname)) {
-				updateAdminField('group', NULL, array('id'=>$user->get('id')));
+				$_zp_authority->updateAdminField('group', NULL, array('id'=>$user->get('id')));
 			} else {
-				saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
+				$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
 			}
 		}
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=assignments&saved');

@@ -115,7 +115,8 @@ class htmlmetatags {
  *
  */
 function getHTMLMetaData() {	
-	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category;
+	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news,
+					$_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category, $_zp_authority;
 	$url = sanitize("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 	// Convert locale shorttag to allowed html meta format
@@ -159,7 +160,7 @@ function getHTMLMetaData() {
 		$pagetitle = $pagetitle.getBareGalleryTitle();
 
 		// get master admin
-		$admins = getAdministrators();
+		$admins = $_zp_authority->getAdministrators();
 		$admincount = 0;
 		foreach($admins as $admin) {
 			$admincount++;

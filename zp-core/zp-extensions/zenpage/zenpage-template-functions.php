@@ -137,7 +137,8 @@ function is_GalleryNewsType() {
  * @return string
  */
 function getAuthor($fullname=false) {
-	global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
+	global $_zp_current_zenpage_page, $_zp_current_zenpage_news, $_zp_authority;
+	;
 		if(is_Pages()) {
 			$obj = $_zp_current_zenpage_page;
 		}
@@ -146,7 +147,7 @@ function getAuthor($fullname=false) {
 		}
 	if(is_Pages() OR is_News()) {
 		if($fullname) {
-			$admins = getAdministrators();
+			$admins = $_zp_authority->getAdministrators();
 			foreach ($admins as $admin) {
 				if($admin['user'] == $obj->getAuthor()) {
 					return $admin['name'];

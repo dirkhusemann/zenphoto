@@ -6,11 +6,19 @@
 
 // force UTF-8 Ø
 
+$_zp_current_admin_obj = null;
 if (file_exists(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/alt/lib-auth.php')) { // load a custom authroization package if it is present
 	require_once(dirname(__FILE__).'/lib-auth.php');
 } else {
 	require_once(dirname(__FILE__).'/lib-auth.php');
+	$_zp_authority = new Zenphoto_Authority();
 }
+
+$_admin_rights = $_zp_authority->getRights();
+foreach ($_admin_rights as $key=>$right) {
+	define($key,$right['value']);
+}
+
 
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = false;
@@ -19,7 +27,7 @@ $_zp_reset_admin = NULL;
 if (isset($_GET['ticket'])) { // password reset query
 	$_zp_ticket = $_GET['ticket'];
 	$post_user = $_GET['user'];
-	$admins = getAdministrators();
+	$admins = $_zp_authority->getAdministrators();
 	foreach ($admins as $tuser) {
 		if ($tuser['user'] == $post_user && !empty($tuser['email'])) {
 			$admin = $tuser;
@@ -47,7 +55,7 @@ if (zp_getCookie('zenphoto_ssl') && !secureServer()) {
 }
 
 if (!isset($_POST['login'])) {
-	$_zp_loggedin = checkAuthorization(zp_getCookie('zenphoto_auth'));
+	$_zp_loggedin = $_zp_authority->checkAuthorization(zp_getCookie('zenphoto_auth'));
 	if (!$_zp_loggedin) {
 		// Clear the cookie
 		zp_setcookie("zenphoto_auth", "", time()-368000);
@@ -59,7 +67,7 @@ if (!isset($_POST['login'])) {
 		$post_user = $_POST['user'];
 		$post_pass = $_POST['pass'];
 		$redirect = sanitize_path($_POST['redirect']);
-		$_zp_loggedin = checkLogon($post_user, $post_pass, true);
+		$_zp_loggedin = $_zp_authority->checkLogon($post_user, $post_pass, true);
 		$_zp_loggedin = zp_apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
 		if ($_zp_loggedin) {
 			// https: set the 'zenphoto_ssl' marker for redirection
@@ -67,7 +75,7 @@ if (!isset($_POST['login'])) {
 				zp_setcookie("zenphoto_ssl", "needed");
 			}
 			// set cookie as secure when in https
-			zp_setcookie("zenphoto_auth", passwordHash($post_user, $post_pass), NULL, NULL, secureServer());
+			zp_setcookie("zenphoto_auth", $_zp_authority->passwordHash($post_user, $post_pass), NULL, NULL, secureServer());
 			if (!empty($redirect)) {
 				if (substr($redirect,0,1) != '/') $redirect = '/'.$redirect;
 				header("Location: " . FULLWEBPATH . $redirect);
@@ -85,7 +93,7 @@ if (!isset($_POST['login'])) {
 				} else {
 					$requestor = sprintf(gettext("You are receiving this e-mail because of a password reset request on your Zenphoto gallery from a user who tried to log in as %s."),$post_user);
 				}
-				$admins = getAdministrators();
+				$admins = $_zp_authority->getAdministrators();
 				$mails = array();	
 				$user = NULL;
 				foreach ($admins as $key=>$tuser) {

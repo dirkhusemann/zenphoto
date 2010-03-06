@@ -118,8 +118,9 @@ function loginLogger($success, $user, $pass, $name, $ip, $type, $authority) {
  * @return int
  */
 function adminLoginLogger($success, $user, $pass) {
+	global $_zp_authority;
 	if ($success) {
-		$admins = getAdministrators();
+		$admins = $_zp_authority->getAdministrators();
 		foreach ($admins as $admin) {
 			if ($admin['user'] == $user) {
 				$name = $admin['name'];

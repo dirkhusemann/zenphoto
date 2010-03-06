@@ -5,7 +5,7 @@
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @package plugins
  * @subpackage zenpage
- */ 
+ */
 
 /**
  * Calls the zenpage class
@@ -57,7 +57,7 @@ function processTags($object) {
 
 /**
  * Updates a new page to that database and returns the object of that page
- * 
+ *
  * @return object
  */
 function addPage() {
@@ -241,26 +241,26 @@ function printPagesListTable($page, $flag) {
 	}
 	?>
  <table class='bordered2'>
-   <tr>
-    <td class='sort-handle' style="padding-bottom: 15px; ">
-       <img src="<?php echo $img; ?>" alt="" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
-  	<?php if(checkIfLocked($page)) { 
-  		echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."' title='".truncate_string(strip_tags($page->getContent()),300)."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
-  	} else { 
-  		echo $page->getTitle(); checkHitcounterDisplay($page->getShow());
-  	}	?>
-    </td>
-    <td class="icons3">
-      <?php
-       checkIfScheduled($page);
-       checkIfExpires($page);
-      ?>
-    </td> 
-    <td class="icons3" style="text-align: left">
-      <?php echo htmlspecialchars($page->getAuthor()) ;?>
-    </td> 
-    
-    
+	 <tr>
+		<td class='sort-handle' style="padding-bottom: 15px; ">
+			 <img src="<?php echo $img; ?>" alt="" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
+		<?php if(checkIfLocked($page)) {
+			echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."' title='".truncate_string(strip_tags($page->getContent()),300)."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
+		} else {
+			echo $page->getTitle(); checkHitcounterDisplay($page->getShow());
+		}	?>
+		</td>
+		<td class="icons3">
+			<?php
+			 checkIfScheduled($page);
+			 checkIfExpires($page);
+			?>
+		</td>
+		<td class="icons3" style="text-align: left">
+			<?php echo htmlspecialchars($page->getAuthor()) ;?>
+		</td>
+		
+		
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
 		<?php printPublishIconLink($page,"page"); ?>
@@ -272,19 +272,19 @@ function printPagesListTable($page, $flag) {
 	<?php } else { ?>
 	<td class="icons">
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-	</td>	
+	</td>
 	<td class="icons">
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-	</td>	
+	</td>
 	<?php } ?>
-    
-    <td class="icons">
-      <a href="../../../index.php?p=<?php echo ZENPAGE_PAGES; ?>&amp;title=<?php echo $page->getTitlelink() ;?>" title="<?php echo gettext("View page"); ?>">
-      <img src="images/view.png" alt="view" />
-      </a>
-    </td>
-    
-  
+		
+		<td class="icons">
+			<a href="../../../index.php?p=<?php echo ZENPAGE_PAGES; ?>&amp;title=<?php echo $page->getTitlelink() ;?>" title="<?php echo gettext("View page"); ?>">
+			<img src="images/view.png" alt="view" />
+			</a>
+		</td>
+		
+	
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
 		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Reset hitcounter"); ?>">
@@ -296,14 +296,14 @@ function printPagesListTable($page, $flag) {
 	</td>
 	<?php } else { ?>
 	<td class="icons">
-    <img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-	</td> 
+		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+	</td>
 	<td class="icons">
-    <img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-	</td> 
+		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+	</td>
 	<?php } ?>
-   
-  </tr>
+	 
+	</tr>
  </table>
 <?php
 }
@@ -314,7 +314,7 @@ function printPagesListTable($page, $flag) {
  * returns true if nesting levels exceede the database container
  *
  * @param array $pages The array containing all pages
- * 
+ *
  * @return bool
  */
 function printPagesList($pages) {
@@ -349,19 +349,19 @@ function printPagesList($pages) {
 		if ($open[$indent]) {
 			echo str_pad("\t",$indent,"\t")."</li>\n";
 			$open[$indent]--;
-		} 
+		}
 		echo str_pad("\t",$indent-1,"\t")."<li id=\"id_".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
 		echo printPagesListTable($pageobj, $toodeep);
 		$open[$indent]++;
 	}
 	while ($indent > 1) {
-		echo "</li>\n"; 
+		echo "</li>\n";
 		$open[$indent]--;
 		$indent--;
 		echo str_pad("\t",$indent,"\t")."</ul>";
 	}
 	if ($open[$indent]) {
-		echo "</li>\n"; 
+		echo "</li>\n";
 	} else {
 		echo "\n";
 	}
@@ -428,7 +428,7 @@ function addArticle() {
 	if(empty($title)) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink).'</p>';	
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink).'</p>';
 	}
 	echo $msg;
 	return $article;
@@ -458,7 +458,7 @@ function updateArticle() {
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getcheckboxState('locked');
-		
+
 	if (getcheckboxState('edittitlelink')) {
 		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
@@ -496,7 +496,7 @@ function updateArticle() {
 		$page->set('hitcounter',0);
 	}
 	processTags($article);
-	$msg = zp_apply_filter('update_article', '', $article, $oldtitlelink); 
+	$msg = zp_apply_filter('update_article', '', $article, $oldtitlelink);
 	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY id");
@@ -545,15 +545,15 @@ function deleteArticle() {
  * @param obj $obj object of the news article
  */
 function printArticleCategories($obj) {
-   $cat = $obj->getCategories();
-  $number = 0;
-  foreach ($cat as $cats) {
-    $number++;
-    if($number != 1) {
-      echo ", ";
-    }
-    echo get_language_string($cats['cat_name']);
-  }
+	 $cat = $obj->getCategories();
+	$number = 0;
+	foreach ($cat as $cats) {
+		$number++;
+		if($number != 1) {
+			echo ", ";
+		}
+		echo get_language_string($cats['cat_name']);
+	}
 }
 
 
@@ -564,25 +564,25 @@ function printArticleCategories($obj) {
  * @param string $option "all" to show all categories if creating a new article without categories assigned, empty if editing an existing article that already has categories assigned.
  */
 function printCategorySelection($id='', $option='') {
-  global $_zp_current_zenpage_news;
-  $all_cats = getAllCategories();
-  $selected = '';
- 	echo "<ul class='zenpagechecklist'>\n";
+	global $_zp_current_zenpage_news;
+	$all_cats = getAllCategories();
+	$selected = '';
+	echo "<ul class='zenpagechecklist'>\n";
 	foreach ($all_cats as $cats) {
-    if($option != "all") {
-   	  $cat2news = query_single_row("SELECT cat_id FROM ".prefix('zenpage_news2cat')." WHERE news_id = ".$id." AND cat_id = ".$cats['id']);
-   	  if($cat2news['cat_id'] != "") {
-   	    $selected ="checked ='checked'";
-   	  } else {
-   	    $selected ="";
-   	  }
-    }
-    $catname = get_language_string($cats['cat_name']);
-    $catlink = $cats['cat_link'];
-    $catid = $cats['id'];
-    echo "<li><label for='cat".$catid."'><input name='cat".$catid."' id='cat".$catid."' type='checkbox' value='".$catid."' ".$selected." />".$catname."</label></li>\n";
-  }
-  echo "</ul>\n";
+		if($option != "all") {
+			$cat2news = query_single_row("SELECT cat_id FROM ".prefix('zenpage_news2cat')." WHERE news_id = ".$id." AND cat_id = ".$cats['id']);
+			if($cat2news['cat_id'] != "") {
+				$selected ="checked ='checked'";
+			} else {
+				$selected ="";
+			}
+		}
+		$catname = get_language_string($cats['cat_name']);
+		$catlink = $cats['cat_link'];
+		$catid = $cats['id'];
+		echo "<li><label for='cat".$catid."'><input name='cat".$catid."' id='cat".$catid."' type='checkbox' value='".$catid."' ".$selected." />".$catname."</label></li>\n";
+	}
+	echo "</ul>\n";
 }
 
 
@@ -591,47 +591,47 @@ function printCategorySelection($id='', $option='') {
  *
  */
 function printArticleDatesDropdown() {
-  global $_zp_current_zenpage_news;
-  $datecount = getAllArticleDates();
-  $currentpage = getCurrentAdminNewsPage();
-  $lastyear = "";
-  $nr = "";
+	global $_zp_current_zenpage_news;
+	$datecount = getAllArticleDates();
+	$currentpage = getCurrentAdminNewsPage();
+	$lastyear = "";
+	$nr = "";
  ?>
-  <form name="AutoListBox1" style="float:left; margin-left: 10px;" action="#" >
-  <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
+	<form name="AutoListBox1" style="float:left; margin-left: 10px;" action="#" >
+	<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
  <?php
- 		if(!isset($_GET['date'])) {
+		if(!isset($_GET['date'])) {
 			$selected = 'selected="selected"';
 		 } else {
 				$selected = "";
 			}
-	   echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,false,true)."'>".gettext("View all months")."</option>";
-	 	while (list($key, $val) = each($datecount)) {
-	  $nr++;
-	  if ($key == '0000-00-01') {
-	    $year = "no date";
-	    $month = "";
-	  } else {
-	    $dt = strftime('%Y-%B', strtotime($key));
-	    $year = substr($dt, 0, 4);
-	    $month = substr($dt, 5);
-	  }
-    if(isset($_GET['category'])) {
-	      $catlink = "&amp;category=".$_GET['category'];
-	    } else {
-	      $catlink = "";
-	    }
+		 echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,false,true)."'>".gettext("View all months")."</option>";
+		while (list($key, $val) = each($datecount)) {
+		$nr++;
+		if ($key == '0000-00-01') {
+			$year = "no date";
+			$month = "";
+		} else {
+			$dt = strftime('%Y-%B', strtotime($key));
+			$year = substr($dt, 0, 4);
+			$month = substr($dt, 5);
+		}
+		if(isset($_GET['category'])) {
+				$catlink = "&amp;category=".$_GET['category'];
+			} else {
+				$catlink = "";
+			}
 		$check = $month."-".$year;
 		 if(isset($_GET['date']) AND $_GET['date'] == substr($key,0,7)) {
 				$selected = "selected='selected'";
 		 } else {
-		 		$selected = "";
-		 	}
-		 	if(isset($_GET['date'])) {
-		 		echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,false,true)."'>$month $year ($val)</option>\n";
-		 	} else {
-	  		echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage."&amp;date=".substr($key,0,7).getNewsAdminOptionPath(true,false,true)."'>$month $year ($val)</option>\n";
-	  	}
+				$selected = "";
+			}
+			if(isset($_GET['date'])) {
+				echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,false,true)."'>$month $year ($val)</option>\n";
+			} else {
+				echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage."&amp;date=".substr($key,0,7).getNewsAdminOptionPath(true,false,true)."'>$month $year ($val)</option>\n";
+			}
 	}
 ?>
 	</select>
@@ -651,41 +651,41 @@ function printArticleDatesDropdown() {
  *
  */
 function printArticlesPageNav() {
-  global $_zp_zenpage_total_pages;
-  $current = getCurrentAdminNewsPage();
-  $total = $_zp_zenpage_total_pages;
-  if($total > 1) {
-    echo "<ul class=\"pagelist\">";
-    if ($current != 1) {
-      echo "<li class='prev'><a href='admin-news-articles.php?pagenr=".($current - 1).getNewsAdminOptionPath(true,true,true)."' title='".gettext("Prev Page")." ".($current - 1)."' >&laquo; ".gettext("prev")."</a></li>\n";
-    } else {
-      echo "<li class='prev'><span class='disabledlink'>&laquo; ".gettext("prev")."</span></li>\n";
-    }
-    $j=max(1, min($current-3, $total-6));
+	global $_zp_zenpage_total_pages;
+	$current = getCurrentAdminNewsPage();
+	$total = $_zp_zenpage_total_pages;
+	if($total > 1) {
+		echo "<ul class=\"pagelist\">";
+		if ($current != 1) {
+			echo "<li class='prev'><a href='admin-news-articles.php?pagenr=".($current - 1).getNewsAdminOptionPath(true,true,true)."' title='".gettext("Prev Page")." ".($current - 1)."' >&laquo; ".gettext("prev")."</a></li>\n";
+		} else {
+			echo "<li class='prev'><span class='disabledlink'>&laquo; ".gettext("prev")."</span></li>\n";
+		}
+		$j=max(1, min($current-3, $total-6));
 		if ($j != 1) {
 			$p = max($j-4,1);
 		echo "\n <li><a href='admin-news-articles.php?pagenr=".$p.' title="page '.$p.'">...</a></li>';
 	}
 	for ($i=$j; $i <= min($total, $j+6); $i++) {
-      if($i == $current) {
-        echo "<li>".$i."</li>\n";
-      } else {
-        echo "<li><a href='admin-news-articles.php?pagenr=".$i.getNewsAdminOptionPath(true,true,true)."' title='Page ".$i."'>".$i."</a></li>\n";
-      }
-    }
-    if ($i < $total) {
-    	$p = min($j+10,$total);
-    	echo "\n <li><a href='admin-news-articles.php?pagenr=".$p.' title="page '.$p.'">...</a></li>';
-    }
-    echo "<li class=\"next\">";
-    
-    if ($current != $total)	{
-      echo "<li class='next'><a href='admin-news-articles.php?pagenr=".min($j+10,$total).getNewsAdminOptionPath(true,true,true)."' title='".gettext("Next page")." ".min($j+10,$total)."'>".gettext("next")." &raquo;</a></li>\n";
-    } else {
-      echo "<li class='next'><span class='disabledlink'>".gettext("next")." &raquo;</span></li>\n";
-    }
-    echo "</ul>";
-  }
+			if($i == $current) {
+				echo "<li>".$i."</li>\n";
+			} else {
+				echo "<li><a href='admin-news-articles.php?pagenr=".$i.getNewsAdminOptionPath(true,true,true)."' title='Page ".$i."'>".$i."</a></li>\n";
+			}
+		}
+		if ($i < $total) {
+			$p = min($j+10,$total);
+			echo "\n <li><a href='admin-news-articles.php?pagenr=".$p.' title="page '.$p.'">...</a></li>';
+		}
+		echo "<li class=\"next\">";
+		
+		if ($current != $total)	{
+			echo "<li class='next'><a href='admin-news-articles.php?pagenr=".min($j+10,$total).getNewsAdminOptionPath(true,true,true)."' title='".gettext("Next page")." ".min($j+10,$total)."'>".gettext("next")." &raquo;</a></li>\n";
+		} else {
+			echo "<li class='next'><span class='disabledlink'>".gettext("next")." &raquo;</span></li>\n";
+		}
+		echo "</ul>";
+	}
 }
 
 
@@ -695,42 +695,42 @@ function printArticlesPageNav() {
  */
 function printCategoryDropdown() {
 	global $_zp_current_zenpage_news;
-  $currentpage = getCurrentAdminNewsPage();
-  $result = getAllCategories();
-  if(isset($_GET['date'])) {
-    $datelink = "&amp;date=".$_GET['date'];
-    $datelinkall = "?date=".$_GET['date'];
-  } else {
-    $datelink = "";
-    $datelinkall ="";
-  }
+	$currentpage = getCurrentAdminNewsPage();
+	$result = getAllCategories();
+	if(isset($_GET['date'])) {
+		$datelink = "&amp;date=".$_GET['date'];
+		$datelinkall = "?date=".$_GET['date'];
+	} else {
+		$datelink = "";
+		$datelinkall ="";
+	}
 ?>
-  <form name ="AutoListBox2" style="float:left" action="#" >
-  <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
+	<form name ="AutoListBox2" style="float:left" action="#" >
+	<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
 <?php
 if(!isset($_GET['category'])) {
 			$selected = "selected='selected'";
-    } else {
-    	$selected ="";
-    } 
+		} else {
+			$selected ="";
+		}
 		echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(false,true,true)."'>".gettext("All categories")."</option>";
-  foreach ($result as $cat) {
-    // check if there are articles in this category. If not don't list the category.
-    $count = countArticles($cat['cat_link'],false);
-    $count = " (".$count.")";
-    if(isset($_GET['category']) AND $_GET['category'] === $cat['cat_link']) {
-    	$selected = "selected='selected'";
-    } else {
-    	$selected ="";
-    }
-    if ($count != " (0)") {
+	foreach ($result as $cat) {
+		// check if there are articles in this category. If not don't list the category.
+		$count = countArticles($cat['cat_link'],false);
+		$count = " (".$count.")";
+		if(isset($_GET['category']) AND $_GET['category'] === $cat['cat_link']) {
+			$selected = "selected='selected'";
+		} else {
+			$selected ="";
+		}
+		if ($count != " (0)") {
 			echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage."&amp;category=".$cat['cat_link'].getNewsAdminOptionPath(false,true,true)."'>".get_language_string($cat['cat_name']).$count."</option>\n";
-  	}
+		}
 	}
-	
+
 ?>
  </select>
-  <script language="JavaScript" type="text/javascript" >
+	<script language="JavaScript" type="text/javascript" >
 	<!--
 	function gotoLink(form) {
 	var OptionIndex=form.ListBoxURL.selectedIndex;
@@ -739,7 +739,7 @@ if(!isset($_GET['category'])) {
 	</script>
 	</form>
 <?php
-} 
+}
 
 
 /**
@@ -775,12 +775,12 @@ function getNewsAdminOptionPath($categorycheck='', $postedcheck='',$publishedche
  */
 function printUnpublishedDropdown() {
 	global $_zp_current_zenpage_news;
-  $currentpage = getCurrentAdminNewsPage();
+	$currentpage = getCurrentAdminNewsPage();
 ?>
-  <form name="AutoListBox3" style="float:left; margin-left: 10px;" action="#" >
-  <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
+	<form name="AutoListBox3" style="float:left; margin-left: 10px;" action="#" >
+	<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
  <?php
- 		$all="";
+		$all="";
 		$published="";
 		$unpublished="";
 		 if(isset($_GET['published']) AND $_GET['published'] == "no") {
@@ -788,13 +788,13 @@ function printUnpublishedDropdown() {
 		 }
 		 if(isset($_GET['published']) AND $_GET['published'] == "yes") {
 				$published="selected='selected'";
-		 	}
-		 	if(!isset($_GET['published'])) {
-		 	 	$all="selected='selected'";
-		 	}
- 	echo "<option $all value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."'>".gettext("All articles")."</option>\n";
+			}
+			if(!isset($_GET['published'])) {
+				$all="selected='selected'";
+			}
+	echo "<option $all value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."'>".gettext("All articles")."</option>\n";
 	echo "<option $published value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=yes'>".gettext("Published")."</option>\n";
-	echo "<option $unpublished value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=no'>".gettext("Unpublished")."</option>\n"; 
+	echo "<option $unpublished value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=no'>".gettext("Unpublished")."</option>\n";
 	?>
 	</select>
 	<script language="JavaScript" type="text/javascript" >
@@ -804,7 +804,7 @@ function printUnpublishedDropdown() {
 	parent.location = form.ListBoxURL.options[OptionIndex].value;}
 	//-->
 	</script></form>
-<?php 
+<?php
 }
 
 
@@ -871,45 +871,45 @@ function updateCategory() {
  *
  */
 function deleteCategory() {
-  global $_zp_current_zenpage_news;
-  if(isset($_GET['delete'])) {
-    // check if the category is in use, don't delete
-    $count = countArticles(sanitize($_GET['cat_link'],3),false);
-    $delete = zp_escape_string(sanitize($_GET['delete'],3));
-    if ($count != 0) {
+	global $_zp_current_zenpage_news;
+	if(isset($_GET['delete'])) {
+		// check if the category is in use, don't delete
+		$count = countArticles(sanitize($_GET['cat_link'],3),false);
+		$delete = zp_escape_string(sanitize($_GET['delete'],3));
+		if ($count != 0) {
 			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = '{$delete}'");
-    } 
-    query("DELETE FROM ".prefix('zenpage_news_categories')." WHERE id = '{$delete}'");
-    echo "<p class='messagebox' id='fade-message'>".gettext("Category successfully deleted!")."</p>";
-  }
+		}
+		query("DELETE FROM ".prefix('zenpage_news_categories')." WHERE id = '{$delete}'");
+		echo "<p class='messagebox' id='fade-message'>".gettext("Category successfully deleted!")."</p>";
+	}
 }
 
 
 function printCategoryList() {
 	global $_zp_current_zenpage_news;
-  $result = getAllCategories();
+	$result = getAllCategories();
 	foreach($result as $cat) {
 		$count = countArticles($cat['cat_link'],false);
 			if(get_language_string($cat['cat_name'])) {
-  			$catname = get_language_string($cat['cat_name']);
-  		} else {
-  			$catname = "<span style='color:red; font-weight: bold'>".gettext("Untitled category")."</span>";
-  		}
+				$catname = get_language_string($cat['cat_name']);
+			} else {
+				$catname = "<span style='color:red; font-weight: bold'>".gettext("Untitled category")."</span>";
+			}
 ?>
- <tr> 
-  <td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."&amp;tab=categories' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
-  <td class="icons3"><?php echo $count; ?> <?php echo gettext("articles"); ?></td>
-  <td class="icons">
-  	<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>&amp;tab=categories" title="<?php echo gettext("Reset hitcounter"); ?>">
-  	<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" />
-  	</a>
-  </td> 
-  <td class="icons">
-  <a href="javascript:confirmDeleteImage('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories','<?php echo js_encode(gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
-  </td>
-  </tr>
- <?php	
-	} 
+ <tr>
+	<td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."&amp;tab=categories' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
+	<td class="icons3"><?php echo $count; ?> <?php echo gettext("articles"); ?></td>
+	<td class="icons">
+		<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>&amp;tab=categories" title="<?php echo gettext("Reset hitcounter"); ?>">
+		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" />
+		</a>
+	</td>
+	<td class="icons">
+	<a href="javascript:confirmDeleteImage('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories','<?php echo js_encode(gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
+	</td>
+	</tr>
+ <?php
+	}
 }
 
 
@@ -946,7 +946,7 @@ function checkForEmptyTitle($titlefield,$type) {
  * @return string
  */
 function publishPageOrArticle($option,$id) {
-  switch ($option) {
+	switch ($option) {
 		case "news":
 			$dbtable = prefix('zenpage_news');
 			break;
@@ -954,12 +954,12 @@ function publishPageOrArticle($option,$id) {
 			$dbtable = prefix('zenpage_pages');
 			break;
 	}
-  $show = sanitize_numeric($_GET['publish']);
-  if ($show > 1) {
-  	query('UPDATE '.$dbtable.' SET `show` = "1", `expiredate`=NULL WHERE id = '.$id);
-  } else {
-  	query("UPDATE ".$dbtable." SET `show` = ".$show." WHERE id = ".$id);
-  }
+	$show = sanitize_numeric($_GET['publish']);
+	if ($show > 1) {
+		query('UPDATE '.$dbtable.' SET `show` = "1", `expiredate`=NULL WHERE id = '.$id);
+	} else {
+		query("UPDATE ".$dbtable." SET `show` = ".$show." WHERE id = ".$id);
+	}
 }
 
 /**
@@ -970,7 +970,7 @@ function publishPageOrArticle($option,$id) {
  * @return string
  */
 function skipScheduledPublishing($option,$id) {
-  switch ($option) {
+	switch ($option) {
 		case "news":
 			$dbtable = prefix('zenpage_news');
 			break;
@@ -978,22 +978,22 @@ function skipScheduledPublishing($option,$id) {
 			$dbtable = prefix('zenpage_pages');
 			break;
 	}
-  query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."', `show`= 1 WHERE id = ".$id);
+	query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."', `show`= 1 WHERE id = ".$id);
 }
 
 /**
  * Checks if comments are allowed for a article or page and prints the matching image icon for the articles or pages list
  *
  * @param string $commentson the comments array field of "commentson"
- * @return string 
+ * @return string
  */
 function checkIfCommentsAllowed($commentson=false) {
-  if ($commentson) {
-    $check = "<img src=\"images/comments-on.png\" alt=\"".gettext("Comments on")."\" />";
-  } else {
-    $check = "<img src=\"images/comments-off.png\" alt=\"".gettext("Comments off")."\" />";
-  }
-  return $check;
+	if ($commentson) {
+		$check = "<img src=\"images/comments-on.png\" alt=\"".gettext("Comments on")."\" />";
+	} else {
+		$check = "<img src=\"images/comments-off.png\" alt=\"".gettext("Comments off")."\" />";
+	}
+	return $check;
 }
 
 
@@ -1003,20 +1003,20 @@ function checkIfCommentsAllowed($commentson=false) {
  * @param string $type "news" or "pages"
  */
 function enableComments($type) {
-  if($_GET['commentson']) {
+	if($_GET['commentson']) {
 		$comments = "0";
-  } else {
-  	$comments = "1";
-  }
-  switch($type) {
-  	case "news":
-  		$dbtable = prefix('zenpage_news');
-  		break;
-  	case "page":
-  		$dbtable = prefix('zenpage_pages');
-  		break;
-  }
-  query("UPDATE ".$dbtable." SET `commentson` = ".$comments." WHERE id = ".sanitize_numeric($_GET['id']));
+	} else {
+		$comments = "1";
+	}
+	switch($type) {
+		case "news":
+			$dbtable = prefix('zenpage_news');
+			break;
+		case "page":
+			$dbtable = prefix('zenpage_pages');
+			break;
+	}
+	query("UPDATE ".$dbtable." SET `commentson` = ".$comments." WHERE id = ".sanitize_numeric($_GET['id']));
 }
 
 
@@ -1038,9 +1038,9 @@ function resetPageOrArticleHitcounter($option='') {
 			break;
 	}
 	$id = sanitize_numeric($_GET['id']);
-  if($_GET['hitcounter']) {
+	if($_GET['hitcounter']) {
 		query("UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE id = ".$id);
-  }   
+	}
 }
 
 
@@ -1137,20 +1137,20 @@ function printCategoriesStatistic() {
 }
 
 /**
- * Prints the links to JavaScript and CSS files zenpage needs. 
+ * Prints the links to JavaScript and CSS files zenpage needs.
  * Actually the same as for zenphoto but with different paths since we are in the plugins folder.
  *
  */
 function zenpageJSCSS() {
 	?>
 	<link rel="stylesheet" href="../../admin.css" type="text/css" />
-  <link rel="stylesheet" href="zenpage.css" type="text/css" />
- 	<script type="text/javascript" src="../../js/admin.js"></script>
-  <script type="text/javascript" src="../../js/jquery.js"></script>
+	<link rel="stylesheet" href="zenpage.css" type="text/css" />
+	<script type="text/javascript" src="../../js/admin.js"></script>
+	<script type="text/javascript" src="../../js/jquery.js"></script>
 	<script src="../../js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="../../js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="../../js/jqueryui/ui.zenphoto.css" type="text/css" />
-  <?php datepickerJS(); ?>
+	<?php datepickerJS(); ?>
 	<script type="text/javascript" src="../../js/zenphoto.js"></script>
 	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
 	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
@@ -1161,12 +1161,12 @@ function zenpageJSCSS() {
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 		});
-  	$(document).ready(function(){
-    	$("#tip a").click(function() {
-      $("#tips").toggle("slow");
-    });
-   });
-  </script>
+		$(document).ready(function(){
+			$("#tip a").click(function() {
+			$("#tips").toggle("slow");
+		});
+	 });
+	</script>
 <?php
 }
 
@@ -1176,10 +1176,10 @@ function zenpageJSCSS() {
  * @param string $currentpage the kind of zenphoto object being accessed.
  */
 function checkRights($currentpage) {
- 	if (!(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
-  	echo "<div class='errorbox'>".gettext("You need Admin Rights or Zenpage rights to use Zenpage")."</div>";
-  	exit;
- 	}
+	if (!(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+		echo "<div class='errorbox'>".gettext("You need Admin Rights or Zenpage rights to use Zenpage")."</div>";
+		exit;
+	}
 }
 
 function printZenpageIconLegend() { ?>
@@ -1189,7 +1189,7 @@ function printZenpageIconLegend() { ?>
 	<li><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>
 	<li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete"); ?></li>
-	</ul>	
+	</ul>
 <?php
 }
 
@@ -1199,7 +1199,8 @@ function printZenpageIconLegend() { ?>
  * @param string $currentadmin The current admin is selected if adding a new article, otherwise the original author
  */
 function AuthorSelector($currentadmin='') {
-	$admins = getAdministrators();
+	global $_zp_authority;
+	$admins = $_zp_authority->getAdministrators();
 	?>
 <select size='1' name="author" id="author">
 <?php
@@ -1211,7 +1212,7 @@ foreach($admins as $admin) {
 			echo "<option value='".$admin['user']."'>".$admin['user']."</option>";
 		}
 	}
-} 
+}
 ?>
 </select>
 <?php
@@ -1245,7 +1246,7 @@ function checkIfExpires($object) {
  */
 function checkIfScheduled($object) {
 	$dt = $object->getDateTime();
-	if($dt > date('Y-m-d H:i:s')) {		
+	if($dt > date('Y-m-d H:i:s')) {
 		if($object->getShow() != 1) {
 			echo '<strong class="inactivescheduledate">'.$dt.'</strong>';
 		} else {
@@ -1279,7 +1280,7 @@ function printPublishIconLink($object,$type) {
 		} else {
 			$title = gettext("Enable scheduled publishing");
 			?>
-			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>"> 
+			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
 			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		}
@@ -1287,7 +1288,7 @@ function printPublishIconLink($object,$type) {
 		if ($object->getShow()) {
 			$title = gettext("Un-publish");
 			?>
-			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>"> 
+			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
 			<img src="../../images/pass.png" alt="<?php echo gettext("Published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		} else {
@@ -1318,11 +1319,11 @@ function printPublishIconLink($object,$type) {
 function checkIfChecked($field) {
 	if ($field) {
 		echo 'checked="checked"';
-	} 
+	}
 }
 
 /**
- * Gets the db field $field of the $object (page or news article) if $object is an object. 
+ * Gets the db field $field of the $object (page or news article) if $object is an object.
  * Used to share the same page for page/news article add (no object) and edit (object available)
  *
  * @param object $object If this is an object the function returns the value of the db field $field
@@ -1331,36 +1332,36 @@ function checkIfChecked($field) {
  */
 function getIfObject($object,$field) {
  if(is_object($object)) {
- 		return $object->get($field);
-  } else {
-  	return "";
-  }
+		return $object->get($field);
+	} else {
+		return "";
+	}
 }
 
 /**
- * Prints the db field $field of the $object (page or news article) if $object is an object. 
+ * Prints the db field $field of the $object (page or news article) if $object is an object.
  * Used to share the same page for page/news article add (no object) and edit (object available)
  *
  * @param object $object If this is an object the function returns the value of the db field $field
  * @param string $field The db field to get (Note: "parent id" is not availabe for news articles!)
  * @return string
  */
-function printIfObject($object,$field) { 
+function printIfObject($object,$field) {
 	echo getIfObject($object,$field);
 }
 
 /**
  * Checks if the current logged in admin user is the author that locked the page/article.
- * Only that author or any user with admin rights will be able to edit or unlock. 
+ * Only that author or any user with admin rights will be able to edit or unlock.
  *
  * @param object $page The array of the page or article to check
  * @return bool
  */
 function checkIfLocked($page) {
-	global $_zp_current_admin;
+	global $_zp_current_admin_obj;
 	if (zp_loggedin(ADMIN_RIGHTS)) return true;
 	if($page->getLocked()) {
-		 return $_zp_current_admin['user'] == $page->getAuthor();
+		 return $_zp_current_admin_obj->getUser() == $page->getAuthor();
 	} else {
 		return true;
 	}
@@ -1400,7 +1401,7 @@ function codeblocktabsJS() { ?> <script type="text/javascript"
 		$(function () {
 			var tabContainers = $('div.tabs > div');
 			tabContainers.hide().filter(':first').show();
-			
+
 			$('div.tabs ul.tabNavigation a').click(function () {
 				tabContainers.hide();
 				tabContainers.filter(this.hash).show();
@@ -1486,7 +1487,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea id="'.$name.'_'.$locale.'" name="'.$name.'" class="mceEditor" cols="60"	'.$rows.' style="width:600px;">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$locale.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';	
+			echo '<textarea id="'.$name.'_'.$locale.'" name="'.$name.'" class="mceEditor" cols="60"	'.$rows.' style="width:600px;">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$locale.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
 		} else {
 			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="96" style="width:600px;"/>';
 		}
@@ -1507,8 +1508,8 @@ function getLocaleForTinyMCEandAFM() {
 }
 
 /**
- * Calls the configuration file for the rich text editor used for pages and news articles. 
- * Default is TinyMCE, but basically other editors would be possible, too. 
+ * Calls the configuration file for the rich text editor used for pages and news articles.
+ * Default is TinyMCE, but basically other editors would be possible, too.
  * The by default included Ajax File Manager does only work with TinyMCE and FCKEditor though.
  *
  */

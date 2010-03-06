@@ -25,13 +25,12 @@ if (!empty($admin)) {   // transfer the old credentials and then remove them
 	query($sql);
 }
 
-if (defined('LIBAUTH_VERSION')) {
-	if (LIBAUTH_VERSION != getOption('libauth_version')) {
-		migrateAuth(getOption('libauth_version'));
-		setOption('libauth_version',LIBAUTH_VERSION);
-	}
+if ($_zp_authority->version != getOption('libauth_version')) {
+	$_zp_authority->migrateAuth(getOption('libauth_version'));
+	setOption('libauth_version',$_zp_authority->version);
 }
-$admins = getAdministrators();
+
+$admins = $_zp_authority->getAdministrators();
 foreach ($admins as $user) {
 	if (($user['rights'] & (MANAGE_ALL_ALBUM_RIGHTS | VIEW_ALL_RIGHTS))==MANAGE_ALL_ALBUM_RIGHTS) {
 		saveAdmin($user['user'], NULL, $user['name'], $user['email'], $user['rights'] | VIEW_ALL_RIGHTS, NULL, $user['custom_data'], $user['group']);

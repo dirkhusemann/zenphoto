@@ -148,7 +148,7 @@ if (isset($_GET['action'])) {
 							setOption('gallery_password', NULL);  // clear the gallery password
 						}
 					} else {
-						setOption('gallery_password', passwordHash($newuser, $pwd));
+						setOption('gallery_password', $_zp_authority->passwordHash($newuser, $pwd));
 					}
 				} else {
 					if (empty($fail)) {
@@ -192,7 +192,7 @@ if (isset($_GET['action'])) {
 							setOption('search_password', NULL);  // clear the gallery password
 						}
 					} else {
-						setOption('search_password', passwordHash($newuser, $pwd));
+						setOption('search_password', $_zp_authority->passwordHash($newuser, $pwd));
 					}
 				} else {
 					if (empty($notify)) {
@@ -289,7 +289,7 @@ if (isset($_GET['action'])) {
 						setOption('protected_image_password', NULL);  // clear the gallery password
 					}
 				} else {
-					setOption('protected_image_password', passwordHash($newuser, $pwd));
+					setOption('protected_image_password', $_zp_authority->passwordHash($newuser, $pwd));
 				}
 			} else {
 				if (empty($notify)) {
@@ -658,8 +658,8 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					</td>
 				</tr>
 				<?php
-				if (class_exists('lib_auth_options')) {
-					customOptions(new lib_auth_options(), "");
+				if (method_exists($_zp_authority,'lib_auth_options')) {
+					customOptions($_zp_authority, "");
 				}
 				?>
 				<tr>

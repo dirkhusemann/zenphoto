@@ -192,10 +192,11 @@ class Album extends PersistentObject {
 	 * @param string $pwd the cleartext password
 	 */
 	function setPassword($pwd) {
+		global $_zp_authority;
 		if (empty($pwd)) {
 			$this->set('password', "");
 		} else {
-			$this->set('password', passwordHash($this->get('user'), $pwd));
+			$this->set('password', $_zp_authority->passwordHash($this->get('user'), $pwd));
 		}
 	}
 
@@ -1419,22 +1420,6 @@ class Album extends PersistentObject {
 	 */
 	function setAlbumTheme($theme) {
 		$this->set('album_theme', $theme);
-	}
-	
-// TODO: remove these functions
-	/**
-	 * deprecated function.
-	 */
-	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
-		trigger_error(gettext('getSubAlbums is deprecated. Use getAlbums().'), E_USER_NOTICE);
-		return $this->getAlbums($page, $sorttype, $sortdirection);
-	}
-	/**
-	 * deprecated function.
-	 */
-		function getNumSubAlbums() {
-		trigger_error(gettext('getNumSubAlbums is deprecated. Use getNumAlbums().'), E_USER_NOTICE);
-		return $this->getNumAlbums();
 	}
 	
 }

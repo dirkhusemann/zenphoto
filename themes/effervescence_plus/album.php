@@ -311,8 +311,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!-- Simpleviewer section -->
 			<div id="flash">
 					<p align="center">
-			<font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('Get Adobe Flash.'); ?></a></font>
-			</p>
+					<span style=" color=#663300"><?php echo gettext('For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Adobe Flash.</a>'); ?></span>
+					</p>
 						<p align="center">
  						<?php
  						if ($imagePage) {

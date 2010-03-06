@@ -4,6 +4,7 @@
  * 
  * @package plugins 
  */
+
 ?>
 	<form action="?action=register_user" method="post" autocomplete="off">
 		<input type="hidden" name="register_user" value="yes" />
@@ -30,7 +31,7 @@
 				<p style="line-height: 1em;">
 					<input type="password" id="adminpass_2" name="adminpass_2"	value="" size="23" />
 					<?php
-					$msg = passwordNote();
+					$msg = $_zp_authority->passwordNote();
 					if (!empty($msg)) {
 						?>
 						<br />

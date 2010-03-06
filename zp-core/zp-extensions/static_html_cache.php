@@ -3,14 +3,14 @@
  * Static HTML Cache
  *
  * Used to cache Theme pages (i.e. those pages launched by the Zenphoto index.php script.)
- * 
- * Exceptions to this are the password.php and 404.php pages, any page listed in the 
- * Excluded pages option, and any page whose script makes a call on the 
+ *
+ * Exceptions to this are the password.php and 404.php pages, any page listed in the
+ * Excluded pages option, and any page whose script makes a call on the
  * static_cache_html_disable_cache() function. NOTE: this function only prevents the
- * creation of a cache image of the page being viewed. If there is already an existing 
+ * creation of a cache image of the page being viewed. If there is already an existing
  * cached page and none of the other exclusions are in effect, the cached page will be
  * shown.
- * 
+ *
  * In addition, caching does not occur for pages viewed by Zenphoto users if the user has
  * ADMIN priviledges or if he is the manager of an album being viewed or whose images are
  * being viewed. Likewise, Zenpage News and Pages are not cached when viewed by the author.
@@ -25,7 +25,7 @@ require_once(dirname(dirname(__FILE__)).'/functions.php');
 $plugin_is_filter = 5;
 $plugin_description = gettext("Adds static html cache functionality to Zenphoto v1.2 or higher. Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php. This plugin uses the folder <em>cache_html</em> and it's subfolders <em>index, images, albums</em> and <em>pages</em> in Zenphoto's root folder.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---static_html_cache.php.html";
 $option_interface = new staticCache();
 $_zp_HTML_cache = $option_interface; // register as the HTML cache handler
@@ -67,7 +67,7 @@ class staticCache {
 
 	var $startmtime;
 	var $disable = false; // manual disable caching a page
-	
+
 	function staticCache() {
 		setOptionDefault('static_cache_expire', 86400);
 		setOptionDefault('static_cache_excludedpages', 'search.php/,contact.php/,register.php/');
@@ -83,11 +83,11 @@ class staticCache {
 
 	function handleOption($option, $currentValue) {
 	}
-	
+
 	/**
-	 * Checks if the current page should be excluded from caching. 
+	 * Checks if the current page should be excluded from caching.
 	 * Pages that can be excluded are custom pages included Zenpage pages (these optionally more specific by titlelink)
-	 * and the standard theme pages image.php (optionally by image file name), album.php (optionally by album folder name) 
+	 * and the standard theme pages image.php (optionally by image file name), album.php (optionally by album folder name)
 	 * or index.php
 	 *
 	 * @return bool
@@ -95,7 +95,7 @@ class staticCache {
 	 */
 	function checkIfAllowedPage() {
 		global $_zp_gallery_page, $_zp_current_image, $_zp_current_album, $_zp_current_zenpage_page,
-						$_zp_current_zenpage_news, $_zp_current_admin;
+						$_zp_current_zenpage_news, $_zp_current_admin_obj;
 		if ($this->disable || zp_loggedin(ADMIN_RIGHTS)) {
 			return false;	// don't cache pages the admin views!
 		}
@@ -117,13 +117,13 @@ class staticCache {
 					$title = $_zp_current_album->name;
 					break;
 				case ZENPAGE_PAGES.'.php':
-					if (zp_loggedin() && $_zp_current_admin['user'] == $_zp_current_zenpage_page->getAuthor()) {
+					if (zp_loggedin() && $_zp_current_admin_obj->getUser() == $_zp_current_zenpage_page->getAuthor()) {
 						return false;	// don't cache author's pages
 					}
-			
+
 					break;
 				case ZENPAGE_NEWS.'.php':
-					if (zp_loggedin() && $_zp_current_admin['user'] == $_zp_current_zenpage_news->getAuthor()) {
+					if (zp_loggedin() && $_zp_current_admin_obj->getUser() == $_zp_current_zenpage_news->getAuthor()) {
 						return false;	// don't cache author's pages
 					}
 					break;
@@ -317,7 +317,7 @@ function static_cache_html_purgebutton($buttons) {
 								'button_text'=>gettext('Purge HTML cache'),
 								'formname'=>'clearcache_button',
 								'action'=>PLUGIN_FOLDER.'/static_html_cache.php?action=clear_html_cache',
-								'icon'=>'images/edit-delete.png', 
+								'icon'=>'images/edit-delete.png',
 								'title'=>gettext('Clear the static HTML cache. HTML pages will be recached as they are viewed.'),
 								'alt'=>'',
 								'hidden'=> '<input type="hidden" name="action" value="clear_html_cache">',
@@ -332,7 +332,7 @@ function static_cache_html_purgebutton($buttons) {
 function static_cache_html_disable_cache() {
 	global $_zp_HTML_cache;
 	if(is_object($_zp_HTML_cache)) {
-		$_zp_HTML_cache->disable = true; 
+		$_zp_HTML_cache->disable = true;
 	}
 }
 
