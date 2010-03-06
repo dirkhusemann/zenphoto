@@ -14,8 +14,7 @@ if (file_exists(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/alt/lib-auth.php'
 	$_zp_authority = new Zenphoto_Authority();
 }
 
-$_admin_rights = $_zp_authority->getRights();
-foreach ($_admin_rights as $key=>$right) {
+foreach ($_zp_authority->getRights() as $key=>$right) {
 	define($key,$right['value']);
 }
 

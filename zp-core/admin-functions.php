@@ -2597,7 +2597,7 @@ function removeParentAlbumNames($album) {
  * @param bit $rights rights of the admin
  */
 function printAdminRightsTable($id, $background, $alterrights, $rights) {
-	global $_admin_rights;
+	global $_zp_authority;
 	?>
 	<table class="checkboxes" > <!-- checkbox table -->
 		<tr>
@@ -2607,7 +2607,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 		</tr>
 		<?php
 		$element = 3;
-		foreach ($_admin_rights as $rightselement=>$right) {
+		foreach ($_zp_authority->getRights() as $rightselement=>$right) {
 			if ($right['display']) {
 				$name = $right['name'];
 				if ($element>2) {
@@ -2704,13 +2704,13 @@ function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
  * @return bit
  */
 function processRights($i) {
-	global $_admin_rights;
+	global $_zp_authority;
 	if (isset($_POST[$i.'-confirmed'])) {
 		$rights = NO_RIGHTS;
 	} else {
 		$rights = 0;
 	}
-	foreach ($_admin_rights as $name=>$right) {
+	foreach ($_zp_authority->getRights() as $name=>$right) {
 		if (isset($_POST[$i.'-'.$name])) {
 			$rights = $rights | $right['value'] | NO_RIGHTS;
 		}

@@ -57,7 +57,7 @@ function user_groups_save_admin($discard, $userobj, $i) {
  * @return string
  */
 function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
-	global $_admin_rights, $gallery, $_zp_authority;
+	global $gallery, $_zp_authority;
 	$group = $userobj->getGroup();
 	$admins = $_zp_authority->getAdministrators();
 	$ordered = array();
@@ -89,7 +89,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 			$allo[] = "'#managed_albums_".$i.'_'.postIndexEncode($folder)."'";
 		}
 		$rights = array();
-		foreach ($_admin_rights as $rightselement=>$right) {
+		foreach ($_zp_authority->getRights() as $rightselement=>$right) {
 			if ($right['display']) {
 				$rights[] = "'#".$rightselement.'-'.$i."'";
 			}
