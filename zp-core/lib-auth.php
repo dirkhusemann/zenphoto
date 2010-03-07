@@ -1,6 +1,6 @@
 <?php
 /**
- * functions used in password hashing for zenphoto
+* functions used in password hashing for zenphoto
  *
  * @package functions
  *
@@ -11,33 +11,35 @@
  * in place of this script.
  * 
  * Replacement libraries must implement two classes:
- * 		"Athority" class: Provides the methods used for user authorizaton and management
+ * 		"Authority" class: Provides the methods used for user authorization and management
  * 			store an instantiation of this class in $_zp_authority.
  *  
  * 		Administrator: supports the basic Zenphoto needs for object manipulation of administrators.
  *
- * The global $_zp_current_admin_obj reperesents the current admin with. 
- * The library must instantiate its authority and store the object in the global $_zp_authority
- * (Note, this library does instantiate the object as described. This is so the classes can 
+ * The global $_zp_current_admin_obj represents the current admin with. 
+ * The library must instantiate its authority class and store the object in the global $_zp_authority
+ * (Note, this library does instantiate the object as described. This is so its classes can 
  * be used as parent classes for lib-auth implementations. If auth_zp.php decides to use this
- * library it will instantiate the class and store it into $_zp_authority
+ * library it will instantiate the class and store it into $_zp_authority.
  * 
  * The following elements need to be present in any alternate implementation in the
  * array returned by getAdministrators().
- * In particular, there should be array elements for:
- * 		'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', 'valid', 
- * 		'group', and 'custom_data'
  * 
- * So long as all these indices are populated it should not matter when and where
- * the data is stored. Adminsitrator methods are requred for these as well. See the
- * Administrator class.
+ * 		In particular, there should be array elements for:
+ * 				'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', 'valid', 
+ * 				'group', and 'custom_data'
+ * 
+ * 		So long as all these indices are populated it should not matter when and where
+ *		the data is stored.
  *
- * 				admin rights [the values for the 'rights' element of $_zp_current_admin]
- * 				must be defined.
+ *		Administrator class methods are required for these elements as well.
  * 
- * 				at least the definitions of the Zenphoto_Athorization class below are required. 
- * 				Their values should indicate the hierarchy of privileges as the checkAuthorization
- *				function will promote the "most privileged" Admin to ADMIN_RIGHTS
+ * 		The getRights() method must define at least the rights defined by the method in 
+ * 		this library.
+ *
+ * 		The checkAuthorization() method should promote the "most privileged" Admin to 
+ * 		ADMIN_RIGHTS to insure that there is some user capable of adding users or 
+ * 		modifying user rights.
  *
  *
  */
@@ -254,14 +256,14 @@ class Zenphoto_Authority {
 	 * @return bit
 	 */
 	function checkAuthorization($authCode) {
-		global $_zp_current_admin,$_zp_current_admin_obj;
+		global $_zp_current_admin_obj;
 		if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
 		$admins = $this->getAdministrators();
 
 		/** uncomment to auto-login for backend HTML validation
-		 $_zp_current_admin = array_shift($admins);
-		 $_zp_current_admin_obj = $this->newAdministrator($_zp_current_admin['user']);
-		 return $_zp_current_admin['rights'] | ADMIN_RIGHTS;
+		 $user = array_shift($admins);
+		 $_zp_current_admin_obj = $this->newAdministrator($user['user']);
+		 return $user['rights'] | ADMIN_RIGHTS;
 		 */
 
 		foreach ($admins as $key=>$user) {
@@ -272,8 +274,7 @@ class Zenphoto_Authority {
 		if (DEBUG_LOGIN) { debugLogArray("checkAuthorization: admins",$admins);	}
 		$reset_date = getOption('admin_reset_date');
 		if ((count($admins) == 0) || empty($reset_date)) {
-			$_zp_current_admin = null;
-			$_zp_current_admin_obj = $this->newAdministrator($_zp_current_admin['user']);
+			$_zp_current_admin_obj = NULL;
 			if (DEBUG_LOGIN) { debugLog("checkAuthorization: no admin or reset request"); }
 			return ADMIN_RIGHTS; //no admins or reset request
 		}
@@ -282,8 +283,7 @@ class Zenphoto_Authority {
 		foreach($admins as $key=>$user) {
 			if (DEBUG_LOGIN) { debugLog("checkAuthorization: checking: $key");	}
 			if ($user['pass'] == $authCode) {
-				$_zp_current_admin = $user;
-				$_zp_current_admin_obj = $this->newAdministrator($_zp_current_admin['user']);
+				$_zp_current_admin_obj = $this->newAdministrator($user['user']);
 				$result = $user['rights'];
 				if ($i == 0) { // the first admin is the master.
 					$result = $result | ADMIN_RIGHTS;
@@ -293,7 +293,7 @@ class Zenphoto_Authority {
 			}
 			$i++;
 		}
-		$_zp_current_admin = $_zp_current_admin_obj = null;
+		$_zp_current_admin_obj = null;
 		if (DEBUG_LOGIN) { debugLog("checkAuthorization: no match");	}
 		return 0; // no rights
 	}
@@ -359,7 +359,7 @@ class Zenphoto_Authority {
 		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 		$admins = query_full_array($sql, true);
 		if (count($admins)>0) { // something to migrate
-			printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, $_zp_authority->version);
+			printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, $this->version);
 			switch ($oldversion) {
 				case 1:
 					$oldrights = array(	'NO_RIGHTS' => 2,
@@ -497,18 +497,18 @@ class Zenphoto_Authority {
 	function getRights() {
 		if (is_null($this->rightsset)) {
 			$this->rightsset = array(	'NO_RIGHTS' => array('value'=>2,'name'=>gettext('No rights'),'display'=>false),
-												'OVERVIEW_RIGHTS' => array('value'=>4,'name'=>gettext('Overview'),'display'=>true),
-												'VIEW_ALL_RIGHTS' => array('value'=>8,'name'=>gettext('View all'),'display'=>true),
-												'UPLOAD_RIGHTS' => array('value'=>16,'name'=>gettext('Upload'),'display'=>true),
-												'POST_COMMENT_RIGHTS'=> array('value'=>32,'name'=>gettext('Post comments'),'display'=>true),
-												'COMMENT_RIGHTS' => array('value'=>64,'name'=>gettext('Comments'),'display'=>true),
-												'ALBUM_RIGHTS' => array('value'=>256,'name'=>gettext('Album'),'display'=>true),
-												'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>512,'name'=>gettext('Manage all albums'),'display'=>true),
-												'THEMES_RIGHTS' => array('value'=>1024,'name'=>gettext('Themes'),'display'=>true),
-												'ZENPAGE_RIGHTS' => array('value'=>2049,'name'=>gettext('Zenpage'),'display'=>true),
-												'TAGS_RIGHTS' => array('value'=>4096,'name'=>gettext('Tags'),'display'=>true),
-												'OPTIONS_RIGHTS' => array('value'=>8192,'name'=>gettext('Options'),'display'=>true),
-												'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true));
+																'OVERVIEW_RIGHTS' => array('value'=>4,'name'=>gettext('Overview'),'display'=>true),
+																'VIEW_ALL_RIGHTS' => array('value'=>8,'name'=>gettext('View all'),'display'=>true),
+																'UPLOAD_RIGHTS' => array('value'=>16,'name'=>gettext('Upload'),'display'=>true),
+																'POST_COMMENT_RIGHTS'=> array('value'=>32,'name'=>gettext('Post comments'),'display'=>true),
+																'COMMENT_RIGHTS' => array('value'=>64,'name'=>gettext('Comments'),'display'=>true),
+																'ALBUM_RIGHTS' => array('value'=>256,'name'=>gettext('Album'),'display'=>true),
+																'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>512,'name'=>gettext('Manage all albums'),'display'=>true),
+																'THEMES_RIGHTS' => array('value'=>1024,'name'=>gettext('Themes'),'display'=>true),
+																'ZENPAGE_RIGHTS' => array('value'=>2049,'name'=>gettext('Zenpage'),'display'=>true),
+																'TAGS_RIGHTS' => array('value'=>4096,'name'=>gettext('Tags'),'display'=>true),
+																'OPTIONS_RIGHTS' => array('value'=>8192,'name'=>gettext('Options'),'display'=>true),
+																'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true));
 			$allrights = 0;
 			foreach ($this->rightsset as $key=>$right) {
 				$allrights = $allrights | $right['value'];
@@ -565,7 +565,11 @@ class Zenphoto_Administrator extends PersistentObject {
 	 * @return Administrator
 	 */
 	function Zenphoto_Administrator($user, $valid) {
-		parent::PersistentObject('administrators',  array('user' => $user, 'valid'=>$valid), 'user', true, empty($user));
+		parent::PersistentObject('administrators',  array('user' => $user, 'valid'=>$valid), 'user', !empty($user), empty($user));
+	}
+	
+	function getID() {
+		return $this->get('id');
 	}
 
 	function setPass($pwd) {

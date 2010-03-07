@@ -167,7 +167,7 @@ printSubtabs($_current_tab, 'users');
 	} else {
 		$alterrights = ' disabled="disabled"';
 		$admins = array($_zp_current_admin_obj->getUser() => 
-													array('id' => $_zp_current_admin_obj->get('id'), 
+													array('id' => $_zp_current_admin_obj->getID(), 
 																'user' => $_zp_current_admin_obj->getUser(),
 																'pass' => $_zp_current_admin_obj->getPass(),
 																'name' => $_zp_current_admin_obj->getName(),

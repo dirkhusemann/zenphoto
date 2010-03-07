@@ -1,18 +1,18 @@
 <?php
 /**
  * Manage the timing of publishing new content
- * 
- * This plugin allows you to change the default setting of the albums: published and 
+ *
+ * This plugin allows you to change the default setting of the albums: published and
  * the images: visible fields.
- * 
+ *
  * It also allows you to list unpublished albums and not visible images from before a
  * specific data and time. You can select albums and images from these lists to be published.
- * NOTE: currently there is no record of when albums were first encountered, so all unpublished 
+ * NOTE: currently there is no record of when albums were first encountered, so all unpublished
  * albums are show.
- * 
+ *
  * So you can freely upload albums and images then on a periodic basis review which ones to make available
  * to visitors of your gallery.
- * 
+ *
  * @package admin
  */
 
@@ -53,7 +53,7 @@ printAdminHeader();
 	background: none;
 	padding-left: 0;
 	text-align: left;
-	
+
 }
 
 .schedulealbumchecklist {
@@ -84,7 +84,7 @@ printAdminHeader();
 	background: none;
 	padding-left: 0;
 	text-align: left;
-	
+
 }
 
 .scheduleimagechecklist {
@@ -208,7 +208,7 @@ if (db_connect()) {
 		foreach ($result as $row) {
 			if ($row['Field'] == 'show') {
 				$albpublish = $row['Default'];
-				break;	
+				break;
 			}
 		}
 	}
@@ -218,7 +218,7 @@ if (db_connect()) {
 		foreach ($result as $row) {
 			if ($row['Field'] == 'show') {
 				$imgpublish = $row['Default'];
-				break;	
+				break;
 			}
 		}
 	}
@@ -227,7 +227,7 @@ if (db_connect()) {
 	} else {
 		$requestdate = date('Y-m-d H:i:s');
 	}
-	
+
 	$albumidlist = '';
 	$albumids = '';
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
@@ -264,7 +264,7 @@ if (db_connect()) {
 			}
 		}
 	}
-	
+
 	$mtime = dateTimeConvert(sanitize($requestdate), true);
 	$sql = "SELECT `folder`, `id` FROM ".prefix('albums').' WHERE `show`="0"'.$albumids;
 	$result = query_full_array($sql);
@@ -297,9 +297,9 @@ if (db_connect()) {
 <br clear="all" />
 <br clear="all" />
 </form>
-<?php 
+<?php
 }
-if (count($publish_albums_list) > 0) { 
+if (count($publish_albums_list) > 0) {
 ?>
 	<form name="publish" action="" method="post"><?php echo gettext('Unpublished albums:'); ?>
 	<input type="hidden" name="publish_albums" value="true" />
@@ -352,17 +352,17 @@ if (count($publish_albums_list) > 0) {
 </form>
 
 <?php
-if (count($publish_images_list) > 0) { 
+if (count($publish_images_list) > 0) {
 	?>
 	<script type="text/javascript">
 	function confirmdel(obj, id, msg) {
 		if (msg) {
 			if (confirm('<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')) {
-				jQuery('#'+id).css({color:'red'}); 
+				jQuery('#'+id).css({color:'red'});
 				obj.checked = true;
 			}
 		} else {
-			jQuery('#'+id).css({color:'black'}); 
+			jQuery('#'+id).css({color:'black'});
 			obj.checked = true;
 		}
 	}
@@ -378,7 +378,7 @@ if (count($publish_images_list) > 0) {
 		$imagelist = array_flip($imagelist);
 		?>
 		<li><p><strong><?php echo $key; ?></strong></p></li>
-		<?php 
+		<?php
 		foreach ($imagelist as $display=>$item) {
 			$listitem = postIndexEncode($item);
 			?>
@@ -417,7 +417,7 @@ if (count($publish_images_list) > 0) {
 				</table>
 			</li>
 			<?php
-		} 
+		}
 	}
 	?>
 	</ul>

@@ -342,7 +342,7 @@ if (ini_get('safe_mode')) { ?>
 		}
 		if($uploadtype != 'http') {
 			$admins = $_zp_authority->getAdministrators();
-			$curadmin = $admins[$_zp_current_admin_obj->get('id')];
+			$curadmin = $admins[$_zp_current_admin_obj->getID()];
 			?>
 			<div id="uploadboxes" style="display: none;"></div> <!--  need this so that toggling it does not fail. -->
 			<div>

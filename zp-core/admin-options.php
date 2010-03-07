@@ -2137,13 +2137,15 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 							if (isset($_GET['_show-'.$extension])) {
 								$show_show = 'none';
 								$show_hide = 'block';
+								$v = 1;
 							} else {
 								$show_show = 'block';
 								$show_hide = 'none';
+								$v= 0;
 							}
 							?>
 							<th colspan="3" style="text-align:left">
-								<input type="hidden" name="_show-<?php echo $extension;?>" id="_show-<?php echo $extension;?>" value="0" />
+								<input type="hidden" name="_show-<?php echo $extension;?>" id="_show-<?php echo $extension;?>" value="<?php echo $v; ?>" />
 								<span style="display:<?php echo $show_show; ?>;" class="pluginextrashow">
 									<a href="javascript:$('#_show-<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
 								</span>

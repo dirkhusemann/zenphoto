@@ -160,7 +160,7 @@ if (!OFFSET_PATH) { // handle form post
 			$userobj->setGroup($group);
 			if (!empty($group)) {
 				$membergroup = $_zp_authority->newAdministrator($group, 0);
-				$userobj->setAlbums(populateManagedAlbumList($membergroup->get('id')));
+				$userobj->setAlbums(populateManagedAlbumList($membergroup->getID()));
 			}
 			zp_apply_filter('register_user_verified', $userobj);
 			$notify = $_zp_authority->saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());

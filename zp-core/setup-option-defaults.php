@@ -259,27 +259,35 @@ define('bozos',4);
 define('album_managers',8);
 define('default_user',16);
 define('newuser',32);
-$groupsdefined = getOption('defined_groups');
-if (!$groupsdefined&administrators) {
-	saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
+
+$groupsdefined = @unserialize(getOption('defined_groups'));
+if (!is_array($groupsdefined)) $groupsdefined = array();
+if (!in_array('administrators',$groupsdefined)) {
+	$_zp_authority->saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
+	$groupsdefined[] = 'administrators';
 }
-if (!$groupsdefined&viewers) {
-	saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
+if (!in_array('viewers',$groupsdefined)) {
+	$_zp_authority->saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
+	$groupsdefined[] = 'viewers';
 }
-if (!$groupsdefined&bozos) {
-	saveAdmin('bozos', NULL, 'group', NULL, 0, array(), gettext('Banned users'),NULL, 0);
+if (!in_array('bozos',$groupsdefined)) {
+	$_zp_authority->saveAdmin('bozos', NULL, 'group', NULL, 0, array(), gettext('Banned users'),NULL, 0);
+	$groupsdefined[] = 'bozos';
 }
-if (!$groupsdefined&album_managers) {
-	saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS
+if (!in_array('album managers',$groupsdefined)) {
+	$_zp_authority->saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS
 	| COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
+	$groupsdefined[] = 'album managers';
 }
-if (!$groupsdefined&default_user) {
-	saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
+if (!in_array('default',$groupsdefined)) {
+	$_zp_authority->saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
+	$groupsdefined[] = 'default';
 }
-if (!$groupsdefined&newuser) {
-	saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
+if (!in_array('newuser',$groupsdefined)) {
+	$_zp_authority->saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
+	$groupsdefined[] = 'newuser';
 }
-setOption('defined_groups',administrators|viewers|bozos|album_managers|default_user|newuser); // record that these have been set once (and never again)
+setOption('defined_groups',serialize($groupsdefined)); // record that these have been set once (and never again)
 
 if (getOption('Allow_comments') || getOption('zenpage_comments_allowed')) {
 	setOptionDefault('zp_plugin_comment_form', 5);

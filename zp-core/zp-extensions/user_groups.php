@@ -34,12 +34,12 @@ function user_groups_save_admin($discard, $userobj, $i) {
 			if (!empty($oldgroup)) {
 				$group = $_zp_authority->newAdministrator($oldgroup, 0);
 				$userobj->setRights($group->getRights());
-				$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
+				$userobj->setAlbums(populateManagedAlbumList($group->getID()));
 			}
 		} else {
 			$group = $_zp_authority->newAdministrator($groupname, 0);
 			$userobj->setRights($group->getRights());
-			$userobj->setAlbums(populateManagedAlbumList($group->get('id')));
+			$userobj->setAlbums(populateManagedAlbumList($group->getID()));
 			if ($group->getName() == 'template') $groupname = '';
 		}
 		$userobj->setGroup($groupname);
@@ -225,9 +225,17 @@ function user_groups_admin_tabs($tabs, $current) {
 }
 
 function user_groups_admin_alterrights($alterrights, $userobj) {
+	global $_zp_authority;
 	$group = $userobj->getGroup();
-	if (empty($group)) return $alterrights;
-	return ' disabled="disabled"';
+	$admins = $_zp_authority->getAdministrators();
+	foreach ($admins as $admin) {
+		if (!$admin['valid']) {	// is a group or template
+			if ($group == $admin['user']) {
+				return ' disabled="disabled"';				
+			}
+		}
+	}
+	return $alterrights;
 }
 
 ?>

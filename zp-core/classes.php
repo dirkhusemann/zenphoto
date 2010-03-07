@@ -252,7 +252,7 @@ class PersistentObject {
 		}
 		// Re-check the database if: 1) not using cache, or 2) didn't get a hit.
 		if (empty($entry)) {
-			$entry = query_single_row($sql);
+			$entry = query_single_row($sql,true);
 		}
 
 		// If we don't have an entry yet, this is a new record. Create it.

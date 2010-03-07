@@ -902,7 +902,7 @@ function getManagedAlbumList() {
 	} else {
 		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
 						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-						$_zp_current_admin_obj->get('id')." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+						$_zp_current_admin_obj->getID()." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
 	}
 	$albums = query_full_array($sql);
 	foreach($albums as $album) {

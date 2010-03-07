@@ -177,7 +177,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	}
 	while (count($admins)>0) {
 		$user = array_shift($admins);
-		if ($user['valid'] && $user['rights']&ADMIN_RIGHTS && $user['email']) {
+		if ($user['valid'] && $user['email']) {
 			$star = '*';
 		}
 	}
@@ -619,12 +619,16 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						<td width="350px">
 							<?php
 							foreach ($row['checkboxes'] as $display=>$checkbox) {
-								$ck_sql = str_replace($key, $checkbox, $sql);
-								$db = query_single_row($ck_sql);
-								if ($db) {
-									$v = $db['value'];
+								if ($theme) {
+									$v = getThemeOption($checkbox, $album, $theme);
 								} else {
-									$v = 0;
+									$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($checkbox) . "';";
+									$db = query_single_row($sql);
+									if ($db) {
+										$v = $db['value'];
+									} else {
+										$v = 0;
+									}
 								}
 								$display = str_replace(' ', '&nbsp;', $display);
 								?>
@@ -647,16 +651,22 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						<td width="350px">
 							<?php
 							$cvarray = array();
-							$c = 0;
 							foreach ($row['checkboxes'] as $display=>$checkbox) {
 								?>
 								<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value="0" />
 								<?php
-								$ck_sql = str_replace($key, $checkbox, $sql);
-								$db = query_single_row($ck_sql);
-								if ($db) {
-									if ($db['value'])	$cvarray[$c++] = $checkbox;
+								if ($theme) {
+									$v = getThemeOption($checkbox, $album, $theme);
+								} else {
+									$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . zp_escape_string($checkbox) . "';";
+									$db = query_single_row($sql);
+									if ($db) {
+										$v = $db['value'];
+									} else {
+										$v = 0;
+									}
 								}
+								if ($v)	$cvarray[] = $checkbox;
 							}
 							?>
 							<ul class="customchecklist">

@@ -40,7 +40,7 @@ if (isset($_GET['action'])) {
 					$initgroupname = trim(sanitize($_POST[$i.'-initgroup'],3));
 					$initgroup = $_zp_authority->newAdministrator($initgroupname, 0);
 					$group->setRights($initgroup->getRights());
-					$group->setAlbums(populateManagedAlbumList($initgroup->get('id')));
+					$group->setAlbums(populateManagedAlbumList($initgroup->getID()));
 				} else {
 					$group->setRights(processRights($i) | NO_RIGHTS);
 					$group->setAlbums(processManagedAlbums($i));
@@ -79,9 +79,9 @@ if (isset($_GET['action'])) {
 			$groupname = trim(sanitize($_POST[$i.'-group'],3));
 			$group = $_zp_authority->newAdministrator($groupname, 0);
 			if (empty($groupname)) {
-				$_zp_authority->updateAdminField('group', NULL, array('id'=>$user->get('id')));
+				$_zp_authority->updateAdminField('group', NULL, array('id'=>$user->getID()));
 			} else {
-				$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->get('id')), $user->getCustomData(), $groupname);
+				$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->getID()), $user->getCustomData(), $groupname);
 			}
 		}
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=assignments&saved');
