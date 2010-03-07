@@ -22,7 +22,6 @@ foreach ($_zp_authority->getRights() as $key=>$right) {
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = false;
 $_zp_reset_admin = NULL;
-// Fix the cookie's path for root installs.
 if (isset($_GET['ticket'])) { // password reset query
 	$_zp_ticket = $_GET['ticket'];
 	$post_user = $_GET['user'];
@@ -96,45 +95,52 @@ if (!isset($_POST['login'])) {
 				$mails = array();	
 				$user = NULL;
 				foreach ($admins as $key=>$tuser) {
-					if ($tuser['valid']) {
-						if (!empty($post_user) && !empty($tuser['email']) && ($tuser['user'] == $post_user || $tuser['email'] == $post_user)) {
+					if ($tuser['valid'] && !empty($tuser['email'])) {
+						if (!empty($post_user) && ($tuser['user'] == $post_user || $tuser['email'] == $post_user)) {
 							$name = $tuser['name'];
 							if (empty($name)) {
 								$name = $tuser['user'];
 							}
 							$mails[$name] = $tuser['email'];
 							$user = $tuser;
-							break;
+							unset($admins[$key]);	// drop him from alternate list.
+						} else {
+							if (!($tuser['rights'] & ADMIN_RIGHTS)) {
+								unset($admins[$key]);	// eliminate any peons from the list
+							}
 						}
 					} else {
-						unset($admins[$key]);	// we want to ignore groups here!
+						unset($admins[$key]);	// we want to ignore groups and users with no email address here!
 					}
 				}
-				$tuser = array_shift($admins);
-				reset($mails);
-				if ($tuser['email'] && count($mails) == 0 || current($mails) != $tuser['email']) {
+
+				foreach ($admins as $tuser) {
 					$name = $tuser['name'];
 					if (empty($name)) {
-							$name = $tuser['user'];
+						$name = $tuser['user'];
 					}
 					$mails[$name] = $tuser['email'];
 					if (is_null($user)) {
 						$user = $tuser;
 					}
 				}
-				$adm = $user['user'];
-				$pas = $user['pass'];
-				setOption('admin_reset_date', time());
-				$req = getOption('admin_reset_date');
-				$ref = md5($req . $adm . $pas);
-				$msg = "\n".$requestor.
-						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-users.php?ticket=$ref&user=$adm") .
-						"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
-				$err_msg = zp_mail(gettext("The Zenphoto information you requested"), $msg, $mails);
-				if (empty($err_msg)) {
-					$_zp_login_error = 2;
+				if (is_null($user)) {
+					$_zp_login_error = gettext('There was no one to which to send the reset request.');
 				} else {
-					$_zp_login_error = $err_msg;
+					$adm = $user['user'];
+					$pas = $user['pass'];
+					setOption('admin_reset_date', time());
+					$req = getOption('admin_reset_date');
+					$ref = md5($req . $adm . $pas);
+					$msg = "\n".$requestor.
+							"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-users.php?ticket=$ref&user=$adm") .
+							"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
+					$err_msg = zp_mail(gettext("The Zenphoto information you requested"), $msg, $mails);
+					if (empty($err_msg)) {
+						$_zp_login_error = 2;
+					} else {
+						$_zp_login_error = $err_msg;
+					}
 				}
 			} else {
 				$_zp_login_error = 1;

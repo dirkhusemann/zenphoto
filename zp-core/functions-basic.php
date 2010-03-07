@@ -843,6 +843,7 @@ function debugLog($message, $reset=false, $date=true) {
 function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 	if (is_array($source)) {
 		$msg = str_repeat(' ', $indent)."$name => ( ";
+		$c = 1;
 		if (count($source) > 0) {
 			foreach ($source as $key => $val) {
 				if (strlen($msg) > 72) {
@@ -851,8 +852,18 @@ function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 					$msg = str_repeat(' ', $indent);
 				}
 				if (is_array($val)) {
-					if (!empty($msg)) debugLog($msg);
-					debugLogArray($key, $val, $indent+5, ',',false);
+					if (!empty($msg)) {
+						debugLog($msg,false,$date);
+						$date = false;
+					}
+					$c++;
+					if ($c<count($source)){
+						$t = '';
+					} else {
+						$t = ','; 
+					}
+					debugLogArray($key, $val, $indent+5, $t, $date);
+					$date = false;
 					$msg = '';
 				} else {
 					if (is_null($val)) {
