@@ -54,6 +54,7 @@ class xmpMetadata_options {
 	 * @return xmpMetadata_options
 	 */
 	function xmpMetadata_options() {
+		setOptionDefault('xmpMetadata_suffix','xmp');
 	}
 
 	/**
@@ -79,7 +80,9 @@ class xmpMetadata_options {
 		foreach ($list as $suffix) {
 			$listi[$suffix] = 'xmpMetadata_examine_images_'.$suffix;
 		}
-		return array(	gettext('Process extensions.') => array('key' => 'xmpMetadata_examine_imagefile', 'type' => OPTION_TYPE_CHECKBOX_UL,
+		return array(	gettext('Sidecar file extension') => array('key' => 'xmpMetadata_suffix', 'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext('The plugin will look for files with </em>image_name.extension</em> and extract XMP metadata from them into the <em>image_name</em> record.')),
+									gettext('Process extensions') => array('key' => 'xmpMetadata_examine_imagefile', 'type' => OPTION_TYPE_CHECKBOX_UL,
 										'checkboxes' => $listi,
 										'desc' => gettext('If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive.'))
 		);
@@ -212,7 +215,8 @@ function xmpMetadata_to_string($meta) {
  * @return $object
  */
 function xmpMetadata_album_instantiate($album) {
-	$album->sidecars['xmp'] = 'xmp';
+	$ext = strtolower(getOption('xmpMetadata_suffix'));
+	$album->sidecars[$ext] = $ext;
 	return $album;
 }
 
@@ -223,28 +227,36 @@ function xmpMetadata_album_instantiate($album) {
  * @return object
  */
 function xmpMetadata_new_album($album) {
-	$metadata_path = dirname($album->localpath).'/'.basename($album->localpath).'.xmp';
-	if (file_exists($metadata_path)) {
-		$source = file_get_contents($metadata_path);
-		$metadata = xmpMetadata_extract($source);
-		if (array_key_exists('EXIFDescription',$metadata)) {
-			$album->setDesc(xmpMetadata_to_string($metadata['EXIFDescription']));
+	$ext = strtolower(getOption('xmpMetadata_suffix'));
+	$metadata_path = dirname($album->localpath).'/'.basename($album->localpath).'*';
+	$files = safe_glob($metadata_path);
+	if (count($files)>0) {
+		foreach ($files as $file) {
+			if (strtolower(getSuffix($file)) == $ext) {
+				$source = file_get_contents($file);
+				$metadata = xmpMetadata_extract($source);
+				if (array_key_exists('EXIFDescription',$metadata)) {
+					$album->setDesc(xmpMetadata_to_string($metadata['EXIFDescription']));
+				}
+				if (array_key_exists('IPTCImageHeadline',$metadata)) {
+					$album->setTitle(xmpMetadata_to_string($metadata['IPTCImageHeadline']));
+				}
+				if (array_key_exists('IPTCLocationName',$metadata)) {
+					$album->setLocation(xmpMetadata_to_string($metadata['IPTCLocationName']));
+				}
+				if (array_key_exists('IPTCKeywords',$metadata)) {
+					$album->setTags(xmpMetadata_to_string($metadata['IPTCKeywords']));
+				}
+				if (array_key_exists('EXIFDateTimeOriginal',$metadata)) {
+					$album->setDateTime($metadata['EXIFDateTimeOriginal']);
+				}
+
+				$album->save();
+				break;
+			}
 		}
-		if (array_key_exists('IPTCImageHeadline',$metadata)) {
-			$album->setTitle(xmpMetadata_to_string($metadata['IPTCImageHeadline']));
-		}
-		if (array_key_exists('IPTCLocationName',$metadata)) {
-			$album->setLocation(xmpMetadata_to_string($metadata['IPTCLocationName']));
-		}
-		if (array_key_exists('IPTCKeywords',$metadata)) {
-			$album->setTags(xmpMetadata_to_string($metadata['IPTCKeywords']));
-		}
-		if (array_key_exists('EXIFDateTimeOriginal',$metadata)) {
-			$album->setDateTime($metadata['EXIFDateTimeOriginal']);
-		}
+		return $album;
 	}
-	$album->save();
-	return $album;
 }
 
 /**
@@ -286,7 +298,8 @@ function rationalNum($element) {
 }
 
 function xmpMetadata_image_instantiate($image) {
-	$image->sidecars['xmp'] = 'xmp';
+	$ext = strtolower(getOption('xmpMetadata_suffix'));
+	$image->sidecars[$ext] = $ext;
 	return $image;
 }
 
@@ -299,9 +312,19 @@ function xmpMetadata_image_instantiate($image) {
 function xmpMetadata_new_image($image) {	
 	global $_zp_exifvars;
 	$source = '';
-	$metadata_path = substr($image->localpath, 0, strrpos($image->localpath, '.')).'.xmp';
-	if (file_exists($metadata_path)) {
-		$source = extractXMP(file_get_contents($metadata_path));		
+	$ext = strtolower(getOption('xmpMetadata_suffix'));
+	$metadata_path = '';
+	$files = safe_glob(substr($image->localpath, 0, strrpos($image->localpath, '.')).'.*');
+	if (count($files)>0) {
+		foreach ($files as $file) {
+			if (strtolower(getSuffix($file)) == $ext) {
+				$metadata_path = $file;
+				break;
+			}
+		}
+	}
+	if (!empty($metadata_path)) {
+		$source = extractXMP(file_get_contents($metadata_path));
 	} else if (getOption('xmpMetadata_examine_images_'.strtolower(substr(strrchr($image->localpath, "."), 1)))) {
 		$f = file_get_contents($image->localpath);
 		$l = filesize($image->localpath);
