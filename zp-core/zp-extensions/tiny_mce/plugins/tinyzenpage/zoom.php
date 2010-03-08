@@ -7,10 +7,11 @@ require_once("../../../../functions.php");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>TinyZenpage</title>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>TinyZenpage</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <script type="text/javascript" src="../../../../js/jquery.js"></script>
-<script type="text/javascript" src="../../../flowplayer/flashembed-0.34.pack.js"></script>
+<script type="text/javascript" src="../../../flowplayer3/flowplayer-3.1.4.min.js"></script>
+<script type="text/javascript" src="../../../flowplayer3/flowplayer.playlist-3.0.7.min.js"></script>
 </head>
 <body>
 <div style="text-align: center; width 450px;">
@@ -21,32 +22,37 @@ $albumname = sanitize($_GET['album']);
 $partialpath = strpos(FULLWEBPATH, '/'.ZENFOLDER);
 $webpath = substr(FULLWEBPATH,0,$partialpath);
 $ext = strtolower(strrchr($imagename, "."));
-if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
+$albumobj = new Album($_zp_gallery,$albumname);
+$imageobj = newImage($albumobj,$imagename);
+echo $imageobj->getTitle()."<br />";
+if(isImageVideo($imageobj)) {
+	if(($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 	echo '
-			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
-			<script>
-			$("#playerContainer").flashembed({
-      	src:\'../../../flowplayer/FlowPlayerLight.swf\',
-      	width:\'450\', 
-      	height:\'338\'
-    	},
-    		{config: {  
-      		autoPlay: \'false\',
-    			loop: false,
-					controlsOverVideo: \'ease\',
-      		videoFile: \''.$host.getAlbumFolder(WEBPATH).$albumname.'/'.$imagename.'\',
-      		initialScale: \'fit\',
-      		backgroundColor: \'black\',
-      		controlBarBackgroundColor: \'black\',
-      		controlsAreaBorderColor: \'black\'
-    		}} 
-  		);
-			
-  		</script>';
+			<a href="'.$imageobj->getFullImage().'" id="player" style="display:block; width: 420px; height: 400px;"></a>
+			<script type="text/javascript">
+			flowplayer("player","../../..//flowplayer3/flowplayer-3.1.5.swf", {
+				clip: {
+					autoPlay: false,
+					autoBuffering: false,
+					scaling: "orig"
+				},
+			}); 
+			</script>';
+	} else if (($ext == ".3gp") ||  ($ext == ".mov")) {
+		echo '</a>
+			 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="400" height="400" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+				 	<param name="src" value="' . $imageobj->getFullImage() . '"/>
+				 	<param name="autoplay" value="false" />
+				 	<param name="type" value="video/quicktime" />
+				 	<param name="controller" value="true" />
+				 	<embed src="' . $imageobj->getFullImage() . '" width="400" height="400" scale="aspect" autoplay="false" controller"true" type="video/quicktime"
+				 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
+					</object><a>';
+	}	
 } else {
 ?>
-<img src="<?php echo $host.WEBPATH.'/'.ZENFOLDER; ?>/i.php?a=<?php echo $albumname; ?>&amp;i=<?php echo $imagename; ?>&amp;s=440&amp;t=true" />
+<img src="<?php echo $imageobj->getSizedImage(440); ?>" />
 <?php } ?>
-<div><!-- main div -->
+</div><!-- main div -->
 </body>
 </html>

@@ -19,10 +19,14 @@ require_once("js/dialog.php");
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
 	<script type="text/javascript" src="../../../../js/jquery.js"></script>
-	<script type="text/javascript" src="js/thickbox-compressed.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/thickbox.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="css/tinyzenpage.css" media="screen" />
-
+	<link rel="stylesheet" href="../../../../js/colorbox/colorbox.css" type="text/css" />
+	<script src="../../../../js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
+	<script language="javascript" type="text/javascript">
+	$(document).ready(function(){
+		$("a[rel='colorbox']").colorbox({iframe:true, innerWidth:450, innerHeight:450});
+	});
+	</script>
 </head>
 
 <body>
@@ -114,7 +118,7 @@ require_once("js/dialog.php");
 	 <?php 
 	 		if(empty($_GET['zenpage']) AND empty($_GET['album'])) {
 	 			echo "<h2 style='margin-left: 8px'>";
-	 			echo "<em>tiny</em>Zenpage (v1.0.6.1)</h2>";
+	 			echo "<em>tiny</em>Zenpage (v1.3)</h2>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("This provides access to your images and albums (dropdown 'zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
@@ -172,7 +176,7 @@ require_once("js/dialog.php");
 	</div>
 </div>
 <br style="clear: both" />
-<div><!-- main div -->
+</div><!-- main div -->
 <div id="help"><a href="tinyzenpage.php" target="_self"><small><?php echo gettext("Help"); ?><small></a></div>
 </body>
 </html>
