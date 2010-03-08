@@ -9,36 +9,36 @@
  *
  * Place the new script in the <ZENFOLDER>/plugins/alt/ folder. It then will be automatically loaded
  * in place of this script.
- * 
+ *
  * Replacement libraries must implement two classes:
  * 		"Authority" class: Provides the methods used for user authorization and management
  * 			store an instantiation of this class in $_zp_authority.
- *  
+ *
  * 		Administrator: supports the basic Zenphoto needs for object manipulation of administrators.
  *
- * The global $_zp_current_admin_obj represents the current admin with. 
+ * The global $_zp_current_admin_obj represents the current admin with.
  * The library must instantiate its authority class and store the object in the global $_zp_authority
- * (Note, this library does instantiate the object as described. This is so its classes can 
+ * (Note, this library does instantiate the object as described. This is so its classes can
  * be used as parent classes for lib-auth implementations. If auth_zp.php decides to use this
  * library it will instantiate the class and store it into $_zp_authority.
- * 
+ *
  * The following elements need to be present in any alternate implementation in the
  * array returned by getAdministrators().
- * 
+ *
  * 		In particular, there should be array elements for:
- * 				'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', 'valid', 
+ * 				'id' (unique), 'user' (unique),	'pass',	'name', 'email', 'rights', 'valid',
  * 				'group', and 'custom_data'
- * 
+ *
  * 		So long as all these indices are populated it should not matter when and where
  *		the data is stored.
  *
  *		Administrator class methods are required for these elements as well.
- * 
- * 		The getRights() method must define at least the rights defined by the method in 
+ *
+ * 		The getRights() method must define at least the rights defined by the method in
  * 		this library.
  *
- * 		The checkAuthorization() method should promote the "most privileged" Admin to 
- * 		ADMIN_RIGHTS to insure that there is some user capable of adding users or 
+ * 		The checkAuthorization() method should promote the "most privileged" Admin to
+ * 		ADMIN_RIGHTS to insure that there is some user capable of adding users or
  * 		modifying user rights.
  *
  *
@@ -48,17 +48,15 @@ require_once(dirname(__FILE__).'/classes.php');
 
 class Zenphoto_Authority {
 
-	var $lib_auth_extratext;
 	var $admin_users = NULL;
 	var $rightsset = NULL;
 	var $version = 1;
-	
+
 
 	/**
 	 * class instantiator
 	 */
 	function Zenphoto_Authorization() {
-		$this->lib_auth_extratext = getOption('extra_auth_hash_text');
 	}
 
 	/**
@@ -69,7 +67,9 @@ class Zenphoto_Authority {
 	 * @return string
 	 */
 	function passwordHash($user, $pass) {
-		$md5 = md5($user . $pass . $this->lib_auth_extratext);
+		$hash = getOption('extra_auth_hash_text');
+		$md5 = md5($user . $pass . $hash);
+		if (DEBUG_LOGIN) { debugLog("passwordHash($user, $pass)[$hash]:$md5"); }
 		return $md5;
 	}
 
@@ -188,7 +188,7 @@ class Zenphoto_Authority {
 				$rightsset = "`rights`='" . zp_escape_string($rights)."', ";
 			}
 			$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . zp_escape_string($name)."', " . $password .
- 					"`email`='" . zp_escape_string($email)."', " . $rightsset . "`custom_data`='".zp_escape_string($custom)."', `valid`=".$valid.", `group`='".
+					"`email`='" . zp_escape_string($email)."', " . $rightsset . "`custom_data`='".zp_escape_string($custom)."', `valid`=".$valid.", `group`='".
 			zp_escape_string($group)."' WHERE `id`='" . $id ."'";
 			$result = query($sql);
 			if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
@@ -313,10 +313,13 @@ class Zenphoto_Authority {
 		$success = false;
 		$md5 = $this->passwordHash($user, $pass);
 		foreach ($admins as $admin) {
-			if ($admin['user'] == $user) {
-				if ($admin['pass'] == $md5) {
-					$success = $this->checkAuthorization($md5);
-					break;
+			if ($admin['valid']) {
+				if (DEBUG_LOGIN) { debugLogArray('checking:',$admin); }
+				if ($admin['user'] == $user) {
+					if ($admin['pass'] == $md5) {
+						$success = $this->checkAuthorization($md5);
+						break;
+					}
 				}
 			}
 		}
@@ -435,14 +438,14 @@ class Zenphoto_Authority {
 				query($sql);
 			} // end loop
 		} else {
-			$_lib_auth_extratext = "";
+			$lib_auth_extratext = "";
 			$salt = 'abcdefghijklmnopqursuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+-={}[]|\:;<>,.?/';
 			$list = range(0, strlen($salt));
 			shuffle($list);
 			for ($i=0; $i < 30; $i++) {
-				$_lib_auth_extratext = $_lib_auth_extratext . substr($salt, $list[$i], 1);
+				$lib_auth_extratext = $lib_auth_extratext . substr($salt, $list[$i], 1);
 			}
-			setOption('extra_auth_hash_text', $_lib_auth_extratext);
+			setOption('extra_auth_hash_text', $lib_auth_extratext);
 		}
 	}
 
@@ -460,7 +463,7 @@ class Zenphoto_Authority {
 		$sql = "DELETE FROM ".prefix('administrators')." WHERE $where";
 		return query($sql);
 	}
-	
+
 	/**
 	 * Updates a field in admin record(s)
 	 *
@@ -483,7 +486,7 @@ class Zenphoto_Authority {
 		$sql = 'UPDATE '.prefix('administrators').' SET `'.$field.'`='.$value.' WHERE '.$where;
 		return query($sql);
 	}
-	
+
 	/**
 	 * Instantiates and returns administrator object
 	 * @param $name
@@ -493,7 +496,7 @@ class Zenphoto_Authority {
 	function newAdministrator($name, $valid=1) {
 		return new Zenphoto_Administrator($name, $valid);
 	}
-	
+
 	function getRights() {
 		if (is_null($this->rightsset)) {
 			$this->rightsset = array(	'NO_RIGHTS' => array('value'=>2,'name'=>gettext('No rights'),'display'=>false),
@@ -519,7 +522,7 @@ class Zenphoto_Authority {
 		}
 		return $this->rightsset;
 	}
-	
+
 	function getVersion() {
 		return $this->version;
 	}
@@ -567,7 +570,7 @@ class Zenphoto_Administrator extends PersistentObject {
 	function Zenphoto_Administrator($user, $valid) {
 		parent::PersistentObject('administrators',  array('user' => $user, 'valid'=>$valid), 'user', !empty($user), empty($user));
 	}
-	
+
 	function getID() {
 		return $this->get('id');
 	}

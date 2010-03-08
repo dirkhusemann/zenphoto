@@ -4298,6 +4298,7 @@ function checkForGuest(&$hint, &$show) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
+	if (getOption('gallery_page_unprotected_'.stripSuffix($_zp_gallery_page))) return false;
 	if (zp_loggedin()) {
 		switch ($_zp_gallery_page) {
 			case 'album.php':

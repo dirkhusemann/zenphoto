@@ -860,7 +860,7 @@ function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 					if ($c<count($source)){
 						$t = '';
 					} else {
-						$t = ','; 
+						$t = ',';
 					}
 					debugLogArray($key, $val, $indent+5, $t, $date);
 					$date = false;

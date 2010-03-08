@@ -85,14 +85,14 @@ if (!isset($_POST['login'])) {
 			zp_setcookie("zenphoto_ssl", "", time()-368000);
 			// was it a request for a reset?
 			if (isset($_POST['code_h']) && $_zp_captcha->checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
-				require_once(dirname(__FILE__).'/class-load.php'); // be sure that the plugins are loaded for the mail handler		
+				require_once(dirname(__FILE__).'/class-load.php'); // be sure that the plugins are loaded for the mail handler
 				if (empty($post_user)) {
 					$requestor = gettext('You are receiving this e-mail because of a password reset request on your Zenphoto gallery.');
 				} else {
 					$requestor = sprintf(gettext("You are receiving this e-mail because of a password reset request on your Zenphoto gallery from a user who tried to log in as %s."),$post_user);
 				}
 				$admins = $_zp_authority->getAdministrators();
-				$mails = array();	
+				$mails = array();
 				$user = NULL;
 				foreach ($admins as $key=>$tuser) {
 					if ($tuser['valid'] && !empty($tuser['email'])) {
@@ -114,14 +114,17 @@ if (!isset($_POST['login'])) {
 					}
 				}
 
+				$cclist = array();
 				foreach ($admins as $tuser) {
 					$name = $tuser['name'];
 					if (empty($name)) {
 						$name = $tuser['user'];
 					}
-					$mails[$name] = $tuser['email'];
 					if (is_null($user)) {
 						$user = $tuser;
+						$mails[$name] = $tuser['email'];
+					} else {
+						$cclist[$name] = $tuser['email'];
 					}
 				}
 				if (is_null($user)) {
@@ -135,7 +138,7 @@ if (!isset($_POST['login'])) {
 					$msg = "\n".$requestor.
 							"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-users.php?ticket=$ref&user=$adm") .
 							"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
-					$err_msg = zp_mail(gettext("The Zenphoto information you requested"), $msg, $mails);
+					$err_msg = zp_mail(gettext("The Zenphoto information you requested"), $msg, $mails, $cclist);
 					if (empty($err_msg)) {
 						$_zp_login_error = 2;
 					} else {
