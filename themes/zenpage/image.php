@@ -53,9 +53,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 	<!-- The Image -->
  <?php
- if(function_exists("printPagedThumbsNav")) {
-		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40);
- } ?>
+ //if(function_exists("printPagedThumbsNav")) printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40);
+ if (function_exists('printjCarouselThumbNav')) printjCarouselThumbNav(6,50,50,50,50,TRUE,FALSE);
+ 
+ ?>
 
 	<div id="image">
 		<?php if(getOption("Use_thickbox")) {

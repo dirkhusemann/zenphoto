@@ -525,13 +525,15 @@ ul.pagelist li.next {
 	border: 0px solid gray;
 }
 
-#pagedthumbsimages img {
+#pagedthumbsimages img,
+.jcarousel-list li img {
 	border: 1px solid darkgray;
 	padding: 2px;
 	float: left;
 }
 
-#pagedthumbsimages img:hover {
+#pagedthumbsimages img:hover,
+.jcarousel-list li img:hover {
 	border: 2px solid orange;
 	padding: 1px;
 }
