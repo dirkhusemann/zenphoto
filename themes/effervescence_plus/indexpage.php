@@ -12,7 +12,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<title><?php $mainsite = getMainSiteName(); echo (empty($mainsite))?gettext("zenphoto gallery"):$mainsite; ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 </head>
 

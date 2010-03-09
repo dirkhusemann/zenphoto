@@ -1459,16 +1459,40 @@ if ($debug) {
 		$dbmsg = "";
 	} else {
 		if (zp_loggedin(ADMIN_RIGHTS)) {
-			echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
+			?>
+			<div class="error">
+				<?php echo gettext("You need to address the problems indicated above then run <code>setup.php</code> again."); ?>
+			</div>
+			<p class='buttons'>
+				<a href="#" title="<?php echo gettext("Setup failed."); ?>" style="font-size: 15pt; font-weight: bold;" disabled="disabled">
+					<img src="images/fail.png" alt=""/> <?php echo gettext("Stop"); ?>
+				</a>
+			</p>
+			<br clear="all" /><br clear="all" />
+			<?php
 		} else {
-			if (zp_loggedin()) {
-				echo "<p>".gettext("You need <em>USER ADMIN</em> rights to run setup.").'</p>';
-				printLoginForm('', false);
-			}
+				?>
+				<div class="error">
+				<?php
+				if (zp_loggedin()) {
+					echo gettext("You need <em>USER ADMIN</em> rights to run setup.");
+				} else {
+					echo gettext('You must be logged in to run setup.');
+				}
+				?>
+				</div>
+				<?php
+			printLoginForm('', false);
 		}
 		if ($noxlate > 0) {
+			?>
+			<div>
+			<?php
 			require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
 			printLanguageSelector();
+			?>
+			</div>
+			<?php
 		}
 		echo "\n</div><!-- content -->";
 		echo "\n</div><!-- main -->";
