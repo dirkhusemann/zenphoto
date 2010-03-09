@@ -159,8 +159,9 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 	if (is_null($showcount)) $showcount = getOption('print_album_menu_count');
 	if (is_null($showsubs)) $showsubs = getOption('print_album_menu_showsubs');
 	if ($showsubs && !is_numeric($showsubs)) $showsubs = 9999999999;
+	if(empty($keeptopactive)) $keeptopactive = false;
 	$pagelevel = count(explode('/', $folder));
-	$currenturlalbumname = "";
+	$currenturalbumname = "";
 	foreach ($albums as $album) {
 		$level = count(explode('/', $album));
 		$process =  (($level < $showsubs && $option == "list") // user wants all the pages whose level is <= to the parameter
@@ -180,8 +181,10 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 				$css_class_t = $css_class_active;
 			}
 			if($keeptopactive) {
-				$currenturalbum = getUrAlbum($_zp_current_album);
-				$currenturalbumname = $currenturalbum->name;
+				if(isset($_zp_current_album) && is_object($_zp_current_album)) {
+					$currenturalbum = getUrAlbum($_zp_current_album);
+					$currenturalbumname = $currenturalbum->name;
+				}
 			}
 			$count = "";
 			if($showcount) {
@@ -213,7 +216,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 			$subalbums = $topalbum->getAlbums();
 			if (!empty($subalbums)) {
 				echo "\n<ul".$css_class.">\n";
-				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink);
+				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink,false);
 				echo "\n</ul>\n";
 
 			}
