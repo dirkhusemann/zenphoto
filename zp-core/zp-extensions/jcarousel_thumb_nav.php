@@ -27,7 +27,6 @@ class jcarouselOptions {
 		setOptionDefault('jcarousel_height', '50');
 		setOptionDefault('jcarousel_croph', '50');
 		setOptionDefault('jcarousel_cropw', '50');
-		setOptionDefault('jcarousel_crop', '1');
 		setOptionDefault('jcarousel_fullimagelink', '');
 	}
 
@@ -42,8 +41,6 @@ class jcarouselOptions {
 										'desc' => ""),
 		gettext('Crop height') => array('key' => 'jcarousel_croph', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => ""),
-		gettext('Crop') => array('key' => 'jcarousel_crop', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("If checked the thumbnails will be cropped.")),
 		gettext('Full image link') => array('key' => 'jcarousel_fullimagelink', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("If checked the thumbs link to the full image instead of the imagepage."))
 		);
@@ -77,7 +74,7 @@ if (isset($_zp_current_album) && is_object($_zp_current_album) && is_object($_zp
  * @param bool $crop TRUE for cropped thumbs, FALSE for uncropped thumbs. $width and $height then will be used as maxspace. Set to NULL if you want to use the backend plugin options.
  * @param bool $fullimagelink Set to TRUE if you want the thumb link to link to the full image instead of the image page. Set to NULL if you want to use the backend plugin options.
  */
-function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$crop=NULL, $fullimagelink=NULL) {
+function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$fullimagelink=NULL) {
 global $_zp_current_album, $_zp_current_image;
 $items = "";
 if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_current_album->getNumImages() >= 2) {
@@ -106,11 +103,6 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 	} else {
 		$croph = sanitize_numeric($croph);
 	}
-	if(is_null($crop)) {
-		$crop = getOption('jcarousel_crop');
-	} else {
-		$crop = sanitize($croph);
-	}
 	if(is_null($fullimagelink)) {
 		$fullimagelink = getOption('jcarousel_fullimagelink');
 	} else {
@@ -130,14 +122,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 			} else {
 				$active = '';
 			}
-			if($crop) {
-				$items .= ' {url: "'.$imgobj->getCustomImage(NULL, $width, $height, $cropw, $croph, NULL, NULL,false).'", title: "'.$imgobj->getTitle().'", link: "'.$link.'", active: "'.$active.'"},';
-			} else {
-				$maxwidth = $width; // needed because otherwise getMaxSpaceContainer will use the values of the first image for all others, too
-				$maxheight = $height;
-				getMaxSpaceContainer($maxwidth, $maxheight, $imgobj, true);
-				$items .= ' {url: "'.$imgobj->getCustomImage(NULL, $maxwidth, $maxheight, NULL, NULL, NULL, NULL, false).'", title: "'.$imgobj->getTitle().'", link: "'.$link.'", active: "'.$active.'"},';
-			}
+			$items .= ' {url: "'.$imgobj->getCustomImage(NULL, $width, $height, $cropw, $croph, NULL, NULL,false).'", title: "'.$imgobj->getTitle().'", link: "'.$link.'", active: "'.$active.'"},';
 			$items .= "\n";
 		}
 	}
@@ -183,7 +168,7 @@ jQuery(document).ready(function() {
 		});
 });
 </script>
-	<ul id="mycarousel" class="jcarousel-skin-ie7">
+	<ul id="mycarousel">
 		<!-- The content will be dynamically loaded in here -->
 	</ul>
 	<?php
