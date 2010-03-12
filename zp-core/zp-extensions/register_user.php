@@ -223,8 +223,8 @@ if (!OFFSET_PATH) { // handle form post
 					$notify = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
-						$message = sprintf(getOption('register_user_text'), $link);
-						$notify = zp_mail(gettext('Registration confirmation'), $message, array($user=>$admin_e));
+						$message = sprintf(get_language_string(getOption('register_user_text')), $link);
+						$notify = zp_mail(get_language_string(gettext('Registration confirmation')), $message, array($user=>$admin_e));
 						if (empty($notify)) $notify = 'accepted';
 					}
 				}

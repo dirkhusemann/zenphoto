@@ -1169,6 +1169,9 @@ function loadLocalOptions($albumid, $theme) {
  *
  * @param string $albumfolder the album to be checked
  * @param int $action what the user wishes to do
+ * 						action will be compared with the logged in user's
+ * 						RIGHTS. If the user has rights to do the action, 
+ * 						access will be allowed.
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list;
