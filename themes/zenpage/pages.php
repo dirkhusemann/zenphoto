@@ -9,6 +9,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printZenpageRSSHeaderLink("News","", "Zenpage news", ""); ?>
 	<?php zenJavascript(); ?>
+	<?php printZDRoundedCornerJS(); ?>
 </head>
 
 <body>
@@ -17,7 +18,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 	<div id="header">
 			<h1><?php printGalleryTitle(); ?></h1>
-			<?php if (isset($ishomepage) AND getOption('Allow_search')) {  printSearchForm("","search","",gettext("Search gallery")); } ?>
+			<?php if (getOption('Allow_search')) {  printSearchForm("","search","",gettext("Search gallery")); } ?>
 		</div>
 				
 <div id="content">

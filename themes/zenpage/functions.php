@@ -60,4 +60,18 @@ function printZDToggleClass($option,$c,$number_to_show) {
 		echo ' class="'.$option.'_extrashow" style="display:none;"'; 
 	}
 }
+
+
+function printZDRoundedCornerJS() {
+	global $_zp_themeroot;
+?>
+<script type="text/javascript" src="<?php echo $_zp_themeroot; ?>/js/jquery.corner.js"></script>
+<script type="text/javascript">
+   	$(document).ready(function() {
+			$(".album,input,#slideshowlink a,textarea,#exif_link a").corner("keep 5px");
+		});
+   </script>
+<?php
+
+}
 ?>

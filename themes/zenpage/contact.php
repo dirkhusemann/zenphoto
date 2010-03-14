@@ -9,6 +9,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<title><?php echo getBareGalleryTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
+	<?php printZDRoundedCornerJS(); ?>
 </head>
 <body>
 
@@ -27,7 +28,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	</div>
 
 	<div id="content-left">	
-	<h1><?php echo gettext('Contact us') ?></h1>
+	<h2><?php echo gettext('Contact us') ?></h2>
 	<?php
 	printContactForm();
 	?> 

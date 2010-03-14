@@ -9,6 +9,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
+	<?php printZDRoundedCornerJS(); ?>
 </head>
 
 <body>
@@ -37,12 +38,12 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php printNewsArchive("archive"); ?>
 			<hr />
 			<?php } ?>
-			</div>
+			
 					<h3>Popular Tags</h3>
 			<div id="tag_cloud">
  			<?php printAllTagsAs('cloud', 'tags'); ?>
 				</div>
- 			
+ 		</div>	
 	</div><!-- content left-->
 	
 	

@@ -9,6 +9,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
+	<?php printZDRoundedCornerJS(); ?>
 </head>
 <body>
 
@@ -31,6 +32,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 	<div id="content-left">
 	<div><p><?php printAlbumDesc(true); ?></p></div>
+<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 
 			<div id="albums">
 			<?php while (next_album()): ?>
@@ -61,7 +63,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
 		<br style="clear:both;" /><br />
-	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
+	<?php if (function_exists('printSlideShowLink')) {
+			echo '<span id="slideshowlink">';
+			printSlideShowLink(gettext('View Slideshow')); 
+			echo '</span>';
+		}
+		?>
+	<br style="clear:both;" />
 	<?php if (function_exists('printRating')) { printRating(); }?>
 	<?php
 	if (function_exists('printCommentForm')) {

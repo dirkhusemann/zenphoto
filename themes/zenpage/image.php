@@ -16,6 +16,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			$("a.thickbox").colorbox({maxWidth:"98%", maxHeight:"98%"});
 		});
 	</script>
+	<?php printZDRoundedCornerJS(); ?>
 		<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 </head>
 <body>
@@ -73,20 +74,25 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		?>
 	</div>
 	<div id="narrow">
-		<?php printImageDesc(true); ?>
-		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
-		<br />
+		<p><?php printImageDesc(true); ?></p>
+		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
+		<br style="clear:both;" /><br />
+		<?php if (function_exists('printSlideShowLink')) {
+			echo '<span id="slideshowlink">';
+			printSlideShowLink(gettext('View Slideshow')); 
+			echo '</span>';
+		}
+		?>
+		
 		<?php
 			if (getImageMetaData()) {echo "<div id=\"exif_link\"><a href=\"#\" title=\"".gettext("Image Info")."\" class=\"colorbox\">".gettext("Image Info")."</a></div>";
 				echo "<div style='display:none'>"; printImageMetadata('', false); echo "</div>";
 			}
 		?>
-		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ', '); ?>
-		<br style="clear:both;" /><br />
-		<?php if (function_exists('printImageMap')) printImageMap(); ?>
-
+	
+		<br style="clear:both" />
 		<?php if (function_exists('printRating')) { printRating(); }?>
-
+		<?php if (function_exists('printImageMap')) printImageMap(); ?>
 		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
 </div>

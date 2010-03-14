@@ -10,6 +10,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
+	<?php printZDRoundedCornerJS(); ?>
 </head>
 <body>
 
