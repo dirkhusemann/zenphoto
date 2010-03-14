@@ -181,6 +181,7 @@ themes/zenpage/images
 themes/zenpage/images/50percent.png
 themes/zenpage/images/arrow_right.gif
 themes/zenpage/images/body.jpg
+themes/zenpage/images/breadcrumb-back.jpg
 themes/zenpage/images/footer.jpg
 themes/zenpage/images/header.jpg
 themes/zenpage/images/img-bg.gif
@@ -190,6 +191,8 @@ themes/zenpage/images/jcarousel_prev.png
 themes/zenpage/images/tag.png
 themes/zenpage/index.php
 themes/zenpage/jcarousel.css
+themes/zenpage/js
+themes/zenpage/js/jquery.corner.js
 themes/zenpage/news.php
 themes/zenpage/pages.php
 themes/zenpage/password.php

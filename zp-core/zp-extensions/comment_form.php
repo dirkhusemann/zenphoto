@@ -64,7 +64,7 @@ class comment_form {
 										'checkboxes' => $checkboxes,
 									'desc' => gettext('Comment forms will be presented on the checked pages.')),
 									gettext('Toggled comment block') => array('key' => 'comment_form_toggle', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('If checked, existing comments will be initially hidden. Clicking on the provided link will show them.')),
+										'desc' => gettext('If checked, existing comments will be initially hidden. Clicking on the provided button will show them.')),
 									gettext('Only members can comment') => array('key' => 'comment_form_members_only', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, only logged in users will be allowed to post comments.')),
 									gettext('Allow private postings') => array('key' => 'comment_form_private', 'type' => OPTION_TYPE_CHECKBOX,
@@ -360,10 +360,10 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 							function toggleComments(hide) {
 								if (hide) {
 									$('div.comment').hide();
-									$('#comment_toggle').html('<a href="javascript:toggleComments(false);" title="<?php echo gettext('show comments')?>"><?php echo gettext('show comments')?></a>');
+									$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(false);"><?php echo gettext('show comments')?></button>');
 								} else {
 									$('div.comment').show();
-									$('#comment_toggle').html('<a href="javascript:toggleComments(true);" title="<?php echo gettext('hide comments')?>"><?php echo gettext('hide comments')?></a>');
+									$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(true);"><?php echo gettext('hide comments')?></button>');
 								}
 							}
 							$(document).ready(function() {
@@ -378,7 +378,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			}
 			?>
 			<div id="comments">
-				<div id="comment_toggle"><!-- place holder for toggle link --></div>
+				<div id="comment_toggle"><!-- place holder for toggle button --></div>
 				<?php
 				while (next_comment()) {
 					?>
