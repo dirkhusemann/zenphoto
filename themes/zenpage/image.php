@@ -15,14 +15,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
 			$("a.thickbox").colorbox({maxWidth:"98%", maxHeight:"98%"});
 		});
-		function toggleComments() {
-			var commentDiv = document.getElementById("comments");
-			if (commentDiv.style.display == "block") {
-				commentDiv.style.display = "none";
-			} else {
-				commentDiv.style.display = "block";
-			}
-		}
 	</script>
 		<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 </head>

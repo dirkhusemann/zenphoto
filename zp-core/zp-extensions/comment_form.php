@@ -63,6 +63,8 @@ class comment_form {
 									gettext('Allow comments on') => array('key' => 'comment_form_allowed', 'type' => OPTION_TYPE_CHECKBOX_ARRAY,
 										'checkboxes' => $checkboxes,
 									'desc' => gettext('Comment forms will be presented on the checked pages.')),
+									gettext('Toggled comment block') => array('key' => 'comment_form_toggle', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('If checked, existing comments will be initially hidden. Clicking on the provided link will show them.')),
 									gettext('Only members can comment') => array('key' => 'comment_form_members_only', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, only logged in users will be allowed to post comments.')),
 									gettext('Allow private postings') => array('key' => 'comment_form_private', 'type' => OPTION_TYPE_CHECKBOX,
@@ -348,16 +350,39 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			switch ($num) {
 				case 0:
 					echo '<h3>'.gettext('No Comments').'</h3><br />';
+					$display = '';
 					break;
 				default:
 					echo '<h3>'.sprintf(ngettext('%u Comment','%u Comments',$num), $num).'</h3>';
+					if (getOption('comment_form_toggle')) {
+						?>
+						<script type="text/javascript">
+							function toggleComments(hide) {
+								if (hide) {
+									$('div.comment').hide();
+									$('#comment_toggle').html('<a href="javascript:toggleComments(false);" title="<?php echo gettext('show comments')?>"><?php echo gettext('show comments')?></a>');
+								} else {
+									$('div.comment').show();
+									$('#comment_toggle').html('<a href="javascript:toggleComments(true);" title="<?php echo gettext('hide comments')?>"><?php echo gettext('hide comments')?></a>');
+								}
+							}
+							$(document).ready(function() {
+								toggleComments(true);
+							});
+						</script>
+						<?php
+						$display = ' style="display:none"';
+					} else {
+						$display = '';
+					}
 			}
 			?>
 			<div id="comments">
+				<div id="comment_toggle"><!-- place holder for toggle link --></div>
 				<?php
 				while (next_comment()) {
 					?>
-					<div class="comment"><a name="<?php echo $_zp_current_comment['id']; ?>"></a>
+					<div class="comment"<?php echo $display; ?>><a name="<?php echo $_zp_current_comment['id']; ?>"></a>
 						<div class="commentinfo">
 							<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
 						</div>

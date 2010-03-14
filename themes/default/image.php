@@ -13,14 +13,6 @@
 		$(document).ready(function(){
 			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
 		});
-		function toggleComments() {
-			var commentDiv = document.getElementById("comments");
-			if (commentDiv.style.display == "block") {
-				commentDiv.style.display = "none";
-			} else {
-				commentDiv.style.display = "block";
-			}
-		}
 	</script>
 		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 

@@ -56,7 +56,7 @@ class Zenphoto_Authority {
 	/**
 	 * class instantiator
 	 */
-	function Zenphoto_Authorization() {
+	function Zenphoto_Authority() {
 	}
 
 	/**
