@@ -240,13 +240,12 @@ function next_news($sortorder="date", $sortdirection="desc") {
 					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 				}
 			}
-			save_context();
 			add_context(ZP_ZENPAGE_NEWS_ARTICLE);
 			return true;
 		} else if (empty($_zp_zenpage_articles)) {
 			$_zp_zenpage_articles = NULL;
 			$_zp_current_zenpage_news = $_zp_current_zenpage_news_restore;
-			restore_context();
+			rem_context(ZP_ZENPAGE_NEWS_ARTICLE);
 			return false;
 		} else {
 			$news = array_shift($_zp_zenpage_articles);
@@ -1893,7 +1892,6 @@ function next_page() {
 	if (!in_context(ZP_SEARCH)) {
 		return false;
 	}
-	save_context();
 	add_context(ZP_ZENPAGE_PAGE);
 	if (is_null($_zp_zenpage_pagelist)) {
 		processExpired('zenpage_pages');
@@ -1901,7 +1899,7 @@ function next_page() {
 	}
 	if (empty($_zp_zenpage_pagelist)) {
 		$_zp_zenpage_pagelist = NULL;
-		restore_context();
+		rem_context(ZP_ZENPAGE_PAGE);
 		return false;
 	}
 	$page = array_shift($_zp_zenpage_pagelist);
