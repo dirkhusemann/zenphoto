@@ -1047,6 +1047,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 	} else {
 		$latest = getNewsArticles($number,'',NULL,true);
 	}
+	$latestnews = array();
 	$counter = "";
 	foreach($latest as $news) {
 		$counter++;
