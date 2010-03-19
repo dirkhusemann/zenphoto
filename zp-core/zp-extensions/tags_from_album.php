@@ -1,12 +1,13 @@
 <?php
 /** 
  * Provides a function to print a tag cloud of all image tags from an album optionally including the subalbums or the album tags including sub album tags.
+ * Requires MySQL 5 or newer.
  *   
  * @author Malte Müller (acrylian) based on maxslug's FlickrishPrintAlbumTagCloud() from http://www.zenphoto.org/support/topic.php?id=6879#post-40363
  * @package plugins 
  */
 
-$plugin_description = gettext("Prints a tag cloud of all image tags from an album optionally including the subalbums or the album tags including sub album tags."); 
+$plugin_description = gettext("Prints a tag cloud of all image tags from an album optionally including the subalbums or the album tags including sub album tags. Requires MySQL 5 or newer."); 
 $plugin_author = "Malte Müller (acrylian) based on maxslug's FlickrishPrintAlbumTagCloud()";
 $plugin_version = '1.3'; 
 $plugin_URL = "";
@@ -94,7 +95,7 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
  * @param integer $count_min the minimum count for a tag to appear in the output 
  * @param integer $count_max the floor count for setting the cloud font size to $size_max
  */
-function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class="",$showcounter=true,$size_min=0.4,$size_max=5,$count_min=1,$count_max=50) {
+function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class="",$showcounter=true,$size_min=0.5,$size_max=5,$count_min=1,$count_max=50) {
 	if($mode == 'all') {
 		$showcounter = false;
 		$tags1 = getAllTagsFromAlbum($albumname,$subalbums,'albums');
@@ -109,6 +110,7 @@ function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$se
 	$count_min = sanitize_numeric($count_min);
 	$count_max = sanitize_numeric($count_max);
 	$separator = sanitize($separator);
+	
 	$counter = '';
 	echo "<ul ".$class.">\n";
 	foreach ($tags as $row) {
@@ -122,7 +124,12 @@ function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$se
 		if($showcounter) {
 			$counter = ' ('.$count.')';
 		}
-		echo "<li><a class=\"tagLink\" href=\"".htmlspecialchars(getSearchURL($tname, '', 'tags',''))."\" style=\"font-size:".$size."em;\" rel=\"nofollow\">".$tname.$counter."</a>".$separator."</li>\n";
+		if($mode == 'all') { // disable the dynamic font size for 'all' mode
+			$style = '';
+		} else {
+			$style = "style=\"font-size:".$size."em;\"";
+		}
+		echo "<li><a class=\"tagLink\" href=\"".htmlspecialchars(getSearchURL($tname, '', 'tags',''))."\" $style rel=\"nofollow\">".$tname.$counter."</a>".$separator."</li>\n";
 	}
 	echo "</ul>\n";
 }
