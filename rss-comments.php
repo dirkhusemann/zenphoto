@@ -28,7 +28,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale))." - ".gettext("latest comments").$title; ?></title>
 <link><?php echo $serverprotocol."://".$host.WEBPATH; ?></link>
 <atom:link href="<?php echo $serverprotocol; ?>://<?php echo $host.WEBPATH; ?>/rss-comments.php" rel="self" type="application/rss+xml" />
-<description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
+<description><?php echo strip_tags(get_language_string(getOption('Gallery_description'), $locale)); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>

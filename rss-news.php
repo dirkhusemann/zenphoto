@@ -34,7 +34,7 @@ $items = getOption("zenpage_rss_items"); // # of Items displayed on the feed
 <title><?php echo get_language_string(getOption('gallery_title'), $locale)." - News "; ?><?php if(!empty($cattitle)) { echo $cattitle ; } ?></title>
 <link><?php echo $serverprotocol."://".$host.WEBPATH; ?></link>
 <atom:link href="<?php echo $serverprotocol; ?>://<?php echo $uri; ?>" rel="self" type="application/rss+xml" />
-<description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
+<description><?php echo strip_tags(get_language_string(getOption('Gallery_description'), $locale)); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
