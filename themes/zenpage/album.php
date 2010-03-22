@@ -5,7 +5,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo getBareGalleryTitle(); ?></title>
+	<title><?php echo getBareAlbumTitle(); ?> | <?php echo getBareGalleryTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
@@ -29,15 +29,12 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <h2><a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Index'); ?>"><?php echo gettext("Index"); ?></a>	&raquo; <?php echo gettext("Gallery"); ?><?php printParentBreadcrumb(" &raquo; "," &raquo; "," &raquo; "); ?><strong><?php printAlbumTitle(true);?></strong></h2>
 </div>
 
-
 	<div id="content-left">
 	<div><p><?php printAlbumDesc(true); ?></p></div>
 <?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
-
 			<div id="albums">
 			<?php while (next_album()): ?>
 			<div class="album">
-
 						<div class="thumb">
 					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php getBareAlbumTitle();?>"><?php printCustomAlbumThumbImage(getBareAlbumTitle(), NULL, 95, 95, 95, 95); ?></a>
 						</div>
