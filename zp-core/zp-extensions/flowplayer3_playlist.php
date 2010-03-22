@@ -143,12 +143,14 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			</a>
 			<script type="text/javascript">
 			$(function() {
+		
 			$("div.playlist").scrollable({
 				items:"div.clips",
 				vertical:true,
 				next:"a.down",
 				prev:"a.up"
 			});
+			$("div.playlist").mousewheel();
 			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.5.swf", {
 			plugins: { 
 				controls: {
