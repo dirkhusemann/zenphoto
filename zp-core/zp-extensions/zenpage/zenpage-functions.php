@@ -134,7 +134,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			$postdate = NULL;
 		}
 		if($ignorepagination) {
-			$limit = " LIMIT ".$articles_per_page;
+			$limit = "";
 		} else {
 			$limit = getLimitAndOffset($articles_per_page);
 		}
