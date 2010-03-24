@@ -96,7 +96,7 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
  * @param integer $count_min the minimum count for a tag to appear in the output 
  * @param integer $count_max the floor count for setting the cloud font size to $size_max
  */
-function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class="",$showcounter=true,$tagcloud=true,$size_min=1,$size_min=0.5,$size_max=5,$count_min=1,$count_max=50) {
+function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class="",$showcounter=true,$tagcloud=true,$size_min=1,$size_max=5,$count_min=1,$count_max=50) {
 	if($mode == 'all') {
 		$showcounter = false;
 		$tags1 = getAllTagsFromAlbum($albumname,$subalbums,'albums');
