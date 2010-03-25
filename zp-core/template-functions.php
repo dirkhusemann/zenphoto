@@ -3289,7 +3289,7 @@ function getRandomImages($daily = false) {
 																' FROM '.prefix('images'). ', '.prefix('albums').
 																' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' .
 																prefix('albums') . '.id ' .    $albumWhere . $imageWhere );
-		$rand_row = rand(1, $result['row_count']);
+		$rand_row = rand(0, $result['row_count']-1);
 
 		$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
 																' FROM '.prefix('images').', '.prefix('albums') .
@@ -3368,7 +3368,7 @@ function getRandomImagesAlbum($rootAlbum=null,$showunpublished=false) {
 				' FROM '.prefix('images'). ', '.prefix('albums').
 				' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' .
 				prefix('albums') . '.id ' . $albumInWhere . $albumNotWhere . $imageWhere );
-			$rand_row = rand(1, $result['row_count']);
+			$rand_row = rand(0, $result['row_count']-1);
 
 			$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
 				' FROM '.prefix('images').', '.prefix('albums') .

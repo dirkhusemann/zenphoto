@@ -47,7 +47,7 @@ if (!empty($_FILES)) {
 				@chmod($targetFile, 0666 & CHMOD_VALUE);
 				$album = new Album(New Gallery(), $folder);
 				$image = newImage($album, $soename);
-				if ($name != $soename) {
+				if ($name != $soename && $image->getTitle() == substr($soename, 0, strrpos($soename, '.'))) {
 					$image->setTitle(substr($name, 0, strrpos($name, '.')));
 					$image->save();
 				}
