@@ -862,7 +862,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$emails = array();
 			$admin_users = $_zp_authority->getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone with full rights
-				if (($admin['rights'] & ADMIN_RIGHTS) && !empty($admin['email'])) {
+				if (!empty($admin['email']) && (($admin['rights'] & ADMIN_RIGHTS) || 
+								(($admin['rights'] & (MANAGE_ALL_ALBUM_RIGHTS | COMMENT_RIGHTS)) == (MANAGE_ALL_ALBUM_RIGHTS | COMMENT_RIGHTS)))) {
 					$emails[] = $admin['email'];
 					unset($admin_users[$admin['id']]);
 				}
