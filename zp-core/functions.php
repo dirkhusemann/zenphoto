@@ -1699,12 +1699,12 @@ function rem_context($context) {
 }
 // Use save and restore rather than add/remove when modifying contexts.
 function save_context() {
-	global $_zp_current_context, $_zp_current_context_restore;
-	$_zp_current_context_restore = $_zp_current_context;
+	global $_zp_current_context, $_zp_current_context_stack;
+	array_push($_zp_current_context_stack,$_zp_current_context);
 }
 function restore_context() {
-	global $_zp_current_context, $_zp_current_context_restore;
-	$_zp_current_context = $_zp_current_context_restore;
+	global $_zp_current_context, $_zp_current_context_stack;
+	$_zp_current_context = array_pop($_zp_current_context_stack);
 }
 
 /**

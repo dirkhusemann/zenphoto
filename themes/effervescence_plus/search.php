@@ -269,7 +269,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 <!-- Wrap Main Body -->
  	<?php
- 	if (getNumImages() > 0){  /* Only print if we have images. */
+ 	if ($numimages > 0){  /* Only print if we have images. */
  		if ($_noFlash) {
 	 ?>
  			<div id="content">
@@ -361,7 +361,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 		<div id="pagenumbers">
 		<?php
-		if ((getNumAlbums() != 0) || $_noFlash){
+		if (($numalbums != 0) || $_noFlash){
 			printPageListWithNav("&laquo; prev", "next &raquo;", !$_noFlash);
 		}
 		?>

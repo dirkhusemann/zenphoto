@@ -256,7 +256,7 @@ if (isset($_GET['action'])) {
 										if (isset($_POST['wm_thumb-'.$i])) $wmuse = $wmuse | WATERMARK_THUMB;
 										if (isset($_POST['wm_full-'.$i])) $wmuse = $wmuse | WATERMARK_FULL;
 										if ($wmuse != $image->getWMUse()) {
-											$invalidatecache = true; 
+											$invalidatecache = true;
 											$image->setWMUse($wmuse);
 										}
 									}
@@ -757,7 +757,7 @@ $alb = removeParentAlbumNames($album);
 				<?php printEditDropdown('imageinfo',$steps); ?>
 			</div>
 			<br style='clear:both'/>
-			<?php 
+			<?php
 		}
 		if ($allimagecount) {
 			?>
@@ -1364,8 +1364,9 @@ if (isset($_GET['saved'])) {
 	</p>
 
 	<?php
+	printEditDropdown('');
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		printEditDropdown(''); ?>
+		?>
 		<form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
 		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>

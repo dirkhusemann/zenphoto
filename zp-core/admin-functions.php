@@ -1798,7 +1798,7 @@ function printAlbumEditRow($album) {
 			}
 		?>
 	</td>
-	<td class="cons">
+	<td class="icons">
 		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this entire album?")); ?>','<?php echo js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
 	</td>

@@ -7,8 +7,8 @@
 // force UTF-8 Ø
 
 $_zp_current_admin_obj = null;
-if (file_exists(WEBPATH.'/'.USER_PLUGIN_FOLDER.'/alt/lib-auth.php')) { // load a custom authroization package if it is present
-	require_once(WEBPATH.'/'.USER_PLUGIN_FOLDER.'/lib-auth.php');
+if (file_exists(dirname(dirname(__FILE__)).'/'.USER_PLUGIN_FOLDER.'/alt/lib-auth.php')) { // load a custom authroization package if it is present
+	require_once(dirname(dirname(__FILE__)).'/'.USER_PLUGIN_FOLDER.'/lib-auth.php');
 } else {
 	require_once(dirname(__FILE__).'/lib-auth.php');
 	$_zp_authority = new Zenphoto_Authority();

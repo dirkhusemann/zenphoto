@@ -662,6 +662,7 @@ zp-core/zp-extensions/spamfilters
 zp-core/zp-extensions/spamfilters/none.php
 zp-core/zp-extensions/spamfilters/simple.php
 zp-core/zp-extensions/static_html_cache.php
+zp-core/zp-extensions/tags_from_album.php
 zp-core/zp-extensions/tag_suggest
 zp-core/zp-extensions/tag_suggest/tag.css
 zp-core/zp-extensions/tag_suggest.php

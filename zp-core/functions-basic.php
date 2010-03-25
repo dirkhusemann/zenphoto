@@ -1185,7 +1185,7 @@ function isMyAlbum($albumfolder, $action) {
 	if (empty($albumfolder) || $albumfolder == '/') {
 		return false;
 	}
-	if ($_zp_loggedin & $action) {
+	if ($_zp_loggedin & $action || ($action == VIEW_ALL_RIGHTS)) {
 		if (is_null($_zp_admin_album_list)) {
 			getManagedAlbumList();
 		}
