@@ -583,13 +583,8 @@ zp-core/zp-extensions/effenberger_effects/glossy.txt
 zp-core/zp-extensions/effenberger_effects/instant.txt
 zp-core/zp-extensions/effenberger_effects/reflex.txt
 zp-core/zp-extensions/effenberger_effects.php
-zp-core/zp-extensions/filter-admin_toolbox.php
 zp-core/zp-extensions/filter-comments.php
 zp-core/zp-extensions/filter-crop_image.php
-zp-core/zp-extensions/filter-custom_data.php
-zp-core/zp-extensions/filter-file_searches.php
-zp-core/zp-extensions/filter-login.php
-zp-core/zp-extensions/filter-new_objects.php
 zp-core/zp-extensions/filter-zenphoto_seo.php
 zp-core/zp-extensions/flag_thumbnail.php
 zp-core/zp-extensions/flowplayer3
