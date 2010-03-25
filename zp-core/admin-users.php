@@ -18,105 +18,103 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
+$_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
 
-if (!is_null(getOption('admin_reset_date'))) {
-	if (!$_zp_loggedin) { // prevent nefarious access to this page.
-		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+if (!$_zp_loggedin) { // prevent nefarious access to this page.
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+	exit();
+}
+
+/* handle posts */
+if (isset($_GET['action'])) {
+	$action = $_GET['action'];
+	$themeswitch = false;
+	if ($action == 'deleteadmin') {
+		$id = sanitize_numeric($_GET['adminuser']);
+		$_zp_authority->deleteAdmin(array('id'=>$id));
+		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
+		query($sql);
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
 		exit();
-	}
+	} else if ($action == 'saveoptions') {
+		$notify = '';
+		$returntab = '';
 
-
-	/* handle posts */
-	if (isset($_GET['action'])) {
-		$action = $_GET['action'];
-		$themeswitch = false;
-		if ($action == 'deleteadmin') {
-			$id = sanitize_numeric($_GET['adminuser']);
-			$_zp_authority->deleteAdmin(array('id'=>$id));
-			$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
-			query($sql);
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
-			exit();
-		} else if ($action == 'saveoptions') {
-			$notify = '';
-			$returntab = '';
-
-			/*** admin options ***/
-			if (isset($_POST['saveadminoptions'])) {
-				$nouser = true;
-				$newuser = false;
-				for ($i = 0; $i < $_POST['totaladmins']; $i++) {
-					$pass = trim($_POST[$i.'-adminpass']);
-					$user = trim($_POST[$i.'-adminuser']);
-					if (empty($user) && !empty($pass)) {
-						$notify = '?mismatch=nothing';
-					}
-					if (!empty($user)) {
-						$nouser = false;
-						if ($pass == trim($_POST[$i.'-adminpass_2'])) {
-							$admin_n = trim($_POST[$i.'-admin_name']);
-							$admin_e = trim($_POST[$i.'-admin_email']);
-							$rights = processRights($i);
-							if (isset($_POST['alter_enabled'])) {
-								$albums = processManagedAlbums($i);
-							} else {
-								$rights = NULL;
-								$albums = NULL;
-							}
-							if (empty($pass)) {
-								$pass = NULL;
-							}
-							$userobj = $_zp_authority->newAdministrator(''); // get a transient object
-							$userobj->setuser($user);
-							$userobj->setPass(NULL);
-							$userobj->setName($admin_n);
-							$userobj->setEmail($admin_e);
-							$userobj->setRights($rights);
-							$userobj->setAlbums($albums);
-							zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-							$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
-							if (empty($msg)) {
-								if (isset($_POST[$i.'-newuser'])) {
-									$newuser = $user;
-								}
-								if ($i == 0) {
-									setOption('admin_reset_date', '1');
-								}
-							} else {
-								$notify = '?mismatch=format&error='.urlencode($msg);
-							}
-						} else {
-							$notify = '?mismatch=password';
-						}
-					}
-				}
-				if ($nouser) {
+		/*** admin options ***/
+		if (isset($_POST['saveadminoptions'])) {
+			$nouser = true;
+			$newuser = false;
+			for ($i = 0; $i < $_POST['totaladmins']; $i++) {
+				$pass = trim($_POST[$i.'-adminpass']);
+				$user = trim($_POST[$i.'-adminuser']);
+				if (empty($user) && !empty($pass)) {
 					$notify = '?mismatch=nothing';
 				}
-				$returntab = "&page=users";
-				if (!empty($newuser)) {
-					$returntab .= '&_show-'.$newuser;
-					unset($_POST['_show-']);
+				if (!empty($user)) {
+					$nouser = false;
+					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
+						$admin_n = trim($_POST[$i.'-admin_name']);
+						$admin_e = trim($_POST[$i.'-admin_email']);
+						$rights = processRights($i);
+						if (isset($_POST['alter_enabled'])) {
+							$albums = processManagedAlbums($i);
+						} else {
+							$rights = NULL;
+							$albums = NULL;
+						}
+						if (empty($pass)) {
+							$pass = NULL;
+						}
+						$userobj = $_zp_authority->newAdministrator(''); // get a transient object
+						$userobj->setuser($user);
+						$userobj->setPass(NULL);
+						$userobj->setName($admin_n);
+						$userobj->setEmail($admin_e);
+						$userobj->setRights($rights);
+						$userobj->setAlbums($albums);
+						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
+						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+						if (empty($msg)) {
+							if (isset($_POST[$i.'-newuser'])) {
+								$newuser = $user;
+							}
+							if ($i == 0) {
+								setOption('admin_reset_date', '1');
+							}
+						} else {
+							$notify = '?mismatch=format&error='.urlencode($msg);
+						}
+					} else {
+						$notify = '?mismatch=password';
+					}
 				}
 			}
-
-			/*** custom options ***/
-			$returntab = processCustomOptionSave($returntab);
-
-			if (empty($notify)) $notify = '?saved';
-			header("Location: " . $notify . $returntab);
-			exit();
-
+			if ($nouser) {
+				$notify = '?mismatch=nothing';
+			}
+			$returntab = "&page=users";
+			if (!empty($newuser)) {
+				$returntab .= '&_show-'.$newuser;
+				unset($_POST['_show-']);
+			}
 		}
+
+		/*** custom options ***/
+		$returntab = processCustomOptionSave($returntab);
+
+		if (empty($notify)) $notify = '?saved';
+		header("Location: " . $notify . $returntab);
+		exit();
+
 	}
 }
+
 
 printAdminHeader();
 ?>
 <script type="text/javascript" src="js/farbtastic.js"></script>
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
 <?php
-$_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
 $subtab = getSubtabs($_current_tab, 'users');
 ?>
 </head>
