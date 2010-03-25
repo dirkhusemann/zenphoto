@@ -341,7 +341,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 						}
 			
 						function onAfter(curr, next, opts){
-							<?php if (!isMyALbum($album->name, VIEW_ALL_RIGHTS)) { ?>
+							<?php if (!isMyALbum($album->name, VIEW_RIGHTS)) { ?>
 							//Only register at hit count the first time the image is viewed.
 							if ($(next).attr( 'viewed') != 1) {
 								$.get("<?php echo FULLWEBPATH .'/'. ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/slideshow/slideshow-counter.php?album=<?php echo pathurlencode($album->name); ?>&img="+ImageNameList[opts.currSlide]);

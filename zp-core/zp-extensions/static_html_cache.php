@@ -105,13 +105,13 @@ class staticCache {
 					$title = "";
 					break;
 				case "image.php": // does it really makes sense to exclude images and albums?
-					if (zp_loggedin() && isMyAlbum($_zp_current_album->name, VIEW_ALL_RIGHTS)) {
+					if (zp_loggedin() && isMyAlbum($_zp_current_album->name, VIEW_RIGHTS)) {
 						return true; // it is his album, no caching!
 					}
 					$title = $_zp_current_image->filename;
 					break;
 				case "album.php":
-					if (zp_loggedin() && isMyAlbum($_zp_current_album->name, VIEW_ALL_RIGHTS)) {
+					if (zp_loggedin() && isMyAlbum($_zp_current_album->name, VIEW_RIGHTS)) {
 						return true; // it is his album, no caching!
 					}
 					$title = $_zp_current_album->name;

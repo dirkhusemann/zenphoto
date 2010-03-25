@@ -702,7 +702,7 @@ class Gallery {
 		$albums_ordered = array();
 		foreach($results as $row) { // check for visible
 			$folder = $row['folder'];
-			if ($row['show'] || isMyALbum($folder, VIEW_ALL_RIGHTS)) {
+			if ($row['show'] || isMyALbum($folder, VIEW_RIGHTS)) {
 				$albums_ordered[] = $folder;
 			}
 		}

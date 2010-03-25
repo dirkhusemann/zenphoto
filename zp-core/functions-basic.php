@@ -1178,14 +1178,14 @@ function isMyAlbum($albumfolder, $action) {
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | $action)) return true;
 	}
-	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == VIEW_ALL_RIGHTS)) {	// sees all
+	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == VIEW_RIGHTS)) {	// sees all
 		return true;
 	}
 	if (zp_apply_filter('check_album_credentials', false)) return true;
 	if (empty($albumfolder) || $albumfolder == '/') {
 		return false;
 	}
-	if ($_zp_loggedin & $action || ($action == VIEW_ALL_RIGHTS)) {
+	if ($_zp_loggedin & $action) {
 		if (is_null($_zp_admin_album_list)) {
 			getManagedAlbumList();
 		}

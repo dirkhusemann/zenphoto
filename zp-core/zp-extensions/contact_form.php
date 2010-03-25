@@ -44,6 +44,7 @@ class contactformOptions {
 		setOptionDefault('contactform_captcha', 0);
 		setOptionDefault('contactform_subject', "required");
 		setOptionDefault('contactform_message', "required");
+		setOptionDefault('contactform_confirm', 1);
 		$mailings = $_zp_authority->getAdminEmail();
 		$email_list = '';
 		foreach ($mailings as $email) {
@@ -71,6 +72,9 @@ class contactformOptions {
 									gettext('Mail address') => array('key' => 'contactform_mailaddress', 'type' => OPTION_TYPE_TEXTBOX,
 										'order' => 17,
 										'desc' => gettext("The e-mail address the messages should be sent to. Enter more than one address separated by comma without any spaces.")),
+									gettext('Require confirmation') => array('key' => 'contactform_confirm', 'type' => OPTION_TYPE_CHECKBOX,
+										'order' => 0,
+										'desc' => gettext("If checked, a confirmation form will be presented before sending the contact message.")),
 									gettext('Title field') => array('key' => 'contactform_title', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
 										'order' => 1,
 										'desc' => sprintf($mailfieldinstruction,gettext("Title field."))),
@@ -208,28 +212,38 @@ function printContactForm() {
 			if(!empty($mailcontent['phone'])) { $message .= $mailcontent['phone']."\n"; }
 			if(!empty($mailcontent['website'])) { $message .= $mailcontent['website']."\n"; }
 			$message .= "\n\n";
-			echo get_language_string(getOption("contactform_confirmtext"));
-			?>
-			<div>
-				<?PHP
-				$_processing_post = true;
-				include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
+			
+			if (getOption('contactform_confirm')) {
+				echo get_language_string(getOption("contactform_confirmtext"));
 				?>
-				<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
-					<input type="hidden" id="confirm" name="confirm" value="confirm" />
-					<input type="hidden" id="name" name="name"	value="<?php echo $name; ?>" />
-					<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
-					<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
-					<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
-					<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
-				</form>
-				<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
-					<input type="hidden" id="discard" name="discard" value="discard" />
-					<input type="submit" value="<?php echo gettext("Discard"); ?>" />
-				</form>
-			</div>
-			<?php
-			return;
+				<div>
+					<?PHP
+					$_processing_post = true;
+					include(SERVERPATH . "/" . ZENFOLDER . '/'.PLUGIN_FOLDER . "/contact_form/form.php");
+					?>
+					<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
+						<input type="hidden" id="confirm" name="confirm" value="confirm" />
+						<input type="hidden" id="name" name="name"	value="<?php echo $name; ?>" />
+						<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
+						<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
+						<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
+						<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
+					</form>
+					<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
+						<input type="hidden" id="discard" name="discard" value="discard" />
+						<input type="submit" value="<?php echo gettext("Discard"); ?>" />
+					</form>
+				</div>
+				<?php
+				return;
+			} else {
+				// simulate confirmation action
+				$_POST['confirm'] = true;
+				$_POST['subject'] = $subject;
+				$_POST['message'] = $message;
+				$_POST['mailaddress'] = $mailaddress;
+				$_POST['name'] = $name;
+			}
 		}
 	}
 	if(isset($_POST['confirm'])) {

@@ -22,10 +22,10 @@ class lib_GD_Options {
 		return array();
 	}
 	function canLoadMsg() {
-		if (!extension_loaded('gd')) {
-			return gettext('The <strong><em>GD</em></strong> extension is not available.');
-		} else {
+		if (extension_loaded('gd')) {
 			return '';
+		} else {
+			return gettext('The <strong><em>GD</em></strong> extension is not available.');
 		}
 	}
 }

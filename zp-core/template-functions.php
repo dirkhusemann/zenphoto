@@ -3339,7 +3339,7 @@ function getRandomImagesAlbum($rootAlbum=null,$showunpublished=false) {
 		}
 	} else {
 		$albumfolder = $album->getFolder();
-		if (isMyAlbum($albumfolder, VIEW_ALL_RIGHTS) || $showunpublished) {
+		if (isMyAlbum($albumfolder, VIEW_RIGHTS) || $showunpublished) {
 			$imageWhere = '';
 			$albumNotWhere = '';
 			$albumInWhere = '';
@@ -4303,7 +4303,7 @@ function checkforPassword($silent=false) {
 		switch ($_zp_gallery_page) {
 			case 'album.php':
 			case 'image.php':
-				if (isMyAlbum($_zp_current_album->name, VIEW_ALL_RIGHTS)) return false;
+				if (isMyAlbum($_zp_current_album->name, VIEW_RIGHTS)) return false;
 				break;
 			default:
 				return false;

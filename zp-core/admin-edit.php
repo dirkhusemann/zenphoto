@@ -1365,53 +1365,53 @@ if (isset($_GET['saved'])) {
 
 	<?php
 	printEditDropdown('');
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		?>
-		<form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
-		<p class="buttons">
-			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
-			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
-		</p>
-		<br clear="all" /><br />
-		<?php
-	}
 	?>
-<table class="bordered" width="100%">
-	<tr>
-		<th style="text-align: left;"><?php echo gettext("Edit this album"); ?></th>
-	</tr>
-	<tr>
-		<td style="padding: 0px" colspan="1">
-			<ul id="left-to-right" class="page-list"><?php
-			if (count($albums) > 0) {
-				printNestedAlbumsList($albums);
-			}
+<form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
+	<p class="buttons">
+		<?php
+		if ($gallery_nesting>1 || $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
-			</ul>
-		</td>
-	</tr>
-</table>
-<div>
-	<ul class="iconlegend">
-		<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
-		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li>
-		<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
-		<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
-		<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
-		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
-	</ul>
-</div>
-<?php
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		?>
-		<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
-		<input name="update" type="hidden" value="Save Order" />
-		<p class="buttons">
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+			<?php
+		}
+		$flag = $note = '';
+		if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+			?>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
-		</p>
-
-		<script type="text/javascript">
+			<?php
+		} else {
+			if ($gallery_nesting>1) {
+				$flag = '*';
+				$note = $flag.gettext('Changes to top-level items are not permitted and will be ignored.');
+				echo $flag;
+			}
+		}
+		?>
+	</p>
+	<br clear="all" /><br />
+	<table class="bordered" width="100%">
+		<tr>
+			<th style="text-align: left;"><?php echo gettext("Edit this album"); ?></th>
+		</tr>
+		<tr>
+			<td style="padding: 0px" colspan="1">
+				<ul id="left-to-right" class="page-list">
+				<?php printNestedAlbumsList($albums); ?>
+				</ul>
+			</td>
+		</tr>
+	</table>
+	<div>
+		<ul class="iconlegend">
+			<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
+			<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li>
+			<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
+			<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
+			<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
+			<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
 		// <![CDATA[
 		jQuery( function($) {
 		$('#left-to-right').NestedSortable(
@@ -1430,13 +1430,28 @@ if (isset($_GET['saved'])) {
 		);
 		});
 		// ]]>
-		</script>
-
-		</form>
-		<br clear="all" />
+	</script>
+	
+	<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
+	<input name="update" type="hidden" value="Save Order" />
+	<p class="buttons">
 		<?php
-	}
-	?>
+		if ($gallery_nesting>1 || $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+			?>
+			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button><?php echo $flag;?>
+			<?php
+		}
+		if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+			?>
+			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
+			<?php
+		}
+		?>
+	</p>
+
+</form>
+<br clear="all" />
+<?php echo $note; ?>
 
 <?php
 	} else {

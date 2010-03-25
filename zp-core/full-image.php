@@ -33,7 +33,7 @@ if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are d
 	exit();
 }
 
-if (!isMyAlbum($album8, VIEW_ALL_RIGHTS)) {
+if (!isMyAlbum($album8, VIEW_RIGHTS)) {
 	//	handle password form if posted
 	zp_handle_password('zp_image_auth', getOption('protected_image_password'), getOption('protected_image_user'));
 	//check for passwords
