@@ -36,11 +36,13 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
 		$albumWhere = "WHERE `dynamic`=0 AND `show`=1".$passwordcheck;
 	}
 	if($subalbums) {
-		$albumWhere .= " AND `folder` LIKE '".$albumname."/%'";
+		$albumWhere .= " AND `folder` LIKE '".$albumname."%'";
 	} else {
 		$albumWhere .= " AND `folder` = '".$albumname."' ";
 	}
+	//echo "albumWhere: ".$albumWhere."<br />";
 	$albumids = query_full_array("SELECT id, folder FROM " . prefix('albums'). $albumWhere);
+	//echo "albumids: <pre>"; print_r($albumids); echo "</pre><br />";
 	$imageWhere = '';
 	switch($mode) {
 		case "images":
@@ -51,7 +53,11 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
 				$imageWhere .= 'albumid='. $albumid['id'];
 				if($count != count($albumids)) $imageWhere .= " OR ";
 			}
+			//echo "imageWhere: ".$imageWhere."<br />";
 			$imageids = query_full_array("SELECT id, albumid FROM " . prefix('images').$imageWhere);
+			// if the album has no direct images and $subalbums is set to false
+			if(count($imageids) == 0) return false; 
+			//echo "imageids: <pre>"; print_r($imageids); echo "</pre><br />";
 			$count = "";
 			$tagWhere = "";
 			if(count($imageids) != 0) $tagWhere = " WHERE ";
