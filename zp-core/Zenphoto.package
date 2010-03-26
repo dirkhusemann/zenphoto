@@ -586,7 +586,6 @@ zp-core/zp-extensions/effenberger_effects.php
 zp-core/zp-extensions/filter-comments.php
 zp-core/zp-extensions/filter-crop_image.php
 zp-core/zp-extensions/filter-zenphoto_seo.php
-zp-core/zp-extensions/flag_thumbnail.php
 zp-core/zp-extensions/flowplayer3
 zp-core/zp-extensions/flowplayer3/controls.css
 zp-core/zp-extensions/flowplayer3/flowplayer-3.1.4.min.js

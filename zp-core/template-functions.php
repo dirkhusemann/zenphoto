@@ -1374,12 +1374,12 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 	global $_zp_current_album, $_zp_themeroot;
 	if (!$_zp_current_album->getShow()) {
 		$class .= " not_visible";
-	} else {
-		$pwd = $_zp_current_album->getPassword();
-		if (zp_loggedin() && !empty($pwd)) {
-			$class .= " password_protected";
-		}
 	}
+	$pwd = $_zp_current_album->getPassword();
+	if (zp_loggedin() && !empty($pwd)) {
+		$class .= " password_protected";
+	}
+
 	$class = trim($class);
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)) {
 		$html = '<img src="' . htmlspecialchars(getAlbumThumb()) . '" alt="' . html_encode($alt) . '"' .
@@ -1449,11 +1449,10 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	global $_zp_current_album;
 	if (!$_zp_current_album->getShow()) {
 		$class .= " not_visible";
-	} else {
-		$pwd = $_zp_current_album->getPassword();
-		if (zp_loggedin() && !empty($pwd)) {
-			$class .= " password_protected";
-		}
+	}
+	$pwd = $_zp_current_album->getPassword();
+	if (zp_loggedin() && !empty($pwd)) {
+		$class .= " password_protected";
 	}
 	$class = trim($class);
 	/* set the HTML image width and height parameters in case this image was "imageDefault.png" substituted for no thumbnail then the thumb layout is preserved */
