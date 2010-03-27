@@ -75,7 +75,7 @@ if (isset($_zp_current_album) && is_object($_zp_current_album) && is_object($_zp
  * @param bool $fullimagelink Set to TRUE if you want the thumb link to link to the full image instead of the image page. Set to NULL if you want to use the backend plugin options.
  */
 function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$fullimagelink=NULL) {
-global $_zp_current_album, $_zp_current_image;
+global $_zp_current_album, $_zp_current_image, $_zp_current_search;
 $items = "";
 if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_current_album->getNumImages() >= 2) {
 	if(is_null($thumbscroll)) {
@@ -108,10 +108,27 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 	} else {
 		$fullimagelink = sanitize($fullimagelink);
 	}
-	$jcarousel_items =  $_zp_current_album->getImages();
-	if($_zp_current_album->getNumImages() >= 2) {
+	if(in_context(ZP_SEARCH_LINKED)) {
+			if($_zp_current_search->getNumImages() === 0) {
+				$searchimages = false;
+			}	else {
+				$searchimages = true; 
+			}
+		} else {
+			$searchimages = false; 
+		}
+		if(in_context(ZP_SEARCH_LINKED) && $searchimages) {
+			$jcarousel_items = $_zp_current_search->getImages();
+		} else {
+			$jcarousel_items =  $_zp_current_album->getImages();
+		}
+	if($_zp_current_album->getNumImages() >= 2 || $_zp_current_search->getNumImages() >= 2) {
 		foreach($jcarousel_items as $item) {
-			$imgobj = newImage($_zp_current_album,$item);
+			if(in_context(ZP_SEARCH_LINKED) && $searchimages) {
+				$imgobj = newImage(new Album($_zp_gallery,$item['folder']),$item['filename']);
+			} else {
+				$imgobj = newImage($_zp_current_album,$item);
+			}
 			if($fullimagelink) {
 				$link = $imgobj->getFullImage();
 			} else {
@@ -122,7 +139,12 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 			} else {
 				$active = '';
 			}
-			$items .= ' {url: "'.$imgobj->getCustomImage(NULL, $width, $height, $cropw, $croph, NULL, NULL,false).'", title: "'.$imgobj->getTitle().'", link: "'.$link.'", active: "'.$active.'"},';
+			if(isImageVideo($imgobj)) {
+				$imageurl = $imgobj->getThumb();
+			} else {
+				$imageurl = $imgobj->getCustomImage(NULL, $width, $height, $cropw, $croph, NULL, NULL,false);
+			}
+			$items .= ' {url: "'.$imageurl.'", title: "'.$imgobj->getTitle().'", link: "'.$link.'", active: "'.$active.'"},';
 			$items .= "\n";
 		}
 	}
