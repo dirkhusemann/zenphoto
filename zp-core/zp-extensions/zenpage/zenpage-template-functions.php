@@ -2547,8 +2547,16 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
 		$titlelink = $comment['titlelink'];
 		$website = $comment['website'];
 		$shortcomment = truncate_string($comment['comment'], $shorten);
-
-		echo "<li><a href=\"".getNewsURL($titlelink)."\" class=\"commentmeta\">".$title.$author."</a><br />\n";
+		$url = "";
+		switch($comment['type']){
+			case "news":
+				$url = getNewsURL($titlelink);
+				break;
+			case "pages":
+				$url = getPageLinkURL($titlelink);
+				break;
+		}
+		echo "<li><a href=\"".$url."\" class=\"commentmeta\">".$title.$author."</a><br />\n";
 		echo "<span class=\"commentbody\">".$shortcomment."</span></li>";
 	}
 	echo "</ul>\n";
