@@ -104,13 +104,21 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
  */
 function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class="",$showcounter=true,$tagcloud=true,$size_min=1,$size_max=5,$count_min=1,$count_max=50) {
 	if($mode == 'all') {
-		$showcounter = false;
-		$tags1 = getAllTagsFromAlbum($albumname,$subalbums,'albums');
-		$tags2 = getAllTagsFromAlbum($albumname,$subalbums,'images');
-		$tags = array_merge($tags1,$tags2);
-		$tags = getAllTagsFromAlbum_multi_unique($tags);
+		if(getAllTagsFromAlbum($albumname,$subalbums,'albums') OR getAllTagsFromAlbum($albumname,$subalbums,'images')) {
+			$showcounter = false;
+			$tags1 = getAllTagsFromAlbum($albumname,$subalbums,'albums');
+			$tags2 = getAllTagsFromAlbum($albumname,$subalbums,'images');
+			$tags = array_merge($tags1,$tags2);
+			$tags = getAllTagsFromAlbum_multi_unique($tags);
+		} else {
+			return false;
+		}
 	} else {
-		$tags = getAllTagsFromAlbum($albumname,$subalbums,$mode);
+		if(getAllTagsFromAlbum($albumname,$subalbums,$mode)) {
+			$tags = getAllTagsFromAlbum($albumname,$subalbums,$mode);
+		} else {
+			return false;
+		}
 	}
 	$size_min = sanitize_numeric($size_min); 
 	$size_max = sanitize_numeric($size_max);
