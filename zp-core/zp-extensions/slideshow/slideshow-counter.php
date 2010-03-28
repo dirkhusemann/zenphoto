@@ -15,7 +15,7 @@ if ($album_name && $img_name ) {
 	$album = new Album($gallery, $album_name);
 	$image = newImage($album, $img_name);	
 	//update hit counter
-	if (!isMyALbum($album->name, VIEW_RIGHTS)) {
+	if (!isMyALbum($album->name, LIST_ALBUM_RIGHTS)) {
 		$hc = $image->get('hitcounter')+1;
 		$image->set('hitcounter', $hc);
 		$image->save();

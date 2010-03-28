@@ -1178,7 +1178,7 @@ function isMyAlbum($albumfolder, $action) {
 	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | $action)) return true;
 	}
-	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == VIEW_RIGHTS)) {	// sees all
+	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_ALBUM_RIGHTS)) {	// sees all
 		return true;
 	}
 	if (zp_apply_filter('check_album_credentials', false)) return true;

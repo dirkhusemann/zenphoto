@@ -17,7 +17,7 @@ if (file_exists(dirname(dirname(__FILE__)).'/'.USER_PLUGIN_FOLDER.'/alt/lib-auth
 foreach ($_zp_authority->getRights() as $key=>$right) {
 	define($key,$right['value']);
 }
-define ('VIEW_RIGHTS', ALBUM_RIGHTS | VIEW_ALL_RIGHTS);
+define ('LIST_ALBUM_RIGHTS', NO_RIGHTS);
 
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = false;
