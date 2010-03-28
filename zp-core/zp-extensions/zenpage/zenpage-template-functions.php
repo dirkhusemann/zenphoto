@@ -1707,6 +1707,7 @@ function getCodeblock($number=0,$titlelink='') {
  */
 function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_pages;
+	$number = sanitize_numeric($number);
 	switch($option) {
 		case "popular":
 			$sortorder = "hitcounter"; break;
@@ -2424,7 +2425,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
  */
 function checkForPage($titlelink) {
 	if(!empty($titlelink)) {
-		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
+		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"';
 		$result = query_single_row($sql);
 		if (is_array($result)) {
 			zenpage_setup_page($titlelink);
@@ -2479,6 +2480,7 @@ function zenpageOpenedForComments() {
  */
 function getLatestZenpageComments($number,$type="all",$itemID="") {
 	$itemID = sanitize_numeric($itemID);
+	$number = sanitize_numeric($number);
 	switch ($type) {
 		case "news":
 			$whereNews = " WHERE news.show = 1 AND news.id = ".$itemID." AND c.ownerid = news.id AND c.type = 'news' AND c.private = 0 AND c.inmoderation = 0";
