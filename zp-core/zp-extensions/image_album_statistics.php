@@ -12,7 +12,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.2.9'; 
+$plugin_version = '1.3'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---image_album_statistics.php.html";
 
 /**
@@ -42,7 +42,7 @@ function getAlbumStatistic($number=5, $option, $albumfolder='') {
 	}
 	$albumfolder = sanitize_path($albumfolder);
 	if(!empty($albumfolder)) {
-		$albumWhere .= " AND folder LIKE '".$albumfolder."/%'";
+		$albumWhere .= " AND folder LIKE '".mysql_real_escape_string($albumfolder)."/%'";
 	} 
 	switch($option) {
 		case "popular":
@@ -78,7 +78,7 @@ function getAlbumStatistic($number=5, $option, $albumfolder='') {
 			}
 			return $updatedalbums;
 	}
-	$albums = query_full_array("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
+	$albums = query_full_array("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT ".mysql_real_escape_string($number));
 	return $albums;
 }
 
@@ -336,9 +336,9 @@ function getImageStatistic($number, $option, $albumfolder='',$collection=false) 
 			$is_dynamicalbum = true;
 		} 
 		if($collection) {
-			$specificalbum = " albums.folder LIKE '".$albumfolder."/%' AND ";
+			$specificalbum = " albums.folder LIKE '".mysql_real_escape_string($albumfolder)."%' AND ";
 		} else {
-			$specificalbum = " albums.folder = '".$albumfolder."' AND ";
+			$specificalbum = " albums.folder = '".mysql_real_escape_string($albumfolder)."' AND ";
 		}
 	} else {
 		$specificalbum = "";
@@ -370,7 +370,7 @@ function getImageStatistic($number, $option, $albumfolder='',$collection=false) 
 		prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
 															" WHERE ".$specificalbum."images.albumid = albums.id " . $imageWhere . $albumWhere .
 															" AND albums.folder != ''".
-															" ORDER BY ".$sortorder." DESC LIMIT $number");
+															" ORDER BY ".$sortorder." DESC LIMIT ".mysql_real_escape_string($number));
 		foreach ($images as $imagerow) {
 			$filename = $imagerow['filename'];
 			$albumfolder2 = $imagerow['folder'];
