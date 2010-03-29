@@ -49,6 +49,7 @@ require_once(dirname(__FILE__).'/auth_zp.php');
 define('ZENPAGE_NEWS',getOption("zenpage_news_page"));
 define('ZENPAGE_PAGES',getOption("zenpage_pages_page"));
 
+$_zp_current_context_stack = array();
 
 /*
  * Note: If fields are added or deleted, setup.php should be run or the new data won't be stored

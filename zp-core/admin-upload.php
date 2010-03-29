@@ -69,7 +69,10 @@ if (isset($_GET['action'])) {
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
 				foreach ($_FILES['files']['error'] as $key => $error) {
-					if ($_FILES['files']['name'][$key] == "") continue;
+					if ($_FILES['files']['name'][$key] == "") {
+						$error = false;
+						continue;
+					}
 					if ($error == UPLOAD_ERR_OK) {
 						$tmp_name = $_FILES['files']['tmp_name'][$key];
 						$name = trim($_FILES['files']['name'][$key]);
@@ -90,9 +93,11 @@ if (isset($_GET['action'])) {
 							$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
 							break;
 						}
+					} else {
+						break;
 					}
 				}
-				if (!$error) {
+				if ($error == UPLOAD_ERR_OK) {
 					header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
 					exit();
 				}
@@ -114,6 +119,10 @@ if (isset($_GET['action'])) {
 					break;
 				case UPLOAD_ERR_EXTENSION:
 					$errormsg = gettext('You have attempted to upload one or more files which are not Zenphoto supported file types');
+					break;
+				case UPLOAD_ERR_INI_SIZE:
+				case UPLOAD_ERR_FORM_SIZE:
+					$errormsg = gettext('You have attempted to upload too large a file');
 					break;
 				default:
 					$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!");
@@ -169,10 +178,14 @@ printLogoAndLinks();
 natcasesort($_zp_supported_images);
 $types = array_keys($_zp_extra_filetypes);
 natcasesort($types);
+$types = array_merge($_zp_supported_images, $types);
 $last = strtoupper(array_pop($types));
-$s1 = strtoupper(implode(', ', $_zp_supported_images));
-$s2 = strtoupper(implode(', ', $types));
-printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s, %s, and %s.'), $s1, $s2, $last);
+$s1 = strtoupper(implode(', ', $types));
+if (count($types)>1) {
+	printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s, and %s.'), $s1, $last);
+} else {
+	printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s and %s.'), $s1, $last);
+}
 echo '<br />'.gettext('You can also upload ZIP files containing files of these types.');
 $maxupload = ini_get('upload_max_filesize');
 ?>
@@ -183,11 +196,11 @@ $maxupload = ini_get('upload_max_filesize');
 </p>
 
 <?php if (isset($error) && $error) { ?>
-<div class="errorbox" id="fade-message">
-<h2><?php echo gettext("Something went wrong..."); ?></h2>
-<?php echo (empty($errormsg) ? gettext("There was an error submitting the form. Please try again.") : $errormsg); ?>
-</div>
-<?php
+	<div class="errorbox" id="fade-message">
+		<h2><?php echo gettext("Something went wrong..."); ?></h2>
+		<?php echo (empty($errormsg) ? gettext("There was an error submitting the form. Please try again.") : $errormsg); ?>
+	</div>
+	<?php
 }
 if (ini_get('safe_mode')) { ?>
 <div class="warningbox" id="fade-message">
