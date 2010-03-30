@@ -43,15 +43,15 @@ function printAdminFooter($addl='') {
 
 function datepickerJS() {
 	$lang = str_replace('_', '-',getOption('locale'));
-	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
+	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/jqueryui/i18n/jquery.ui.datepicker-'.$lang.'.js')) {
 		$lang = substr($lang, 0, 2);
-		if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
+		if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/jqueryui/i18n/jquery.ui.datepicker-'.$lang.'.js')) {
 			$lang = '';
 		}
 	}
 	if (!empty($lang)) {
 		?>
-		<script src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/jqueryui/i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
+		<script src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/jqueryui/i18n/jquery.ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
 		<?php
 	}
 	?>
@@ -86,8 +86,8 @@ function printAdminHeader($tinyMCE=NULL) {
 	<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
 	<script src="<?php echo $path; ?>js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/zenphoto.js" type="text/javascript" ></script>
-	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/ui.zenphoto.css" type="text/css" />
+	<script src="<?php echo $path;?>js/jqueryui/jquery_ui_zenphoto.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/jquery_ui_zenphoto.css" type="text/css" />
 	<?php datepickerJS(); ?>
 	<!--Nested Sortables-->
 	<script type="text/javascript" src="<?php echo $path; ?>js/nestedsortables/interface-1.2.js"></script>
