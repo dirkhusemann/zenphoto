@@ -19,7 +19,7 @@ zp_register_filter('edit_admin_custom_data', 'quota_edit_admin');
 zp_register_filter('save_image_utilities_data', 'quota_save_image');
 zp_register_filter('edit_image_custom_data', 'quota_edit_image');
 zp_register_filter('new_image', 'quota_new_image');
-zp_register_filter('image_instantiate', 'quota_image_instantiate');
+zp_register_filter('image_refresh', 'quota_image_refresh');
 zp_register_filter('get_upload_quota', 'quota_getUploadQuota');
 zp_register_filter('check_upload_quota', 'quota_checkQuota');
 zp_register_filter('get_upload_limit', 'quota_getUploadLimit');
@@ -154,6 +154,7 @@ function quota_edit_image($discard, $image, $currentimage) {
  */
 function quota_save_image($image, $prefix) {
 	$image->setOwner(sanitize($_POST[$prefix.'-owner']));
+	$image->set('filesize',filesize($image->localpath));
 	return $image;
 }
 
@@ -176,10 +177,9 @@ function quota_new_image($image) {
  * checks to see if the filesize is set and sets it if not
  * @param unknown_type $image
  */
-function quota_image_instantiate($image) {
-	if ($image->get('filesize') == 0) {
-		$image->set('filesize',filesize($image->localpath));
-	}
+function quota_image_refresh($image) {
+	$image->set('filesize',filesize($image->localpath));
+	$image->save();
 	return $image;
 }
 

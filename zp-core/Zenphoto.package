@@ -645,6 +645,7 @@ zp-core/zp-extensions/PHPMailer/class.pop3.php
 zp-core/zp-extensions/PHPMailer/class.smtp.php
 zp-core/zp-extensions/PHPMailer.php
 zp-core/zp-extensions/print_album_menu.php
+zp-core/zp-extensions/quota.php
 zp-core/zp-extensions/rating
 zp-core/zp-extensions/rating/alt_star.png
 zp-core/zp-extensions/rating/clear.png

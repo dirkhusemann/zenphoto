@@ -221,7 +221,13 @@ $maxupload = ini_get('upload_max_filesize');
 $uploadlimit = $maxupload = parse_size($maxupload);
 if ($quota > 0) {
 	$uploadlimit = zp_apply_filter('get_upload_limit');
-	printf(gettext('Your available upload quota is %u kb.'),round($uploadlimit/1024));
+	if ($uploadlimit <= 1024) {
+		$color = 'style="color:red"';
+	} else {
+		$color = '';
+	}
+	printf(gettext('Your available upload quota is <span %1$s>%2$s</span> kb.'),$color,number_format(round($uploadlimit/1024)));
+	$maxupload = min($maxupload, $uploadlimit);
 } else {
 	echo gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!');
 }
@@ -284,8 +290,19 @@ if (ini_get('safe_mode')) { ?>
 		echo zp_apply_filter('seoFriendly_js', $defaultjs);	
 		?>
 		<script type="text/javascript">
+			<?php
+			if ($maxupload > 1024) {
+				?>
+				var buttonenable = true;
+				<?php 
+			} else {
+				?>
+				var buttonenable = false;
+				<?php
+			}
+			?>
 			function buttonstate(good) {
-				if (good) {
+				if (good && buttonenable) {
 					$('#fileUploadbuttons').show();
 				} else {
 					$('#fileUploadbuttons').hide();
