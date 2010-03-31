@@ -73,7 +73,7 @@ if (isset($_GET['action'])) {
 						$userobj->setRights($rights);
 						$userobj->setAlbums($albums);
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup(), 1, $userobj->getQuota());
 						if (empty($msg)) {
 							if (isset($_POST[$i.'-newuser'])) {
 								$newuser = $user;

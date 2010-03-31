@@ -7,6 +7,8 @@
 // force UTF-8 Ø
 
 define('OFFSET_PATH', 1);
+define('UPLOAD_ERR_QUOTA', -1);
+
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
@@ -68,6 +70,8 @@ if (isset($_GET['action'])) {
 					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
+				
+				$quota = zp_apply_filter('get_upload_quota', -1);
 				foreach ($_FILES['files']['error'] as $key => $error) {
 					if ($_FILES['files']['name'][$key] == "") {
 						$error = false;
@@ -80,15 +84,22 @@ if (isset($_GET['action'])) {
 						if (is_valid_image($name) || is_valid_other_type($name)) {
 							if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
 							$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
-							move_uploaded_file($tmp_name, $uploadfile);
-							@chmod($uploadfile, 0666 & CHMOD_VALUE);
-							$image = newImage($album, $soename);
-							if ($name != $soename) {
-								$image->setTitle($name);
-								$image->save();
+							$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tmp_name);
+							if (!$error) {
+								move_uploaded_file($tmp_name, $uploadfile);
+								@chmod($uploadfile, 0666 & CHMOD_VALUE);
+								$image = newImage($album, $soename);
+								if ($name != $soename) {
+									$image->setTitle($name);
+									$image->save();
+								}
 							}
 						} else if (is_zip($name)) {
-							unzip($tmp_name, $uploaddir);
+							if ($quota > 0) {
+								$error = UPLOAD_ERR_EXTENSION;
+							} else {
+								unzip($tmp_name, $uploaddir);
+							}
 						} else {
 							$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
 							break;
@@ -98,7 +109,11 @@ if (isset($_GET['action'])) {
 					}
 				}
 				if ($error == UPLOAD_ERR_OK) {
-					header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
+					if (zp_loggedin(ALBUM_RIGHTS)) {
+						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
+					} else {
+						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded='.$used);
+					}
 					exit();
 				}
 			}
@@ -123,6 +138,9 @@ if (isset($_GET['action'])) {
 				case UPLOAD_ERR_INI_SIZE:
 				case UPLOAD_ERR_FORM_SIZE:
 					$errormsg = gettext('You have attempted to upload too large a file');
+					break;
+				case UPLOAD_ERR_QUOTA:
+					$errormsg = gettext('You have exceeded your upload quota');
 					break;
 				default:
 					$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!");
@@ -181,24 +199,47 @@ natcasesort($types);
 $types = array_merge($_zp_supported_images, $types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $types));
+$used = 0;
+$quota = zp_apply_filter('get_upload_quota', -1, $used);
+if ($quota > 0) {
+	$extensions = '';
+} else {
+	$extensions = '*.zip';
+}
 if (count($types)>1) {
 	printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s, and %s.'), $s1, $last);
 } else {
 	printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s and %s.'), $s1, $last);
 }
-echo '<br />'.gettext('You can also upload ZIP files containing files of these types.');
+if (!empty($extensions)) echo '<br />'.gettext('You can also upload ZIP files containing files of these types.');
 $maxupload = ini_get('upload_max_filesize');
 ?>
 </p>
 <p>
 <?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload); ?>
-<?php echo gettext(' Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'); ?>
+<?php
+$uploadlimit = $maxupload = parse_size($maxupload);
+if ($quota > 0) {
+	$uploadlimit = zp_apply_filter('get_upload_limit');
+	printf(gettext('Your available upload quota is %u kb.'),round($uploadlimit/1024));
+} else {
+	echo gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!');
+}
+?>
 </p>
 
 <?php if (isset($error) && $error) { ?>
 	<div class="errorbox" id="fade-message">
 		<h2><?php echo gettext("Something went wrong..."); ?></h2>
 		<?php echo (empty($errormsg) ? gettext("There was an error submitting the form. Please try again.") : $errormsg); ?>
+	</div>
+	<?php
+}
+if (isset($_GET['uploaded'])) {
+	?>
+	<div class="messagebox" id="fade-message">
+		<h2><?php echo gettext("Upload complete"); ?></h2>
+		<?php printf(gettext('You uploaded %u kb of images.'),sanitize_numeric($_GET['uploaded']))?>
 	</div>
 	<?php
 }
@@ -348,7 +389,6 @@ if (ini_get('safe_mode')) { ?>
 		<hr />
 
 		<?php
-		$extensions = '*.zip';
 		$types = array_merge($_zp_supported_images, array_keys($_zp_extra_filetypes)); // supported extensions
 		foreach ($types as $ext) {
 			$extensions .= ';*.'.$ext.';*.'.strtoupper($ext);
@@ -411,7 +451,7 @@ if (ini_get('safe_mode')) { ?>
 ?>
 								'displayData': 'speed',
 								'simUploadLimit': 3,
-								'sizeLimit': <?php echo parse_size($maxupload); ?>,
+								'sizeLimit': <?php echo $uploadlimit; ?>,
 								<?php
 								if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 									?>

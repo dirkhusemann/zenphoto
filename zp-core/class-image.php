@@ -97,6 +97,7 @@ class _Image extends PersistentObject {
 	 * @return Image
 	 */
 	function _Image(&$album, $filename) {
+		global $_zp_current_admin_obj;
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
 		if (!$this->classSetup($album, $filename)) { // spoof attempt
@@ -132,6 +133,7 @@ class _Image extends PersistentObject {
 	 * 
 	 */
 	function classSetup(&$album, $filename) {
+		global $_zp_current_admin_obj;
 		$fileFS = internalToFilesystem($filename);
 		if ($filename != filesystemToInternal($fileFS)) { // image name spoof attempt
 			return false;
@@ -152,7 +154,8 @@ class _Image extends PersistentObject {
 		$this->comments = null;
 		$this->filemtime = @filemtime($this->localpath);
 		$this->imagetype = strtolower(get_class($this)).'s';
-		$this->set('date', strftime('%Y-%m-%d %T', $this->filemtime));
+		$date = $this->get('date');
+		if (empty($date)) $this->set('date', strftime('%Y-%m-%d %T', $this->filemtime));
 		zp_apply_filter('image_instantiate', $this);
 		return true;
 	}
@@ -1187,6 +1190,18 @@ class _Image extends PersistentObject {
 		$this->set('watermark_use', $use);
 		
 	}
+	
+	/**
+	 * Owner functions
+	 */
+	function getOwner() {
+		return $this->get('owner');
+	}
+	function setOwner($owner) {
+		$this->set('owner',$owner);
+	}
+	
+
 }
 
 ?>

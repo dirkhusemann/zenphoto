@@ -164,9 +164,10 @@ class Zenphoto_Authority {
 	 * @param bit $rights The administrating rites for the admin
 	 * @param string $custom custom data for the administrator
 	 * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
+	 * @param int $quota Total image size quoat
 	 * @return string error message if any errors
 	 */
-	function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1) {
+	function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1, $quota=NULL) {
 		if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
 		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '".zp_escape_string($user)."' AND `valid`=$valid";
 		$result = query_single_row($sql);
@@ -187,8 +188,13 @@ class Zenphoto_Authority {
 			} else {
 				$rightsset = "`rights`='" . zp_escape_string($rights)."', ";
 			}
+			if (is_null($quota)) {
+				$quotaset = '';
+			} else {
+				$quotaset = '`quota`='.$quota.',';
+			}
 			$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . zp_escape_string($name)."', " . $password .
-					"`email`='" . zp_escape_string($email)."', " . $rightsset . "`custom_data`='".zp_escape_string($custom)."', `valid`=".$valid.", `group`='".
+					"`email`='" . zp_escape_string($email)."', " . $rightsset . $quotaset . "`custom_data`='".zp_escape_string($custom)."', `valid`=".$valid.", `group`='".
 			zp_escape_string($group)."' WHERE `id`='" . $id ."'";
 			$result = query($sql);
 			if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
@@ -636,6 +642,13 @@ class Zenphoto_Administrator extends PersistentObject {
 	}
 	function getUser() {
 		return $this->get('user');
+	}
+	
+	function setQuota($v) {
+		$this->set('quota',$v);
+	}
+	function getQuota() {
+		return $this->get('quota');
 	}
 
 }

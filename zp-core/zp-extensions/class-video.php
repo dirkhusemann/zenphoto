@@ -9,7 +9,7 @@
 $plugin_is_filter = 9;
 $plugin_description = gettext('Video and MP3/4 handling for Zenphoto. This plugin must always be enabled to use multimedia content.');
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.2.9'; 
+$plugin_version = '1.2.9';
 
 addPluginType('flv', 'Video');
 addPluginType('3gp', 'Video');
@@ -24,8 +24,8 @@ $option_interface = new VideoObject_Options();
  *
  */
 class VideoObject_Options {
-	
-	
+
+
 	function VideoObject_Options() {
 		setOptionDefault('zp_plugin_class-video_mov_w',520);
 		setOptionDefault('zp_plugin_class-video_mov_h',390);
@@ -50,7 +50,7 @@ class VideoObject_Options {
 																	'desc' => '')
 		);
 	}
-	
+
 }
 
 class Video extends _Image {
@@ -122,8 +122,8 @@ class Video extends _Image {
 
 	/**
 	 * Returns the image file name for the thumbnail image.
-	 * 
-	 * @param string $path override path 
+	 *
+	 * @param string $path override path
 	 *
 	 * @return string
 	 */
@@ -182,7 +182,7 @@ class Video extends _Image {
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
-			return getImageProcessorURI($args, $this->album->name, $filename); 		
+			return getImageProcessorURI($args, $this->album->name, $filename);
 		}
 	}
 
@@ -208,7 +208,7 @@ class Video extends _Image {
 		if ($thumbStandin & 1) {
 			if ($this->objectsThumb == NULL) {
 				$filename = makeSpecialImageName($this->getThumbImageFile());
-				return getImageProcessorURI($args, $this->album->name, $filename); 
+				return getImageProcessorURI($args, $this->album->name, $filename);
 			} else {
 				$filename = $this->objectsThumb;
 				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
@@ -216,7 +216,7 @@ class Video extends _Image {
 				if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 					return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 				} else {
-					return getImageProcessorURI($args, $this->album->name, $filename); 
+					return getImageProcessorURI($args, $this->album->name, $filename);
 				}
 			}
 		} else {
@@ -225,11 +225,11 @@ class Video extends _Image {
 			if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 				return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 			} else {
-				return getImageProcessorURI($args, $this->album->name, $filename); 
+				return getImageProcessorURI($args, $this->album->name, $filename);
 			}
 		}
 	}
-	
+
 	function getBody() {
 		global $_zp_flash_player;
 		$w = $this->getWidth();
@@ -248,17 +248,17 @@ class Video extends _Image {
 			case '.3gp':
 			case '.mov':
 				return '</a>
-			 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$w.'" height="'.$h.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-				 	<param name="src" value="' . $this->getFullImage() . '"/>
-				 	<param name="autoplay" value="false" />
-				 	<param name="type" value="video/quicktime" />
-				 	<param name="controller" value="true" />
-				 	<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" scale="aspect" autoplay="false" controller"true" type="video/quicktime"
-				 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
+					<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$w.'" height="'.$h.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+					<param name="src" value="' . $this->getFullImage() . '"/>
+					<param name="autoplay" value="false" />
+					<param name="type" value="video/quicktime" />
+					<param name="controller" value="true" />
+					<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" scale="aspect" autoplay="false" controller"true" type="video/quicktime"
+						pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 					</object><a>';
 				break;
-		}		
+		}
 	}
-	
+
 }
 ?>

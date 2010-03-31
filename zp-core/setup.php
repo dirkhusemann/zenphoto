@@ -1948,12 +1948,12 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `sort_order` `sort_order` VARCHAR(48) NOT NULL default ""';
 	//v1.2.5
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `parentid` `parentid` int(11) unsigned default NULL;";
-	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `albumid` `albumid` int(11) unsigned default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `albumid` `albumid` int(11) unsigned default NULL";
 	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET `parentid`=NULL WHERE `parentid`=0';
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `albumid`=NULL WHERE `albumid`=0';
 	$sql_statements[] = 'DELETE FROM '.$tbl_zenpage_pages.' WHERE `titlelink`=""'; // cleanup for bad records
-	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`;';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`);';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`)';
 	
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
@@ -1966,19 +1966,19 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `total_votes` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `total_value` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `used_ips` longtext;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `used_ips` longtext';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `total_votes` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `total_value` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `used_ips` longtext;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `used_ips` longtext';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	//v1.2.6
-	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `custom_data` TEXT;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `custom_data` TEXT';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `password` `pass` varchar(64)';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `valid` int(1) default 1;';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `group` varchar(64);';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `valid` int(1) default 1';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `group` varchar(64)';
 	$sql = 'SHOW INDEX FROM '.$tbl_administrators;
 	$result = mysql_query($sql, $mysql_connection);
 	if ($result) {
@@ -2009,6 +2009,9 @@ if (file_exists(CONFIGFILE)) {
 	//v1.3
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `watermark` varchar(255) DEFAULT NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `watermark_use` int(1) DEFAULT 7';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `owner` varchar(64) DEFAULT NULL';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `filesize` INT';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `quota` INT';
 	
 	
 	// do this last incase there are any field changes of like names!
