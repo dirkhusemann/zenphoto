@@ -109,10 +109,10 @@ if (isset($_GET['action'])) {
 					}
 				}
 				if ($error == UPLOAD_ERR_OK) {
-					if (zp_loggedin(ALBUM_RIGHTS)) {
+					if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
 					} else {
-						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded='.$used);
+						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded=1');
 					}
 					exit();
 				}
@@ -200,7 +200,7 @@ $types = array_merge($_zp_supported_images, $types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $types));
 $used = 0;
-$quota = zp_apply_filter('get_upload_quota', -1, $used);
+$quota = zp_apply_filter('get_upload_quota', -1);
 if ($quota > 0) {
 	$extensions = '';
 } else {
@@ -245,7 +245,12 @@ if (isset($_GET['uploaded'])) {
 	?>
 	<div class="messagebox" id="fade-message">
 		<h2><?php echo gettext("Upload complete"); ?></h2>
-		<?php printf(gettext('You uploaded %u kb of images.'),sanitize_numeric($_GET['uploaded']))?>
+		<?php
+		echo gettext('Your files have been uploaded.').' ';
+		if ($quota > 0) {
+			printf(gettext('You have %s kb of upload left.'),number_format(round($uploadlimit/1024)));
+		}
+		?>
 	</div>
 	<?php
 }
@@ -469,19 +474,23 @@ if (ini_get('safe_mode')) { ?>
 								'displayData': 'speed',
 								'simUploadLimit': 3,
 								'sizeLimit': <?php echo $uploadlimit; ?>,
-								<?php
-								if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-									?>
 									'onAllComplete':	function(event, data) {
 																			if (data.errors) {
 																				return false;
 																			} else {
+																			<?php
+																			if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+																				?>
 																				launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
+																				<?php
+																			} else {
+																				?>
+																				launchScript('admin-upload.php',['uploaded=1']);
+																				<?php
+																			}
+																			?>
 																			}
 																		},
-									<?php
-									}
-								?>
 								'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
 								'fileExt': '<?php echo $extensions.'|*.*'; ?>'
 							});

@@ -1,6 +1,23 @@
 <?php
 /**
  * A quota management system to limit the sum of sizes of uploaded images.
+ * 
+ * Set the default quota on the plugin options page.
+ * You can change the quota for individual users on the Admin tab. Users with ADMIN_RIGHTS
+ * are not subject to quotas and will not be assigned ownership of an image.
+ * 
+ * Images uploaded by a user will be marked as his and will count toward his quota.
+ * Images uploaded via FTP will not necessarily have an owner assigned. If there is
+ * one assiged, it is the logged on user when the image is discovered by Zenphoto.
+ * 
+ * You may also assign the complete set of images in an albums to a user. (Just the images in the
+ * album. If you want to assign images from subalbums, you need to do that for each 
+ * subalbum.)
+ * 
+ * A user who exceeds his quota will not be allowed to upload files.
+ * 
+ * Because of the difficulty of policing quotas when ZIP files are uploaded, enabling
+ * this plugin will diable ZIP file upload.
  *
  * @author Stephen Billard (sbillard)
  * @package plugins
@@ -23,6 +40,8 @@ zp_register_filter('image_refresh', 'quota_image_refresh');
 zp_register_filter('get_upload_quota', 'quota_getUploadQuota');
 zp_register_filter('check_upload_quota', 'quota_checkQuota');
 zp_register_filter('get_upload_limit', 'quota_getUploadLimit');
+zp_register_filter('save_album_utilities_data', 'quota_save_album');
+zp_register_filter('edit_album_custom_data', 'quota_edit_album');
 
 /**
  * Option handler class
@@ -93,7 +112,7 @@ function quota_edit_admin($html, $userobj, $i, $background, $current) {
 			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Quota:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
 				sprintf(gettext('Allowed: %s kb'),'<input type="text" size="10" name="'.$i.'quota" value="'.$quota.'" />').' '.
-				sprintf(gettext('(%u kb used)'),$used).' '.
+				sprintf(gettext('(%s kb used)'),number_format($used)).
 				"\n".
 			'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">'.gettext('Image quota information.').'</td>
@@ -113,6 +132,25 @@ function quota_getCurrentUse($userobj) {
 }
 
 /**
+ * Returns an option list of administrators who do not have ADMIN_RIGHTS
+ * @param string $owner
+ * @return string
+ */
+function quota_admin_list($owner) {
+	global $_zp_authority;
+	$adminlist = '';
+	$admins = $_zp_authority->getAdministrators();
+	foreach ($admins as $user) {
+		if ($user['valid'] && ($user['rights'] & (UPLOAD_RIGHTS)) && !($user['rights'] & (ADMIN_RIGHTS))) {
+			$adminlist .= '<option value="'.$user['user'].'"';
+			if ($owner == $user['user']) $adminlist .= ' SELECTED="SELECTED"';
+			$adminlist .= '>'.$user['user']."</option>\n";
+		}
+	}
+	return $adminlist;
+}
+
+/**
  * Returns table row(s) for the edit of an image custom data field
  *
  * @param string $discard always empty
@@ -121,24 +159,14 @@ function quota_getCurrentUse($userobj) {
  * @return string
  */
 function quota_edit_image($discard, $image, $currentimage) {
-	global $_zp_authority;
-	$adminlist = '';
-	$admins = $_zp_authority->getAdministrators();
 	$owner = $image->getOwner();
-	foreach ($admins as $user) {
-		if ($user['valid'] && ($user['rights'] & (ADMIN_RIGHTS | UPLOAD_RIGHTS))) {
-			$adminlist .= '<option value="'.$user['user'].'"';
-			if ($owner == $user['user']) $adminlist .= ' SELECTED="SELECTED"';
-			$adminlist .= '>'.$user['user']."</option>\n";
-		}
-	}
 	$html = 
 		'<tr>
 			<td valign="top">'.gettext("Owner:").'</td>
 			<td>
 				<select name="'.$currentimage.'-owner">
 					<option value="">'.gettext('*no owner')."</option>\n".
-					$adminlist.'
+					quota_admin_list($owner).'
 				</select>
 			</td>
 		</tr>';
@@ -159,6 +187,41 @@ function quota_save_image($image, $prefix) {
 }
 
 /**
+ * Returns a table entry for image assignment
+ * @param string $discard
+ * @param object $album
+ * @param string $prefix
+ * @return string
+ */
+function quota_edit_album($discard, $album, $prefix) {
+	$html = 
+		'<tr>
+			<td valign="top">'.gettext("Assign images to:").'</td>
+			<td>
+				<select name="'.$prefix.'assignee">
+					<option value="">'."</option>\n".
+					quota_admin_list('').'
+				</select>
+			</td>
+		</tr>';
+	return $html;
+}
+
+/**
+ * Assigns images within the album to an owner.
+ * @param object $album
+ * @param string $prefix
+ */
+function quota_save_album($album, $prefix) {
+	if (!empty($_POST[$prefix.'assignee'])) {
+		$sql = 'UPDATE '.prefix('images').' SET `owner`="'.mysql_real_escape_string(sanitize($_POST[$prefix.'assignee'])).'" WHERE `albumid`='.$album->get('id');
+		query($sql);
+	}
+	return $album;
+}
+
+
+/**
  * Assigns owner to new image
  * @param string $image
  * @return object
@@ -176,6 +239,7 @@ function quota_new_image($image) {
 /**
  * checks to see if the filesize is set and sets it if not
  * @param unknown_type $image
+ * @return object
  */
 function quota_image_refresh($image) {
 	$image->set('filesize',filesize($image->localpath));
@@ -185,23 +249,25 @@ function quota_image_refresh($image) {
 
 /**
  * Returns the user's quota
- * @param $quota
+ * @param int $quota
+ * @return int
  */
 function quota_getUploadQuota($quota) {
 	global $_zp_current_admin_obj, $quota_total, $quota_used;
-	if (is_object($_zp_current_admin_obj) && !($_zp_current_admin_obj->getRights() & ADMIN_RIGHTS)) {
-		$quota_used = quota_getCurrentUse($_zp_current_admin_obj);
-		$quota_total = $_zp_current_admin_obj->getQuota();
-	} else {
+	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$quota_used = 0;
 		$quota_total = -1;
+	} else {
+		$quota_used = quota_getCurrentUse($_zp_current_admin_obj);
+		$quota_total = $_zp_current_admin_obj->getQuota();
 	}
 	return $quota_total;
 }
 
 /**
  * Returns the upload limit
- * @param $uploadlimit
+ * @param int $uploadlimit
+ * @return int
  */
 function quota_getUploadLimit() {
 	global $quota_total, $quota_used;
@@ -211,8 +277,8 @@ function quota_getUploadLimit() {
 
 /**
  * Checks if upload should be allowed
- * @param $error
- * @param $image
+ * @param int $error
+ * @param object$image
  * @return int
  */
 function quota_checkQuota($error, $image) {
