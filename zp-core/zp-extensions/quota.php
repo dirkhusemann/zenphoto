@@ -40,6 +40,7 @@ zp_register_filter('image_refresh', 'quota_image_refresh');
 zp_register_filter('get_upload_quota', 'quota_getUploadQuota');
 zp_register_filter('check_upload_quota', 'quota_checkQuota');
 zp_register_filter('get_upload_limit', 'quota_getUploadLimit');
+zp_register_filter('get_upload_header_text', 'quota_get_header');
 zp_register_filter('save_album_utilities_data', 'quota_save_album');
 zp_register_filter('edit_album_custom_data', 'quota_edit_album');
 
@@ -269,7 +270,7 @@ function quota_getUploadQuota($quota) {
  * @param int $uploadlimit
  * @return int
  */
-function quota_getUploadLimit() {
+function quota_getUploadLimit($uploadlimit) {
 	global $quota_total, $quota_used;
 	$uploadlimit = ($quota_total-$quota_used)*1024;	
 	return $uploadlimit;
@@ -293,5 +294,15 @@ function quota_checkQuota($error, $image) {
 		}
 	}
 	return $error;
+}
+
+function quota_get_header($default) {
+	$uploadlimit = quota_getUploadLimit(0);
+	if ($uploadlimit <= 1024) {
+		$color = 'style="color:red"';
+	} else {
+		$color = '';
+	}
+	return sprintf(gettext('Your available upload quota is <span %1$s>%2$s</span> kb.'),$color,number_format(round($uploadlimit/1024)));
 }
 ?>

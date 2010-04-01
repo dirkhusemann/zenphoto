@@ -70,7 +70,7 @@ if (isset($_GET['action'])) {
 					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
-				
+
 				$quota = zp_apply_filter('get_upload_quota', -1);
 				foreach ($_FILES['files']['error'] as $key => $error) {
 					if ($_FILES['files']['name'][$key] == "") {
@@ -218,19 +218,10 @@ $maxupload = ini_get('upload_max_filesize');
 <p>
 <?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload); ?>
 <?php
-$uploadlimit = $maxupload = parse_size($maxupload);
-if ($quota > 0) {
-	$uploadlimit = zp_apply_filter('get_upload_limit');
-	if ($uploadlimit <= 1024) {
-		$color = 'style="color:red"';
-	} else {
-		$color = '';
-	}
-	printf(gettext('Your available upload quota is <span %1$s>%2$s</span> kb.'),$color,number_format(round($uploadlimit/1024)));
-	$maxupload = min($maxupload, $uploadlimit);
-} else {
-	echo gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!');
-}
+$maxupload = parse_size($maxupload);
+$uploadlimit = zp_apply_filter('get_upload_limit', $maxupload);
+$maxupload = min($maxupload, $uploadlimit);
+echo zp_apply_filter('get_upload_header_text', gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'));
 ?>
 </p>
 
@@ -245,12 +236,7 @@ if (isset($_GET['uploaded'])) {
 	?>
 	<div class="messagebox" id="fade-message">
 		<h2><?php echo gettext("Upload complete"); ?></h2>
-		<?php
-		echo gettext('Your files have been uploaded.').' ';
-		if ($quota > 0) {
-			printf(gettext('You have %s kb of upload left.'),number_format(round($uploadlimit/1024)));
-		}
-		?>
+		<?php echo zp_apply_filter('get_upload_header_text',gettext('Your files have been uploaded.')); ?>
 	</div>
 	<?php
 }
@@ -291,15 +277,22 @@ if (ini_get('safe_mode')) { ?>
 				//]]>
 			</script>
 		";
+		echo zp_apply_filter('seoFriendly_js', $defaultjs);
 
-		echo zp_apply_filter('seoFriendly_js', $defaultjs);	
+		$default_quota_js = "
+			<script type=\"text/javascript\">
+				function uploadify_onSelectOnce(event, data) {
+				}
+			</script>
+			";
+		echo zp_apply_filter('upload_helper_js', $default_quota_js);
 		?>
 		<script type="text/javascript">
 			<?php
 			if ($maxupload > 1024) {
 				?>
 				var buttonenable = true;
-				<?php 
+				<?php
 			} else {
 				?>
 				var buttonenable = false;
@@ -432,11 +425,14 @@ if (ini_get('safe_mode')) { ?>
 								'scriptData': {	'auth': '<?php echo md5(serialize($curadmin)); ?>' },
 								'folder': '/',
 								'multi': true,
+								'onSelectOnce':	function(event, data) {
+									uploadify_onSelectOnce(event, data);
+								},
 								<?php
 								$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/'.getOption('locale').'/select_files_button.png';
 								if(!file_exists($uploadbutton)) {
 									$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/images/select_files_button.png';
-								}							
+								}
 								$discard = NULL;
 								$info = zp_imageDims($uploadbutton, $discard);
 								if ($info['height']>60) {
@@ -445,8 +441,8 @@ if (ini_get('safe_mode')) { ?>
 								} else {
 									$rollover = "";
 								}
-								$uploadbutton = str_replace(SERVERPATH, WEBPATH, $uploadbutton);	
-								?>				
+								$uploadbutton = str_replace(SERVERPATH, WEBPATH, $uploadbutton);
+								?>
 								'buttonImg': '<?php echo $uploadbutton; ?>',
 								'height': '<?php echo $info['height'] ?>',
 								'width': '<?php echo $info['width'] ?>',
@@ -474,23 +470,23 @@ if (ini_get('safe_mode')) { ?>
 								'displayData': 'speed',
 								'simUploadLimit': 3,
 								'sizeLimit': <?php echo $uploadlimit; ?>,
-									'onAllComplete':	function(event, data) {
-																			if (data.errors) {
-																				return false;
-																			} else {
-																			<?php
-																			if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-																				?>
-																				launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
-																				<?php
-																			} else {
-																				?>
-																				launchScript('admin-upload.php',['uploaded=1']);
-																				<?php
-																			}
+								'onAllComplete':	function(event, data) {
+																		if (data.errors) {
+																			return false;
+																		} else {
+																		<?php
+																		if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 																			?>
-																			}
-																		},
+																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
+																			<?php
+																		} else {
+																			?>
+																			launchScript('admin-upload.php',['uploaded=1']);
+																			<?php
+																		}
+																		?>
+																		}
+																	},
 								'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
 								'fileExt': '<?php echo $extensions.'|*.*'; ?>'
 							});
