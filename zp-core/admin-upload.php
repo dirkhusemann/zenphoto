@@ -194,7 +194,8 @@ natcasesort($_zp_supported_images);
 $types = array_keys($_zp_extra_filetypes);
 natcasesort($types);
 $types = array_merge($_zp_supported_images, $types);
-$types[] = '*.ZIP';
+$types[] = 'ZIP';
+$upload_extensions = $types;
 $types = zp_apply_filter('upload_filetypes',$types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $types));
@@ -205,7 +206,7 @@ if (count($types)>1) {
 	printf(gettext('This web-based upload accepts the file formats: %s and %s.'), $s1, $last);
 }
 
-if ($last == '*.ZIP') echo '<br />'.gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
+if ($last == 'ZIP') echo '<br />'.gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
 $maxupload = ini_get('upload_max_filesize');
 ?>
 </p>
@@ -275,6 +276,7 @@ if (ini_get('safe_mode')) { ?>
 
 		$default_quota_js = "
 			<script type=\"text/javascript\">
+				var buttonenable = true;
 				function uploadify_onSelectOnce(event, data) {
 				}
 			</script>
@@ -467,7 +469,10 @@ if (ini_get('safe_mode')) { ?>
 																		}
 																	},
 								'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
-								'fileExt': '<?php echo implode(',',$types).'|*.*'; ?>'
+								'fileExt': '<?php
+														$list = implode(';*.',$upload_extensions);
+														echo '*.'.$list.' | *.*';
+														?>'
 							});
 						buttonstate($('#folderdisplay').val() != "");
 					});

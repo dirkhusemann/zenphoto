@@ -16,8 +16,8 @@
  * 
  * A user who exceeds his quota will not be allowed to upload files.
  * 
- * Because of the difficulty of policing quotas when ZIP files are uploaded, enabling
- * this plugin will diable ZIP file upload.
+ * Because of the difficulty of policing quotas when ZIP files are uploaded this plugin
+ * has an option to diable ZIP file upload.
  *
  * @author Stephen Billard (sbillard)
  * @package plugins
@@ -57,6 +57,7 @@ class Quota_management {
 	 */
 	function Quota_management() {
 		setOptionDefault('quota_default', 250000);
+		setOptionDefault('quota_allowZIP', 1);
 	}
 
 
@@ -69,7 +70,7 @@ class Quota_management {
 		return array(	gettext('Default quota') => array('key' => 'quota_default', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext('Default size limit in kilobytes.')),
 									gettext('Allow ZIPfiles') => array('key' => 'quota_allowZIP', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('The size of a ZIP file may be slightly smaller than the sum of the files it contains. Check this box if you wish to diable uploaing of ZIPfiles.'))
+										'desc' => gettext('The size of a ZIP file may be slightly smaller than the sum of the <em>image</em> files it contains. Un-check this box if you wish to disable uploaing of ZIP files.'))
 		);
 	}
 
@@ -357,7 +358,7 @@ function quota_upload_filetypes($types) {
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS) || (getoption('quota_allowZIP'))) {
 		return $types;
 	}
-	$key = array_search('*.ZIP', $types);
+	$key = array_search('ZIP', $types);
 	unset($types[$key]);
 	return $types;
 }
