@@ -12,7 +12,7 @@ define('UPLOAD_ERR_QUOTA', -1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
+if (!($_zp_loggedin & (UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
@@ -71,7 +71,6 @@ if (isset($_GET['action'])) {
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
 
-				$quota = zp_apply_filter('get_upload_quota', -1);
 				foreach ($_FILES['files']['error'] as $key => $error) {
 					if ($_FILES['files']['name'][$key] == "") {
 						$error = false;
@@ -81,28 +80,26 @@ if (isset($_GET['action'])) {
 						$tmp_name = $_FILES['files']['tmp_name'][$key];
 						$name = trim($_FILES['files']['name'][$key]);
 						$soename = seoFriendly($name);
-						if (is_valid_image($name) || is_valid_other_type($name)) {
-							if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
-							$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
-							$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tmp_name);
-							if (!$error) {
-								move_uploaded_file($tmp_name, $uploadfile);
-								@chmod($uploadfile, 0666 & CHMOD_VALUE);
-								$image = newImage($album, $soename);
-								if ($name != $soename) {
-									$image->setTitle($name);
-									$image->save();
+						$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tmp_name);
+						if (!error) {
+							if (is_valid_image($name) || is_valid_other_type($name)) {
+								if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
+								$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
+								if (!$error) {
+									move_uploaded_file($tmp_name, $uploadfile);
+									@chmod($uploadfile, 0666 & CHMOD_VALUE);
+									$image = newImage($album, $soename);
+									if ($name != $soename) {
+										$image->setTitle($name);
+										$image->save();
+									}
 								}
-							}
-						} else if (is_zip($name)) {
-							if ($quota > 0) {
-								$error = UPLOAD_ERR_EXTENSION;
-							} else {
+							} else if (is_zip($name)) {
 								unzip($tmp_name, $uploaddir);
+							} else {
+								$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
+								break;
 							}
-						} else {
-							$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
-							break;
 						}
 					} else {
 						break;
@@ -197,21 +194,18 @@ natcasesort($_zp_supported_images);
 $types = array_keys($_zp_extra_filetypes);
 natcasesort($types);
 $types = array_merge($_zp_supported_images, $types);
+$types[] = '*.ZIP';
+$types = zp_apply_filter('upload_filetypes',$types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $types));
 $used = 0;
-$quota = zp_apply_filter('get_upload_quota', -1);
-if ($quota > 0) {
-	$extensions = '';
-} else {
-	$extensions = '*.zip';
-}
 if (count($types)>1) {
-	printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s, and %s.'), $s1, $last);
+	printf(gettext('This web-based upload accepts the file formats: %s, and %s.'), $s1, $last);
 } else {
-	printf(gettext('This web-based upload accepts the ZenPhoto supported file formats: %s and %s.'), $s1, $last);
+	printf(gettext('This web-based upload accepts the file formats: %s and %s.'), $s1, $last);
 }
-if (!empty($extensions)) echo '<br />'.gettext('You can also upload ZIP files containing files of these types.');
+
+if ($last == '*.ZIP') echo '<br />'.gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
 $maxupload = ini_get('upload_max_filesize');
 ?>
 </p>
@@ -221,7 +215,7 @@ $maxupload = ini_get('upload_max_filesize');
 $maxupload = parse_size($maxupload);
 $uploadlimit = zp_apply_filter('get_upload_limit', $maxupload);
 $maxupload = min($maxupload, $uploadlimit);
-echo zp_apply_filter('get_upload_header_text', gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'));
+echo ' '.zp_apply_filter('get_upload_header_text', gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'));
 ?>
 </p>
 
@@ -288,17 +282,6 @@ if (ini_get('safe_mode')) { ?>
 		echo zp_apply_filter('upload_helper_js', $default_quota_js);
 		?>
 		<script type="text/javascript">
-			<?php
-			if ($maxupload > 1024) {
-				?>
-				var buttonenable = true;
-				<?php
-			} else {
-				?>
-				var buttonenable = false;
-				<?php
-			}
-			?>
 			function buttonstate(good) {
 				if (good && buttonenable) {
 					$('#fileUploadbuttons').show();
@@ -404,10 +387,6 @@ if (ini_get('safe_mode')) { ?>
 		<hr />
 
 		<?php
-		$types = array_merge($_zp_supported_images, array_keys($_zp_extra_filetypes)); // supported extensions
-		foreach ($types as $ext) {
-			$extensions .= ';*.'.$ext.';*.'.strtoupper($ext);
-		}
 		if($uploadtype != 'http') {
 			$admins = $_zp_authority->getAdministrators();
 			$curadmin = $admins[$_zp_current_admin_obj->getID()];
@@ -488,7 +467,7 @@ if (ini_get('safe_mode')) { ?>
 																		}
 																	},
 								'fileDesc': '<?php echo gettext('Zenphoto supported file types | all files'); ?>',
-								'fileExt': '<?php echo $extensions.'|*.*'; ?>'
+								'fileExt': '<?php echo implode(',',$types).'|*.*'; ?>'
 							});
 						buttonstate($('#folderdisplay').val() != "");
 					});

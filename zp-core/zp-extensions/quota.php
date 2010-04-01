@@ -3,7 +3,7 @@
  * A quota management system to limit the sum of sizes of uploaded images.
  * 
  * Set the default quota on the plugin options page.
- * You can change the quota for individual users on the Admin tab. Users with ADMIN_RIGHTS
+ * You can change the quota for individual users on the Admin tab. Users with ADMIN_RIGHTS or MANAGE_ALL_ALBUM_RIGHTS
  * are not subject to quotas and will not be assigned ownership of an image.
  * 
  * Images uploaded by a user will be marked as his and will count toward his quota.
@@ -35,14 +35,15 @@ zp_register_filter('save_admin_custom_data', 'quota_save_admin');
 zp_register_filter('edit_admin_custom_data', 'quota_edit_admin');
 zp_register_filter('save_image_utilities_data', 'quota_save_image');
 zp_register_filter('edit_image_custom_data', 'quota_edit_image');
+zp_register_filter('save_album_utilities_data', 'quota_save_album');
+zp_register_filter('edit_album_custom_data', 'quota_edit_album');
 zp_register_filter('new_image', 'quota_new_image');
 zp_register_filter('image_refresh', 'quota_image_refresh');
-zp_register_filter('get_upload_quota', 'quota_getUploadQuota');
 zp_register_filter('check_upload_quota', 'quota_checkQuota');
 zp_register_filter('get_upload_limit', 'quota_getUploadLimit');
 zp_register_filter('get_upload_header_text', 'quota_get_header');
-zp_register_filter('save_album_utilities_data', 'quota_save_album');
-zp_register_filter('edit_album_custom_data', 'quota_edit_album');
+zp_register_filter('upload_filetypes', 'quota_upload_filetypes');
+zp_register_filter('upload_helper_js', 'quota_upload_helper_js');
 
 /**
  * Option handler class
@@ -66,16 +67,16 @@ class Quota_management {
 	 */
 	function getOptionsSupported() {
 		return array(	gettext('Default quota') => array('key' => 'quota_default', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext('Default size limit in kilobytes.')));
+										'desc' => gettext('Default size limit in kilobytes.')),
+									gettext('Allow ZIPfiles') => array('key' => 'quota_allowZIP', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('The size of a ZIP file may be slightly smaller than the sum of the files it contains. Check this box if you wish to diable uploaing of ZIPfiles.'))
+		);
 	}
 
 	function handleOption($option, $currentValue) {
 	}
 
 }
-
-$quota_used = NULL;
-$quota_total = NULL;
 
 /**
  * Saves admin custom data
@@ -103,7 +104,7 @@ function quota_save_admin($discard, $userobj, $i) {
  * @return string
  */
 function quota_edit_admin($html, $userobj, $i, $background, $current) {
-	if ($userobj->getRights() & ADMIN_RIGHTS) return $html;
+	if ($userobj->getRights() & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return $html;
 	if (!($userobj->getRights() & UPLOAD_RIGHTS)) return $html;
 	$quota = $userobj->getQuota();
 	$used = quota_getCurrentUse($userobj);
@@ -127,13 +128,17 @@ function quota_edit_admin($html, $userobj, $i, $background, $current) {
  * @return int
  */
 function quota_getCurrentUse($userobj) {
+	global $_zp_current_admin_obj;
+	if (is_null($userobj)) {
+		$userobj = $_zp_current_admin_obj;
+	}
 	$sql = 'SELECT sum(`filesize`) FROM '.prefix('images').' WHERE `owner`="'.$userobj->getUser().'"';
 	$result = query_single_row($sql);
 	return array_shift($result)/1024;
 }
 
 /**
- * Returns an option list of administrators who do not have ADMIN_RIGHTS
+ * Returns an option list of administrators who do not have ADMIN_RIGHTS or MANAGE_ALL_ALBUM_RIGHTS
  * @param string $owner
  * @return string
  */
@@ -142,7 +147,7 @@ function quota_admin_list($owner) {
 	$adminlist = '';
 	$admins = $_zp_authority->getAdministrators();
 	foreach ($admins as $user) {
-		if ($user['valid'] && ($user['rights'] & (UPLOAD_RIGHTS)) && !($user['rights'] & (ADMIN_RIGHTS))) {
+		if ($user['valid'] && ($user['rights'] & (UPLOAD_RIGHTS)) && !($user['rights'] & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) {
 			$adminlist .= '<option value="'.$user['user'].'"';
 			if ($owner == $user['user']) $adminlist .= ' SELECTED="SELECTED"';
 			$adminlist .= '>'.$user['user']."</option>\n";
@@ -254,15 +259,13 @@ function quota_image_refresh($image) {
  * @return int
  */
 function quota_getUploadQuota($quota) {
-	global $_zp_current_admin_obj, $quota_total, $quota_used;
-	if (zp_loggedin(ADMIN_RIGHTS)) {
-		$quota_used = 0;
-		$quota_total = -1;
+	global $_zp_current_admin_obj, $quota;
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+		$quota = -1;
 	} else {
-		$quota_used = quota_getCurrentUse($_zp_current_admin_obj);
-		$quota_total = $_zp_current_admin_obj->getQuota();
+		$quota = $_zp_current_admin_obj->getQuota();
 	}
-	return $quota_total;
+	return $quota;
 }
 
 /**
@@ -271,38 +274,91 @@ function quota_getUploadQuota($quota) {
  * @return int
  */
 function quota_getUploadLimit($uploadlimit) {
-	global $quota_total, $quota_used;
-	$uploadlimit = ($quota_total-$quota_used)*1024;	
+	$uploadlimit = (quota_getUploadQuota(0)-quota_getCurrentUse(NULL))*1024;	
 	return $uploadlimit;
 }
 
 /**
  * Checks if upload should be allowed
  * @param int $error
- * @param object$image
+ * @param string $image
  * @return int
  */
 function quota_checkQuota($error, $image) {
-	global $quota_total, $quota_used;
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+		return UPLOAD_ERR_OK;
+	}
+	if (getSuffix($image) == 'zip') {
+		return UPLOAD_ERR_EXTENSION;
+	}
+	$quota = quota_getUploadQuota(0);
 	$size = round(filesize($image)/1024);
-	if ($quota_total > 0) {
-		if ($quota_used + $size > $quota_total) {
+	if ($quota > 0) {
+		if (quota_getCurrentUse(NULL) + $size > $quota) {
 			$error = UPLOAD_ERR_QUOTA;
 			break;
-		} else {
-			$quota_used = $quota_used + $size;
 		}
 	}
 	return $error;
 }
 
+/**
+ * Returns quota text for header, etc.
+ * @param string $default
+ * @return string
+ */
 function quota_get_header($default) {
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+		return $default;
+	}
 	$uploadlimit = quota_getUploadLimit(0);
 	if ($uploadlimit <= 1024) {
-		$color = 'style="color:red"';
+		$color = 'style="color:red;"';
+		$warn = ' <span style="color:red;">'.gettext('Uploading is disabled.').'</span>';
 	} else {
 		$color = '';
+		$warn = '';
 	}
-	return sprintf(gettext('Your available upload quota is <span %1$s>%2$s</span> kb.'),$color,number_format(round($uploadlimit/1024)));
+	return sprintf(gettext('Your available upload quota is <span %1$s>%2$s</span> kb.'),$color,number_format(round($uploadlimit/1024))).$warn;
+}
+
+/**
+ * Returns Javascript needed to support quota system
+ * @param string $defaultJS
+ * @return string
+ */
+function quota_upload_helper_js($defaultJS) {
+		$quota_js = "
+			<script type=\"text/javascript\">";
+
+			if (quota_getUploadLimit(0) > 1024) {
+				$quota_js .= "
+				var buttonenable = true;";
+
+			} else {
+				$quota_js .= "
+				var buttonenable = false;";
+			}
+		
+		$quota_js .= "
+				function uploadify_onSelectOnce(event, data) {
+				}
+			</script>
+			";
+		return $quota_js;
+}
+
+/**
+ * Removes ZIP from list of upload suffixes
+ * @param array $types
+ * @return array
+ */
+function quota_upload_filetypes($types) {
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS) || (getoption('quota_allowZIP'))) {
+		return $types;
+	}
+	$key = array_search('*.ZIP', $types);
+	unset($types[$key]);
+	return $types;
 }
 ?>

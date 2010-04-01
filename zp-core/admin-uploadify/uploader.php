@@ -39,24 +39,25 @@ if (!empty($_FILES)) {
 				$album->save();
 			}
 			@chmod($targetPath, CHMOD_VALUE);
-			$quota = zp_apply_filter('get_upload_quota', -1);
-			if (is_valid_image($name) || is_valid_other_type($name)) {
-				$soename = seoFriendly($name);
-				if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
-				$targetFile =  $targetPath.'/'.internalToFilesystem($soename);
-				$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tempFile);
-				if (!$error) {
-					$rslt = move_uploaded_file($tempFile,$targetFile);
-					@chmod($targetFile, 0666 & CHMOD_VALUE);
-					$album = new Album(New Gallery(), $folder);
-					$image = newImage($album, $soename);
-					if ($name != $soename && $image->getTitle() == substr($soename, 0, strrpos($soename, '.'))) {
-						$image->setTitle(substr($name, 0, strrpos($name, '.')));
-						$image->save();
-					}
+			$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tempFile);
+			if (!$error) {
+				if (is_valid_image($name) || is_valid_other_type($name)) {
+					$soename = seoFriendly($name);
+					if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
+					$targetFile =  $targetPath.'/'.internalToFilesystem($soename);
+	
+						$rslt = move_uploaded_file($tempFile,$targetFile);
+						@chmod($targetFile, 0666 & CHMOD_VALUE);
+						$album = new Album(New Gallery(), $folder);
+						$image = newImage($album, $soename);
+						if ($name != $soename && $image->getTitle() == substr($soename, 0, strrpos($soename, '.'))) {
+							$image->setTitle(substr($name, 0, strrpos($name, '.')));
+							$image->save();
+						}
+	
+				} else if (is_zip($name)) {
+					unzip($tempFile, $targetPath);
 				}
-			} else if ($quota < 0 && is_zip($name)) {
-				unzip($tempFile, $targetPath);
 			}
 		}
 	}
