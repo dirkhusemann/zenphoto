@@ -4,13 +4,13 @@
  *
  * Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL. The sitemap is cached as a xml file within the root "cache_html/sitemap" folder.
  *
- * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer)
+ * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap
  * @package plugins
  */
 
 $plugin_is_filter = 5;
 $plugin_description = 'Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL.';
-$plugin_author = 'Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer)';
+$plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer)';
 $plugin_version = '1.3.0';
 $plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---zenphoto-sitemap-extended.php.html';
 $option_interface = new sitemap();
