@@ -329,24 +329,25 @@ function quota_get_header($default) {
  * @return string
  */
 function quota_upload_helper_js($defaultJS) {
-		$quota_js = "
-			<script type=\"text/javascript\">";
+	$quota = quota_getUploadLimit(0);
+	$quota_js = "
+		<script type=\"text/javascript\">";
 
-			if (quota_getUploadLimit(0) > 1024) {
-				$quota_js .= "
-				var buttonenable = true;";
+		if ($quota < 0 || $quota > 1024) {
+			$quota_js .= "
+			var buttonenable = true;";
 
-			} else {
-				$quota_js .= "
-				var buttonenable = false;";
+		} else {
+			$quota_js .= "
+			var buttonenable = false;";
+		}
+	
+	$quota_js .= "
+			function uploadify_onSelectOnce(event, data) {
 			}
-		
-		$quota_js .= "
-				function uploadify_onSelectOnce(event, data) {
-				}
-			</script>
-			";
-		return $quota_js;
+		</script>
+		";
+	return $quota_js;
 }
 
 /**

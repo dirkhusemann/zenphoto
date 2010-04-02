@@ -81,7 +81,7 @@ if (isset($_GET['action'])) {
 						$name = trim($_FILES['files']['name'][$key]);
 						$soename = seoFriendly($name);
 						$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tmp_name);
-						if (!error) {
+						if (!$error) {
 							if (is_valid_image($name) || is_valid_other_type($name)) {
 								if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
 								$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
