@@ -1,21 +1,21 @@
 <?php
 /**
  * A quota management system to limit the sum of sizes of uploaded images.
- * 
+ *
  * Set the default quota on the plugin options page.
  * You can change the quota for individual users on the Admin tab. Users with ADMIN_RIGHTS or MANAGE_ALL_ALBUM_RIGHTS
  * are not subject to quotas and will not be assigned ownership of an image.
- * 
+ *
  * Images uploaded by a user will be marked as his and will count toward his quota.
  * Images uploaded via FTP will not necessarily have an owner assigned. If there is
  * one assiged, it is the logged on user when the image is discovered by Zenphoto.
- * 
+ *
  * You may also assign the complete set of images in an albums to a user. (Just the images in the
- * album. If you want to assign images from subalbums, you need to do that for each 
+ * album. If you want to assign images from subalbums, you need to do that for each
  * subalbum.)
- * 
+ *
  * A user who exceeds his quota will not be allowed to upload files.
- * 
+ *
  * Because of the difficulty of policing quotas when ZIP files are uploaded this plugin
  * has an option to diable ZIP file upload.
  *
@@ -26,7 +26,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides a quota management system to limit the sum of sizes of images a user uploads. <strong>NOTE</strong> if FTP is used to upload images, manual user assignment is necessary. ZIP file upload is disabled as as quotas are not applied to the files contained therein.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.0'; 
+$plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-quota.php.html";
 
 $option_interface = new Quota_management();
@@ -110,7 +110,7 @@ function quota_edit_admin($html, $userobj, $i, $background, $current) {
 	$quota = $userobj->getQuota();
 	$used = quota_getCurrentUse($userobj);
 	if ($quota == NULL) $quota = getOption('quota_default');
-	$result = 
+	$result =
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Quota:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
@@ -167,7 +167,7 @@ function quota_admin_list($owner) {
  */
 function quota_edit_image($discard, $image, $currentimage) {
 	$owner = $image->getOwner();
-	$html = 
+	$html =
 		'<tr>
 			<td valign="top">'.gettext("Owner:").'</td>
 			<td>
@@ -201,7 +201,7 @@ function quota_save_image($image, $prefix) {
  * @return string
  */
 function quota_edit_album($discard, $album, $prefix) {
-	$html = 
+	$html =
 		'<tr>
 			<td valign="top">'.gettext("Assign images to:").'</td>
 			<td>
@@ -275,7 +275,7 @@ function quota_getUploadQuota($quota) {
  * @return int
  */
 function quota_getUploadLimit($uploadlimit) {
-	$uploadlimit = (quota_getUploadQuota(0)-quota_getCurrentUse(NULL))*1024;	
+	$uploadlimit = (quota_getUploadQuota(0)-quota_getCurrentUse(NULL))*1024;
 	return $uploadlimit;
 }
 
@@ -331,17 +331,15 @@ function quota_get_header($default) {
 function quota_upload_helper_js($defaultJS) {
 	$quota = quota_getUploadLimit(0);
 	$quotaOK = $quota < 0 || $quota > 1024;
-	$quota_js = '<script type="text/javascript">';
-	if (!$quotaOK) {
-		$quota_js .= "
+	if ($quotaOK) {
+		$quota_js = '';
+	} else {
+		$quota_js = "
 			$(document).ready(function() {
 				$('#albumselect').hide();
 			});";
 	}
-	$quota_js .= "
-			function uploadify_onSelectOnce(event, data) {
-			}";
-	return $quota_js.'</script>';
+	return $quota_js.$defaultJS;
 }
 
 /**
