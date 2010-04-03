@@ -331,7 +331,7 @@ function quota_get_header($default) {
 function quota_upload_helper_js($defaultJS) {
 	$quota = quota_getUploadLimit(0);
 	$quotaOK = $quota < 0 || $quota > 1024;
-	$quota_js = '';
+	$quota_js = '<script type="text/javascript">';
 	if (!$quotaOK) {
 		$quota_js .= "
 			$(document).ready(function() {
@@ -341,7 +341,7 @@ function quota_upload_helper_js($defaultJS) {
 	$quota_js .= "
 			function uploadify_onSelectOnce(event, data) {
 			}";
-	return $quota_js;
+	return $quota_js.'</script>';
 }
 
 /**

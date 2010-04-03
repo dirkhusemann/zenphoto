@@ -15,6 +15,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."-
 
 $option_interface = new uploadlimit();
 zp_register_filter('upload_helper_js', 'uploadLimiterJS');
+zp_register_filter('get_upload_header_text', 'uploadLimiterHeaderMessage');
 
 /**
  * Option handler class
@@ -58,8 +59,12 @@ global $_zp_loggedin;
 	$albumlist = array();
 	genAlbumUploadList($albumlist);
 	$rootrights = isMyAlbum('/', UPLOAD_RIGHTS);
+	$uploadtype = zp_getcookie('uploadtype');
 ?>
-<script>
+<script type="text/javascript">
+<?php if($uploadtype == "http") { ?>
+$('#albumselect').hide();
+<?php } ?>
 var buttonenable = true;
 function generateUploadlimit(selectedalbum,limitalbums) {
 	$('#uploadlimitmessage').remove();
@@ -75,24 +80,12 @@ function generateUploadlimit(selectedalbum,limitalbums) {
 				imagesleft = uploadlimit - imagenumber[key];
 			} 
 			if(imagesleft === 0) {
-		   	$('#fileUploadbuttons,#addUploadBoxes').hide();
+		   	$('#fileUploadbuttons').hide();
 		   	queuelimit = 0;
 		   	message = '<?php echo gettext('The album exceeded the image number limit. You cannot upload more images!'); ?>';
 				//alert(message);
 				$('#albumselect').prepend('<span id="uploadlimitmessage" style="color:red; font-weight: bold;">'+message+'<br /><br /></span>');
 			} else {
-				$('#uploadboxes,#addUploadBoxes').show();
-				if(imagesleft <= 5) {
-					$('#addUploadBoxes').hide();
-					$('.fileuploadbox').remove();
-					if($('#addUploadBoxes').length != 0) { // prevent display of uploadbox if using multi file upload
-						for(var i = 1; i <= imagesleft;i++) {
-							$('#uploadboxes').prepend('<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>');
-						}
-					}
-				} else {
-					$('#addUploadBoxes').hide();
-				}
 				queuelimit = imagesleft;	
 				message = '<?php echo gettext("Maximum number of images to upload for this album: "); ?>'+imagesleft;
 				//alert(message);
@@ -105,7 +98,7 @@ function generateUploadlimit(selectedalbum,limitalbums) {
 var limitalbums = new Array(<?php printUploadLimitedAlbums($albumlist); ?>);
 <?php if(isset($_GET['album']) && !empty($_GET['album'])) { // if we upload 
 	$selectedalbum = sanitize($_GET['album']);
-	?>
+?>
 var selectedalbum = '<?php echo $selectedalbum; ?>'; 
 	<?php } else if($rootrights) { ?>
 var selectedalbum = ""; // choose the first entry of the select list if nothing is selected and the user has root rights (so root no message...)
@@ -117,7 +110,6 @@ $("#albumselect").change(function() {
 	selectedalbum = $("#albumselectmenu").val();
 	queuelimit = generateUploadlimit(selectedalbum,limitalbums);	
 });
-
 function uploadify_onSelectOnce(event, data) {
 	if (data.fileCount > queuelimit) {
 		alert('<?php echo gettext('Too many images! You can only upload: '); ?>'+queuelimit);
@@ -126,6 +118,19 @@ function uploadify_onSelectOnce(event, data) {
 }
 </script>
 <?php //}
+}
+
+function uploadLimiterHeaderMessage($default) {
+	/*if (zp_loggedin(ADMIN_RIGHTS)) {
+		return $default;
+		} */
+	$warn = "";
+	$uploadtype = zp_getcookie('uploadtype');
+	echo $uploadtype;
+	if($uploadtype != "multifile") {
+		$warn = '<p style="color:red;">'.gettext('HTTP single file uploading is disabled because upload limitations are in effect. Please use the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>').'</p>';
+	}
+	return $warn;
 }
 
 /*

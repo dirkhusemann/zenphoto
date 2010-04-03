@@ -244,7 +244,7 @@ if (ini_get('safe_mode')) { ?>
 }
 ?>
 
-<form name="uploadform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="post"
+<form name="uploadform" id="uploaderform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="post"
 												onsubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" />
 	<input type="hidden" name="existingfolder" value="false" />
@@ -278,8 +278,8 @@ if (ini_get('safe_mode')) { ?>
 			function uploadify_onSelectOnce(event, data) {
 			}";
 		?>
+		<?php echo zp_apply_filter('upload_helper_js', $default_quota_js)."\n"; ?>
 		<script type="text/javascript">
-			<?php echo zp_apply_filter('upload_helper_js', $default_quota_js)."\n"; ?>
 			function buttonstate(good) {
 				if (good) {
 					$('#fileUploadbuttons').show();
@@ -357,15 +357,13 @@ if (ini_get('safe_mode')) { ?>
 
 		<div id="newalbumbox" style="margin-top: 5px;">
 			<div>
-				<label>
 					<input id="newalbumcheckbox" type="checkbox" name="newalbum"<?php echo $checked; ?> onclick="albumSwitch(this.form.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')" />
-					<?php echo gettext("Make a new Album"); ?>
-				</label>
+					<label for="newalbumcheckbox"><?php echo gettext("Make a new Album"); ?></label>
 			</div>
 			<div id="publishtext"><?php echo gettext("and"); ?>
-				<label>
-					<input type="checkbox" name="publishalbum" id="publishalbum" value="1" <?php echo $publishchecked; ?> /> <?php echo gettext("Publish the album so everyone can see it."); ?>
-				</label>
+				
+					<input type="checkbox" name="publishalbum" id="publishalbum" value="1" <?php echo $publishchecked; ?> /> 
+					<label for="publishalbum"><?php echo gettext("Publish the album so everyone can see it."); ?></label>
 			</div>
 		</div>
 		<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("titled:"); ?>
@@ -376,9 +374,9 @@ if (ini_get('safe_mode')) { ?>
 				<div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 				<input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="disabled"
 											onkeyup="buttonstate(validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));" />
-				<label><input type="checkbox" name="autogenfolder" id="autogen" checked="checked"
+				<input type="checkbox" name="autogenfolder" id="autogen" checked="checked"
 											onclick="buttonstate(toggleAutogen('folderdisplay', 'albumtitle', this));" />
-											<?php echo gettext("Auto-generate"); ?></label>
+											<label for="autogen"><?php echo gettext("Auto-generate"); ?></label>
 				<br />
 				<br />
 			</div>
@@ -487,7 +485,7 @@ if (ini_get('safe_mode')) { ?>
 					<a href="javascript:$('#fileUpload').uploadifyClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
 				<br clear="all" /><br />
 				</p>
-				<p><?php echo gettext('If your upload does not work try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=http\');" >http-browser single file upload</a> or use FTP instead.'); ?></p>
+				<p id="uploadswitch"><?php echo gettext('If your upload does not work try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=http\');" >http-browser single file upload</a> or use FTP instead.'); ?></p>
 			</div>
 			<?php
 		} else {
@@ -519,7 +517,7 @@ if (ini_get('safe_mode')) { ?>
 					</p>
 					<br /><br clear="all" />
 				</div>
-				<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
+				<p id="uploadswitch"><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
 			</div>
 			<?php
 		}
