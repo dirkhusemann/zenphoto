@@ -330,23 +330,17 @@ function quota_get_header($default) {
  */
 function quota_upload_helper_js($defaultJS) {
 	$quota = quota_getUploadLimit(0);
-	$quota_js = "
-		<script type=\"text/javascript\">";
-
-		if ($quota < 0 || $quota > 1024) {
-			$quota_js .= "
-			var buttonenable = true;";
-
-		} else {
-			$quota_js .= "
-			var buttonenable = false;";
-		}
-	
+	$quotaOK = $quota < 0 || $quota > 1024;
+	$quota_js = '';
+	if (!$quotaOK) {
+		$quota_js .= "
+			$(document).ready(function() {
+				$('#albumselect').hide();
+			});";
+	}
 	$quota_js .= "
 			function uploadify_onSelectOnce(event, data) {
-			}
-		</script>
-		";
+			}";
 	return $quota_js;
 }
 

@@ -272,26 +272,21 @@ if (ini_get('safe_mode')) { ?>
 				//]]>
 			</script>
 		";
-		echo zp_apply_filter('seoFriendly_js', $defaultjs);
+		echo zp_apply_filter('seoFriendly_js', $defaultjs)."\n";
 
 		$default_quota_js = "
-			<script type=\"text/javascript\">
-				var buttonenable = true;
-				function uploadify_onSelectOnce(event, data) {
-				}
-			</script>
-			";
-		echo zp_apply_filter('upload_helper_js', $default_quota_js);
+			function uploadify_onSelectOnce(event, data) {
+			}";
 		?>
 		<script type="text/javascript">
+			<?php echo zp_apply_filter('upload_helper_js', $default_quota_js)."\n"; ?>
 			function buttonstate(good) {
-				if (good && buttonenable) {
+				if (good) {
 					$('#fileUploadbuttons').show();
 				} else {
 					$('#fileUploadbuttons').hide();
 				}
 			}
-
 			function albumSelect() {
 				var sel = document.getElementById('albumselectmenu');
 				buttonstate(albumSwitch(sel, true, '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));
@@ -299,7 +294,7 @@ if (ini_get('safe_mode')) { ?>
 		</script>
 		<select id="albumselectmenu" name="albumselect" onchange="albumSelect()">
 			<?php
-				if ($rootrights) {
+			if ($rootrights) {
 				?>
 				<option value="" selected="selected" style="font-weight: bold;">/</option>
 				<?php
@@ -308,7 +303,12 @@ if (ini_get('safe_mode')) { ?>
 			if (isset($_GET['album'])) {
 				$passedalbum = sanitize($_GET['album']);
 			} else {
+				if ($rootrights) {
 				$passedalbum = NULL;
+				} else {
+					$alist = $albumlist;
+					$passedalbum = array_shift($alist);
+				}
 			}
 			foreach ($albumlist as $fullfolder => $albumtitle) {
 				$singlefolder = $fullfolder;
@@ -394,7 +394,7 @@ if (ini_get('safe_mode')) { ?>
 			$curadmin = $admins[$_zp_current_admin_obj->getID()];
 			?>
 			<div id="uploadboxes" style="display: none;"></div> <!--  need this so that toggling it does not fail. -->
-			<div>
+			<div id="upload_action">
 			<!-- UPLOADIFY JQUERY/FLASH MULTIFILE UPLOAD TEST -->
 				<script type="text/javascript">
 					if (FlashDetect.installed) {
@@ -492,33 +492,35 @@ if (ini_get('safe_mode')) { ?>
 			<?php
 		} else {
 			?>
-			<div id="uploadboxes" style="display: none;">
-				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
-				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
-				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
-				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
-				<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
+			<div id="upload_action">
+				<div id="uploadboxes" style="display: none;">
+					<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
+					<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
+					<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
+					<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
+					<div class="fileuploadbox"><input type="file" size="40" name="files[]" /></div>
 
-				<div id="place" style="display: none;"></div>
-				<!-- New boxes get inserted before this -->
+					<div id="place" style="display: none;"></div>
+					<!-- New boxes get inserted before this -->
 
-				<div style="display:none">
-				<!-- This is the template that others are copied from -->
-				<div class="fileuploadbox" id="filetemplate" ><input type="file" size="40" name="files[]" value="x" /></div>
+					<div style="display:none">
+					<!-- This is the template that others are copied from -->
+					<div class="fileuploadbox" id="filetemplate" ><input type="file" size="40" name="files[]" value="x" /></div>
+					</div>
+					<p id="addUploadBoxes"><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
+					<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
+
+
+					<p id="fileUploadbuttons" class="buttons">
+						<button type="submit" value="<?php echo gettext('Upload'); ?>"
+							onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button">
+							<img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?>
+						</button>
+					</p>
+					<br /><br clear="all" />
 				</div>
-				<p id="addUploadBoxes"><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
-				<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
-
-
-				<p id="fileUploadbuttons" class="buttons">
-					<button type="submit" value="<?php echo gettext('Upload'); ?>"
-						onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button">
-						<img src="images/pass.png" alt="" /><?php echo gettext('Upload'); ?>
-					</button>
-				</p>
-				<br /><br clear="all" />
+				<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
 			</div>
-			<p><?php echo gettext('Try the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>'); ?></p>
 			<?php
 		}
 	} else {
