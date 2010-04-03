@@ -1502,7 +1502,7 @@ function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $n
 		}
 		for ($i=$j; $i <= min($total, $j+6); $i++) {
 			if($i == $current) {
-				echo "<li>".$i."</li>\n";
+				echo "<li class=\"current\">".$i."</li>\n";
 			} else {
 				if($i == 1 AND getOption("zenpage_zp_index_news")) {
 					echo "<li><a href='".getNewsIndexURL()."' title='".gettext("Page")." ".$i."'>".$i."</a></li>\n";
