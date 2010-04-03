@@ -26,6 +26,7 @@ if (isset($_GET['uploadtype'])) {
 	$uploadtype = sanitize($_GET['uploadtype'])	;
 	zp_setcookie('uploadtype', $uploadtype);
 }
+if (empty($uploadtype)) $uploadtype = 'multifile';
 $gallery = new Gallery();
 
 /* handle posts */
@@ -278,8 +279,8 @@ if (ini_get('safe_mode')) { ?>
 			function uploadify_onSelectOnce(event, data) {
 			}";
 		?>
-		<?php echo zp_apply_filter('upload_helper_js', $default_quota_js)."\n"; ?>
 		<script type="text/javascript">
+			<?php echo zp_apply_filter('upload_helper_js', $default_quota_js)."\n"; ?>
 			function buttonstate(good) {
 				if (good) {
 					$('#fileUploadbuttons').show();
@@ -361,8 +362,8 @@ if (ini_get('safe_mode')) { ?>
 					<label for="newalbumcheckbox"><?php echo gettext("Make a new Album"); ?></label>
 			</div>
 			<div id="publishtext"><?php echo gettext("and"); ?>
-				
-					<input type="checkbox" name="publishalbum" id="publishalbum" value="1" <?php echo $publishchecked; ?> /> 
+
+					<input type="checkbox" name="publishalbum" id="publishalbum" value="1" <?php echo $publishchecked; ?> />
 					<label for="publishalbum"><?php echo gettext("Publish the album so everyone can see it."); ?></label>
 			</div>
 		</div>
