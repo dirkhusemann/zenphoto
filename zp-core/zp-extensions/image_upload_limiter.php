@@ -32,6 +32,7 @@ class uploadlimit {
 	 */
 	function uploadlimit() {
 		setOptionDefault('imageuploadlimit', 5);
+		setOptionDefault('imageuploadlimit_newalbum', 0);
 		setOptionDefault('imageuploadlimit_zip', 0); // this is meant to not to be changed
 	}
 
@@ -43,7 +44,10 @@ class uploadlimit {
 	 */
 	function getOptionsSupported() {
 		return array(	gettext('Upload limit') => array('key' => 'imageuploadlimit', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext('The maximum number of images per album if uploading via the multifile upload.')));
+										'desc' => gettext('The maximum number of images per album if uploading via the multifile upload.')),
+		gettext('Disable new album creation') => array('key' => 'imageuploadlimit_newalbum', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('If checked users cannot create new albums.'))
+		);
 	}
 
 	function handleOption($option, $currentValue) {
@@ -75,11 +79,24 @@ function uploadLimiterJS($defaultJS) {
 		genAlbumUploadList($albumlist);
 		$rootrights = isMyAlbum('/', UPLOAD_RIGHTS);
 		$uploadtype = zp_getcookie('uploadtype');
-		if($uploadtype == "http") {
-			$js .= "$('#albumselect').hide();";
-		}
+		$limitalbums = getUploadLimitedAlbums($albumlist);
 		$imagenumber = getUploadImagesInAlbum($albumlist);
-		$js .= "
+		if($uploadtype == "http") {
+			$js .= "$(document).ready(function() {
+										$('#albumselect').hide();
+							});";
+		} else {
+			$js .= "$(document).ready(function() {
+										$('#uploadswitch').hide();
+							});";
+		}
+		if(getOption('imageuploadlimit_newalbum')) {
+			$js .= "
+				jQuery(document).ready(function() {
+					$('#newalbumbox,#albumtext').hide();
+				});";
+		}
+	$js .= "
 	function generateUploadlimit(selectedalbum,limitalbums) {
 		$('#uploadlimitmessage').remove();
 		var imagenumber = new Array(".$imagenumber.");
@@ -109,7 +126,10 @@ function uploadLimiterJS($defaultJS) {
 		});
 		return queuelimit;
 	}";
-	$limitalbums = getUploadLimitedAlbums($albumlist);
+
+	if($uploadtype == "http") {
+			$js .= "$('#albumselect').hide();";
+		}
 	$js .= "var limitalbums = new Array(".$limitalbums.");";
 	if(isset($_GET['album']) && !empty($_GET['album'])) { // if we upload
 		$selectedalbum = sanitize($_GET['album']);
@@ -121,9 +141,19 @@ function uploadLimiterJS($defaultJS) {
 	}
 	$js .= "
 	var queuelimit = generateUploadlimit(selectedalbum,limitalbums);	
-	$('#albumselect').change(function() {
+	var value = '';
+	$('#albumselect').change(function() { // normal album selection
+		$('#fileUpload').uploadifyClearQueue();
 		selectedalbum = $('#albumselectmenu').val();
 		queuelimit = generateUploadlimit(selectedalbum,limitalbums);	
+	});
+	$(document).ready(function() { // this is for new toplevel albums and new subalbums
+		$('#albumtitle').keyup(function () {
+				value = $('#albumtitle').val();
+				if(value != '') {
+					queuelimit = ".getOption('imageuploadlimit').";
+				}
+		});
 	});
 	function uploadify_onSelectOnce(event, data) {
 		var note = '';
@@ -136,7 +166,8 @@ function uploadLimiterJS($defaultJS) {
 			alert(note);
 			$('#fileUpload').uploadifyClearQueue();
 		} 
-	}";
+	}
+";
 	}
 return $js;
 }
