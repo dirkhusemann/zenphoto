@@ -3729,7 +3729,7 @@ function getCustomPageURL($page, $q='', $album='') {
  */
 function printCustomPageURL($linktext, $page, $q='', $prev='', $next='', $class=NULL) {
 	if (!is_null($class)) {
-		$class = 'class="' . $class . '";';
+		$class = 'class="' . $class . '"';
 	}
 	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))."\" $class title=\"".html_encode($linktext)."\">".htmlspecialchars($linktext)."</a>".$next;
 }
