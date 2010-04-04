@@ -1980,7 +1980,7 @@ function seoFriendly($source) {
 	if (zp_has_filter('seoFriendly')) {
 		$string = zp_apply_filter('seoFriendly', $source);
 	} else { // no filter, do basic cleanup
-		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
+		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$source);
 		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
 		$string = str_replace(array('---','--'),'-', $string);
 	}

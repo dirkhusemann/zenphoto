@@ -260,7 +260,6 @@ function quota_image_refresh($image) {
  * @return int
  */
 function quota_getUploadQuota($quota) {
-	global $_zp_current_admin_obj, $quota;
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$quota = -1;
 	} else {
@@ -275,7 +274,9 @@ function quota_getUploadQuota($quota) {
  * @return int
  */
 function quota_getUploadLimit($uploadlimit) {
-	$uploadlimit = (quota_getUploadQuota(0)-quota_getCurrentUse(NULL))*1024;
+	if (!zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+		$uploadlimit = (quota_getUploadQuota(0)-quota_getCurrentUse(NULL))*1024;
+	}
 	return $uploadlimit;
 }
 
@@ -329,7 +330,7 @@ function quota_get_header($default) {
  * @return string
  */
 function quota_upload_helper_js($defaultJS) {
-	$quota = quota_getUploadLimit(0);
+	$quota = quota_getUploadLimit(99999);
 	$quotaOK = $quota < 0 || $quota > 1024;
 	if ($quotaOK) {
 		$quota_js = '';
