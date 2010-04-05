@@ -3,6 +3,7 @@ rss-comments.php
 rss-news-comments.php
 rss-news.php
 rss.php
+sitemap.php
 themes
 themes/default
 themes/default/404.php
@@ -533,6 +534,7 @@ zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
 zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
 zp-core/locale/zh_TW/select_files_button.png
 zp-core/oldhtaccess
+zp-core/password.php
 zp-core/password_form.php
 zp-core/pclzip.lib.php
 zp-core/PHP4_functions
@@ -626,8 +628,10 @@ zp-core/zp-extensions/google_maps/gmaps.js
 zp-core/zp-extensions/google_maps/license.txt
 zp-core/zp-extensions/google_maps/phoogle.php
 zp-core/zp-extensions/google_maps.php
+zp-core/zp-extensions/hitcounter.php
 zp-core/zp-extensions/html_meta_tags.php
 zp-core/zp-extensions/image_album_statistics.php
+zp-core/zp-extensions/image_upload_limiter.php
 zp-core/zp-extensions/jcarousel_thumb_nav
 zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel.css
 zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel.js
@@ -1744,6 +1748,7 @@ zp-core/zp-extensions/zenpage/zenpage-template-functions.php
 zp-core/zp-extensions/zenpage/zenpage.css
 zp-core/zp-extensions/zenpage/zp-functions.php
 zp-core/zp-extensions/zenpage.php
+zp-core/zp-extensions/zenphoto-sitemap-extended.php
 zp-core/zp-extensions/zenphoto_news
 zp-core/zp-extensions/zenphoto_news/rsslib.php
 zp-core/zp-extensions/zenphoto_news.php

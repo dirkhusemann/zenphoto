@@ -25,7 +25,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<h1><?php printGalleryTitle(); echo ' | '.gettext('Archive'); ?></h1>
 
 	<div class="galleries">
- 	<?php if (!checkForPassword()) {?>
 		<h2><?php echo gettext("All galleries"); ?></h2>
 		<ul>
 			<?php
@@ -91,7 +90,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php } ?>
 				</p>
 			</div>
-	<?php } ?>
 </div>
 
 <div id="feeds">

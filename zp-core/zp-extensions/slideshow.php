@@ -90,7 +90,6 @@ $slideshow_instance = 0;
  */
 function printSlideShowLink($linktext='', $linkstyle='') {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_search, $slideshow_instance;
-	if (checkForPassword(true)) return;
 	if(empty($_GET['page'])) {
 		$pagenr = 1;
 	} else {

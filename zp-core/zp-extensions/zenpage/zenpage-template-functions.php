@@ -201,81 +201,79 @@ function getNumNews($combi=true) {
  */
 function next_news($sortorder="date", $sortdirection="desc") {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery, $_zp_current_search;
-	if(!checkforPassword()) {
-		if (is_null($_zp_zenpage_articles)) {
-			if (in_context(ZP_SEARCH)) {
-				processExpired('zenpage_news');
-				$_zp_zenpage_articles = $_zp_current_search->getSearchNews();
-			} else if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
-				$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
-			} else {
-				$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"),'',NULL,false,$sortorder,$sortdirection);
-			}
-			//print_r($_zp_zenpage_articles); // debugging
-			if (empty($_zp_zenpage_articles)) { return false; }
-			$_zp_current_zenpage_news_restore = $_zp_current_zenpage_news;
-			$news = array_shift($_zp_zenpage_articles);
-			//print_r($news); // debugging
-			if (is_array($news)) {
-				if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
-					if($news['type'] == "images") {
-						$albumobj = new Album($_zp_gallery,$news['albumname']);
-						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
-					} else if($news['type'] == "albums") {
-						switch(getOption("zenpage_combinews_mode")) {
-							case "latestimagesbyalbum-thumbnail":
-							case "latestimagesbyalbum-thumbnail-customcrop":
-							case "latestimagesbyalbum-sizedimage":
-								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['titlelink']);
-								$_zp_current_zenpage_news->set('date', $news['date']); // in this mode this stores the date of the images to group not the album (inconvenient workaround...)
-								break;
-							default:
-								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
-								break;
-						}
-					} else {
-						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
-					}
-				} else {
-					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
-				}
-			}
-			add_context(ZP_ZENPAGE_NEWS_ARTICLE);
-			return true;
-		} else if (empty($_zp_zenpage_articles)) {
-			$_zp_zenpage_articles = NULL;
-			$_zp_current_zenpage_news = $_zp_current_zenpage_news_restore;
-			rem_context(ZP_ZENPAGE_NEWS_ARTICLE);
-			return false;
+	if (is_null($_zp_zenpage_articles)) {
+		if (in_context(ZP_SEARCH)) {
+			processExpired('zenpage_news');
+			$_zp_zenpage_articles = $_zp_current_search->getSearchNews();
+		} else if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
+			$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
 		} else {
-			$news = array_shift($_zp_zenpage_articles);
-			if (is_array($news)) {
-				if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
-					if($news['type'] == "images") {
-						$albumobj = new Album($_zp_gallery,$news['albumname']);
-						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
-					} else if($news['type'] == "albums") {
-						switch(getOption("zenpage_combinews_mode")) {
-							case "latestimagesbyalbum-thumbnail":
-							case "latestimagesbyalbum-thumbnail-customcrop":
-							case "latestimagesbyalbum-sizedimage":
-								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['titlelink']);
-								$_zp_current_zenpage_news->set('date', $news['date']); // in this mode this stores the date of the images to group not the album (inconvenient workaround...)
-								break;
-							default:
-								$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
-								break;
-						}
-					} else {
-						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
+			$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"),'',NULL,false,$sortorder,$sortdirection);
+		}
+		//print_r($_zp_zenpage_articles); // debugging
+		if (empty($_zp_zenpage_articles)) { return false; }
+		$_zp_current_zenpage_news_restore = $_zp_current_zenpage_news;
+		$news = array_shift($_zp_zenpage_articles);
+		//print_r($news); // debugging
+		if (is_array($news)) {
+			if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
+				if($news['type'] == "images") {
+					$albumobj = new Album($_zp_gallery,$news['albumname']);
+					$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
+				} else if($news['type'] == "albums") {
+					switch(getOption("zenpage_combinews_mode")) {
+						case "latestimagesbyalbum-thumbnail":
+						case "latestimagesbyalbum-thumbnail-customcrop":
+						case "latestimagesbyalbum-sizedimage":
+							$_zp_current_zenpage_news = new Album($_zp_gallery,$news['titlelink']);
+							$_zp_current_zenpage_news->set('date', $news['date']); // in this mode this stores the date of the images to group not the album (inconvenient workaround...)
+							break;
+						default:
+							$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+							break;
 					}
 				} else {
 					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 				}
+			} else {
+				$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 			}
-			return true;
 		}
-	} // checkpassword if end
+		add_context(ZP_ZENPAGE_NEWS_ARTICLE);
+		return true;
+	} else if (empty($_zp_zenpage_articles)) {
+		$_zp_zenpage_articles = NULL;
+		$_zp_current_zenpage_news = $_zp_current_zenpage_news_restore;
+		rem_context(ZP_ZENPAGE_NEWS_ARTICLE);
+		return false;
+	} else {
+		$news = array_shift($_zp_zenpage_articles);
+		if (is_array($news)) {
+			if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
+				if($news['type'] == "images") {
+					$albumobj = new Album($_zp_gallery,$news['albumname']);
+					$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
+				} else if($news['type'] == "albums") {
+					switch(getOption("zenpage_combinews_mode")) {
+						case "latestimagesbyalbum-thumbnail":
+						case "latestimagesbyalbum-thumbnail-customcrop":
+						case "latestimagesbyalbum-sizedimage":
+							$_zp_current_zenpage_news = new Album($_zp_gallery,$news['titlelink']);
+							$_zp_current_zenpage_news->set('date', $news['date']); // in this mode this stores the date of the images to group not the album (inconvenient workaround...)
+							break;
+						default:
+							$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+							break;
+					}
+				} else {
+					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
+				}
+			} else {
+				$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
+			}
+		}
+		return true;
+	}
 }
 
 /**
@@ -941,9 +939,9 @@ function getCurrentNewsArchive($mode='formatted',$format='%B %Y') {
 		if($mode == "formatted") {
 		 $archivedate = strtotime($archivedate);
 		 $archivedate = strftime($format,$archivedate);
-		} 
+		}
 		return $archivedate;
-	} 
+	}
 	return false;
 }
 
@@ -978,7 +976,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	$categories = getAllCategories();
-	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
+	if((zp_loggedin(ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
 		$published = "all";
 		$pub = false;
 	} else {
@@ -2222,7 +2220,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	if(empty($shortenindicator)) {
 		$shortenindicator = getOption("zenpage_textshorten_indicator");
 	}
-	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+	if((zp_loggedin(ZENPAGE_RIGHTS))) {
 		$published = FALSE;
 	} else {
 		$published = TRUE;
@@ -2245,7 +2243,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 				$pagecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
 				if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
 					$pagecontent = str_replace($shortenindicator, '', $pagecontent);
-				} 
+				}
 			} else if(strlen($pagecontent) > $excerptlength) {
 				$pagecontent = shortenContent($pagecontent, $excerptlength, $shortenindicator.$readmorelink);
 			}
@@ -2298,7 +2296,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
 
-	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
+	if((zp_loggedin(ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
 		$published = FALSE;
 	} else {
 		$published = TRUE;

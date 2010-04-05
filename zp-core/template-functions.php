@@ -264,7 +264,7 @@ function printAdminToolbox($id='admin') {
 					$titlelink = getPageTitlelink();
 					$redirect .= '&amp;title='.urlencode($titlelink);
 				}
-				if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
+				if (zp_loggedin(ZENPAGE_RIGHTS)) {
 				// admin has zenpage rights, provide link to the zenpage admin tab
 				echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-news-articles.php\">".gettext("News")."</a></li>";
 				if (is_NewsArticle()) {
@@ -462,7 +462,6 @@ function getCurrentTheme() {
  */
 function next_album($all=false, $sorttype=null, $sortdirection=NULL) {
 	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore, $_zp_current_search;
-	if (checkforPassword()) { return false; }
 	if (is_null($_zp_albums)) {
 		if (in_context(ZP_SEARCH)) {
 			$_zp_albums = $_zp_current_search->getAlbums($all ? 0 : $_zp_page);
@@ -1714,10 +1713,9 @@ function getTotalImagesIn($album) {
  *
  * @return bool
  */
-function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirection=NULL, $overridePassword=false) {
+function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirection=NULL) {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
 				 $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
-	if (!$overridePassword) { if (checkforPassword()) { return false; } }
 	if (is_null($firstPageCount)) $firstPageCount = $_zp_conf_vars['images_first_page'];
 	$imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
 	if ($all) {
@@ -3199,10 +3197,10 @@ function getHitcounter($obj=NULL) {
 			case 'image.php':
 				$obj = $_zp_current_image;
 				break;
-			case 'pages.php':
+			case ZENPAGE_PAGES:
 				$obj = $_zp_current_zenpage_page;
 				break;
-			case 'news.php':
+			case ZENPAGE_NEWS:
 				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 					$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$_zp_current_category."'");
 					return $hc["hitcounter"];
@@ -3212,7 +3210,7 @@ function getHitcounter($obj=NULL) {
 				}
 				break;
 			default:
-				$page = substr($_zp_gallery_page, 0, -4);
+				$page = stripSuffix($_zp_gallery_page);
 				return getOption('Page-Hitcounter-'.$page);
 				break;
 		}
@@ -4009,7 +4007,6 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 	} else {
 		$buttontext = sanitize($buttontext);
 	}
-	if (checkforPassword(true)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
 	$searchwords = (isset($_POST['words']) ? html_encode(sanitize($_REQUEST['words'],0),false) : '');
@@ -4291,11 +4288,10 @@ function checkForGuest(&$hint, &$show) {
  * required will be that of the nearest parent that has a password. (The gallery is the ur-parrent to all
  * albums.)
  *
- * @param bool $silent set to true to inhibit the logon form
  * @return bool
  * @since 1.1.3
  */
-function checkforPassword($silent=false) {
+function checkforPassword() {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
 	if (getOption('gallery_page_unprotected_'.stripSuffix($_zp_gallery_page))) return false;
 	if (zp_loggedin()) {
@@ -4309,8 +4305,6 @@ function checkforPassword($silent=false) {
 		}
 	}
 	if ($authType = checkForGuest($hint, $show)) return false;	// a guest is logged in
-	if ($silent) return true;
-	printPasswordForm($hint, true, getOption('login_user_field') || $show);
 	return true;
 }
 

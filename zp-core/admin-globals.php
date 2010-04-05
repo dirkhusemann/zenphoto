@@ -43,7 +43,7 @@ if (($_zp_loggedin & (ALBUM_RIGHTS | ADMIN_RIGHTS))) {
 							'default'=>'albuminfo');
 }
 
-if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_RIGHTS))) {
 	$zenphoto_tabs['pages'] = array('text'=>gettext("pages"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-pages.php',
 							'subtabs'=>NULL);

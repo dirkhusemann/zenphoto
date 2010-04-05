@@ -59,15 +59,12 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 				}
 			?>
 			<div class="main" <?php echo $wide; ?>>
-				<?php if ($show = !checkForPassword()) { ?>
 					<p id="photo">
 					<strong>
 						<?php printCustomSizedImage(getImageTitle(), null, $ls?480:null, $ls?null:480); ?>
 					</strong>
 					</p>
-				<?php } ?>
 			</div>
-			<?php if ($show) { ?>
 			<div id="meta">
 				<ul>
 					<li class="count"><?php
@@ -99,7 +96,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 				if (function_exists('printCommentForm')) { 
 					require_once('comment.php');
 				}
-			}
 			?>
 
 			</div>

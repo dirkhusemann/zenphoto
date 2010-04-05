@@ -259,8 +259,8 @@ function printPagesListTable($page, $flag) {
 		<td class="icons3" style="text-align: left">
 			<?php echo htmlspecialchars($page->getAuthor()) ;?>
 		</td>
-		
-		
+
+
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
 		<?php printPublishIconLink($page,"page"); ?>
@@ -277,14 +277,14 @@ function printPagesListTable($page, $flag) {
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 	</td>
 	<?php } ?>
-		
+
 		<td class="icons">
 			<a href="../../../index.php?p=<?php echo ZENPAGE_PAGES; ?>&amp;title=<?php echo $page->getTitlelink() ;?>" title="<?php echo gettext("View page"); ?>">
 			<img src="images/view.png" alt="view" />
 			</a>
 		</td>
-		
-	
+
+
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
 		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Reset hitcounter"); ?>">
@@ -302,7 +302,7 @@ function printPagesListTable($page, $flag) {
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 	</td>
 	<?php } ?>
-	 
+
 	</tr>
  </table>
 <?php
@@ -678,7 +678,7 @@ function printArticlesPageNav() {
 			echo "\n <li><a href='admin-news-articles.php?pagenr=".$p.' title="page '.$p.'">...</a></li>';
 		}
 		echo "<li class=\"next\">";
-		
+
 		if ($current != $total)	{
 			echo "<li class='next'><a href='admin-news-articles.php?pagenr=".min($j+10,$total).getNewsAdminOptionPath(true,true,true)."' title='".gettext("Next page")." ".min($j+10,$total)."'>".gettext("next")." &raquo;</a></li>\n";
 		} else {
@@ -1176,7 +1176,7 @@ function zenpageJSCSS() {
  * @param string $currentpage the kind of zenphoto object being accessed.
  */
 function checkRights($currentpage) {
-	if (!(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+	if (!(zp_loggedin(ZENPAGE_RIGHTS))) {
 		echo "<div class='errorbox'>".gettext("You need Admin Rights or Zenpage rights to use Zenpage")."</div>";
 		exit;
 	}

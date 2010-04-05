@@ -285,7 +285,7 @@ function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
 			break;
 	}
 	if(($option == "pages" AND is_Pages()) OR ($option == "news" AND is_NewsArticle()) OR ($option == "category" AND is_NewsCategory())) {
-		if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) || $viewonly) { $doUpdate = false; }
+		if ((zp_loggedin(ZENPAGE_RIGHTS)) || $viewonly) { $doUpdate = false; }
 		$hitcounter = "hitcounter";
 		$whereID = " WHERE `id` = $id";
 		$sql = "SELECT `".$hitcounter."` FROM $dbtable $whereID";

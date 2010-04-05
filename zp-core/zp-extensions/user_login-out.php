@@ -84,16 +84,14 @@ if (!OFFSET_PATH) {
 function printUserLogin_out($before='', $after='', $showLoginForm=false, $logouttext=NULL) {
 	global $cookies, $__redirect;
 	if (is_null($logouttext)) $logouttext = gettext("Logout");
-	if ($showLoginForm || getOption('user_logout_login_form')) {
-		$showLoginForm = !checkforPassword(true);
+	if (getOption('user_logout_login_form')) {
+		$showLoginForm = true;
 	}
 	if (empty($cookies)) {
 		if ($showLoginForm) {
 			?>
 			<div class="passwordform">
-			<?php
-			printPasswordForm('', false);
-			?>
+			<?php printPasswordForm('', false); ?>
 			</div>
 			<?php
 		}

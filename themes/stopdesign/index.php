@@ -79,9 +79,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				endwhile;
 				?>
 				</ul>
-				<?php if (!checkForPassword(true)) { ?>
 				<p class="mainbutton"><a href="<?php echo $archivepageURL; ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/images/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo gettext('Gallery Archive'); ?>" /></a></p>
-				<?php } ?>
 		</div>
 
 		<div id="secondary">
@@ -90,10 +88,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php printGalleryDesc(); ?>
 			</div>
 			<div class="module">
-				<?php 
-				$selector = getOption('Mini_slide_selector'); 
-				if (!checkFOrPassword()) {
-				?>
+				<?php $selector = getOption('Mini_slide_selector'); ?>
 				<ul id="randomlist">
 					<?php
 					switch($selector) {
@@ -156,10 +151,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					}
 					?>
 				</ul>
-				<?php } ?>
 			</div>
 			<div class="module">
-			<?php if (!checkForPassword(true)) { ?>
 				<h2><?php echo gettext("Gallery data"); ?></h2>
 				<table cellspacing="0" class="gallerydata">
 						<tr>
@@ -180,7 +173,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							</tr>
 						<?php } ?>
 				</table>
-				<?php } ?>
 			</div>
 		</div>
 	</div>

@@ -39,7 +39,6 @@ if (isset($_GET['p'])) {
 	} else {
 		$obj = THEMEFOLDER."/$theme/$page.php";
 		$_zp_gallery_page = basename($obj);
-		if (!zp_loggedin()) setOption('Page-Hitcounter-'.$page, getOption('Page-Hitcounter-'.$page)+1);
 	}
 
 // Display an Image page.
@@ -47,11 +46,6 @@ if (isset($_GET['p'])) {
 	handleSearchParms('image', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
-	if (!isMyALbum($_zp_current_album->name, LIST_ALBUM_RIGHTS)) { //update hit counter
-		$hc = $_zp_current_image->get('hitcounter')+1;
-		$_zp_current_image->set('hitcounter', $hc);
-		$_zp_current_image->save();
-	}
 	
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
@@ -64,18 +58,11 @@ if (isset($_GET['p'])) {
 	}
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
-	// update hit counter
-	if (!isMyALbum($_zp_current_album->name, LIST_ALBUM_RIGHTS) && getCurrentPage() == 1) {
-		$hc = $_zp_current_album->get('hitcounter')+1;
-		$_zp_current_album->set('hitcounter', $hc);
-		$_zp_current_album->save();
-	}
 
 	// Display the Index page.
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms('index');
 	$theme = setupTheme();
-	if (!zp_loggedin()) setOption('Page-Hitcounter-index', getOption('Page-Hitcounter-index')+1);
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
 
@@ -98,35 +85,22 @@ if (file_exists($custom)) {
 	$custom = false;
 }
 
-// Load plugins, then load the requested $obj (page, image, album, or index; defined above).
-if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
-	if (checkforPassword(true)) { // password protected object
+
+if ($zp_request) {
+	$obj = zp_apply_filter('load_theme_script',$obj);
+}
+if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
+	if (checkforPassword()) { // password protected object
 		$passwordpage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password.php';
-		if (file_exists($passwordpage)) {
-			header("HTTP/1.0 200 OK");
-			header("Status: 200 OK");
-			header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-			include($passwordpage);
-			exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );
-			exit();
+		if (!file_exists($passwordpage)) {
+			$passwordpage = SERVERPATH.'/'.ZENFOLDER.'/password.php';
 		}
-	}
-	// Zenpage automatic hitcounter update support
-	if(function_exists("is_NewsArticle") AND !$_zp_loggedin) {
-		if(is_NewsArticle()) {
-			$hc = $_zp_current_zenpage_news->get('hitcounter')+1;
-			$_zp_current_zenpage_news->set('hitcounter', $hc);
-			$_zp_current_zenpage_news->save();
-		}
-		if(is_NewsCategory()) {
-			$catname = sanitize($_GET['category'],3);
-			query("UPDATE ".prefix('zenpage_news_categories')." SET `hitcounter` = `hitcounter`+1 WHERE `cat_link` = '".zp_escape_string($catname)."'",true);
-		}
-		if(is_Pages()) {
-			$hc = $_zp_current_zenpage_page->get('hitcounter')+1;
-			$_zp_current_zenpage_page->set('hitcounter', $hc);
-			$_zp_current_zenpage_page->save();
-		}
+		header("HTTP/1.0 200 OK");
+		header("Status: 200 OK");
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+		include($passwordpage);
+		exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );
+		exit();
 	}
 
 	// re-initialize video dimensions if needed
