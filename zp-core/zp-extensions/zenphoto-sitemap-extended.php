@@ -11,9 +11,9 @@
  *</urlset>
  *
  * Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL. The sitemap is cached as a xml file within the root "cache_html/sitemap" folder.
- * 
+ *
  * NOTE: The index links may not match if using the options for "Zenpage news on index" or a "custom home page" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!
- * 
+ *
  * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap
  * @package plugins
  */
@@ -33,11 +33,11 @@ if (!file_exists($sitemapfolder)) {
 		die(gettext("sitemap cache folder could not be created. Please try to create it manually via FTP with chmod 0777."));
 	}
 }
-if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') { 
+if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') {
 	clearSitemapCache();
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('sitemap cache cleared.'));
 	exit();
-} 
+}
 
 /**
  * Plugin option handling class
@@ -65,69 +65,69 @@ class sitemap {
 		return array(	gettext('Sitemap cache expire') => array('key' => 'sitemap_cache_expire', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("When the cache should expire in seconds. Default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec).The cache can also be cleared on the admin overview page manually.")),
 		gettext('Change frequence - Zenphoto index') => array('key' => 'sitemap_changefreq_index', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
 										'desc' => ''),
 		gettext('Change frequence - albums') => array('key' => 'sitemap_changefreq_albums', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
-										'desc' => ''),		
+										'desc' => ''),
 		gettext('Change frequence - images') => array('key' => 'sitemap_changefreq_images', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
-										'desc' => ''),										
+										'desc' => ''),
 		gettext('Change frequence - Zenpage pages') => array('key' => 'sitemap_changefreq_pages', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
-										'desc' => ''),	
+										'desc' => ''),
 		gettext('Change frequence - Zenpage news index') => array('key' => 'sitemap_changefreq_newsindex', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
-										'desc' => ''),		
+										'desc' => ''),
 		gettext('Change frequence: Zenpage news articles') => array('key' => 'sitemap_changefreq_news', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
-										'desc' => ''),	
+										'desc' => ''),
 		gettext('Change frequence - Zenpage news categories') => array('key' => 'sitemap_changefreq_newscats', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("always")=>"always", 
+										'selections' => array(gettext("always")=>"always",
 																					gettext("hourly")=>"hourly",
-																					gettext("daily")=>"daily", 
+																					gettext("daily")=>"daily",
 																					gettext("weekly")=>"monthly",
-																					gettext("yearly")=>"yearly", 
+																					gettext("yearly")=>"yearly",
 																					gettext("never")=>"never"),
-										'desc' => ''),	
+										'desc' => ''),
 	gettext('Last modification date - albums') => array('key' => 'sitemap_lastmod_albums', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("date")=>"date", 
+										'selections' => array(gettext("date")=>"date",
 																					gettext("mtime")=>"mtime"),
-										'desc' => ''),			
+										'desc' => ''),
 	gettext('Last modification date - images') => array('key' => 'sitemap_lastmod_images', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext("date")=>"date", 
+										'selections' => array(gettext("date")=>"date",
 																					gettext("mtime")=>"mtime"),
-										'desc' => ''),																																							
+										'desc' => ''),
 		);
 	}
 
@@ -141,7 +141,7 @@ class sitemap {
  * @return array
  */
 function sitemap_cache_purgebutton($buttons) {
-	if(zp_loggedin(ADMIN_RIGHTS)) { 
+	if(zp_loggedin(ADMIN_RIGHTS)) {
 	$buttons[] = array(
 								'button_text'=>gettext('Purge sitemap cache'),
 								'formname'=>'clearcache_button',
@@ -261,16 +261,16 @@ function printSitemapAlbumsAndImages($albumchangefreq='',$imagechangefreq='',$al
 		$albumlastmod = getOption('sitemap_lastmod_albums');
 	} else {
 		$albumlastmod = sanitize($albumlastmod);
-	}	
+	}
 	if(empty($imagelastmod)) {
 		$imagelastmod = getOption('sitemap_lastmod_images');
 	} else {
 		$imagelastmod = sanitize($imagelastmod);
-	}	
+	}
 	$passwordcheck = '';
 	$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 	foreach($albumscheck as $albumcheck) {
-		if(!checkAlbumPassword($albumcheck['folder'], $hint)) { 
+		if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
 		$albumpasswordcheck= " AND id != ".$albumcheck['id'];
 		$passwordcheck = $passwordcheck.$albumpasswordcheck;
 		}
