@@ -25,7 +25,7 @@ $plugin_version = '1.3.0';
 $plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---sitemap-extended.php.html';
 $option_interface = new sitemap();
 
-zp_register_filter('admin_utilities_buttons', 'sitemap_cache_purgebutton');
+//zp_register_filter('admin_utilities_buttons', 'sitemap_cache_purgebutton');
 
 $sitemapfolder = SERVERPATH.'/cache_html/sitemap';
 if (!file_exists($sitemapfolder)) {
