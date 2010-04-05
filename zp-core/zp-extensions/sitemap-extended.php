@@ -22,7 +22,7 @@ $plugin_is_filter = 5;
 $plugin_description = 'Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL. NOTE: The index links may not match if using the Zenpage option "news on index" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!!';
 $plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer)';
 $plugin_version = '1.3.0';
-$plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---zenphoto-sitemap-extended.php.html';
+$plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---sitemap-extended.php.html';
 $option_interface = new sitemap();
 
 zp_register_filter('admin_utilities_buttons', 'sitemap_cache_purgebutton');
@@ -141,11 +141,10 @@ class sitemap {
  * @return array
  */
 function sitemap_cache_purgebutton($buttons) {
-	if(zp_loggedin(ADMIN_RIGHTS)) {
 	$buttons[] = array(
 								'button_text'=>gettext('Purge sitemap cache'),
 								'formname'=>'clearcache_button',
-								'action'=>PLUGIN_FOLDER.'/zenphoto-sitemap.php?action=clear_sitemap_cache',
+								'action'=>PLUGIN_FOLDER.'/sitemap-extended.php?action=clear_sitemap_cache',
 								'icon'=>'images/edit-delete.png',
 								'title'=>gettext('Clear the static sitemap cache. It will be recached if requested.'),
 								'alt'=>'',
@@ -153,7 +152,6 @@ function sitemap_cache_purgebutton($buttons) {
 								'rights'=> ADMIN_RIGHTS
 	);
 	return $buttons;
-	}
 }
 
 /**
