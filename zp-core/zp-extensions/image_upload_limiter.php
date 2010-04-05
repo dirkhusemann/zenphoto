@@ -28,7 +28,6 @@ class uploadlimit {
 	/**
 	 * class instantiation function
 	 *
-	 * @return filter_zenphoto_seo
 	 */
 	function uploadlimit() {
 		setOptionDefault('imageuploadlimit', 5);
@@ -142,17 +141,28 @@ function uploadLimiterJS($defaultJS) {
 	$js .= "
 	var queuelimit = generateUploadlimit(selectedalbum,limitalbums);	
 	var value = '';
-	$('#albumselect').change(function() { // normal album selection
-		$('#fileUpload').uploadifyClearQueue();
-		selectedalbum = $('#albumselectmenu').val();
-		queuelimit = generateUploadlimit(selectedalbum,limitalbums);	
-	});
-	$(document).ready(function() { // this is for new toplevel albums and new subalbums
-		$('#albumtitle').keyup(function () {
+	var newalbum = '';
+	
+	$(document).ready(function() { 
+		// normal album selection
+		$('#albumselectmenu').change(function() { 
+			$('#fileUpload').uploadifyClearQueue(); // to be sure that no selections for other albums are kept
+			selectedalbum = $('#albumselectmenu').val();
+			queuelimit = generateUploadlimit(selectedalbum,limitalbums);	
+		});
+		// new toplevel album
+		$('#albumtitle').keyup(function () { 
 				value = $('#albumtitle').val();
 				if(value != '') {
 					queuelimit = ".getOption('imageuploadlimit').";
 				}
+		});
+		// new subalbum
+		$('#newalbumcheckbox').change(function() { 
+			$('#albumtitle').keyup(function () {
+				value = $('#albumtitle').val();
+				queuelimit = ".getOption('imageuploadlimit').";
+			});
 		});
 	});
 	function uploadify_onSelectOnce(event, data) {
