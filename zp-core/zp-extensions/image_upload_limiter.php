@@ -30,9 +30,8 @@ class uploadlimit {
 	 *
 	 */
 	function uploadlimit() {
-		setOptionDefault('imageuploadlimit', 5);
+		setOptionDefault('imageuploadlimit', 999);
 		setOptionDefault('imageuploadlimit_newalbum', 0);
-		setOptionDefault('imageuploadlimit_zip', 0); // this is meant to not to be changed
 	}
 
 
@@ -61,7 +60,7 @@ class uploadlimit {
  * @return string
  */
 function uploadLimiterJS($defaultJS) {
-	if(true || !$_zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+	if(!$_zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$js = '';
 		$target = 'function uploadify_onSelectOnce(event, data) {';
 		$i = strpos($defaultJS,$target);
@@ -183,9 +182,9 @@ return $js;
 }
 
 function uploadLimiterHeaderMessage($default) {
-	/*if (zp_loggedin(ADMIN_RIGHTS)) {
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		return $default;
-		} */
+	}
 	$warn = "";
 	$uploadtype = zp_getcookie('uploadtype');
 	if($uploadtype != "multifile") {
@@ -258,9 +257,9 @@ function getUploadImagesInAlbum($albumlist) {
  * @return array
  */
 function limitUploadFiletypes($types) {
-	/*if (zp_loggedin()) {
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		return $types;
-	}*/
+	}
 	$key = array_search('ZIP', $types);
 	unset($types[$key]);
 	return $types;
