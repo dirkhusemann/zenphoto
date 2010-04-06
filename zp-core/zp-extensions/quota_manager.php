@@ -353,7 +353,7 @@ function quota_upload_filetypes($types) {
 		return $types;
 	}
 	$key = array_search('ZIP', $types);
-	unset($types[$key]);
+	if ($key !== false) unset($types[$key]);
 	return $types;
 }
 ?>
