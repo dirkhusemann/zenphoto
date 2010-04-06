@@ -189,10 +189,13 @@ function getNumNews($combi=true) {
  * Returns the next news item on a page.
  * sets $_zp_current_zenpage_news to the next news item
  * Returns true if there is an new item to be shown
+ * 
+ * NOTE: If you set the sortorder and sortdirection parameters you also have to set the same ones 
+ * on the next/prevNewsLink/URL functions for the single news article pagination!
  *
  * @param string $sortorder "date" for sorting by date (default)
  * 													"title" for sorting by title
- * 													This parameter is not used for date archives and CombiNews mode
+ * 													This parameter is not used for date archives and CombiNews mode. 
  * @param string $sortdirection "desc" (default) for descending sort order
  * 													    "asc" for ascending sort order
  * 											        This parameter is not used for date archives and CombiNews mode
@@ -1543,16 +1546,18 @@ function getTotalNewsPages() {
  * NOTE: This is not available if using the CombiNews feature
  *
  * @param string $option "prev" or "next"
+ * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
+ * @param string $sortdirection "date" (default) or "title" for sorting by date or title. Required if these for next_news() loop are changed.
  *
  * @return mixed
  */
-function getNextPrevNews($option='') {
+function getNextPrevNews($option='',$sortorder='date',$sortdirection='desc') {
 	global $_zp_current_zenpage_news, $_zp_loggedin;
 	$article_url = array();
 	if(!getOption("zenpage_combinews")) {
 		$current = 0;
 		if(!empty($option)) {
-			$all_articles = getNewsArticles("","");
+			$all_articles = getNewsArticles('','',NULL,false,$sortorder,$sortdirection);
 			$count = 0;
 			foreach($all_articles as $article) {
 				$newsobj = new ZenpageNews($article['titlelink']);
@@ -1595,11 +1600,13 @@ function getNextPrevNews($option='') {
  * Returns false if there is none (or option is empty)
  *
  * NOTE: This is not available if using the CombiNews feature
- *
+ * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
+ * @param string $sortdirection "date" (default) or "title" for sorting by date or titlelink. Required if these for next_news() loop are changed.
+ * 
  * @return mixed
  */
-function getNextNewsURL() {
-	return getNextPrevNews("next");
+function getNextNewsURL($sortorder='date',$sortdirection='desc') {
+	return getNextPrevNews("next",$sortorder,$sortdirection);
 }
 
 
@@ -1608,11 +1615,13 @@ function getNextNewsURL() {
  * Returns false if there is none (or option is empty)
  *
  * NOTE: This is not available if using the CombiNews feature
- *
+ * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
+ * @param string $sortdirection "date" (default) or "title" for sorting by date or titlelink. Required if these for next_news() loop are changed.
+ * 
  * @return mixed
  */
-function getPrevNewsURL() {
-	return getNextPrevNews("prev");
+function getPrevNewsURL($sortorder='date',$sortdirection='desc') {
+	return getNextPrevNews("prev",$sortorder,$sortdirection);
 }
 
 
@@ -1622,11 +1631,12 @@ function getPrevNewsURL() {
  * NOTE: This is not available if using the CombiNews feature
  *
  * @param string $next If you want to show something with the title of the article like a symbol
- *
+ * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
+ * @param string $sortdirection "date" (default) or "title" for sorting by date or titlelink. Required if these for next_news() loop are changed.
  * @return string
  */
-function printNextNewsLink($next=" &raquo;") {
-	$article_url = getNextPrevNews("next");
+function printNextNewsLink($next=" &raquo;",$sortorder='date',$sortdirection='desc') {
+	$article_url = getNextPrevNews("next",$sortorder,$sortdirection);
 	if(array_key_exists('link', $article_url) && $article_url['link'] != "") {
 		echo "<a href=\"".$article_url['link']."\" title=\"".strip_tags($article_url['title'])."\">".$article_url['title']."</a> ".$next;
 	}
@@ -1639,11 +1649,12 @@ function printNextNewsLink($next=" &raquo;") {
  * NOTE: This is not available if using the CombiNews feature
  *
  * @param string $next If you want to show something with the title of the article like a symbol
- *
+ * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
+ * @param string $sortdirection "date" (default) or "title" for sorting by date or titlelink. Required if these for next_news() loop are changed.
  * @return string
  */
-function printPrevNewsLink($prev="&laquo; ") {
-	$article_url = getNextPrevNews("prev");
+function printPrevNewsLink($prev="&laquo; ",$sortorder='date',$sortdirection='desc') {
+	$article_url = getNextPrevNews("prev",$sortorder,$sortdirection);
 	if(array_key_exists('link', $article_url) && $article_url['link'] != "") {
 		echo $prev." <a href=\"".$article_url['link']."\" title=\"".strip_tags($article_url['title'])."\">".$article_url['title']."</a>";
 	}
