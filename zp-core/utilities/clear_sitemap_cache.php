@@ -5,7 +5,7 @@
 	require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 	require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 	require_once(dirname(dirname(__FILE__)).'/'.PLUGIN_FOLDER.'/sitemap-extended.php');
-	$button_text = gettext('Purge sitemap cache HALLO');
+	$button_text = gettext('Purge sitemap cache');
 	$button_hint = gettext('Clear the static sitemap cache. It will be recached if requested.');
 	$button_icon = 'images/edit-delete.png';
 	$button_rights = MANAGE_ALL_ALBUM_RIGHTS;
