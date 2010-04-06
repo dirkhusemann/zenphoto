@@ -18,6 +18,16 @@
  * @package plugins
  */
 
+if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') { //button handler
+	if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
+	require_once(dirname(dirname(__FILE__)).'/folder-definitions.php');
+	require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+	require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
+	clearSitemapCache();
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('sitemap cache cleared.'));
+	exit();
+}
+
 //$plugin_is_filter = 5;
 $plugin_description = 'Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL. NOTE: The index links may not match if using the Zenpage option "news on index" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!!';
 $plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer)';
@@ -25,7 +35,7 @@ $plugin_version = '1.3.0';
 $plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---sitemap-extended.php.html';
 $option_interface = new sitemap();
 
-//zp_register_filter('admin_utilities_buttons', 'sitemap_cache_purgebutton');
+zp_register_filter('admin_utilities_buttons', 'sitemap_cache_purgebutton');
 
 $sitemapfolder = SERVERPATH.'/cache_html/sitemap';
 if (!file_exists($sitemapfolder)) {
@@ -33,11 +43,6 @@ if (!file_exists($sitemapfolder)) {
 		die(gettext("sitemap cache folder could not be created. Please try to create it manually via FTP with chmod 0777."));
 	}
 }
-/* if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') {
-	clearSitemapCache();
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('sitemap cache cleared.'));
-	exit();
-} */
 
 /**
  * Plugin option handling class
