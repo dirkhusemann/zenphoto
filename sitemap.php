@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__).'/zp-core/folder-definitions.php');
 define('OFFSET_PATH', 0);
 require_once(ZENFOLDER . "/template-functions.php");
-if(!getOption('zp_plugin_zenphoto-sitemap-extended')) {
+if(!getOption('zp_plugin_sitemap-extended')) {
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
 	include(ZENFOLDER. '/404.php');

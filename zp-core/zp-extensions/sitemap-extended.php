@@ -18,7 +18,7 @@
  * @package plugins
  */
 
-$plugin_is_filter = 5;
+//$plugin_is_filter = 5;
 $plugin_description = 'Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL. NOTE: The index links may not match if using the Zenpage option "news on index" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!!';
 $plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer)';
 $plugin_version = '1.3.0';
@@ -33,11 +33,11 @@ if (!file_exists($sitemapfolder)) {
 		die(gettext("sitemap cache folder could not be created. Please try to create it manually via FTP with chmod 0777."));
 	}
 }
-if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') {
+/* if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') {
 	clearSitemapCache();
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('sitemap cache cleared.'));
 	exit();
-}
+} */
 
 /**
  * Plugin option handling class
