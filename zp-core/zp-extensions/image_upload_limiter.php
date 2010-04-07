@@ -60,8 +60,8 @@ class uploadlimit {
  * @return string
  */
 function uploadLimiterJS($defaultJS) {
-	if(!$_zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
-		$js = '';
+	$js = '';	
+	if(!zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$target = 'function uploadify_onSelectOnce(event, data) {';
 		$i = strpos($defaultJS,$target);
 		if ($i !== false) {
