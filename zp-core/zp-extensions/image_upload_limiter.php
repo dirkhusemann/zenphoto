@@ -163,20 +163,9 @@ function uploadLimiterJS($defaultJS) {
 				queuelimit = ".getOption('imageuploadlimit').";
 			});
 		});
-	});
-	function uploadify_onSelectOnce(event, data) {
-		var note = '';
-		if (data.fileCount > queuelimit) {
-			if(queuelimit == 0) {
-				note = '".gettext('You cannot upload more images!!!')."';
-			} else {
-				note = '".gettext('Too many images! You can only upload: ')."'+queuelimit;
-			}
-			alert(note);
-			$('#fileUpload').uploadifyClearQueue();
-		} 
-	}
-";
+		$('#fileUpload').uploadifySettings('queueSizeLimit',".getOption('imageuploadlimit').");
+	});		
+	";
 	}
 return $js;
 }

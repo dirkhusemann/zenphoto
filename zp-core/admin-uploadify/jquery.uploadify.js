@@ -139,7 +139,7 @@ if(jQuery)(
 				}
 				jQuery(this).bind("uploadifyQueueFull", {'action': settings.onQueueFull}, function(event, queueSizeLimit) {
 					if (event.data.action(event, queueSizeLimit) !== false) {
-						alert('The queue is full.  The max size is ' + queueSizeLimit + '.');
+						alert(sprintf(uploadifier_queue_full_message, queueSizeLimit));
 					}
 				});
 				jQuery(this).bind("uploadifyCheckExist", {'action': settings.onCheck}, function(event, checkScript, fileQueueObj, folder, single) {

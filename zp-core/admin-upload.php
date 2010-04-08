@@ -154,6 +154,7 @@ printAdminHeader();
 <link rel="stylesheet" href="admin-uploadify/uploadify.css" type="text/css" />
 <script type="text/javascript">
 var uploadifier_replace_message =  "<?php echo gettext('Do you want to replace the file %s?'); ?>";
+var uploadifier_queue_full_message =  "<?php echo gettext('Upload queue is full. The upload limit is %u.'); ?>";
 </script>
 
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/sprintf.js"></script>
@@ -274,13 +275,8 @@ if (ini_get('safe_mode')) { ?>
 			</script>
 		";
 		echo zp_apply_filter('seoFriendly_js', $defaultjs)."\n";
-
-		$default_quota_js = "
-			function uploadify_onSelectOnce(event, data) {
-			}";
 		?>
 		<script type="text/javascript">
-			<?php echo zp_apply_filter('upload_helper_js', $default_quota_js)."\n"; ?>
 			function buttonstate(good) {
 				if (good) {
 					$('#fileUploadbuttons').show();
@@ -405,9 +401,6 @@ if (ini_get('safe_mode')) { ?>
 								'scriptData': {	'auth': '<?php echo md5(serialize($curadmin)); ?>' },
 								'folder': '/',
 								'multi': true,
-								'onSelectOnce':	function(event, data) {
-									uploadify_onSelectOnce(event, data);
-								},
 								<?php
 								$uploadbutton = SERVERPATH.'/'.ZENFOLDER.'/locale/'.getOption('locale').'/select_files_button.png';
 								if(!file_exists($uploadbutton)) {
@@ -529,6 +522,8 @@ if (ini_get('safe_mode')) { ?>
 	</div>
 </form>
 <script type="text/javascript">
+	<?php echo zp_apply_filter('upload_helper_js', '')."\n"; ?>
+
 	albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');
 	<?php
 		if (isset($_GET['folderdisplay'])) {

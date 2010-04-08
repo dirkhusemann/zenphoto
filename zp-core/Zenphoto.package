@@ -662,6 +662,7 @@ zp-core/zp-extensions/rating.php
 zp-core/zp-extensions/register_user
 zp-core/zp-extensions/register_user/register_user_form.php
 zp-core/zp-extensions/register_user.php
+zp-core/zp-extensions/sitemap-extended.php
 zp-core/zp-extensions/slideshow
 zp-core/zp-extensions/slideshow/controls.png
 zp-core/zp-extensions/slideshow/flowplayerfullsizeicon.png
@@ -1748,7 +1749,6 @@ zp-core/zp-extensions/zenpage/zenpage-template-functions.php
 zp-core/zp-extensions/zenpage/zenpage.css
 zp-core/zp-extensions/zenpage/zp-functions.php
 zp-core/zp-extensions/zenpage.php
-zp-core/zp-extensions/zenphoto-sitemap-extended.php
 zp-core/zp-extensions/zenphoto_news
 zp-core/zp-extensions/zenphoto_news/rsslib.php
 zp-core/zp-extensions/zenphoto_news.php

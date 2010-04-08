@@ -260,6 +260,7 @@ function quota_image_refresh($image) {
  * @return int
  */
 function quota_getUploadQuota($quota) {
+	global $_zp_current_admin_obj;
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$quota = -1;
 	} else {
