@@ -14,9 +14,6 @@ header('Content-Type: text/xml;charset=utf-8');
 // Output XML file headers, and plug the plugin :)
 sitemap_echonl('<?xml version="1.0" encoding="UTF-8"?>');
 sitemap_echonl('<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
-
-// Add the front page of the gallery to the URL list
-sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>");
 printSitemapIndexLinks();
 printSitemapAlbumsAndImages();
 // Optional Zenpage stuff

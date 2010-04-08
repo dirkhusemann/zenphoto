@@ -14,7 +14,7 @@
  *
  * NOTE: The index links may not match if using the options for "Zenpage news on index" or a "custom home page" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!
  *
- * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap
+ * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap and on contributions by timo
  * @package plugins
  */
 
@@ -226,6 +226,7 @@ function printSitemapIndexLinks($changefreq='') {
 	} else {
 		$changefreq = sitemap_getChangefreq($changefreq);
 	}
+	sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	if(galleryAlbumsPerPage() != 0) {
 		$toplevelpages = ceil($_zp_gallery->getNumAlbums() / galleryAlbumsPerPage());
 	} else {
@@ -235,7 +236,7 @@ function printSitemapIndexLinks($changefreq='') {
 	if($toplevelpages) {
 		for($x = 2;$x <= $toplevelpages; $x++) {
 			$url = FULLWEBPATH.'/'.rewrite_path('page/'.$x,'index.php?page='.$x,false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	}
 }
@@ -290,12 +291,12 @@ function printSitemapAlbumsAndImages($albumchangefreq='',$imagechangefreq='',$al
 			$pageCount = getTotalPages();
 			$date = sitemap_getDateformat($albumobj,$albumlastmod);
 			$url = FULLWEBPATH.'/'.rewrite_path(pathurlencode($albumobj->name),'?album='.pathurlencode($albumobj->name),false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$albumchangefreq."</changefreq>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$albumchangefreq."</changefreq>\n\t\t<priority>0.8</priority>\n\t</url>");
 			// print album pages if avaiable
 			if($pageCount > 1) {
 				for($x = 2;$x <= $pageCount; $x++) {
 					$url = FULLWEBPATH.'/'.rewrite_path(pathurlencode($albumobj->name).'/page/'.$x,'?album='.pathurlencode($albumobj->name).'&amp;page='.$x,false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$albumchangefreq."</changefreq>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$albumchangefreq."</changefreq>\n\t\t<priority>0.8</priority>\n\t</url>");
 				}
 			}
 			$images = $albumobj->getImages();
@@ -304,7 +305,7 @@ function printSitemapAlbumsAndImages($albumchangefreq='',$imagechangefreq='',$al
 					$imageob = newImage($albumobj,$image);
 					$date = sitemap_getDateformat($imageob,$imagelastmod);
 					$path = FULLWEBPATH.'/'.rewrite_path(pathurlencode($albumobj->name).'/'.urlencode($imageob->filename),'?album='.pathurlencode($albumobj->name).'&amp;image='.urlencode($imageob->filename),false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$path."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$imagechangefreq."</changefreq>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$path."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$imagechangefreq."</changefreq>\n\t\t<priority>0.6</priority>\n\t</url>");
 				}
 			}
 		}
@@ -327,8 +328,10 @@ function printSitemapZenpagePages($changefreq='') {
 		foreach($pages as $page) {
 			$pageobj = new ZenpagePage($page['titlelink']);
 			$date = substr($pageobj->getDatetime(),0,10);
+			$lastchange = substr($pageobj->getLastchange(),0,10);
+			if($date > $lastchange) $date = $lastchange;
 			$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_PAGES.'/'.urlencode($page['titlelink']),'?p='.ZENPAGE_PAGES.'&amp;title='.urlencode($page['titlelink']),false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	}
 }
@@ -344,13 +347,13 @@ function printSitemapZenpageNewsIndex($changefreq='') {
 		$changefreq = sitemap_getChangefreq($changefreq);
 	}
 	$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/1','?p='.ZENPAGE_NEWS.'&amp;page=1',false);
-	sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+	sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	// getting pages for the main news loop
 	$newspages = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
 	if($newspages > 1) {
 		for($x = 2;$x <= $newspages; $x++) {
 			$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/'.$x,'?p='.ZENPAGE_NEWS.'&amp;page='.$x,false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	}
 }
@@ -370,8 +373,10 @@ function printSitemapZenpageNewsArticles($changefreq='') {
 		foreach($articles as $article) {
 			$articleobj = new ZenpageNews($article['titlelink']);
 			$date = substr($articleobj->getDatetime(),0,10);
+			$lastchange = substr($articleobj->getLastchange(),0,10);
+			if($date > $lastchange) $date = $lastchange;
 			$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/'.urlencode($articleobj->getTitlelink()),'?p='.ZENPAGE_NEWS.'&amp;title=' . urlencode($articleobj->getTitlelink()),false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	}
 }
@@ -392,14 +397,14 @@ function printSitemapZenpageNewsCategories($changefreq='') {
 		// Add the correct URLs to the URL list
 		foreach($newscats as $newscat) {
 			$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/category/'.urlencode($newscat['cat_link']).'/1','?p='.ZENPAGE_NEWS.'&amp;category=' . urlencode($newscat['cat_link']).'&amp;page=1',false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 			// getting pages for the categories
 			$articlecount = countArticles($newscat['cat_link']);
 			$catpages = ceil($articlecount / getOption("zenpage_articles_per_page"));
 			if($catpages > 1) {
 				for($x = 2;$x <= $catpages ; $x++) {
 					$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/category/'.urlencode($newscat['cat_link']).'/'.$x,'?p='.ZENPAGE_NEWS.'&amp;category=' . urlencode($newscat['cat_link']).'&amp;page='.$x,false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 				}
 			}
 		}
