@@ -49,6 +49,8 @@ if(isset($_GET['add'])) {
 }
 ?>
 <h1><?php echo $headline; ?></h1>
+<p class="buttons"><strong><a href="menu_tab.php?menuset=<?php echo $menuset; ?>" title="<?php echo gettext("Back"); ?>"><img	src="../../images/arrow_left_blue_round.png" alt="" /><?php echo gettext("Back"); ?></a></strong></p>
+<br clear="all" /><br />
 <div class="box" style="padding:15px; margin-top: 10px">
 <?php if(is_array($result)) { ?>
 <form method="post" action="menu_tab_edit.php?update" name="update">

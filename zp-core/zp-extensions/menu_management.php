@@ -30,7 +30,7 @@ function menu_tabs($tabs, $current) {
 	$newtabs = array();
 	foreach ($tabs as $key=>$tab) {
 		if ($key == 'tags') {
-			$newtabs['menu'] = array(	'text'=>gettext("Menu"),
+			$newtabs['menu'] = array(	'text'=>gettext("menu"),
 																'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/menu_management/menu_tab.php?page=menu&amp;tab=menu',
 																'default'=>'menu',
 																'subtabs'=>NULL);	
