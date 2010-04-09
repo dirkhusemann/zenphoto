@@ -2434,7 +2434,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
  */
 function checkForPage($titlelink) {
 	if(!empty($titlelink)) {
-		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.mysql_real_escape_string($titlelink).'"';
+		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"';
 		$result = query_single_row($sql);
 		if (is_array($result)) {
 			zenpage_setup_page($titlelink);

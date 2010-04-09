@@ -221,7 +221,7 @@ function quota_edit_album($discard, $album, $prefix) {
  */
 function quota_save_album($album, $prefix) {
 	if (!empty($_POST[$prefix.'assignee'])) {
-		$sql = 'UPDATE '.prefix('images').' SET `owner`="'.mysql_real_escape_string(sanitize($_POST[$prefix.'assignee'])).'" WHERE `albumid`='.$album->get('id');
+		$sql = 'UPDATE '.prefix('images').' SET `owner`="'.zp_escape_string(sanitize($_POST[$prefix.'assignee'])).'" WHERE `albumid`='.$album->get('id');
 		query($sql);
 	}
 	return $album;

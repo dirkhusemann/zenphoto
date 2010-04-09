@@ -36,9 +36,9 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
 		$albumWhere = "WHERE `dynamic`=0 AND `show`=1".$passwordcheck;
 	}
 	if($subalbums) {
-		$albumWhere .= " AND `folder` LIKE '".mysql_real_escape_string($albumname)."%'";
+		$albumWhere .= " AND `folder` LIKE '".zp_escape_string($albumname)."%'";
 	} else {
-		$albumWhere .= " AND `folder` = '".mysql_real_escape_string($albumname)."' ";
+		$albumWhere .= " AND `folder` = '".zp_escape_string($albumname)."' ";
 	}
 	//echo "albumWhere: ".$albumWhere."<br />";
 	$albumids = query_full_array("SELECT id, folder FROM " . prefix('albums'). $albumWhere);
