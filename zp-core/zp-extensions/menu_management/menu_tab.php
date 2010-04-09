@@ -100,7 +100,7 @@ $count = mysql_result($result, 0);
 			} else {
 				$visible = 3;
 			}
-			$items = getMenuItems($visible);
+			$items = getMenuItems($menuset, $visible);
 			printItemsList($items);
 			?>
 			</ul>

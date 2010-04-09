@@ -49,11 +49,11 @@ function menu_tabs($tabs, $current) {
 /**
  * Enter description here...
  *
+ * @param string $menuset the menu tree desired
  * @param unknown_type $visible
  * @return unknown
  */
-function getMenuItems($visible) {
-	$menuset = checkChosenMenuset();
+function getMenuItems($menuset, $visible) {
 	$visible = checkChosenItemStatus();
 	switch($visible) {
 		case 'visible':
@@ -150,6 +150,7 @@ function getItemTitleAndURL($item) {
 /**
  * Prints a context sensitive menu of all pages as a unordered html list
  *
+ * @param string $menuset the menu tree to output
  * @param string $option The mode for the menu:
  * 												"list" context sensitive toplevel plus sublevel pages,
  * 												"list-top" only top level pages,
@@ -163,7 +164,7 @@ function getItemTitleAndURL($item) {
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
  * @return string
  */
-function printCustomMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$showsubs=0) {
+function printCustomMenu($menuset='default', $option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$showsubs=0) {
 	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page, $_zp_current_category;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
@@ -176,7 +177,7 @@ function printCustomMenu($option='list',$css_id='',$css_class_topactive='',$css_
 	} else {
 		$published = "visible";
 	}
-	$items = getMenuItems($published);
+	$items = getMenuItems($menuset, $published);
 	if (count($items)==0) return; // nothing to do
 	echo "<ul$css_id>";
 	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
