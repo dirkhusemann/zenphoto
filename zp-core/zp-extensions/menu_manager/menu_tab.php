@@ -3,7 +3,7 @@ define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
-require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_management/menu_management-admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manager/menu_manager-admin-functions.php');
 
 $page = 'edit';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
@@ -34,10 +34,12 @@ if(isset($_POST['update'])) {
 if (isset($_GET['delete'])) {
 	$sql = 'DELETE FROM '.prefix('menu').' WHERE `id`='.sanitize_numeric($_GET['id']);
 	query($sql);
+	echo "<p class='messagebox' id='fade-message'>".gettext('Menu item deleted')."</p>";
 }
 if (isset($_GET['deletemenuset'])) {
-	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['menuset'])).'"';
+	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
 	query($sql);
+	echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset']))."</p>";
 }
 
 // publish or unpublish page by click
@@ -57,29 +59,24 @@ $count = mysql_result($result, 0);
 	};
 	function deleteMenuSet() {
 		if (confirm('<?php printf(gettext('Ok to delete menu set %s? This cannot be undone!'),htmlspecialchars($menuset)); ?>')) {
-			window.location = '?deletemenuset&amp;menuset=<?php echo htmlspecialchars($menuset); ?>';
+			window.location = '?deletemenuset=<?php echo htmlspecialchars($menuset); ?>';
 		}
 	};
 </script>
-<h1><?php echo gettext("Menu Management")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1> 				
+<h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1> 				
  
 <form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update">
 
 <p>
-<?php echo gettext("Drag the items into the order, including sub page levels, you wish them displayed. <br /><br /><strong>IMPORTANT:</strong> This menu's order is completely independend from any order of albums or pages set on the other admin pages. It is recommend to use with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!");?>
+<?php echo gettext("Drag the items into the order, including sub levels, you wish them displayed. This lets you create arbitrary menus and place them on your theme pages. Use printCustomMenu() to place them on your pages."); ?>
+</p>
+<p>
+<?php echo gettext("<strong>IMPORTANT:</strong> This menu's order is completely independend from any order of albums or pages set on the other admin pages. It is recommend to use with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!");?>
 </p>
 <p class="buttons">
 <button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button>
 <strong><a href="menu_tab_edit.php?add&amp;menuset=<?php echo urlencode($menuset); ?>" title="<?php echo gettext("Add Menu Items"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu Items"); ?></a></strong>
 <strong><a href="javascript:newMenuSet();" title="<?php echo gettext("Add Menu set"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu set"); ?></a></strong>
-<?php 
-if ($count > 0) {
-	$buttontext = sprintf(gettext("Delete %s"),htmlspecialchars($menuset));
-	?>
-	<strong><a href="javascript:deleteMenuSet();" title="<?php echo $buttontext; ?>"><img src="../../images/fail.png" alt="" /><?php echo $buttontext; ?></a></strong>
-	<?php
-}
-?>
 </p>
 <br clear="all" /><br />
 
@@ -89,6 +86,15 @@ if ($count > 0) {
 	  	<strong><?php echo gettext("Edit the menu"); ?></strong>
 	  	<?php printMenuSetSelector(true); ?>
 	  	<?php printItemStatusDropdown(); ?>
+	  	<span class="buttons" style="float: right"><?php 
+if ($count > 0) {
+	$buttontext = sprintf(gettext("Delete menu set '%s'"),htmlspecialchars($menuset));
+	?>
+	<strong><a href="javascript:deleteMenuSet();" title="<?php echo $buttontext; ?>"><img src="../../images/fail.png" alt="" /><?php echo $buttontext; ?></a></strong>
+	<?php
+}
+?>
+</span>
 	  </th>
 	</tr>
 	<tr>

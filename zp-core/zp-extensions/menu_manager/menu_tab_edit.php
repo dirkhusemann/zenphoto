@@ -3,7 +3,7 @@ define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
-require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_management/menu_management-admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manager/menu_manager-admin-functions.php');
 $page = 'edit';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
@@ -38,9 +38,9 @@ if(isset($_GET['del'])) {
 	deleteItem();
 }
 if(isset($_GET['edit'])) {
-	$headline = gettext("Menu Management: Edit Custom Item");
+	$headline = gettext("Menu Manager: Edit Custom Item");
 } else {
-	$headline = gettext("Menu Management: Add Menu Items");
+	$headline = gettext("Menu Manager: Add Menu Items");
 }
  
 ?>
@@ -66,7 +66,7 @@ if (is_array($result)) {
 }
 ?>
 function handleSelectorChange(type) {
-	$('#add,#titlelabel,V,#link_row,#link,#link_label,#visible_row,#show_visible').show();
+	$('#add,#titlelabel,#link_row,#link,#link_label,#visible_row,#show_visible').show();
 	$('#type').val(type);
 	$('#link_label').html('<?php echo gettext('URL'); ?>');
 	switch(type) {
@@ -91,11 +91,11 @@ function handleSelectorChange(type) {
 		case 'album':
 			$('#pageselector,#categoryselector,#titleinput').hide();
 			$('#selector').html('<?php echo gettext("Album"); ?>');
-			$('#description').html('<?php echo gettext("This is for Zenphoto albums. Naturally you cannot change anything for these items here here."); ?>');
+			$('#description').html('<?php echo gettext("This is for Zenphoto albums. Naturally you cannot change anything for these items here."); ?>');
 			$('#link').attr('disabled',true);
 			$('#albumselector').show();
 			$('#albumselector').change(function() {
-				$('#link').val($('#albumselector').val());
+				$('#link').val($(this).val());
 			});
 			break;
 		case 'all_zenpagepages':
@@ -110,7 +110,7 @@ function handleSelectorChange(type) {
 			$('#link').attr('disabled',true);
 			$('#pageselector').show();
 			$('#pageselector').change(function() {
-				$('#link').val($('#pageselector').val());
+				$('#link').val($(this).val());
 			});
 			break;
 		case 'zenpagenewsindex':
@@ -133,7 +133,7 @@ function handleSelectorChange(type) {
 			$("#link").attr('disabled',true);
 			$('#categoryselector').show();
 			$('#categoryselector').change(function() {
-				$('#link').val($('#categoryselector').val());
+				$('#link').val($(this).val());
 			});
 			break;
 		case 'custompage':
@@ -160,14 +160,15 @@ function handleSelectorChange(type) {
 };
 </script>
 <h1><?php echo $headline; ?></h1>
+<?php if(!is_array($result)) { ?>
+<p>Elements with an * are set to unpublished</p>
+<?php } ?>
 <p class="buttons"><strong><a href="menu_tab.php?menuset=<?php echo $menuset; ?>" title="<?php echo gettext("Back"); ?>"><img	src="../../images/arrow_left_blue_round.png" alt="" /><?php echo gettext("Back"); ?></a></strong></p>
 <br clear="all" /><br />
 <div class="box" style="padding:15px; margin-top: 10px">
 <?php
 if(is_array($result)) {
 	?>
-	
-	
 	<form method="post" action="menu_tab_edit.php?update" name="update">
 	<input type="hidden" name="id" value="<?php if(is_array($result)) { echo $result['id']; };?>" />
 	<input type="hidden" name="link-old" type="text" id="link-old" value="<?php echo $result['link'];?>" />

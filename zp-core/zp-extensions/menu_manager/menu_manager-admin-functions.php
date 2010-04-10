@@ -1,7 +1,7 @@
 <?php
-/*******************
- * Menu management admin functions
- *******************/
+/*******************************
+ * Menu manager admin functions
+ *******************************/
 
 /**
  * Creates the db table for the menu (probably needs to be able to use different tables to use several custom menues)
@@ -73,15 +73,13 @@ function printItemsListTable($item, $flag) {
 	<tr>
 		<td class='sort-handle' style="padding-bottom: 15px;">
 			<img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width: 14px; height: 14px" />
-		</td>
-		<td style="text-align: left; width: 260px">
 			<?php
 			printItemEditLink($item); 
 			$array = getItemTitleAndURL($item);
 			?>
 		</td>
 	
-		<td style="text-align: left; width: 460px"><?php echo $item['link']; ?></td>
+		<td class="icons3"><?php echo $array['name']; ?></td>
 		<td class="icons3"><em><?php echo $item['type']; ?></em></td>
 				
 		<td class="icons">
@@ -172,9 +170,9 @@ function printItemsList($items) {
 
 
 /**
- * Enter description here...
+ * Prints the link to the edit page of a menu item. For gallery and Zenpage items it links to their normal edit pages, for custom pages and custom links to menu specific edit page.
  *
- * @param unknown_type $item
+ * @param array $item Array of the menu item
  */
 function printItemEditLink($item) {
 	$link = "";
@@ -199,7 +197,7 @@ function printItemEditLink($item) {
 }
 
 /**
- * Enter description here...
+ * Prints the item status selector to choose if all items or only hidden or visible should be listed
  *
  */
 function printItemStatusDropdown() {
@@ -231,7 +229,8 @@ function printItemStatusDropdown() {
 }
 
 /**
- * Enter description here...
+ * Priints the menu set selector
+ *  @param string $active the active menu set
  *
  */
 function printMenuSetSelector($active) {
@@ -267,10 +266,11 @@ function printMenuSetSelector($active) {
 
 
 /**
- * Enter description here...
+ * Sets a menu item to published/visible
  *
- * @param unknown_type $id
- * @param unknown_type $show
+ * @param integer $id id of the item
+ * @param string $show published status.
+ * @param string $menuset chosen menu set
  */
 function publishItem($id,$show,$menuset) {
 	query("UPDATE ".prefix('menu')." SET `show` = '".$show."' WHERE id = ".$id,true." AND menuset = '".zp_escape_string($menuset)."'");
@@ -316,7 +316,10 @@ function addalbumsToDatabase($menuset) {
 		addSubalbumMenus($menuset, $gallery, 0, $link, sprintf('%03u', $key+$albumbase));
 	}
 }
-
+/**
+ * Adds Zenpage pages to the menu set 
+  * @param string $menuset chosen menu set
+ */
 function addPagesToDatabase($menuset) {
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$result = query($sql);
@@ -343,7 +346,10 @@ function addPagesToDatabase($menuset) {
 		$parents[$level] =$id;
 	}
 }
-
+/**
+ * Adds Zenpage news categories to the menu set 
+ * @param string $menuset chosen menu set
+ */
 function addCategoriesToDatabase($menuset) {
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$result = query($sql);
@@ -364,14 +370,16 @@ function addCategoriesToDatabase($menuset) {
 *********************************************************************/
 
 /**
- * Enter description here...
+ * Adds an menu item set via POST
  *
- * @return unknown
+ * @return array
  */
 function addItem() {
 	$menuset = checkChosenMenuset();
 	$result['type'] = sanitize($_POST['type']);
-	switch ($result['type']) {
+	$result['show'] = getCheckboxState('show');
+	echo "<pre>"; print_r($_POST); echo "</pre>";
+	switch($result['type']) {
 		case 'all_items':
 			addAlbumsToDatabase($menuset);
 			query("INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
@@ -400,48 +408,88 @@ function addItem() {
 			echo "<p class='messagebox' id='fade-message'>".gettext("Menu items for all Zenpage categories added.")."</p>";
 			$result = NULL;
 			break;
-		case 'galleryindex':
-			break;
 		default:
-			$result['title'] = process_language_string_save("title",2);
-			if(empty($_POST['link'])) {
-				$result['link'] = seoFriendly(get_language_string($title));
-			} else {
-				$result['link'] = sanitize($_POST['link']);
+			switch($result['type']) {
+				case 'album':
+					$result['title'] = NULL;
+					$result['link'] = sanitize($_POST['albumselect']);
+					$successmsg = sprintf(gettext("Album menu item <em>%s</em> added"),$result['link']);
+					break;
+				case 'galleryindex':
+					$result['title'] = process_language_string_save("title",2);
+				$result['link'] = NULL;
+					$successmsg = sprintf(gettext("Gallery index menu item <em>%s</em> added"),$result['link']);
+					break;
+				case 'zenpagepage':
+					$result['title'] = NULL;
+					$result['link'] = sanitize($_POST['pageselect']);
+					$successmsg = sprintf(gettext("Zenpage page menu item <em>%s</em> added"),$result['link']);
+					break;
+				case 'zenpagenewsindex':
+					$result['title'] = process_language_string_save("title",2);
+					$result['link'] = NULL;
+					$successmsg = sprintf(gettext("Zenpage news index menu item <em>%s</em> added"),$result['link']);
+					break;
+				case 'zenpagecategory':
+					$result['title'] = NULL;
+					$result['link'] = sanitize($_POST['categoryselect']);
+					$successmsg = sprintf(gettext("Zenpage news category menu item <em>%s</em> added"),$result['link']);
+					break;
+				case 'custompage':
+					$result['title'] = process_language_string_save("title",2);
+					$result['link'] = sanitize($_POST['link']);
+					$successmsg = sprintf(gettext("Custom page menu item <em>%s</em> added"),$result['link']);
+					break;
+				case 'customlink':
+					$result['title'] = process_language_string_save("title",2);
+					if(empty($_POST['link'])) {
+						$result['link'] = seoFriendly(get_language_string($title));
+					} else {
+						$result['link'] = sanitize($_POST['link']);
+					}
+					$successmsg = sprintf(gettext("Custom page menu item <em>%s</em> added"),$result['link']);
+					break;
 			}
-			$result['show'] = getCheckboxState('show');
-			if(empty($result['title']) || empty($result['link'])) {
-				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your custom menu item a <strong>title or link</strong>!")."</p>";
-			} else {
-				$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
-						"VALUES ('".zp_escape_string($result['title']).
-						"', '".zp_escape_string($result['link']).
-						"','".zp_escape_string($result['type'])."','".$result['show'].
-						"','".zp_escape_string($menuset)."','000')";
-				if (query($sql, true)) {
-					echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Custom menu item <em>%s</em> added"),$result['link'])."</p>";
-				} else {
-					echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A menu item with the title/link <em>%s</em> already exists!"),$result['link'])."</p>";
-				}
+			switch($result['type']) {
+				case 'custompage':
+				case 'customlink':
+					$result['title'] = process_language_string_save("title",2);
+					$result['link'] = sanitize($_POST['link']);
+					if(empty($result['title']) || empty($result['link'])) {
+						echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your custom menu item a <strong>title or link</strong>!")."</p>";
+					} else {
+						addSingleItemQuery($result,$menuset,$successmsg);
+					}
+				default:
+					addSingleItemQuery($result,$menuset,$successmsg);
 			}
-			break;
 	}
 	return $result;
 }
 
+function addSingleItemQuery($result,$menuset,$successmsg) {
+	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+						"VALUES ('".zp_escape_string($result['title']).
+						"', '".zp_escape_string($result['link']).
+						"','".zp_escape_string($result['type'])."','".$result['show'].
+						"','".zp_escape_string($menuset)."','000')";
+	if (query($sql, true)) {
+		echo "<p class='messagebox' id='fade-message'>".$successmsg."</p>"; 
+		echo "<pre>"; print_r($result); echo "</pre>";
+	} else {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A menu item with the title/link <em>%s</em> already exists!"),$result['link'])."</p>";
+	}
+}
+
+
 /**
- * Enter description here...
+ * Updates a menu item (custom link, custom page only) set via POST
  *
  */
 function updateItem() {
 	$menuset = checkChosenMenuset();
 	$result['id'] = sanitize($_POST['id']);
-	$result['title'] = process_language_string_save("title",2);
-	if(empty($_POST['link'])) {
-		$result['link'] = seoFriendly(get_language_string($title));
-	} else {
-		$result['link'] = sanitize($_POST['link']);
-	}
+	
 	$result['show'] = getCheckboxState('show');
 	$result['type'] = sanitize($_POST['type']);
 	// update the category in the category table
@@ -463,7 +511,7 @@ function updateItem() {
 }
 
 /**
- * Enter description here...
+ * Deletes a menu item set via GET
  *
  */
 function deleteItem() {
@@ -563,5 +611,4 @@ function unpublishedZenphotoItemCheck($obj,$dropdown=true) {
 	}
 	return $show;
 }
-
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Menu Management
+ * Menu Manager
  * 
  * Lets you create arbitrary menus and place them on your theme pages.
  * 
@@ -16,7 +16,7 @@ $plugin_is_filter = 5;
 $plugin_description = gettext("A menu creation facility. The <em>Menu</em> tab admin interface lets you create arbitrary menu trees. They are placed on your theme pages by the <code>printCustomMenu()</code> function.");
 $plugin_author = "Maltem Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0';
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--menu_management.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--menu_manager.php.html";
 
 zp_register_filter('admin_tabs', 'menu_tabs');
 /**
@@ -31,7 +31,7 @@ function menu_tabs($tabs, $current) {
 	foreach ($tabs as $key=>$tab) {
 		if ($key == 'tags') {
 			$newtabs['menu'] = array(	'text'=>gettext("menu"),
-																'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/menu_management/menu_tab.php?page=menu&amp;tab=menu',
+																'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/menu_manager/menu_tab.php?page=menu&amp;tab=menu',
 																'default'=>'menu',
 																'subtabs'=>NULL);	
 		}
@@ -112,31 +112,32 @@ function getItemTitleAndURL($item) {
 	switch ($item['type']) {
 		case "galleryindex":
 			$url = WEBPATH;
-			$array = array("title" => get_language_string($item['title']),"url" => $url);
+			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url);
 			break;
 		case "album":
 			$obj = new Album($gallery,$item['link']);
 			$url = rewrite_path("/".$item['link'],"/index.php?album=".$item['link']);
-			$array = array("title" => $obj->getTitle(),"url" => $url);
+			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
 			break;
 		case "zenpagepage":
 			$obj = new ZenpagePage($item['link']);
 			$url = rewrite_path("/".ZENPAGE_PAGES."/".$item['link'],"/index.php?p=".ZENPAGE_PAGES."&amp;titlelink=".$item['link']);
-			$array = array("title" => $obj->getTitle(),"url" => $url);
+			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
 			break;
 		case "zenpagenewsindex":
-			$obj = new ZenpagePage($item['link']);
 			$url = rewrite_path("/".ZENPAGE_NEWS,"/index.php?p=".ZENPAGE_NEWS);
-			$array = array("title" => get_language_string($item['title']),"url" => $url); // make title a custom title later..
+			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url); 
 			break;
 		case "zenpagecategory":
 			$obj = query_single_row("SELECT cat_name FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$item['link']."'",true);
 			$url = rewrite_path("/".ZENPAGE_NEWS."/category/".$item['link'],"/index.php?p=".ZENPAGE_NEWS."&amp;category=".$item['link']);
-			$array = array("title" => get_language_string($obj['cat_name']),"url" => $url);
+			$array = array("title" => get_language_string($obj['cat_name']),"url" => $url,"name" => $item['link']);
 			break;
-		case "customlink":
 		case "custompage":
-			$array = array("title" => get_language_string($item['title']),"url" => $item['link']);
+			$url = rewrite_path("/page/".$item['link'],"/index.php?p=".$item['link']);
+			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $item['link']);
+		case "customlink":
+			$array = array("title" => get_language_string($item['title']),"url" => $item['link'],"name" => $item['link']);
 			break;
 	}
 	return $array;
