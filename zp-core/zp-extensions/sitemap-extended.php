@@ -328,7 +328,7 @@ function printSitemapZenpagePages($changefreq='') {
 		foreach($pages as $page) {
 			$pageobj = new ZenpagePage($page['titlelink']);
 			$date = substr($pageobj->getDatetime(),0,10);
-			$lastchange = substr($pageobj->getLastchange(),0,10);
+			if(!is_null($pageobj->getLastchange())) $lastchange = substr($pageobj->getLastchange(),0,10);
 			if($date > $lastchange) $date = $lastchange;
 			$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_PAGES.'/'.urlencode($page['titlelink']),'?p='.ZENPAGE_PAGES.'&amp;title='.urlencode($page['titlelink']),false);
 			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
@@ -373,7 +373,7 @@ function printSitemapZenpageNewsArticles($changefreq='') {
 		foreach($articles as $article) {
 			$articleobj = new ZenpageNews($article['titlelink']);
 			$date = substr($articleobj->getDatetime(),0,10);
-			$lastchange = substr($articleobj->getLastchange(),0,10);
+			if(!is_null($articleobj->getLastchange())) $lastchange = substr($articleobj->getLastchange(),0,10);
 			if($date > $lastchange) $date = $lastchange;
 			$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/'.urlencode($articleobj->getTitlelink()),'?p='.ZENPAGE_NEWS.'&amp;title=' . urlencode($articleobj->getTitlelink()),false);
 			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
