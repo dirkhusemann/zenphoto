@@ -27,17 +27,20 @@ zp_register_filter('admin_tabs', 'menu_tabs');
  * @return unknown
  */
 function menu_tabs($tabs, $current) {
-	$newtabs = array();
-	foreach ($tabs as $key=>$tab) {
-		if ($key == 'tags') {
-			$newtabs['menu'] = array(	'text'=>gettext("menu"),
-																'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/menu_manager/menu_tab.php?page=menu&amp;tab=menu',
-																'default'=>'menu',
-																'subtabs'=>NULL);	
+	if (zp_loggedin()) {
+		$newtabs = array();
+		foreach ($tabs as $key=>$tab) {
+			if ($key == 'tags') {
+				$newtabs['menu'] = array(	'text'=>gettext("menu"),
+																	'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/menu_manager/menu_tab.php?page=menu&amp;tab=menu',
+																	'default'=>'menu',
+																	'subtabs'=>NULL);	
+			}
+			$newtabs[$key] = $tab;
 		}
-		$newtabs[$key] = $tab;
+		return $newtabs;
 	}
-	return $newtabs;
+	return $tabs;
 }
 
 /*

@@ -5,6 +5,15 @@ require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manager/menu_manager-admin-functions.php');
 
+if (!(zp_loggedin())) { // prevent nefarious access to this page.
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+	exit();
+}
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
+}
+
 $page = 'edit';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
@@ -84,7 +93,7 @@ $count = mysql_result($result, 0);
 	<tr> 
 	  <th colspan="2" style="text-align:left">
 	  	<strong><?php echo gettext("Edit the menu"); ?></strong>
-	  	<?php printMenuSetSelector(true); ?>
+	  	<?php echo getMenuSetSelector(true); ?>
 	  	<?php printItemStatusDropdown(); ?>
 	  	<span class="buttons" style="float: right"><?php 
 if ($count > 0) {

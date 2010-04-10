@@ -4,6 +4,16 @@ require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manager/menu_manager-admin-functions.php');
+
+if (!(zp_loggedin())) { // prevent nefarious access to this page.
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+	exit();
+}
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
+}
+
 $page = 'edit';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
@@ -37,34 +47,9 @@ if(isset($_GET['save'])) {
 if(isset($_GET['del'])) {
 	deleteItem();
 }
-if(isset($_GET['edit'])) {
-	$headline = gettext("Menu Manager: Edit Custom Item");
-} else {
-	$headline = gettext("Menu Manager: Add Menu Items");
-}
  
 ?>
 <script type="text/javascript">
-<?php
-if (is_array($result)) {
-	?>
-	$(document).ready(function() {
-			handleSelectorChange('<?php echo $result['type']; ?>');
-		});
-	<?php
-} else {
-	?>
-	$(document).ready(function() {
-		$('#albumselector,#pageselector,#categoryselector,#titleinput').hide();
-		$('#typeselector').change(function() {
-				$('input').val(''); // reset all input values so we do not carry them over from one type to another
-				$('#link').val('');
-				handleSelectorChange($(this).val());
-			});
-		});
-	<?php
-}
-?>
 function handleSelectorChange(type) {
 	$('#add,#titlelabel,#link_row,#link,#link_label,#visible_row,#show_visible').show();
 	$('#type').val(type);
@@ -159,23 +144,57 @@ function handleSelectorChange(type) {
 	}
 };
 </script>
-<h1><?php echo $headline; ?></h1>
-<?php if(!is_array($result)) { ?>
-<p>Elements with an * are set to unpublished</p>
-<?php } ?>
+<script type="text/javascript">
+<?php
+if (is_array($result)) {
+	?>
+	$(document).ready(function() {
+			handleSelectorChange('<?php echo $result['type']; ?>');
+		});
+	<?php
+} else {
+	?>
+	$(document).ready(function() {
+		$('#albumselector,#pageselector,#categoryselector,#titleinput').hide();
+		$('#typeselector').change(function() {
+				$('input').val(''); // reset all input values so we do not carry them over from one type to another
+				$('#link').val('');
+				handleSelectorChange($(this).val());
+			});
+		});
+	<?php
+}
+?>
+</script>
+<h1>
+<?php
+if(is_array($result) && $result['id']) {
+	if (isset($_GET['edit'])) {
+		echo gettext("Menu Manager: Edit Menu Item");
+	} else {
+		echo gettext("Menu Manager: Edit Menu Item or add new Menu Item");
+	}
+} else {
+	echo gettext("Menu Manager: Add Menu Item");
+}
+?>
+</h1>
 <p class="buttons"><strong><a href="menu_tab.php?menuset=<?php echo $menuset; ?>" title="<?php echo gettext("Back"); ?>"><img	src="../../images/arrow_left_blue_round.png" alt="" /><?php echo gettext("Back"); ?></a></strong></p>
 <br clear="all" /><br />
 <div class="box" style="padding:15px; margin-top: 10px">
 <?php
 if(is_array($result)) {
+	$type = $result['type'];
 	?>
 	<form method="post" action="menu_tab_edit.php?update" name="update">
 	<input type="hidden" name="id" value="<?php if(is_array($result)) { echo $result['id']; };?>" />
 	<input type="hidden" name="link-old" type="text" id="link-old" value="<?php echo $result['link'];?>" />
-	<input type="hidden" name="type" id="type" value="<?php echo $result['type'];?>" />
 	<input type="hidden" name="menuset" id="menuset" value="<?php echo $menuset; ?>" />
 	<?php
 } else {
+	$type = '';
+}
+if (isset($_GET['add'])) {
 	?>
 	<select id="typeselector" name="typeselector">
 		<option value=""><?php echo gettext("*Select the type of the menus item you wish to add*"); ?></option>
@@ -197,55 +216,56 @@ if(is_array($result)) {
 		<option value="custompage"><?php echo gettext("Custom theme page"); ?></option>
 		<option value="customlink"><?php echo gettext("Custom link"); ?></option>
 	</select>
-	<form method="post" id="add" name="add" action="menu_tab_edit.php?save" style="display: none">
-	<input name="type" type="hidden" id="type" size="48" value="" />
-<?php
-}
-?>
-<table style="width: 80%">
-<?php
-if(!is_array($result)) {
-	$result = array('id'=>NULL, 'title'=>'', 'link'=>'', 'show'=>1,'type'=>NULL);
-	?>
-	<tr>
-		<td colspan="2"><?php printMenuSetSelector(false); echo gettext("Menu set"); ?></td>
-	</tr>     
+	<form method="post" id="add" name="add" action="menu_tab_edit.php?add&amp;save" style="display: none">
 	<?php
 }
 ?>
-	<tr style="vertical-align: top">
-		<td style="width: 13%"><?php echo gettext("Type:"); ?></td>
-		<td id="selector"></td>
-	</tr>
-	<tr style="vertical-align: top";>
-		<td><?php echo gettext("Description:"); ?></td>
-		<td id="description"></td>
-	</tr>
-	<tr> 
-    <td><span id="titlelabel"><?php echo gettext("Title:"); ?></span></td>
-		<td>
-		<span id="titleinput"><?php print_language_string_list($result['title'],"title",false); ?></span>
-		<?php printAlbumsSelector(); ?>
-		<?php printZenpagePagesSelector(); ?>
-		<?php printZenpageNewsCategorySelector(); ?>
-		</td>
-	</tr>
-	<tr id="link_row">
-		<td><span id="link_label"></span></td>
-		<td><input name="link" type="text" id="link" size="48" value="<?php echo htmlspecialchars($result['link']); ?>" /></td>
-	</tr>
-	<tr id="visible_row">
-		<td><label id="show_visible" for="show" style="display: inline">
-			<input name="show" type="checkbox" id="show" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
-			<?php echo gettext("visible"); ?></label>
-		</td>
-	</tr>
-</table>
-<p class="buttons">
-<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-</p>
-<br clear="all" /><br />
+		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />
+		<table style="width: 80%">
+		<?php
+		if(is_array($result)) {
+			$selector = htmlspecialchars($menuset);
+		} else {
+			$result = array('id'=>NULL, 'title'=>'', 'link'=>'', 'show'=>1,'type'=>NULL);
+			$selector = getMenuSetSelector(false);
+		}
+			?>
+			<tr>
+				<td colspan="2"><?php printf(gettext("Menu set <em>%s</em>"), $selector); ?></td>
+			</tr>     
+			<tr style="vertical-align: top">
+				<td style="width: 13%"><?php echo gettext("Type:"); ?></td>
+				<td id="selector"></td>
+			</tr>
+			<tr style="vertical-align: top";>
+				<td><?php echo gettext("Description:"); ?></td>
+				<td id="description"></td>
+			</tr>
+			<tr> 
+		    <td><span id="titlelabel"><?php echo gettext("Title:"); ?></span></td>
+				<td>
+				<span id="titleinput"><?php print_language_string_list($result['title'],"title",false); ?></span>
+				<?php printAlbumsSelector(); ?>
+				<?php printZenpagePagesSelector(); ?>
+				<?php printZenpageNewsCategorySelector(); ?>
+				</td>
+			</tr>
+			<tr id="link_row">
+				<td><span id="link_label"></span></td>
+				<td><input name="link" type="text" id="link" size="48" value="<?php echo htmlspecialchars($result['link']); ?>" /></td>
+			</tr>
+			<tr id="visible_row">
+				<td><label id="show_visible" for="show" style="display: inline">
+					<input name="show" type="checkbox" id="show" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
+					<?php echo gettext("visible"); ?></label>
+				</td>
+			</tr>
+		</table>
+	<p class="buttons">
+	<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+	<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+	</p>
+	<br clear="all" /><br />
 </form>
 </div>
 </div>

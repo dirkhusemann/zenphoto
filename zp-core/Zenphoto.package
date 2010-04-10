@@ -642,11 +642,11 @@ zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_prev.png
 zp-core/zp-extensions/jcarousel_thumb_nav/jquery.jcarousel.css
 zp-core/zp-extensions/jcarousel_thumb_nav/jquery.jcarousel.pack.js
 zp-core/zp-extensions/jcarousel_thumb_nav.php
-zp-core/zp-extensions/menu_management
-zp-core/zp-extensions/menu_management/menu_management-admin-functions.php
-zp-core/zp-extensions/menu_management/menu_tab.php
-zp-core/zp-extensions/menu_management/menu_tab_edit.php
-zp-core/zp-extensions/menu_management.php
+zp-core/zp-extensions/menu_manager
+zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php
+zp-core/zp-extensions/menu_manager/menu_tab.php
+zp-core/zp-extensions/menu_manager/menu_tab_edit.php
+zp-core/zp-extensions/menu_manager.php
 zp-core/zp-extensions/paged_thumbs_nav.php
 zp-core/zp-extensions/PHPMailer
 zp-core/zp-extensions/PHPMailer/class.phpmailer.php
