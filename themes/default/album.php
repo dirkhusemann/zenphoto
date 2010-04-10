@@ -21,7 +21,6 @@
 		<div id="padbox">
 
 		<?php printAlbumDesc(true); ?>
-
 			<div id="albums">
 			<?php while (next_album()): ?>
 			<div class="album">

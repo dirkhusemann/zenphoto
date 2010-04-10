@@ -49,6 +49,8 @@ function menu_tabs($tabs, $current) {
  * 
  */
 
+$_menu_manager_items = array();
+
 /**
  * Enter description here...
  *
@@ -57,7 +59,8 @@ function menu_tabs($tabs, $current) {
  * @return unknown
  */
 function getMenuItems($menuset, $visible) {
-	$visible = checkChosenItemStatus();
+	global $_menu_manager_items;
+	if (isset($_menu_manager_items[$visible])) return $_menu_manager_items[$visible];
 	switch($visible) {
 		case 'visible':
 			$where = " WHERE `show` = 1 AND menuset = '".zp_escape_string($menuset)."'";
@@ -67,10 +70,14 @@ function getMenuItems($menuset, $visible) {
 			break;
 		default:
 			$where = " WHERE menuset = '".zp_escape_string($menuset)."'";
+			$visible = 'all';
 			break;
 	}
 	$result = query_full_array("SELECT id, parentid, title, link, type, sort_order,`show`, menuset FROM ".prefix('menu').$where." ORDER BY sort_order");
-	return $result;
+	foreach ($result as $item) {
+		$_menu_manager_items[$visible][$item['id']] = $item;
+	}
+	return $_menu_manager_items[$visible];
 }
 
 /**
@@ -148,8 +155,124 @@ function getItemTitleAndURL($item) {
 
 
 /*******************
- * Theme functions ------ THIS DOES NOT FULLY WORK YET!!!
+ * Theme functions
  *******************/
+
+function getMenuVisibility() {
+	if(zp_loggedin(ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS)) {
+		return "all";
+	} else {
+		return "visible";
+	}
+}
+
+function getCurrentMenuItem($menuset='default') {
+	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
+	$items = getMenuItems($menuset, getMenuVisibility());
+	$id = NULL;
+	foreach ($items as $item) {
+		$array = getItemTitleAndURL($item);
+		if($currentpageURL == $array['url']) {
+			$id = $item['id'];
+			break;
+		}
+	}
+	return $id;
+}
+
+function getMenumanagerPredicessor($menuset='default') {
+	$items = getMenuItems($menuset, getMenuVisibility());
+	if (count($items)==0) return NULL;
+	$id = getCurrentMenuItem();
+	if (empty($id)) return NULL;
+	$sortorder = $items[$id]['sort_order'];
+	$order = explode('-', $sortorder);
+	$next = array_pop($order) - 1;
+	if ($next < 0) return NULL;
+	array_push($order, sprintf('%03u',$next));
+	$sortorder = implode('-', $order);
+	foreach ($items as $item) {
+		if ($item['sort_order'] == $sortorder) {
+			return getItemTitleAndURL($item);
+		}
+	}
+	return NULL;
+}
+
+function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
+	$itemarray = getMenumanagerPredicessor($menuset);
+	if (is_array($itemarray)) {
+		if (is_null($title)) $title = $itemarray['title'];
+		printLink($itemarray['url'], $text, $title, $class, $id);
+	} else {
+		echo '<span class="disabledlink">$text</span>';
+	}
+}
+
+function getMenumanagerSuccessor($menuset='default') {
+	$items = getMenuItems($menuset, getMenuVisibility());
+	if (count($items)==0) return NULL;
+	$id = getCurrentMenuItem();
+	if (empty($id)) return NULL;
+	$sortorder = $items[$id]['sort_order'];
+	$order = explode('-', $sortorder);
+	$next = array_pop($order) + 1;
+	array_push($order, sprintf('%03u',$next));
+	$sortorder = implode('-', $order);
+	foreach ($items as $item) {
+		if ($item['sort_order'] == $sortorder) {
+			return getItemTitleAndURL($item);
+		}
+	}
+	return NULL;
+}
+
+function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
+	$itemarray = getMenumanagerSuccessor($menuset);
+	if (is_array($itemarray)) {
+		if (is_null($title)) $title = $itemarray['title'];
+		printLink($itemarray['url'], $text, $title, $class, $id);
+	} else {
+		echo '<span class="disabledlink">$text</span>';
+	}
+}
+
+function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' | ', $after=' | ') {
+	echo $before;
+	$items = getMenuItems($menuset, getMenuVisibility());
+	if (count($items)>0){
+		$id = getCurrentMenuItem();
+		if ($id) {
+			$sortorder = $items[$id]['sort_order'];
+			$order = explode('-', $sortorder);
+			array_pop($order);
+			$look = array();
+			while (count($order) > 0) {
+				$look[] = implode('-', $order);
+				array_pop($order);
+			}
+			$parents = array();
+			foreach ($items as $item) {
+				foreach ($look as $key=>$see) {
+					if ($see == $item['sort_order']) {
+						$parents[] = $item;
+						unset($look[$key]);
+						break;
+					}
+				}
+			}
+			if (!empty($parents)) sortMultiArray($parents, 'sort_order', $descending=false, $natsort=false, $case_sensitive=false);
+			$i = 0;
+			foreach ($parents as $item) {
+				if ($i > 0) echo $between;
+				$itemarray = getItemTitleAndURL($item);
+				printLink($itemarray['url'], $itemarray['title'], $itemarray['title']);
+				$i++;
+			}
+		}
+	}
+	echo $after;
+}
 
 /**
  * Prints a context sensitive menu of all pages as a unordered html list
@@ -176,26 +299,11 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
 
-	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS))) {
-		$published = "all";
-	} else {
-		$published = "visible";
-	}
-	$items = getMenuItems($menuset, $published);
+	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return; // nothing to do
 	echo "<ul$css_id>";
-	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
-	$sortorder = "";
-	$id = "";
-	foreach ($items as $item) {
-		$array = getItemTitleAndURL($item);
-		$itemURL = $array['url'];
-		if($currentpageURL == $itemURL) {
-			$sortorder = $item['sort_order'];
-			$id = $item['id'];
-			break;
-		}
-	}
+	$id = getCurrentMenuItem();
+	$sortorder = $items[$id]['sort_order'];
 	
 	$baseindent = max(1,count(explode("-", $sortorder)));
 	$indent = 1;
@@ -263,7 +371,7 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 			} else {
 				$class = $css_class_active;
 			}
-			if ($itemURL == $currentpageURL) {
+			if ($item['id'] == $id) {
 				echo "<li $class>".$itemtitle; 
 			} else {
 				echo "<li><a href=\"".$itemURL."\" title=\"".strip_tags($itemtitle)."\">".$itemtitle."</a>";
