@@ -21,21 +21,13 @@ printTabs("menu");
 ?>
 <div id="content">
 <?php
-
-// create menu table and then get albums, pages and categories and put them into menu db table
-// this is rought of course...
-
 createTable();
-if (!isset($_GET['menuset'])) { //	setup default menuset
-	$menuset = 'default';
-} else {
+if (isset($_GET['menuset'])) { 
 	$menuset = checkChosenMenuset();
+} else {	//	setup default menuset
+	$menuset = 'default';
 }
-addAlbumsToDatabase($menuset);
-if(getOption('zp_plugin_zenpage')) {
-	addPagesToDatabase($menuset);
-	addCategoriesToDatabase($menuset);
-}
+
 if(isset($_POST['update'])) {
 	updateItemsSortorder();
 }
@@ -73,12 +65,21 @@ $count = mysql_result($result, 0);
  
 <form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update">
 
-<p><?php echo gettext("Drag the items into the order, including sub page levels, you wish them displayed. <br /><br /><strong>IMPORTANT:</strong> This menu's order is completely independend from any order of albums or pages set on the other admin pages. It is recommend to use with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!"); ?></p>
+<p>
+<?php echo gettext("Drag the items into the order, including sub page levels, you wish them displayed. <br /><br /><strong>IMPORTANT:</strong> This menu's order is completely independend from any order of albums or pages set on the other admin pages. It is recommend to use with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!");?>
+</p>
 <p class="buttons">
 <button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button>
-<strong><a href="menu_tab_edit.php?add&amp;menuset=<?php echo urlencode($menuset); ?>" title="<?php echo gettext("Add Menu Item"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu Item"); ?></a></strong>
+<strong><a href="menu_tab_edit.php?add&amp;menuset=<?php echo urlencode($menuset); ?>" title="<?php echo gettext("Add Menu Items"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu Items"); ?></a></strong>
 <strong><a href="javascript:newMenuSet();" title="<?php echo gettext("Add Menu set"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu set"); ?></a></strong>
-<strong><a href="javascript:deleteMenuSet();" title="<?php echo gettext("Delete Menu set"); ?>"><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete Menu set"); ?></a></strong>
+<?php 
+if ($count > 0) {
+	$buttontext = sprintf(gettext("Delete %s"),htmlspecialchars($menuset));
+	?>
+	<strong><a href="javascript:deleteMenuSet();" title="<?php echo $buttontext; ?>"><img src="../../images/fail.png" alt="" /><?php echo $buttontext; ?></a></strong>
+	<?php
+}
+?>
 </p>
 <br clear="all" /><br />
 
