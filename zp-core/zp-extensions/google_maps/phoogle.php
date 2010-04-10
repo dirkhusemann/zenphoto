@@ -249,6 +249,9 @@ class PhoogleMap{
 				case 'Large':
 					$this->controlType = 'map.addControl(new GLargeMapControl());';
 					break;
+				case 'Large3D':
+					$this->controlType = 'map.addControl(new GLargeMapControl3D());';
+					break;
 				default:
 					$this->controlType = $controlmap;
 			}
@@ -305,7 +308,6 @@ class PhoogleMap{
 		<div id="map" style="width: <?php echo $this->mapWidth; ?>px; height: <?php echo $this->mapHeight; ?>px">
 		</div>
 		<script type="text/javascript">
-		function showmap(){
 	   	if (GBrowserIsCompatible()) {
 	   		
     		map = new GMap2(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
@@ -393,8 +395,6 @@ class PhoogleMap{
 					var text = document.createTextNode("<?php echo gettext('Your browser is not compatible with Google maps'); ?>");
 					document.getElementById("map").appendChild(text);
 				}
-			}
-			window.onload = showmap;
 			</script>
 		<?php
 	}

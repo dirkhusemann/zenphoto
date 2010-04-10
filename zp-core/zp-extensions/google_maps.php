@@ -296,7 +296,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
 				$infoHTML = '<a href="' . htmlspecialchars(getImageLinkURL()) . '"><img src="' .
 					htmlspecialchars(getImageThumb()) . '" alt="' . getImageDesc() . '" ' .
-					'style=" margin-left: 30%; margin-right: 10%; border: 0px; " /></a>' . getImageDesc();
+					'style=" margin-left: 30%; margin-right: 10%; border: 0px; " /></a><p align=center >' . getImageDesc()."</p>";
 				addPoint($lat, $long, js_encode($infoHTML));
 			}
 		}
