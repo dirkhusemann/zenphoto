@@ -289,8 +289,8 @@ function addSubalbumMenus($menuset, $gallery, $id, $link, $sort) {
 	$album = new Album($gallery, $link);
 	$show = $album->get('show');
 	$title = $album->getTitle();
-	$sql = "INSERT INTO ".prefix('menu')." (`link`,`title`,`type`,`show`,`menuset`,`sort_order`, `parentid`) ".
-																				'VALUES ("'.zp_escape_string($link).'", "'.zp_escape_string($title).'", "album", "'.$show.'","'.zp_escape_string($menuset).'", "'.$sort.'",'.$id.')';
+	$sql = "INSERT INTO ".prefix('menu')." (`link`,`type`,`show`,`menuset`,`sort_order`, `parentid`) ".
+																				'VALUES ("'.zp_escape_string($link).'", "album", "'.$show.'","'.zp_escape_string($menuset).'", "'.$sort.'",'.$id.')';
 	$result = query($sql, true);													
 	if ($result) {
 		$id = mysql_insert_id();
@@ -325,7 +325,7 @@ function addPagesToDatabase($menuset) {
 	$result = query($sql);
 	$pagebase = mysql_result($result, 0);
 	$parents = array(0);
-	$result = query_full_array("SELECT `title`, `titlelink`, `show`, `sort_order` FROM ".prefix('zenpage_pages')." ORDER BY sort_order");
+	$result = query_full_array("SELECT `titlelink`, `show`, `sort_order` FROM ".prefix('zenpage_pages')." ORDER BY sort_order");
 	foreach($result as $key=>$item) {
 		$sorts = explode('-',$item['sort_order']);
 		$level = count($sorts);
@@ -334,9 +334,8 @@ function addPagesToDatabase($menuset) {
 		$show = $item['show'];
 		$link = $item['titlelink'];
 		$parent = $parents[$level-1];
-		$title = $item['title'];
-		$sql = "INSERT INTO ".prefix('menu')." (`link`, `title`, `type`, `show`,`menuset`,`sort_order`, `parentid`) ".
-				'VALUES ("'.zp_escape_string($link).'","'.zp_escape_string($title).'", "zenpagepage",'.$show.',"'.zp_escape_string($menuset).'", "'.$order.'",'.$parent.')';
+		$sql = "INSERT INTO ".prefix('menu')." (`link`, `type`, `show`,`menuset`,`sort_order`, `parentid`) ".
+				'VALUES ("'.zp_escape_string($link).'","zenpagepage",'.$show.',"'.zp_escape_string($menuset).'", "'.$order.'",'.$parent.')';
 		if (query($sql, true)) {
 			$id = mysql_insert_id();
 		} else {
@@ -378,7 +377,7 @@ function addItem() {
 	$menuset = checkChosenMenuset();
 	$result['type'] = sanitize($_POST['type']);
 	$result['show'] = getCheckboxState('show');
-	echo "<pre>"; print_r($_POST); echo "</pre>";
+	//echo "<pre>"; print_r($_POST); echo "</pre>"; // for debugging
 	switch($result['type']) {
 		case 'all_items':
 			addAlbumsToDatabase($menuset);

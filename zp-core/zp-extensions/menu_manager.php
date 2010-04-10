@@ -285,5 +285,4 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	}
 	echo "</ul>\n";
 }
-
 ?>
