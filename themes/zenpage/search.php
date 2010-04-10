@@ -41,7 +41,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		$searchwords = getSearchWords();
 		$searchdate = getSearchDate();
 		if (!empty($searchdate)) {
-			if (!empty($seachwords)) {
+			if (!empty($searchwords)) {
 				$searchwords .= ": ";
 			}
 			$searchwords .= $searchdate;
