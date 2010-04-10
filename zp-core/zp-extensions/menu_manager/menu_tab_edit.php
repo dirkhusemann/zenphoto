@@ -54,85 +54,89 @@ function handleSelectorChange(type) {
 	$('#add,#titlelabel,#link_row,#link,#link_label,#visible_row,#show_visible').show();
 	$('#type').val(type);
 	$('#link_label').html('<?php echo gettext('URL'); ?>');
+	$('#titlelabel').html('<?php echo gettext('Title'); ?>');
 	switch(type) {
 		case 'all_items':
-			$('#albumselector,#pageselector,#categoryselector,#titleinput,#titlelabel,#link_row,#link,#link_label,#visible_row').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo gettext("All menu items"); ?>');
 			$('#description').html('<?php echo gettext('This adds menu items for all Zenphoto objects. (It creates a "default" menuset.)'); ?>');
 			break;
 		case "galleryindex":
-			$('#albumselector,#pageselector,#categoryselector,#link_row,#link,#link_label').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#link_row,').hide();
 			$('#selector').html('<?php echo gettext("Gallery index"); ?>');
-			$('#description').html('<?php echo gettext("This is the normal Zenphoto gallery index page."); ?>');
+			$('#description').html('<?php echo gettext("This is the normal Zenphoto gallery Index page."); ?>');
 			$('#link').attr('disabled',true);
 			$('#titleinput').show();
 			$('#link').val('<?php echo WEBPATH; ?>/');
 			break;
 		case 'all_albums':
-			$('#albumselector,#pageselector,#categoryselector,#titleinput,#titlelabel,#link_row,#link,#link_label,#visible_row').hide();
+			$('#albumselector,#pageselector,#categoryselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo gettext("All Albums"); ?>');
 			$('#description').html('<?php echo gettext("This adds menu items for all Zenphoto albums."); ?>');
 			break;
 		case 'album':
-			$('#pageselector,#categoryselector,#titleinput').hide();
+			$('#pageselector,#categoryselector,#custompageselector,#titleinput,#link_row').hide();
 			$('#selector').html('<?php echo gettext("Album"); ?>');
-			$('#description').html('<?php echo gettext("This is for Zenphoto albums. Naturally you cannot change anything for these items here."); ?>');
+			$('#description').html('<?php echo gettext("Creates a link to a Zenphoto Album."); ?>');
 			$('#link').attr('disabled',true);
 			$('#albumselector').show();
+			$('#titlelabel').html('<?php echo gettext('Album'); ?>');
 			$('#albumselector').change(function() {
 				$('#link').val($(this).val());
 			});
 			break;
 		case 'all_zenpagepages':
-			$('#albumselector,#pageselector,#categoryselector,#titleinput,#titlelabel,#link_row,#link,#link_label,#visible_row').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo gettext("All Zenpage pages"); ?>');
 			$('#description').html('<?php echo gettext("This adds menu items for all Zenppage pages."); ?>');
 			break;
 		case 'zenpagepage':
-			$('#albumselector,#categoryselector,#titleinput').hide();
+			$('#albumselector,#categoryselector,#custompageselector,#link_row,#titleinput').hide();
 			$('#selector').html('<?php echo gettext("Zenpage page"); ?>');
-			$('#description').html('<?php echo gettext("This is for Zenpage CMS pages. Naturally you cannot change anything for these items here."); ?>');
+			$('#description').html('<?php echo gettext("Creates a link to a Zenpage Page."); ?>');
 			$('#link').attr('disabled',true);
 			$('#pageselector').show();
+			$('#titlelabel').html('<?php echo gettext('Page'); ?>');
 			$('#pageselector').change(function() {
 				$('#link').val($(this).val());
 			});
 			break;
 		case 'zenpagenewsindex':
-			$('#albumselector,#pageselector,#categoryselector,#link,#link_label').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#link_row').hide();
 			$('#selector').html('<?php echo gettext("Zenpage news index"); ?>');
-			$('#description').html('<?php echo gettext("This is for news loop of the Zenpage CMS plugin."); ?>');
+			$('#description').html('<?php echo gettext("Creates a link to the Zenpage News Index."); ?>');
 			$('#link').attr('disabled',true);
 			$('#titleinput').show();
 			$('#link').val('<?php echo rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS); ?>');
 			break;	
 		case 'all_zenpagecategorys':
-			$('#albumselector,#pageselector,#categoryselector,#titleinput,#titlelabel,#link_row,#link,#link_label,#show_visible').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#show_visible').hide();
 			$('#selector').html('<?php echo gettext("All Zenpage categories"); ?>');
 			$('#description').html('<?php echo gettext("This adds menu items for all Zenppage categories."); ?>');
 			break;
 		case 'zenpagecategory':
-			$('#albumselector,#pageselector,#titleinput').hide();
+			$('#albumselector,#pageselector,#custompageselector,#custompageselector,#titleinput,#link_row').hide();
 			$('#selector').html('<?php echo gettext("Zenpage news category"); ?>');
-			$('#description').html('<?php echo gettext("This is for the news categories for Zenpage CMS news articles. Naturally you cannot change anything for these items here."); ?>');
+			$('#description').html('<?php echo gettext("Creates a link to a Zenpage News article category."); ?>');
 			$("#link").attr('disabled',true);
 			$('#categoryselector').show();
+			$('#titlelabel').html('<?php echo gettext('Category'); ?>');
 			$('#categoryselector').change(function() {
 				$('#link').val($(this).val());
 			});
 			break;
 		case 'custompage':
-			$('#albumselector,#pageselector,#categoryselector').hide();
+			$('#albumselector,#pageselector,#categoryselector,#link,').hide();
+			$('#custompageselector').show();
 			$('#selector').html('<?php echo gettext("Custom page"); ?>');
-			$('#description').html('<?php echo gettext("This refers to the custom theme page feater which is described on the theming tutorial. Just enter a custom title and the file name (e.g. archive.php) and the correct URL is created automatically."); ?>');
-			$('#link').removeAttr('disabled');
+			$('#description').html('<?php echo gettext('Creates a link to a custom theme page as described in the theming tutorial.'); ?>');
 			$('#link_label').html('<?php echo gettext('Script page'); ?>');
 			$('#titleinput').show();
 			break;
 		case "customlink":
-			$('#albumselector,#pageselector,#categoryselector').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector').hide();
 			$('#selector').html('<?php echo gettext("Custom link"); ?>');
-			$('#description').html('<?php echo gettext("This can be be a external link for example so the full URL is recommended (e.g http://www.domain.com)."); ?>');
+			$('#description').html('<?php echo gettext("Creates a link outside the Zenphoto structure. Use of a full URL is recommended (e.g http://www.domain.com)."); ?>');
 			$('#link').removeAttr('disabled');
 			$('#link_label').html('<?php echo gettext('URL'); ?>');
 			$('#titleinput').show();
@@ -252,7 +256,10 @@ if (isset($_GET['add'])) {
 			</tr>
 			<tr id="link_row">
 				<td><span id="link_label"></span></td>
-				<td><input name="link" type="text" id="link" size="48" value="<?php echo htmlspecialchars($result['link']); ?>" /></td>
+				<td>
+					<?php printCustomPageSelector($result['link']); ?>
+					<input name="link" type="text" id="link" size="48" value="<?php echo htmlspecialchars($result['link']); ?>" />
+				</td>
 			</tr>
 			<tr id="visible_row">
 				<td><label id="show_visible" for="show" style="display: inline">

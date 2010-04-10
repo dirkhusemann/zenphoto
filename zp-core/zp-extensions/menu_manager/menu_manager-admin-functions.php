@@ -447,9 +447,9 @@ function addItem() {
 			break;
 		case 'custompage':
 			$result['title'] = process_language_string_save("title",2);
-			$result['link'] = sanitize($_POST['link']);
-			if(empty($result['title']) || empty($result['link'])) {
-				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title or link</strong>!")."</p>";
+			$result['link'] = sanitize($_POST['custompageselect']);
+			if(empty($result['title'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
 				return $result;
 			}
 			$successmsg = sprintf(gettext("Custom page menu item <em>%s</em> added"),$result['link']);
@@ -614,6 +614,28 @@ function printZenpageNewsCategorySelector() {
 ?>
 </select>
 <?php
+}
+
+function printCustomPageSelector($current) {
+	$gallery = new Gallery();
+	?>
+	<select id="custompageselector" name="custompageselect">
+		<?php
+		$curdir = getcwd();
+		$themename = $gallery->getCurrentTheme();
+		$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
+		chdir($root);
+		$filelist = safe_glob('*.php');
+		$list = array();
+		foreach($filelist as $file) {
+			$list[] = str_replace('.php', '', filesystemToInternal($file));
+		}
+		$list = array_diff($list, standardScripts());
+		generateListFromArray(array($current), $list, false, false);
+		chdir($curdir);
+		?>
+	</select>
+	<?php
 }
 
 /**
