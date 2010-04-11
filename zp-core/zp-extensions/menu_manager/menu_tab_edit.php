@@ -18,9 +18,6 @@ $page = 'edit';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
 <link rel="stylesheet" href="../zenpage/zenpage.css" type="text/css" />
-<script type="text/javascript" src="../zenpage/js/interface-1.2.js"></script>
-<!--Nested Sortables-->
-<script type="text/javascript" src="../zenpage/js/inestedsortable.js"></script>
 <?php 
 $_zp_gallery = new Gallery();
 $menuset = checkChosenMenuset();
@@ -50,6 +47,7 @@ if(isset($_GET['del'])) {
  
 ?>
 <script type="text/javascript">
+// <!-- <![CDATA[
 function handleSelectorChange(type) {
 	$('#add,#titlelabel,#link_row,#link,#link_label,#visible_row,#show_visible').show();
 	$('#type').val(type);
@@ -153,8 +151,10 @@ function handleSelectorChange(type) {
 			break;
 	}
 };
+//]]> -->
 </script>
 <script type="text/javascript">
+//<!-- <![CDATA[
 <?php
 if (is_array($result)) {
 	?>
@@ -175,6 +175,7 @@ if (is_array($result)) {
 	<?php
 }
 ?>
+//]]> -->
 </script>
 <h1>
 <?php

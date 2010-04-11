@@ -301,7 +301,9 @@ function addSubalbumMenus($menuset, $gallery, $id, $link, $sort) {
 		}
 	}
 }
-
+/**
+ * Adds album items for the menu
+ */
 function addalbumsToDatabase($menuset) {
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$result = query($sql);
@@ -624,7 +626,11 @@ function printZenpageNewsCategorySelector() {
 </select>
 <?php
 }
-
+/**
+ * Prints the selector for custom pages
+ *
+ * @return string
+ */
 function printCustomPageSelector($current) {
 	$gallery = new Gallery();
 	?>

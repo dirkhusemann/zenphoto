@@ -79,7 +79,7 @@ $count = mysql_result($result, 0);
 <p>
 <?php echo gettext("Drag the items into the order, including sub levels, you wish them displayed. This lets you create arbitrary menus and place them on your theme pages. Use printCustomMenu() to place them on your pages."); ?>
 </p>
-<p>
+<p class="notebox">
 <?php echo gettext("<strong>IMPORTANT:</strong> This menu's order is completely independend from any order of albums or pages set on the other admin pages. It is recommend to use with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!");?>
 </p>
 <p class="buttons">

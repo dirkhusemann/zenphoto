@@ -14,7 +14,7 @@
  */
 $plugin_is_filter = 5;
 $plugin_description = gettext("A menu creation facility. The <em>Menu</em> tab admin interface lets you create arbitrary menu trees. They are placed on your theme pages by the <code>printCustomMenu()</code> function.");
-$plugin_author = "Maltem Müller (acrylian), Stephen Billard (sbillard)";
+$plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--menu_manager.php.html";
 
@@ -52,11 +52,11 @@ function menu_tabs($tabs, $current) {
 $_menu_manager_items = array();
 
 /**
- * Enter description here...
+ * Gets the menu items 
  *
  * @param string $menuset the menu tree desired
- * @param unknown_type $visible
- * @return unknown
+ * @param string $visible
+ * @return array
  */
 function getMenuItems($menuset, $visible) {
 	global $_menu_manager_items;
@@ -81,10 +81,10 @@ function getMenuItems($menuset, $visible) {
 }
 
 /**
- * Enter description here...
+ * Gets a menu item by its id
  *
- * @param unknown_type $id
- * @return unknown
+ * @param integer $id id of the item
+ * @return array
  */
 function getItem($id) {
 	$menuset = checkChosenMenuset();
@@ -95,7 +95,7 @@ function getItem($id) {
 /**
  * Checks which menu set is chosen via $_GET. If none is explicity chosen the "default" one (create initially) is used.
  *
- * @return unknown
+ * @return string
  */
 function checkChosenMenuset() {
 	if(isset($_GET['menuset'])) {
@@ -108,6 +108,12 @@ function checkChosenMenuset() {
 	return $menuset;
 }
 
+
+/**
+ * Checks if the menu item is set visible or not
+ *
+ * @return string
+ */
 function checkChosenItemStatus() {
   if(isset($_GET['visible'])) {
   	return sanitize($_GET['visible']);
@@ -116,6 +122,11 @@ function checkChosenItemStatus() {
   }
 }
 
+/**
+ * Gets the title, url and name of a menu item
+ *
+ * @return array
+ */
 function getItemTitleAndURL($item) {
 	$gallery = new Gallery();
 	$array = array();
@@ -160,7 +171,11 @@ function getItemTitleAndURL($item) {
 /*******************
  * Theme functions
  *******************/
-
+/**
+ * Gets the menu visibility
+ *
+ * @return string
+ */
 function getMenuVisibility() {
 	if(zp_loggedin(ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS)) {
 		return "all";
@@ -169,6 +184,11 @@ function getMenuVisibility() {
 	}
 }
 
+/**
+ * Gets the current menu item
+ *
+ * @return id
+ */
 function getCurrentMenuItem($menuset='default') {
 	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
 	$items = getMenuItems($menuset, getMenuVisibility());
@@ -183,6 +203,11 @@ function getCurrentMenuItem($menuset='default') {
 	return $id;
 }
 
+/**
+ * Gets predicessor of the current menu item
+ *
+ * @return string
+ */
 function getMenumanagerPredicessor($menuset='default') {
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return NULL;
@@ -201,7 +226,11 @@ function getMenumanagerPredicessor($menuset='default') {
 	}
 	return NULL;
 }
-
+/**
+ * Gets the link to the previous menu item
+ *
+ * @return string
+ */
 function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
 	$itemarray = getMenumanagerPredicessor($menuset);
 	if (is_array($itemarray) && $itemarray['type']!='menulabel') {
@@ -211,7 +240,11 @@ function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class
 		echo '<span class="disabledlink">'.htmlspecialchars($text).'"</span>';
 	}
 }
-
+/**
+ * Gets the successor of the current menu item
+ *
+ * @return string
+ */
 function getMenumanagerSuccessor($menuset='default') {
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return NULL;
@@ -229,7 +262,11 @@ function getMenumanagerSuccessor($menuset='default') {
 	}
 	return NULL;
 }
-
+/**
+ * Gets the link to the next menu item
+ *
+ * @return string
+ */
 function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
 	$itemarray = getMenumanagerSuccessor($menuset);
 	if (is_array($itemarray) && $itemarray['type']!='menulabel') {
@@ -239,7 +276,11 @@ function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class
 		echo '<span class="disabledlink">'.htmlspecialchars($text).'"</span>';
 	}
 }
-
+/**
+ * Prints the breadcrumb to use with custom menu(s)
+ *
+ * @return string
+ */
 function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' | ', $after=' | ') {
 	echo $before;
 	$items = getMenuItems($menuset, getMenuVisibility());
