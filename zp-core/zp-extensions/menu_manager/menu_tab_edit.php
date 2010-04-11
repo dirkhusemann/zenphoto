@@ -141,6 +141,12 @@ function handleSelectorChange(type) {
 			$('#link_label').html('<?php echo gettext('URL'); ?>');
 			$('#titleinput').show();
 			break;
+		case 'menulabel':
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#link_row').hide();
+			$('#selector').html('<?php echo gettext("Label"); ?>');
+			$('#description').html('<?php echo gettext("Creates a <em>label</em> to use in menu structures)."); ?>');
+			$('#titleinput').show();
+			break;
 		case "":
 			$("#selector").html("");
 			$("#add").hide();
@@ -219,6 +225,7 @@ if (isset($_GET['add'])) {
 		?>
 		<option value="custompage"><?php echo gettext("Custom theme page"); ?></option>
 		<option value="customlink"><?php echo gettext("Custom link"); ?></option>
+		<option value="menulabel"><?php echo gettext("Label"); ?></option>
 	</select>
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?add&amp;save" style="display: none">
 	<?php

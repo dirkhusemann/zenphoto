@@ -149,6 +149,9 @@ function getItemTitleAndURL($item) {
 		case "customlink":
 			$array = array("title" => get_language_string($item['title']),"url" => $item['link'],"name" => $item['link']);
 			break;
+		case 'menulabel':
+			$array = array("title" => get_language_string($item['title']),"url" => NULL, 'name'=>$item['title']);
+			break;
 	}
 	return $array;
 }
@@ -201,11 +204,11 @@ function getMenumanagerPredicessor($menuset='default') {
 
 function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
 	$itemarray = getMenumanagerPredicessor($menuset);
-	if (is_array($itemarray)) {
+	if (is_array($itemarray) && $itemarray['type']!='menulabel') {
 		if (is_null($title)) $title = $itemarray['title'];
 		printLink($itemarray['url'], $text, $title, $class, $id);
 	} else {
-		echo '<span class="disabledlink">$text</span>';
+		echo '<span class="disabledlink">'.htmlspecialchars($text).'"</span>';
 	}
 }
 
@@ -229,11 +232,11 @@ function getMenumanagerSuccessor($menuset='default') {
 
 function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
 	$itemarray = getMenumanagerSuccessor($menuset);
-	if (is_array($itemarray)) {
+	if (is_array($itemarray) && $itemarray['type']!='menulabel') {
 		if (is_null($title)) $title = $itemarray['title'];
 		printLink($itemarray['url'], $text, $title, $class, $id);
 	} else {
-		echo '<span class="disabledlink">$text</span>';
+		echo '<span class="disabledlink">'.htmlspecialchars($text).'"</span>';
 	}
 }
 
@@ -266,7 +269,11 @@ function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' |
 			foreach ($parents as $item) {
 				if ($i > 0) echo $between;
 				$itemarray = getItemTitleAndURL($item);
-				printLink($itemarray['url'], $itemarray['title'], $itemarray['title']);
+				if ($item['type']=='menulabel') {
+					echo htmlspecialchars($itemarray['title']);
+				} else {
+					printLink($itemarray['url'], $itemarray['title'], $itemarray['title']);
+				}
 				$i++;
 			}
 		}
@@ -374,7 +381,11 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 			if ($item['id'] == $id) {
 				echo "<li $class>".$itemtitle; 
 			} else {
-				echo "<li><a href=\"".$itemURL."\" title=\"".strip_tags($itemtitle)."\">".$itemtitle."</a>";
+				if (isnull($itemURL)) {
+					echo '<li class="'.$item['type'].'">'.$itemtitle;
+				} else {
+					echo '<li class="'.$item['type'].'"><a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">"'.$itemtitle.'</a>';
+				}
 			}
 			
 		}

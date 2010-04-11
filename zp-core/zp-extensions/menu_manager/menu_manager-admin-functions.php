@@ -467,6 +467,15 @@ function addItem() {
 			}
 			$successmsg = sprintf(gettext("Custom page menu item <em>%s</em> added"),$result['link']);
 			break;
+		case 'menulabel':
+			$result['title'] = process_language_string_save("title",2);
+			if(empty($result['title'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
+				return $result;
+			}
+			$result['link'] = md5($result['title']);
+			$successmsg = gettext("Custom label added");
+			break;
 	}
 	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
 						"VALUES ('".zp_escape_string($result['title']).
