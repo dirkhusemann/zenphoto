@@ -73,10 +73,8 @@ function getMenuItems($menuset, $visible) {
 			$visible = 'all';
 			break;
 	}
-	$result = query_full_array("SELECT id, parentid, title, link, type, sort_order,`show`, menuset FROM ".prefix('menu').$where." ORDER BY sort_order");
-	foreach ($result as $item) {
-		$_menu_manager_items[$visible][$item['id']] = $item;
-	}
+	$result = query_full_array("SELECT id, parentid, title, link, type, sort_order,`show`, menuset FROM ".prefix('menu').$where." ORDER BY sort_order", true, 'sort_order');
+	$_menu_manager_items[$visible] = $result;
 	return $_menu_manager_items[$visible];
 }
 
@@ -171,9 +169,9 @@ function getItemTitleAndURL($item) {
 /*******************
  * Theme functions
  *******************/
+
 /**
  * Gets the menu visibility
- *
  * @return string
  */
 function getMenuVisibility() {
@@ -185,126 +183,140 @@ function getMenuVisibility() {
 }
 
 /**
- * Gets the current menu item
- *
- * @return id
+ * Returns the ID of the current menu item
+ * @param string $menuset current menu set
+ * @return int
  */
 function getCurrentMenuItem($menuset='default') {
 	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
+	$currentpageURL = str_replace('\\','/',$currentpageURL);
+	if (substr($currentpageURL,-1) == '/') $currentpageURL = substr($currentpageURL, 0, -1);
 	$items = getMenuItems($menuset, getMenuVisibility());
-	$id = NULL;
-	foreach ($items as $item) {
-		$array = getItemTitleAndURL($item);
-		if($currentpageURL == $array['url']) {
-			$id = $item['id'];
+	$currentkey = NULL;
+	foreach ($items as $key=>$item) {
+		$checkitem = getItemTitleAndURL($item);
+		if($currentpageURL == $checkitem['url']) {
+			$currentkey = $key;
 			break;
 		}
 	}
-	return $id;
+	return $currentkey;
 }
 
 /**
- * Gets predicessor of the current menu item
- *
+ * Returns the link to the predicessor of the current menu item
+ * @param string $menuset current menu set
  * @return string
  */
 function getMenumanagerPredicessor($menuset='default') {
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return NULL;
-	$id = getCurrentMenuItem();
-	if (empty($id)) return NULL;
-	$sortorder = $items[$id]['sort_order'];
-	$order = explode('-', $sortorder);
-	$next = array_pop($order) - 1;
-	if ($next < 0) return NULL;
-	array_push($order, sprintf('%03u',$next));
-	$sortorder = implode('-', $order);
-	foreach ($items as $item) {
-		if ($item['sort_order'] == $sortorder) {
-			return getItemTitleAndURL($item);
+	$sortorder = getCurrentMenuItem();
+	if (empty($sortorder)) return NULL;
+	$shortorder = $order = explode('-', $sortorder);
+	$next = array_pop($order);
+	while ($next >= 0) {
+		$order = $shortorder;
+		array_push($order, sprintf('%03u',$next));
+		$sortorder = implode('-', $order);
+		if (array_key_exists($sortorder, $items) && $items[$sortorder]['type'] != 'menulabel') {	// omit the menulabels
+			return getItemTitleAndURL($items[$sortorder]);
 		}
+		$next--;
 	}
 	return NULL;
 }
+
 /**
- * Gets the link to the previous menu item
- *
- * @return string
+ * Prints the previous link of the current menu item
+ * @param string  $text
+ * @param string  $menuset
+ * @param string  $title
+ * @param string  $class
+ * @param string  $id
  */
 function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
 	$itemarray = getMenumanagerPredicessor($menuset);
-	if (is_array($itemarray) && $itemarray['type']!='menulabel') {
+	if (is_array($itemarray)) {
 		if (is_null($title)) $title = $itemarray['title'];
 		printLink($itemarray['url'], $text, $title, $class, $id);
 	} else {
-		echo '<span class="disabledlink">'.htmlspecialchars($text).'"</span>';
+		echo '<span class="disabledlink">'.htmlspecialchars($text).'</span>';
 	}
 }
+
 /**
- * Gets the successor of the current menu item
- *
+ * Returns the successor link of the current menu item
+ * @param string $menuset
  * @return string
  */
 function getMenumanagerSuccessor($menuset='default') {
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return NULL;
-	$id = getCurrentMenuItem();
-	if (empty($id)) return NULL;
-	$sortorder = $items[$id]['sort_order'];
+	$sortorder = getCurrentMenuItem();
+	if (empty($sortorder)) return NULL;
 	$order = explode('-', $sortorder);
 	$next = array_pop($order) + 1;
+	$short_order = $order;
 	array_push($order, sprintf('%03u',$next));
 	$sortorder = implode('-', $order);
-	foreach ($items as $item) {
-		if ($item['sort_order'] == $sortorder) {
-			return getItemTitleAndURL($item);
+	while ($next <= 999) {
+		$order = $short_order;
+		array_push($order, sprintf('%03u',$next));
+		$sortorder = implode('-', $order);
+		if (array_key_exists($sortorder, $items)) {
+			if ($items[$sortorder]['type'] != 'menulabel') {	// omit the menulabels
+				return getItemTitleAndURL($items[$sortorder]);
+			}
 		}
+		$next++;
 	}
 	return NULL;
 }
+
 /**
  * Gets the link to the next menu item
- *
- * @return string
+ * @param string $text
+ * @param string $menuset current menu set
+ * @param string $title
+ * @param string $class
+ * @param string $id
  */
 function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class=NULL, $id=NULL) {
 	$itemarray = getMenumanagerSuccessor($menuset);
-	if (is_array($itemarray) && $itemarray['type']!='menulabel') {
+	if (is_array($itemarray)) {
 		if (is_null($title)) $title = $itemarray['title'];
 		printLink($itemarray['url'], $text, $title, $class, $id);
 	} else {
-		echo '<span class="disabledlink">'.htmlspecialchars($text).'"</span>';
+		echo '<span class="disabledlink">'.htmlspecialchars($text).'</span>';
 	}
 }
+
 /**
- * Prints the breadcrumb to use with custom menu(s)
- *
- * @return string
+ * Prints the breadcrumbs of the current page
+ * @param string $menuset current menu set
+ * @param string $before before text
+ * @param string $between between text
+ * @param string $after after text
  */
 function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' | ', $after=' | ') {
 	echo $before;
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)>0){
-		$id = getCurrentMenuItem();
-		if ($id) {
-			$sortorder = $items[$id]['sort_order'];
+		$sortorder = getCurrentMenuItem();
+		if ($sortorder) {
+			$parents = array();
 			$order = explode('-', $sortorder);
 			array_pop($order);
 			$look = array();
 			while (count($order) > 0) {
-				$look[] = implode('-', $order);
+				$look = implode('-', $order);
 				array_pop($order);
-			}
-			$parents = array();
-			foreach ($items as $item) {
-				foreach ($look as $key=>$see) {
-					if ($see == $item['sort_order']) {
-						$parents[] = $item;
-						unset($look[$key]);
-						break;
-					}
+				if (array_key_exists($look, $items)) {
+					array_unshift($parents, $items[$look]);
 				}
 			}
+			
 			if (!empty($parents)) sortMultiArray($parents, 'sort_order', $descending=false, $natsort=false, $case_sensitive=false);
 			$i = 0;
 			foreach ($parents as $item) {
@@ -320,6 +332,45 @@ function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' |
 		}
 	}
 	echo $after;
+}
+
+/**
+ * Returns the menu item corresponding to $link
+ * @param string $link
+ * @param string $menuset
+ * @return array
+ */
+function getMenuFromLink($link, $menuset='default') {
+	$link = str_replace('\\','/',$link);
+	if (substr($link,-1) == '/') $link = substr($link, 0, -1);
+	$items = getMenuItems($menuset, getMenuVisibility());
+	foreach ($items as $item) {
+		$itemarray = getItemTitleAndURL($item);
+		if ($itemarray['url'] == $link) return $item;
+	}
+	return NULL;
+}
+
+/**
+ * Returns true if the current menu item is a sub item of $link
+ * @param string $link possible parent
+ * @param string $menuset current menuset
+ * @return bool
+ */
+function submenuOf($link, $menuset='default') {
+	$link_menu = getMenuFromLink($link, $menuset);
+	if (is_array($link_menu)) {
+		$items = getMenuItems($menuset, getMenuVisibility());
+		$current = getCurrentMenuItem();
+		if (!is_null($current)) {
+			$sortorder = $link_menu['sort_order'];
+			if (strlen($current) > strlen($sortorder)) {		
+				$p = strpos($current,$sortorder);
+				return $p === 0;
+			}
+		}
+	}
+	return false;
 }
 
 /**
@@ -350,13 +401,12 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return; // nothing to do
 	echo "<ul$css_id>";
-	$id = getCurrentMenuItem();
-	$sortorder = $items[$id]['sort_order'];
+	$sortorder = getCurrentMenuItem();
+	$pageid = $items[$sortorder]['id'];
 	
 	$baseindent = max(1,count(explode("-", $sortorder)));
 	$indent = 1;
 	$open = array($indent=>0);
-	$pageid = $id;
 	$parents = array(NULL);
 	$order = explode('-', $sortorder);
 	$mylevel = count($order);

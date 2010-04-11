@@ -259,8 +259,6 @@ function getMenuSetSelector($active) {
   return $selector;
  }
 
-
-
 /**
  * Sets a menu item to published/visible
  *
@@ -479,11 +477,14 @@ function addItem() {
 			$successmsg = gettext("Custom label added");
 			break;
 	}
+	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
+	$result = query($sql);
+	$order = sprintf('%3u',mysql_result($result, 0));
 	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
 						"VALUES ('".zp_escape_string($result['title']).
 						"', '".zp_escape_string($result['link']).
 						"','".zp_escape_string($result['type'])."','".$result['show'].
-						"','".zp_escape_string($menuset)."','000')";
+						"','".zp_escape_string($menuset)."',$order)";
 	if (query($sql, true)) {
 		echo "<p class='messagebox' id='fade-message'>".$successmsg."</p>"; 
 		//echo "<pre>"; print_r($result); echo "</pre>";
