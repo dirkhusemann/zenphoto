@@ -78,7 +78,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$albumlist = array();
-		$all = array();
+		$allo = array();
 		foreach ($gallery->getAlbums() as $folder) {
 			if (hasDynamicAlbumSuffix($folder)) {
 				$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
@@ -96,6 +96,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 		}
 		$grouppart =	'
 			<script type="text/javascript">
+				// <!-- <![CDATA[
 				function groupchange'.$i.'(obj) {
 					var disable = obj.value != \'\';
 					var albdisable = false;
@@ -176,6 +177,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 		}
 		
 		$grouppart .= '
+				//]]> -->
 			</script>';
 		$grouppart .= '<select name="'.$i.'group" onchange="javascript:groupchange'.$i.'(this);"'.'>'."\n";
 		$grouppart .= '<option value="" title="'.gettext('*no group affiliation').'">'.gettext('*no group selected').'</option>'."\n";

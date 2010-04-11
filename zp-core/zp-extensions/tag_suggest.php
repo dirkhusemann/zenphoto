@@ -14,7 +14,13 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."-
 
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/js/tag.js"></script>');
-addPluginScript('<link type="text/css" rel="stylesheet" href="' . WEBPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER . '/tag_suggest/tag.css" />');
+$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem(getCurrentTheme()) . '/tag.css';
+if (file_exists($css)) {
+	$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/tag.css';
+} else {
+	$css = WEBPATH . '/' . ZENFOLDER . '/' . PLUGIN_FOLDER . '/tag_suggest/tag.css';
+}
+addPluginScript('<link type="text/css" rel="stylesheet" href="' . $css . '" />');
 $taglist = getAllTagsUnique();
 $c = 0;
 $list = '';

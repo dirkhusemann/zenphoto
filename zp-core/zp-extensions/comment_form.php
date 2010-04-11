@@ -432,6 +432,12 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 				if (!empty($name)) {
 					$stored['name'] = $name;
 					$disabled['name'] = ' disabled="disabled"';
+				} else {
+					$user = $_zp_current_admin_obj->getUser();
+					if (!empty($user)) {
+						$stored['name'] = $user;
+						$disabled['name'] = ' disabled="disabled"';
+					}
 				}
 				$email = $_zp_current_admin_obj->getEmail();
 				if (!empty($email)) {

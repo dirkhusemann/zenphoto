@@ -97,15 +97,20 @@ function query_single_row($sql, $noerrmsg=false) {
  * Runs a SQL query and returns an array of associative arrays of every row returned.
  * @param string $sql sql code
  * @param bool $noerrmsg set to true to supress the error message
+ * @param string $key optional array index key
  * @return results of the sql statements
  * @since 0.6
  */
-function query_full_array($sql, $noerrmsg = false) {
+function query_full_array($sql, $noerrmsg = false, $key=NULL) {
 	$result = query($sql, $noerrmsg);
 	if ($result) {
 		$allrows = array();
 		while ($row = mysql_fetch_assoc($result))
-			$allrows[] = $row;
+			if (is_null($key)) {
+				$allrows[] = $row;
+			} else {
+				$allrows[$row[$key]] = $row;
+			}
 		return $allrows;
 	} else {
 		return false;

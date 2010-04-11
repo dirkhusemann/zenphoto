@@ -132,10 +132,12 @@
                         html += '<' + settings.tagWrap + ' class="_tag_suggestion">' + matches[i] + '</' + settings.tagWrap + '>';
                     }
 
+                    $('span.tagMatches').css('display','block');
                     tagMatches.html(html);
                     suggestionsShow = !!(matches.length);
                 } else {
                     hideSuggestions();
+                    $('span.tagMatches').css('display','none');
                 }
             }
 
