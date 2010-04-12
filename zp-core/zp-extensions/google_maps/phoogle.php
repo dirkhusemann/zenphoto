@@ -308,6 +308,7 @@ class PhoogleMap{
 		<div id="map" style="width: <?php echo $this->mapWidth; ?>px; height: <?php echo $this->mapHeight; ?>px">
 		</div>
 		<script type="text/javascript">
+			// <!-- <![CDATA[
 	   	if (GBrowserIsCompatible()) {
 	   		
     		map = new GMap2(document.getElementById("map"), {backgroundColor:'<?php echo $this->backGround; ?>'});
@@ -395,6 +396,7 @@ class PhoogleMap{
 					var text = document.createTextNode("<?php echo gettext('Your browser is not compatible with Google maps'); ?>");
 					document.getElementById("map").appendChild(text);
 				}
+				// ]]> -->
 			</script>
 		<?php
 	}

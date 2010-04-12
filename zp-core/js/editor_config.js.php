@@ -2,7 +2,8 @@
 if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tiny_mce.js")) {
 	?> 
 	<script language="javascript" type="text/javascript" src="<?php echo WEBPATH ."/" . ZENFOLDER .'/'. PLUGIN_FOLDER; ?>/tiny_mce/tiny_mce.js"></script>
-		<script language="javascript" type="text/javascript">
+	<script language="javascript" type="text/javascript">
+		// <!-- <![CDATA[
 		tinyMCE.init({
 			mode : "textareas",
 			theme : "zenphoto",
@@ -27,6 +28,7 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tin
 			convert_urls : false,
 			entity_encoding: "raw"
 		});
+		// ]]> -->
 	</script>
 	<?php
 } else {

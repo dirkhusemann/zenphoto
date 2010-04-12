@@ -153,8 +153,10 @@ printAdminHeader();
 /* MULTI FILE UPLOAD: Script additions */ ?>
 <link rel="stylesheet" href="admin-uploadify/uploadify.css" type="text/css" />
 <script type="text/javascript">
-var uploadifier_replace_message =  "<?php echo gettext('Do you want to replace the file %s?'); ?>";
-var uploadifier_queue_full_message =  "<?php echo gettext('Upload queue is full. The upload limit is %u.'); ?>";
+	//<!-- <![CDATA[
+	var uploadifier_replace_message =  "<?php echo gettext('Do you want to replace the file %s?'); ?>";
+	var uploadifier_queue_full_message =  "<?php echo gettext('Upload queue is full. The upload limit is %u.'); ?>";
+	// ]]> -->
 </script>
 
 <script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/sprintf.js"></script>
@@ -177,6 +179,7 @@ printLogoAndLinks();
 			genAlbumUploadList($albumlist);
 			?>
 			<script type="text/javascript">
+				// <!-- <![CDATA[
 				window.totalinputs = 5;
 				// Array of album names for javascript functions.
 				var albumArray = new Array (
@@ -187,6 +190,7 @@ printLogoAndLinks();
 						$separator = ", ";
 					}
 					?> );
+				// ]]> -->
 			</script>
 
 <h1><?php echo gettext("Upload Photos"); ?></h1>
@@ -263,7 +267,7 @@ if (ini_get('safe_mode')) { ?>
 		}
 		$defaultjs = "
 			<script type=\"text/javascript\">
-				//<![CDATA[
+				// <!-- <![CDATA[
 				function soejs(fname) {
 					fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, '');
 					fname = fname.replace(/^\s+|\s+$/g, '');
@@ -271,12 +275,13 @@ if (ini_get('safe_mode')) { ?>
 					fname = fname.replace(/--*/g, '-');
 					return fname;
 				}
-				//]]>
+				// ]]> -->
 			</script>
 		";
 		echo zp_apply_filter('seoFriendly_js', $defaultjs)."\n";
 		?>
 		<script type="text/javascript">
+			// <!-- <![CDATA[
 			function buttonstate(good) {
 				if (good) {
 					$('#fileUploadbuttons').show();
@@ -288,6 +293,7 @@ if (ini_get('safe_mode')) { ?>
 				var sel = document.getElementById('albumselectmenu');
 				buttonstate(albumSwitch(sel, true, '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>'));
 			}
+			// ]]> -->
 		</script>
 		<select id="albumselectmenu" name="albumselect" onchange="albumSelect()">
 			<?php
@@ -392,6 +398,7 @@ if (ini_get('safe_mode')) { ?>
 			<div id="upload_action">
 			<!-- UPLOADIFY JQUERY/FLASH MULTIFILE UPLOAD TEST -->
 				<script type="text/javascript">
+					// <!-- <![CDATA[
 					if (FlashDetect.installed) {
 						$(document).ready(function() {
 							$('#fileUpload').uploadify({
@@ -469,6 +476,7 @@ if (ini_get('safe_mode')) { ?>
 						buttonstate($('#folderdisplay').val() != "");
 					});
 					}
+					// ]]> -->
 				</script>
 				<div id="fileUpload" style="color:red">
 					<?php echo gettext("There appears to be no <em>Flash</em> plugin installed in your browser."); ?>
@@ -522,6 +530,7 @@ if (ini_get('safe_mode')) { ?>
 	</div>
 </form>
 <script type="text/javascript">
+	//<!-- <![CDATA[
 	<?php echo zp_apply_filter('upload_helper_js', '')."\n"; ?>
 
 	albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');
@@ -573,6 +582,7 @@ if (ini_get('safe_mode')) { ?>
 			}
 		}
 	?>
+	// ]]> -->
 </script>
 </div>
 </div>

@@ -16,9 +16,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php')?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		$(document).ready(function(){
 			$(".colorbox").colorbox({inline:true, href:"#imagemetadata"});
 		});
+		// ]]> -->
 	</script>
 </head>
 

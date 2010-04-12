@@ -2,9 +2,11 @@
 	<!-- BEGIN #addcomment -->
 	<div id="addcomment">
 		<script type="text/javascript">
+			// <!-- <![CDATA[
 			$(function() {
   			window.onload = initCommentState;
 			});
+			// ]]> -->
 		</script>
 		<h2><?php echo gettext("Add a comment") ?></h2>
 		<form method="post" action="#" id="comments-form">

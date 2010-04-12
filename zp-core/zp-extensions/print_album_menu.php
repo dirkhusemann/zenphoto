@@ -248,10 +248,12 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index",$firstim
 	}
 	?>
 	<script type="text/javaScript">
+		// <!-- <![CDATA[
 		function gotoLink(form) {
 		 	var OptionIndex=form.ListBoxURL.selectedIndex;
 			parent.location = form.ListBoxURL.options[OptionIndex].value;
 		}
+		// ]]> -->
 	</script>
 	<form name="AutoListBox" action="#">
 		<p>

@@ -56,7 +56,9 @@ function datepickerJS() {
 	}
 	?>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd 00:00:00' });
+		// ]]> -->
 	</script>
 	<?php
 }
@@ -99,6 +101,7 @@ function printAdminHeader($tinyMCE=NULL) {
 	<link rel="stylesheet" href="<?php echo $path; ?>js/colorbox/colorbox.css" type="text/css" />
 	<script src="<?php echo $path; ?>js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script language="javascript" type="text/javascript">
+		// <!-- <![CDATA[
 		$(document).ready(function(){
 			$("a[rel='colorbox']").colorbox({ maxWidth:"98%", maxHeight:"98%"});
 		});
@@ -108,7 +111,8 @@ function printAdminHeader($tinyMCE=NULL) {
 			$('.tooltip').tooltip({
 				left: -80
 			});
-			});
+		})
+		// ]]> -->
 	</script>
 	<?php
 	if ($tinyMCE) {
@@ -681,9 +685,11 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 						<td width="350px" style="margin:0; padding:0">
 							<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'text-'.$key; ?>" value="0" />
 							<script type="text/javascript">
+								// <!-- <![CDATA[
 								$(document).ready(function() {
 									$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>');
 								});
+								// ]]> -->
 							</script>
 							<table style="margin:0; padding:0" >
 								<tr>
@@ -1048,6 +1054,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<td align="left" valign="top"><?php echo gettext("Date:");?> </td>
 						<td width="400">
 							<script type="text/javascript">
+								// <!-- <![CDATA[
 								$(function() {
 									$("#datepicker_<?php echo $prefix; ?>").datepicker({
 													showOn: 'button',
@@ -1056,6 +1063,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 													buttonImageOnly: true
 													});
 								});
+								// ]]> -->
 							</script>
 							<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" />
 						</td>
@@ -1140,11 +1148,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<tr>
 								<td colspan="2">
 									<script type="text/javascript">
+										// <!-- <![CDATA[
 										$(function () {
 											$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
 												tags: [<?php echo $albumdbfields; ?>]
 											});
 										});
+										// ]]> -->
 									</script>
 									<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
@@ -1210,11 +1220,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								<tr>
 									<td align="left" colspan="2">
 									<script type="text/javascript">
+										// <!-- <![CDATA[
 										$(function () {
 											$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
 												tags: [<?php echo $imagedbfields; ?>]
 											});
 										});
+										// ]]> -->
 									</script>
 									<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
@@ -1285,7 +1297,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						$thumb = $album->get('thumb');
 						if ($showThumb)  {
 							?>
-							<script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
+							<script type="text/javascript">
+								// <!-- <![CDATA[
+								updateThumbPreview(document.getElementById('thumbselect'));
+								// ]]> -->
+							</script>
 							<?php
 						}
 						?>
@@ -3023,13 +3039,13 @@ function printEditDropdown($subtab,$nestinglevels = array('1','2','3','4','5')) 
 			echo '</option>';
 		}
 ?>
- </select>
+	</select>
 	<script language="JavaScript" type="text/javascript" >
-	<!--
-	function gotoLink(form) {
-	var OptionIndex=form.ListBoxURL.selectedIndex;
-	parent.location = form.ListBoxURL.options[OptionIndex].value;}
-	//-->
+		// <!-- <![CDATA[
+		function gotoLink(form) {
+		var OptionIndex=form.ListBoxURL.selectedIndex;
+		parent.location = form.ListBoxURL.options[OptionIndex].value;}
+		// ]]> -->
 	</script>
 	</form>
 <?php

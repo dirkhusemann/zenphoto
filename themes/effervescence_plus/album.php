@@ -82,12 +82,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <body onload="blurAnchors()">
 <?php if ($personality == 'Smoothgallery') { ?>
 <script type="text/javascript">
+	//<!-- <![CDATA[
 	function startGallery() {
 		var myGallery = new gallery($('smoothImages'), {
 			timed: <?php ($show) ? print 'true' : print 'false'; ?>
 		});
 	}
 	window.addEvent('domready',startGallery);
+	// ]]> -->
 </script>
 <?php } ?>
 
@@ -327,13 +329,15 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  						$flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&amp;") . "format=xml";
  						?>
  						<script type="text/javascript">
-									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");
-									fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
-									fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
-									fo.addVariable("width", "100%");
-									fo.addVariable("height", "100%");
-									fo.addParam("wmode", "opaque");
-									fo.write("flash");
+ 							// <!-- <![CDATA[
+							var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");
+							fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
+							fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
+							fo.addVariable("width", "100%");
+							fo.addVariable("height", "100%");
+							fo.addParam("wmode", "opaque");
+							fo.write("flash");
+							// ]]> -->
  						</script>
 				</div> <!-- flash -->
  						<?php

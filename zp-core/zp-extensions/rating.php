@@ -58,9 +58,11 @@ if (isset($_zp_gallery) && !is_null($_zp_gallery)) {
 	}
 	addPluginScript('<link rel="stylesheet" href="'.$css.'" type="text/css" />');
 	addPluginScript('<script type="text/javascript">'.
-										"$.fn.rating.options = { 
+										"// <!-- <![CDATA[
+										$.fn.rating.options = { 
 											cancel: '".gettext('retract')."'   // advisory title for the 'cancel' link
 									 	}; 
+									 	// ]]> -->
 						 			</script>");
 }
 
@@ -189,6 +191,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 	}
   ?>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		$(function() {
 			$('#star_rating<?php echo $unique; ?> :radio.star').rating('select','<?php echo $starselector; ?>');
 			<?php
@@ -199,6 +202,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 			}
 		?>
 		});
+		// ]]> -->
 	</script>
 		<form name="star_rating<?php echo $unique; ?>" id="star_rating<?php echo $unique; ?>" action="submit">
 		  <input type="radio" class="star<?php echo $split; ?>" name="star_rating-value<?php echo $unique; ?>" value="1" title="<?php echo gettext('1 star'); ?>" />

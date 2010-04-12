@@ -142,6 +142,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			'.$videoThumb.'
 			</a>
 			<script type="text/javascript">
+			// <!-- <![CDATA[
 			$(function() {
 		
 			$("div.playlist").scrollable({
@@ -190,6 +191,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			}); 
 			flowplayer("player").playlist("div.clips:first", {loop:true});
 			});
+			// ]]> -->
 			</script>';
 		?>
 		<div class="wrapper">

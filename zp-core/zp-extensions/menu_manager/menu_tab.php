@@ -18,9 +18,9 @@ $page = 'edit';
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
 <link rel="stylesheet" href="../zenpage/zenpage.css" type="text/css" />
-<script type="text/javascript" src="../zenpage/js/interface-1.2.js"></script>
+<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
 <!--Nested Sortables-->
-<script type="text/javascript" src="../zenpage/js/inestedsortable.js"></script>
+<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
 </head>
 <body>
 <?php	printLogoAndLinks(); ?>
@@ -48,6 +48,7 @@ if (isset($_GET['delete'])) {
 if (isset($_GET['deletemenuset'])) {
 	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
 	query($sql);
+	$_menu_manager_items = NULL;
 	echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset']))."</p>";
 }
 
@@ -60,7 +61,8 @@ $result = query($sql);
 $count = mysql_result($result, 0);
 ?>
 <script type="text/javascript">
-	function newMenuSet() {
+	//<!-- <![CDATA[
+    function newMenuSet() {
 		var new_menuset = prompt("<?php echo gettext('Menuset id'); ?>","<?php echo 'menu_'.$count; ?>");
 		if (new_menuset) {
 			window.location = '?menuset='+encodeURIComponent(new_menuset);
@@ -71,6 +73,7 @@ $count = mysql_result($result, 0);
 			window.location = '?deletemenuset=<?php echo htmlspecialchars($menuset); ?>';
 		}
 	};
+	// ]]> -->
 </script>
 <h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1> 				
  
@@ -111,9 +114,9 @@ if ($count > 0) {
 			<ul id="left-to-right" class="page-list">
 			<?php
 			if(isset($_GET['visible'])) {
-				$visible = sanitize_numeric($_GET['visible']);
+				$visible = sanitize($_GET['visible']);
 			} else {
-				$visible = 3;
+				$visible = 'all';
 			}
 			$items = getMenuItems($menuset, $visible);
 			printItemsList($items);
@@ -134,22 +137,23 @@ if ($count > 0) {
 	</ul>	
 </div>
 <script type="text/javascript">
-jQuery( function($) {
-$('#left-to-right').NestedSortable(
-	{
-		accept: 'page-item1',
-		noNestingClass: "no-nesting",
-		opacity: 0.4,
-		helperclass: 'helper',
-		onChange: function(serialized) {
-			$('#left-to-right-ser')
-			.html("<input name='order' size='100' maxlength='1000' type='hidden' value="+ serialized[0].hash +">");
-		},
-		autoScroll: true,
-		handle: '.sort-handle'
-	}
-);
-});
+	//<!-- <![CDATA[
+	jQuery( function($) {
+	$('#left-to-right').NestedSortable(	{
+			accept: 'page-item1',
+			noNestingClass: "no-nesting",
+			opacity: 0.4,
+			helperclass: 'helper',
+			onChange: function(serialized) {
+				$('#left-to-right-ser')
+				.html("<input name='order' size='100' maxlength='1000' type='hidden' value="+ serialized[0].hash +">");
+			},
+			autoScroll: true,
+			handle: '.sort-handle'
+		}
+	);
+	});
+	// ]]> -->
 </script>
 
 <?php printAdminFooter(); ?>

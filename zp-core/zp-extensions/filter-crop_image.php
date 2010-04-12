@@ -197,6 +197,7 @@ printAdminHeader();
 <script src="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.js" type="text/javascript"></script>
 <link rel="stylesheet" href="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.css" type="text/css" />
 <script language="javascript" type="text/javascript" >
+	//<!-- <![CDATA[
 	jQuery(window).load(function(){
 		jQuery('#cropbox').Jcrop({
 			onChange: showCoords,
@@ -219,6 +220,7 @@ printAdminHeader();
 	function checkCoords() {
 		return true;
 	};
+	// ]]> -->
 </script>
 </head>
 <body>

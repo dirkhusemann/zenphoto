@@ -155,7 +155,7 @@ class flvplayer {
 		}
 		$output = '';
 		$output .= '<p id="player'.$count.'">'.gettext('The flv player is not installed. Please install or activate the flv player plugin.').'</p>
-			<script type="text/javascript">'."\n";
+			<script type="text/javascript">'."\n// <!-- <![CDATA[\n";
 		if($ext === ".mp3" AND !isset($videoThumb)) {
 			$output .= 'var so = new SWFObject("'.getPlugin('flvplayer/'.$_flv_player,false,WEBPATH).'","player'.$count.'",'.getOption('flv_player_width').','.FLV_PLAYER_MP3_HEIGHT.',7);'."\n";
 		} else {
@@ -177,7 +177,7 @@ class flvplayer {
 		
 		$output .= 'so.addParam("allowfullscreen",true);'."\n";
 		$output .= 'so.write("player'.$count.'");'."\n";
-		$output .= '</script>'."\n";
+		$output .= "\\ ]]> -->\n</script>\n";
 		return $output;
 	}
 	
@@ -267,6 +267,7 @@ function flvPlaylist($option='') {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		var so = new SWFObject('<?php echo getPlugin('flvplayer/'.$_flv_player,false,WEBPATH); ?>','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
 		so.addVariable('stretching','<?php echo getOption('flv_player_stretching'); ?>');
@@ -281,6 +282,7 @@ function flvPlaylist($option='') {
 		so.addVariable('javascriptid','jstest');
 		so.addVariable('enablejs','true');
 		so.write('flvplaylist');
+		// ]]> -->
 	</script>
 	<?php }
 		break;

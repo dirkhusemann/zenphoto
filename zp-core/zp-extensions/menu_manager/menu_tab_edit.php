@@ -3,7 +3,7 @@ define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
-require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manager/menu_manager-admin-functions.php');
+require_once(dirname(__FILE__).'/menu_manager-admin-functions.php');
 
 if (!(zp_loggedin())) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
@@ -154,28 +154,28 @@ function handleSelectorChange(type) {
 //]]> -->
 </script>
 <script type="text/javascript">
-//<!-- <![CDATA[
-<?php
-if (is_array($result)) {
-	?>
-	$(document).ready(function() {
-			handleSelectorChange('<?php echo $result['type']; ?>');
-		});
+	//<!-- <![CDATA[
 	<?php
-} else {
-	?>
-	$(document).ready(function() {
-		$('#albumselector,#pageselector,#categoryselector,#titleinput').hide();
-		$('#typeselector').change(function() {
-				$('input').val(''); // reset all input values so we do not carry them over from one type to another
-				$('#link').val('');
-				handleSelectorChange($(this).val());
+	if (is_array($result)) {
+		?>
+		$(document).ready(function() {
+				handleSelectorChange('<?php echo $result['type']; ?>');
 			});
-		});
-	<?php
-}
-?>
-//]]> -->
+		<?php
+	} else {
+		?>
+		$(document).ready(function() {
+			$('#albumselector,#pageselector,#categoryselector,#titleinput').hide();
+			$('#typeselector').change(function() {
+					$('input').val(''); // reset all input values so we do not carry them over from one type to another
+					$('#link').val('');
+					handleSelectorChange($(this).val());
+				});
+			});
+		<?php
+	}
+	?>
+	//]]> -->
 </script>
 <h1>
 <?php

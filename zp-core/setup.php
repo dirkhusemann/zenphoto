@@ -664,13 +664,13 @@ if (!$setup_checked) {
 					} else {
 						?>
 						<script type="text/javascript">
-						// <![CDATA[
+							// <!-- <![CDATA[
 							$.ajax({   
 								type: 'POST',   
 								url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
 								data: 'folder=<?php echo $path; ?>&key=<?php echo md5(filemtime(CONFIGFILE).file_get_contents(CONFIGFILE)); ?>'
 							});
-						// ]]>
+							// ]]> -->
 						</script>
 						<?php
 					}

@@ -374,6 +374,137 @@ function submenuOf($link, $menuset='default') {
 }
 
 /**
+ * Creates a menu set from the items passed. But only if the menu set does not already exist
+ * @param array $menuitems items for the menuset
+ * 		array elements:
+ * 			'type'=>menuset type
+ * 			'title'=>title for the menu item
+ * 			'link'=>URL or other data for the item link
+ * 			'show'=>set to 1:"visible" or 0:"hidden", 
+ * 			'nesting'=>nesting level of this item in the menu heirarchy
+ * 			
+ * @param string $menuset current menuset
+ */
+function createMenuIfNotExists($menuitems, $menuset='default') {
+	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
+	$result = query($sql);
+	if (mysql_result($result, 0)==0) {	// there was not an existing menu set
+		require_once(dirname(__FILE__).'/menu_manager/menu_manager-admin-functions.php');
+		$success = 1;
+		$orders = array();
+		foreach ($menuitems as $result) {
+			if (array_key_exists('nesting',$result)) {
+				$nesting = $result['nesting'];
+			} else {
+				$nesting = 0;
+			}
+			while ($nesting+1 < count($orders)) array_pop($orders);
+			while ($nesting+1 > count($orders)) array_push($orders, -1);
+			$result['id'] = 0;
+			$type = $result['type'];
+			switch($type) {
+				case 'all_items':
+					$orders[$nesting]++;
+					query("INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+								"VALUES ('".gettext('Home')."', '".WEBPATH.'/'.	"','galleryindex','1','".zp_escape_string($menuset).'","'.$orders.'"',true);
+					$orders[$nesting] = addAlbumsToDatabase($menuset,$orders);
+					if(getOption('zp_plugin_zenpage')) {
+						$orders[$nesting]++;
+						query("INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+									"VALUES ('".gettext('News index')."', '".rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS).	"','zenpagenewsindex','1','".zp_escape_string($menuset).'","'.sprintf('%3u',$base+1).'"',true);
+						$orders[$nesting] = addPagesToDatabase($menuset, $orders)+1;
+						$orders[$nesting] = addCategoriesToDatabase($menuset,$orders);
+					}
+					$type = false;
+					break;
+				case 'all_albums':
+					$orders[$nesting]++;
+					$orders[$nesting] = addAlbumsToDatabase($menuset,$orders);
+					$type = false;
+					break;
+				case 'all_zenpagepages':
+					$orders[$nesting]++;
+					$orders[$nesting] = addPagesToDatabase($menuset,$orders);
+					$type = false;
+					break;
+				case 'all_zenpagecategories':
+					$orders[$nesting]++;
+					$orders[$nesting] = addCategoriesToDatabase($menuset,$orders);
+					$type = false;
+					break;
+				case 'album':
+					$result['title'] = NULL;
+					if(empty($result['link'])) {
+						$success = -1;
+					}
+					break;
+				case 'galleryindex':
+					$result['link'] = NULL;
+					if(empty($result['title'])) {
+						$success = -1;
+					}
+					break;
+				case 'zenpagepage':
+					$result['title'] = NULL;
+					if(empty($result['link'])) {
+						$success = -1;
+					}
+					break;
+				case 'zenpagenewsindex':
+					$result['link'] = NULL;
+					if(empty($result['title'])) {
+						$success = -1;
+					}
+					break;
+				case 'zenpagecategory':
+					$result['title'] = NULL;
+					if(empty($result['link'])) {
+						$success = -1;
+					}
+					break;
+				case 'custompage':
+					if(empty($result['title']) || empty($result['link'])) {
+						$success = -1;;
+					}
+					break;
+				case 'customlink':
+					if(empty($result['title'])) {
+						$success = -1;
+					} else if(empty($result['link'])) {
+						$result['link'] = seoFriendly(get_language_string($result['title']));
+					}
+					break;
+				case 'menulabel':
+					if(empty($result['title'])) {
+						$success = -1;
+					}
+					$result['link'] = md5($result['title']);
+					break;
+			}
+			if ($success >0 && $type) {
+				$orders[$nesting]++;
+				$sort_order = '';
+				for ($i=0;$i<count($orders);$i++) {
+					$sort_order .= sprintf('%03u',$orders[$i]).'-';
+				}
+				$sort_order = substr($sort_order,0,-1);
+				$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+									"VALUES ('".zp_escape_string($result['title']).
+									"', '".zp_escape_string($result['link']).
+									"','".zp_escape_string($result['type'])."','".$result['show'].
+									"','".zp_escape_string($menuset)."','$sort_order')";
+				if (!query($sql, true)) {
+					$success = -2;
+				}
+			}
+		}
+	} else {
+		$success = 0;
+	}
+	return $success;
+}
+
+/**
  * Prints a context sensitive menu of all pages as a unordered html list
  *
  * @param string $menuset the menu tree to output
@@ -393,9 +524,7 @@ function submenuOf($link, $menuset='default') {
 function printCustomMenu($menuset='default', $option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$showsubs=0) {
 	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page, $_zp_current_category;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
-	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
-	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
 
 	$items = getMenuItems($menuset, getMenuVisibility());
@@ -464,15 +593,15 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 			echo str_pad("\t",$indent-1,"\t");
 			$open[$indent]++;
 			$parents[$indent] = $item['id'];
-			if($level == 1) { // top level
-				$class = $css_class_topactive;
+			if ($item['id'] == $pageid) {
+				if($level == 1) { // top level
+					$class = $css_class_topactive;
+				} else {
+					$class = $css_class_active;
+				}
+				echo '<li class="'.trim($item['type'].' '.$class).'">'.$itemtitle; 
 			} else {
-				$class = $css_class_active;
-			}
-			if ($item['id'] == $id) {
-				echo "<li $class>".$itemtitle; 
-			} else {
-				if (isnull($itemURL)) {
+				if (is_null($itemURL)) {
 					echo '<li class="'.$item['type'].'">'.$itemtitle;
 				} else {
 					echo '<li class="'.$item['type'].'"><a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">"'.$itemtitle.'</a>';

@@ -26,9 +26,11 @@ printAdminHeader();
 
 ?>
 <script language="javascript" type="text/javascript">
+	//<!-- <![CDATA[
 	$(function() {
 		$('#images').sortable();
 	});
+	// ]]> -->
 </script>
 <?php
 echo "\n</head>";
@@ -105,10 +107,12 @@ if (!isset($_GET['album'])) {
 		<div class="tabbox">
 			<form action="?page=edit&amp;album=<?php echo $album->getFolder(); ?>&amp;saved&amp;tab=sort" method="post" name="sortableListForm" id="sortableListForm">
 				<script language="javascript" type="text/javascript">
+					// <!-- <![CDATA[
 					function postSort(form) {
 						$('#sortableList').val($('#images').sortable('serialize'));
 						form.submit();
 					}
+					// ]]> -->
 				</script>
 			
 				<p class="buttons">
@@ -136,10 +140,6 @@ if (!isset($_GET['album'])) {
 				<br />
 			
 				<div>
-					<script language="javascript" type="text/javascript">
-						function saveOrder() {
-						}
-					</script>
 					<input type="hidden" id="sortableList" name="sortableList" value="" />
 					<p class="buttons">
 						<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >

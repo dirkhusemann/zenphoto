@@ -16,39 +16,41 @@ include('zp-functions.php'); ?>
 <?php printTextEditorConfigJS(); ?>
 <?php zenpageJSCSS(); codeblocktabsJS(); ?>
 <script type="text/javascript">
-<?php if(!isset($_GET['add'])) { // prevent showing the message when adding page or article ?>
-$(document).ready(function() {
-	$('#date').change(function() {
-		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$(".scheduledpublishing").html('<?php echo addslashes(gettext('Future publishing date:')); ?>');
-		} else {
-			$(".scheduledpublishing").html('');
-		}
-	});
-		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$(".scheduledpublishing").html('<?php echo addslashes(gettext('Future publishing date:')); ?>');
-		} else {
-			$(".scheduledpublishing").html('');
-		}
-	$('#expiredate').change(function() {
-		if($('#expiredate').val() > '<?php echo date('Y-m-d H:i:s'); ?>' || $('#expiredate').val() === '') {
-			$(".expire").html('');
-		} else {
-			$(".expire").html('<?php echo addslashes(gettext('This is not a future date!')); ?>');
-		}
-	});
-	if(jQuery('#edittitlelink:checked').val() != 1) {
-		$('#titlelink').attr("disabled", true);
-	}
-	$('#edittitlelink').change(function() {
-		if(jQuery('#edittitlelink:checked').val() == 1) {
-			$('#titlelink').removeAttr("disabled");
-		} else {
+	//<!-- <![CDATA[
+	<?php if(!isset($_GET['add'])) { // prevent showing the message when adding page or article ?>
+	$(document).ready(function() {
+		$('#date').change(function() {
+			if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
+				$(".scheduledpublishing").html('<?php echo addslashes(gettext('Future publishing date:')); ?>');
+			} else {
+				$(".scheduledpublishing").html('');
+			}
+		});
+			if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
+				$(".scheduledpublishing").html('<?php echo addslashes(gettext('Future publishing date:')); ?>');
+			} else {
+				$(".scheduledpublishing").html('');
+			}
+		$('#expiredate').change(function() {
+			if($('#expiredate').val() > '<?php echo date('Y-m-d H:i:s'); ?>' || $('#expiredate').val() === '') {
+				$(".expire").html('');
+			} else {
+				$(".expire").html('<?php echo addslashes(gettext('This is not a future date!')); ?>');
+			}
+		});
+		if(jQuery('#edittitlelink:checked').val() != 1) {
 			$('#titlelink').attr("disabled", true);
 		}
+		$('#edittitlelink').change(function() {
+			if(jQuery('#edittitlelink:checked').val() == 1) {
+				$('#titlelink').removeAttr("disabled");
+			} else {
+				$('#titlelink').attr("disabled", true);
+			}
+		});
 	});
-});
-<?php } ?>
+	<?php } ?>
+	// ]]> -->
 </script>
 </head>
 <body>
@@ -257,6 +259,7 @@ if(is_object($result)) {
 				<p>
 
 				<script type="text/javascript">
+					// <!-- <![CDATA[
 					$(function() {
 						$("#date").datepicker({
 							showOn: 'button',
@@ -265,6 +268,7 @@ if(is_object($result)) {
 							buttonImageOnly: true
 							});
 					});
+					// ]]> -->
 				</script>
 
 				<strong class='scheduledpublishing'></strong>
@@ -275,6 +279,7 @@ if(is_object($result)) {
 				<p>
 
 				<script type="text/javascript">
+					// <!-- <![CDATA[
 					$(function() {
 						$("#expiredate").datepicker({
 							showOn: 'button',
@@ -283,6 +288,7 @@ if(is_object($result)) {
 							buttonImageOnly: true
 							});
 					});
+					// ]]> -->
 				</script>
 
 				<?php echo gettext("Expiration date:"); ?><br />

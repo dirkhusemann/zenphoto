@@ -29,11 +29,11 @@ foreach ($taglist AS $tag) {
 	$c++;
 	$list .= '"'.addslashes($tag).'"';
 }
-$js = '<script type="text/javascript">'."\n".
+$js = '<script type="text/javascript">'."\n// <!-- <![CDATA[\n".
 			'var _tagList = ['.$list."];\n".
 			"$(function () {\n".
 				"$('#search_input, #edit-editable_4').tagSuggest({ separator:'".(getOption('search_space_is_or')?' ':',')."', tags: _tagList });\n".
-			"});\n".
+			"});\n// ]]> -->".
 		'</script>';
 addPluginScript($js);
 ?>

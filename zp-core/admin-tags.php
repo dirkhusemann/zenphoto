@@ -150,17 +150,19 @@ printLogoAndLinks();
 						<span id="autotext"><?php echo gettext('all')?></span>
 					</label>
 					<script type="text/javascript">
-					var checked = false;
-					$('#autocheck').click(
-					   function() {
-					      if (checked) {
-						      checked = false;
-					      } else {
-						      checked = true;
-					      }
-					      $("INPUT[type='checkbox']").attr('checked', checked);
-					   }
-					)			
+						// <!-- <![CDATA[
+						var checked = false;
+						$('#autocheck').click(
+						   function() {
+						      if (checked) {
+							      checked = false;
+						      } else {
+							      checked = true;
+						      }
+						      $("INPUT[type='checkbox']").attr('checked', checked);
+						   }
+						)			
+						// ]]> -->
 					</script>	
 					<br clear="all" />
 					<br />

@@ -5,17 +5,19 @@
  */
 function printZDSearchToggleJS() { ?>
 	<script type="text/javascript">
-	function toggleExtraElements(category, show) {
-		if (show) {
-			jQuery('.'+category+'_showless').show();
-			jQuery('.'+category+'_showmore').hide();
-			jQuery('.'+category+'_extrashow').show();
-		} else {
-			jQuery('.'+category+'_showless').hide();
-			jQuery('.'+category+'_showmore').show();
-			jQuery('.'+category+'_extrashow').hide();
+		// <!-- <![CDATA[
+		function toggleExtraElements(category, show) {
+			if (show) {
+				jQuery('.'+category+'_showless').show();
+				jQuery('.'+category+'_showmore').hide();
+				jQuery('.'+category+'_extrashow').show();
+			} else {
+				jQuery('.'+category+'_showless').hide();
+				jQuery('.'+category+'_showmore').show();
+				jQuery('.'+category+'_extrashow').hide();
+			}
 		}
-	}
+		// ]]> -->
 	</script>
 <?php
 }
@@ -67,10 +69,12 @@ function printZDRoundedCornerJS() {
 ?>
 <script type="text/javascript" src="<?php echo $_zp_themeroot; ?>/js/jquery.corner.js"></script>
 <script type="text/javascript">
-   	$(document).ready(function() {
-			$(".album,input,#slideshowlink a,textarea,#exif_link a").corner("keep 5px");
-		});
-   </script>
+	//<!-- <![CDATA[
+   $(document).ready(function() {
+		$(".album,input,#slideshowlink a,textarea,#exif_link a").corner("keep 5px");
+	});
+	// ]]> -->
+</script>
 <?php
 
 }

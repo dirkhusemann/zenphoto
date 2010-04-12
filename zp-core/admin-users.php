@@ -494,6 +494,7 @@ if (empty($alterrights)) {
 </p>
 </form>
 <script language="javascript" type="text/javascript">
+	//<!-- <![CDATA[
 	function setShow(v) {
 		<?php
 		foreach ($showlist as $show) {
@@ -503,6 +504,7 @@ if (empty($alterrights)) {
 		}
 		?>
 	}
+	// ]]> -->
 </script>
 
 <br clear="all" />

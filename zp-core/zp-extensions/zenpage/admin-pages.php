@@ -15,9 +15,6 @@ require_once('zp-functions.php');
 <title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php zenpageJSCSS(); ?>
-<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
-<!--Nested Sortables-->
-<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
 </head>
 <body>
 <?php
@@ -88,24 +85,24 @@ if(isset($_GET['hitcounter'])) {
 <?php printZenpageIconLegend(); ?>
 </div>
 <script type="text/javascript">
-// <![CDATA[ 
-jQuery( function($) {
-$('#left-to-right').NestedSortable(
-	{
-		accept: 'page-item1',
-		noNestingClass: "no-nesting",
-		opacity: 0.4,
-		helperclass: 'helper',
-		onChange: function(serialized) {
-			$('#left-to-right-ser')
-			.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
-		},
-		autoScroll: true,
-		handle: '.sort-handle'
-	} 
-);
-});
-// ]]> 
+	// <!-- <![CDATA[ 
+	jQuery( function($) {
+	$('#left-to-right').NestedSortable(
+		{
+			accept: 'page-item1',
+			noNestingClass: "no-nesting",
+			opacity: 0.4,
+			helperclass: 'helper',
+			onChange: function(serialized) {
+				$('#left-to-right-ser')
+				.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
+			},
+			autoScroll: true,
+			handle: '.sort-handle'
+		} 
+	);
+	});
+	// ]]> -->
 </script>
 </div>
 <?php printAdminFooter(); ?>

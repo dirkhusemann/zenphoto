@@ -299,34 +299,62 @@ function addSubalbumMenus($menuset, $gallery, $id, $link, $sort) {
 		}
 	}
 }
+
 /**
- * Adds album items for the menu
+ * Adds albums to the menu set. Returns the next sort order base
+ * @param string $menuset current menu set
+ * @param string $base starting "sort order"
+ * @return int
  */
-function addalbumsToDatabase($menuset) {
-	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
-	$result = query($sql);
-	$albumbase = mysql_result($result, 0);
+function addalbumsToDatabase($menuset, $base=NULL) {
+	if (is_null($base)) {
+		$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
+		$result = query($sql);
+		$albumbase = mysql_result($result, 0);
+		$sortbase = '';
+	} else {
+		$albumbase = array_pop($base);
+		$sortbase = '';
+		for ($i=0;$i<count($base);$i++) {
+			$sortbase .= sprintf('%03u',$base[$i]).'-';
+		}
+	}
+	$result = $albumbase;
 	$gallery = new Gallery();
 	$albums = $gallery->getAlbums();
 	foreach ($albums as $key=>$link) {
-		addSubalbumMenus($menuset, $gallery, 0, $link, sprintf('%03u', $key+$albumbase));
+		addSubalbumMenus($menuset, $gallery, 0, $link, $sortbase.sprintf('%03u', $result = $key+$albumbase));
 	}
+	return $result;
 }
+
 /**
  * Adds Zenpage pages to the menu set 
-  * @param string $menuset chosen menu set
+ * @param string $menuset current menu set
+ * @param int $pagebase starting "sort order"
+ * @return int
  */
-function addPagesToDatabase($menuset) {
-	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
-	$result = query($sql);
-	$pagebase = mysql_result($result, 0);
+function addPagesToDatabase($menuset, $base=NULL) {
+	if (is_null($base)) {
+		$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
+		$result = query($sql);
+		$pagebase = mysql_result($result, 0);
+		$sortbase = '';
+	} else {
+		$pagebase = array_pop($base);
+		$sortbase = '';
+		for ($i=0;$i<count($base);$i++) {
+			$sortbase .= sprintf('%03u',$base[$i]).'-';
+		}
+	}
+	$result = $pagebase;
 	$parents = array(0);
 	$result = query_full_array("SELECT `titlelink`, `show`, `sort_order` FROM ".prefix('zenpage_pages')." ORDER BY sort_order");
 	foreach($result as $key=>$item) {
 		$sorts = explode('-',$item['sort_order']);
 		$level = count($sorts);
-		$sorts[0] = sprintf('%03u',$sorts[0]+$pagebase);
-		$order = implode('-',$sorts);
+		$sorts[0] = sprintf('%03u',$result = $sorts[0]+$pagebase);
+		$order = $sortbase.implode('-',$sorts);
 		$show = $item['show'];
 		$link = $item['titlelink'];
 		$parent = $parents[$level-1];
@@ -340,23 +368,35 @@ function addPagesToDatabase($menuset) {
 		}
 		$parents[$level] =$id;
 	}
+	return $result;
 }
 /**
  * Adds Zenpage news categories to the menu set 
  * @param string $menuset chosen menu set
  */
-function addCategoriesToDatabase($menuset) {
-	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
-	$result = query($sql);
-	$categorybase = mysql_result($result, 0);
+function addCategoriesToDatabase($menuset, $base=NULL) {
+	if (is_null($base)) {
+		$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
+		$result = query($sql);
+		$categorybase = mysql_result($result, 0);
+		$sortbase = '';
+	} else {
+		$categorybase = array_pop($base);
+		$sortbase = '';
+		for ($i=0;$i<count($base);$i++) {
+			$sortbase .= sprintf('%03u',$base[$i]).'-';
+		}
+	}
+	$result = $categorybase;
 	$result = query_full_array("SELECT cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
 	foreach($result as $key=>$item) {
-		$order = sprintf('%03u',$key+$categorybase);
+		$order = $sortbase.sprintf('%03u',$result = $key+$categorybase);
 		$link = $item['cat_link'];
 		$sql = "INSERT INTO ".prefix('menu')." (`link`, `type`, `show`,`menuset`,`sort_order`) ".
 										'VALUES ("'.zp_escape_string($link).'","zenpagecategory", 1,"'.zp_escape_string($menuset).'","'.$order.'")';
 		query($sql, true);
 	}
+	return $result;
 }
 
 
@@ -377,14 +417,14 @@ function addItem() {
 	//echo "<pre>"; print_r($_POST); echo "</pre>"; // for debugging
 	switch($result['type']) {
 		case 'all_items':
-			addAlbumsToDatabase($menuset);
 			query("INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
 						"VALUES ('".gettext('Home')."', '".WEBPATH.'/'.	"','galleryindex','1','".zp_escape_string($menuset)."','000')",true);
+			addAlbumsToDatabase($menuset);
 			if(getOption('zp_plugin_zenpage')) {
-				addPagesToDatabase($menuset);
-				addCategoriesToDatabase($menuset);
 				query("INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
 							"VALUES ('".gettext('News index')."', '".rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS).	"','zenpagenewsindex','1','".zp_escape_string($menuset)."','001')",true);
+				addPagesToDatabase($menuset);
+				addCategoriesToDatabase($menuset);
 			}
 			echo "<p class='messagebox' id='fade-message'>".gettext("Menu items for all Zenphoto objects added.")."</p>";
 			return NULL;
@@ -461,7 +501,7 @@ function addItem() {
 				return $result;
 			}
 			if(empty($_POST['link'])) {
-				$result['link'] = seoFriendly(get_language_string($title));
+				$result['link'] = seoFriendly(get_language_string($result['title']));
 			} else {
 				$result['link'] = sanitize($_POST['link']);
 			}

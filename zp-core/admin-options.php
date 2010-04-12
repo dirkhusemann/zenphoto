@@ -419,6 +419,7 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 	?>
 	<script type="text/javascript" src="js/tag.js"></script>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		$(function () {
 			$('#<?php echo $targetid; ?>').tagSuggest({
 				tags: [
@@ -426,6 +427,7 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 				]
 			});
 		});
+		// ]]> -->
 	</script>
 	<?php
 }
@@ -1361,53 +1363,59 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<td width="350">
 					<?php echo gettext('Normal Image'); ?>&nbsp;<input type="text" size="3" id="imagequality" name="image_quality" value="<?php echo getOption('image_quality');?>" />
 					<script type="text/javascript">
-					$(function() {
-						$("#slider-imagequality").slider({
-							<?php $v = getOption('image_quality'); ?>
-							startValue: <?php echo $v; ?>,
-							value: <?php echo $v; ?>,
-							min: 0,
-							max: 100,
-							slide: function(event, ui) {
-								$("#imagequality").val( ui.value);
-							}
+						// <!-- <![CDATA[
+						$(function() {
+							$("#slider-imagequality").slider({
+								<?php $v = getOption('image_quality'); ?>
+								startValue: <?php echo $v; ?>,
+								value: <?php echo $v; ?>,
+								min: 0,
+								max: 100,
+								slide: function(event, ui) {
+									$("#imagequality").val( ui.value);
+								}
+							});
+							$("#imagequality").val($("#slider-imagequality").slider("value"));
 						});
-						$("#imagequality").val($("#slider-imagequality").slider("value"));
-					});
+						// ]]> -->
 					</script>
 					<div id="slider-imagequality"></div>
 					<?php echo gettext('<em>full</em> Image'); ?>&nbsp;<input type="text" size="3" id="fullimagequality" name="full_image_quality" value="<?php echo getOption('full_image_quality');?>" />
 					<script type="text/javascript">
-					$(function() {
-						$("#slider-fullimagequality").slider({
-							<?php $v = getOption('full_image_quality'); ?>
-							startValue: <?php echo $v; ?>,
-							value: <?php echo $v; ?>,
-							min: 0,
-							max: 100,
-							slide: function(event, ui) {
-								$("#fullimagequality").val( ui.value);
-							}
+						// <!-- <![CDATA[
+						$(function() {
+							$("#slider-fullimagequality").slider({
+								<?php $v = getOption('full_image_quality'); ?>
+								startValue: <?php echo $v; ?>,
+								value: <?php echo $v; ?>,
+								min: 0,
+								max: 100,
+								slide: function(event, ui) {
+									$("#fullimagequality").val( ui.value);
+								}
+							});
+							$("#fullimagequality").val($("#slider-fullimagequality").slider("value"));
 						});
-						$("#fullimagequality").val($("#slider-fullimagequality").slider("value"));
-					});
+						// ]]> -->
 					</script>
 					<div id="slider-fullimagequality"></div>
 					<?php echo gettext('Thumbnail'); ?>&nbsp;<input type="text" size="3" id="thumbquality" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" />
 					<script type="text/javascript">
-					$(function() {
-						$("#slider-thumbquality").slider({
-							<?php $v = getOption('thumb_quality'); ?>
-							startValue: <?php echo $v; ?>,
-							value: <?php echo $v; ?>,
-							min: 0,
-							max: 100,
-							slide: function(event, ui) {
-								$("#thumbquality").val( ui.value);
-							}
+						// <!-- <![CDATA[
+						$(function() {
+							$("#slider-thumbquality").slider({
+								<?php $v = getOption('thumb_quality'); ?>
+								startValue: <?php echo $v; ?>,
+								value: <?php echo $v; ?>,
+								min: 0,
+								max: 100,
+								slide: function(event, ui) {
+									$("#thumbquality").val( ui.value);
+								}
+							});
+							$("#thumbquality").val($("#slider-thumbquality").slider("value"));
 						});
-						$("#thumbquality").val($("#slider-thumbquality").slider("value"));
-					});
+						// ]]> -->
 					</script>
 					<div id="slider-thumbquality"></div>
 				</td>
@@ -1452,20 +1460,22 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<br />
 					<?php echo gettext('Amount'); ?>&nbsp;<input type="text" id="sharpenamount" name="sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
 					<script type="text/javascript">
-					$(function() {
-						$("#slider-sharpenamount").slider({
-						<?php $v = getOption('sharpen_amount'); ?>
+						// <!-- <![CDATA[
+						$(function() {
+							$("#slider-sharpenamount").slider({
 							<?php $v = getOption('sharpen_amount'); ?>
-							startValue: <?php echo $v; ?>,
-							value: <?php echo $v; ?>,
-							min: 0,
-							max: 100,
-							slide: function(event, ui) {
-								$("#sharpenamount").val( ui.value);
-							}
+								<?php $v = getOption('sharpen_amount'); ?>
+								startValue: <?php echo $v; ?>,
+								value: <?php echo $v; ?>,
+								min: 0,
+								max: 100,
+								slide: function(event, ui) {
+									$("#sharpenamount").val( ui.value);
+								}
+							});
+							$("#sharpenamount").val($("#slider-sharpenamount").slider("value"));
 						});
-						$("#sharpenamount").val($("#slider-sharpenamount").slider("value"));
-					});
+						// ]]> -->
 					</script>
 					<div id="slider-sharpenamount"></div>
 					<table>
@@ -2192,6 +2202,7 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 			?>
 		</form>
 		<script language="javascript" type="text/javascript">
+			// <!-- <![CDATA[
 			function setShow(v) {
 				<?php
 				foreach ($showlist as $show) {
@@ -2201,6 +2212,7 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 				}
 				?>
 			}
+			// ]]> -->
 		</script>
 	</div>
 	<!-- end of tab_plugin div -->

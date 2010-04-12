@@ -47,10 +47,12 @@ if (isset($_GET['mod_rewrite'])) {
 	if ($_GET['mod_rewrite'] == 'ON') {
 		?>
 		<script type="text/javascript">
+			// <!-- <![CDATA[
 			$.ajax({   
 				type: 'POST',   
 				url: '<?php echo WEBPATH; ?>/page/setup_set-mod_rewrite?z'
 			});
+			// ]]> -->
 		</script>
 		<?php
 	} else {

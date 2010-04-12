@@ -41,7 +41,9 @@
 		}
 	?>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		var initstate = <?php echo $errors; ?>;
+		// ]]> -->
 	</script>
 	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
 	<!-- BEGIN #commentblock -->

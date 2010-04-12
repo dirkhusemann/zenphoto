@@ -636,12 +636,13 @@ function printArticleDatesDropdown() {
 ?>
 	</select>
 	<script language="JavaScript" type="text/javascript" >
-	<!--
-	function gotoLink(form) {
-	var OptionIndex=form.ListBoxURL.selectedIndex;
-	parent.location = form.ListBoxURL.options[OptionIndex].value;}
-	//-->
-	</script></form>
+		// <!-- <![CDATA[
+		function gotoLink(form) {
+		var OptionIndex=form.ListBoxURL.selectedIndex;
+		parent.location = form.ListBoxURL.options[OptionIndex].value;}
+		// ]]> -->
+	</script>
+	</form>
 <?php
 }
 
@@ -729,13 +730,13 @@ if(!isset($_GET['category'])) {
 	}
 
 ?>
- </select>
-	<script language="JavaScript" type="text/javascript" >
-	<!--
-	function gotoLink(form) {
-	var OptionIndex=form.ListBoxURL.selectedIndex;
-	parent.location = form.ListBoxURL.options[OptionIndex].value;}
-	//-->
+		</select>
+		<script language="JavaScript" type="text/javascript" >
+			// <!-- <![CDATA[
+			function gotoLink(form) {
+			var OptionIndex=form.ListBoxURL.selectedIndex;
+			parent.location = form.ListBoxURL.options[OptionIndex].value;}
+			// ]]> -->
 	</script>
 	</form>
 <?php
@@ -798,12 +799,13 @@ function printUnpublishedDropdown() {
 	?>
 	</select>
 	<script language="JavaScript" type="text/javascript" >
-	<!--
-	function gotoLink(form) {
-	var OptionIndex=form.ListBoxURL.selectedIndex;
-	parent.location = form.ListBoxURL.options[OptionIndex].value;}
-	//-->
-	</script></form>
+		// <!-- <![CDATA[
+		function gotoLink(form) {
+		var OptionIndex=form.ListBoxURL.selectedIndex;
+		parent.location = form.ListBoxURL.options[OptionIndex].value;}
+		// ]]> -->
+	</script>
+	</form>
 <?php
 }
 
@@ -1155,6 +1157,7 @@ function zenpageJSCSS() {
 	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
 	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
 	<script type="text/javascript">
+		// <!-- <![CDATA[
 		$(document).ready(function(){
 			$("a.colorbox").colorbox({iframe:true, width:"810",height:"480" });
 		});
@@ -1163,9 +1166,10 @@ function zenpageJSCSS() {
 		});
 		$(document).ready(function(){
 			$("#tip a").click(function() {
-			$("#tips").toggle("slow");
-		});
-	 });
+				$("#tips").toggle("slow");
+			});
+	 	});
+		// ]]> -->
 	</script>
 <?php
 }
@@ -1396,8 +1400,10 @@ function is_AdminEditPage($page) {
  * Codeblock tabs javascript code
  *
  */
-function codeblocktabsJS() { ?> <script type="text/javascript"
-		charset="utf-8">
+function codeblocktabsJS() {
+	?>
+	<script type="text/javascript" charset="utf-8">
+		// <!-- <![CDATA[
 		$(function () {
 			var tabContainers = $('div.tabs > div');
 			tabContainers.hide().filter(':first').show();
@@ -1410,7 +1416,10 @@ function codeblocktabsJS() { ?> <script type="text/javascript"
 				return false;
 			}).filter(':first').click();
 		});
-	</script> <?php }
+		// ]]> -->
+	</script>
+<?php
+}
 
 
 

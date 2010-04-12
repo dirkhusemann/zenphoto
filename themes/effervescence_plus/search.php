@@ -53,17 +53,19 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
 	<script type="text/javascript">
-	function toggleExtraElements(category, show) {
-		if (show) {
-			jQuery('.'+category+'_showless').show();
-			jQuery('.'+category+'_showmore').hide();
-			jQuery('.'+category+'_extrashow').show();
-		} else {
-			jQuery('.'+category+'_showless').hide();
-			jQuery('.'+category+'_showmore').show();
-			jQuery('.'+category+'_extrashow').hide();
+		// <!-- <![CDATA[
+		function toggleExtraElements(category, show) {
+			if (show) {
+				jQuery('.'+category+'_showless').show();
+				jQuery('.'+category+'_showmore').hide();
+				jQuery('.'+category+'_extrashow').show();
+			} else {
+				jQuery('.'+category+'_showless').hide();
+				jQuery('.'+category+'_showmore').show();
+				jQuery('.'+category+'_extrashow').hide();
+			}
 		}
-	}
+		// ]]> -->
 	</script>
 </head>
 
@@ -325,12 +327,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  					$flash_url = "index.php?p=search" . htmlspecialchars(getSearchParams()) . "&amp;format=xml";
  					?>
  					<script type="text/javascript">
-									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");
-									fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
-									fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
-									fo.addVariable("width", "100%");
-									fo.addVariable("height", "100%");
-									fo.write("flash");
+ 						// <!-- <![CDATA[
+						var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");
+						fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
+						fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
+						fo.addVariable("width", "100%");
+						fo.addVariable("height", "100%");
+						fo.write("flash");
+						// ]]> -->
  					</script>
  					<?php
 	 			}

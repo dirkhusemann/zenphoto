@@ -153,39 +153,41 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 	}
 	?>
 	<script type="text/javascript">
-var mycarousel_itemList = [
-	<?php echo $items; ?>
-];
-
-function mycarousel_itemLoadCallback(carousel, state) {
-		for (var i = carousel.first; i <= carousel.last; i++) {
-				if (carousel.has(i)) {
-						continue;
+		// <!-- <![CDATA[
+		var mycarousel_itemList = [
+			<?php echo $items; ?>
+		];
+		
+		function mycarousel_itemLoadCallback(carousel, state) {
+				for (var i = carousel.first; i <= carousel.last; i++) {
+						if (carousel.has(i)) {
+								continue;
+						}
+						if (i > mycarousel_itemList.length) {
+								break;
+						}
+						carousel.add(i, mycarousel_getItemHTML(mycarousel_itemList[i-1]));
 				}
-				if (i > mycarousel_itemList.length) {
-						break;
-				}
-				carousel.add(i, mycarousel_getItemHTML(mycarousel_itemList[i-1]));
-		}
-};
-
-function mycarousel_getItemHTML(item) {
-	if(item.active === "") {
-		return '<a href="' + item.link + '" title="' + item.title + '"><img src="' + item.url + '" width="<?php  echo $width; ?>" height="<?php echo $height; ?>" alt="' + item.url + '" /></a>';
-	} else {
-		return '<a href="' + item.link + '" title="' + item.title + '"><img class="activecarouselimage" src="' + item.url + '" width="<?php  echo $width; ?>" height="<?php echo $height; ?>" alt="' + item.url + '" /></a>';
-	}
-};
-
-jQuery(document).ready(function() {
-		jQuery("#mycarousel").jcarousel({
-				size: mycarousel_itemList.length,
-				start: <?php echo $imgnumber; ?>,
-				scroll: <?php echo $thumbscroll; ?>,
-				itemLoadCallback: {onBeforeAnimation: mycarousel_itemLoadCallback}
+		};
+		
+		function mycarousel_getItemHTML(item) {
+			if(item.active === "") {
+				return '<a href="' + item.link + '" title="' + item.title + '"><img src="' + item.url + '" width="<?php  echo $width; ?>" height="<?php echo $height; ?>" alt="' + item.url + '" /></a>';
+			} else {
+				return '<a href="' + item.link + '" title="' + item.title + '"><img class="activecarouselimage" src="' + item.url + '" width="<?php  echo $width; ?>" height="<?php echo $height; ?>" alt="' + item.url + '" /></a>';
+			}
+		};
+		
+		jQuery(document).ready(function() {
+				jQuery("#mycarousel").jcarousel({
+						size: mycarousel_itemList.length,
+						start: <?php echo $imgnumber; ?>,
+						scroll: <?php echo $thumbscroll; ?>,
+						itemLoadCallback: {onBeforeAnimation: mycarousel_itemLoadCallback}
+				});
 		});
-});
-</script>
+	// ]]> -->
+	</script>
 	<ul id="mycarousel">
 		<!-- The content will be dynamically loaded in here -->
 	</ul>

@@ -435,12 +435,14 @@ if (empty($subtab) || $subtab=='albuminfo') {
 }
 ?>
 <script type="text/javascript">
+	//<!-- <![CDATA[
 	function newAlbum(folder,albumtab) {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {
 			launchScript('',['action=newalbum','album='+folder,'name='+encodeURIComponent(album),'albumtab='+albumtab]);
 		}
 	}
+	// ]]> -->
 </script>
 <?php
 $result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
@@ -716,7 +718,7 @@ $alb = removeParentAlbumNames($album);
 					</button>
 					</p>
 					<script type="text/javascript">
-					// <![CDATA[
+					// <!-- <![CDATA[
 					jQuery( function($) {
 					$('#left-to-right').NestedSortable(
 						{
@@ -733,7 +735,7 @@ $alb = removeParentAlbumNames($album);
 						}
 					);
 					});
-					// ]]>
+					// ]]> -->
 					</script>
 				</form>
 				<br clear="all" />
@@ -1049,6 +1051,7 @@ $alb = removeParentAlbumNames($album);
 						<td valign="top"><?php echo gettext("Date:"); ?></td>
 						<td>
 							<script type="text/javascript">
+								// <!-- <![CDATA[
 								$(function() {
 									$("#datepicker_<?php echo $currentimage; ?>").datepicker({
 													showOn: 'button',
@@ -1057,6 +1060,7 @@ $alb = removeParentAlbumNames($album);
 													buttonImageOnly: true
 													});
 								});
+								// ]]> -->
 							</script>
 							<input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20em" name="<?php echo $currentimage; ?>-date"
 								value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" />
@@ -1215,7 +1219,9 @@ $alb = removeParentAlbumNames($album);
 			if (!empty($target_image)) {
 				?>
 				<script language="Javascript" type="text/javascript" >
-				javascript:toggleExtraInfo('<?php echo $target_image_nr;?>', 'image', true);
+					// <!-- <![CDATA[
+					toggleExtraInfo('<?php echo $target_image_nr;?>', 'image', true);
+					// ]]> -->
 				</script>
 				<?php
 			}
@@ -1412,7 +1418,7 @@ if (isset($_GET['saved'])) {
 		</ul>
 	</div>
 	<script type="text/javascript">
-		// <![CDATA[
+		// <!-- <![CDATA[
 		jQuery( function($) {
 		$('#left-to-right').NestedSortable(
 			{
@@ -1429,7 +1435,7 @@ if (isset($_GET['saved'])) {
 			}
 		);
 		});
-		// ]]>
+		// ]]> -->
 	</script>
 	
 	<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>

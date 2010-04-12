@@ -91,13 +91,15 @@ function zenJavascript() {
 		if ($grant) {
 			?>
 			<script type="text/javascript">
-			var zpstrings = {
-				/* Used in jquery.editinplace.js */
-				'Save' : "<?php echo gettext('Save'); ?>",
-				'Cancel' : "<?php echo gettext('Cancel'); ?>",
-				'Saving' : "<?php echo gettext('Saving'); ?>",
-				'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
-			};
+				// <!-- <![CDATA[
+				var zpstrings = {
+					/* Used in jquery.editinplace.js */
+					'Save' : "<?php echo gettext('Save'); ?>",
+					'Cancel' : "<?php echo gettext('Cancel'); ?>",
+					'Saving' : "<?php echo gettext('Saving'); ?>",
+					'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
+				};
+				// ]]> -->
 			</script>
 			<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
 			<?php
@@ -123,12 +125,14 @@ function printAdminToolbox($id='admin') {
 		$redirect = '';
 		?>
 		<script type="text/javascript">
+			// <!-- <![CDATA[
 			function newAlbum(folder,albumtab) {
 				var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 				if (album) {
 					launchScript('<?php echo $zf; ?>/admin-edit.php',['action=newalbum','album='+encodeURIComponent(folder),'name='+encodeURIComponent(album),'albumtab='+albumtab]);
 				}
 			}
+			// ]]> -->
 		</script>
 		<?php
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript:toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
@@ -2174,7 +2178,7 @@ function printPreloadScript() {
 	global $_zp_current_image;
 	$size = getOption('image_size');
 	if (hasNextImage() || hasPrevImage()) {
-		echo "<script type=\"text/javascript\">\n";
+		echo "<script type=\"text/javascript\">\n// <!-- <![CDATA[\n";
 		if (hasNextImage()) {
 			$nextimg = $_zp_current_image->getNextImage();
 			echo "  nextimg = new Image();\n  nextimg.src = \"" . $nextimg->getSizedImage($size) . "\";\n";
@@ -2183,7 +2187,7 @@ function printPreloadScript() {
 			$previmg = $_zp_current_image->getPrevImage();
 			echo "  previmg = new Image();\n  previmg.src = \"" . $previmg->getSizedImage($size) . "\";\n";
 		}
-		echo "</script>\n\n";
+		echo "</script>\n\\ ]]> -->\n";
 	}
 }
 

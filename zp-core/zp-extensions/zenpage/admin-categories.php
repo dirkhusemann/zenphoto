@@ -15,20 +15,22 @@ include("zp-functions.php"); ?>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php zenpageJSCSS(); ?>  
 <script type="text/javascript">
-<?php if(isset($_GET["edit"])) { // prevent showing the message when adding page or article ?>
-$(document).ready(function() {
-	if(jQuery('#edittitlelink:checked').val() != 1) {
-		$('#catlink').attr("disabled", true); 
-	}
-	$('#edittitlelink').change(function() {
-		if(jQuery('#edittitlelink:checked').val() == 1) {	
-			$('#catlink').removeAttr("disabled"); 
-		} else {
+	//<!-- <![CDATA[
+	<?php if(isset($_GET["edit"])) { // prevent showing the message when adding page or article ?>
+	$(document).ready(function() {
+		if(jQuery('#edittitlelink:checked').val() != 1) {
 			$('#catlink').attr("disabled", true); 
 		}
+		$('#edittitlelink').change(function() {
+			if(jQuery('#edittitlelink:checked').val() == 1) {	
+				$('#catlink').removeAttr("disabled"); 
+			} else {
+				$('#catlink').attr("disabled", true); 
+			}
+		});
 	});
-});
-<?php } ?>
+	<?php } ?>
+	// ]]> -->
 </script>
 </head>
 <body>

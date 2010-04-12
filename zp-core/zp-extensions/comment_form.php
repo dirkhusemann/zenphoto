@@ -357,6 +357,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 					if (getOption('comment_form_toggle')) {
 						?>
 						<script type="text/javascript">
+							// <!-- <![CDATA[
 							function toggleComments(hide) {
 								if (hide) {
 									$('div.comment').hide();
@@ -369,6 +370,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 							$(document).ready(function() {
 								toggleComments(true);
 							});
+							// ]]> -->
 						</script>
 						<?php
 						$display = ' style="display:none"';

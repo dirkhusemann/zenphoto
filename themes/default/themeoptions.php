@@ -11,7 +11,7 @@ class ThemeOptions {
 	
 	function ThemeOptions() {
 		setThemeOptionDefault('Allow_search', true);
-		setThemeOptionDefault('Theme_colors', 'light'); 
+		setThemeOptionDefault('Theme_colors', 'light');
 	}
 	
 	function getOptionsSupported() {

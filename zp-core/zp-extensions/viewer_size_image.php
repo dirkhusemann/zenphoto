@@ -114,7 +114,8 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 	}
 	if (($cookiepath = WEBPATH) == '') $cookiepath = '/';
 	?>
-	<script>
+	<script type="text/javascript">
+		// <!-- <![CDATA[
 		function switchimage(obj){
 			var url = $(obj).attr('url');
 			var w = $(obj).attr('im_w');
@@ -124,6 +125,7 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 			$('#image img').attr('src',url);
 			document.cookie='viewer_size_image_saved='+$(obj).attr('value')+'; expires=<?php echo date('Y-m-d H:i:s', time()+COOKIE_PESISTENCE); ?>; path=<?php echo $cookiepath ?>';
 		}
+		// ]]> -->
 	</script>
 	<div>
 	<?php

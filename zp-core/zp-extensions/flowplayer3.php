@@ -165,6 +165,7 @@ class flowplayer3 {
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.$width.'px; height: '.$height.'px;">
 			</span>
 			<script type="text/javascript">
+			// <!-- <![CDATA[
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.5.swf", {
 			plugins: { 
         controls: {
@@ -195,7 +196,8 @@ class flowplayer3 {
 					autoBuffering: '.$autoplay.',
 					scaling: "'.getOption('flow_player3_scaling').'"
 				}
-			}); 
+			});
+			// ]]> -->
 			</script>';
 			} else { // use existing videothumb as splash image
 				$playerconfigadd = 'playlist: [ 
@@ -210,7 +212,8 @@ class flowplayer3 {
 					scaling: "'.getOption('flow_player3_scaling').'"
 				}
 			]
-			}); 
+			});
+			// ]]> -->
 			</script>';
 			}
 			$playerconfig = $playerconfig.$playerconfigadd;

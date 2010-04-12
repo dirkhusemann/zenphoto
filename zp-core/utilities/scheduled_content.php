@@ -329,6 +329,7 @@ if (count($publish_albums_list) > 0) {
 ?>
 
 <script type="text/javascript">
+	//<!-- <![CDATA[
 	$(function() {
 		$("#publish_date").datepicker({
 							showOn: 'button',
@@ -337,6 +338,7 @@ if (count($publish_albums_list) > 0) {
 							buttonImageOnly: true
 							});
 	});
+	// ]]> -->
 </script>
 <form name="review" action="" method="post">
 <?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" id="publish_date" name="publish_date" value="'.$requestdate.'" />'); ?>
@@ -355,17 +357,19 @@ if (count($publish_albums_list) > 0) {
 if (count($publish_images_list) > 0) {
 	?>
 	<script type="text/javascript">
-	function confirmdel(obj, id, msg) {
-		if (msg) {
-			if (confirm('<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')) {
-				jQuery('#'+id).css({color:'red'});
+		// <!-- <![CDATA[
+		function confirmdel(obj, id, msg) {
+			if (msg) {
+				if (confirm('<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')) {
+					jQuery('#'+id).css({color:'red'});
+					obj.checked = true;
+				}
+			} else {
+				jQuery('#'+id).css({color:'black'});
 				obj.checked = true;
 			}
-		} else {
-			jQuery('#'+id).css({color:'black'});
-			obj.checked = true;
 		}
-	}
+		// ]]> -->
 	</script>
 	<form name="publish" action="" method="post"><?php echo gettext('Not visible images:'); ?>
 	<input type="hidden" name="publish_images" value="true" />

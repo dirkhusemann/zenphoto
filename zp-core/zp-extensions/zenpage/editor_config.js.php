@@ -19,8 +19,9 @@ function printTextEditorConfigJS($locale='') {
 		$locale = getLocaleForTinyMCEandAFM();
 	} 
 ?>
- <script language="javascript" type="text/javascript" src="../tiny_mce/tiny_mce.js"></script>
+	<script language="javascript" type="text/javascript" src="../tiny_mce/tiny_mce.js"></script>
 	<script language="javascript" type="text/javascript">
+	// <!-- <![CDATA[
 		tinyMCE.init({
 			mode : "textareas",
 			language: "<?php echo $locale; ?>",
@@ -89,6 +90,7 @@ function printTextEditorConfigJS($locale='') {
 	else
 		tinyMCE.execCommand('mceRemoveControl', false, id);
 }
+ 	// ]]> -->
 	</script>
 <?php
 } // function end

@@ -272,6 +272,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			$validtypes = array('jpg','jpeg','gif','png','mov','3gp');
 			?>
 			<script type="text/javascript">
+				// <!-- <![CDATA[
 				$(document).ready(function(){
 					$(function() {
 						var ThisGallery = '<?php echo html_encode($albumtitle); ?>';
@@ -370,8 +371,8 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 					});
 			
 				});	// Documentready()
-			
-				</script>
+				// ]]> -->
+			</script>
 				<div id="slideshow" align="center">
 				<?php
 				// 7/21/08dp
@@ -478,39 +479,40 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			echo "<span id='slideshow' style='display: block; margin: 0 auto; width:".getOption('slideshow_flow_player_width')."px; height: ".getOption('slideshow_flow_player_height')."px'></span>";
 			?> 
 			<script type="text/javascript">
+			// <!-- <![CDATA[
 			flowplayer('slideshow','<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer-3.1.5.swf', {
 			
-	 	 playlist: [
-	 	<?php 
-											echo "\n";
-											$count = 0;
-											foreach($images as $animage) {
-													if ($dynamic) {
-														$folder = $animage['folder'];
-														$filename = $animage['filename'];
-														$salbum = new Album($_zp_gallery, $folder);
-														$image = newImage($salbum, $filename);
-														$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($salbum->name)."/".urlencode($filename);
-													} else {
-														$folder = $album->name;
-														$filename = $animage;
-														$image = newImage($album, $filename);
-														$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".pathurlencode($filename);
-													}
-												$ext = is_valid($filename, array('jpg','jpeg','gif','png','flv','mp3','mp4'));
-												if ($ext) {
-													if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
-														$duration = "";
-													} else {
-														$duration = ", duration: ".getOption("slideshow_speed")/10;
-													}
-													if($count > 0) { echo ",\n"; }
-													echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."'".$duration.", scaling: 'fit', autoBuffering: true }";
-													$count++;
-												}
-											}
-											echo "\n"; 
-											?>
+			playlist: [
+			<?php 
+			echo "\n";
+			$count = 0;
+			foreach($images as $animage) {
+					if ($dynamic) {
+						$folder = $animage['folder'];
+						$filename = $animage['filename'];
+						$salbum = new Album($_zp_gallery, $folder);
+						$image = newImage($salbum, $filename);
+						$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($salbum->name)."/".urlencode($filename);
+					} else {
+						$folder = $album->name;
+						$filename = $animage;
+						$image = newImage($album, $filename);
+						$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".pathurlencode($filename);
+					}
+				$ext = is_valid($filename, array('jpg','jpeg','gif','png','flv','mp3','mp4'));
+				if ($ext) {
+					if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
+						$duration = "";
+					} else {
+						$duration = ", duration: ".getOption("slideshow_speed")/10;
+					}
+					if($count > 0) { echo ",\n"; }
+					echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."'".$duration.", scaling: 'fit', autoBuffering: true }";
+					$count++;
+				}
+			}
+			echo "\n"; 
+			?>
 	 	],
     plugins:  { 
         controls: { 
@@ -519,6 +521,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
         }  
     }     
 										});	
+			// ]]> -->
 		</script> 
 			<?php
 			echo "</span>";

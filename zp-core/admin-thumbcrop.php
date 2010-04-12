@@ -162,6 +162,7 @@ printAdminHeader();
 <script src="js/jquery.Jcrop.js" type="text/javascript"></script>
 <link rel="stylesheet" href="js/jquery.Jcrop.css" type="text/css" />
 <script language="javascript" type="text/javascript" >
+	//<!-- <![CDATA[
 	jQuery(window).load(function(){
 		jQuery('#cropbox').Jcrop({
 			onChange: showPreview,
@@ -201,6 +202,7 @@ printAdminHeader();
 	function checkCoords() {
 		return true;
 	};
+	// ]]> -->
 </script>
 </head>
 <body>
@@ -273,12 +275,14 @@ printAdminHeader();
 		
 					<!-- set the initial view for the preview -->
 					<script language="Javascript" type="text/javascript" >
+						// <!-- <![CDATA[
 						jQuery('#preview').css({
 							width: '<?php echo round($cropwidth / $iW * $sizedwidth); ?>px', 
 							height: '<?php echo round($cropheight / $iH  * $sizedheight); ?>px',
 							marginLeft: '-<?php echo round($cropwidth / $iW * $iX); ?>px',
 							marginTop: '-<?php echo round($cropheight / $iH * $iY); ?>px'
 						});
+						// ]]> -->
 					</script>
 				<br style="clear: both" />
 				</div><!-- block -->
