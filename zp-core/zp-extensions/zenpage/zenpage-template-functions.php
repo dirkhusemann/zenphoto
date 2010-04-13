@@ -443,13 +443,13 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 		case 'image':
 			switch($mode) {
 				case 'latestimages-sizedimage':
-					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getImageLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'">';
 					if (isImagePhoto($_zp_current_zenpage_news)) {
+						$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getImageLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'">';
 						$articlecontent .= '<img src="'.htmlspecialchars($_zp_current_zenpage_news->getSizedImage($size)).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" />';
+						$articlecontent .= '</a>';
 					} else {
-						$articlecontent .= '<img src="'.htmlspecialchars($_zp_current_zenpage_news->getThumbImageFile(WEBPATH)).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" />';
+						$articlecontent .= $_zp_current_zenpage_news->getSizedImage($size);
 					}
-					$articlecontent .= '</a>';
 					break;
 				case 'latestimages-thumbnail':
 					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getImageLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.htmlspecialchars($_zp_current_zenpage_news->getThumb()).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />';
@@ -545,10 +545,19 @@ function printNewsContent($shorten=false,$shortenindicator='') {
  *
  * @param string $articlecontent Then news article content or image/album description to shorten
  * @param bool $shorten true or false if the description to this object should be shortened.
+ * @param string $shortenindicator The placeholder to mark the shortening (e.g."(...)"). If empty the zenpage option for this is used.
+ * @param string $readmoreurl The url where to point the "read more" link to. (The term set in Zenpage option is used).
  */
-function getNewsContentShorten($articlecontent,$shorten,$shortenindicator) {
+function getNewsContentShorten($articlecontent,$shorten,$shortenindicator='',$readmoreurl='') {
+	$readmorelink = '';
+	if(empty($shortenindicator)) {
+		$shortenindicator = getOption('zenpage_textshorten_indicator');
+	}
+	if(!empty($readmoreurl)) {
+		$readmorelink = '<a href="'.$readmoreurl.'" title="'.gettext('Read more').'">'.getOption('zenpage_read_more').'</a>';
+	}
 	if(!empty($shorten) && strlen($articlecontent) > $shorten) {
-		return shortenContent($articlecontent,$shorten,$shortenindicator);
+		return shortenContent($articlecontent,$shorten,$shortenindicator).$readmorelink;
 	} else {
 		return $articlecontent;
 	}
@@ -1211,7 +1220,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 			echo "<p class=\"latestnews-date\">". $date."</p>\n";
 		}
 		if($showcontent) {
-			echo "<p class=\"latestnews-desc\">".truncate_string($content, $contentlength)."</p>\n";
+			echo "<p class=\"latestnews-desc\">".getNewsContentShorten($content,$contentlength,'',$link)."</p>\n";
 		}
 		if($showcat AND $type != "album") {
 			echo "<p class=\"latestnews-cats\">(".$categories.")</p>\n";
@@ -2228,9 +2237,9 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	if(empty($readmore)) {
 		$readmore = getOption("zenpage_read_more");
 	}
-	if(empty($shortenindicator)) {
+	/* if(empty($shortenindicator)) {
 		$shortenindicator = getOption("zenpage_textshorten_indicator");
-	}
+	} */
 	if((zp_loggedin(ZENPAGE_RIGHTS))) {
 		$published = FALSE;
 	} else {
@@ -2247,16 +2256,17 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 			$subcount++;
 			$pagetitle = $pageobj->getTitle();
 			$pagecontent = $pageobj->getContent();
-			$readmorelink = " <a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$readmore."</a>\n";
+			//$readmorelink = " <a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$readmore."</a>\n";
 			if(stristr($pagecontent,"<!-- pagebreak -->") !== FALSE) {
 				$array = explode("<!-- pagebreak -->",$pagecontent);
-				$shortenindicator .= $readmorelink;
-				$pagecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
+				//$shortenindicator .= $readmorelink;
+				//$pagecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
+				$pagecontent = getNewsContentShorten($array[0], strlen($array[0]),$shortenindicator,getPageLinkURL($page['titlelink']));
 				if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
 					$pagecontent = str_replace($shortenindicator, '', $pagecontent);
 				}
 			} else if(strlen($pagecontent) > $excerptlength) {
-				$pagecontent = shortenContent($pagecontent, $excerptlength, $shortenindicator.$readmorelink);
+				$pagecontent = getNewsContentShorten($pagecontent, $excerptlength, $shortenindicator,getPageLinkURL($page['titlelink']));
 			}
 			echo "\n<div class='pageexcerpt'>\n";
 			echo "<h4><a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$pagetitle."</a></h4>";
