@@ -701,9 +701,10 @@ function printPageNav($prevtext, $separator, $nexttext, $class='pagenav', $id=NU
  *
  * @param string $class the css class to use, "pagelist" by default
  * @param string $id the css id to use
- */
-function printPageList($class='pagelist', $id=NULL) {
-	printPageListWithNav(null, null, false, false, $class, $id);
+ * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
+*/
+function printPageList($class='pagelist', $id=NULL, $navlen=9) {
+	printPageListWithNav(null, null, false, false, $class, $id, false, $navlen);
 }
 
 /**
@@ -718,7 +719,6 @@ function printPageList($class='pagelist', $id=NULL) {
  * @param bool $firstlast Add links to the first and last pages of you gallery
  * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
  */
-
 function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
 	$total = getTotalPages($oneImagePage);
 	$current = getCurrentPage();
@@ -744,27 +744,32 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	if ($firstlast) {
 		echo '<li class="'.($current==1?'current':'first').'">';
-		printLink(getPageURL(1, $total), 1, "Page 1");
+		printLink(getPageURL(1, $total), 1, gettext("Page 1"));
 		echo "</li>\n";
 		if ($j>2) {
 			echo "<li>";
-			printLink(getPageURL($k1, $total), ($j-1>2)?'...':$k1, "Page $k1");
+			printLink(getPageURL($k1, $total), ($j-1>2)?'...':$k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1));
 			echo "</li>\n";
 		}
 	}
 	for ($i=$j; $i <= $ilim; $i++) {
 		echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-		printLink(getPageURL($i, $total), $i, "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
+		if ($i == $current) {
+			$title = sprintf(ngettext('Page %1$u (Current Page)','Page %1$u (Current Page)', $i),$i);
+		} else {
+			$title = sprintf(ngettext('Page %1$u','Page %1$u', $i),$i);
+		}
+		printLink(getPageURL($i, $total), $i, $title);
 		echo "</li>\n";
 	}
 	if ($i < $total) {
 		echo "<li>";
-		printLink(getPageURL($k2, $total), ($total-$i>1)?'...':$k2, "Page $k2");
+		printLink(getPageURL($k2, $total), ($total-$i>1)?'...':$k2, sprintf(ngettext('Page %u','Page %u',$k2),$k2));
 		echo "</li>\n";
 	}
 	if ($firstlast && $i <= $total) {
 		echo "\n  <li class=\"last\">";
-		printLink(getPageURL($total, $total), $total, "Page {$total}");
+		printLink(getPageURL($total, $total), $total, sprintf(ngettext('Page {%u}','Page {%u}',$total),$total));
 		echo "</li>";
 	}
 	if ($nextprev) {

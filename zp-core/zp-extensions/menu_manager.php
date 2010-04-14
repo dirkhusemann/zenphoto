@@ -213,10 +213,11 @@ function getMenumanagerPredicessor($menuset='default') {
 	if (count($items)==0) return NULL;
 	$sortorder = getCurrentMenuItem();
 	if (empty($sortorder)) return NULL;
-	$shortorder = $order = explode('-', $sortorder);
-	$next = array_pop($order);
+	$order = explode('-', $sortorder);
+	$next = array_pop($order)-1;
+	$saveorder = $order;
 	while ($next >= 0) {
-		$order = $shortorder;
+		$order = $saveorder;
 		array_push($order, sprintf('%03u',$next));
 		$sortorder = implode('-', $order);
 		if (array_key_exists($sortorder, $items) && $items[$sortorder]['type'] != 'menulabel') {	// omit the menulabels
@@ -256,7 +257,7 @@ function getMenumanagerSuccessor($menuset='default') {
 	$sortorder = getCurrentMenuItem();
 	if (empty($sortorder)) return NULL;
 	$order = explode('-', $sortorder);
-	$next = array_pop($order) + 1;
+	$next = array_pop($order)+1;
 	$short_order = $order;
 	array_push($order, sprintf('%03u',$next));
 	$sortorder = implode('-', $order);
@@ -291,6 +292,116 @@ function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class
 		echo '<span class="disabledlink">'.htmlspecialchars($text).'</span>';
 	}
 }
+
+/**
+ * Prints a list of all pages.
+ *
+ * @param string $prevtext Insert here the linktext like 'previous page'
+ * @param string $menuset current menu set
+ * @param string $menuset current menu set
+ * @param string $class the css class to use, "pagelist" by default
+ * @param string $nextprev set to true to get the 'next' and 'prev' links printed
+ * @param string $id the css id to use
+ * @param bool $firstlast Add links to the first and last pages of you gallery
+ * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
+*/
+function printMenuemanagerPageListWithNav($prevtext, $nexttext, $menuset='default', $class='pagelist', $nextprev=true, $id=NULL, $firstlast=true, $navlen=9) {
+	$currentitem = getMenuFromLink(htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8'),$menuset);
+	if (is_null($currentitem)) return; // we are not in menuset
+	$orders = explode('-',$currentitem['sort_order']);
+	array_pop($orders);
+	$lookfor = implode('-',$orders).'-';
+	$sql = 'SELECT `sort_order` FROM '.prefix('menu').' WHERE `sort_order` LIKE "'.$lookfor.'%" ORDER BY `sort_order` ASC';
+	$result = query_full_array($sql,false,'sort_order');
+	if (is_array($result)) {
+		$l = strlen($lookfor)+3;
+		foreach ($result as $key=>$item) {	// discard next level items
+			if (strlen($key) > $l) unset($result[$key]);
+		}
+		$itemlist = array_keys($result);
+		$total = count($itemlist);
+		$current = array_search($currentitem['sort_order'], $itemlist)+1;
+		if ($total < 2) {
+			$class .= ' disabled_nav';
+		}
+		if ($navlen == 0)
+			$navlen = $total;
+		$extralinks = 2;
+		if ($firstlast) $extralinks = $extralinks + 2;
+		$len = floor(($navlen-$extralinks) / 2);
+		$j = max(round($extralinks/2), min($current-$len-(2-round($extralinks/2)), $total-$navlen+$extralinks-1));
+		$ilim = min($total, max($navlen-round($extralinks/2), $current+floor($len)));
+		$k1 = round(($j-2)/2)+1;
+		$k2 = $total-round(($total-$ilim)/2);
+		$items = getMenuItems($menuset, getMenuVisibility());
+		echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
+		echo "<ul class=\"$class\">\n";
+		if ($nextprev) {
+			echo "<li class=\"prev\">";
+			printMenumanagerPrevLink($prevtext, $menuset, $prevtext, gettext("Previous Page"));
+			echo "</li>\n";
+		}
+		if ($firstlast) {
+			echo '<li class="'.($current==1?'current':'first').'">';
+			$itemarray = getItemTitleAndURL($items[$itemlist[0]]);
+			printLink($itemarray['url'], 1, gettext("Page 1"));
+			echo "</li>\n";
+			if ($j>2) {
+				echo "<li>";
+				$itemarray = getItemTitleAndURL($items[$itemlist[$k1-1]]);
+				printLink($itemarray['url'], ($j-1>2)?'...':$k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1));
+				echo "</li>\n";
+			}
+		}
+		for ($i=$j; $i <= $ilim; $i++) {
+			echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
+			$itemarray = getItemTitleAndURL($items[$itemlist[$i-1]]);
+			if ($i == $current) {
+				$title = sprintf(ngettext('Page %1$u (Current Page)','Page %1$u (Current Page)', $i),$i);
+			} else {
+				$title = sprintf(ngettext('Page %1$u','Page %1$u', $i),$i);
+			}
+			printLink($itemarray['url'], $i, $title);
+			echo "</li>\n";
+		}
+		if ($i < $total) {
+			echo "<li>";
+			$itemarray = getItemTitleAndURL($items[$itemlist[$k2-1]]);
+			printLink($itemarray['url'], ($total-$i>1)?'...':$k2, sprintf(ngettext('Page %u','Page %u',$k2),$k2));
+			echo "</li>\n";
+		}
+		if ($firstlast && $i <= $total) {
+			echo "\n  <li class=\"last\">";
+			$itemarray = getItemTitleAndURL($items[$itemlist[$total-1]]);
+			printLink($itemarray['url'], $total, sprintf(ngettext('Page {%u}','Page {%u}',$total),$total));
+			echo "</li>";
+		}
+		if ($nextprev) {
+			echo "<li class=\"next\">";
+			printMenumanagerNextLink($nexttext, gettext("Next Page"));
+			echo "</li>\n";
+		}
+		echo "</ul>\n";
+		echo "</div>\n";
+	}
+}
+
+/**
+ * Prints a full page navigation including previous and next page links with a list of all pages in between.
+ *
+ * @param string $nexttext Insert here the linktext like 'next page'
+ * @param string $class Insert here the CSS-class name you want to style the link with (default is "pagelist")
+ * @param string $id Insert here the CSS-ID name if you want to style the link with this
+ * @param bool $firstlast Add links to the first and last pages of you gallery
+ * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
+ */
+function printMenuemanagerPageList($menuset='default', $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
+
+echo "<br/>printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navlen)";	
+	
+	printMenuemanagerPageListWithNav(null, null, $menuset, false, $class, $id, false, $navlen);
+}
+
 
 /**
  * Prints the breadcrumbs of the current page
