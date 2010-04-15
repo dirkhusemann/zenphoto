@@ -1156,6 +1156,10 @@ function zenpageJSCSS() {
 	<script type="text/javascript" src="../../js/zenphoto.js"></script>
 	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
 	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
+	<!--Nested Sortables-->
+	<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
+	<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
+	<!--Nested Sortables End-->
 	<script type="text/javascript">
 		// <!-- <![CDATA[
 		$(document).ready(function(){
