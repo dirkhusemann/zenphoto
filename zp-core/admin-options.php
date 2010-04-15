@@ -2132,8 +2132,14 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 					$option_interface = NULL;
 					if (array_key_exists($extension, $class_optionInterface)) {
 						$option_interface = $class_optionInterface[$extension];
+					} else {
+						$path = getPlugin($extension.'.php');
+						$pluginStream = file_get_contents($path);
+						$str = isolate('$option_interface', $pluginStream);
+						if (false !== $str) {
+							require_once($path);
+						}
 					}
-					require_once(getPlugin($extension.'.php'));
 					if (!is_null($option_interface)) {
 						$showlist[] = '#_show-'.$extension;
 						$_zp_plugin_count++;
