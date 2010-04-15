@@ -492,6 +492,8 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 						if(getOption('combinews-latestimagesbyalbum-imgdesc')) {
 							$imagedesc = $imageobj->getDesc();
 							$imagedesc = '<p>'.getNewsContentShorten($imagedesc,$shorten,$shortenindicator).'</p>';
+						} else {
+							$imagedesc = '';
 						}
 						$articlecontent .= '<div class="latestimagesbyalbum">'; // entry wrapper
 						switch($mode) {
