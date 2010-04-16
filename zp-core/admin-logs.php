@@ -169,7 +169,11 @@ echo "\n</head>";
 							foreach ($logtext as $line) {
 								?>
 								<p>
-									<span class="nowrap"><?php echo strip_tags($line); ?></span>
+									<span class="nowrap">
+									<?php
+									echo str_replace(' ','&nbsp;',strip_tags($line));
+									?>
+									</span>
 								</p>
 								<?php
 							}

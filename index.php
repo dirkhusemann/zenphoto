@@ -122,10 +122,11 @@ if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
 	$_zp_gallery_page = '404.php';
 	$errpage = THEMEFOLDER.'/'.internalToFilesystem($theme).'/404.php';
 	if (DEBUG_404) {
+		trigger_error(gettext('Zenphoto processed a 404 error. See the debug log for details.'), E_USER_NOTICE);
 		debugLog("404 error: album=$album; image=$image; theme=$theme");
-		debugLogArray('$_SERVER', $_SERVER);
-		debugLogArray('$_REQUEST', $_REQUEST);
-		debugLog('');
+		debugLogArray('$_SERVER', $_SERVER, 0, '', false);
+		debugLogArray('$_REQUEST', $_REQUEST, 0, '', false);
+		debugLog('', false, false);
 	}
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");

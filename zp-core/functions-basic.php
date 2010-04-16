@@ -828,8 +828,10 @@ function getAlbumFolder($root=SERVERPATH) {
 function debugLog($message, $reset=false, $date=true) {
 	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
 	$f = fopen(dirname(dirname(__FILE__)) . '/' . DATA_FOLDER . '/debug_log.txt', $mode);
-	if ($date) $date = '{'.gmdate('D, d M Y H:i:s').' GMT} '."\n";
-	fwrite($f, $date.$message . "\n");
+	if ($date) {
+		$date = '{'.gmdate('D, d M Y H:i:s').' GMT} '."\n";
+	}
+	fwrite($f, $date."  ".$message . "\n");
 	fclose($f);
 }
 
@@ -879,7 +881,7 @@ function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 		}
 		debugLog($msg,false,$date);
 	} else {
-		debugLog($name.' parameter is not an array.');
+		debugLog($name.' parameter is not an array.', $date);
 	}
 }
 
