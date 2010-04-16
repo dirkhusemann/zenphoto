@@ -5,8 +5,8 @@
  * @package plugins
  */
 $plugin_version = '1.3.0';
-$plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />"
-				."<strong>NOTE:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>zenpage default</code> and <code>effervescence+</code> themes support Zenpage.");
+$plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto.")
+				."<p class='notebox'>". gettext("<strong>NOTE:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>zenpage default</code> and <code>effervescence+</code> themes support Zenpage.")."</p>";
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_".PLUGIN_FOLDER."---zenpage---zenpage-template-functions.php.html";
 $option_interface = new zenpagecms();
@@ -62,11 +62,11 @@ class zenpagecms {
 		gettext('News articles per page (admin)') => array('key' => 'zenpage_admin_articles', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("How many news articles you want to show per page on the news article admin page.")),
 		gettext('News page name') => array('key' => 'zenpage_news_page', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("If you want to rename the theme page <em>news.php</em> that is used to display news, you need to enter the new name without the .php suffix here. <strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!")),
+										'desc' => gettext("If you want to rename the theme page <em>news.php</em> that is used to display news, you need to enter the new name without the .php suffix here.")."<p class='notebox'>".gettext("<strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!")."</p>"),
 		gettext('Pages page name') => array('key' => 'zenpage_pages_page', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("If you want to rename the theme page <em>pages.php</em> that is used to display pages, you need to enter the new name without the .php suffix here. <strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!")),
+										'desc' => gettext("If you want to rename the theme page <em>pages.php</em> that is used to display pages, you need to enter the new name without the .php suffix here.")."<p class='notebox'>".gettext("<strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!")."</p>"),
 		gettext('CombiNews') => array('key' => 'zenpage_combinews', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("Set to enable the CombiNews feature to show news articles and latest gallery items together on the news section's overview page(s). <strong>NOTE:</strong> Images/albums and news articles are still separate, your Zenphoto gallery is not touched in any way! <strong>IMPORTANT: This feature requires MySQL 4.1 or later.</strong>")),
+										'desc' => gettext("Set to enable the CombiNews feature to show news articles and latest gallery items together on the news section's overview page(s).")."<p class='notebox'>".gettext("<strong>NOTE:</strong> Images/albums and news articles are still separate, your Zenphoto gallery is not touched in any way! <strong>IMPORTANT: This feature requires MySQL 4.1 or later.</strong>")."</p>"),
 		gettext('CombiNews: Gallery page link') => array('key' => 'zenpage_combinews_readmore', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1,
 										'desc' => gettext("The text for the 'read more'/'view more' link to the gallery page for images/movies/audio.")),
 		gettext('CombiNews: Mode') => array('key' => 'zenpage_combinews_mode', 'type' => OPTION_TYPE_SELECTOR,
@@ -76,7 +76,7 @@ class zenpagecms {
 										'desc' => gettext("The size of the sized image shown the CombiNews section <em>(only in latest images-sizedimage or latest albums-sizedimage mode)</em>.")),
 		gettext('CombiNews: Sortorder') => array('key' => 'zenpage_combinews_sortorder', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('date') => "date", gettext('id') => "id", gettext('mtime') => "mtime"),
-										'desc' => gettext("The sort order for your gallery items within the CombiNews display except for <em>latest images by album</em> which is by date or mtime only. 'date' (date order), 'id' (added to db order), 'mtime' (upload order). NOTE: If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id or mtime they will be sorted by date with the articles afterwards since articles only have a date.")),
+										'desc' => gettext("The sort order for your gallery items within the CombiNews display except for <em>latest images by album</em> which is by date or mtime only. 'date' (date order), 'id' (added to db order), 'mtime' (upload order).")."<p class='notebox'>".gettext("<strong>NOTE: </strong> If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id or mtime they will be sorted by date with the articles afterwards since articles only have a date."),"</p>"),
 		gettext('CombiNews: Gallery link') => array('key' => 'zenpage_combinews_gallerylink', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('image') => "image", gettext('album') => "album"),
 										'desc' => gettext("Choose if you want to link from the image entry it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),

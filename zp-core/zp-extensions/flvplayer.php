@@ -11,7 +11,7 @@
  * @package plugins
  */
 
-$plugin_description = sprintf(gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files. <strong>No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations.</strong> Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files "player*.swf" and "swobjects.js" into <code>/%s/flvplayer/</code>. <br />IMPORTANT: Only one multimedia player plugin can be enabled at the time. The class-video plugin must be enabled.'),USER_PLUGIN_FOLDER);
+$plugin_description = sprintf(gettext('Enable <strong>FLV player 4.x</strong> to handle multimedia files.').'<p class="notebox">'.gettext('<strong>No <em>FLVPlayer</em> player files are included with this plugin due to licensing considerations.</strong> Please download these files from the <a href="http://www.longtailvideo.com/players/jw-flv-player/">Longtail Video</a> site. Extract the files "player*.swf" and "swobjects.js" into <code>/%s/flvplayer/</code>. <br /><strong>IMPORTANT:</strong> Only one multimedia player plugin can be enabled at the time. The class-video plugin must be enabled.').'</p>',USER_PLUGIN_FOLDER);
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flvplayer.php.html";

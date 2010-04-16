@@ -478,7 +478,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					</td>
 					<td>
 						<p><?php echo gettext("Normally this option should be set to <em>http</em>. If you're running a secure server, change this to <em>https</em>. Select <em>secure admin</em> to insure secure access to <code>admin</code> pages."); ?></p>
-						<p><?php echo gettext("<strong>Note:</strong> Login from the front-end user login form is secure only if <em>https</em> is selected.");?></p>
+						<p class="notebox"><?php echo gettext("<strong>Note:</strong> Login from the front-end user login form is secure only if <em>https</em> is selected.");?></p>
 					</td>
 				</tr>
 				<tr>
@@ -567,7 +567,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td>
 						<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>
 						<p><?php echo gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields."); ?></p>
-						<p><?php echo gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings."); ?></p>
+						<p class="notebox"><?php echo gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings."); ?></p>
 					</td>
 				</tr>
 				<tr>
@@ -982,8 +982,8 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>" ); ?></p>
 						<div id="persistentarchive" style="display: none">
-						<p><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?>
-							<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></p>
+						<p><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?></p>
+						<p class="notebox"><?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></p>
 						</div>
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>" ); ?></p>
@@ -1437,7 +1437,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<td>
 					<p><?php	echo gettext("Automatically rotate images based on the EXIF orientation setting."); ?></p>
 					<?php
-					if (!function_exists('imagerotate')) echo '<p>'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.").'</p>';
+					if (!function_exists('imagerotate')) echo '<p class="notebox">'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.").'</p>';
 					?>
 				</td>
 			</tr>
@@ -1490,7 +1490,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						</table>
 				</td>
 				<td>
-					<p><?php echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."); ?></p>
+					<p><?php echo gettext("Add an unsharp mask to images and/or thumbnails.")."</p><p class='notebox'>".gettext("<strong>Warning</strong>: can overload slow servers."); ?></p>
 					<p><?php echo gettext("<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening)."); ?></p>
 					<p><?php echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details."); ?></p>
 					<p><?php echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges."); ?></p>
@@ -1932,7 +1932,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td align="left">
 					<?php echo gettext('<strong>Standard options</strong>') ?>
 				</td>
-				<td colspan="2" ><em><?php echo gettext('These image and album presentation options provided by the Zenphoto core for all themes. However, please note that these are <em>recommendations</em> as themes may choose to override them for design reasons'); ?></em></td>
+				<td colspan="2" ><em><?php echo gettext('These image and album presentation options provided by the Zenphoto core for all themes.').'<p class="notebox">'.gettext('<strong>Note:</strong> These are <em>recommendations</em> as themes may choose to override them for design reasons'); ?></p></em></td>
 			</tr>
 			<tr>
 				<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
@@ -1944,7 +1944,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td><?php echo gettext("Thumbnails per page:"); ?></td>
 				<td><input type="text" size="3" name="images_per_page"
 					value="<?php echo getThemeOption('images_per_page',$album,$themename);?>" /></td>
-				<td><?php echo gettext("Recommended number of thumbnails on a album page. You might need to adjust this for a better page layout."); ?></td>
+				<td><?php echo gettext("Recommended number of thumbnails on a album page.")."<p class='notebox'>".gettext("<strong>Note:</strong> You might need to adjust this for a better page layout."); ?></p></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Thumb size:"); ?></td>
@@ -1971,7 +1971,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td>
 					<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
 					<br />
-					<?php echo gettext('<strong>Note</strong>: changing crop height or width will invalidate existing crops.'); ?>
+					<p class='notebox'><?php echo gettext('<strong>Note</strong>: changing crop height or width will invalidate existing crops.'); ?></p>
 				</td>
 			</tr>
 			<tr>

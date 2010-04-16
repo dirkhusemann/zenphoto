@@ -138,11 +138,11 @@ class Zenphoto_Authority {
 		}
 		if ($c > 0) {
 			if ($l > 0) {
-				$msg = sprintf(ngettext('<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s.',
-															'<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s.', $c), $l, $text);
+				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s.',
+															'<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s.', $c), $l, $text).'</p>';;
 			} else {
-				$msg = sprintf(ngettext('<strong>Note</strong>: passwords must contain at least one character from %s.',
-															'<strong>Note</strong>: passwords must contain at least one character from each of the following groups: %s.', $c), $text);
+				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must contain at least one character from %s.',
+															'<strong>Note</strong>: passwords must contain at least one character from each of the following groups: %s.', $c), $text).'</p>';
 			}
 		} else {
 			if ($l > 0) {
@@ -551,7 +551,7 @@ class Zenphoto_Authority {
 	 */
 	function getOptionsSupported() {
 		return array(	gettext('Augment password hash:') => array('key' => 'extra_auth_hash_text', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication. <strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.')),
+										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication.').'<p class="notebox">'.gettext('<strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.').'</p>'),
 		gettext('Minimum password length:') => array('key' => 'min_password_lenght', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext('Minimum number of characters a password must contain.')),
 		gettext('Password characters:') => array('key' => 'password_pattern', 'type' => OPTION_TYPE_CLEARTEXT,
