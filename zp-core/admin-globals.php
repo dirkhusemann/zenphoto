@@ -67,7 +67,7 @@ if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
 							'subtabs'=>NULL);
 }
 
-$zenphoto_tabs['users'] = array('text'=>gettext("admin"),
+$zenphoto_tabs['users'] = array('text'=>gettext("users"),
  						'link'=>WEBPATH."/".ZENFOLDER.'/admin-users.php?page=users',
  						'subtabs'=>NULL);
 

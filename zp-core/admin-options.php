@@ -1191,7 +1191,18 @@ if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					</label>
 				</span>
 			</td>
-			<td><?php echo gettext("Check each RSS feed you wish to activate. Note: Theme support is required to display RSS links."); ?></td>
+			<td>
+			<p>	
+			<?php
+			echo gettext('Check each RSS feed you wish to activate.');
+			?>
+			</p>
+			<p class="notebox">
+			<?php
+			echo gettext('Note: Theme support is required to display RSS links.');
+			?>
+			</p>
+			</td>
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
