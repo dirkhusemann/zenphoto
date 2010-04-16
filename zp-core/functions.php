@@ -2007,7 +2007,7 @@ function is_connected($host = 'www.zenphoto.org') {
 function debug404($album, $image, $theme) {
 	if (DEBUG_404) {
 		$ignore = array('/favicon.ico');
-		$target = $_SERVER[REQUEST_URI];
+		$target = $_SERVER['REQUEST_URI'];
 		foreach ($ignore as $uri) {
 			if ($target == $uri) return;
 		}
