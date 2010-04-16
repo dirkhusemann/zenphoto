@@ -294,7 +294,7 @@ function optionVoteStatus($before, $object, $prefix) {
 		} else {
 			$checked = '';
 		} 
-		$output .= "<label style='padding-right: .5em'><span style='white-space:nowrap'>\n<input type='radio' name='".$prefix."rating_status' id='rating_status".$value."-".$prefix."' value='".$value."' ".$checked."/> ".$text."</span>\n</label>"."\n";
+		$output .= "<label style='padding-right: .5em'><span style='white-space:nowrap'>\n<input type='radio' name='rating_status".$prefix."' id='rating_status".$value."-".$prefix."' value='".($value+1)."' ".$checked."/> ".$text."</span>\n</label>"."\n";
 	}
 	$output = $before.'<hr />'."\n".$output;
 	return $output;
@@ -307,7 +307,9 @@ function optionVoteStatus($before, $object, $prefix) {
  * @param string $prefix indicator if admin is processing multiple objects
  */
 function optionVoteStatusSave($object, $prefix) {
-	$object->set('rating_status', sanitize($_POST['rating_status'.$prefix]));
+	if (isset($_POST['rating_status'.$prefix])) {
+		$object->set('rating_status', sanitize_numeric($_POST['rating_status'.$prefix])-1);
+	}
 }
 
 function rating_purgebutton($buttons) {
