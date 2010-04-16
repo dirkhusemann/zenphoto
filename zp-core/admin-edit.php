@@ -658,9 +658,10 @@ $alb = removeParentAlbumNames($album);
 				?>
 			</p>
 			<p>
-				<?php
-				echo gettext('Drag the albums into the order you wish them displayed. <strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');
-				?>
+				<?php	echo gettext('Drag the albums into the order you wish them displayed.'); ?>
+			</p>
+			<p class="notebox">
+				<?php echo gettext('<strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.'); ?>
 			</p>
 			<p>
 				<?php
@@ -1354,15 +1355,19 @@ if (isset($_GET['saved'])) {
 			} else {
 				$dir = '';
 			}
-			printf(gettext('Current sort: <em>%1$s%2$s</em>.'), $sorttype, $dir);
 			?>
+			<p>
+			<?php  printf(gettext('Current sort: <em>%1$s%2$s</em>.'), $sorttype, $dir); ?>
 			</p>
 			<p>
+			<?php	echo gettext('Drag the albums into the order you wish them displayed.'); ?>
+			</p>
+			<p class="notebox">
+			<?php	echo gettext('<strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');?>
+			</p>
 			<?php
-			echo gettext('Drag the albums into the order you wish them displayed. <strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');
 		}
 		?>
-	</p>
 	<p>
 		<?php
 		echo gettext('Select an album to edit its description and data, or <a href="?page=edit&amp;massedit">mass-edit</a> all gallery level albums.');

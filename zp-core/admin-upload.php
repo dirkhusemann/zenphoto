@@ -206,25 +206,44 @@ $types = zp_apply_filter('upload_filetypes',$types);
 $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $types));
 $used = 0;
+
 if (count($types)>1) {
 	printf(gettext('This web-based upload accepts the file formats: %s, and %s.'), $s1, $last);
 } else {
 	printf(gettext('This web-based upload accepts the file formats: %s and %s.'), $s1, $last);
 }
-
-if ($last == 'ZIP') echo '<br />'.gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
-$maxupload = ini_get('upload_max_filesize');
 ?>
 </p>
-<p>
-<?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload); ?>
-<?php
-$maxupload = parse_size($maxupload);
-$uploadlimit = zp_apply_filter('get_upload_limit', $maxupload);
-$maxupload = min($maxupload, $uploadlimit);
-echo ' '.zp_apply_filter('get_upload_header_text', gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'));
-?>
-</p>
+<Div class="notebox">
+	<p>
+	<?php
+	echo gettext('<strong>NOTE:</strong>');
+	?>
+	</p>
+	<?php
+	if ($last == 'ZIP') {
+		?><p>
+		<?php
+		echo gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
+		?>
+		</p>
+	<?php
+	}
+	$maxupload = ini_get('upload_max_filesize');
+	?>
+	<p>
+	
+	<?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload); ?>
+	</p>
+	<p>
+	<?php
+	$maxupload = parse_size($maxupload);
+	$uploadlimit = zp_apply_filter('get_upload_limit', $maxupload);
+	$maxupload = min($maxupload, $uploadlimit);
+	echo zp_apply_filter('get_upload_header_text', gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'));
+	?>
+	</p>
+</div>
 
 <?php if (isset($error) && $error) { ?>
 	<div class="errorbox" id="fade-message">
