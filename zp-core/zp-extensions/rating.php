@@ -307,7 +307,7 @@ function optionVoteStatus($before, $object, $prefix) {
  * @param string $prefix indicator if admin is processing multiple objects
  */
 function optionVoteStatusSave($object, $prefix) {
-	$object->set('rating_status', sanitize($_POST[$prefix.'rating_status']));
+	$object->set('rating_status', sanitize($_POST['rating_status'.$prefix]));
 }
 
 function rating_purgebutton($buttons) {

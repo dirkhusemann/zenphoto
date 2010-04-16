@@ -2004,6 +2004,20 @@ function is_connected($host = 'www.zenphoto.org') {
 	return false;
 }
 
+function debug404($album, $image, $theme) {
+	if (DEBUG_404) {
+		$ignore = array('/favicon.ico');
+		$target = $_SERVER[REQUEST_URI];
+		foreach ($ignore as $uri) {
+			if ($target == $uri) return;
+		}
+		trigger_error(gettext('Zenphoto processed a 404 error. See the debug log for details.'), E_USER_NOTICE);
+		debugLog("404 error: album=$album; image=$image; theme=$theme");
+		debugLogArray('$_SERVER', $_SERVER, 0, '', false);
+		debugLogArray('$_REQUEST', $_REQUEST, 0, '', false);
+		debugLog('', false, false);
+	}
+}
 
 //load PHP specific functions
 require_once(PHPScript('5.0.0', '_functions.php'));
