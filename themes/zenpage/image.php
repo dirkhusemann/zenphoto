@@ -36,14 +36,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php } ?>
 		</div>
 	</div>
+	
+<div id="content">
 
 	<div id="breadcrumb">
 	<h2><a href="<?php echo getGalleryIndexURL(false);?>" title="<?php gettext('Index'); ?>"><?php echo gettext("Index"); ?></a> &raquo; <?php echo gettext("Gallery"); ?><?php printParentBreadcrumb(" &raquo; "," &raquo; "," &raquo; "); printAlbumBreadcrumb(" ", " &raquo; "); ?>
 			 <strong><?php printImageTitle(true); ?></strong> (<?php echo imageNumber()."/".getNumImages(); ?>)
 			</h2>
 		</div>
-
-<div id="content">
 	<div id="content-left">
 
 	<!-- The Image -->
