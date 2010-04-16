@@ -418,18 +418,20 @@ cite {
 }
 
 .error {
-	line-height: 1;
-	text-align: left;
-	border-top: 1px solid #FF9595;
-	border-bottom: 1px solid #FF9595;
-	background-color: #FFEAEA;
-	padding: 2px 8px 0px 8px;
-	color: red;
+	padding: 10px 15px 10px 15px;
+	background-color: #FDD;
+	border-width: 1px 1px 2px 1px;
+	border-style: solid;
+	border-color: #FAA;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	font-size: 100%;
 }
 .error h1 {
-	color: red;
-	font-weight : bold;
-	text-align:center;
+	color: #DD6666;
+	font-size: 130%;
+	font-weight: bold;
+	margin-bottom: 1em;
 }
 .error select {
 	color: red;
@@ -437,18 +439,20 @@ cite {
 }
 
 .warning {
-	line-height: 1;
-	text-align: left;
-	border-top: 1px solid #FF6600;
-	border-bottom: 1px solid #FF6600;
-	background-color: #FFDDAA;
-	padding: 2px 8px 0px 8px;
-	color: #FF6600;
+	padding: 5px 10px 5px 10px;
+	background-color: #FFEFB7;
+	border-width: 1px 1px 2px 1px;
+	border-color: #FFDEB5 ;
+	border-style: solid;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	font-size: 100%;
 }
 .warning h1 {
-	color: #FF6600;
-	text-align:center;
-	font-weight : bold;
+	color: #663300;
+	font-size: 130%;
+	font-weight: bold;
+	margin-bottom: 1em;
 }
 .warning select {
 	color: #FF6600;
@@ -456,18 +460,20 @@ cite {
 }
 
 .notice {
-	line-height: 1;
-	text-align: left;
-	border-top: 1px solid #009966;
-	border-bottom: 1px solid #009966;
-	background-color: #B1F7B6;
-	padding: 2px 8px 0px 8px;
-	color: #009966;
+	background-color: #C0FFA8;
+	padding: 10px 15px 10px 15px;
+	border-width: 1px 1px 2px 1px;
+	border-color: #8BD37C;
+	border-style: solid;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	font-size: 100%;
 }
 .notice h1 {
-	color: #009966;
-	font-weight : bold;
-	text-align:center;
+	color: #006633;
+	font-size: 130%;
+	font-weight: bold;
+	margin-bottom: 1em;
 }
 .notice select {
 	color: #009966;
