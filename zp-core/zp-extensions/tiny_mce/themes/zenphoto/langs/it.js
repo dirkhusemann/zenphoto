@@ -1,4 +1,4 @@
-tinyMCE.addI18n('it.zenphoto',{
+tinyMCE.addI18n('it.advanced',{
 style_select:"Stili",
 font_size:"Grandezza carattere",
 fontdefault:"Famiglia carattere",

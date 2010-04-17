@@ -1,4 +1,4 @@
-tinyMCE.addI18n('ja.zenphoto',{
+tinyMCE.addI18n('ja.advanced',{
 style_select:"\u30B9\u30BF\u30A4\u30EB",
 font_size:"\u30D5\u30A9\u30F3\u30C8\u30B5\u30A4\u30BA",
 fontdefault:"\u30D5\u30A9\u30F3\u30C8",

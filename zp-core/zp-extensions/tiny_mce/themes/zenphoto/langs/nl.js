@@ -1,4 +1,4 @@
-tinyMCE.addI18n('nl.zenphoto',{
+tinyMCE.addI18n('nl.advanced',{
 style_select:"Stijlen",
 font_size:"Tekengrootte",
 fontdefault:"Lettertype",

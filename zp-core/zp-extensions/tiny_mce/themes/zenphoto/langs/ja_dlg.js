@@ -1,4 +1,4 @@
-tinyMCE.addI18n('ja.zenphoto_dlg',{
+tinyMCE.addI18n('ja.advanced_dlg',{
 about_title:"TinyMCE\u306B\u3064\u3044\u3066",
 about_general:"\u8A73\u7D30",
 about_help:"\u30D8\u30EB\u30D7",

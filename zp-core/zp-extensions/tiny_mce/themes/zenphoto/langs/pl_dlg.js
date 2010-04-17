@@ -1,4 +1,4 @@
-tinyMCE.addI18n('pl.zenphoto_dlg',{
+tinyMCE.addI18n('pl.advanced_dlg',{
 about_title:"O TinyMCE",
 about_general:"O TinyMCE",
 about_help:"Pomoc",
