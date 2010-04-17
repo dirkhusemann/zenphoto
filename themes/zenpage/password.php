@@ -26,7 +26,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<div id="content-error">
 	
 		<div class="errorbox">
-		<?php printPasswordForm(NULL, false); ?>
+		<?php printPasswordForm($hint, $show); ?>
 		</div>
 	
 	<?php

@@ -863,7 +863,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$emails = array();
 			$admin_users = $_zp_authority->getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone with full rights
-				if (!empty($admin['email']) && (($admin['rights'] & ADMIN_RIGHTS) || 
+				if (!empty($admin['email']) && (($admin['rights'] & ADMIN_RIGHTS) ||
 								(($admin['rights'] & (MANAGE_ALL_ALBUM_RIGHTS | COMMENT_RIGHTS)) == (MANAGE_ALL_ALBUM_RIGHTS | COMMENT_RIGHTS)))) {
 					$emails[] = $admin['email'];
 					unset($admin_users[$admin['id']]);
@@ -1197,7 +1197,7 @@ function storeTags($tags, $id, $tbl) {
 	foreach ($tags as $tag) {
 		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
-			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')",true); 
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')",true);
 			$dbtag = array('id' => mysql_insert_id());
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
@@ -1728,7 +1728,7 @@ function logTime($tag) {
  * @param string $authType override of athorization type
  */
 function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) {
-	global $_zp_loggedin, $_zp_login_error, $_zp_current_album, $_zp_authority;
+	global $_zp_loggedin, $_zp_login_error, $_zp_current_album, $_zp_authority, $_zp_current_zenpage_page;
 	if (empty($authType)) { // not supplied by caller
 		$check_auth = '';
 		if (isset($_GET['z']) && $_GET['p'] == 'full-image' || isset($_GET['p']) && $_GET['p'] == '*full-image') {
@@ -1751,6 +1751,23 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
 					$authType = "zp_album_auth_" . $parent->get('id');
 					if (!empty($check_auth)) { break; }
 					$parent = $parent->getParent();
+				}
+			}
+		} else if (in_context(ZP_ZENPAGE_PAGE)) {
+			$authType = "zp_page_auth_" . $_zp_current_zenpage_page->get('id');
+			$check_auth = $_zp_current_zenpage_page->getPassword();
+			$check_user = $_zp_current_zenpage_page->getUser();
+			if (empty($check_auth)) {
+				$pageobj = $_zp_current_zenpage_page;
+				while(empty($check_auth)) {
+					$parentID = $pageobj->getParentID();
+					if ($parentID == 0) break;
+					$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parentID;
+					$result = query_single_row($sql);
+					$pageobj = new ZenpagePage($result['titlelink']);
+					$authType = "zp_page_auth_" . $pageobj->get('id');
+					$check_auth = $pageobj->getPassword();
+					$check_user = $pageobj->getUser();
 				}
 			}
 		}

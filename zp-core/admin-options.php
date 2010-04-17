@@ -135,13 +135,9 @@ if (isset($_GET['action'])) {
 			$fail = '';
 			if (sanitize($_POST['password_enabled'])) {
 				if ($olduser != $newuser) {
-					if ($pwd != $_POST['gallerypass_2']) {
-						$_POST['gallerypass'] = $pwd;  // invalidate, user changed but password not set
-						$pwd2 = trim($_POST['gallerypass_2']);
-						if (!empty($newuser)  && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_gallery';
-					}
+					if (!empty($newuser)  && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_gallery';
 				}
-				if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
+				if (!$fail && $_POST['gallerypass'] == $_POST['gallerypass_2']) {
 					setOption('gallery_user', $newuser);
 					if (empty($pwd)) {
 						if (empty($_POST['gallerypass'])) {
@@ -179,13 +175,9 @@ if (isset($_GET['action'])) {
 				if (!empty($newuser)) setOption('login_user_field', 1);
 				$pwd = trim($_POST['searchpass']);
 				if ($olduser != $newuser) {
-					if ($pwd != $_POST['searchpass_2']) {
-						$pwd2 = trim($_POST['searchpass_2']);
-						$_POST['searchpass'] = $pwd;  // invalidate, user changed but password not set
-						if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_search';
-					}
+					if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_search';
 				}
-				if ($_POST['searchpass'] == $_POST['searchpass_2']) {
+				if (!$fail && $_POST['searchpass'] == $_POST['searchpass_2']) {
 					setOption('search_user',$newuser);
 					if (empty($pwd)) {
 						if (empty($_POST['searchpass'])) {
@@ -276,13 +268,9 @@ if (isset($_GET['action'])) {
 			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['imagepass']);
 			if ($olduser != $newuser) {
-				if ($pwd != $_POST['imagepass_2']) {
-					$pwd2 = trim($_POST['imagepass_2']);
-					$_POST['imagepass'] = $pwd;  // invalidate, user changed but password not set
-					if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=image_user';
-				}
+				if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=image_user';
 			}
-			if ($_POST['imagepass'] == $_POST['imagepass_2']) {
+			if (!$fail && $_POST['imagepass'] == $_POST['imagepass_2']) {
 				setOption('protected_image_user',$newuser);
 				if (empty($pwd)) {
 					if (empty($_POST['imagepass'])) {

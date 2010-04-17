@@ -4245,7 +4245,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * @return string
  */
 function checkForGuest(&$hint, &$show) {
-	global $_zp_gallery;
+	global $_zp_gallery, $_zp_current_zenpage_page;
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$show = (getOption('search_user') != '');
@@ -4260,6 +4260,9 @@ function checkForGuest(&$hint, &$show) {
 		if (!empty($hash) && zp_getCookie($authType) == $hash) {
 			return $authType;
 		}
+	} else if (!is_null($_zp_current_zenpage_page)) { // zenpage page
+		$authType = checkPagePassword($_zp_current_zenpage_page, $hint, $show);
+		return $authType;
 	} else if (isset($_GET['album'])) {  // album page
 		list($album, $image) = rewrite_get_album_image('album','image');
 		if ($authType = checkAlbumPassword($album, $hint)) {
@@ -4297,11 +4300,13 @@ function checkForGuest(&$hint, &$show) {
  * required will be that of the nearest parent that has a password. (The gallery is the ur-parrent to all
  * albums.)
  *
+ * @param string $hint the password hint
+ * @param bool $show whether there is a user associated with the password.
  * @return bool
  * @since 1.1.3
  */
-function checkforPassword() {
-	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page;
+function checkforPassword(&$hint, &$show) {
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page;
 	if (getOption('gallery_page_unprotected_'.stripSuffix($_zp_gallery_page))) return false;
 	if (zp_loggedin()) {
 		switch ($_zp_gallery_page) {
@@ -4309,11 +4314,15 @@ function checkforPassword() {
 			case 'image.php':
 				if (isMyAlbum($_zp_current_album->name, LIST_ALBUM_RIGHTS)) return false;
 				break;
+			case ZENPAGE_PAGES.'.php':
+				if (isMyPage($_zp_current_zenpage_page, LIST_PAGE_RIGHTS)) return false;
+				break;
 			default:
 				return false;
 		}
 	}
-	if ($authType = checkForGuest($hint, $show)) return false;	// a guest is logged in
+	$authType = checkForGuest($hint, $show);
+	if ($authType) return false;	// a guest is logged in
 	return true;
 }
 
@@ -4364,24 +4373,10 @@ function getPageRedirect() {
  */
 function printPasswordForm($_password_hint, $_password_showProtected=true, $_password_showuser=NULL, $_password_redirect=NULL) {
 	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page,
-					$_zp_current_album, $_zp_current_image, $theme;
+					$_zp_current_album, $_zp_current_image, $theme, $_zp_current_zenpage_page;
 	if ($_zp_password_form_printed) return;
 	if (is_null($_password_showuser)) $_password_showuser = getOption('login_user_field');
 	if (is_null($_password_redirect)) $_password_redirect = getPageRedirect();
-	if (is_null($_password_hint)) {
-		switch($_zp_gallery_page) {
-			case 'album.php':
-			case 'image.php':
-				$_password_hint = $_zp_current_album->getPasswordHint();
-				break;
-			case 'search.php':
-				$_password_hint = getOption('search_hint');
-				break;
-			default:
-				$_password_hint = getOption('gallery_hint');
-				break;
-		}
-	}
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
 		?>
@@ -4399,7 +4394,6 @@ function printPasswordForm($_password_hint, $_password_showProtected=true, $_pas
 		</p>
 		<?php
 	}
-	$_password_redirect = htmlspecialchars($_password_redirect);
 	$passwordform = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password_form.php';
 	if (file_exists($passwordform)) {
 		include($passwordform);

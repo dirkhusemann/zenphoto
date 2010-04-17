@@ -37,7 +37,7 @@ if (!isMyAlbum($album8, LIST_ALBUM_RIGHTS)) {
 	//	handle password form if posted
 	zp_handle_password('zp_image_auth', getOption('protected_image_password'), getOption('protected_image_user'));
 	//check for passwords
-	$hash = getOption('protected_image_password'); 
+	$hash = getOption('protected_image_password');
 	$authType = 'zp_image_auth';
 	$hint = get_language_string(getOption('protected_image_hint'));
 	$show = getOption('protected_image_user');
@@ -140,7 +140,7 @@ if (isset($_GET['dsp'])) {
 if (empty($watermark_use_image) && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && $disposal != 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
-		
+
 		if (getOption('UTF8_image_URI')){
 			header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($album8) . "/" . rawurlencode($image8));
 		} else {

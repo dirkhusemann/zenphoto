@@ -45,7 +45,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<div id="content">
 		<small>&nbsp;</small>
 		<div id="main">
-		<?php printPasswordForm(NULL, false); ?>
+		<?php printPasswordForm($hint, $show); ?>
 		</div>
 	</div>
 

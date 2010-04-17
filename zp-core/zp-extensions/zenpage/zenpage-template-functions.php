@@ -2770,4 +2770,66 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
 		<?php
 	}
 }
+
+// page password functions
+
+function isMyPage($pageobj, $rights) {
+	
+//echo "isMyPage(xxxxj, $rights)<br/>";	var_dump($pageobj);
+	
+	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
+	if ($_zp_loggedin & (ADMIN_RIGHTS)) {	// no current manage all page rights
+		return true;
+	}
+	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
+		return true;
+	}
+	if ($_zp_loggedin & $action) {
+		 return $_zp_current_admin_obj->getUser() == $_zp_current_zenpage_page->getAuthor();
+	}
+	return false;
+}
+
+function checkPagePassword($pageobj, &$hint, &$show) {
+	
+//echo "checkPagePassword(xxxx, $hint, $show)<br/>";	var_dump($pageobj);
+	
+	$hash = $pageobj->getPassword();
+	
+//echo "<br/>initial hash=$hash";	
+	
+	while(empty($hash) && !is_null($pageobj)) {
+		$parentID = $pageobj->getParentID();
+		$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parentID;
+		$result = query_single_row($sql);
+		$pageobj = new ZenpagePage($result['titlelink']);
+		$hash = $pageobj->getPassword();
+		
+//echo "<br/>hash=$hash";		
+		
+	}
+	if (empty($hash)) { // no password required
+		return 'zp_unprotected';
+	} else {
+		$authType = "zp_page_auth_" . $pageobj->get('id');
+		$saved_auth = zp_getCookie($authType);
+		
+//echo "<br/>aurhtype=$authType; saved auth=$saved_auth";		
+		
+		if ($saved_auth == $hash) {
+			
+//echo "<br/>returning $authType";			
+			
+			return $authType;
+		} else {
+			$user = $pageobj->getUser();
+			$show = (!empty($user));
+			$hint = $pageobj->getPasswordHint();
+			
+//echo "<br/>returning false";			
+			
+			return false;
+		}
+	}
+}
 ?>

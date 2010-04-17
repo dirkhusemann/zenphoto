@@ -23,7 +23,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		</div>
 
 	<div class="galleryinfo">
-		<?php printPasswordForm(NULL, false); ?>
+		<?php printPasswordForm($hint, $show); ?>
 		<?php
 		if (!zp_loggedin() && function_exists('printRegistrationForm') &&  getOption('gallery_page_unprotected_register')) {
 			printCustomPageURL(gettext('Register for this site'), 'register', '', '<br />');

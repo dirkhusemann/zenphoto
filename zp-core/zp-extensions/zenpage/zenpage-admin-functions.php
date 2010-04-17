@@ -56,6 +56,44 @@ function processTags($object) {
 ***************************/
 
 /**
+ * processes password saves
+ * returns error indicating mismatch state
+ * @param object $page
+ * @return string
+ */
+function processPasswordSave($page) {
+	$notify = $fail = '';
+	if (sanitize($_POST['password_enabled'])) {
+		$olduser = $page->getUser();
+		$newuser = $_POST['page_user'];
+		$pwd = trim($_POST['pagepass']);
+		if (($olduser != $newuser)) {
+			if (!empty($newuser) && empty($pwd) && empty($pwd2)) {
+				$fail = 'user';
+			}
+		}
+		if (!$fail && $_POST['pagepass'] == $_POST['pagepass_2']) {
+			$page->setUser($newuser);
+			$page->setPasswordHint(sanitize($_POST['page_hint']));
+			if (empty($pwd)) {
+				if (empty($_POST['pagepass'])) {
+					$page->setPassword(NULL);  // clear the password
+				}
+			} else {
+				$page->setPassword($pwd);
+			}
+		} else {
+			if (empty($fail)) {
+				$notify = 'pass';
+			} else {
+				$notify = $fail;
+			}
+		}
+	}
+	return $notify;
+}
+
+/**
  * Updates a new page to that database and returns the object of that page
  *
  * @return object
@@ -79,12 +117,13 @@ function addPage() {
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getcheckboxState('locked');
-
+	
 	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
 	if ($rslt) {
 		$titlelink .= '_'.seoFriendly($date); // force unique so that data may be saved.
 	}
 	$page = new ZenpagePage($titlelink);
+	$notice = processPasswordSave($page);
 	$page->set('title',$title);
 	$page->set('content',$content);
 	$page->set('extracontent',$extracontent);
@@ -102,6 +141,10 @@ function addPage() {
 	$page->save();
 	if(empty($title)) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
+	} else if ($notice == 'user') {
+		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected page user').'</p>';
+	} else if ($notice == 'pass') {
+		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
 		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink).'</p>';
 	}
@@ -133,7 +176,7 @@ function updatePage() {
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getcheckboxState('locked');
-
+	
 	if (getcheckboxState('edittitlelink')) {
 		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
@@ -153,6 +196,7 @@ function updatePage() {
 	}
 	// update page
 	$page = new ZenpagePage($titlelink);
+	$notice = processPasswordSave($page);
 	$page->set('title',$title);
 	$page->set('content',$content);
 	$page->set('extracontent',$extracontent);
@@ -172,10 +216,15 @@ function updatePage() {
 	processTags($page);
 	$msg = zp_apply_filter('update_page', '', $page, $oldtitlelink);
 	$page->save();
+		
 	if (!$rslt) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
 	} else 	if(empty($title)) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
+	} else if ($notice == 'user') {
+		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected page user').'</p>';
+	} else if ($notice == 'pass') {
+		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
 		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink).'</p>';
 	}

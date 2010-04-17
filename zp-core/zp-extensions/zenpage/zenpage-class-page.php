@@ -277,6 +277,58 @@ class ZenpagePage extends PersistentObject {
 		}
 		return $this->commentcount;
 	}
+	
+	/**
+	 * Returns the page guest user
+	 *
+	 * @return string
+	 */
+	function getUser() { return $this->get('user');	}
 
+	/**
+	 * Sets the album guest user
+	 *
+	 * @param string $user
+	 */
+	function setUser($user) { $this->set('user', $user);	}
+
+	/**
+	 * Returns the page password
+	 *
+	 * @return string
+	 */
+	function getPassword() { return $this->get('password'); }
+
+	/**
+	 * Sets the encrypted page password
+	 *
+	 * @param string $pwd the cleartext password
+	 */
+	function setPassword($pwd) {
+		global $_zp_authority;
+		if (empty($pwd)) {
+			$this->set('password', "");
+		} else {
+			$this->set('password', $_zp_authority->passwordHash($this->get('user'), $pwd));
+		}
+	}
+
+	/**
+	 * Returns the password hint for the page
+	 *
+	 * @return string
+	 */
+	function getPasswordHint() {
+		return get_language_string($this->get('password_hint'));
+	}
+
+	/**
+	 * Sets the page password hint
+	 *
+	 * @param string $hint the hint text
+	 */
+	function setPasswordHint($hint) { $this->set('password_hint', $hint); }
+
+	
 }
 ?>

@@ -90,7 +90,8 @@ if ($zp_request) {
 	$obj = zp_apply_filter('load_theme_script',$obj);
 }
 if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
-	if (checkforPassword()) { // password protected object
+	$hint = $show = false;
+	if (checkforPassword($hint, $show)) { // password protected object
 		$passwordpage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password.php';
 		if (!file_exists($passwordpage)) {
 			$passwordpage = SERVERPATH.'/'.ZENFOLDER.'/password.php';

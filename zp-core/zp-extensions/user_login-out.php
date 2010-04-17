@@ -10,7 +10,7 @@
 
 $plugin_description = gettext("Provides a means for placing a user login form or logout link on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.0'; 
+$plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---user_login-out.php.html";
 $option_interface = new user_logout_options();
 
@@ -51,11 +51,14 @@ if (!OFFSET_PATH) {
 	if (isset($_SESSION)) $candidate = Array_merge($candidate, $_SESSION);
 	$candidate = array_unique($candidate);
 	foreach ($candidate as $cookie=>$value) {
-		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || $cookie == 'zp_search_auth' || $cookie == 'zp_image_auth' || strpos($cookie, 'zp_album_auth_') !== false) {
+		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || 
+				$cookie == 'zp_search_auth' || $cookie == 'zp_image_auth' || 
+				strpos($cookie, 'zp_album_auth_') !== false ||
+				strpos($cookie, 'zp_page_auth_') !== false) {
 			$cookies[] = $cookie;
 		}
 	}
-	
+
 	if (isset($_GET['userlog'])) { // process the logout.
 		if ($_GET['userlog'] == 0) {
 			foreach($cookies as $cookie) {

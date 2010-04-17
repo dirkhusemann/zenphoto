@@ -1673,7 +1673,7 @@ if (file_exists(CONFIGFILE)) {
 		`image_sortdirection` int(1) UNSIGNED default '0',
 		`album_sortdirection` int(1) UNSIGNED default '0',
 		`hitcounter` int(11) unsigned default 0,
-		`password` varchar(255) default NULL,
+		`password` varchar(64) default NULL,
 		`password_hint` text,
 		PRIMARY KEY  (`id`),
 		KEY `folder` (`folder`)
@@ -2018,7 +2018,9 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `owner` varchar(64) DEFAULT NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `filesize` INT';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `quota` INT';
-	
+	$sql_statements[] = "ALTER TABLE $tbl_zenpage_pages ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `password` VARCHAR(64)';
+	$sql_statements[] = "ALTER TABLE $tbl_zenpage_pages ADD COLUMN `password_hint` text;";
 	
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {

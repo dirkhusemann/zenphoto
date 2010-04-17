@@ -17,7 +17,7 @@
 	</div>
 
 		<div id="padbox">
-		<?php printPasswordForm(NULL, false); ?>
+		<?php printPasswordForm($hint, $show); ?>
 	</div>
 
 </div>
