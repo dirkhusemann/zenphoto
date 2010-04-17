@@ -546,7 +546,7 @@ function printNewsContent($shorten=false,$shortenindicator='') {
  * If shorten is disable it sjust returns the string passed.
  *
  * @param string $articlecontent Then news article content or image/album description to shorten
- * @param bool $shorten true or false if the description to this object should be shortened.
+ * @param integer $shorten The lenght the content should be shortened
  * @param string $shortenindicator The placeholder to mark the shortening (e.g."(...)"). If empty the zenpage option for this is used.
  * @param string $readmoreurl The url where to point the "read more" link to. (The term set in Zenpage option is used).
  */
@@ -569,9 +569,8 @@ function getNewsContentShorten($articlecontent,$shorten,$shortenindicator='',$re
  * Helper function for getNewsContent to get video/audio content if $imageobj is a video/audio object if using Zenpage CombiNews
  *
  * @param object $imageobj The object of an image
- * @param bool $shorten true or false if the description to this object should be shortened.
  */
-function getNewsVideoContent($imageobj,$shorten=false) {
+function getNewsVideoContent($imageobj) {
 	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_page;
 	$videocontent = "";
 	$ext = strtolower(strrchr($imageobj->getFullImage(), "."));
@@ -585,12 +584,10 @@ function getNewsVideoContent($imageobj,$shorten=false) {
 				$_zp_current_image = $imageobj;
 				$videocontent = $_zp_flash_player->getPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
 			}
-			$videocontent .= $_zp_current_image->getDesc();
 			break;
 		case '.3gp':
 		case '.mov':
 			$videocontent = $imageobj->getBody();
-			$videocontent .= $imageobj->getDesc();
 			break;
 	}
 	return $videocontent;
