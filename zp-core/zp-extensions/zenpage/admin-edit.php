@@ -239,16 +239,52 @@ if(is_object($result)) {
 				<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked")); ?> />
 				<label for="locked"><?php echo gettext("Locked for changes"); ?></label>
 				</p>
-
 				<?php
 				if(is_AdminEditPage("newsarticle")) {
 					echo zp_apply_filter('publish_article_utilities', '');
 				} else {
 					echo zp_apply_filter('publish_page_utilities', '');
 				}
-
+				if(is_object($result) && is_AdminEditPage("page")) {
+						?>
+						<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
+						<span class="passwordextrashow">
+							<p>
+								<a href="javascript:toggle_passwords('',true);">
+									<?php echo gettext("Page password:"); ?>
+								</a>
+								<?php
+								$x = $result->getPassword();
+								if (!empty($x)) {
+									?>
+									<br />**********
+									<?php 
+								} 
+								?>
+							</p>
+						</span>
+						<span class="passwordextrahide" style="display:none" >
+							<p>
+								<a href="javascript:toggle_passwords('',false);">
+								<?php echo gettext("Page guest user:"); ?>
+								</a>
+								<input type="text" size="26" name="page_user" value="<?php echo htmlspecialchars($result->getUser()); ?>" />								</p>
+								<?php echo gettext("Page password:"); ?>
+								<br />
+								<?php $x = $result->getPassword(); if (!empty($x)) { $x = '          '; } ?>
+								<input type="password" size="26" name="pagepass" value="<?php echo $x; ?>" />
+								<?php echo gettext("(repeat)"); ?>
+								<br />
+								<input type="password" size="26" name="pagepass_2" value="<?php echo $x; ?>" />
+								<br />
+								<?php echo gettext("Page password hint:"); ?>
+								<br />
+								<?php print_language_string_list($result->getPasswordHint(), 'page_hint', false, NULL, '', true); ?>
+							</p>
+						</span>
+					<?php
+				}
 				?>
-
 				<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
 				<br style="clear:both" />
 				<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
@@ -306,49 +342,7 @@ if(is_object($result)) {
 
 				<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("General"); ?></h2>
 				<div class="box-edit-zenpage">
-				<?php
-				if(is_object($result)) {
-					?>
-						<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
-						<span class="passwordextrashow">
-							<p>
-								<a href="javascript:toggle_passwords('',true);">
-									<?php echo gettext("Page password:"); ?>
-								</a>
-								<?php
-								$x = $result->getPassword();
-								if (!empty($x)) {
-									?>
-									<br />**********
-									<?php 
-								} 
-								?>
-							</p>
-						</span>
-						<span class="passwordextrahide" style="display:none" >
-							<p>
-								<a href="javascript:toggle_passwords('',false);">
-								<?php echo gettext("Page guest user:"); ?>
-								</a>
-								<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="page_user" value="<?php echo htmlspecialchars($result->getUser()); ?>" />								</p>
-								<?php echo gettext("Page password:"); ?>
-								<br />
-								<?php $x = $result->getPassword(); if (!empty($x)) { $x = '          '; } ?>
-								<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass" value="<?php echo $x; ?>" />
-								<?php echo gettext("(repeat)"); ?>
-								<br />
-								<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass_2" value="<?php echo $x; ?>" />
-								<br />
-								<?php echo gettext("Page password hint:"); ?>
-								<br />
-								<?php print_language_string_list($result->getPasswordHint(), 'page_hint', false, NULL, '', true); ?>
-							</p>
-						</span>
-					<?php
-				}
-				?>
-
-				<p class="checkbox">
+					<p class="checkbox">
 				<input name="commentson" type="checkbox" id="commentson" value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> />
 				<label for="commentson"> <?php echo gettext("Comments on"); ?></label>
 				</p>
