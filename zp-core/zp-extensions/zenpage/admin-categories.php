@@ -102,6 +102,8 @@ printLogoAndLinks();
 					?>
 					<input type="hidden" name="id" value="<?php echo $result['id'];?>" />
 					<input type="hidden" name="catlink-old" id="catlink-old" value="<?php echo $result['cat_link']; ?>" />
+					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
+					<input	type="hidden" name="olduser" id="olduser" value="<?php echo $result['user']; ?>" />
 					<?php
 				}
 				?>
@@ -133,60 +135,57 @@ printLogoAndLinks();
 							$result['user'] = $result['password'] = $result['password_hint'] = '';
 						}
 						?>
-						<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
-						<input	type="hidden" name="olduser" id="olduser" value="<?php echo $result['user']; ?>" />
-						<span class="passwordextrashow">
-						<tr>
-								<td>
-									<a href="javascript:toggle_passwords('',true);">
-										<?php echo gettext("Category password:"); ?>
-									</a>
-								</td>
-								<td>
-									<?php
-									$x = $result['password'];
-									if (!empty($x)) {
-										?>
-										<br />**********
-										<?php 
-									} 
-									?>
-								</td>
-						</tr>
-						</span>
-						<span class="passwordextrahide" style="display:none" >
-							<tr>
-								<td>
-									<a href="javascript:toggle_passwords('',false);">
-									<?php echo gettext("Category guest user:"); ?>
-									</a>
-								</td>
-								<td colspan="2">
-									<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />								</p>
-								</td>
-							</tr>
-								<td style="text-align:right">
+						<tr class="passwordextrashow">
+							<td>
+								<a href="javascript:toggle_passwords('',true);">
 									<?php echo gettext("Category password:"); ?>
-									<br />
-									<?php echo gettext("(repeat)"); ?>
-								</td>
-								<td colspan="2">
-									<?php $x = $result['password']; if (!empty($x)) { $x = '          '; } ?>
-									<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="categorypass" value="<?php echo $x; ?>" />
-									<br />
-									<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="categorypass_2" value="<?php echo $x; ?>" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<?php echo gettext("Category password hint:"); ?>
-								</td>
-								<td colspan="2">
-								<?php print_language_string_list($result['password_hint'], 'category_hint', false, NULL, '', false); ?>
-								</td>
-							</tr>
-						</span>
-						<tr>
+								</a>
+							</td>
+							<td>
+								<?php
+								$x = $result['password'];
+								if (empty($x)) {
+									?>
+									<img src="../../images/lock_open.png" />
+									<?php
+								} else {
+									$x = '          ';
+									?>
+									<img src="../../images/lock.png" />
+									<?php 
+								} 
+								?>
+							</td>
+						</tr>
+						<tr class="passwordextrahide" style="display:none">
+							<td>
+								<a href="javascript:toggle_passwords('',false);">
+								<?php echo gettext("Category guest user:"); ?>
+								</a>
+							</td>
+							<td colspan="2">
+								<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />
+							</td>
+						<tr class="passwordextrahide" style="display:none">
+							<td style="text-align:right">
+								<?php echo gettext("Category password:"); ?>
+								<br />
+								<?php echo gettext("(repeat)"); ?>
+							</td>
+							<td colspan="2">
+								<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="categorypass" value="<?php echo $x; ?>" />
+								<br />
+								<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="categorypass_2" value="<?php echo $x; ?>" />
+							</td>
+						</tr>
+						<tr class="passwordextrahide" style="display:none">
+							<td>
+								<?php echo gettext("Category password hint:"); ?>
+							</td>
+							<td colspan="2">
+							<?php print_language_string_list($result['password_hint'], 'category_hint', false, NULL, '', false); ?>
+							</td>
+						<tr class="passwordextrahide" style="display:none">
 							<td colspan="2">
 								<p class="notebox"><?php echo gettext('<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected.')?></p>
 							</td>

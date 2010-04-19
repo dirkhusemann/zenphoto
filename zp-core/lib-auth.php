@@ -4,17 +4,16 @@
  *
  * @package functions
  *
- * At least in theory one should be able to replace this script with
- * an alternate to change how Admin users are validated and stored.
- *
- * Place the new script in the <ZENFOLDER>/plugins/alt/ folder. It then will be automatically loaded
- * in place of this script.
+ * An alternate authorization script may be provided to override this script. To do so, make a script that
+ * implements the classes declared below. Place the new script inthe <ZENFOLDER>/plugins/alt/ folder. Zenphoto
+ * will then will be automatically loaded the alternate script in place of this one.
  *
  * Replacement libraries must implement two classes:
  * 		"Authority" class: Provides the methods used for user authorization and management
  * 			store an instantiation of this class in $_zp_authority.
  *
  * 		Administrator: supports the basic Zenphoto needs for object manipulation of administrators.
+ * (You can include this script and extend the classes if that suits your needs.)
  *
  * The global $_zp_current_admin_obj represents the current admin with.
  * The library must instantiate its authority class and store the object in the global $_zp_authority

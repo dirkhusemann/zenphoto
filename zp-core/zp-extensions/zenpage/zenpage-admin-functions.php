@@ -966,7 +966,7 @@ function updateCategory() {
 	if (is_array($pwdresult)) {
 		$notice = false;
 		$passwordpart = ", user = '".zp_escape_string($pwdresult['user'])."', password = '".zp_escape_string($pwdresult['password']).
-				"', password_hint = '".zp_escape_string($pwdresult['password_hint']).'"';
+				"', password_hint = '".zp_escape_string($pwdresult['password_hint'])."'";
 	} else {
 		$notice = $pwdresult;
 		$passwordpart = '';

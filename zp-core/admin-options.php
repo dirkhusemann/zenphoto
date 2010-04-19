@@ -160,6 +160,7 @@ if (isset($_GET['action'])) {
 
 		/*** Search options ***/
 		if (isset($_POST['savesearchoptions'])) {
+			$fail = '';
 			$search = new SearchEngine();
 			$searchfields = array();
 			foreach ($_POST as $key=>$value) {
@@ -266,6 +267,7 @@ if (isset($_GET['action'])) {
 			$olduser = getOption('protected_image_user');
 			$newuser = sanitize($_POST['protected_image_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
+			$fail = '';
 			$pwd = trim($_POST['imagepass']);
 			if ($olduser != $newuser) {
 				if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=image_user';
@@ -762,7 +764,16 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td style="background-color: #ECF1F2;">
 					<?php
 					$x = getOption('gallery_password');
-					if (!empty($x)) echo "**********";
+					if (empty($x)) {
+						?>
+						<img src="images/lock_open.png" />
+						<?php
+					} else {
+						$x = '          ';
+						?>
+						<img src="images/lock.png" />
+						<?php 
+					} 
 					?>
 					</td>
 					<td style="background-color: #ECF1F2;">
@@ -785,7 +796,6 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td>
 						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" /></p>
 						<p>
-							<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass" value="<?php echo $x; ?>" />
 							<br />
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass_2" value="<?php echo $x; ?>" />
@@ -1020,7 +1030,16 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td style="background-color: #ECF1F2;">
 						<?php
 						$x = getOption('search_password');
-						if (!empty($x)) echo "**********";
+						if (empty($x)) {
+							?>
+							<img src="images/lock_open.png" />
+							<?php
+						} else {
+							$x = '          ';
+							?>
+							<img src="images/lock.png" />
+							<?php 
+						} 
 						?>
 					</td>
 					<td style="background-color: #ECF1F2;">
@@ -1043,7 +1062,6 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					<td>
 						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" /></p>
 						<p>
-							<?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass" value="<?php echo $x; ?>" />
 							<br />
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass_2" value="<?php echo $x; ?>" />
@@ -1598,7 +1616,16 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 							<td style="margin:0; padding:0">
 								<?php
 								$x = getOption('protected_image_password');
-								if (!empty($x)) echo "  **********";
+								if (empty($x)) {
+									?>
+									<img src="images/lock_open.png" />
+									<?php
+								} else {
+									$x = '          ';
+									?>
+									<img src="images/lock.png" />
+									<?php 
+								} 
 								?>
 							</td>
 						</tr>
@@ -1634,7 +1661,6 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 								<?php echo gettext("password:"); ?>
 							</td>
 							<td style="margin:0; padding:0">
-								<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
 								<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" />
 							</td>
 						</tr>

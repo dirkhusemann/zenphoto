@@ -1000,7 +1000,16 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<td>
 						<?php
 						$x = $album->getPassword();
-						if (!empty($x)) echo "**********";
+						if (empty($x)) {
+							?>
+							<img src="images/lock_open.png" />
+							<?php
+						} else {
+							$x = '          ';
+							?>
+							<img src="images/lock.png" />
+							<?php 
+						} 
 						?>
 						</td>
 					</tr>
@@ -1025,13 +1034,6 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
 							</p>
 							<p>
-							<?php
-							$x = $album->getPassword();
-
-							if (!empty($x)) {
-								$x = '			 ';
-							}
-							?>
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" />
 							<br />
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
