@@ -13,6 +13,9 @@ $option_interface = new zenpagecms();
 
 $zenpage_version = $plugin_version;
 
+zp_register_filter('checkForGuest', 'zenpageCheckForGuest');
+zp_register_filter('isMyItem', 'zenpageIsMyItem');
+
 class zenpagecms {
 
 	function zenpagecms() {
@@ -114,4 +117,41 @@ class zenpagecms {
 
 require_once(dirname(__FILE__)."/zenpage/zenpage-template-functions.php");
 
+// zenpage filters
+
+/**
+ * Handles password checks
+ * @param string $auth
+ */
+function zenpageCheckForGuest($auth) {
+	global $_zp_current_zenpage_page, $_zp_current_category;
+	if (!is_null($_zp_current_zenpage_page)) { // zenpage page
+		$authType = checkPagePassword($_zp_current_zenpage_page, $hint, $show);
+		return $authType;
+	} else if (!is_null($_zp_current_category)) {
+		$authType = checkNewsCategoryPassword($_zp_current_category, $hint, $show);
+		return $authType;
+	}
+	return $auth;
+}
+
+/**
+ * Handles item ownership
+ * @param bool $fail
+ */
+function zenpageIsMyItem($fail) {
+	global $_zp_gallery_page;
+	switch($_zp_gallery_page) {
+		case ZENPAGE_PAGES.'.php':
+			if (isMyPage($_zp_current_zenpage_page, LIST_PAGE_RIGHTS)) return false;
+			$fail = true;
+			break;
+		case ZENPAGE_NEWS:
+			if (!in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
+				if (isMyNews($_zp_current_zenpage_news, LIST_NEWS_RIGHTS)) return false;
+			}
+			$fail = true;
+	}
+	return $fail;
+}
 ?>

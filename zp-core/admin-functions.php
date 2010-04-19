@@ -2086,8 +2086,21 @@ $_zp_current_locale = NULL;
  * @param string $locale optional locale of the translation desired
  * @param string $edit optional class
  */
-function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $short=false, $id='') {
+function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $size=false, $id='') {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
+	if ($textbox) {
+		if ($size == false) {
+			$size = TEXTAREA_COLUMNS;
+		} else if ($size == true) {
+			$size = TEXTAREA_COLUMNS_SHORT;
+		}
+	} else {
+		if ($size == false) {
+			$size = TEXT_INPUT_SIZE;
+		} else if ($size == true) {
+			$size = TEXT_INPUT_SIZE_SHORT;
+		}
+	}
 	if (!empty($edit)) $edit = ' class="'.$edit.'"';
 	if (empty($id)) {
 		$groupid ='';
@@ -2127,9 +2140,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 						<label for="<?php echo $name; ?>_'.$key.'"><?php echo $lang; ?></label>
 						<?php
 						if ($textbox) {
-							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
+							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.size.'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
 						} else {
-							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string,ENT_COMPAT,getOption("charset")).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string,ENT_COMPAT,getOption("charset")).'" size="'.$size.'" />';
 						}
 						?>
 					</li>
@@ -2146,9 +2159,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			echo '<li><label for="'.$name.'_'.$key.'"></label>';
 			echo $lang;
 			if ($textbox) {
-				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 320px" rows="6"></textarea>';
+				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.$size.'"	style="width: 320px" rows="6"></textarea>';
 			} else {
-				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="'.$size .'" />';
 			}
 			echo "</li>\n";
 
@@ -2162,9 +2175,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'</textarea>';
+			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.$size.'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'</textarea>';
 		} else {
-			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
+			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'" size="'.$size.'" />';
 		}
 	}
 }

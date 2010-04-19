@@ -4246,6 +4246,8 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkForGuest(&$hint, &$show) {
 	global $_zp_gallery, $_zp_current_zenpage_page, $_zp_current_category, $_zp_current_zenpage_news;
+	$authType = zp_apply_filter('checkForGuest', NULL);
+	if (!is_null($authType)) return $authType;
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$show = (getOption('search_user') != '');
@@ -4260,12 +4262,6 @@ function checkForGuest(&$hint, &$show) {
 		if (!empty($hash) && zp_getCookie($authType) == $hash) {
 			return $authType;
 		}
-	} else if (!is_null($_zp_current_zenpage_page)) { // zenpage page
-		$authType = checkPagePassword($_zp_current_zenpage_page, $hint, $show);
-		return $authType;
-	} else if (!is_null($_zp_current_category)) {
-		$authType = checkNewsCategoryPassword($_zp_current_category, $hint, $show);
-		return $authType;
 	} else if (!is_null($_zp_current_zenpage_news)) {
 		if (!checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
 			return false;
@@ -4319,18 +4315,13 @@ function checkforPassword(&$hint, &$show) {
 				$_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	if (getOption('gallery_page_unprotected_'.stripSuffix($_zp_gallery_page))) return false;
 	if (zp_loggedin()) {
+		$fail = zp_apply_filter('isMyItem', false);
+		if (!$fail) return false;
 		switch ($_zp_gallery_page) {
 			case 'album.php':
 			case 'image.php':
 				if (isMyAlbum($_zp_current_album->name, LIST_ALBUM_RIGHTS)) return false;
 				break;
-			case ZENPAGE_PAGES.'.php':
-				if (isMyPage($_zp_current_zenpage_page, LIST_PAGE_RIGHTS)) return false;
-				break;
-			case ZENPAGE_NEWS:
-				if (!in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
-					if (isMyNews($_zp_current_zenpage_news, LIST_NEWS_RIGHTS)) return false;
-				}
 			default:
 				return false;
 		}

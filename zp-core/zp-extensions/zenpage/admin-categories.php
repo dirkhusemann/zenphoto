@@ -162,7 +162,7 @@ printLogoAndLinks();
 									</a>
 								</td>
 								<td colspan="2">
-									<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />								</p>
+									<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />								</p>
 								</td>
 							</tr>
 								<td style="text-align:right">
@@ -172,9 +172,9 @@ printLogoAndLinks();
 								</td>
 								<td colspan="2">
 									<?php $x = $result['password']; if (!empty($x)) { $x = '          '; } ?>
-									<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="categorypass" value="<?php echo $x; ?>" />
+									<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="categorypass" value="<?php echo $x; ?>" />
 									<br />
-									<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="categorypass_2" value="<?php echo $x; ?>" />
+									<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="categorypass_2" value="<?php echo $x; ?>" />
 								</td>
 							</tr>
 							<tr>
@@ -186,6 +186,11 @@ printLogoAndLinks();
 								</td>
 							</tr>
 						</span>
+						<tr>
+							<td colspan="2">
+								<p class="notebox"><?php echo gettext('<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected.')?></p>
+							</td>
+						</tr>
 				    <tr>
 				      <td colspan="3">
 					    	<?php 
