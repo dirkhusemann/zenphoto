@@ -159,7 +159,10 @@ function getItemTitleAndURL($item) {
 			$array = array("title" => get_language_string($item['title']),"url" => $item['link'],"name" => $item['link']);
 			break;
 		case 'menulabel':
-			$array = array("title" => get_language_string($item['title']),"url" => NULL, 'name'=>$item['title']);
+			$array = array("title"=>get_language_string($item['title']),"url" => NULL,'name'=>$item['title']);
+			break;
+		case 'menufunction':
+			$array = array("title"=>$item['link'],"url"=>$item['link'],"name"=>$item['link']);
 			break;
 	}
 	return $array;
@@ -397,7 +400,7 @@ function printMenuemanagerPageListWithNav($prevtext, $nexttext, $menuset='defaul
  */
 function printMenuemanagerPageList($menuset='default', $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
 
-echo "<br/>printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navlen)";	
+echo "<br />printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navlen)";	
 	
 	printMenuemanagerPageListWithNav(null, null, $menuset, false, $class, $id, false, $navlen);
 }
@@ -591,6 +594,12 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					}
 					$result['link'] = md5($result['title']);
 					break;
+				case 'menufunction':
+					if (empty($result['link'])) {
+						$success = -1;
+					}
+					$result['title'] = $result['link'];
+					break;
 			}
 			if ($success >0 && $type) {
 				$orders[$nesting]++;
@@ -715,7 +724,12 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 				if (is_null($itemURL)) {
 					echo '<li class="'.$item['type'].'">'.$itemtitle;
 				} else {
-					echo '<li class="'.$item['type'].'"><a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">"'.$itemtitle.'</a>';
+					echo '<li class="'.$item['type'].'">';
+					if ($item['type']=='menulabel') {
+						eval($itemURL);
+					} else {
+						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">"'.$itemtitle.'</a>';
+					}
 				}
 			}
 			

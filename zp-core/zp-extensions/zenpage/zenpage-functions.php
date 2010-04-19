@@ -602,7 +602,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	function getAllCategories() {
 		global $_zp_zenpage_all_categories;
 		if(is_null($_zp_zenpage_all_categories) OR isset($_GET['delete']) OR isset($_GET['update']) OR isset($_GET['save'])) {
-			$_zp_zenpage_all_categories = query_full_array("SELECT id, cat_name, cat_link, hitcounter, permalink FROM ".prefix('zenpage_news_categories')." ORDER by cat_name");
+			$_zp_zenpage_all_categories = query_full_array("SELECT * FROM ".prefix('zenpage_news_categories')." ORDER by cat_name");
 		}
 		$_zp_zenpage_all_categories = sortByMultilingual($_zp_zenpage_all_categories,"cat_name",false);
 		return $_zp_zenpage_all_categories;
@@ -629,7 +629,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function getCategory($id) {
 		$id = sanitize($id);
-		$result = query_single_row("SELECT id, cat_name, cat_link, hitcounter, permalink FROM ".prefix('zenpage_news_categories')." WHERE id=".$id);
+		$result = query_single_row("SELECT * FROM ".prefix('zenpage_news_categories')." WHERE id=".$id);
 		return $result;
 	}
 

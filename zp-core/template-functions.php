@@ -4245,7 +4245,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * @return string
  */
 function checkForGuest(&$hint, &$show) {
-	global $_zp_gallery, $_zp_current_zenpage_page;
+	global $_zp_gallery, $_zp_current_zenpage_page, $_zp_current_category, $_zp_current_zenpage_news;
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$show = (getOption('search_user') != '');
@@ -4262,6 +4262,15 @@ function checkForGuest(&$hint, &$show) {
 		}
 	} else if (!is_null($_zp_current_zenpage_page)) { // zenpage page
 		$authType = checkPagePassword($_zp_current_zenpage_page, $hint, $show);
+		return $authType;
+	} else if (!is_null($_zp_current_category)) {
+		$authType = checkNewsCategoryPassword($_zp_current_category, $hint, $show);
+		return $authType;
+	} else if (!is_null($_zp_current_zenpage_news)) {
+		if (!checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
+			return false;
+		}
+		$authType = checkCategoryPassword($_zp_current_category, $hint, $show);
 		return $authType;
 	} else if (isset($_GET['album'])) {  // album page
 		list($album, $image) = rewrite_get_album_image('album','image');
@@ -4306,7 +4315,8 @@ function checkForGuest(&$hint, &$show) {
  * @since 1.1.3
  */
 function checkforPassword(&$hint, &$show) {
-	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page;
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page,
+				$_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	if (getOption('gallery_page_unprotected_'.stripSuffix($_zp_gallery_page))) return false;
 	if (zp_loggedin()) {
 		switch ($_zp_gallery_page) {
@@ -4317,6 +4327,10 @@ function checkforPassword(&$hint, &$show) {
 			case ZENPAGE_PAGES.'.php':
 				if (isMyPage($_zp_current_zenpage_page, LIST_PAGE_RIGHTS)) return false;
 				break;
+			case ZENPAGE_NEWS:
+				if (!in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
+					if (isMyNews($_zp_current_zenpage_news, LIST_NEWS_RIGHTS)) return false;
+				}
 			default:
 				return false;
 		}

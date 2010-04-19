@@ -410,6 +410,10 @@ function printNewsTitleLink($before='') {
  */
 function getNewsContent($shorten=false, $shortenindicator='') {
 	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
+	$hint = $show = '';
+	if (!checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
+		return '<p>'.gettext('<em>This article belongs to a protected category.</em>').'</p>';
+	}
 	$excerptbreak = false;
 	if(empty($shortenindicator)) {
 		$shortenindicator = getOption('zenpage_textshorten_indicator');
@@ -537,7 +541,7 @@ function getNewsContent($shorten=false, $shortenindicator='') {
  * @param int $shorten $shorten The lengths of the content for the news main page for example (only for video/audio descriptions, not for normal image descriptions)
  */
 function printNewsContent($shorten=false,$shortenindicator='') {
-	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
+	global $_zp_current_zenpage_news, $_zp_page;
 	echo getNewsContent($shorten,$shortenindicator);
 }
 
@@ -1693,7 +1697,12 @@ function getCodeblock($number=0,$titlelink='') {
 	if (empty($titlelink)) {
 		if(is_News()) {
 			if(get_class($_zp_current_zenpage_news) == "ZenpageNews") {
-				$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+				$hint = $show = '';
+				if (checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
+					$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+				} else {
+					$getcodeblock = '';
+				}
 			}
 		}
 		if(is_Pages()) {
@@ -2773,10 +2782,12 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
 
 // page password functions
 
-function isMyPage($pageobj, $rights) {
-	
-//echo "isMyPage(xxxxj, $rights)<br/>";	var_dump($pageobj);
-	
+/**
+ * Checks if user is author of page
+ * @param object $pageobj
+ * @param bit $action
+ */
+function isMyPage($pageobj=NULL, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
 	if ($_zp_loggedin & (ADMIN_RIGHTS)) {	// no current manage all page rights
 		return true;
@@ -2785,49 +2796,97 @@ function isMyPage($pageobj, $rights) {
 		return true;
 	}
 	if ($_zp_loggedin & $action) {
-		 return $_zp_current_admin_obj->getUser() == $_zp_current_zenpage_page->getAuthor();
+		if (is_null($pageobj)) $pageobj = $_zp_current_admin_obj;
+		 return $_zp_current_admin_obj->getUser() == $pageobj->getAuthor();
 	}
 	return false;
 }
 
+/**
+ * Checks for allowed access to a page
+ * @param object $pageobj
+ * @param string $hint
+ * @param bool $show
+ */
 function checkPagePassword($pageobj, &$hint, &$show) {
-	
-//echo "checkPagePassword(xxxx, $hint, $show)<br/>";	var_dump($pageobj);
-	
 	$hash = $pageobj->getPassword();
-	
-//echo "<br/>initial hash=$hash";	
-	
 	while(empty($hash) && !is_null($pageobj)) {
 		$parentID = $pageobj->getParentID();
 		$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parentID;
 		$result = query_single_row($sql);
 		$pageobj = new ZenpagePage($result['titlelink']);
 		$hash = $pageobj->getPassword();
-		
-//echo "<br/>hash=$hash";		
-		
 	}
 	if (empty($hash)) { // no password required
 		return 'zp_unprotected';
 	} else {
 		$authType = "zp_page_auth_" . $pageobj->get('id');
 		$saved_auth = zp_getCookie($authType);
-		
-//echo "<br/>aurhtype=$authType; saved auth=$saved_auth";		
-		
 		if ($saved_auth == $hash) {
-			
-//echo "<br/>returning $authType";			
-			
 			return $authType;
 		} else {
 			$user = $pageobj->getUser();
 			$show = (!empty($user));
 			$hint = $pageobj->getPasswordHint();
-			
-//echo "<br/>returning false";			
-			
+			return false;
+		}
+	}
+}
+
+//	News category password functions
+
+/**
+ * Checks if user is news author
+ * @param object $newsobj News object being checked
+ * @param $action
+ */
+function isMyNews($newsobj, $action) {
+	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_news;
+	if ($_zp_loggedin & (ADMIN_RIGHTS)) {	// no current manage all news rights
+		return true;
+	}
+	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_NEWS_RIGHTS)) {	// sees all
+		return true;
+	}
+	if ($_zp_loggedin & $action) {
+		return $_zp_current_admin_obj->getUser() == $newsobj->getAuthor();
+	}
+	return false;
+}
+
+function checkNewsAccess($newsobj, &$hint, &$show) {
+	if (isMyNews($newsobj, LIST_NEWS_RIGHTS)) return true;
+	$allcategories = $newsobj->getCategories();
+	if (count($allcategories) == 0) return true;
+	foreach ($allcategories as $category) {
+		if (checkNewsCategoryPassword($category['cat_link'], $hint, $show)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Checks if user is allowed to access News article
+ * @param $newsobj
+ * @param $hint
+ * @param $show
+ */
+function checkNewsCategoryPassword($category, &$hint, &$show) {
+	$sql = 'SELECT * FROM '.prefix('zenpage_news_categories').' WHERE `cat_link`="'.zp_escape_string($category).'"';
+	$result = query_single_row($sql);
+	$hash = $result['password'];
+	if (empty($hash))	{
+		return 'zp_unprotected';
+	} else {
+		$authType = "zp_category_auth_" . $result['id'];
+		$saved_auth = zp_getCookie($authType);
+		if ($saved_auth == $hash) {
+			return $authType;
+		} else {
+			$user = $result['user'];
+			$show = (!empty($user));
+			$hint = $result['password_hint'];
 			return false;
 		}
 	}

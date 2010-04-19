@@ -74,7 +74,7 @@ function processPasswordSave($page) {
 		}
 		if (!$fail && $_POST['pagepass'] == $_POST['pagepass_2']) {
 			$page->setUser($newuser);
-			$page->setPasswordHint(sanitize($_POST['page_hint']));
+			$page->setPasswordHint(process_language_string_save('page_hint', 3));
 			if (empty($pwd)) {
 				if (empty($_POST['pagepass'])) {
 					$page->setPassword(NULL);  // clear the password
@@ -142,7 +142,7 @@ function addPage() {
 	if(empty($title)) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else if ($notice == 'user') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected page user').'</p>';
+		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Page user').'</p>';
 	} else if ($notice == 'pass') {
 		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
@@ -222,7 +222,7 @@ function updatePage() {
 	} else 	if(empty($title)) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else if ($notice == 'user') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected page user').'</p>';
+		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Page user').'</p>';
 	} else if ($notice == 'pass') {
 		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
@@ -310,6 +310,14 @@ function printPagesListTable($page, $flag) {
 		</td>
 
 
+	<td class="icons">
+	<?php
+	$pwd = $page->getPassword();
+	if (!empty($pwd)) {
+		echo '<a title="'.gettext('Password protected').'"><img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
+	}
+	?>
+	</td>
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
 		<?php printPublishIconLink($page,"page"); ?>
@@ -468,7 +476,7 @@ function addArticle() {
 	$msg = zp_apply_filter('new_article', '', $article);
 	$article->save();
 	// create news2cat rows
-	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
+	$result2 = query_full_array("SELECT * FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
 	foreach ($result2 as $cat) {
 		if (isset($_POST["cat".$cat['id']])) {
 			query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id, news_id) VALUES ('".$cat['id']."', '".$article->get('id')."')");
@@ -548,7 +556,7 @@ function updateArticle() {
 	$msg = zp_apply_filter('update_article', '', $article, $oldtitlelink);
 	$article->save();
 	// create news2cat rows
-	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY id");
+	$result2 = query_full_array("SELECT * FROM ".prefix('zenpage_news_categories')." ORDER BY id");
 	foreach($result2 as $cat) {
 
 		// if category is sent
@@ -607,7 +615,7 @@ function printArticleCategories($obj) {
 
 
 /**
- * Prints the checkboxes to select and/or show the catagory of an news article on the edit or add page
+ * Prints the checkboxes to select and/or show the category of an news article on the edit or add page
  *
  * @param int $id ID of the news article if the categories an existing articles is assigned to shall be shown, empty if this is a new article to be added.
  * @param string $option "all" to show all categories if creating a new article without categories assigned, empty if editing an existing article that already has categories assigned.
@@ -864,20 +872,72 @@ function printUnpublishedDropdown() {
 ***************************/
 
 /**
+ * Handles saving of News Category passwords
+ */
+function processCategoryPasswordSave() {
+	global $_zp_authority;
+	$notify = $fail = '';
+	$result = '';
+	if (sanitize($_POST['password_enabled'])) {
+		$result = array();
+		$olduser = $_POST['olduser'];
+		$newuser = $_POST['category_user'];
+		$pwd = trim($_POST['categorypass']);
+		if (($olduser != $newuser)) {
+			if (!empty($newuser) && empty($pwd) && empty($pwd2)) {
+				$fail = 'user';
+			}
+		}
+		if (!$fail && $_POST['categorypass'] == $_POST['categorypass_2']) {
+			$result['user'] = $newuser;
+			$result['password_hint'] = process_language_string_save('category_hint', 3);
+			if (empty($pwd)) {
+				if (empty($_POST['categorypass'])) {
+					$result['password'] = '';  // clear the password
+				}
+			} else {
+				$result['password'] = $_zp_authority->passwordHash($newuser, $pwd);
+			}
+		} else {
+			if (empty($fail)) {
+				$notify = 'pass';
+			} else {
+				$notify = $fail;
+			}
+		}
+	}
+	if ($notify) return $notify;
+	return $result;
+}
+
+/**
  * Adds a category to the database
  *
  */
 function addCategory() {
 	$catname = process_language_string_save("category",2); // so that no \ are shown in the 'Category x added' message
 	$catlink = seoFriendly(get_language_string($catname));
+	$result = processCategoryPasswordSave();
+	if (!is_array($result)) {
+		$notice = $result;
+		$result = array('user'=>'','password'=>'','password_hint'=>'');
+	} else {
+		$notice = false;
+	}
 	if(empty($catlink) OR empty($catname)) {
 		echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
+	} else if ($notice == 'user') {
+		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Category user').'</p>';
+	} else if ($notice == 'pass') {
+		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
-		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink) VALUES ('".zp_escape_string($catname)."', '".
-		zp_escape_string(seoFriendly($catlink))."','".getcheckboxState('permalink')."')", true)) {
+		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink, user, password, password_hint) VALUES ('".
+				zp_escape_string($catname)."', '".zp_escape_string(seoFriendly($catlink))."','".
+				zp_escape_string($result['user'])."','".zp_escape_string($result['password'])."','".zp_escape_string($result['password_hint'])."','".
+				getcheckboxState('permalink')."')", true)) {
 			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$catlink)."</p>";
+			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($catlink))."</p>";
 		}
 	}
 }
@@ -889,8 +949,8 @@ function addCategory() {
  */
 function updateCategory() {
 	global $_zp_current_zenpage_news;
-	$result['id'] = sanitize($_POST['id']);
-	$result['cat_name'] = zp_escape_string(process_language_string_save("category",2));
+	$result['id'] = sanitize_numeric($_POST['id']);
+	$result['cat_name'] = process_language_string_save("category",2);
 	$result['permalink'] = getcheckboxState('permalink');
 	if($result['permalink']) {
 		$result['cat_link'] = sanitize($_POST['catlink-old']);
@@ -902,15 +962,30 @@ function updateCategory() {
 		$result['cat_link'] = process_language_string_save("category",2);
 		$result['cat_link'] = zp_escape_string(seoFriendly(get_language_string($result['cat_link'])));
 	}
-	// update the category in the category table
-	if(query("UPDATE ".prefix('zenpage_news_categories')." SET cat_name = '".$result['cat_name']."', cat_link = '".$result['cat_link']."', permalink = '".$result['permalink']."' WHERE id = ".$result['id'],true)) {
+	$pwdresult = processCategoryPasswordSave();
+	if (is_array($pwdresult)) {
+		$notice = false;
+		$passwordpart = ", user = '".zp_escape_string($pwdresult['user'])."', password = '".zp_escape_string($pwdresult['password']).
+				"', password_hint = '".zp_escape_string($pwdresult['password_hint']).'"';
+	} else {
+		$notice = $pwdresult;
+		$passwordpart = '';
+	}
+		// update the category in the category table
+	if(query("UPDATE ".prefix('zenpage_news_categories')." SET cat_name = '".$result['cat_name'].
+				"', cat_link = '".zp_escape_string($result['cat_link'])."', permalink = ".$result['permalink'].
+				$passwordpart." WHERE id = ".$result['id'],true)) {
 		if(empty($result['cat_name']) OR empty($result['cat_link'])) {
 			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
+		} else if ($notice == 'user') {
+			echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Category user').'</p>';
+		} else if ($notice == 'pass') {
+			echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 		} else {
 			echo "<p class='messagebox' id='fade-message'>".gettext("Category updated!")."</p>";
 		}
 	} else {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$catlink)."</p>";
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($result['cat_link']))."</p>";
 	}
 	$result = getCategory($result['id']);
 	return $result;
@@ -950,6 +1025,13 @@ function printCategoryList() {
  <tr>
 	<td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."&amp;tab=categories' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
 	<td class="icons3"><?php echo $count; ?> <?php echo gettext("articles"); ?></td>
+	<td class="icons">
+	<?php
+	if (!empty($cat['password'])) {
+		echo '<a title="'.gettext('Password protected').'"><img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
+	}
+	?>
+	</td>
 	<td class="icons">
 		<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>&amp;tab=categories" title="<?php echo gettext("Reset hitcounter"); ?>">
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" />
@@ -1241,7 +1323,7 @@ function checkRights($currentpage) {
 
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">
-	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><img src="images/clock.png" alt="" /><?php echo gettext("Published/Not published/Scheduled for publishing"); ?></li>
+	<li><img src="../../images/lock.png" alt="" /><?php echo gettext("Has Password"); ?></li>	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><img src="images/clock.png" alt="" /><?php echo gettext("Published/Not published/Scheduled for publishing"); ?></li>
 	<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
 	<li><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>

@@ -73,7 +73,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			break;
 		case "newscategories":
 			$typename = gettext("News Categories");
-			$dbquery = "SELECT id, cat_name, cat_link, hitcounter FROM ".prefix('zenpage_news_categories');
+			$dbquery = "SELECT * FROM ".prefix('zenpage_news_categories');
 			break;
 		case "tags":
 			$typename = gettext("Tags");

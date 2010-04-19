@@ -30,7 +30,6 @@ printTabs("menu");
 ?>
 <div id="content">
 <?php
-createTable();
 if (isset($_GET['menuset'])) { 
 	$menuset = checkChosenMenuset();
 } else {	//	setup default menuset

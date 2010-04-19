@@ -4,27 +4,6 @@
  *******************************/
 
 /**
- * Creates the db table for the menu (probably needs to be able to use different tables to use several custom menues)
- *
- */
-function createTable() {
-	$collation = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci';
-	$db_schema = "CREATE TABLE IF NOT EXISTS ".prefix('menu')." (
-	`id` int(11) unsigned NOT NULL auto_increment,
-	`parentid` int(11) unsigned NOT NULL,
-	`title` text,
-	`link` varchar(255) NOT NULL,
-	`type` varchar(16) NOT NULL,
-	`sort_order`varchar(48) NOT NULL default '',
-	`show` int(1) unsigned NOT NULL default '1',
-	`menuset` varchar(32) NOT NULL,
-	PRIMARY KEY  (`id`),
-	UNIQUE (`type`,`link`, `menuset`)
-	) $collation;";
-	query($db_schema);
-}
-
-/**
  * Updates the sortorder of the pages list in the database
  *
  */
@@ -74,8 +53,8 @@ function printItemsListTable($item, $flag) {
 		<td class='sort-handle' style="padding-bottom: 15px;">
 			<img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width: 14px; height: 14px" />
 			<?php
-			printItemEditLink($item); 
 			$array = getItemTitleAndURL($item);
+			printItemEditLink($item); 
 			?>
 		</td>
 	
@@ -388,7 +367,7 @@ function addCategoriesToDatabase($menuset, $base=NULL) {
 		}
 	}
 	$result = $categorybase;
-	$result = query_full_array("SELECT cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
+	$result = query_full_array("SELECT * FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
 	foreach($result as $key=>$item) {
 		$order = $sortbase.sprintf('%03u',$result = $key+$categorybase);
 		$link = $item['cat_link'];
@@ -516,10 +495,19 @@ function addItem() {
 			$result['link'] = md5($result['title']);
 			$successmsg = gettext("Custom label added");
 			break;
+		case 'menufunction':
+			$result['title'] = NULL;
+			$result['link'] = sanitize($_POST['link'],0);
+			if (empty($result['link'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to provide a <strong>function</strong>!")."</p>";
+				return $result;
+			}
+			$successmsg = sprintf(gettext("Function  menu item <em>%s</em> added"),$result['link']);
+			break;
 	}
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
-	$result = query($sql);
-	$order = sprintf('%3u',mysql_result($result, 0));
+	$rslt = query($sql);
+	$order = sprintf('%3u',mysql_result($rslt, 0));
 	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
 						"VALUES ('".zp_escape_string($result['title']).
 						"', '".zp_escape_string($result['link']).

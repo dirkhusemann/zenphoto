@@ -1537,11 +1537,9 @@ if (file_exists(CONFIGFILE)) {
 			$_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
 			$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum',
 			$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
-			$_zp_conf_vars['mysql_prefix'].'captcha');
-		
-		$expected_tables = array_merge($expected_tables, array($_zp_conf_vars['mysql_prefix'].'zenpage_pages',
+			$_zp_conf_vars['mysql_prefix'].'captcha',$_zp_conf_vars['mysql_prefix'].'zenpage_pages',
 			$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
-			$_zp_conf_vars['mysql_prefix'].'zenpage_news'));
+			$_zp_conf_vars['mysql_prefix'].'zenpage_news',$_zp_conf_vars['mysql_prefix'].'menu');
 		
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {
@@ -1581,6 +1579,7 @@ if (file_exists(CONFIGFILE)) {
 	$tbl_zenpage_pages = prefix('zenpage_pages');
 	$tbl_zenpage_news_categories = prefix('zenpage_news_categories');
 	$tbl_zenpage_news2cat = prefix('zenpage_news2cat');
+	$tbl_menu_manager = prefix('menu');
 	// Prefix the constraint names:
 	$cst_images = prefix('images_ibfk1');
 
@@ -1800,6 +1799,21 @@ if (file_exists(CONFIGFILE)) {
 		) $collation;";
 	}
 
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'menu'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('menu')." (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`parentid` int(11) unsigned NOT NULL,
+		`title` text,
+		`link` varchar(255) NOT NULL,
+		`type` varchar(16) NOT NULL,
+		`sort_order`varchar(48) NOT NULL default '',
+		`show` int(1) unsigned NOT NULL default '1',
+		`menuset` varchar(32) NOT NULL,
+		PRIMARY KEY  (`id`),
+		UNIQUE (`type`,`link`, `menuset`)
+		) $collation;";
+	}
+	
 	/****************************************************************************************
 	 ******                             UPGRADE SECTION                                ******
 	 ******                                                                            ******
@@ -2021,6 +2035,9 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_pages ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `password` VARCHAR(64)';
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_pages ADD COLUMN `password_hint` text;";
+	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' ADD COLUMN `password` VARCHAR(64)';
+	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `password_hint` text;";
 	
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {

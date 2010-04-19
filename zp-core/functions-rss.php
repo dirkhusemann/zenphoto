@@ -201,7 +201,7 @@ function getRSSAlbumnameAndCollection($arrayfield) {
 }
 
 /**
- * Returns the News Catagory title or catlink (name) or the mode (all news or category only) for the Zenpage news feed.
+ * Returns the News category title or catlink (name) or the mode (all news or category only) for the Zenpage news feed.
  *
  * @param string $arrayfield "catlink", "catttitle" or "option"
  * @return string

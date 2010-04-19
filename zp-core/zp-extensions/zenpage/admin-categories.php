@@ -128,18 +128,73 @@ printLogoAndLinks();
 					      <input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext('Edit TitleLink'); ?>
 					      </td>
 					    </tr>
-							<?php
+					    <?php
+						} else {
+							$result['user'] = $result['password'] = $result['password_hint'] = '';
 						}
 						?>
+						<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
+						<input	type="hidden" name="olduser" id="olduser" value="<?php echo $result['user']; ?>" />
+						<span class="passwordextrashow">
+						<tr>
+								<td>
+									<a href="javascript:toggle_passwords('',true);">
+										<?php echo gettext("Category password:"); ?>
+									</a>
+								</td>
+								<td>
+									<?php
+									$x = $result['password'];
+									if (!empty($x)) {
+										?>
+										<br />**********
+										<?php 
+									} 
+									?>
+								</td>
+						</tr>
+						</span>
+						<span class="passwordextrahide" style="display:none" >
+							<tr>
+								<td>
+									<a href="javascript:toggle_passwords('',false);">
+									<?php echo gettext("Category guest user:"); ?>
+									</a>
+								</td>
+								<td colspan="2">
+									<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />								</p>
+								</td>
+							</tr>
+								<td style="text-align:right">
+									<?php echo gettext("Category password:"); ?>
+									<br />
+									<?php echo gettext("(repeat)"); ?>
+								</td>
+								<td colspan="2">
+									<?php $x = $result['password']; if (!empty($x)) { $x = '          '; } ?>
+									<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="categorypass" value="<?php echo $x; ?>" />
+									<br />
+									<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="categorypass_2" value="<?php echo $x; ?>" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<?php echo gettext("Category password hint:"); ?>
+								</td>
+								<td colspan="2">
+								<?php print_language_string_list($result['password_hint'], 'category_hint', false, NULL, '', false); ?>
+								</td>
+							</tr>
+						</span>
 				    <tr>
 				      <td colspan="3">
-				    	<?php 
-				    	if(isset($_GET['edit'])) { 
-				     		$submittext =  gettext('Update Category');
-				    	} else {
-				     		$submittext =  gettext('Save New Category');
-				    	}
-				     	?>
+					    	<?php 
+					    	if(isset($_GET['edit'])) { 
+					     		$submittext =  gettext('Update Category');
+					    	} else {
+					     		$submittext =  gettext('Save New Category');
+					    	}
+					     	?>
 				      	<p class="buttons">
 					      	<button type="submit" title="<?php echo $submittext; ?>">
 					      		<img src="../../images/pass.png" alt="" />
@@ -166,6 +221,7 @@ printLogoAndLinks();
 				
 			</div> <!-- box -->
 			<ul class="iconlegend">
+				<li><img src="../../images/lock.png" alt="" /><?php echo gettext("Has Password"); ?></li>
 				<li><img src="../../images/reset.png" alt="" /><?php echo gettext('Reset hitcounter'); ?></li>
 				<li><img src="../../images/fail.png" alt="" /><?php echo gettext('Delete category'); ?></li>
 			</ul>
