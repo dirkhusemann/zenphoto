@@ -334,7 +334,8 @@ class Gallery {
 	function garbageCollect($cascade=true, $complete=false, $restart='') {
 		if (empty($restart)) {
 			// Check for the existence of top-level albums (subalbums handled recursively).
-			$result = query("SELECT * FROM " . prefix('albums'));
+			$sql = "SELECT * FROM " . prefix('albums');
+			$result = query($sql);
 			$dead = array();
 			$live = array(''); // purge the root album if it exists
 			$deadalbumthemes = array();
@@ -464,12 +465,12 @@ class Gallery {
 
 			$start = array_sum(explode(" ",microtime()));  // protect against too much processing.
 			if (!empty($restart)) {
-				$restartwhere = ' WHERE `id`>'.$restart;
+				$restartwhere = ' WHERE `id`>0 AND `mtime`=0';
 			} else {
-				$restartwhere = '';
+				$restartwhere = ' WHERE `mtime`=0';
 			}
 			define('RECORD_LIMIT',5);
-			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime` FROM ' . prefix('images').$restartwhere.' ORDER BY `id` LIMIT '.(RECORD_LIMIT+2);
+			$sql = 'SELECT * FROM ' . prefix('images').$restartwhere.' ORDER BY `id` LIMIT '.(RECORD_LIMIT+2);
 			$images = query_full_array($sql);
 			if (count($images) > 0) {
 				$c = 0;

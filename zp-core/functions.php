@@ -2028,7 +2028,7 @@ function debug404($album, $image, $theme) {
 		foreach ($ignore as $uri) {
 			if ($target == $uri) return;
 		}
-		trigger_error(gettext('Zenphoto processed a 404 error. See the debug log for details.'), E_USER_NOTICE);
+		trigger_error(sprintf(gettext('Zenphoto processed a 404 error on %s. See the debug log for details.'),$target), E_USER_NOTICE);
 		debugLog("404 error: album=$album; image=$image; theme=$theme");
 		debugLogArray('$_SERVER', $_SERVER, 0, '', false);
 		debugLogArray('$_REQUEST', $_REQUEST, 0, '', false);
