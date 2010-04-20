@@ -2789,7 +2789,7 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
  */
 function isMyPage($pageobj=NULL, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
-	if ($_zp_loggedin & (ADMIN_RIGHTS)) {	// no current manage all page rights
+	if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {	
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
@@ -2842,7 +2842,7 @@ function checkPagePassword($pageobj, &$hint, &$show) {
  */
 function isMyNews($newsobj, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_news;
-	if ($_zp_loggedin & (ADMIN_RIGHTS)) {	// no current manage all news rights
+	if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_NEWS_RIGHTS)) {	// sees all

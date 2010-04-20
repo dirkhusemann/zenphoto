@@ -208,7 +208,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
 				$grouppart.
 			'</td>
-			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">'.gettext('User group membership.<br /><strong>NOTE:</strong> When a group is assigned <em>rights</em> and <em>managed albums</em> are determined by the group!').'</td>
+			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">'.gettext('User group membership.<br /><strong>Note:</strong> When a group is assigned <em>rights</em> and <em>managed albums</em> are determined by the group!').'</td>
 		</tr>'."\n";
 	return $html.$result;
 }

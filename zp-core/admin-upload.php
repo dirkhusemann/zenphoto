@@ -216,7 +216,7 @@ if (count($types)>1) {
 </p>
 <p class="notebox">
 	<?php
-	echo gettext('<strong>NOTE: </strong>');
+	echo gettext('<strong>Note: </strong>');
 	if ($last == 'ZIP') {
 		echo gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
 	}

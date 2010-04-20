@@ -428,6 +428,7 @@ function zp_load_image_from_id($id){
  * @return bool
  */
 function zp_load_request() {
+	zp_apply_filter('load_request',false);
 	list($album, $image) = rewrite_get_album_image('album','image');
 	zp_load_page();
 	$success = true;

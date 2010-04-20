@@ -550,7 +550,7 @@ class Zenphoto_Authority {
 	 */
 	function getOptionsSupported() {
 		return array(	gettext('Augment password hash:') => array('key' => 'extra_auth_hash_text', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication.').'<p class="notebox">'.gettext('<strong>NOTE:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.').'</p>'),
+										'desc' => gettext('Extra text appended when hashing password to strengthen Zenphoto authentication.').'<p class="notebox">'.gettext('<strong>Note:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text.').'</p>'),
 		gettext('Minimum password length:') => array('key' => 'min_password_lenght', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext('Minimum number of characters a password must contain.')),
 		gettext('Password characters:') => array('key' => 'password_pattern', 'type' => OPTION_TYPE_CLEARTEXT,

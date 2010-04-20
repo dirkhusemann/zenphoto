@@ -2792,7 +2792,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		if ($height) $sizing .= ' height="'.$height.'"';
 	}
 	if ($id) $id = ' id="'.$id.'"';
-	if ($class) $id = ' class="'.$class.'"';
+	if ($class) $id .= ' class="'.$class.'"';
 	if (isImagePhoto() || $thumbStandin) {
 		$html = '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' .
 			' alt="' . html_encode($alt) . '"' .

@@ -661,7 +661,7 @@ $alb = removeParentAlbumNames($album);
 				<?php	echo gettext('Drag the albums into the order you wish them displayed.'); ?>
 			</p>
 			<p class="notebox">
-				<?php echo gettext('<strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.'); ?>
+				<?php echo gettext('<strong>Note:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.'); ?>
 			</p>
 			<p>
 				<?php
@@ -1363,7 +1363,7 @@ if (isset($_GET['saved'])) {
 			<?php	echo gettext('Drag the albums into the order you wish them displayed.'); ?>
 			</p>
 			<p class="notebox">
-			<?php	echo gettext('<strong>NOTE:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');?>
+			<?php	echo gettext('<strong>Note:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album.');?>
 			</p>
 			<?php
 		}

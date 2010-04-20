@@ -1205,7 +1205,7 @@ if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			</p>
 			<p class="notebox">
 			<?php
-			echo gettext('<strong>NOTE:</strong> Theme support is required to display RSS links.');
+			echo gettext('<strong>Note:</strong> Theme support is required to display RSS links.');
 			?>
 			</p>
 			</td>

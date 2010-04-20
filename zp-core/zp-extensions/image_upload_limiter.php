@@ -180,7 +180,7 @@ function uploadLimiterHeaderMessage($default) {
 		$warn = '<p style="color:red;">'.gettext('HTTP single file uploading is disabled because upload limitations are in effect. Please use the <a href="javascript:switchUploader(\'admin-upload.php?uploadtype=multifile\');" >multi file upload</a>').'</p>';
 	} else {
 		$uploadlimit = getOption('imageuploadlimit');
-		$warn = '<p style="color: green">'. sprintf(gettext("<strong>NOTE:</strong> You can upload a maximum of %s images to each album."),$uploadlimit).'</p>'; 
+		$warn = '<p style="color: green">'. sprintf(gettext("<strong>Note:</strong> You can upload a maximum of %s images to each album."),$uploadlimit).'</p>'; 
 	}
 	return $warn;
 }

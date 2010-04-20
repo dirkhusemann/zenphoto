@@ -200,7 +200,7 @@ function generateLanguageOptionList($HTTPAccept) {
  * 
  */
 function setPluginDomain($plugindomain) {
-	return setupCurrentLocale($plugindomain,"plugin");
+	return setupCurrentLocale(NULL,$plugindomain,"plugin");
 }
 
 /**
@@ -225,26 +225,33 @@ function setMainDomain() {
  * @return bool
  */
 function setThemeDomain($themedomain) {
-	return setupCurrentLocale($themedomain,"theme");
+	return setupCurrentLocale(NULL,$themedomain,"theme");
 }
 
 /**
  * Setup code for gettext translation
  * Returns the result of the setlocale call
- *
+ * 
+ * @param string $locale_override force locale to this
+ * @param string $plugindomain domain
+ * @param string $type case for settign domain
  * @return mixed
  */
-function setupCurrentLocale($plugindomain='', $type='') {
+function setupCurrentLocale($locale_override=NULL, $plugindomain='', $type='') {
 	global $_zp_languages;
 	$encoding = getOption('charset');
 	if (empty($encoding)) $encoding = 'UTF-8';
 	if(empty($plugindomain) && empty($type)) {
-		$locale = getOption("locale");
+		if (is_null($locale_override)) {
+			$locale = getOption("locale");
+		} else {
+			$locale = $locale_override;
+		}
 		@putenv("LANG=$locale");
 		// gettext setup
 		$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale, NULL);
 		if (!$result) { // failed to set the locale
-			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
+			if (isset($_POST['dynamic-locale']) || is_null($locale_override)) { // and it was chosen via dynamic-locale
 				$locale = sanitize($_POST['oldlocale'], 3);
 				setOption('locale', $locale, false);
 				zp_setCookie('dynamic_locale', '', time()-368000);
@@ -253,7 +260,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
-		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): locale=$locale, \$result=$result");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($local_override, $plugindomain, $type): locale=$locale, \$result=$result");
 	} else {
 		$domain = $plugindomain;
 		switch ($type) {
@@ -269,7 +276,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 				break;
 		}
 		$result = true;
-		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): domainpath=$domainpath");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($local_override, $plugindomain, $type): domainpath=$domainpath");
 	}
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
