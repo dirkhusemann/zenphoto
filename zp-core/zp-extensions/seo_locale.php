@@ -25,7 +25,7 @@ zp_register_filter('load_request', 'filterLocale_load_request');
 
 function filterLocale_load_request() {
 	if (isset($_GET['locale'])) {
-		$l = sanitize($_GET['locale'],3);
+		$l = strtoupper(sanitize($_GET['locale'],3));
 	} else {
 		$uri = urldecode(sanitize($_SERVER['REQUEST_URI'], 0));
 		$path = substr($uri, strlen(WEBPATH)+1);
@@ -56,10 +56,10 @@ function filterLocale_load_request() {
 		}
 	}
 	if ($locale) {
-		if (isset($_GET['locale'])) {
-			zp_setCookie('dynamic_locale', $locale);
-			setupCurrentLocale($locale);
-		} else {  // we need to re-direct
+		
+		zp_setCookie('dynamic_locale', $locale);
+		setupCurrentLocale($locale);
+		if (!isset($_GET['locale'])) {  // we need to re-direct
 			if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
 			$path = FULLWEBPATH.substr($path, strlen($l));
 			if (strpos($path, '?') === false) {
@@ -67,8 +67,6 @@ function filterLocale_load_request() {
 			} else {
 				$uri = $path.'&locale='.$locale;
 			}
-			header("HTTP/1.0 301 Moved Permanently");
-			header("Status: 301 Moved Permanently");
 			header('Location: '.$uri);
 			exit();
 		}
