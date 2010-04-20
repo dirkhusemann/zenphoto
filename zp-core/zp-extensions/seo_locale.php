@@ -30,14 +30,15 @@ function filterLocale_load_request() {
 		$uri = urldecode(sanitize($_SERVER['REQUEST_URI'], 0));
 		$path = substr($uri, strlen(WEBPATH)+1);
 		$path = str_replace('\\','/',$path);
+		if (substr($path,0,1) == '/') $path = substr($path,1);
 		if (empty($path)) {
 			$l = false;
 		} else {
-			$rest = strpos($path, '/', 1);
+			$rest = strpos($path, '/');
 			if ($rest === false) {
 				$l = strtoupper($path);
 			} else {
-				$l = strtoupper(substr($path,0,strlen($path)-$rest+1));
+				$l = strtoupper(substr($path,0,$rest));
 			}
 		}
 	}
@@ -55,15 +56,21 @@ function filterLocale_load_request() {
 		}
 	}
 	if ($locale) {
-		zp_setCookie('dynamic_locale', $locale);
-		setupCurrentLocale($locale);
-		if (!isset($_GET['locale'])) {
-			$path = substr($path,strlen($l)+1);
-			$_GET['locale'] = $locale;
-			$_SERVER['REQUEST_URI'] = WEBPATH.'/'.$path;
-			if (isset($_GET['album'])) {
-				$_GET['album'] = $path;
+		if (isset($_GET['locale'])) {
+			zp_setCookie('dynamic_locale', $locale);
+			setupCurrentLocale($locale);
+		} else {  // we need to re-direct
+			if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
+			$path = FULLWEBPATH.substr($path, strlen($l));
+			if (strpos($path, '?') === false) {
+				$uri = $path.'?locale='.$locale;
+			} else {
+				$uri = $path.'&locale='.$locale;
 			}
+			header("HTTP/1.0 301 Moved Permanently");
+			header("Status: 301 Moved Permanently");
+			header('Location: '.$uri);
+			exit();
 		}
 	}
 }
