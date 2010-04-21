@@ -465,7 +465,7 @@ class Gallery {
 
 			$start = array_sum(explode(" ",microtime()));  // protect against too much processing.
 			if (!empty($restart)) {
-				$restartwhere = ' WHERE `id`>0 AND `mtime`=0';
+				$restartwhere = ' WHERE `id`>'.$restart.' AND `mtime`=0';
 			} else {
 				$restartwhere = ' WHERE `mtime`=0';
 			}

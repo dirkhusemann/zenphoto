@@ -18,7 +18,7 @@ $plugin_description =  gettext("Show the content of an media album with .flv/.mp
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flowplayer3_playlist.php.html";
-$plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>'):false;
+$plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>.'):false;
 
 if ($plugin_disable) {
 	setOption('zp_plugin_flowplayer3_playlist',0);

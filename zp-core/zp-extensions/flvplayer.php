@@ -15,7 +15,7 @@ $plugin_description = sprintf(gettext('Enable <strong>FLV player 4.x</strong> to
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flvplayer.php.html";
-$plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>'):false;
+$plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>.'):false;
 
 if ($plugin_disable) {
 	setOption('zp_plugin_flvplayer',0);

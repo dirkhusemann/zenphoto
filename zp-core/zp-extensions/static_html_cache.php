@@ -225,8 +225,8 @@ class staticCache {
 		} else {
 			$page = "_1";
 		}
-		if(isset($_POST['dynamic-locale'])) {
-			$locale = "_".sanitize($_POST['dynamic-locale']);
+		if(isset($_REQUEST['locale'])) {
+			$locale = "_".sanitize($_REQUEST['locale']);
 		} else {
 			$locale = "_".sanitize(getOption("locale"));
 		}
