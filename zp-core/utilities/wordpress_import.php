@@ -226,13 +226,16 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 			} else {
 				$show = 0;
 			}
-			$title = $post['title'];
-			$titlelink = sanitize(seoFriendly($title));
-			$content = $post['content'];
+			$post['title']= sanitize($post['title']);
+			$titlelink = sanitize(seoFriendly($post['title']));
+			$post['content'] = sanitize($post['content']);
+			$post['date']  = sanitize($post['date']);
+			$post['lastchange'] = sanitize($post['lastchange']);
+			$post['type'] = sanitize($post['type']);
 			switch($post['type']) {
 				case 'post':
-					//TODO: Add the post to Zenphoto database as Zenpage article
-					if (query("INSERT INTO ".prefix('zenpage_news')." (title,titlelink,content,date,lastchange,`show`) VALUES ('".zp_escape_string($title)."','".zp_escape_string($titlelink)."','".zp_escape_string($content)."','".zp_escape_string($post['date'])."','".zp_escape_string($post['lastchange'])."','".zp_escape_string($show)."')", true)) {
+					//Add the post to Zenphoto database as Zenpage article
+					if (query("INSERT INTO ".prefix('zenpage_news')." (title,titlelink,content,date,lastchange,`show`) VALUES ('".zp_escape_string($post['title'])."','".zp_escape_string($titlelink)."','".zp_escape_string($post['content'])."','".zp_escape_string($post['date'])."','".zp_escape_string($post['lastchange'])."','".zp_escape_string($show)."')", true)) {
 						echo "<li class='messagebox'>".sprintf(gettext('%1$s <em>%2$s</em> added'),$post['type'], $post['title']);
 					} else {
 						echo "<li class='errorbox'>".sprintf(gettext('%1$s with the title/titlelink <em>%2$s</em> already exists!'),$post['type'], $post['title']);
@@ -253,6 +256,9 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 					echo "<ul>";
 					if($termrelations) {
 						foreach($termrelations as $term) {
+							$term['name']  = sanitize($term['name']);
+							$term['slug'] = sanitize($term['slug']);
+							$term['taxonomy'] = sanitize($term['taxonomy']);
 							switch($term['taxonomy']) {
 								case 'category':
 									//Get new id of category
@@ -285,13 +291,13 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 							}
 							//echo "<li>".sprintf(gettext('%1$s <em>%2$s</em>'),$term['taxonomy'],$term['slug'])."</li>";
 						}
-						echo "</ul></li>";
+						echo "</ul>";
 						debugLogArray('Wordpress import - Term relations for "'.$post['title'].'" ('.$post['type'].')', $termrelations);
 					}
 					break;
 				case 'page':
 				//Add the page to Zenphoto database as Zenpage page
-					if (query("INSERT INTO ".prefix('zenpage_pages')." (title,titlelink,content,date,lastchange,`show`) VALUES ('".zp_escape_string($title)."','".zp_escape_string($titlelink)."','".zp_escape_string($content)."','".zp_escape_string($post['date'])."','".zp_escape_string($post['lastchange'])."','".zp_escape_string($show)."')", true)) {
+					if (query("INSERT INTO ".prefix('zenpage_pages')." (title,titlelink,content,date,lastchange,`show`) VALUES ('".zp_escape_string($post['title'])."','".zp_escape_string($titlelink)."','".zp_escape_string($post['content'])."','".zp_escape_string($post['date'])."','".zp_escape_string($post['lastchange'])."','".zp_escape_string($show)."')", true)) {
 						echo "<li class='messagebox'>".sprintf(gettext('%1$s <em>%2$s</em> added'),$post['type'], $post['title']);
 					} else {
 						echo "<li class='errorbox'>".sprintf(gettext('%1$s with the title/titlelink <em>%2$s</em> already exists!'),$post['type'], $post['title']);
@@ -299,22 +305,28 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 					break;
 			} // switch end
 			// getting comments
-			/*switch($post['type']) {
+			switch($post['type']) {
 				case 'post':
 					$ctype = 'news';
 					break;
 				case 'page':
 					$ctype = 'pages';
 					break;
-			}
-			$comments = wp_query_full_array("
+			} 
+		/*	$comments = wp_query_full_array("
 						SELECT comment_post_ID, comment_author, comment_author_email, comment_author_url,comment_date, comment_content, comment_approved
 						FROM ".wp_prefix('comments',$wp_prefix)."
 						WHERE comment_post_ID = '".$post['id']."'");
 			$comentcount = "";
 			if($comments) {
 				foreach($comments as $comment) {
-					if (query_single_row("SELECT * from ".prefix('comments')." WHERE ownerid ='".zp_escape_string($newarticleid)."' AND name='".zp_escape_string($comment['comment_author'])."' AND email ='".zp_escape_string($comment['comment_author_email'])."' AND website ='".zp_escape_string($comment['comment_author_url'])."' AND date ='".zp_escape_string($comment['comment_date'])."' AND comment ='".zp_escape_string($comment['comment_content'])."' AND type ='".zp_escape_string($comment['comment_approved'])."'",true)) {
+					$comment['comment_author']  = sanitize($comment['comment_author']);
+					$comment['comment_author_email']  = sanitize($comment['comment_author_email']);
+					$comment['comment_author_url']  = sanitize($comment['comment_author_url']);
+					$comment['comment_date']  = sanitize($comment['comment_date']);
+					$comment['comment_content']  = sanitize($comment['comment_content']);
+					$comment['comment_approved']  = sanitize($comment['comment_approved']);
+					if (query_single_row("SELECT * from ".prefix('comments')." WHERE ownerid ='".zp_escape_string($newarticleid)."' AND name='".zp_escape_string($comment['comment_author'])."' AND email ='".zp_escape_string($comment['comment_author_email'])."' AND website ='".zp_escape_string($comment['comment_author_url'])."' AND date ='".zp_escape_string($comment['comment_date'])."' AND comment ='".zp_escape_string($comment['comment_content'])."' AND inmoderation ='".zp_escape_string($comment['comment_approved'])."' AND type='".$ctype."'",true)) {
 						echo "<li class='errorbox'>".gettext("This comment already exists!")."</li>";
 					} else {
 						if(query("INSERT INTO ".prefix('comments')." (ownerid,name,email,website,date,comment,inmoderation,type) VALUES ('".zp_escape_string($newarticleid)."','".zp_escape_string($comment['comment_author'])."','".zp_escape_string($comment['comment_author_email'])."','".zp_escape_string($comment['comment_author_url'])."','".zp_escape_string($comment['comment_date'])."','".zp_escape_string($comment['comment_content'])."','".zp_escape_string($comment['comment_approved'])."','".$ctype."'",false)) {
@@ -326,13 +338,19 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 				}
 				echo "<p class='messagebox'>".sprintf(gettext('%u comments imported'),$commentcount)."</p>";
 			} else {
-				echo "<p class='notebox'>".sprintf(gettext('No comments imported'),$commentcount)."</p>";
-			}
+				echo "<p class='notebox'>".gettext('No comments to import')."</p>";
+			} 
 			debugLogArray('Wordpress import - Comments for "'.$post['title'].'" ('.$post['type'].')', $comments);*/
+			echo '</li>'; 
 		} // posts foreach
 	} else { // if posts are available at all
-		echo "<li class='notebox'>".gettext("No posts or pages to import.")."</li>";
+		echo "<li class='notebox'>".gettext("No posts or pages to import.")."</li></li>";
 	}
+	?>
+	<p class="buttons"><a href="wordpress_import.php"><?php echo gettext('New import'); ?></a></p>
+	<br style="clear:both" />
+	<?php
+	
 } // if form submit if
 ?>
 </ol>
