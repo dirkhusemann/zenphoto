@@ -56,7 +56,6 @@ function filterLocale_load_request() {
 		}
 	}
 	if ($locale) {
-		
 		zp_setCookie('dynamic_locale', $locale);
 		setupCurrentLocale($locale);
 		if (!isset($_GET['locale'])) {  // we need to re-direct
@@ -67,6 +66,8 @@ function filterLocale_load_request() {
 			} else {
 				$uri = $path.'&locale='.$locale;
 			}
+			header("HTTP/1.0 302 Found");
+			header("Status: 302 Found");
 			header('Location: '.$uri);
 			exit();
 		}
