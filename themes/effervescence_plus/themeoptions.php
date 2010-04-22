@@ -29,8 +29,10 @@ class ThemeOptions {
 									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),
 									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => OPTION_TYPE_SELECTOR, 'selections' => array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'),
 													'desc' => gettext('Select the theme personality')),
-									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select the colors of the theme'))
-								);
+									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select the colors of the theme')),
+									gettext('Use custom menu') => array('key' => 'effervescence_custommenu', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check this if you want to use the <em>menu_manager</em> plugin to build a custom menu instead of the "standard" zenpage one.').
+													'<p class="notebox">'.gettext('<strong>Note:</strong> Your custom menu must be named "effervescence". This option is valid only if you have the <em>Zenpage</em> plugin enabled and the <em>Gallery index page link</em> option set to "gallery".').'</p>')
+									);
 	}
 
 	function handleOption($option, $currentValue) {
