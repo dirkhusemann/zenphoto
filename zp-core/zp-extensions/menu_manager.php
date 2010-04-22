@@ -719,16 +719,16 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 				} else {
 					$class = $css_class_active;
 				}
-				echo '<li class="'.trim($item['type'].' '.$class).'">'.$itemtitle; 
+				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle; 
 			} else {
 				if (is_null($itemURL)) {
-					echo '<li class="'.$item['type'].'">'.$itemtitle;
+					echo '<li class="menu_'.$item['type'].'">'.$itemtitle;
 				} else {
-					echo '<li class="'.$item['type'].'">';
+					echo '<li class="menu_'.$item['type'].'">';
 					if ($item['type']=='menulabel') {
 						eval($itemURL);
 					} else {
-						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">"'.$itemtitle.'</a>';
+						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">'.$itemtitle.'</a>';
 					}
 				}
 			}

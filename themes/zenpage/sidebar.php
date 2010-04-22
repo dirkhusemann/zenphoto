@@ -1,4 +1,11 @@
-<?php if(function_exists("printAllNewsCategories")) { ?>
+<?php 
+if(function_exists('printCustomMenu') && getOption('zenpage_custommenu')) { ?>
+<div class="menu">
+<?php printCustomMenu('default','list','',"menu-active","submenu","menu-active",0); ?>
+</div>
+<?php
+} else {
+if(function_exists("printAllNewsCategories")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("News articles"); ?></h3>
 	<?php printAllNewsCategories(gettext("All news"),TRUE,"","menu-active"); ?>
@@ -24,7 +31,8 @@
 	<h3><?php echo gettext("Pages"); ?></h3>
 	<?php	printPageMenu("list","","menu-active","submenu","menu-active"); ?>
 </div>
-<?php } ?>
+<?php } 
+} // custom menu check end ?>
 
 <div class="menu">
 <h3><?php echo gettext("Archive"); ?></h3>
