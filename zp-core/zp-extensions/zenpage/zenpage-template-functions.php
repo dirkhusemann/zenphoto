@@ -913,13 +913,12 @@ function isProtectedNewsCategory($catlink='') {
 		$catlink = $_zp_current_category;
 	}
 	$categories = getAllCategories();
-	foreach($categories as $cat) {
-		if($cat['cat_link'] == $catlink && (!empty($cat['password']) || !is_null($cat['password']))) {
-			return true;
-			break;
-		}
+	if (array_key_exists($catlink,$categories)) {
+		$cat = $categories[$catlink];
+		return !empty($categories[$catlink]['password']);
+	} else {
+		return false;
 	}
-	return false;
 }
 
 	
