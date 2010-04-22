@@ -9,6 +9,15 @@ if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 2); // don't need any admin t
 require_once(dirname(__FILE__) . "/functions.php");
 require_once(dirname(__FILE__) . "/functions-image.php");
 
+if (isset($_GET['dsp'])) {
+	$disposal = sanitize($_GET['dsp']);
+} else {
+	$disposal = getOption('protect_full_image');
+}
+if ($disposal == 'No access') {	// illegal use of the script!
+		pageError(403, gettext("Forbidden"));
+		exit();
+}
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	header("HTTP/1.0 404 Not Found");
@@ -131,11 +140,6 @@ if (isset($_GET['q'])) {
 	$quality = sanitize_numeric($_GET['q']);
 } else {
 	$quality = getOption('full_image_quality');
-}
-if (isset($_GET['dsp'])) {
-	$disposal = sanitize($_GET['dsp']);
-} else {
-	$disposal = getOption('protect_full_image');
 }
 if (empty($watermark_use_image) && !$rotate) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && $disposal != 'Download') { // local album system, return the image directly
