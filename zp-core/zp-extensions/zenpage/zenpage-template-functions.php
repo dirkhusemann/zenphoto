@@ -872,6 +872,59 @@ function inNewsCategory($catlink) {
 
 
 /**
+ * Checks if an article is in a password protected category and returns TRUE or FALSE
+ *
+ * @param bool $checkProtection If set to TRUE (default) this check if the article is actually protected (remember only articles that are in the protected category only are!).
+ * 															If set to FALSE it simply checks if it is in an otherwise protected category at all
+ * @param obj $articleobj Optional news article object to check directly, if empty the current news article is checked if available
+ * @return bool
+ */
+function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
+	global $_zp_current_zenpage_news;
+	if(empty($articleobj) && !is_null($_zp_current_zenpage_news)) {
+		$articleobj = $_zp_current_zenpage_news;
+	}
+	$categories = $articleobj->getCategories();
+	if($checkProtection) {
+		$catcount = count($categories);
+	} else {
+		$catcount = 0;
+	}
+	$count = 0;
+	if($catcount == 1) {
+		foreach($categories as $cat) {
+			if(!empty($cat['password']) || !is_null($cat['password'])) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Checks if a category is protected and returns TRUE or FALSE
+ *
+ * @param string $catlink The optional categorylink of a category, if empty the current category is checked if available
+ * @return bool
+ */	
+function isProtectedNewsCategory($catlink='') {
+	global $_zp_current_category;
+	if(empty($catlink) && !is_null($_zp_current_category)) {
+		$catlink = $_zp_current_category;
+	}
+	$categories = getAllCategories();
+	foreach($categories as $cat) {
+		if($cat['cat_link'] == $catlink && (!empty($cat['password']) || !is_null($cat['password']))) {
+			return true;
+			break;
+		}
+	}
+	return false;
+}
+
+	
+
+/**
  * Gets the date of the current news article
  *
  * @return string

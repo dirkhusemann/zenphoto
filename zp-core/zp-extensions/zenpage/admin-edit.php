@@ -162,7 +162,14 @@ if(is_object($result)) {
 } ?>
 </h1>
 <p class="buttons">
-<strong><a href="admin-news-articles.php?<?php echo $page; ?>" title="<?php echo gettext("Back"); ?>"><img	src="../../images/arrow_left_blue_round.png" alt="" /><?php echo gettext("Back"); ?></a></strong>
+<?php 
+if(is_AdminEditPage("newsarticle")) {
+	$backurl = 'admin-news-articles.php?'.$page;
+} else {
+	$backurl = 'admin-pages.php';
+}
+?>
+<strong><a href="<?php echo $backurl; ?>" title="<?php echo gettext("Back"); ?>"><img	src="../../images/arrow_left_blue_round.png" alt="" /><?php echo gettext("Back"); ?></a></strong>
 <?php if(is_AdminEditPage("newsarticle")) { ?>
 	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
 <?php } else if(is_AdminEditPage("page")) { ?>

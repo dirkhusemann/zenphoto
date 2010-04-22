@@ -543,8 +543,6 @@ function getParentPages(&$parentid,$initparents=true) {
 			return $totalcount;
 		}
 	}
-	
-	
 
 	/************************************/
 	/* general news category functions  */
