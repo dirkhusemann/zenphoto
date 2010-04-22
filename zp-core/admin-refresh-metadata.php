@@ -112,9 +112,6 @@ if (isset($_GET['refresh']) && db_connect()) {
 	}
 	if (!empty($ret)) $ret = '&amp;return='.$ret;
 	$starturl = '?'.$type.'refresh=start'.$album.$ret;
-	if (!empty($id)) {
-		
-	}
 	?>
 	<meta http-equiv="refresh" content="1; url=<?php  echo$starturl; ?>" />
 	<?php
@@ -144,6 +141,10 @@ if (isset($_GET['refresh']) && db_connect()) {
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
 	if ($type !== 'prune&amp;') {
+		if (!empty($id)) {
+			$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0".getOption('album_use_new_image_date')?", `date`=NULL WHERE `id`=$id":'';
+			query($sql);
+		}
 		$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 $albumwhere";
 		query($sql);
 		$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $imagewhere;";
