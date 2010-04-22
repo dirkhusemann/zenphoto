@@ -320,7 +320,7 @@ if (empty($alterrights)) {
 			<!-- apply alterrights filter -->
 			<?php $local_alterrights = zp_apply_filter('admin_alterrights', $local_alterrights, $userobj); ?>
 			<!-- apply admin_custom_data filter -->
-			<?php $custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current); ?>
+			<?php $custom_row = zp_apply_filter('edit_admin_custom_data', '', $userobj, $id, $background, $current, $local_alterrights); ?>
 			<!-- finished with filters -->
 			<tr>
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
@@ -367,45 +367,59 @@ if (empty($alterrights)) {
 							</a>
 						</span>
 					</td>
-					<td width="345" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
-					<?php 
-					if (empty($userid)) {
-							?>
-							<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
-								onclick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
-							<?php
-						} else {
-							echo $master;
-						}
-						if ($pending) {
+					<?php
+					if (!$alterrights) {
 						?>
-							<input type="checkbox" name="<?php echo $id ?>-confirmed" value="<?php echo NO_RIGHTS; echo $alterrights; ?>" />
-							<?php echo gettext("Authenticate user"); ?>
-							<?php
-						} else {
-							?>
-							<input type = "hidden" name="<?php echo $id ?>-confirmed"	value="<?php echo NO_RIGHTS; ?>" />
-							<?php 
-						}
-			 			?>
-		 			</td>
-					<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
+						<td width="345" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 						<?php 
-						if(!empty($userid) && count($admins) > 2) { 
-							$msg = gettext('Are you sure you want to delete this user?');
-							if ($id == 0) {
-								$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
+						if (empty($userid)) {
+								?>
+								<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
+									onclick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
+								<?php
+							} else {
+								echo $master;
 							}
+							if ($pending) {
+							?>
+								<input type="checkbox" name="<?php echo $id ?>-confirmed" value="<?php echo NO_RIGHTS; echo $alterrights; ?>" />
+								<?php echo gettext("Authenticate user"); ?>
+								<?php
+							} else {
+								?>
+								<input type = "hidden" name="<?php echo $id ?>-confirmed"	value="<?php echo NO_RIGHTS; ?>" />
+								<?php 
+							}
+				 			?>
+			 			</td>
+						<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
+							<?php 
+							if(!empty($userid) && count($admins) > 2) { 
+								$msg = gettext('Are you sure you want to delete this user?');
+								if ($id == 0) {
+									$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
+								}
+							?>
+							<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+								title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
+								src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
+							<?php
+							}
+							?>
+							&nbsp;
+							</td>
+							<?php
+					} else  {
 						?>
-						<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
-							title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
-							src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
-						<?php
-						}
-						?>
-						&nbsp;
+						<td colspan="2" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
+							<span class="notebox">
+								<?php echo gettext('<strong>Note:</strong> You must have ADMIN rights to alter anything but your personal infrormation.')?>
+							</span>
 						</td>
-					</tr>
+						<?php
+					}
+					?>
+				</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
 				<td width="20%" <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?>
@@ -448,28 +462,28 @@ if (empty($alterrights)) {
 						value="<?php echo $userobj->getEmail();?>" />
 				</td>
 				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
-						<?php
-						if ($_zp_loggedin & (MANAGE_ALL_ALBUM_RIGHTS | ADMIN_RIGHTS)) {
-							$album_alter_rights = $local_alterrights;
-						} else {
-							$album_alter_rights = ' disabled="disabled"';
-						}
-						if ($current && $ismaster) {
-							echo '<p>'.gettext("The <em>master</em> account has full rights to all albums.").'</p>';
-						} else {
-							printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
-						}
-						?>
+					<?php
+					if ($_zp_loggedin & (MANAGE_ALL_ALBUM_RIGHTS | ADMIN_RIGHTS)) {
+						$album_alter_rights = $local_alterrights;
+					} else {
+						$album_alter_rights = ' disabled="disabled"';
+					}
+					if ($current && $ismaster) {
+						echo '<p>'.gettext("The <em>master</em> account has full rights to all albums.").'</p>';
+					} else {
+						printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
+					}
+					?>
 					<p>
 						<?php
-							if (!$ismaster) {
-								if (empty($album_alter_rights)) {
-									echo gettext("Select one or more albums for the administrator to manage.").' ';
-									echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
-								} else {
-									echo gettext("You may manage these albums subject to the above rights.");
-								}
+						if (!$ismaster) {
+							if (empty($album_alter_rights)) {
+								echo gettext("Select one or more albums for the administrator to manage.").' ';
+								echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
+							} else {
+								echo gettext("You may manage these albums subject to the above rights.");
 							}
+						}
 						?>
 					</p>
 				</td>

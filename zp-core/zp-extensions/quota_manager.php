@@ -104,7 +104,7 @@ function quota_save_admin($discard, $userobj, $i) {
  * @param bool $current true if this admin row is the logged in admin
  * @return string
  */
-function quota_edit_admin($html, $userobj, $i, $background, $current) {
+function quota_edit_admin($html, $userobj, $i, $background, $current, $local_alterrights) {
 	if ($userobj->getRights() & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return $html;
 	if (!($userobj->getRights() & UPLOAD_RIGHTS)) return $html;
 	$quota = $userobj->getQuota();
@@ -114,7 +114,7 @@ function quota_edit_admin($html, $userobj, $i, $background, $current) {
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Quota:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
-				sprintf(gettext('Allowed: %s kb'),'<input type="text" size="10" name="'.$i.'quota" value="'.$quota.'" />').' '.
+				sprintf(gettext('Allowed: %s kb'),'<input type="text" size="10" name="'.$i.'quota" value="'.$quota.'" '.$local_alterrights.' />').' '.
 				sprintf(gettext('(%s kb used)'),number_format($used)).
 				"\n".
 			'</td>
