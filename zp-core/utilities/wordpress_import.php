@@ -86,13 +86,14 @@ printAdminHeader();
 <div id="main">
 <?php printTabs('home'); ?>
 <div id="content">
-<h1><?php echo (gettext('Wordpress Importer [beta version]')); ?></h1>
+<h1><?php echo (gettext('Wordpress Importer')); ?></h1>
 <p><?php echo gettext("An importer for <strong>Wordpress 2.9.x</strong> to the Zenpage CMS plugin that imports the following:"); ?></p>
 <ul>
 	<li><?php echo gettext("<strong>Posts => Zenpage articles</strong>"); ?></li>
 	<li><?php echo gettext("<strong>Pages => Zenpage pages</strong>"); ?></li>
 	<li><?php echo gettext("<strong>Post categories => Zenpage categories including assignment to their article</strong>"); ?></li>
 	<li><?php echo gettext("<strong>Post tags => Zenphoto tags including assignment to their article</strong>"); ?></li>
+	<li><?php echo gettext("<strong>Post and page comments => Zenphoto comments including assignment to their article</strong>"); ?></li>
 </ul>
 <p class="notebox">
 <?php echo gettext("<strong>IMPORTANT: </strong>If you are not using an fresh Zenphoto install it is <strong>strongly recommended to backup your database</strong> before running this importer. Make also sure that both databases use the same encoding so you do not get messed up character display."); ?>
@@ -136,17 +137,17 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 		if(empty($wp_dbpassword)) $wp_dbpassword = $missingmessage;
 		if(empty($wp_dbhost)) $wp_dbhost = $missingmessage;
 		printWPDatabaseInfo($wp_dbname,$wp_dbbuser,$wp_dbpassword,$wp_dbhost,$wp_prefix);
-		wpimport_TryAgainError(gettext("<strong>ERROR:</strong> Wordpress database info incomplete"));
+		wpimport_TryAgainError(gettext('<strong>ERROR:</strong> Wordpress database info incomplete'));
 		die();
 	}
 	printWPDatabaseInfo($wp_dbname,$wp_dbbuser,$wp_dbpassword,$wp_dbhost,$wp_prefix);
 		$wpdbconnection = @mysql_connect($wp_dbhost,$wp_dbbuser,$wp_dbpassword,true); // open 2nd connection to Wordpress additonally to the existing Zenphoto connection
 		if(!$wpdbconnection) {
-			wpimport_TryAgainError(gettext("<strong>ERROR:</strong> Could not connect to the Wordpress database - Query failed : ") . mysql_error());
+			wpimport_TryAgainError(gettext('<strong>ERROR:</strong> Could not connect to the Wordpress database - Query failed : ') . mysql_error());
 			die();
 		}
 		if(!@mysql_select_db($wp_dbname,$wpdbconnection)) {
-			wpimport_TryAgainError(gettext("<strong>ERROR:</strong> Wordpress database could not be selected - Query failed : ") . mysql_error());
+			wpimport_TryAgainError(gettext('<strong>ERROR:</strong> Wordpress database could not be selected - Query failed : ') . mysql_error());
 			die();
 		}
 		?>
@@ -164,13 +165,13 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 		foreach($cats as $cat) {
 			if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink) VALUES ('".zp_escape_string($cat['name'])."', '".
 			zp_escape_string(seoFriendly($cat['slug']))."','1')", true)) {
-				echo "<li class='messagebox'>".sprintf(gettext("Category <em>%s</em> added"),$cat['name'])."</li>";
+				echo '<li class="messagebox">'.sprintf(gettext("Category <em>%s</em> added"),$cat['name']).'</li>';
 			} else {
-				echo "<li class='errorbox'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$cat['name'])."</li>";
+				echo '<li class="errorbox">'.sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$cat['name']).'</li>';
 			}
 		}
 	} else {
-		echo "<li class='notebox'>".gettext("No categories to import.")."</li>";
+		echo '<li class="notebox">'.gettext('No categories to import.').'</li>';
 	}
 	?>
 	</ol>
@@ -187,13 +188,13 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 	if($tags) {
 		foreach($tags as $tag) {
 			if (query("INSERT INTO ".prefix('tags')." (name) VALUES ('".zp_escape_string(seoFriendly($tag['slug']))."')", true)) {
-				echo "<li class='messagebox'>".sprintf(gettext("Tag <em>%s</em> added"),$tag['name'])."</li>";
+				echo '<li class="messagebox">'.sprintf(gettext("Tag <em>%s</em> added"),$tag['name']).'</li>';
 			} else {
-				echo "<li class='errorbox'>".sprintf(gettext("A tag with the title/titlelink <em>%s</em> already exists!"),$tag['name'])."</li>";
+				echo '<li class="errorbox">'.sprintf(gettext("A tag with the title/titlelink <em>%s</em> already exists!"),$tag['name']).'</li>';
 			}
 		}
 	} else {
-		echo "<li class='notebox'>".gettext("No tags to import.")."</li>";
+		echo '<li class="notebox">'.gettext('No tags to import.').'</li>';
 	}
 	?>
 	</ol>
@@ -236,9 +237,9 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 				case 'post':
 					//Add the post to Zenphoto database as Zenpage article
 					if (query("INSERT INTO ".prefix('zenpage_news')." (title,titlelink,content,date,lastchange,`show`) VALUES ('".zp_escape_string($post['title'])."','".zp_escape_string($titlelink)."','".zp_escape_string($post['content'])."','".zp_escape_string($post['date'])."','".zp_escape_string($post['lastchange'])."','".zp_escape_string($show)."')", true)) {
-						echo "<li class='messagebox'>".sprintf(gettext('%1$s <em>%2$s</em> added'),$post['type'], $post['title']);
+						echo '<li class="messagebox">'.sprintf(gettext('%1$s <em>%2$s</em> added'),$post['type'], $post['title']);
 					} else {
-						echo "<li class='errorbox'>".sprintf(gettext('%1$s with the title/titlelink <em>%2$s</em> already exists!'),$post['type'], $post['title']);
+						echo '<li class="errorbox">'.sprintf(gettext('%1$s with the title/titlelink <em>%2$s</em> already exists!'),$post['type'], $post['title']);
 					}	
 					//Get new id of the article
 					$newarticle = new ZenpageNews($titlelink);
@@ -265,12 +266,12 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 									$getcat = query_single_row("SELECT cat_name, cat_link,id from ".prefix('zenpage_news_categories')." WHERE cat_name = '".zp_escape_string($term['name'])."' AND cat_link = '".zp_escape_string($term['slug'])."'");
 									//Prevent double assignments
 									if (query_single_row("SELECT id from ".prefix('zenpage_news2cat')." WHERE news_id = ".zp_escape_string($newarticleid)." AND cat_id=".zp_escape_string($getcat['id']),true)) {
-										echo "<li class='errorbox'>".sprintf(gettext('%1$s <em>%2$s</em> already assigned'),$term['taxonomy'], $term['name']);
+										echo '<li class="errorbox">'.sprintf(gettext('%1$s <em>%2$s</em> already assigned'),$term['taxonomy'], $term['name']);
 									} else {
 										if (query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id,news_id) VALUES ('".zp_escape_string($getcat['id'])."','".zp_escape_string($newarticleid)."')", true)) {
-											echo "<li class='messagebox'>".sprintf(gettext('%1$s <em>%2$s</em> assigned'),$term['taxonomy'], $term['name']);
+											echo '<li class="messagebox">'.sprintf(gettext('%1$s <em>%2$s</em> assigned'),$term['taxonomy'], $term['name']);
 										} else {
-											echo "<li class='errorbox'>".sprintf(gettext('%1$s <em>%2$s</em> could not be assigned!'),$term['taxonomy'], $term['name']);
+											echo '<li class="errorbox">'.sprintf(gettext('%1$s <em>%2$s</em> could not be assigned!'),$term['taxonomy'], $term['name']);
 										}
 									}
 									break;
@@ -279,12 +280,12 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 									$gettag = query_single_row("SELECT name,id from ".prefix('tags')." WHERE name = '".zp_escape_string($term['name'])."'");
 									//Prevent double assignments
 									if (query_single_row("SELECT id from ".prefix('obj_to_tag')." WHERE objectid = ".zp_escape_string($newarticleid)." AND tagid =".zp_escape_string($gettag['id']),true)) {
-										echo "<li class='errorbox'>".sprintf(gettext('%1$s <em>%2$s</em> already assigned'),$term['taxonomy'], $term['name']);
+										echo '<li class="errorbox">'.sprintf(gettext('%1$s <em>%2$s</em> already assigned'),$term['taxonomy'], $term['name']);
 									} else {
 										if (query("INSERT INTO ".prefix('obj_to_tag')." (tagid,type,objectid) VALUES ('".zp_escape_string($gettag['id'])."','zenpage_news','".zp_escape_string($newarticleid)."')",true)) {
-											echo "<li class='messagebox'>".sprintf(gettext('%1$s <em>%2$s</em> assigned'),$term['taxonomy'], $term['name']);
+											echo '<li class="messagebox">'.sprintf(gettext('%1$s <em>%2$s</em> assigned'),$term['taxonomy'], $term['name']);
 										} else {
-											echo "<li class='errorbox'>".sprintf(gettext('%1$s <em>%2$s</em> could not be assigned!'),$term['taxonomy'], $term['name']);
+											echo '<li class="errorbox">'.sprintf(gettext('%1$s <em>%2$s</em> could not be assigned!'),$term['taxonomy'], $term['name']);
 										}
 									} 
 									break;
@@ -298,9 +299,9 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 				case 'page':
 				//Add the page to Zenphoto database as Zenpage page
 					if (query("INSERT INTO ".prefix('zenpage_pages')." (title,titlelink,content,date,lastchange,`show`) VALUES ('".zp_escape_string($post['title'])."','".zp_escape_string($titlelink)."','".zp_escape_string($post['content'])."','".zp_escape_string($post['date'])."','".zp_escape_string($post['lastchange'])."','".zp_escape_string($show)."')", true)) {
-						echo "<li class='messagebox'>".sprintf(gettext('%1$s <em>%2$s</em> added'),$post['type'], $post['title']);
+						echo '<li class="messagebox">'.sprintf(gettext('%1$s <em>%2$s</em> added'),$post['type'], $post['title']);
 					} else {
-						echo "<li class='errorbox'>".sprintf(gettext('%1$s with the title/titlelink <em>%2$s</em> already exists!'),$post['type'], $post['title']);
+						echo '<li class="errorbox">'.sprintf(gettext('%1$s with the title/titlelink <em>%2$s</em> already exists!'),$post['type'], $post['title']);
 					}	
 					break;
 			} // switch end
@@ -313,12 +314,14 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 					$ctype = 'pages';
 					break;
 			} 
-		/*	$comments = wp_query_full_array("
+			$comments = wp_query_full_array("
 						SELECT comment_post_ID, comment_author, comment_author_email, comment_author_url,comment_date, comment_content, comment_approved
 						FROM ".wp_prefix('comments',$wp_prefix)."
 						WHERE comment_post_ID = '".$post['id']."'");
 			$comentcount = "";
+
 			if($comments) {
+				echo '<ul>';
 				foreach($comments as $comment) {
 					$comment['comment_author']  = sanitize($comment['comment_author']);
 					$comment['comment_author_email']  = sanitize($comment['comment_author_email']);
@@ -327,24 +330,24 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 					$comment['comment_content']  = sanitize($comment['comment_content']);
 					$comment['comment_approved']  = sanitize($comment['comment_approved']);
 					if (query_single_row("SELECT * from ".prefix('comments')." WHERE ownerid ='".zp_escape_string($newarticleid)."' AND name='".zp_escape_string($comment['comment_author'])."' AND email ='".zp_escape_string($comment['comment_author_email'])."' AND website ='".zp_escape_string($comment['comment_author_url'])."' AND date ='".zp_escape_string($comment['comment_date'])."' AND comment ='".zp_escape_string($comment['comment_content'])."' AND inmoderation ='".zp_escape_string($comment['comment_approved'])."' AND type='".$ctype."'",true)) {
-						echo "<li class='errorbox'>".gettext("This comment already exists!")."</li>";
+						echo '<li class="errorbox">'.gettext('Comment already exists!').'</li>';
 					} else {
-						if(query("INSERT INTO ".prefix('comments')." (ownerid,name,email,website,date,comment,inmoderation,type) VALUES ('".zp_escape_string($newarticleid)."','".zp_escape_string($comment['comment_author'])."','".zp_escape_string($comment['comment_author_email'])."','".zp_escape_string($comment['comment_author_url'])."','".zp_escape_string($comment['comment_date'])."','".zp_escape_string($comment['comment_content'])."','".zp_escape_string($comment['comment_approved'])."','".$ctype."'",false)) {
+						if(query("INSERT INTO ".prefix('comments')." (ownerid,name,email,website,date,comment,inmoderation,type) VALUES ('".zp_escape_string($newarticleid)."','".zp_escape_string($comment['comment_author'])."','".zp_escape_string($comment['comment_author_email'])."','".zp_escape_string($comment['comment_author_url'])."','".zp_escape_string($comment['comment_date'])."','".zp_escape_string($comment['comment_content'])."','".zp_escape_string($comment['comment_approved'])."','".$ctype."')",false)) {
 							$commentcount++;
 						} else {
-							echo "<li class='errorbox'>".gettext('Comment could not be assigned!');
+							echo '<li class="errorbox">'.gettext('Comment could not be assigned!').'</li>';
 						}
 					}
 				}
-				echo "<p class='messagebox'>".sprintf(gettext('%u comments imported'),$commentcount)."</p>";
+				echo "<li class='messagebox'>".sprintf(gettext('%u comments imported'),$commentcount)."</li>";
 			} else {
-				echo "<p class='notebox'>".gettext('No comments to import')."</p>";
+				echo '<ul><li class="notebox">'.gettext('No comments to import').'</li>';
 			} 
-			debugLogArray('Wordpress import - Comments for "'.$post['title'].'" ('.$post['type'].')', $comments);*/
-			echo '</li>'; 
+			debugLogArray('Wordpress import - Comments for "'.$post['title'].'" ('.$post['type'].')', $comments); 
+			echo '</ul></li>'; 
 		} // posts foreach
 	} else { // if posts are available at all
-		echo "<li class='notebox'>".gettext("No posts or pages to import.")."</li></li>";
+		echo "<li class='notebox'>".gettext("No posts or pages to import.")."</li>";
 	}
 	?>
 	<p class="buttons"><a href="wordpress_import.php"><?php echo gettext('New import'); ?></a></p>
