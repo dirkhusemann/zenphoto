@@ -189,6 +189,7 @@ body {
 	margin-left: 1.6em;
 	border: 0px solid gray;
 	font-style: italic;
+	background-image: none;
 }
 
 .menu ul {
@@ -204,6 +205,22 @@ body {
 	background-image: url(images/arrow_right.gif);
 	background-repeat: no-repeat;
 	background-position: 1px 0px;
+}
+
+.menu ul li.menu_menulabel {
+	padding-left: 0px;
+	font-family: Times, "Times New Roman", Georgia, serif;
+	font-size: 1.2em;
+	font-weight: normal;
+	text-transform: capitalize;
+	letter-spacing: 0.1em;
+	color: black;
+	margin-bottom: 0.5em;
+	margin-top: 0.9em;
+	margin-left: 0em;
+	border: 0px solid gray;
+	font-style: italic;
+	background-image: none;
 }
 
 .menu li a.menu-active  {

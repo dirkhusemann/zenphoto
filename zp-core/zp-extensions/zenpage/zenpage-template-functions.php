@@ -2352,6 +2352,37 @@ function printParentPagesBreadcrumb($before='', $after='') {
 	}
 }
 
+/**
+ * Checks if the page is itself password protected or is inheriting protection from a parent pages.
+ *
+ * @param bool $checkProtection TRUE (default) if you want to check if if this page itself is protected or inherits protection
+ * 															FALSE to check if the page itself is password protected only
+ * @param obj $pageobj Optional page object to test directly, otherwise the current page is checked if available.
+ */
+function isProtectedPage($checkProtection=true,$pageobj='') {
+	global $_zp_current_zenpage_page;
+	if(empty($pageobj) && !is_null($_zp_current_zenpage_page)) {
+		$pageobj = $_zp_current_zenpage_page;
+		$parentid = getPageParentID();
+	} else {
+		$parentid = $pageobj->getParentID();
+	}
+	$password = $pageobj->getPassword(); 
+	if(!empty($password) || !is_null($password)) {
+		return true;
+	}
+	if($checkProtection) {
+		$parentpages = getParentPages($parentid);
+		foreach($parentpages as $parentpage) {
+			$parentobj = new ZenpagePage($parentpage);
+			$parentpassword = $parentobj->getPassword();
+			if(!empty($parentpassword) || !is_null($parentpassword)) {
+				return true;
+			}
+		}
+	}
+	return false;
+} 
 
 /**
  * Prints a context sensitive menu of all pages as a unordered html list
