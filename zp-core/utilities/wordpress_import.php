@@ -112,11 +112,11 @@ die();
 <?php if(!isset($_POST['dbname']) && !isset($_POST['dbuser']) && !isset($_POST['dbpass']) && !isset($_POST['dbhost'])) { ?>
 <h2><?php echo gettext('Please enter your Wordpress database details:'); ?></h2>
 <form action="" method="post" name="wordpress">
-	<input type="text" value="wordpress" id="dbname" name="dbname"> <label for="dbname"><?php echo gettext("Database name"); ?></label><br />
-	<input type="text" value="root" id="dbuser" name="dbuser"> <label for="db"><?php echo gettext("Database user"); ?></label><br />
-	<input type="text" value="root" id="dbpass" name="dbpass"> <label for="dbnuser"><?php echo gettext("Database password"); ?></label><br />
-	<input type="text" value="localhost" id="dbhost" name="dbhost"> <label for="dbhost"><?php echo gettext("Database host"); ?></label><br />
-	<input type="text" value="wp_" name="tableprefix"> <label for="tableprefix"><?php echo gettext("Database table prefix"); ?></label><br />
+	<input type="text" value="wordpress" id="dbname" name="dbname" /> <label for="dbname"><?php echo gettext("Database name"); ?></label><br />
+	<input type="text" value="root" id="dbuser" name="dbuser" /> <label for="db"><?php echo gettext("Database user"); ?></label><br />
+	<input type="text" value="root" id="dbpass" name="dbpass" /> <label for="dbnuser"><?php echo gettext("Database password"); ?></label><br />
+	<input type="text" value="localhost" id="dbhost" name="dbhost" /> <label for="dbhost"><?php echo gettext("Database host"); ?></label><br />
+	<input type="text" value="wp_" name="tableprefix" /> <label for="tableprefix"><?php echo gettext("Database table prefix"); ?></label><br />
 	<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo gettext("Import"); ?>"><img src="../images/pass.png" alt="" /><strong><?php echo gettext("Import"); ?></strong></button></p>
 	<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
 	<br style="clear:both" />
@@ -318,7 +318,7 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 						SELECT comment_post_ID, comment_author, comment_author_email, comment_author_url,comment_date, comment_content, comment_approved
 						FROM ".wp_prefix('comments',$wp_prefix)."
 						WHERE comment_post_ID = '".$post['id']."'");
-			$comentcount = "";
+			$commentcount = "";
 
 			if($comments) {
 				echo '<ul>';
@@ -339,7 +339,7 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 						}
 					}
 				}
-				echo "<li class='messagebox'>".sprintf(gettext('%u comments imported'),$commentcount)."</li>";
+				//echo "<li class='messagebox'>".sprintf(gettext('%u comments imported'),$commentcount)."</li>";
 			} else {
 				echo '<ul><li class="notebox">'.gettext('No comments to import').'</li>';
 			} 
