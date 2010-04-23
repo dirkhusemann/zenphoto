@@ -35,11 +35,12 @@ $result = "";
 if(isset($_GET['id'])) {
 	$result = getItem(sanitize($_GET['id']));
 }
-if(isset($_GET['update'])) {
-	$result = updateItem();
-}
 if(isset($_GET['save'])) {
-	$result = addItem();
+	if ($_POST['update']) {
+		$result = updateItem();
+	} else {
+		$result = addItem();
+	}
 }
 if(isset($_GET['del'])) {
 	deleteItem();
@@ -152,6 +153,12 @@ function handleSelectorChange(type) {
 			$('#link_label').html('<?php echo gettext('Function'); ?>');
 			$('#link').removeAttr('disabled');
 			break;
+		case 'hr':
+			$('#albumselector,#pageselector,#categoryselector,#titlelabel,#titleinput,#custompageselector,#link_row').hide();
+			$('#selector').html('<?php echo gettext("Horizontal rule"); ?>');
+			$('#description').html('<?php echo gettext('Inserts a horizontal rule.'); ?>');
+			$('#link_label').html('<?php echo gettext('Horizontal rule'); ?>');
+			break;
 		case "":
 			$("#selector").html("");
 			$("#add").hide();
@@ -162,26 +169,24 @@ function handleSelectorChange(type) {
 </script>
 <script type="text/javascript">
 	//<!-- <![CDATA[
-	<?php
-	if (is_array($result)) {
-		?>
 		$(document).ready(function() {
+			<?php
+			if (is_array($result)) {
+				?>
 				handleSelectorChange('<?php echo $result['type']; ?>');
-			});
-		<?php
-	} else {
-		?>
-		$(document).ready(function() {
-			$('#albumselector,#pageselector,#categoryselector,#titleinput').hide();
+				<?php
+			} else {
+				?>
+				$('#albumselector,#pageselector,#categoryselector,#titleinput').hide();
+				<?php
+			}
+			?>
 			$('#typeselector').change(function() {
 					$('input').val(''); // reset all input values so we do not carry them over from one type to another
 					$('#link').val('');
 					handleSelectorChange($(this).val());
 				});
 			});
-		<?php
-	}
-	?>
 	//]]> -->
 </script>
 <h1>
@@ -201,18 +206,17 @@ if(is_array($result) && $result['id']) {
 <br clear="all" /><br />
 <div class="box" style="padding:15px; margin-top: 10px">
 <?php
+$action = $type = $id = $link = '';
 if(is_array($result)) {
 	$type = $result['type'];
-	?>
-	<form method="post" action="menu_tab_edit.php?update" name="update">
-	<input type="hidden" name="id" value="<?php if(is_array($result)) { echo $result['id']; };?>" />
-	<input type="hidden" name="link-old" type="text" id="link-old" value="<?php echo $result['link'];?>" />
-	<input type="hidden" name="menuset" id="menuset" value="<?php echo $menuset; ?>" />
-	<?php
-} else {
-	$type = '';
+	$id = $result['id'];
+	if (array_key_exists('link',$result)) {
+		$link = $result['link'];
+	}
+	$action = '1';
 }
 if (isset($_GET['add'])) {
+	$add = '&amp;add'
 	?>
 	<select id="typeselector" name="typeselector">
 		<option value=""><?php echo gettext("*Select the type of the menus item you wish to add*"); ?></option>
@@ -235,11 +239,17 @@ if (isset($_GET['add'])) {
 		<option value="customlink"><?php echo gettext("Custom link"); ?></option>
 		<option value="menulabel"><?php echo gettext("Label"); ?></option>
 		<option value="menufunction"><?php echo gettext("Function"); ?></option>
+		<option value="hr"><?php echo gettext("Horizontal rule"); ?></option>
 	</select>
-	<form method="post" id="add" name="add" action="menu_tab_edit.php?add&amp;save" style="display: none">
-	<?php
+	<?php 
+} else {
+	$add = '&amp;update';
 }
 ?>
+	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
+		<input type="hidden" name="update" id="update" value="<?php echo $action; ?>" />
+		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
+		<input type="hidden" name="link-old" id="link-old" type="text" value="<?php echo $link; ?>" />
 		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />
 		<table style="width: 80%">
 		<?php

@@ -169,7 +169,7 @@ function printItemEditLink($item) {
 			$link = '<a href="../zenpage/admin-categories.php?edit&id='.$catid.'&tab=categories">'.$title.'</a>';
 			break;
 		default:
-			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".zp_escape_string(checkChosenMenuset()).'">'.$title.'</a>';
+			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.$title.'</a>';
 			break;		
 	}
 	echo $link;
@@ -214,7 +214,7 @@ function printItemStatusDropdown() {
  */
 function getMenuSetSelector($active) {
 	$menuset = checkChosenMenuset();
-	$menusets = array($menuset => $menuset);
+	$menusets = array($menuset => $menuset,'default'=>'default');
 	$result = query_full_array("SELECT DISTINCT menuset FROM ".prefix('menu')." ORDER BY menuset");
 	foreach ($result as $set) {
 		$menusets[$set['menuset']] = $set['menuset'];
@@ -503,6 +503,11 @@ function addItem() {
 				return $result;
 			}
 			$successmsg = sprintf(gettext("Function  menu item <em>%s</em> added"),$result['link']);
+			break;
+		case 'hr':
+			$result['title'] = gettext("Horizontal rule");
+			$result['link'] = date('r');
+			$successmsg = gettext("Horizontal rule added");
 			break;
 	}
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';

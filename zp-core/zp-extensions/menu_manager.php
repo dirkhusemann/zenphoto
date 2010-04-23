@@ -95,13 +95,13 @@ function getItem($id) {
  *
  * @return string
  */
-function checkChosenMenuset() {
+function checkChosenMenuset($default='default') {
 	if(isset($_GET['menuset'])) {
 		$menuset = sanitize($_GET['menuset']);
 	} else if(isset($_POST['menuset'])) {
 		$menuset = sanitize($_POST['menuset']);
 	} else {
-		$menuset = "default";
+		$menuset = $default;
 	}
 	return $menuset;
 }
@@ -163,6 +163,9 @@ function getItemTitleAndURL($item) {
 			break;
 		case 'menufunction':
 			$array = array("title"=>$item['link'],"url"=>$item['link'],"name"=>$item['link']);
+			break;
+		case 'hr':
+			$array = array("title"=>$item['title'],"url" => NULL,'name'=>'<hr />');
 			break;
 	}
 	return $array;
@@ -600,6 +603,10 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					}
 					$result['title'] = $result['link'];
 					break;
+				case 'hr':
+					$result['title'] = gettext('Horizontal rule');
+					$result['link'] = date('r');
+					break;
 			}
 			if ($success >0 && $type) {
 				$orders[$nesting]++;
@@ -722,7 +729,11 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle; 
 			} else {
 				if (is_null($itemURL)) {
-					echo '<li class="menu_'.$item['type'].'">'.$itemtitle;
+					if ($item['type'] == 'hr') {
+						echo '<hr />';
+					} else {
+						echo '<li class="menu_'.$item['type'].'">'.$itemtitle;
+					}
 				} else {
 					echo '<li class="menu_'.$item['type'].'">';
 					if ($item['type']=='menulabel') {

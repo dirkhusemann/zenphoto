@@ -30,10 +30,16 @@ printTabs("menu");
 ?>
 <div id="content">
 <?php
-if (isset($_GET['menuset'])) { 
-	$menuset = checkChosenMenuset();
-} else {	//	setup default menuset
-	$menuset = 'default';
+$menuset = checkChosenMenuset('');
+if (empty($menuset)) {	//	setup default menuset
+	$result = query_full_array("SELECT DISTINCT menuset FROM ".prefix('menu'));
+	if (is_array($result)) {	// default to the first one
+		$set = array_shift($result);
+		$menuset = $set['menuset'];
+	} else {
+		$menuset = 'default';
+	}
+	$_GET['menuset'] = $menuset;
 }
 
 if(isset($_POST['update'])) {
