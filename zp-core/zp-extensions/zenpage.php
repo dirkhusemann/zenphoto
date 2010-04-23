@@ -140,7 +140,7 @@ function zenpageCheckForGuest($auth) {
  * @param bool $fail
  */
 function zenpageIsMyItem($fail) {
-	global $_zp_gallery_page;
+	global $_zp_gallery_page,$_zp_current_zenpage_page,$_zp_current_zenpage_news;
 	switch($_zp_gallery_page) {
 		case ZENPAGE_PAGES.'.php':
 			if (isMyPage($_zp_current_zenpage_page, LIST_PAGE_RIGHTS)) return false;

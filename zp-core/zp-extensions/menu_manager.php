@@ -136,6 +136,7 @@ function getItemTitleAndURL($item) {
 		case "album":
 			$obj = new Album($gallery,$item['link']);
 			$url = rewrite_path("/".$item['link'],"/index.php?album=".$item['link']);
+			
 			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
 			break;
 		case "zenpagepage":
@@ -144,7 +145,11 @@ function getItemTitleAndURL($item) {
 			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
 			break;
 		case "zenpagenewsindex":
-			$url = rewrite_path("/".ZENPAGE_NEWS,"/index.php?p=".ZENPAGE_NEWS);
+			if(getOption("zenpage_zp_index_news")) {
+				$url = WEBPATH;
+			} else {
+				$url = rewrite_path("/".ZENPAGE_NEWS,"/index.php?p=".ZENPAGE_NEWS);
+			}
 			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url); 
 			break;
 		case "zenpagecategory":
@@ -646,10 +651,13 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
  * @param string $$css_class_active CSS class of the sub level list(s)
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" (default) if you don't use it, it is not printed then.
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
+ * @param bool $counter TRUE (FALSE default) if you want the count of articles for Zenpage news categories or images/subalbums for albums.
+
  * @return string
  */
-function printCustomMenu($menuset='default', $option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$showsubs=0) {
+function printCustomMenu($menuset='default', $option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$showsubs=0,$counter=false) {
 	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page, $_zp_current_category;
+	$itemcounter = '';
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
@@ -659,7 +667,6 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	echo "<ul$css_id>";
 	$sortorder = getCurrentMenuItem();
 	$pageid = $items[$sortorder]['id'];
-	
 	$baseindent = max(1,count(explode("-", $sortorder)));
 	$indent = 1;
 	$open = array($indent=>0);
@@ -720,26 +727,49 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 			echo str_pad("\t",$indent-1,"\t");
 			$open[$indent]++;
 			$parents[$indent] = $item['id'];
+			if($counter) {
+				switch($item['type']) {
+					case'album':
+						$albumobj = new Album($_zp_gallery,$item['link']);
+						$numimages = $albumobj->getNumImages();
+						$numsubalbums = $albumobj->getNumAlbums();
+						if($numimages != 0) {
+							$itemcounter = "<small> ".sprintf(ngettext('(%u image)', '(%u images)',$numimages),$numimages)."</small>";
+						} else {
+							$itemcounter = "<small> ".sprintf(ngettext('(%u album)', '(%u albums)',$numsubalbums),$numsubalbums)."</small>";
+						}
+						break;
+					case'zenpagecategory':
+						if((zp_loggedin(ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
+							$published = "all";
+						} else {
+							$published = "published";
+						}
+						$catcount = countArticles($item['link'],$published);
+						$itemcounter = "<small> (".$catcount.")</small>";
+						break;
+				}
+			}
 			if ($item['id'] == $pageid) {
 				if($level == 1) { // top level
 					$class = $css_class_topactive;
 				} else {
 					$class = $css_class_active;
 				}
-				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle; 
+				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle.$itemcounter; 
 			} else {
 				if (is_null($itemURL)) {
 					if ($item['type'] == 'hr') {
 						echo '<hr />';
 					} else {
-						echo '<li class="menu_'.$item['type'].'">'.$itemtitle;
+						echo '<li class="menu_'.$item['type'].'">'.$itemtitle.$itemcounter;
 					}
 				} else {
 					echo '<li class="menu_'.$item['type'].'">';
 					if ($item['type']=='menulabel') {
 						eval($itemURL);
 					} else {
-						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">'.$itemtitle.'</a>';
+						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">'.$itemtitle.'</a>'.$itemcounter;
 					}
 				}
 			}
