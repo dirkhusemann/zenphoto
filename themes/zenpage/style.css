@@ -179,7 +179,7 @@ body {
 }
 
 .menu h3 {
-	font-size: 1.2em;
+	font-size: 15px;
 	font-weight: normal;
 	text-transform: capitalize;
 	letter-spacing: 0.1em;
@@ -197,6 +197,7 @@ body {
 	padding-left: 1.8em;
 	padding-right: 1em;
 	margin-top: 0.2em;
+	font-size: 13px;
 }
 
 .menu ul li {
@@ -210,7 +211,7 @@ body {
 .menu ul li.menu_menulabel {
 	padding-left: 0px;
 	font-family: Times, "Times New Roman", Georgia, serif;
-	font-size: 1.2em;
+	font-size: 15px;
 	font-weight: normal;
 	text-transform: capitalize;
 	letter-spacing: 0.1em;
@@ -233,6 +234,13 @@ body {
 	padding: 0px;
 }
 
+.menu ul li.menu_menulabel ul.submenu li {
+		font-size: 13px;
+	letter-spacing: 0;
+		font-style: normal;
+	font-family: "Helvetica Neue", "Lucida Grande", Helvetica, Arial,
+		sans-serif;
+}
 
 #footer {
 	width: 950px;
