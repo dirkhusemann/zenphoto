@@ -331,11 +331,10 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageDims($filename) {
 		$ping = new Imagick();
-		$ping->pingImage($filename);
-		if ($ping != false) {
+		if ($ping->pingImage($filename)) {
 			return array('width'=>$ping->getImageWidth(), 'height'=>$ping->getImageHeight());
 		}
-		return $ping;
+		return false;
 	}
 
 	/**
@@ -347,16 +346,16 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageIPTC($filename) {
 		$ping = new Imagick();
-		$ping->pingImage($filename);
-		if ($ping != false) {
+		if ($ping->pingImage($filename)) {
 			try {
 				return $ping->getImageProfile('exif');
 			} catch (ImagickException $e) {
-				debugLog('This exception should NEVER be triggered; just a failsafe!');
-				debugLog('Caught ImagickException in zp_imageIPTC(): ' . $e->getMessage());
+				if (DEBUG_IMAGE) {
+					debugLog('Caught ImagickException in zp_imageIPTC(): ' . $e->getMessage());
+				}
 			}
 		}
-		return $ping;
+		return false;
 	}
 
 	/**
@@ -536,8 +535,9 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 			try {
 				$draw->setFont($font);
 			} catch(ImagickDrawException $e) {
-				debugLog('Invalid font name; using system default font.');
-				debugLog('Caught ImagickDrawException in zp_imageLoadFont(): ' . $e->getMessage());
+				if (DEBUG_IMAGE) {
+					debugLog('Caught ImagickDrawException in zp_imageLoadFont(): ' . $e->getMessage());
+				}
 			}
 		}
 		$draw->setFontSize(getOption('magick_font_size'));
