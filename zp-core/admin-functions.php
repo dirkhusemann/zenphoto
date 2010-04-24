@@ -2858,7 +2858,6 @@ function postAlbumSort($parentid) {
 			$id = str_replace('id_','',$id);
 			$sortToID[implode('-',$orderlist)] = $id;
 		}
-
 		foreach ($order as $item=>$orderlist) {
 			$item = str_replace('id_','',$item);
 			$currentalbum = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$item);
@@ -2868,32 +2867,30 @@ function postAlbumSort($parentid) {
 			} else {
 				$newparent = $parentid;
 			}
-			if (count($orderlist)>0 || ($parentid==NULL && zp_loggedin(ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) {
-				if ($newparent == $currentalbum['parentid']) {
-					$sql = 'UPDATE '.prefix('albums').' SET `sort_order`="'.$sortorder.'" WHERE `id`='.$item;
-					query($sql);
-				} else {	// have to do a move
-					$albumname = $currentalbum['folder'];
-					$album = new Album($gallery, $albumname);
-					if (strpos($albumname,'/') !== false) {
-						$albumname = basename($albumname);
-					}
-					if (is_null($newparent)) {
-						$dest = $albumname;
+			if ($newparent == $currentalbum['parentid']) {
+				$sql = 'UPDATE '.prefix('albums').' SET `sort_order`="'.$sortorder.'" WHERE `id`='.$item;
+				query($sql);
+			} else {	// have to do a move
+				$albumname = $currentalbum['folder'];
+				$album = new Album($gallery, $albumname);
+				if (strpos($albumname,'/') !== false) {
+					$albumname = basename($albumname);
+				}
+				if (is_null($newparent)) {
+					$dest = $albumname;
+				} else {
+					$parent = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$newparent);
+					if ($parent['dynamic']) {
+						return "&mcrerr=5";
 					} else {
-						$parent = query_single_row('SELECT * FROM '.prefix('albums').' WHERE `id`='.$newparent);
-						if ($parent['dynamic']) {
-							return "&mcrerr=5";
-						} else {
-							$dest = $parent['folder'].'/' . $albumname;
-						}
+						$dest = $parent['folder'].'/' . $albumname;
 					}
-					if ($e = $album->moveAlbum($dest)) {
-						return "&mcrerr=".$e;
-					} else {
-						$album->setSortOrder($sortorder);		
-						$album->save();
-					}
+				}
+				if ($e = $album->moveAlbum($dest)) {
+					return "&mcrerr=".$e;
+				} else {
+					$album->setSortOrder($sortorder);		
+					$album->save();
 				}
 			}
 		}
