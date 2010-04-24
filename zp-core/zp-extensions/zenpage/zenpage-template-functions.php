@@ -189,13 +189,13 @@ function getNumNews($combi=true) {
  * Returns the next news item on a page.
  * sets $_zp_current_zenpage_news to the next news item
  * Returns true if there is an new item to be shown
- * 
- * NOTE: If you set the sortorder and sortdirection parameters you also have to set the same ones 
+ *
+ * NOTE: If you set the sortorder and sortdirection parameters you also have to set the same ones
  * on the next/prevNewsLink/URL functions for the single news article pagination!
  *
  * @param string $sortorder "date" for sorting by date (default)
  * 													"title" for sorting by title
- * 													This parameter is not used for date archives and CombiNews mode. 
+ * 													This parameter is not used for date archives and CombiNews mode.
  * @param string $sortdirection "desc" (default) for descending sort order
  * 													    "asc" for ascending sort order
  * 											        This parameter is not used for date archives and CombiNews mode
@@ -908,22 +908,17 @@ function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
  *
  * @param string $catlink The optional categorylink of a category, if empty the current category is checked if available
  * @return bool
- */	
+ */
 function isProtectedNewsCategory($catlink='') {
 	global $_zp_current_category;
 	if(empty($catlink) && !is_null($_zp_current_category)) {
 		$catlink = $_zp_current_category;
 	}
-	$categories = getAllCategories();
-	if (array_key_exists($catlink,$categories)) {
-		$cat = $categories[$catlink];
-		return !empty($categories[$catlink]['password']);
-	} else {
-		return false;
-	}
+	$hint = $show = '';
+	return checkNewsCategoryPassword($catlink, &$hint, &$show) != 'zp_unprotected';
 }
 
-	
+
 
 /**
  * Gets the date of the current news article
@@ -1668,7 +1663,7 @@ function getNextPrevNews($option='',$sortorder='date',$sortdirection='desc') {
  * NOTE: This is not available if using the CombiNews feature
  * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
  * @param string $sortdirection "date" (default) or "title" for sorting by date or titlelink. Required if these for next_news() loop are changed.
- * 
+ *
  * @return mixed
  */
 function getNextNewsURL($sortorder='date',$sortdirection='desc') {
@@ -1683,7 +1678,7 @@ function getNextNewsURL($sortorder='date',$sortdirection='desc') {
  * NOTE: This is not available if using the CombiNews feature
  * @param string $sortorder "desc" (default)or "asc" for descending or ascending news. Required if these for next_news() loop are changed.
  * @param string $sortdirection "date" (default) or "title" for sorting by date or titlelink. Required if these for next_news() loop are changed.
- * 
+ *
  * @return mixed
  */
 function getPrevNewsURL($sortorder='date',$sortdirection='desc') {
@@ -2362,30 +2357,12 @@ function printParentPagesBreadcrumb($before='', $after='') {
  * 															FALSE to check if the page itself is password protected only
  * @param obj $pageobj Optional page object to test directly, otherwise the current page is checked if available.
  */
-function isProtectedPage($checkProtection=true,$pageobj='') {
+function isProtectedPage($checkProtection=true,$pageobj=NULL) {
 	global $_zp_current_zenpage_page;
-	if(empty($pageobj) && !is_null($_zp_current_zenpage_page)) {
-		$pageobj = $_zp_current_zenpage_page;
-		$parentid = getPageParentID();
-	} else {
-		$parentid = $pageobj->getParentID();
-	}
-	$password = $pageobj->getPassword(); 
-	if(!empty($password) || !is_null($password)) {
-		return true;
-	}
-	if($checkProtection) {
-		$parentpages = getParentPages($parentid);
-		foreach($parentpages as $parentpage) {
-			$parentobj = new ZenpagePage($parentpage);
-			$parentpassword = $parentobj->getPassword();
-			if(!empty($parentpassword) || !is_null($parentpassword)) {
-				return true;
-			}
-		}
-	}
-	return false;
-} 
+	if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
+	$hint = $show = '';
+	return checkPagePassword($pageobj, &$hint, &$show) != 'zp_unprotected';
+}
 
 /**
  * Prints a context sensitive menu of all pages as a unordered html list
@@ -2876,7 +2853,7 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
  */
 function isMyPage($pageobj=NULL, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {	
+	if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
@@ -2945,6 +2922,12 @@ function isMyNews($newsobj, $action) {
 	return false;
 }
 
+/**
+ * Checks if user is allowed access t the news article
+ * @param $newsobj
+ * @param $hint
+ * @param $show
+ */
 function checkNewsAccess($newsobj, &$hint, &$show) {
 	if (isMyNews($newsobj, LIST_NEWS_RIGHTS)) return true;
 	$allcategories = $newsobj->getCategories();
@@ -2958,13 +2941,13 @@ function checkNewsAccess($newsobj, &$hint, &$show) {
 }
 
 /**
- * Checks if user is allowed to access News article
- * @param $newsobj
+ * Checks if user is allowed to access News category
+ * @param $catlink
  * @param $hint
  * @param $show
  */
-function checkNewsCategoryPassword($category, &$hint, &$show) {
-	$sql = 'SELECT * FROM '.prefix('zenpage_news_categories').' WHERE `cat_link`="'.zp_escape_string($category).'"';
+function checkNewsCategoryPassword($catlink, &$hint, &$show) {
+	$sql = 'SELECT * FROM '.prefix('zenpage_news_categories').' WHERE `cat_link`="'.zp_escape_string($catlink).'"';
 	$result = query_single_row($sql);
 	$hash = $result['password'];
 	if (empty($hash))	{

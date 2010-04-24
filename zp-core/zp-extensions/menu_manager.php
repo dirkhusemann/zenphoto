@@ -130,18 +130,39 @@ function getItemTitleAndURL($item) {
 	$array = array();
 	switch ($item['type']) {
 		case "galleryindex":
-			$array = array("title" => get_language_string($item['title']),"url" => WEBPATH,"name" => WEBPATH);
+			$array = array("title" => get_language_string($item['title']),"url" => WEBPATH,"name" => WEBPATH,'protected'=>false);
 			break;
 		case "album":
-			$obj = new Album($gallery,$item['link']);
-			$url = rewrite_path("/".$item['link'],"/index.php?album=".$item['link']);
-
-			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
+			$folderFS = internalToFilesystem($item['link']);
+			$localpath = getAlbumFolder() . $folderFS . "/";
+			$dynamic = hasDynamicAlbumSuffix($folderFS);
+			$valid = file_exists($localpath) && ($dynamic || is_dir($localpath));
+			if(!$valid || strpos($localpath, '..') !== false) {
+				$title = gettext('*****The target for this item no longer exists*****');
+				$url = '';
+				$protected = 0;
+			} else {
+				$obj = new Album($gallery,$item['link']);
+				$url = rewrite_path("/".$item['link'],"/index.php?album=".$item['link']);
+				$protected = isProtectedAlbum($obj);
+				$title = $obj->getTitle();
+			}
+			$array = array("title"=>$title,"url"=>$url,"name"=>$item['link'],'protected'=>$protected);
 			break;
 		case "zenpagepage":
-			$obj = new ZenpagePage($item['link']);
-			$url = rewrite_path("/".ZENPAGE_PAGES."/".$item['link'],"/index.php?p=".ZENPAGE_PAGES."&amp;titlelink=".$item['link']);
-			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
+			$sql = 'SELECT * FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$item['link'].'"';
+			$result = query_single_row($sql);
+			if (is_array($result)) {
+				$obj = new ZenpagePage($item['link']);
+				$url = rewrite_path("/".ZENPAGE_PAGES."/".$item['link'],"/index.php?p=".ZENPAGE_PAGES."&amp;titlelink=".$item['link']);
+				$protected = isProtectedPage(true,$obj);
+				$title = $obj->getTitle();
+			} else {
+				$title = gettext('*****The target for this item no longer exists*****');
+				$url = '';
+				$protected = 0;
+			}
+			$array = array("title"=>$title,"url"=>$url,"name"=>$item['link'],'protected'=>$protected);
 			break;
 		case "zenpagenewsindex":
 			if(getOption("zenpage_zp_index_news")) {
@@ -149,28 +170,42 @@ function getItemTitleAndURL($item) {
 			} else {
 				$url = rewrite_path("/".ZENPAGE_NEWS,"/index.php?p=".ZENPAGE_NEWS);
 			}
-			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url);
+			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url,'protected'=>false);
 			break;
 		case "zenpagecategory":
 			$obj = query_single_row("SELECT cat_name FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$item['link']."'",true);
-			$url = rewrite_path("/".ZENPAGE_NEWS."/category/".$item['link'],"/index.php?p=".ZENPAGE_NEWS."&amp;category=".$item['link']);
-			$array = array("title" => get_language_string($obj['cat_name']),"url" => $url,"name" => $item['link']);
+			if ($obj) {
+				$title = get_language_string($obj['cat_name']);
+				$url = rewrite_path("/".ZENPAGE_NEWS."/category/".$item['link'],"/index.php?p=".ZENPAGE_NEWS."&amp;category=".$item['link']);
+			} else {
+				$title = gettext('*****The target for this item no longer exists*****');
+				$url = '';
+			}
+			$array = array("title" => $title,"url" => $url,"name" => $item['link'],'protected'=>isProtectedNewsCategory($item['link']));
 			break;
-		case "custompage":
-			$url = rewrite_path("/page/".$item['link'],"/index.php?p=".$item['link']);
-			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $item['link']);
+		case "custompage":	
+			$themename = $gallery->getCurrentTheme();
+			$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
+			if (file_exists($root.$item['link'].'.php')) {
+				$url = rewrite_path("/page/".$item['link'],"/index.php?p=".$item['link']);
+				$title = get_language_string($item['title']);
+			} else {
+				$title = gettext('*****The target for this item no longer exists*****');
+				$url = '';
+			}
+			$array = array("title"=>$title,"url" => $url,"name"=>$item['link'],'protected'=>false);
 			break;
 		case "customlink":
-			$array = array("title" => get_language_string($item['title']),"url" => $item['link'],"name" => $item['link']);
+			$array = array("title" => get_language_string($item['title']),"url" => $item['link'],"name" => $item['link'],'protected'=>false);
 			break;
 		case 'menulabel':
-			$array = array("title"=>get_language_string($item['title']),"url" => NULL,'name'=>$item['title']);
+			$array = array("title"=>get_language_string($item['title']),"url" => NULL,'name'=>$item['title'],'protected'=>false);
 			break;
 		case 'menufunction':
-			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link']);
+			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link'],'protected'=>false);
 			break;
 		case 'html':
-			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>htmlspecialchars($item['link']));
+			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>htmlspecialchars($item['link']),'protected'=>false);
 			break;
 		default:
 			echo "<br/>bad item type ";var_dump($item);
@@ -565,7 +600,7 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					$orders[$nesting] = addPagesToDatabase($menuset,$orders);
 					$type = false;
 					break;
-				case 'all_zenpagecategories':
+				case 'all_zenpagecategorys':
 					$orders[$nesting]++;
 					$orders[$nesting] = addCategoriesToDatabase($menuset,$orders);
 					$type = false;

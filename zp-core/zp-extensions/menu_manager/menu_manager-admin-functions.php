@@ -57,10 +57,21 @@ function printItemsListTable($item, $flag) {
 			printItemEditLink($item); 
 			?>
 		</td>
-	
 		<td class="icons3"><?php echo $array['name']; ?></td>
 		<td class="icons3"><em><?php echo $item['type']; ?></em></td>
-				
+		<td  class="icons">
+			<?php
+			if ($array['protected']) {
+				?> 
+				<img src="../../images/lock_2.png" alt="<?php echo gettext("The object of this menu is under password protection"); ?>" title="<?php echo gettext("The object of this menu is under password protection"); ?>" />
+				<?php
+			} else {
+				?>
+				<img src="../../images/place_holder_icon.png" alt="<?php echo gettext("The object of this menu is under password protection"); ?>" title="<?php echo gettext("The object of this menu is under password protection"); ?>" />
+				<?php
+			}
+			?>
+		</td>
 		<td class="icons">
 		<?php
 		if($item['show'] === '1') {
@@ -77,18 +88,20 @@ function printItemsListTable($item, $flag) {
 		<td class="icons">
 			<?php
 			switch ($item['type']) {
+				default:
+					if (!empty($array['url'])) {
+						?>
+						<a href="<?php echo $array['url']; ?>">
+						<img src="../../images/view.png" alt="<?php echo gettext('view'); ?>" title="<?php echo gettext('view'); ?>" /></a>	
+						<?php 
+						break;
+					}
 				case 'menulabel':
 				case 'menufunction':
 				case 'html':
 					?>
-					<img src="../../images/icon_inactive.png" alt="" title="" /></a>	
+					<img src="../../images/icon_inactive.png" alt="" title="" />
 					<?php
-					break;
-				default:
-					?>
-					<a href="<?php echo $array['url']; ?>">
-					<img src="../../images/view.png" alt="<?php echo gettext('view'); ?>" title="<?php echo gettext('view'); ?>" /></a>	
-					<?php 
 					break;
 			}
 			?>					
@@ -431,7 +444,7 @@ function addItem() {
 			addPagesToDatabase($menuset);
 			echo "<p class='messagebox' id='fade-message'>".gettext("Menu items for all Zenpage pages added.")."</p>";
 			return NULL;
-		case 'all_zenpagecategories':
+		case 'all_zenpagecategorys':
 			addCategoriesToDatabase($menuset);
 			echo "<p class='messagebox' id='fade-message'>".gettext("Menu items for all Zenpage categories added.")."</p>";
 			return NULL;

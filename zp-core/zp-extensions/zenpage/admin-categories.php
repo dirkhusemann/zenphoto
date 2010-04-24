@@ -97,16 +97,16 @@ printLogoAndLinks();
 				}
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
-				<?php
-				if(isset($_GET['edit'])) {
-					?>
-					<input type="hidden" name="id" value="<?php echo $result['id'];?>" />
-					<input type="hidden" name="catlink-old" id="catlink-old" value="<?php echo $result['cat_link']; ?>" />
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
-					<input	type="hidden" name="olduser" id="olduser" value="<?php echo $result['user']; ?>" />
+					<input	type="hidden" name="olduser" id="olduser" value="<?php if (isset($result)) echo $result['user']; ?>" />
 					<?php
-				}
-				?>
+					if(isset($_GET['edit'])) {
+						?>
+						<input type="hidden" name="id" value="<?php echo $result['id'];?>" />
+						<input type="hidden" name="catlink-old" id="catlink-old" value="<?php echo $result['cat_link']; ?>" />
+						<?php
+					}
+					?>
 					<table>
 			    	<tr> 
 				     <?php

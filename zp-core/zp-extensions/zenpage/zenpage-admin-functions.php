@@ -931,10 +931,11 @@ function addCategory() {
 	} else if ($notice == 'pass') {
 		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
-		if (query("INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink, user, password, password_hint) VALUES ('".
-				zp_escape_string($catname)."', '".zp_escape_string(seoFriendly($catlink))."','".
-				zp_escape_string($result['user'])."','".zp_escape_string($result['password'])."','".zp_escape_string($result['password_hint'])."','".
-				getcheckboxState('permalink')."')", true)) {
+		$sql = "INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink, user, password, password_hint) VALUES ('".
+				zp_escape_string($catname)."', '".zp_escape_string(seoFriendly($catlink))."','".getcheckboxState('permalink')."', '".
+				zp_escape_string($result['user'])."','".zp_escape_string($result['password'])."','".zp_escape_string($result['password_hint']).
+				"')";
+		if (query($sql, true)) {
 			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($catlink))."</p>";
@@ -971,10 +972,11 @@ function updateCategory() {
 		$notice = $pwdresult;
 		$passwordpart = '';
 	}
-		// update the category in the category table
-	if(query("UPDATE ".prefix('zenpage_news_categories')." SET cat_name = '".$result['cat_name'].
+	// update the category in the category table
+	$sql = "UPDATE ".prefix('zenpage_news_categories')." SET cat_name = '".$result['cat_name'].
 				"', cat_link = '".zp_escape_string($result['cat_link'])."', permalink = ".$result['permalink'].
-				$passwordpart." WHERE id = ".$result['id'],true)) {
+				$passwordpart." WHERE id = ".$result['id'];
+	if(query($sql,true)) {
 		if(empty($result['cat_name']) OR empty($result['cat_link'])) {
 			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
 		} else if ($notice == 'user') {

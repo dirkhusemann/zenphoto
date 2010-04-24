@@ -2,6 +2,7 @@
 define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/template-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manager/menu_manager-admin-functions.php');
 
@@ -136,6 +137,7 @@ if ($count > 0) {
  				<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
 </form>
 	<ul class="iconlegend">
+	<li><img src="../../images/lock_2.png" alt="" /><?php echo gettext("Menu target is pasword protected"); ?></li>
 	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><?php echo gettext("Show/hide"); ?></li>
 	<li><img src="../zenpage/images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete"); ?></li>

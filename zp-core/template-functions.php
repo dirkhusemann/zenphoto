@@ -4238,6 +4238,24 @@ function normalizeColumns($albumColumns, $imageColumns) {
 //************************************************************************************************
 
 /**
+ * Checks if the album is password protected
+ * @param object $album
+ */
+function isProtectedAlbum($album=NULL) {
+	global $_zp_current_album;
+	if (is_null($album)) $album = $_zp_current_album;
+	$hash = $album->getPassword();
+	if (empty($hash)) {
+		$album = $album->getParent();
+		while (!is_null($album) && empty($hash)) {
+			$hash = $album->getPassword();
+			$album = $album->getParent();
+		}
+	}
+	return $hash;
+}
+
+/**
  * returns the auth type of a guest login
  *
  * @param string $hint
