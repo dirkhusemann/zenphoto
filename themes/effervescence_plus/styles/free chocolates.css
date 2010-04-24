@@ -5,7 +5,7 @@ Author URI: http://angoulvant.net/sblog
 Version: 0.9
 */
 #simpleviewer {   /* the background color for simpleviewer. Leave this line near the front for performance reasons */
-    background: #E7B681; /* Normally the same as main2 */
+		background: #E7B681; /* Normally the same as main2 */
 }
 /*
 This CSS was uses the free Chocolates color scheme. (http://www.colourlovers.com/palette/163062/free_Chocolates)
@@ -66,11 +66,11 @@ color: #ECEBE1; /*whenever a paragraph is held within blockquote tags.*/
 	color:#FFFFFF;
 }
 #imagemetadata {
-  text-align: center;
-  color: #996B3F;
+	text-align: center;
+	color: #996B3F;
 }
 #imgmetadata_data a {
-  color: #996B3F;
+	color: #996B3F;
 }
 #imagemetadata_data a:hover {
 text-decoration: none;
@@ -78,16 +78,16 @@ color: #076a54;
 }
 
 #imagemetadata table {
-  text-align: left;
-  line-height: 1em;
-  top: 2em;
-  right: 0px;
-  background-color: #996B3F;
+	text-align: left;
+	line-height: 1em;
+	top: 2em;
+	right: 0px;
+	background-color: #996B3F;
 }
 
 #imagemetadata table td {
-  background-color: #F5D1AF;
-  padding: 2px 5px;
+	background-color: #F5D1AF;
+	padding: 2px 5px;
 }
 
 /* Text Styles
@@ -98,7 +98,7 @@ h1 {
 font: normal 20px Trebuchet MS, Arial, Helvetica, Tahoma, Verdana, serif;
 letter-spacing: -2px;
 }
-#logo h1 a{ 
+#logo h1 a{
 color: #F5D1AF;
 font: bold 30px Monotype Corsiva, Apple Chancery, Zaph Chancery, Comic Sans, cursive, serif;
 }
@@ -107,15 +107,15 @@ border: none;
 }
 * html h1 a {
 height:35px;
-//he\ight:0px; 
+//he\ight:0px;
 height:0px;
 }
-h1 a{ 
+h1 a{
 height:0px;
 }
 
 /* Image Page Title  --- */
-#logo2 h1 a{ 
+#logo2 h1 a{
 color: #F5D1AF;
 font: bold 30px Monotype Corsiva, Apple Chancery, Zaph Chancery, Comic Sans, cursive, serif;
 }
@@ -227,7 +227,7 @@ font-weight: bold;
 	background: #E7B681; /*color around the main div in index.*/
 	width: 650px;
 	margin: 0 auto;
-  color: #ECEBE1; /*textbox labels*/
+	color: #ECEBE1; /*textbox labels*/
 	font-size: 12px;
 	padding: 10px;
 }
@@ -245,15 +245,15 @@ width: 610px;
 #comments {
 clear: both;
 display: block;
-margin: 0 auto; 
-width: 610px; 
+margin: 0 auto;
+width: 610px;
 text-align: left;
 }
 
 #commententry {
 clear: both;
 display: block;
-margin: 0 auto; 
+margin: 0 auto;
 text-align: left;
 width: 610px;
 }
@@ -283,7 +283,7 @@ color: #62675f; /*the author name*/
 .commentinfo h4 a {
 color: #62675f; /*author name if they've given a link to their homepage*/
 border: none;
-font-style: normal; 
+font-style: normal;
 font-weight: bold;
 }
 .commentinfo h4 a:hover {
@@ -294,7 +294,7 @@ font-weight: bold;
 .commentinfo a {
 color: #62675f; /*links in commentingo (EDIT-link)*/
 border: none;
-font-style: normal; 
+font-style: normal;
 font-weight: bold;
 }
 .commenttext {
@@ -356,13 +356,13 @@ color: #ECEBE1;
 color: #FFFFFF;
 }
 #main2 #navbar a { /*Same as navbar a, but in single-image view.*/
-    color: #ECEBE1;
+		color: #ECEBE1;
 }
 #main2 #navbar a:hover {
 color: #ffffff;
 }
 #description a:hover {
-    color: #FFFFFF;
+		color: #FFFFFF;
 text-decoration: underline;
 }
 #main2 #description a {
@@ -417,8 +417,8 @@ padding-bottom: 10px;
 text-decoration:none;
 }
 #main2 {
-    background: #E7B681; /*div in single-image view.*/
-    text-align: left;
+		background: #E7B681; /*div in single-image view.*/
+		text-align: left;
 	padding-bottom: 30px;
 }
 #main3 {
@@ -427,9 +427,9 @@ padding: 10px 20px 20px 20px;
 background: #996B3F; /*background around comment area */
 }
 #main4 {
-    margin: 0 auto 0 auto;
+		margin: 0 auto 0 auto;
 	padding-left: 20px;
-	padding-right: 20px;	
+	padding-right: 20px;
 	background: #996B3F; /*page background in single-image view.*/
 	color: #FFFCDB;
 }
@@ -517,7 +517,7 @@ width: 620px;
 color: #ECEBE1; /*text in navbar in single-image, only the last node.*/
 }
 
-ul.pagelist { 
+ul.pagelist {
 clear: both;
 padding: 0;
 margin: 20px 0 0 0;
@@ -559,7 +559,7 @@ clear: both;
 border-top: 2px solid #fbefdb;
 border-left: 2px solid #fbefdb;
 border-right: 2px solid #996B3F;
-border-bottom: 2px solid #996B3F; 
+border-bottom: 2px solid #996B3F;
 display: block;
 padding: 7px;
 margin: 6px;
@@ -570,7 +570,7 @@ line-height: 0px;
 border-top: 2px solid #fbefdb;
 border-left: 2px solid #fbefdb;
 border-right: 2px solid #996B3F  ;
-border-bottom: 2px solid #996B3F  ; 
+border-bottom: 2px solid #996B3F  ;
 background: #B68148;
 }
 .imagethumb a:hover {
@@ -617,21 +617,21 @@ list-style: none;
 	padding-right: 2em
 }
 .imgwrap ul {
-   text-align: center;
-   margin-left: 0;
-   margin-rignt: 0;
-   padding: 0;
-   list-style-type: none;
+	 text-align: center;
+	 margin-left: 0;
+	 margin-rignt: 0;
+	 padding: 0;
+	 list-style-type: none;
 }
 .imgwrap li {
-   margin: 0;
-   padding: 0;
-   float: left;
-   text-align: center;
-   width: 50%
+	 margin: 0;
+	 padding: 0;
+	 float: left;
+	 text-align: center;
+	 width: 50%
 }
-    
-.image { 
+
+.image {
 margin: 0;
 padding: 0;
 border: 0;
@@ -649,7 +649,7 @@ border: 0;
 	margin-bottom: 10px;
 }
 #image_container a {
-	color: black;	
+	color: black;
 }
 .imgnav {
 float: right;
@@ -669,7 +669,7 @@ color: #fbefdb; /*header next/prev in single-image view.*/
 .imgnav .imgprevious a:hover, .imgnav .imgnext a:hover {
 text-decoration: none;
 color: #ffffff; /*header next/prev i single-image view, mouse over.*/
-}  
+}
 .imgnav .imgprevious a{
 float: left;
 }
@@ -687,7 +687,7 @@ line-height: 200%;
 color: #E7B681; /*disabled next/prev in single image view*/
 }
 
-.error { 
+.error {
 	padding: 20px;
 	background-color: #FDD;
 	border-top: 1px solid #FAA;
@@ -800,15 +800,15 @@ text-decroation: none;
 	_margin-top: 24px; /* IE Only */
 }
 #search input.pushbutton {
-  padding: 1px;
-  font-size: 80%;
+	padding: 1px;
+	font-size: 80%;
 }
 #search a {
 text-decoration: none;
 }
 #search ul {
-border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
-height: 8em; width: 20em; overflow: auto; 
+border: 1px solid #ccc; position:absolute; text-align:left; list-style: none;
+height: 8em; width: 20em; overflow: auto;
 color: #fff;
 background-image:url(../images/50percent.png);
 }
@@ -822,8 +822,8 @@ top: 6px;
 }
 
 .clear {
-  clear:both;
-  height:10px;
+	clear:both;
+	height:10px;
 }
 
 /* Archive View
@@ -872,7 +872,7 @@ ul.archive .month {
 #tag_cloud p {
 	padding:10px 0;
 	margin:20px 0;
-    background: #B68148;
+		background: #B68148;
 	font-size: 18px;
 	text-align: center;
 }
@@ -888,7 +888,7 @@ padding-top: 0.8em;
 padding-left: 45px;
 padding-right: 45px;
 font-size: 1.2em;
-line-height: 1.6em; 
+line-height: 1.6em;
 }
 
 #content-left h2 {
@@ -915,14 +915,21 @@ height: 100%;
 float: right;
 background-color: transparent;
 margin-right: 4px;
-border-top: 0px dotted red;  
+border-top: 0px dotted red;
 }
 .menu {
 margin-top: 0em;
 font-size: 1.3em;
 padding: 1em 0 0.8em 1em;
 border-bottom: 1px dotted darkgray;
-height: 100%; 
+height: 100%;
+}
+.menu_rule {
+padding-top: 0em;
+padding-bottom: 0em;
+margin-top: 0em;
+margin-bottom: 0.5em;
+border-bottom: 1px dotted darkgray;
 }
 .menu h3 {
 font-size: 1em;
@@ -930,7 +937,7 @@ font-weight: normal;
 text-transform: uppercase;
 letter-spacing: 0.3em;
 color: black;
-margin-bottom: 0.5em; 
+margin-bottom: 0.5em;
 margin-top: 0.7em;
 margin-left: 1.6em;
 border: 0px solid gray;
@@ -947,6 +954,15 @@ padding-bottom: 3px;
 background-image: url(../images/arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
+}
+.menu ul li.menu_menulabel {
+color: black;
+font-size: 1em;
+font-weight: normal;
+text-transform: uppercase;
+letter-spacing: 0.3em;
+text-decoration:none;
+background-image: none;
 }
 .menu ul li a {
 text-decoration:none;
@@ -991,7 +1007,7 @@ padding: 2px;
 #pagetext {
 font-size: 1em;
 line-height: 1em;
-margin-bottom: 1em;	
+margin-bottom: 1em;
 }
 #pagetext p {
 	line-height: 1em;
@@ -1077,11 +1093,11 @@ font-size: 0.8em;
 	width: 400px;
 	margin: 0 auto;
 }
-	
+
 table.password {
 	margin: 0 auto;
 }
-	
+
 table.password td.userlabel{
 	text-align:right;
 }

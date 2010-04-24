@@ -94,10 +94,11 @@ function printAlbumMenu($option,$showcount=NULL,$css_id='',$css_class_topactive=
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
  * @param bool $firstimagelink If set to TRUE and if the album has images the link will point to page of the first image instead the album thumbnail page
  * @param bool $keeptopactive If set to TRUE the toplevel album entry will stay marked as active if within its subalbums ("list" only)
+ * @param bool $startlist set to true to output the UL tab
  * @return html list of the albums
  */
 
-function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=NULL,$firstimagelink=false,$keeptopactive=false) {
+function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=NULL,$firstimagelink=false,$keeptopactive=false,$startlist=true) {
 	global $_zp_gallery, $_zp_current_album, $_zp_gallery_page;
 	
 	// if in search mode don't use the foldout contextsensitiveness and show only toplevel albums
@@ -118,7 +119,7 @@ function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topact
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	
-	echo "<ul".$css_id.">\n"; // top level list
+	if ($startlist) echo "<ul".$css_id.">\n"; // top level list
 	/**** Top level start with Index link  ****/
 	if($option === "list" OR $option === "list-top") {
 		if(!empty($indexname)) {
@@ -134,7 +135,7 @@ function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topact
 
 	printAlbumMenuListAlbum($albums, $albumpath, $currentfolder, $option, $showcount, $showsubs, $css_class, $css_class_topactive, $css_class_active,$firstimagelink,$keeptopactive);
 
-	echo "</ul>\n";
+	if ($startlist) echo "</ul>\n";
 
 }
 

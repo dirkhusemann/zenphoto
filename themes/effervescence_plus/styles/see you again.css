@@ -922,6 +922,13 @@ padding: 1em 0 0.8em 1em;
 border-bottom: 1px dotted darkgray;
 height: 100%; 
 }
+.menu_rule {
+padding-top: 0em;
+padding-bottom: 0em;
+margin-top: 0em;
+margin-bottom: 0.5em;
+border-bottom: 1px dotted darkgray;
+}
 .menu h3 {
 font-size: 1em;
 font-weight: normal;
@@ -945,6 +952,15 @@ padding-bottom: 3px;
 background-image: url(../images/arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
+}
+.menu ul li.menu_menulabel {
+color: black;
+font-size: 1em;
+font-weight: normal;
+text-transform: uppercase;
+letter-spacing: 0.3em;
+text-decoration:none;
+background-image: none;
 }
 .menu ul li a {
 text-decoration:none;

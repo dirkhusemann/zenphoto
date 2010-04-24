@@ -4,7 +4,7 @@ Author: Stephane Angoulvant (modified (badly) by ulfben)
 Author URI: http://angoulvant.net/sblog
 */
 #simpleviewer {   /* the background color for simpleviewer. Leave this line near the front for performance reasons */
-    background: #8597A5; /* Normally the same as main2 */
+		background: #8597A5; /* Normally the same as main2 */
 }
 /*
 This CSS was uses the Machu Picchu color scheme. (http://www.colourlovers.com/palette/100694/Machu_Picchu)
@@ -199,7 +199,7 @@ h4 a:hover {
 	background: #789048; /*color around the main div in index.*/
 	width: 650px;
 	margin: 0 auto;
-  color: #ECEBE1; /*textbox labels*/
+	color: #ECEBE1; /*textbox labels*/
 	font-size: 12px;
 	padding: 10px;
 }
@@ -217,15 +217,15 @@ width: 610px;
 #comments {
 clear: both;
 display: block;
-margin: 0 auto; 
-width: 610px; 
+margin: 0 auto;
+width: 610px;
 text-align: left;
 }
 
 #commententry {
 clear: both;
 display: block;
-margin: 0 auto; 
+margin: 0 auto;
 text-align: left;
 width: 610px;
 }
@@ -255,7 +255,7 @@ color: #ECEBE1; /*the author name*/
 .commentinfo h4 a {
 	color: #22b393; /*author name if they've given a link to their homepage*/
 	border: none;
-font-style: normal; 
+font-style: normal;
 font-weight: bold;
 }
 .commentinfo h4 a:hover {
@@ -266,7 +266,7 @@ font-weight: bold;
 .commentinfo a {
 color: #ECEBE1; /*links in commentingo (EDIT-link)*/
 border: none;
-font-style: normal; 
+font-style: normal;
 font-weight: bold;
 }
 .commenttext {
@@ -601,7 +601,7 @@ ul.pagelist li.next {
 	margin-bottom: 10px;
 }
 #image_container a {
-	color: black;	
+	color: black;
 }
 .imgnav {
 	float: right;
@@ -639,13 +639,13 @@ ul.pagelist li.next {
 	color: #84e4cf; /*disabled next/prev in single image view*/
 }
 
-/* Comments 
+/* Comments
 ------------------------------ */
 #comments {
 clear: both;
 display: block;
-margin: 0 auto; 
-width: 650px; 
+margin: 0 auto;
+width: 650px;
 text-align: left;
 }
 
@@ -763,15 +763,15 @@ text-decroation: none;
 	_margin-top: 24px; /* IE Only */
 }
 #search input.pushbutton {
-  padding: 1px;
-  font-size: 80%;
+	padding: 1px;
+	font-size: 80%;
 }
 #search a {
 text-decoration: none;
 }
 #search ul {
-border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
-height: 8em; width: 20em; overflow: auto; 
+border: 1px solid #ccc; position:absolute; text-align:left; list-style: none;
+height: 8em; width: 20em; overflow: auto;
 color: #fff;
 background-image:url(../images/50percent.png);
 }
@@ -781,8 +781,8 @@ top: 4px;
 }
 
 .clear {
-  clear:both;
-  height:10px;
+	clear:both;
+	height:10px;
 }
 
 /* Archive View
@@ -847,7 +847,7 @@ padding-top: 0.8em;
 padding-left: 45px;
 padding-right: 45px;
 font-size: 1.2em;
-line-height: 1.6em; 
+line-height: 1.6em;
 }
 
 #content-left h2 {
@@ -874,14 +874,21 @@ height: 100%;
 float: right;
 background-color: transparent;
 margin-right: 4px;
-border-top: 0px dotted red;  
+border-top: 0px dotted red;
 }
 .menu {
 margin-top: 0em;
 font-size: 1.3em;
 padding: 1em 0 0.8em 1em;
 border-bottom: 1px dotted darkgray;
-height: 100%; 
+height: 100%;
+}
+.menu_rule {
+padding-top: 0em;
+padding-bottom: 0em;
+margin-top: 0em;
+margin-bottom: 0.5em;
+border-bottom: 1px dotted darkgray;
 }
 .menu h3 {
 font-size: 1em;
@@ -889,7 +896,7 @@ font-weight: normal;
 text-transform: uppercase;
 letter-spacing: 0.3em;
 color: black;
-margin-bottom: 0.5em; 
+margin-bottom: 0.5em;
 margin-top: 0.7em;
 margin-left: 1.6em;
 border: 0px solid gray;
@@ -906,6 +913,15 @@ padding-bottom: 3px;
 background-image: url(../images/arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
+}
+.menu ul li.menu_menulabel {
+color: black;
+font-size: 1em;
+font-weight: normal;
+text-transform: uppercase;
+letter-spacing: 0.3em;
+text-decoration:none;
+background-image: none;
 }
 .menu ul li a {
 text-decoration:none;
@@ -950,7 +966,7 @@ padding: 2px;
 #pagetext {
 font-size: 1em;
 line-height: 1em;
-margin-bottom: 1em;	
+margin-bottom: 1em;
 }
 #pagetext p {
 	line-height: 1em;
@@ -1036,11 +1052,11 @@ font-size: 0.8em;
 	width: 400px;
 	margin: 0 auto;
 }
-	
+
 table.password {
 	margin: 0 auto;
 }
-	
+
 table.password td.userlabel{
 	text-align:right;
 }

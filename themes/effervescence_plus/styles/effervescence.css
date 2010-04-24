@@ -4,7 +4,7 @@ Author: Stephane Angoulvant (modified (badly) by ulfben)
 Author URI: http://angoulvant.net/sblog
 */
 #simpleviewer {   /* the background color for simpleviewer. Leave this line near the front for performance reasons */
-    background: #0b9577; /* Normally the same as main2 */
+		background: #0b9577; /* Normally the same as main2 */
 }
 /*
 This CSS was "reverse engineered" (eg: hijacked and gunned down) by Ulf Benjaminsson to use the Kish-color scheme. (http://www.colourlovers.com/palette/27527/kish__my_father)
@@ -60,10 +60,10 @@ blockquote {
 }
 #imagemetadata {
 	text-align: center;
-    color: #fff;
+		color: #fff;
 }
 #imgmetadata_data a {
-    color: #fff;
+		color: #fff;
 }
 #imagemetadata_data a:hover {
 	text-decoration: none;
@@ -74,10 +74,10 @@ blockquote {
 	line-height: 1em;
 	top: 2em;
 	right: 0px;
-    background-color: #0c8369;
+		background-color: #0c8369;
 }
 #imagemetadata table td {
- 	background-color: #0b9577;
+	background-color: #0b9577;
 	padding: 2px 5px;
 }
 /* Text Styles
@@ -89,7 +89,7 @@ h1 {
 	letter-spacing: -2px;
 }
 #logo h1 a {
-    color: #12a081;
+		color: #12a081;
 	font: bold 30px Monotype Corsiva, Apple Chancery, Zaph Chancery, Comic Sans, cursive, serif;
 }
 h1 a:hover {
@@ -103,7 +103,7 @@ h1 a {
 }
 /* Image Page Title  --- */
 #logo2 h1 a {
-    color: #84e4cf;
+		color: #84e4cf;
 	font: bold 30px Monotype Corsiva, Apple Chancery, Zaph Chancery, Comic Sans, cursive, serif;
 }
 h2 {
@@ -135,12 +135,12 @@ h2 a:hover {
 	font-size: 120%;
 	text-decoration: none;
 	line-height: 200%;
-    color: #7b7871; /*prev / next in subalbums */
+		color: #7b7871; /*prev / next in subalbums */
 }
 .albnav .albprevious a:hover, .albnav .albnext a:hover {
 	text-decoration: none;
 font-weight: bold;
-    color: #22b393; /*prev / next hover in subalbum*/
+		color: #22b393; /*prev / next hover in subalbum*/
 }
 .albnav .albprevious a {
 	float: left;
@@ -156,7 +156,7 @@ font-weight: bold;
 	font-size: 120%;
 	text-decoration: none;
 	line-height: 200%;
-    color: #b1aea7; /*disabled prev/next links i subalbums (upper part of the screen)*/
+		color: #b1aea7; /*disabled prev/next links i subalbums (upper part of the screen)*/
 	cursor: default;
 }
 /* Intro Text  --- */
@@ -186,9 +186,9 @@ h4 {
 	color: #fff;
 }
 h4 a {
-    color: #98958f; /*album titles in thumbview*/
+		color: #98958f; /*album titles in thumbview*/
 	border: none;
-        font-weight: bold;
+				font-weight: bold;
 }
 h4 a:hover {
 	color: #0b9577; /*album titles in thumbview on mouse over*/
@@ -201,7 +201,7 @@ h4 a:hover {
 	background: #0b9577; /*color around the main div in index.*/
 	width: 650px;
 	margin: 0 auto;
-  color: #ECEBE1; /*textbox labels*/
+	color: #ECEBE1; /*textbox labels*/
 	font-size: 12px;
 	padding: 10px;
 }
@@ -219,15 +219,15 @@ width: 610px;
 #comments {
 clear: both;
 display: block;
-margin: 0 auto; 
-width: 610px; 
+margin: 0 auto;
+width: 610px;
 text-align: left;
 }
 
 #commententry {
 clear: both;
 display: block;
-margin: 0 auto; 
+margin: 0 auto;
 text-align: left;
 width: 610px;
 }
@@ -257,7 +257,7 @@ color: #f7f4ed; *//*the author name*/
 .commentinfo h4 a {
 color: #f0f0f0; *//*author name if they've given a link to their homepage*/
 border: none;
-font-style: normal; 
+font-style: normal;
 font-weight: bold;
 }
 .commentinfo h4 a:hover {
@@ -268,7 +268,7 @@ font-weight: bold;
 .commentinfo a {
 color: #f0f0f0; /*links in commentingo (EDIT-link)*/
 border: none;
-font-style: normal; 
+font-style: normal;
 font-weight: bold;
 }
 .commenttext {
@@ -308,12 +308,12 @@ background: #FFFFFF; /*Color of textarea when focused*/
 
 /* Links  --- */
 a {
-    color: #7b7871; /*the current pagination link */
+		color: #7b7871; /*the current pagination link */
 	text-decoration: none;
-    font-weight: bold;
+		font-weight: bold;
 }
 a:hover {
-    color: #22b393;
+		color: #22b393;
 	text-decoration: none;
 }
 .disabledlink {
@@ -321,10 +321,10 @@ a:hover {
 	cursor: default;
 }
 #navbar a {
-    color: #22b393;
+		color: #22b393;
 }
 #navbar a:hover {
-    color: #0b9577;
+		color: #0b9577;
 }
 #main2 #navbar a { /*Same as navbar a, but in single-image view.*/
 	color: #fff;
@@ -346,12 +346,12 @@ a:hover {
 body {
 	font: 14px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
 	color: #fff;
-    background: #d8d6cf; /*body background*/
+		background: #d8d6cf; /*body background*/
 	text-align: left;
 	margin: 0 auto 0 auto;
 }
 #content {
-    background: #e3e2dd; /*color around the main div in index.*/
+		background: #e3e2dd; /*color around the main div in index.*/
 }
 #content p {
 	color: #7b7973;
@@ -367,11 +367,11 @@ body {
 text-decoration: none;
 }
 #subcontent {
-    background: #e3e2dd; /*around the main div in sub-albums.*/
+		background: #e3e2dd; /*around the main div in sub-albums.*/
 	margin-bottom: 5px;
 }
 #submain {
-    background: #e3e2dd; /*div around thumbs in subalbums.*/
+		background: #e3e2dd; /*div around thumbs in subalbums.*/
 	text-align: left;
 	width: 630px;
 	margin: 0 auto 0 auto;
@@ -381,14 +381,14 @@ text-decoration: none;
 text-decoration:none;
 }
 #main2 {
-    background: #0b9577; /*div in single-image view.*/
+		background: #0b9577; /*div in single-image view.*/
 	text-align: left;
 	padding-bottom: 30px;
 }
 #main3 {
 	margin: 0 auto 0 auto;
 	padding: 10px 20px 20px 20px;
-	color: $0; 
+	color: $0;
 	background: #607848; /*background around comment area */
 }
 #main4 {
@@ -399,14 +399,14 @@ text-decoration:none;
 //	color: #FFFCDB;
 }
 #header {
-    background: #d8d6cf; /*the header area above the nav-bar*/
+		background: #d8d6cf; /*the header area above the nav-bar*/
 	text-align: left;
 	border: none;
 	padding: 0;
 	margin: 0;
 }
 #galleryheader {
-    background: #0b9577; /*the header area above the nav-bar, single image view*/
+		background: #0b9577; /*the header area above the nav-bar, single image view*/
 text-align: left;
 	border: none;
 	padding: 0;
@@ -419,7 +419,7 @@ text-align: left;
 	margin: 0 auto 0 auto;
 }
 #description {
-    color: #98958f; /*text color for descriptions*/
+		color: #98958f; /*text color for descriptions*/
 	text-align: center;
 	padding: 7px 7px;
 	margin: 0px auto 0px auto;
@@ -475,7 +475,7 @@ text-decoration: none;
 border: 6px solid #fff;
 }
 #wrapnav {
-    background: #12a081;  /*nav bar in single-image.*/
+		background: #12a081;  /*nav bar in single-image.*/
 	margin-bottom: 30px;
 }
 #wrapnav a {
@@ -483,7 +483,7 @@ text-decoration:none;
 }
 
 #header #wrapnav {
-    background: #eceae7; /*navbar in subdirs.*/
+		background: #eceae7; /*navbar in subdirs.*/
 	margin-bottom: 0px;
 }
 
@@ -522,10 +522,10 @@ ul.pagelist li.next {
 /* AJAX
 ------------------------------ */
 #albumDescEditable:hover {
-    background: #eceae7;
+		background: #eceae7;
 }
 #imageDescEditable:hover {
-    background: #12a081;
+		background: #12a081;
 }
 /* Image Thumbnails
 ------------------------------ */
@@ -533,29 +533,29 @@ ul.pagelist li.next {
 	display: block;
 	padding: 7px;
 	margin: 6px;
-    border-top: 2px solid #d8d6cf;
-    border-left: 2px solid #d8d6cf;
-    border-right: 2px solid #d8d6cf;
-    border-bottom: 2px solid #22b393;
+		border-top: 2px solid #d8d6cf;
+		border-left: 2px solid #d8d6cf;
+		border-right: 2px solid #d8d6cf;
+		border-bottom: 2px solid #22b393;
 	background: #fff;
 	line-height: 0px;
 }
 .imagethumb a:visited {
-    border-top: 2px solid #d8d6cf;
-    border-left: 2px solid #d8d6cf;
-    border-right: 2px solid #d8d6cf;
-    border-bottom: 2px solid #c4c2bb;
+		border-top: 2px solid #d8d6cf;
+		border-left: 2px solid #d8d6cf;
+		border-right: 2px solid #d8d6cf;
+		border-bottom: 2px solid #c4c2bb;
 	background: #fff;
 }
 .imagethumb a:hover {
-    border-top: 2px solid #c4c2bb;
-    border-left: 2px solid #c4c2bb;
-    border-right: 2px solid #c4c2bb;
-    border-bottom: 2px solid #22b393;
+		border-top: 2px solid #c4c2bb;
+		border-left: 2px solid #c4c2bb;
+		border-right: 2px solid #c4c2bb;
+		border-bottom: 2px solid #22b393;
 	background: #fff;
 }
 #albums li:hover h4 a {
-    color: #0b9577;
+		color: #0b9577;
 }
 .imagethumb {
 	float: left;
@@ -620,7 +620,7 @@ ul.pagelist li.next {
 	margin-bottom: 10px;
 }
 #image_container a {
-	color: black;	
+	color: black;
 }
 .imgnav {
 	float: right;
@@ -765,15 +765,15 @@ text-decroation: none;
 	_margin-top: 24px; /* IE Only */
 }
 #search input.pushbutton {
-  padding: 1px;
-  font-size: 80%;
+	padding: 1px;
+	font-size: 80%;
 }
 #search a {
 text-decoration: none;
 }
 #search ul {
-border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
-height: 8em; width: 20em; overflow: auto; 
+border: 1px solid #ccc; position:absolute; text-align:left; list-style: none;
+height: 8em; width: 20em; overflow: auto;
 color: #fff;
 background-image:url(../images/50percent.png);
 }
@@ -787,8 +787,8 @@ top: 6px;
 }
 
 .clear {
-  clear:both;
-  height:10px;
+	clear:both;
+	height:10px;
 }
 
 /* Archive View
@@ -853,7 +853,7 @@ padding-top: 0.8em;
 padding-left: 45px;
 padding-right: 45px;
 font-size: 1.2em;
-line-height: 1.6em; 
+line-height: 1.6em;
 	color: #7b7973;
 }
 
@@ -882,14 +882,21 @@ height: 100%;
 float: right;
 background-color: transparent;
 margin-right: 4px;
-border-top: 0px dotted red;  
+border-top: 0px dotted red;
 }
 .menu {
 margin-top: 0em;
 font-size: 1.3em;
 padding: 1em 0 0.8em 1em;
 border-bottom: 1px dotted darkgray;
-height: 100%; 
+height: 100%;
+}
+.menu_rule {
+padding-top: 0em;
+padding-bottom: 0em;
+margin-top: 0em;
+margin-bottom: 0.5em;
+border-bottom: 1px dotted darkgray;
 }
 .menu h3 {
 font-size: 1em;
@@ -897,16 +904,16 @@ font-weight: normal;
 text-transform: uppercase;
 letter-spacing: 0.3em;
 color: black;
-margin-bottom: 0.5em; 
+margin-bottom: 0.5em;
 margin-top: 0.7em;
 margin-left: 1.6em;
 border: 0px solid gray;
 }
 .menu a:hover {
-color: #7b0073;		
+color: #7b0073;
 }
 .menu a:link, a:active, a:visited {
-color: #7b7973;	
+color: #7b7973;
 }
 .menu ul {
 list-style: none;
@@ -920,6 +927,15 @@ padding-bottom: 3px;
 background-image: url(../images/dark_arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
+}
+.menu ul li.menu_menulabel {
+color: black;
+font-size: 1em;
+font-weight: normal;
+text-transform: uppercase;
+letter-spacing: 0.3em;
+text-decoration:none;
+background-image: none;
 }
 .menu ul li a {
 text-decoration:none;
@@ -964,7 +980,7 @@ padding: 2px;
 #pagetext {
 font-size: 1em;
 line-height: 1em;
-margin-bottom: 1em;	
+margin-bottom: 1em;
 }
 #pagetext p {
 	line-height: 1em;
@@ -993,11 +1009,11 @@ border-bottom: 1px dotted #666666;
 line-height: 1em;
 }
 .newsarticle a:hover {
-color: #7b0073;		
+color: #7b0073;
 }
 .newsarticle a:link, a:active, a:visited {
 text-decoration:underline;
-color: #7b7973;	
+color: #7b7973;
 }
 
 .newsarticlecredit {
@@ -1054,11 +1070,11 @@ font-size: 0.8em;
 	width: 400px;
 	margin: 0 auto;
 }
-	
+
 table.password {
 	margin: 0 auto;
 }
-	
+
 table.password td.userlabel{
 	text-align:right;
 }

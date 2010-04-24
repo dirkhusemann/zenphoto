@@ -18,6 +18,29 @@ class ThemeOptions {
 		setThemeOptionDefault('Watermark_head_image', true);
 		setThemeOptionDefault('Theme_personality', 'Image page');
 		setThemeOptionDefault('Theme_colors', 'effervescence');
+		
+		if (function_exists('createMenuIfNotExists')) {
+			$menuitems = array(
+										array('type'=>'menulabel','title'=>gettext('News Articles'),'link'=>'','show'=>1,'nesting'=>0),
+										array('type'=>'menufunction','title'=>gettext('All news'),'link'=>'printAllNewsCategories("All news",TRUE,"","menu-active",false);','show'=>1,'nesting'=>1),
+										array('type'=>'html','title'=>'DIV-Gallery','link'=>'<div class="menu_rule"></div>','show'=>1,'nesting'=>0),
+										array('type'=>'custompage','title'=>gettext('Gallery'),'link'=>'gallery','show'=>1,'nesting'=>0),
+										array('type'=>'menufunction','title'=>gettext('All Albums'),'link'=>'printAlbumMenuList("list",NULL,"","menu-active","submenu","menu-active","",false,false,false,false);','show'=>1,'nesting'=>1),
+										array('type'=>'html','title'=>'DIV-Pages','link'=>'<div class="menu_rule"></div>','show'=>1,'nesting'=>0),
+										array('type'=>'menulabel','title'=>gettext('Pages'),'link'=>'','show'=>1,'nesting'=>0),
+										array('type'=>'menufunction','title'=>gettext('All pages'),'link'=>'printPageMenu("list","","menu-active","submenu","menu-active",false);','show'=>1,'nesting'=>1),
+										array('type'=>'html','title'=>'DIV-Archive','link'=>'<div class="menu_rule"></div>','show'=>1,'nesting'=>0),
+										array('type'=>'menulabel','title'=>gettext('Archive'),'link'=>'','show'=>1,'nesting'=>0),
+										array('type'=>'custompage','title'=>gettext('Galery and News'),'link'=>'archive','show'=>1,'nesting'=>1),
+										array('type'=>'html','title'=>'DIV-RSS','link'=>'<div class="menu_rule"></div>','show'=>1,'nesting'=>0),
+										array('type'=>'menulabel','title'=>gettext('RSS'),'link'=>'','show'=>1,'nesting'=>0),
+										array('type'=>'customlink','title'=>gettext('Galery'),'link'=>WEBPATH.'/rss.php','show'=>1,'nesting'=>1),
+										array('type'=>'customlink','title'=>gettext('News'),'link'=>WEBPATH.'/rss-news.php','show'=>1,'nesting'=>1),
+										array('type'=>'customlink','title'=>gettext('News and Galery'),WEBPATH.'link'=>'/rss-news.php?withimages','show'=>1,'nesting'=>1),
+										);
+			createMenuIfNotExists($menuitems, 'effervescence');
+		}
+		
 	}
 
 	function getOptionsSupported() {

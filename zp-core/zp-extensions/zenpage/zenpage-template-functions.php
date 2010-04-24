@@ -1035,10 +1035,10 @@ function printCurrentNewsArchive($before='',$mode='formatted',$format='%B %Y') {
  * @param bool $counter TRUE or FALSE (default TRUE). If you want to show the number of articles behind the category name within brackets,
  * @param string $css_id The CSS id for the list
  * @param string $css_class_active The css class for the active menu item
- *
+ * @param bool $startlist set to true to output the UL tab
  * @return string
  */
-function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id='',$css_class_active='') {
+function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id='',$css_class_active='',$startlist=true) {
 	global $_zp_loggedin, $_zp_gallery_page, $_zp_gallery;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
@@ -1050,7 +1050,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 		$published = "published";
 		$pub = true;
 	}
-	echo "<ul $css_id>";
+	if ($startlist) echo "<ul $css_id>";
 	if(!empty($newsindex)) {
 		if(($_zp_gallery_page == "news.php" OR (getOption("zenpage_zp_index_news") AND $_zp_gallery_page == "index.php")) AND !is_NewsCategory() AND !is_NewsArchive() AND !is_NewsArticle()) {
 			echo "<li $css_class_active>".htmlspecialchars($newsindex);
@@ -1086,7 +1086,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 			}
 		}
 	}
-	echo "</ul>\n";
+	if ($startlist) echo "</ul>\n";
 }
 
 
@@ -2398,9 +2398,10 @@ function isProtectedPage($checkProtection=true,$pageobj='') {
  * @param string $$css_class_active CSS class of the sub level list(s)
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" (default) if you don't use it, it is not printed then.
  * @param int $showsubs Set to depth of sublevels that should be shown always. 0 by default. To show all, set to a true! Only valid if option=="list".
+ * @param bool $startlist set to true to output the UL tab
  * @return string
  */
-function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$indexname='',$showsubs=0) {
+function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$indexname='',$showsubs=0,$startlist=true) {
 	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
@@ -2421,7 +2422,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	}
 	$pages = getPages($published);
 	if (count($pages)==0) return; // nothing to do
-	echo "<ul$css_id>";
+	if ($startlist) echo "<ul$css_id>";
 	if(!empty($indexname)) {
 		if($_zp_gallery_page == "index.php") {
 			echo "<li $css_class_topactive>".$indexname."</li>";
@@ -2522,7 +2523,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 		echo "\n";
 	}
 
-	echo "</ul>\n";
+	if ($startlist) echo "</ul>\n";
 }
 
 /**
@@ -2895,10 +2896,14 @@ function checkPagePassword($pageobj, &$hint, &$show) {
 	$hash = $pageobj->getPassword();
 	while(empty($hash) && !is_null($pageobj)) {
 		$parentID = $pageobj->getParentID();
-		$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parentID;
-		$result = query_single_row($sql);
-		$pageobj = new ZenpagePage($result['titlelink']);
-		$hash = $pageobj->getPassword();
+		if (empty($parentID)) {
+			$pageobj = NULL;
+		} else {
+			$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parentID;
+			$result = query_single_row($sql);
+			$pageobj = new ZenpagePage($result['titlelink']);
+			$hash = $pageobj->getPassword();
+		}
 	}
 	if (empty($hash)) { // no password required
 		return 'zp_unprotected';

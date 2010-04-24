@@ -4266,7 +4266,7 @@ function checkForGuest(&$hint, &$show) {
 		if (!checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
 			return false;
 		}
-		$authType = checkCategoryPassword($_zp_current_category, $hint, $show);
+		$authType = checkNewsCategoryPassword($_zp_current_category, $hint, $show);
 		return $authType;
 	} else if (isset($_GET['album'])) {  // album page
 		list($album, $image) = rewrite_get_album_image('album','image');

@@ -147,17 +147,20 @@ function handleSelectorChange(type) {
 			$('#titleinput').show();
 			break;
 		case 'menufunction':
-			$('#albumselector,#pageselector,#categoryselector,#titlelabel,#titleinput,#custompageselector').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector').hide();
 			$('#selector').html('<?php echo gettext("Function"); ?>');
 			$('#description').html('<?php echo gettext('Executes the PHP function provided.'); ?>');
 			$('#link_label').html('<?php echo gettext('Function'); ?>');
 			$('#link').removeAttr('disabled');
+			$('#titleinput').show();
 			break;
-		case 'hr':
-			$('#albumselector,#pageselector,#categoryselector,#titlelabel,#titleinput,#custompageselector,#link_row').hide();
-			$('#selector').html('<?php echo gettext("Horizontal rule"); ?>');
-			$('#description').html('<?php echo gettext('Inserts a horizontal rule.'); ?>');
-			$('#link_label').html('<?php echo gettext('Horizontal rule'); ?>');
+		case 'html':
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector').hide();
+			$('#selector').html('<?php echo gettext("HTML"); ?>');
+			$('#description').html('<?php echo gettext('Inserts custom HTML.'); ?>');
+			$('#link_label').html('<?php echo gettext('HTML'); ?>');
+			$('#link').removeAttr('disabled');
+			$('#titleinput').show();
 			break;
 		case "":
 			$("#selector").html("");
@@ -239,7 +242,7 @@ if (isset($_GET['add'])) {
 		<option value="customlink"><?php echo gettext("Custom link"); ?></option>
 		<option value="menulabel"><?php echo gettext("Label"); ?></option>
 		<option value="menufunction"><?php echo gettext("Function"); ?></option>
-		<option value="hr"><?php echo gettext("Horizontal rule"); ?></option>
+		<option value="html"><?php echo gettext("HTML"); ?></option>
 	</select>
 	<?php 
 } else {
@@ -249,7 +252,7 @@ if (isset($_GET['add'])) {
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
 		<input type="hidden" name="update" id="update" value="<?php echo $action; ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
-		<input type="hidden" name="link-old" id="link-old" type="text" value="<?php echo $link; ?>" />
+		<input type="hidden" name="link-old" id="link-old" type="text" value="<?php echo htmlspecialchars($link); ?>" />
 		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />
 		<table style="width: 80%">
 		<?php

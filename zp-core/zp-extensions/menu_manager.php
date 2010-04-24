@@ -1,11 +1,11 @@
 <?php
 /**
  * Menu Manager
- * 
+ *
  * Lets you create arbitrary menus and place them on your theme pages.
- * 
+ *
  * Use the "Menu" tab to create your menus. Use printCustomMenu() to place them on your pages.
- * 
+ *
  * This plugin is recommend for customized themes only that do not use the standard Zenphoto
  * display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album()
  * loop for example will NOT take care of this menu's structure!
@@ -34,7 +34,7 @@ function menu_tabs($tabs, $current) {
 				$newtabs['menu'] = array(	'text'=>gettext("menu"),
 																	'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/menu_manager/menu_tab.php?page=menu&amp;tab=menu',
 																	'default'=>'menu',
-																	'subtabs'=>NULL);	
+																	'subtabs'=>NULL);
 			}
 			$newtabs[$key] = $tab;
 		}
@@ -44,15 +44,15 @@ function menu_tabs($tabs, $current) {
 }
 
 /*
- * 
+ *
  * Common functions
- * 
+ *
  */
 
 $_menu_manager_items = array();
 
 /**
- * Gets the menu items 
+ * Gets the menu items
  *
  * @param string $menuset the menu tree desired
  * @param string $visible
@@ -113,11 +113,11 @@ function checkChosenMenuset($default='default') {
  * @return string
  */
 function checkChosenItemStatus() {
-  if(isset($_GET['visible'])) {
-  	return sanitize($_GET['visible']);
-  } else {
-  	return 'all';
-  }
+	if(isset($_GET['visible'])) {
+		return sanitize($_GET['visible']);
+	} else {
+		return 'all';
+	}
 }
 
 /**
@@ -130,13 +130,12 @@ function getItemTitleAndURL($item) {
 	$array = array();
 	switch ($item['type']) {
 		case "galleryindex":
-			$url = WEBPATH;
-			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url);
+			$array = array("title" => get_language_string($item['title']),"url" => WEBPATH,"name" => $url);
 			break;
 		case "album":
 			$obj = new Album($gallery,$item['link']);
 			$url = rewrite_path("/".$item['link'],"/index.php?album=".$item['link']);
-			
+
 			$array = array("title" => $obj->getTitle(),"url" => $url,"name" => $item['link']);
 			break;
 		case "zenpagepage":
@@ -150,7 +149,7 @@ function getItemTitleAndURL($item) {
 			} else {
 				$url = rewrite_path("/".ZENPAGE_NEWS,"/index.php?p=".ZENPAGE_NEWS);
 			}
-			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url); 
+			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $url);
 			break;
 		case "zenpagecategory":
 			$obj = query_single_row("SELECT cat_name FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$item['link']."'",true);
@@ -167,11 +166,15 @@ function getItemTitleAndURL($item) {
 			$array = array("title"=>get_language_string($item['title']),"url" => NULL,'name'=>$item['title']);
 			break;
 		case 'menufunction':
-			$array = array("title"=>$item['link'],"url"=>$item['link'],"name"=>$item['link']);
+			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link']);
 			break;
-		case 'hr':
-			$array = array("title"=>$item['title'],"url" => NULL,'name'=>'<hr />');
+		case 'html':
+			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>htmlspecialchars($item['link']));
 			break;
+		default:
+
+			echo "<br/>bad item type ";var_dump($item);
+
 	}
 	return $array;
 }
@@ -408,8 +411,8 @@ function printMenuemanagerPageListWithNav($prevtext, $nexttext, $menuset='defaul
  */
 function printMenuemanagerPageList($menuset='default', $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
 
-echo "<br />printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navlen)";	
-	
+echo "<br />printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navlen)";
+
 	printMenuemanagerPageListWithNav(null, null, $menuset, false, $class, $id, false, $navlen);
 }
 
@@ -438,7 +441,7 @@ function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' |
 					array_unshift($parents, $items[$look]);
 				}
 			}
-			
+
 			if (!empty($parents)) sortMultiArray($parents, 'sort_order', $descending=false, $natsort=false, $case_sensitive=false);
 			$i = 0;
 			foreach ($parents as $item) {
@@ -486,7 +489,7 @@ function submenuOf($link, $menuset='default') {
 		$current = getCurrentMenuItem();
 		if (!is_null($current)) {
 			$sortorder = $link_menu['sort_order'];
-			if (strlen($current) > strlen($sortorder)) {		
+			if (strlen($current) > strlen($sortorder)) {
 				$p = strpos($current,$sortorder);
 				return $p === 0;
 			}
@@ -502,9 +505,9 @@ function submenuOf($link, $menuset='default') {
  * 			'type'=>menuset type
  * 			'title'=>title for the menu item
  * 			'link'=>URL or other data for the item link
- * 			'show'=>set to 1:"visible" or 0:"hidden", 
+ * 			'show'=>set to 1:"visible" or 0:"hidden",
  * 			'nesting'=>nesting level of this item in the menu heirarchy
- * 			
+ *
  * @param string $menuset current menuset
  */
 function createMenuIfNotExists($menuitems, $menuset='default') {
@@ -514,7 +517,7 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 		require_once(dirname(__FILE__).'/menu_manager/menu_manager-admin-functions.php');
 		$success = 1;
 		$orders = array();
-		foreach ($menuitems as $result) {
+		foreach ($menuitems as $key=>$result) {
 			if (array_key_exists('nesting',$result)) {
 				$nesting = $result['nesting'];
 			} else {
@@ -532,7 +535,7 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					$orders[$nesting] = addAlbumsToDatabase($menuset,$orders);
 					if(getOption('zp_plugin_zenpage')) {
 						$orders[$nesting]++;
-						query("INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+						query("INSERT INTO ".prefix('menu')." (title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
 									"VALUES ('".gettext('News index')."', '".rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS).	"','zenpagenewsindex','1','".zp_escape_string($menuset).'","'.sprintf('%3u',$base+1).'"',true);
 						$orders[$nesting] = addPagesToDatabase($menuset, $orders)+1;
 						$orders[$nesting] = addCategoriesToDatabase($menuset,$orders);
@@ -558,40 +561,47 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					$result['title'] = NULL;
 					if(empty($result['link'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty link.'),$key));
 					}
 					break;
 				case 'galleryindex':
 					$result['link'] = NULL;
 					if(empty($result['title'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title.'),$key));
 					}
 					break;
 				case 'zenpagepage':
 					$result['title'] = NULL;
 					if(empty($result['link'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty link.'),$key));
 					}
 					break;
 				case 'zenpagenewsindex':
 					$result['link'] = NULL;
 					if(empty($result['title'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title.'),$key));
 					}
 					break;
 				case 'zenpagecategory':
 					$result['title'] = NULL;
 					if(empty($result['link'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty link.'),$key));
 					}
 					break;
 				case 'custompage':
 					if(empty($result['title']) || empty($result['link'])) {
 						$success = -1;;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title or link.'),$key));
 					}
 					break;
 				case 'customlink':
 					if(empty($result['title'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title.'),$key));
 					} else if(empty($result['link'])) {
 						$result['link'] = seoFriendly(get_language_string($result['title']));
 					}
@@ -599,18 +609,25 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 				case 'menulabel':
 					if(empty($result['title'])) {
 						$success = -1;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title.'),$key));
 					}
 					$result['link'] = md5($result['title']);
 					break;
 				case 'menufunction':
-					if (empty($result['link'])) {
-						$success = -1;
+					if(empty($result['title']) || empty($result['link'])) {
+						$success = -1;;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title or link.'),$key));
 					}
-					$result['title'] = $result['link'];
 					break;
-				case 'hr':
-					$result['title'] = gettext('Horizontal rule');
-					$result['link'] = date('r');
+				case 'html':
+					if(empty($result['title']) || empty($result['link'])) {
+						$success = -1;;
+						debugLog(sprintf(gettext('createMenuIfNotExists item %s has an empty title or link.'),$key));
+					}
+					break;
+				default:
+					$success = -1;
+					debugLog(sprintf(gettext('createMenuIfNotExists item %s has an invalid type.'),$key));
 					break;
 			}
 			if ($success >0 && $type) {
@@ -627,11 +644,15 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 									"','".zp_escape_string($menuset)."','$sort_order')";
 				if (!query($sql, true)) {
 					$success = -2;
+					debugLog(sprintf(gettext('createMenuIfNotExists item %1$s MySQL query (%2$s) failed: %3$s.'),$key, $sql, mysql_error()));
 				}
 			}
 		}
 	} else {
 		$success = 0;
+	}
+	if ($success < 0) {
+		trigger_error(gettext('createMenuIfNotExists has posted processing errors to your debug log.'), E_USER_NOTICE);
 	}
 	return $success;
 }
@@ -666,7 +687,11 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	if (count($items)==0) return; // nothing to do
 	echo "<ul$css_id>";
 	$sortorder = getCurrentMenuItem();
-	$pageid = $items[$sortorder]['id'];
+	if (empty($sortorder)) {
+		$pageid = NULL;
+	} else {
+		$pageid = $items[$sortorder]['id'];
+	}
 	$baseindent = max(1,count(explode("-", $sortorder)));
 	$indent = 1;
 	$open = array($indent=>0);
@@ -674,7 +699,7 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	$order = explode('-', $sortorder);
 	$mylevel = count($order);
 	$myparentsort = array_shift($order);
-	
+
 	for ($c=0; $c<=$mylevel; $c++) {
 		$parents[$c] = NULL;
 	}
@@ -718,12 +743,12 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 					echo "\n";
 				}
 			}
-	
+
 			if ($open[$indent]) { // close an open LI if it exists
 				echo "</li>\n";
 				$open[$indent]--;
 			}
-			
+
 			echo str_pad("\t",$indent-1,"\t");
 			$open[$indent]++;
 			$parents[$indent] = $item['id'];
@@ -756,24 +781,29 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 				} else {
 					$class = $css_class_active;
 				}
-				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle.$itemcounter; 
+				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle.$itemcounter;
 			} else {
-				if (is_null($itemURL)) {
-					if ($item['type'] == 'hr') {
-						echo '<hr />';
-					} else {
+				switch ($item['type']) {
+					case 'html':
+						echo $item['link'];
+						$open[$indent]--;	//	no LI tag!
+						break;
+					case 'menufunction_list':
 						echo '<li class="menu_'.$item['type'].'">'.$itemtitle.$itemcounter;
-					}
-				} else {
-					echo '<li class="menu_'.$item['type'].'">';
-					if ($item['type']=='menulabel') {
+					case 'menufunction':
 						eval($itemURL);
-					} else {
+						if ($item['type']=='menufunction') $open[$indent]--;	//	no LI tag!
+						break;
+					case 'menulabel':
+						echo '<li class="menu_'.$item['type'].'">'.$itemtitle;
+						break;
+					default:
+						echo '<li class="menu_'.$item['type'].'">';
 						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">'.$itemtitle.'</a>'.$itemcounter;
-					}
+						break;
 				}
 			}
-			
+
 		}
 	}
 	// cleanup any hanging list elements

@@ -479,10 +479,10 @@ function addItem() {
 				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
 				return $result;
 			}
-			if(empty($_POST['link'])) {
-				$result['link'] = seoFriendly(get_language_string($result['title']));
-			} else {
-				$result['link'] = sanitize($_POST['link']);
+			$result['link'] = sanitize($_POST['link']);
+			if (empty($result['link'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to provide a <strong>function</strong>!")."</p>";
+				return $result;
 			}
 			$successmsg = sprintf(gettext("Custom page menu item <em>%s</em> added"),$result['link']);
 			break;
@@ -492,11 +492,14 @@ function addItem() {
 				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
 				return $result;
 			}
-			$result['link'] = md5($result['title']);
 			$successmsg = gettext("Custom label added");
 			break;
 		case 'menufunction':
-			$result['title'] = NULL;
+			$result['title'] = process_language_string_save("title",2);
+			if(empty($result['title'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
+				return $result;
+			}
 			$result['link'] = sanitize($_POST['link'],0);
 			if (empty($result['link'])) {
 				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to provide a <strong>function</strong>!")."</p>";
@@ -504,9 +507,17 @@ function addItem() {
 			}
 			$successmsg = sprintf(gettext("Function  menu item <em>%s</em> added"),$result['link']);
 			break;
-		case 'hr':
-			$result['title'] = gettext("Horizontal rule");
-			$result['link'] = date('r');
+		case 'html':
+			$result['title'] = process_language_string_save("title",2);
+			if(empty($result['title'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
+				return $result;
+			}
+			$result['link'] = sanitize($_POST['link'],0);
+			if (empty($result['link'])) {
+				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to provide a <strong>function</strong>!")."</p>";
+				return $result;
+			}
 			$successmsg = gettext("Horizontal rule added");
 			break;
 	}
@@ -544,7 +555,7 @@ function updateItem() {
 	$result['type'] = sanitize($_POST['type']);
 	$result['title'] = process_language_string_save("title",2);
 	if (isset($_POST['link'])) {
-		$result['link'] = sanitize($_POST['link']);
+		$result['link'] = sanitize($_POST['link'],0);
 	} else {
 		$result['link'] = '';
 	}
@@ -553,7 +564,7 @@ function updateItem() {
 						"',link='".zp_escape_string($result['link']).
 						"',type='".zp_escape_string($result['type'])."', `show`= '".zp_escape_string($result['show']).
 						"',menuset='".zp_escape_string($menuset).						
-						"' WHERE `id`=".zp_escape_string($result['id']),true)) {
+						"' WHERE `id`=".zp_escape_string($result['id']))) {
 		
 		if(isset($_POST['title']) && empty($result['title'])) {
 			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
@@ -562,13 +573,6 @@ function updateItem() {
 		} else {
 			echo "<p class='messagebox' id='fade-message'>".gettext("Menu item updated!")."</p>";
 		}
-	} else {
-		if (empty($result['link'])) {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext('A <em>%1$s</em> item already exists in <em>%2$s</em>!'),$result['type'],$menuset)."</p>";
-		} else {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext('A <em>%1$s</em> item with the link <em>%2$s</em> already exists in <em>%3$s</em>!'),$result['type'],$result['link'],$menuset)."</p>";
-		}
-		return NULL;
 	}
 	return $result;
 }
