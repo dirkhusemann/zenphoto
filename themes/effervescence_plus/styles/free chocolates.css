@@ -910,7 +910,7 @@ margin-bottom: 1em;
 clear: both;
 }
 #sidebar {
-width: 320px;
+width: 360px;
 height: 100%;
 float: right;
 background-color: transparent;
@@ -918,16 +918,13 @@ margin-right: 4px;
 border-top: 0px dotted red;
 }
 .menu {
+font: 18px Arial, Helvetica, Tahoma, Verdana, sans-serif;
 margin-top: 0em;
-font-size: 1.3em;
 padding-top: 0em;
 padding-bottom: 0em;
 padding-left: 1em;
 padding-right: 1em;
 height: 100%;
-}
-.menu_undent {
-margin-left: -1em;
 }
 .menu_rule {
 padding-top: 0em;
@@ -935,12 +932,14 @@ padding-bottom: 0em;
 margin-top: 0.5em;
 margin-bottom: 0.5em;
 border-bottom: 1px dotted darkgray;
+background-image: none;
+background-repeat: no-repeat;
+background-position: 1px 0px;
 }
 .menu h3 {
 font-size: 1em;
 font-weight: normal;
 text-transform: uppercase;
-letter-spacing: 0.3em;
 color: black;
 margin-bottom: 0.5em;
 margin-top: 0.7em;
@@ -965,9 +964,13 @@ color: black;
 font-size: 1em;
 font-weight: normal;
 text-transform: uppercase;
-letter-spacing: 0.3em;
 text-decoration:none;
 background-image: none;
+}
+.menu ul li.menu_menulabel ul.submenu li {
+font-style: normal;
+text-decoration:none;
+text-transform: none;
 }
 .menu ul li a {
 text-decoration:none;
@@ -982,7 +985,6 @@ color: black;
 font-size: 1em;
 font-weight: normal;
 text-transform: uppercase;
-letter-spacing: 0.3em;
 text-decoration:none
 }
 .menu h3 a:hover {

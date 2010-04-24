@@ -75,8 +75,23 @@ function printItemsListTable($item, $flag) {
 		?>
 	</td>
 		<td class="icons">
-			<a href="<?php echo $array['url']; ?>">
-			<img src="../../images/view.png" alt="<?php echo gettext('view'); ?>" title="<?php echo gettext('view'); ?>" /></a>						
+			<?php
+			switch ($item['type']) {
+				case 'menulabel':
+				case 'menufunction':
+				case 'html':
+					?>
+					<img src="../../images/icon_inactive.png" alt="" title="" /></a>	
+					<?php
+					break;
+				default:
+					?>
+					<a href="<?php echo $array['url']; ?>">
+					<img src="../../images/view.png" alt="<?php echo gettext('view'); ?>" title="<?php echo gettext('view'); ?>" /></a>	
+					<?php 
+					break;
+			}
+			?>					
 		</td>
 		<td class="icons">
 			<a href="menu_tab.php?delete&amp;id=<?php echo $item['id']; ?>">
@@ -159,17 +174,17 @@ function printItemEditLink($item) {
 	$title = $array['title']; 				
 	switch($item['type']) {
 		case "album":
-			$link = '<a href="../../admin-edit.php?page=edit&album='.$item['link'].'">'.$title.'</a>';
+			$link = '<a href="../../admin-edit.php?page=edit&album='.$item['link'].'">'.htmlspecialchars($title).'</a>';
 			break;
 		case "zenpagepage":
-			$link = '<a href="../zenpage/admin-edit.php?page&titlelink='.$item['link'].'">'.$title.'</a>';
+			$link = '<a href="../zenpage/admin-edit.php?page&titlelink='.$item['link'].'">'.htmlspecialchars($title).'</a>';
 			break;
 		case "zenpagecategory":
 			$catid = getCategoryID($item['link']);
-			$link = '<a href="../zenpage/admin-categories.php?edit&id='.$catid.'&tab=categories">'.$title.'</a>';
+			$link = '<a href="../zenpage/admin-categories.php?edit&id='.$catid.'&tab=categories">'.htmlspecialchars($title).'</a>';
 			break;
 		default:
-			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.$title.'</a>';
+			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.htmlspecialchars($title).'</a>';
 			break;		
 	}
 	echo $link;
@@ -566,7 +581,7 @@ function updateItem() {
 						"',link='".zp_escape_string($result['link']).
 						"',type='".zp_escape_string($result['type'])."', `show`= '".zp_escape_string($result['show']).
 						"',menuset='".zp_escape_string($menuset).						
-						"',inlclude_li='".$result['include_li'].						
+						"',include_li='".$result['include_li'].						
 	"' WHERE `id`=".zp_escape_string($result['id']))) {
 		
 		if(isset($_POST['title']) && empty($result['title'])) {

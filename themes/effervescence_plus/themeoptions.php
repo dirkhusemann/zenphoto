@@ -23,16 +23,16 @@ class ThemeOptions {
 			$menuitems = array(
 										array('type'=>'menulabel','title'=>gettext('News Articles'),'link'=>'','show'=>1,'nesting'=>0),
 										array('type'=>'menufunction','title'=>gettext('All news'),'link'=>'printAllNewsCategories("All news",TRUE,"","menu-active",false);','show'=>1,'include_li'=>0,'nesting'=>1),
-										array('type'=>'html','title'=>gettext('News Articles Rule'),'link'=>'<div class="menu_rule"></div>','show'=>1,'include_li'=>0,'nesting'=>0),
+										array('type'=>'html','title'=>gettext('News Articles Rule'),'link'=>'<li class="menu_rule menu_menulabel"></li>','show'=>1,'include_li'=>0,'nesting'=>0),
 										array('type'=>'custompage','title'=>gettext('Gallery'),'link'=>'gallery','show'=>1,'nesting'=>0),
 										array('type'=>'menufunction','title'=>gettext('All Albums'),'link'=>'printAlbumMenuList("list",NULL,"","menu-active","submenu","menu-active","",false,false,false,false);','show'=>1,'include_li'=>0,'nesting'=>1),
-										array('type'=>'html','title'=>gettext('Gallery Rule'),'link'=>'<div class="menu_rule"></div>','show'=>1,'include_li'=>0,'nesting'=>0),
+										array('type'=>'html','title'=>gettext('Gallery Rule'),'link'=>'<li class="menu_rule menu_menulabel"></li>','show'=>1,'include_li'=>0,'nesting'=>0),
 										array('type'=>'menulabel','title'=>gettext('Pages'),'link'=>'','show'=>1,'nesting'=>0),
-										array('type'=>'menufunction','title'=>gettext('All pages'),'link'=>'printPageMenu("list","","menu-active","submenu","menu-active",false);','show'=>1,'include_li'=>0,'nesting'=>1),
-										array('type'=>'html','title'=>gettext('Pages Rule'),'link'=>'<div class="menu_rule"></div>','show'=>1,'include_li'=>0,'nesting'=>0),
+										array('type'=>'menufunction','title'=>gettext('All pages'),'link'=>'printPageMenu("list","","menu-active","submenu","menu-active","",0,false);','show'=>1,'include_li'=>0,'nesting'=>1),
+										array('type'=>'html','title'=>gettext('Pages Rule'),'link'=>'<li class="menu_rule menu_menulabel"></li>','show'=>1,'include_li'=>0,'nesting'=>0),
 										array('type'=>'menulabel','title'=>gettext('Archive'),'link'=>'','show'=>1,'nesting'=>0),
 										array('type'=>'custompage','title'=>gettext('Gallery and News'),'link'=>'archive','show'=>1,'nesting'=>1),
-										array('type'=>'html','title'=>gettext('Archive Rule'),'link'=>'<div class="menu_rule"></div>','show'=>1,'include_li'=>0,'nesting'=>0),
+										array('type'=>'html','title'=>gettext('Archive Rule'),'link'=>'<li class="menu_rule menu_menulabel"></li>','show'=>1,'include_li'=>0,'nesting'=>0),
 										array('type'=>'menulabel','title'=>gettext('RSS'),'link'=>'','show'=>1,'nesting'=>0),
 										array('type'=>'customlink','title'=>gettext('Gallery'),'link'=>WEBPATH.'/rss.php','show'=>1,'nesting'=>1),
 										array('type'=>'customlink','title'=>gettext('News'),'link'=>WEBPATH.'/rss-news.php','show'=>1,'nesting'=>1),
@@ -54,7 +54,7 @@ class ThemeOptions {
 													'desc' => gettext('Select the theme personality')),
 									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select the colors of the theme')),
 									gettext('Use custom menu') => array('key' => 'effervescence_custommenu', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check this if you want to use the <em>menu_manager</em> plugin to build a custom menu instead of the "standard" zenpage one.').
-													'<p class="notebox">'.gettext('<strong>Note:</strong> Your custom menu must be named "effervescence". This option is valid only if you have the <em>Zenpage</em> plugin enabled and the <em>Gallery index page link</em> option set to "gallery".').'</p>')
+													'<p class="notebox">'.gettext('<strong>Note:</strong> Your custom menu must be named "effervescence". This option is valid only if you have the <em>Gallery index page link</em> option set to "gallery".').'</p>')
 									);
 	}
 

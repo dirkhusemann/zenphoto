@@ -3,12 +3,10 @@ rem_context(ZP_ALBUM | ZP_IMAGE);
 
 if(function_exists('printCustomMenu') && getOption('effervescence_custommenu')) {
 	?>
-	<div class="menu_undent"></div>
-		<div class="menu">
-			<?php
-			printCustomMenu('effervescence','list','',"menu-active","submenu","menu-active",2);
-			?>
-		</div>
+	<div class="menu">
+		<?php
+		printCustomMenu('effervescence','list','',"menu-active","submenu","menu-active",2);
+		?>
 	</div>
 	<?php
 } else {	//	"standard zenpage sidebar menus

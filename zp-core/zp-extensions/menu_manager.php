@@ -208,10 +208,18 @@ function getCurrentMenuItem($menuset='default') {
 	$items = getMenuItems($menuset, getMenuVisibility());
 	$currentkey = NULL;
 	foreach ($items as $key=>$item) {
-		$checkitem = getItemTitleAndURL($item);
-		if($currentpageURL == $checkitem['url']) {
-			$currentkey = $key;
-			break;
+		switch ($item['type']) {
+			case 'menulabel':
+			case 'menufunction':
+			case 'html':
+				break;
+			default:
+				$checkitem = getItemTitleAndURL($item);
+				if($currentpageURL == $checkitem['url']) {
+					$currentkey = $key;
+					break;
+				}
+				break;
 		}
 	}
 	return $currentkey;
@@ -780,7 +788,7 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 						break;
 				}
 			}
-			if ($item['id'] == $pageid) {
+			if ($item['id'] == $pageid && !is_null($pageid)) {
 				if($level == 1) { // top level
 					$class = $css_class_topactive;
 				} else {
