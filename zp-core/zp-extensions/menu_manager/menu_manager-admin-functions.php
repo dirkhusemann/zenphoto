@@ -184,20 +184,24 @@ function printItemsList($items) {
 function printItemEditLink($item) {
 	$link = "";
 	$array = getItemTitleAndURL($item);
-	$title = $array['title']; 				
+	if (is_null($array['title'])) {
+		$title = '<span class="notebox">'.gettext('The target for this menu element no longer exists').'</span>';
+	} else {
+		$title = htmlspecialchars($array['title']);
+	}				
 	switch($item['type']) {
 		case "album":
-			$link = '<a href="../../admin-edit.php?page=edit&album='.$item['link'].'">'.htmlspecialchars($title).'</a>';
+			$link = '<a href="../../admin-edit.php?page=edit&album='.$item['link'].'">'.$title.'</a>';
 			break;
 		case "zenpagepage":
-			$link = '<a href="../zenpage/admin-edit.php?page&titlelink='.$item['link'].'">'.htmlspecialchars($title).'</a>';
+			$link = '<a href="../zenpage/admin-edit.php?page&titlelink='.$item['link'].'">'.$title.'</a>';
 			break;
 		case "zenpagecategory":
 			$catid = getCategoryID($item['link']);
-			$link = '<a href="../zenpage/admin-categories.php?edit&id='.$catid.'&tab=categories">'.htmlspecialchars($title).'</a>';
+			$link = '<a href="../zenpage/admin-categories.php?edit&id='.$catid.'&tab=categories">'.$title.'</a>';
 			break;
 		default:
-			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.htmlspecialchars($title).'</a>';
+			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.$title.'</a>';
 			break;		
 	}
 	echo $link;

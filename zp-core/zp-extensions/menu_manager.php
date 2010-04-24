@@ -138,7 +138,7 @@ function getItemTitleAndURL($item) {
 			$dynamic = hasDynamicAlbumSuffix($folderFS);
 			$valid = file_exists($localpath) && ($dynamic || is_dir($localpath));
 			if(!$valid || strpos($localpath, '..') !== false) {
-				$title = gettext('*****The target for this item no longer exists*****');
+				$title = NULL;
 				$url = '';
 				$protected = 0;
 			} else {
@@ -158,7 +158,7 @@ function getItemTitleAndURL($item) {
 				$protected = isProtectedPage(true,$obj);
 				$title = $obj->getTitle();
 			} else {
-				$title = gettext('*****The target for this item no longer exists*****');
+				$title = NULL;
 				$url = '';
 				$protected = 0;
 			}
@@ -178,7 +178,7 @@ function getItemTitleAndURL($item) {
 				$title = get_language_string($obj['cat_name']);
 				$url = rewrite_path("/".ZENPAGE_NEWS."/category/".$item['link'],"/index.php?p=".ZENPAGE_NEWS."&amp;category=".$item['link']);
 			} else {
-				$title = gettext('*****The target for this item no longer exists*****');
+				$title = NULL;
 				$url = '';
 			}
 			$array = array("title" => $title,"url" => $url,"name" => $item['link'],'protected'=>isProtectedNewsCategory($item['link']));
@@ -190,7 +190,7 @@ function getItemTitleAndURL($item) {
 				$url = rewrite_path("/page/".$item['link'],"/index.php?p=".$item['link']);
 				$title = get_language_string($item['title']);
 			} else {
-				$title = gettext('*****The target for this item no longer exists*****');
+				$title = NULL;
 				$url = '';
 			}
 			$array = array("title"=>$title,"url" => $url,"name"=>$item['link'],'protected'=>false);
