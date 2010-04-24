@@ -73,7 +73,7 @@ function getMenuItems($menuset, $visible) {
 			$visible = 'all';
 			break;
 	}
-	$result = query_full_array("SELECT id, parentid, title, link, type, sort_order,`show`, menuset FROM ".prefix('menu').$where." ORDER BY sort_order", true, 'sort_order');
+	$result = query_full_array("SELECT * FROM ".prefix('menu').$where." ORDER BY sort_order", true, 'sort_order');
 	$_menu_manager_items[$visible] = $result;
 	return $_menu_manager_items[$visible];
 }
@@ -130,7 +130,7 @@ function getItemTitleAndURL($item) {
 	$array = array();
 	switch ($item['type']) {
 		case "galleryindex":
-			$array = array("title" => get_language_string($item['title']),"url" => WEBPATH,"name" => $url);
+			$array = array("title" => get_language_string($item['title']),"url" => WEBPATH,"name" => WEBPATH);
 			break;
 		case "album":
 			$obj = new Album($gallery,$item['link']);
@@ -526,6 +526,11 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 			while ($nesting+1 < count($orders)) array_pop($orders);
 			while ($nesting+1 > count($orders)) array_push($orders, -1);
 			$result['id'] = 0;
+			if (isset($result['include_li'])) {
+				$includeli = $result['include_li'];
+			} else {
+				$includeli = 1;
+			}
 			$type = $result['type'];
 			switch($type) {
 				case 'all_items':
@@ -637,11 +642,11 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					$sort_order .= sprintf('%03u',$orders[$i]).'-';
 				}
 				$sort_order = substr($sort_order,0,-1);
-				$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+				$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`,`include_li`) ".
 									"VALUES ('".zp_escape_string($result['title']).
 									"', '".zp_escape_string($result['link']).
 									"','".zp_escape_string($result['type'])."','".$result['show'].
-									"','".zp_escape_string($menuset)."','$sort_order')";
+									"','".zp_escape_string($menuset)."','$sort_order',$includeli)";
 				if (!query($sql, true)) {
 					$success = -2;
 					debugLog(sprintf(gettext('createMenuIfNotExists item %1$s MySQL query (%2$s) failed: %3$s.'),$key, $sql, mysql_error()));
@@ -750,7 +755,7 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 			}
 
 			echo str_pad("\t",$indent-1,"\t");
-			$open[$indent]++;
+			$open[$indent] += $item['include_li'];
 			$parents[$indent] = $item['id'];
 			if($counter) {
 				switch($item['type']) {
@@ -786,13 +791,10 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 				switch ($item['type']) {
 					case 'html':
 						echo $item['link'];
-						$open[$indent]--;	//	no LI tag!
 						break;
-					case 'menufunction_list':
 						echo '<li class="menu_'.$item['type'].'">'.$itemtitle.$itemcounter;
 					case 'menufunction':
 						eval($itemURL);
-						if ($item['type']=='menufunction') $open[$indent]--;	//	no LI tag!
 						break;
 					case 'menulabel':
 						echo '<li class="menu_'.$item['type'].'">'.$itemtitle;

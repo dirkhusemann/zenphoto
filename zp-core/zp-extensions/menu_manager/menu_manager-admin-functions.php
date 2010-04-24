@@ -392,6 +392,7 @@ function addItem() {
 	$menuset = checkChosenMenuset();
 	$result['type'] = sanitize($_POST['type']);
 	$result['show'] = getCheckboxState('show');
+	$result['include_li'] = getCheckboxState('include_li');
 	$result['id'] = 0;
 	//echo "<pre>"; print_r($_POST); echo "</pre>"; // for debugging
 	switch($result['type']) {
@@ -524,11 +525,11 @@ function addItem() {
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$rslt = query($sql);
 	$order = sprintf('%3u',mysql_result($rslt, 0));
-	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
+	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`,`include_li`) ".
 						"VALUES ('".zp_escape_string($result['title']).
 						"', '".zp_escape_string($result['link']).
 						"','".zp_escape_string($result['type'])."','".$result['show'].
-						"','".zp_escape_string($menuset)."',$order)";
+						"','".zp_escape_string($menuset)."',".$order.",".$result['include_li'].")";
 	if (query($sql, true)) {
 		echo "<p class='messagebox' id='fade-message'>".$successmsg."</p>"; 
 		//echo "<pre>"; print_r($result); echo "</pre>";
@@ -554,6 +555,7 @@ function updateItem() {
 	$result['show'] = getCheckboxState('show');
 	$result['type'] = sanitize($_POST['type']);
 	$result['title'] = process_language_string_save("title",2);
+	$result['include_li'] = getCheckboxState('include_li');
 	if (isset($_POST['link'])) {
 		$result['link'] = sanitize($_POST['link'],0);
 	} else {
@@ -564,7 +566,8 @@ function updateItem() {
 						"',link='".zp_escape_string($result['link']).
 						"',type='".zp_escape_string($result['type'])."', `show`= '".zp_escape_string($result['show']).
 						"',menuset='".zp_escape_string($menuset).						
-						"' WHERE `id`=".zp_escape_string($result['id']))) {
+						"',inlclude_li='".$result['include_li'].						
+	"' WHERE `id`=".zp_escape_string($result['id']))) {
 		
 		if(isset($_POST['title']) && empty($result['title'])) {
 			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
@@ -583,8 +586,8 @@ function updateItem() {
  */
 function deleteItem() {
   if(isset($_GET['delete'])) {
-    $delete = zp_escape_string(sanitize($_GET['delete'],3));
-    query("DELETE FROM ".prefix('menu')." WHERE menuset = '".zp_escape_string($menuset)."' AND id = '{$delete}'");
+    $delete = sanitize_numeric($_GET['delete'],3);
+    query("DELETE FROM ".prefix('menu')." WHERE `id`=$delete");
     echo "<p class='messagebox' id='fade-message'>".gettext("Custom menu item successfully deleted!")."</p>";
   }
 }

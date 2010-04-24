@@ -2085,15 +2085,15 @@ $_zp_current_locale = NULL;
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $size=false, $id='') {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
 	if ($textbox) {
-		if ($size == false) {
+		if ($size === false) {
 			$size = TEXTAREA_COLUMNS;
-		} else if ($size == true) {
+		} else if ($size === true) {
 			$size = TEXTAREA_COLUMNS_SHORT;
 		}
 	} else {
-		if ($size == false) {
+		if ($size === false) {
 			$size = TEXT_INPUT_SIZE;
-		} else if ($size == true) {
+		} else if ($size === true) {
 			$size = TEXT_INPUT_SIZE_SHORT;
 		}
 	}

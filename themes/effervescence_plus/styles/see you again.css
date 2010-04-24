@@ -918,14 +918,19 @@ border-top: 0px dotted red;
 .menu {
 margin-top: 0em;
 font-size: 1.3em;
-padding: 1em 0 0.8em 1em;
-border-bottom: 1px dotted darkgray;
+padding-top: 0em;
+padding-bottom: 0em;
+padding-left: 1em;
+padding-right: 1em;
 height: 100%; 
+}
+.menu_undent {
+margin-left: -1em;
 }
 .menu_rule {
 padding-top: 0em;
 padding-bottom: 0em;
-margin-top: 0em;
+margin-top: 0.5em;
 margin-bottom: 0.5em;
 border-bottom: 1px dotted darkgray;
 }

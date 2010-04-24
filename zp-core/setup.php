@@ -1805,7 +1805,7 @@ if (file_exists(CONFIGFILE)) {
 		`parentid` int(11) unsigned NOT NULL,
 		`title` text,
 		`link` varchar(255) NOT NULL,
-		`auxinfo` varchar(64),
+		`include_li` int(1) unsigned default 1,
 		`type` varchar(16) NOT NULL,
 		`sort_order`varchar(48) NOT NULL default '',
 		`show` int(1) unsigned NOT NULL default '1',

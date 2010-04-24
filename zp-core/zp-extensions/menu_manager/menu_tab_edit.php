@@ -51,6 +51,7 @@ if(isset($_GET['del'])) {
 // <!-- <![CDATA[
 function handleSelectorChange(type) {
 	$('#add,#titlelabel,#link_row,#link,#link_label,#visible_row,#show_visible').show();
+	$('#include_li_label').hide();
 	$('#type').val(type);
 	$('#link_label').html('<?php echo gettext('URL'); ?>');
 	$('#titlelabel').html('<?php echo gettext('Title'); ?>');
@@ -153,6 +154,7 @@ function handleSelectorChange(type) {
 			$('#link_label').html('<?php echo gettext('Function'); ?>');
 			$('#link').removeAttr('disabled');
 			$('#titleinput').show();
+			$('#include_li_label').show();
 			break;
 		case 'html':
 			$('#albumselector,#pageselector,#categoryselector,#custompageselector').hide();
@@ -161,6 +163,7 @@ function handleSelectorChange(type) {
 			$('#link_label').html('<?php echo gettext('HTML'); ?>');
 			$('#link').removeAttr('disabled');
 			$('#titleinput').show();
+			$('#include_li_label').show();
 			break;
 		case "":
 			$("#selector").html("");
@@ -277,7 +280,7 @@ if (isset($_GET['add'])) {
 			<tr> 
 		    <td><span id="titlelabel"><?php echo gettext("Title:"); ?></span></td>
 				<td>
-				<span id="titleinput"><?php print_language_string_list($result['title'],"title",false); ?></span>
+				<span id="titleinput"><?php print_language_string_list($result['title'],"title",false,NULL,'',100); ?></span>
 				<?php printAlbumsSelector(); ?>
 				<?php printZenpagePagesSelector(); ?>
 				<?php printZenpageNewsCategorySelector(); ?>
@@ -287,13 +290,21 @@ if (isset($_GET['add'])) {
 				<td><span id="link_label"></span></td>
 				<td>
 					<?php printCustomPageSelector($result['link']); ?>
-					<input name="link" type="text" id="link" size="48" value="<?php echo htmlspecialchars($result['link']); ?>" />
+					<input name="link" type="text" size="100" id="link" value="<?php echo htmlspecialchars($result['link']); ?>" />
 				</td>
 			</tr>
 			<tr id="visible_row">
-				<td><label id="show_visible" for="show" style="display: inline">
-					<input name="show" type="checkbox" id="show" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
-					<?php echo gettext("visible"); ?></label>
+				<td colspan="2">
+					<span style="display: inline">
+					<label id="show_visible" for="show" style="display: inline">
+						<input name="show" type="checkbox" id="show" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
+						<?php echo gettext("visible"); ?>
+					</label>
+					<label id="include_li_label" style="display: inline">
+						<input name="include_li" type="checkbox" id="include_li" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
+						<?php echo gettext("Include <em>&lt;LI&gt;</em> element"); ?>
+					</label>
+					</span>
 				</td>
 			</tr>
 		</table>

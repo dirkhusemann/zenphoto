@@ -3,10 +3,12 @@ rem_context(ZP_ALBUM | ZP_IMAGE);
 
 if(function_exists('printCustomMenu') && getOption('effervescence_custommenu')) {
 	?>
-	<div class="menu">
-	<?php
-	printCustomMenu('effervescence','list','',"menu-active","submenu","menu-active",2);
-	?>
+	<div class="menu_undent"></div>
+		<div class="menu">
+			<?php
+			printCustomMenu('effervescence','list','',"menu-active","submenu","menu-active",2);
+			?>
+		</div>
 	</div>
 	<?php
 } else {	//	"standard zenpage sidebar menus
@@ -15,6 +17,7 @@ if(function_exists('printCustomMenu') && getOption('effervescence_custommenu')) 
 	<div class="menu">
 		<h3><?php echo gettext("News articles"); ?></h3>
 		<?php printAllNewsCategories("All news",TRUE,"","menu-active"); ?>
+		<div class="menu_rule"></div>
 	</div>
 	<?php } ?>
 	
@@ -34,11 +37,13 @@ if(function_exists('printCustomMenu') && getOption('effervescence_custommenu')) 
 			<?php
 		}
 		?>
+		<div class="menu_rule"></div>
 	</div>
 	<?php if(function_exists("printPageMenu")) { ?>
 	<div class="menu">
 		<h3><?php echo gettext("Pages"); ?></h3>
 		<?php	printPageMenu("list","","menu-active","submenu","menu-active"); ?>
+		<div class="menu_rule"></div>
 	</div>
 	<?php } ?>
 	
@@ -61,6 +66,7 @@ if(function_exists('printCustomMenu') && getOption('effervescence_custommenu')) 
 	 	 	} 
 			?>
 		</ul>
+		<div class="menu_rule"></div>
 	</div>
 	
 	<?php
