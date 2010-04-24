@@ -540,13 +540,23 @@ class SearchEngine
 
 		if (!empty($searchdate)) {
 			if ($searchdate == "0000-00") {
-				$sql .= "`date`=\"0000-00-00 00:00:00\"";
+				$sql .= "`$whichdate`=\"0000-00-00 00:00:00\"";
 			} else {
-				$d1 = $searchdate."-01 00:00:00";
-				$d = strtotime($d1);
-				$d = strtotime('+ 1 month', $d);
-				$d2 = substr(date('Y-m-d H:m:s', $d), 0, 7) . "-01 00:00:00";
-				$sql .= "`$whichdate` >= \"$d1\" AND `date` < \"$d2\"";
+				$datesize = sizeof(split('-', $searchdate));
+				// search by day
+				if ($datesize == 3)	{
+					$d1 = $searchdate." 00:00:00";
+					$d2 = $searchdate." 23:59:59";
+					$sql .= "`$whichdate` >= \"$d1\" AND `$whichdate` < \"$d2\"";
+				}
+				// search by month
+				else if ($datesize == 2) {
+					$d1 = $searchdate."-01 00:00:00";
+					$d = strtotime($d1);
+					$d = strtotime('+ 1 month', $d);
+					$d2 = substr(date('Y-m-d H:m:s', $d), 0, 7) . "-01 00:00:00";
+					$sql .= "`$whichdate` >= \"$d1\" AND `$whichdate` < \"$d2\"";
+				}
 			}
 		}
 		if(!zp_loggedin()) { $sql .= ")"; }

@@ -159,6 +159,7 @@ function getItemTitleAndURL($item) {
 		case "custompage":
 			$url = rewrite_path("/page/".$item['link'],"/index.php?p=".$item['link']);
 			$array = array("title" => get_language_string($item['title']),"url" => $url,"name" => $item['link']);
+			break;
 		case "customlink":
 			$array = array("title" => get_language_string($item['title']),"url" => $item['link'],"name" => $item['link']);
 			break;
@@ -172,9 +173,8 @@ function getItemTitleAndURL($item) {
 			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>htmlspecialchars($item['link']));
 			break;
 		default:
-
 			echo "<br/>bad item type ";var_dump($item);
-
+			break;
 	}
 	return $array;
 }

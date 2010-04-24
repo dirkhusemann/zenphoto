@@ -31,12 +31,12 @@ class ThemeOptions {
 										array('type'=>'menufunction','title'=>gettext('All pages'),'link'=>'printPageMenu("list","","menu-active","submenu","menu-active",false);','show'=>1,'nesting'=>1),
 										array('type'=>'html','title'=>'DIV-Archive','link'=>'<div class="menu_rule"></div>','show'=>1,'nesting'=>0),
 										array('type'=>'menulabel','title'=>gettext('Archive'),'link'=>'','show'=>1,'nesting'=>0),
-										array('type'=>'custompage','title'=>gettext('Galery and News'),'link'=>'archive','show'=>1,'nesting'=>1),
+										array('type'=>'custompage','title'=>gettext('Gallery and News'),'link'=>'archive','show'=>1,'nesting'=>1),
 										array('type'=>'html','title'=>'DIV-RSS','link'=>'<div class="menu_rule"></div>','show'=>1,'nesting'=>0),
 										array('type'=>'menulabel','title'=>gettext('RSS'),'link'=>'','show'=>1,'nesting'=>0),
-										array('type'=>'customlink','title'=>gettext('Galery'),'link'=>WEBPATH.'/rss.php','show'=>1,'nesting'=>1),
+										array('type'=>'customlink','title'=>gettext('Gallery'),'link'=>WEBPATH.'/rss.php','show'=>1,'nesting'=>1),
 										array('type'=>'customlink','title'=>gettext('News'),'link'=>WEBPATH.'/rss-news.php','show'=>1,'nesting'=>1),
-										array('type'=>'customlink','title'=>gettext('News and Galery'),WEBPATH.'link'=>'/rss-news.php?withimages','show'=>1,'nesting'=>1),
+										array('type'=>'customlink','title'=>gettext('News and Gallery'),WEBPATH.'link'=>'/rss-news.php?withimages','show'=>1,'nesting'=>1),
 										);
 			createMenuIfNotExists($menuitems, 'effervescence');
 		}
