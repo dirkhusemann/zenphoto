@@ -873,6 +873,7 @@ function inNewsCategory($catlink) {
 
 /**
  * Checks if an article is in a password protected category and returns TRUE or FALSE
+ * NOTE: This function does not check if the password has been entered! Use checkNewsAccess() for that.
  *
  * @param bool $checkProtection If set to TRUE (default) this check if the article is actually protected (remember only articles that are in the protected category only are!).
  * 															If set to FALSE it simply checks if it is in an otherwise protected category at all
@@ -903,6 +904,7 @@ function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
 
 /**
  * Checks if a category is protected and returns TRUE or FALSE
+ * NOTE: This function does only check if a password is set not if it has been entered! Use checkNewsCategoryPassword() for that.
  *
  * @param string $catlink The optional categorylink of a category, if empty the current category is checked if available
  * @return bool
@@ -2354,6 +2356,7 @@ function printParentPagesBreadcrumb($before='', $after='') {
 
 /**
  * Checks if the page is itself password protected or is inheriting protection from a parent pages.
+ * NOTE: This function does only check if a password is set not if it has been entered! Use checkPagePassword() for that.
  *
  * @param bool $checkProtection TRUE (default) if you want to check if if this page itself is protected or inherits protection
  * 															FALSE to check if the page itself is password protected only
