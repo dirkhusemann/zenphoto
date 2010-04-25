@@ -307,7 +307,19 @@ if (isset($_GET['add'])) {
 					</span>
 				</td>
 			</tr>
-		</table>
+			<?php
+			$array = getItemTitleAndURL($result);
+			if (is_null($array['title'])) {
+				?>
+				<tr>
+					<td colspan="2">
+						<span class="notebox"><?php echo gettext('The target for this menu element no longer exists'); ?></span>
+					</td>
+				</tr>
+				<?php
+			}
+			?>
+</table>
 	<p class="buttons">
 	<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 	<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
