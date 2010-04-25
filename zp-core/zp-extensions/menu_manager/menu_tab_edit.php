@@ -110,7 +110,7 @@ function handleSelectorChange(type) {
 			$('#link').val('<?php echo rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS); ?>');
 			break;	
 		case 'all_zenpagecategorys':
-			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#show_visible').hide();
+			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo gettext("All Zenpage categories"); ?>');
 			$('#description').html('<?php echo gettext("This adds menu items for all Zenppage categories."); ?>');
 			break;
