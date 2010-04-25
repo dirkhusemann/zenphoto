@@ -57,7 +57,7 @@ function printItemsListTable($item, $flag) {
 			printItemEditLink($item); 
 			?>
 		</td>
-		<td class="icons3"><?php echo $array['name']; ?></td>
+		<td class="icons3"><?php echo htmlspecialchars($array['name']); ?></td>
 		<td class="icons3"><em><?php echo $item['type']; ?></em></td>
 		<td  class="icons">
 			<?php

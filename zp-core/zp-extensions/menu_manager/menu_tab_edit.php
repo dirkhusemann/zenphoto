@@ -294,32 +294,34 @@ if (isset($_GET['add'])) {
 				</td>
 			</tr>
 			<tr id="visible_row">
-				<td colspan="2">
-					<span style="display: inline">
+				<td>
 					<label id="show_visible" for="show" style="display: inline">
 						<input name="show" type="checkbox" id="show" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
 						<?php echo gettext("visible"); ?>
 					</label>
+				</td>
+				<td>	
 					<label id="include_li_label" style="display: inline">
 						<input name="include_li" type="checkbox" id="include_li" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
 						<?php echo gettext("Include <em>&lt;LI&gt;</em> element"); ?>
 					</label>
-					</span>
 				</td>
 			</tr>
 			<?php
-			$array = getItemTitleAndURL($result);
-			if (is_null($array['title'])) {
-				?>
-				<tr>
-					<td colspan="2">
-						<span class="notebox"><?php echo gettext('The target for this menu element no longer exists'); ?></span>
-					</td>
-				</tr>
-				<?php
+			if (is_array($result) && !empty($result['type'])) {
+				$array = getItemTitleAndURL($result);
+				if (is_null($array['title'])) {
+					?>
+					<tr>
+						<td colspan="2">
+							<span class="notebox"><?php echo gettext('The target for this menu element no longer exists'); ?></span>
+						</td>
+					</tr>
+					<?php
+				}
 			}
 			?>
-</table>
+	</table>
 	<p class="buttons">
 	<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 	<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>

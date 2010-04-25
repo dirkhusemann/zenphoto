@@ -205,7 +205,7 @@ function getItemTitleAndURL($item) {
 			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link'],'protected'=>false);
 			break;
 		case 'html':
-			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>htmlspecialchars($item['link']),'protected'=>false);
+			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link'],'protected'=>false);
 			break;
 		default:
 			echo "<br/>bad item type ";var_dump($item);
