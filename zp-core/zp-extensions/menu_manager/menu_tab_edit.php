@@ -255,7 +255,7 @@ if (isset($_GET['add'])) {
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
 		<input type="hidden" name="update" id="update" value="<?php echo $action; ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
-		<input type="hidden" name="link-old" id="link-old" type="text" value="<?php echo htmlspecialchars($link); ?>" />
+		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link); ?>" />
 		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />
 		<table style="width: 80%">
 		<?php
@@ -273,7 +273,7 @@ if (isset($_GET['add'])) {
 				<td style="width: 13%"><?php echo gettext("Type:"); ?></td>
 				<td id="selector"></td>
 			</tr>
-			<tr style="vertical-align: top";>
+			<tr style="vertical-align: top">
 				<td><?php echo gettext("Description:"); ?></td>
 				<td id="description"></td>
 			</tr>
@@ -328,6 +328,7 @@ if (isset($_GET['add'])) {
 	</p>
 	<br clear="all" /><br />
 </form>
+</div>
 </div>
 </div>
 <?php printAdminFooter(); ?>

@@ -52,7 +52,7 @@ function printItemsListTable($item, $flag) {
 <table class='bordered2'>
 	<tr>
 		<td class='sort-handle' style="padding-bottom: 15px;">
-			<img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width: 14px; height: 14px" />
+			<img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width: 14px; height: 14px" alt="" />
 			<?php
 			$array = getItemTitleAndURL($item);
 			printItemEditLink($item); 
@@ -199,7 +199,7 @@ function printItemEditLink($item) {
 			break;
 		case "zenpagecategory":
 			$catid = getCategoryID($item['link']);
-			$link = '<a href="../zenpage/admin-categories.php?edit&amp;id='.$catid.'&tab=categories">'.$title.'</a>';
+			$link = '<a href="../zenpage/admin-categories.php?edit&amp;id='.$catid.'&amp;tab=categories">'.$title.'</a>';
 			break;
 		default:
 			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.$title.'</a>';

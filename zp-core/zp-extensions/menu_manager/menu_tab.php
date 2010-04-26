@@ -162,7 +162,7 @@ if ($count > 0) {
 	});
 	// ]]> -->
 </script>
-
+</div>
 <?php printAdminFooter(); ?>
 
 </body>
