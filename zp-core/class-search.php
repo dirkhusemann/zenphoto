@@ -290,6 +290,7 @@ class SearchEngine
 		$i = 0;
 		do {
 			$c = substr($searchstring, $i, 1);
+			$op = '';
 			switch ($c) {
 				case "'":
 				case '"':
@@ -313,9 +314,17 @@ class SearchEngine
 						case 'AND':
 							if ($j < strlen($searchstring)) {
 								$c3 = substr($searchstring,$j,1);
-								$nextop = array_key_exists($c3,$opChars) && $opChars[$c3] == 1;
-							} else {
-								$nextop = false;
+								if (array_key_exists($c3,$opChars) && $opChars[$c3] == 1) {	
+									$nextop = true;
+								} else if (substr($searchstring.' ', $j, 4)=='AND ') {
+									$nextop = true;
+								} else if (substr($searchstring.' ', $j, 3)=='OR ') {
+									$nextop = true;
+								} else if (substr($searchstring.' ', $j, 4)=='NOT ') {
+									$nextop = true;
+								} else {
+									$nextop = false;
+								}
 							}
 							if (!$nextop) {
 								if (!empty($target)) {
@@ -363,13 +372,13 @@ class SearchEngine
 					$c2 = substr($searchstring, $i+1, 1);
 					switch ($c2) {
 						case 'A':
-							if (substr($searchstring, $i+1, 4) == 'AND ') $c2 = '&';
+							if (substr($searchstring.' ', $i+1, 4) == 'AND ') $c2 = '&';
 							break;
 						case 'O':
-							if (substr($searchstring, $i+1, 3) == 'OR ') $c2 = '|';
+							if (substr($searchstring.' ', $i+1, 3) == 'OR ') $c2 = '|';
 							break;
 						case 'N':
-							if (substr($searchstring, $i+1, 4) == 'NOT ') $c2 = '!';
+							if (substr($searchstring.' ', $i+1, 4) == 'NOT ') $c2 = '!';
 							break;
 					}
 					if (!((isset($opChars[$c2])&&$opChars[$c2]==1) || (isset($opChars[$last])&&$opChars[$last]==1))) {
@@ -399,38 +408,21 @@ class SearchEngine
 					$i=$j-1;
 					break;
 				case 'A':
-					if (substr($searchstring, $i, 4) == 'AND ') {
-						$searchstring = substr($searchstring, 3);
-						if (!empty($target)) {
-							$r = trim($target);
-							if (!empty($r)) {
-								$last = $result[] = $r;
-								$target = '';
-							}
-						}
-						$c1 = $c;
-						$target = '';
-						$last = $result[] = '&';
-						break;
+					if (substr($searchstring.' ', $i, 4) == 'AND ') {
+						$op = '&';
+						$skip = 3;
 					}
 				case 'O':
-					if (substr($searchstring, $i, 3) == 'OR ') {
-						$searchstring = substr($searchstring, 2);
-						if (!empty($target)) {
-							$r = trim($target);
-							if (!empty($r)) {
-								$last = $result[] = $r;
-								$target = '';
-							}
-						}
-						$c1 = $c;
-						$target = '';
-						$last = $result[] = '|';
-						break;
+					if (substr($searchstring.' ', $i, 3) == 'OR ') {
+						$op = '|';
+						$skip = 2;
 					}
 				case 'N':
-					if (substr($searchstring, $i, 4) == 'NOT ') {
-						$searchstring = substr($searchstring, 3);
+					if (substr($searchstring.' ' , $i, 4) == 'NOT ') {
+						$op = '!';
+						$skip = 3;
+					}
+					if ($op) {
 						if (!empty($target)) {
 							$r = trim($target);
 							if (!empty($r)) {
@@ -438,12 +430,21 @@ class SearchEngine
 								$target = '';
 							}
 						}
-						$c1 = $c;
+						$c1 = $op;
 						$target = '';
-						$last = $result[] = '!';
-						break;
+						$last = $result[] = $op;
+						$j = $i+$skip;
+						while ($j < strlen($searchstring) && substr($searchstring,$j,1)==' ') {
+							$j++;
+						}
+						$i=$j-1;
+					} else {
+						$c1 = $c;
+						$target .= $c;
 					}
-					default:
+					break;
+
+				default:
 					$c1 = $c;
 					$target .= $c;
 					break;
@@ -457,7 +458,9 @@ class SearchEngine
 			}
 			$lasttoken = $token;
 		}
-		if ($lasttoken == '|') array_pop($result);
+		if (array_key_exists($lasttoken,$opChars) && $opChars[$lasttoken] == 1) {	
+			array_pop($result);
+		}
 		return $result;
 	}
 
