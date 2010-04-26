@@ -146,12 +146,12 @@ printLogoAndLinks();
 								$x = $result['password'];
 								if (empty($x)) {
 									?>
-									<img src="../../images/lock_open.png" />
+									<img src="../../images/lock_open.png" alt="" />
 									<?php
 								} else {
 									$x = '          ';
 									?>
-									<img src="../../images/lock.png" />
+									<img src="../../images/lock.png" alt="" />
 									<?php 
 								} 
 								?>
@@ -166,6 +166,7 @@ printLogoAndLinks();
 							<td colspan="2">
 								<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />
 							</td>
+						</tr>
 						<tr class="passwordextrahide" style="display:none">
 							<td style="text-align:right">
 								<?php echo gettext("Category password:"); ?>
@@ -185,6 +186,7 @@ printLogoAndLinks();
 							<td colspan="2">
 							<?php print_language_string_list($result['password_hint'], 'category_hint', false, NULL, '', false); ?>
 							</td>
+						</tr>
 						<tr class="passwordextrahide" style="display:none">
 							<td colspan="2">
 								<p class="notebox"><?php echo gettext('<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected.')?></p>

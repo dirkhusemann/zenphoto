@@ -99,7 +99,7 @@ printLogoAndLinks();
 						  <td> 
 						   <?php 
 						   if(checkIfLocked($article)) {
-						   	 echo '<a href="admin-edit.php?newsarticle&amp;titlelink='.urlencode($article->getTitlelink()).'&amp;pagenr='.getCurrentAdminNewsPage().'" title="'.truncate_string(strip_tags($article->getContent()),300).'">'; checkForEmptyTitle($article->getTitle(),"news"); echo '</a>'.checkHitcounterDisplay($article->getHitcounter()); 
+						   	 echo '<a href="admin-edit.php?newsarticle&amp;titlelink='.urlencode($article->getTitlelink()).'&amp;pagenr='.getCurrentAdminNewsPage().'">'; checkForEmptyTitle($article->getTitle(),"news"); echo '</a>'.checkHitcounterDisplay($article->getHitcounter()); 
 						   } else {
 						   	 echo $article->getTitle().'</a>'.checkHitcounterDisplay($article->getHitcounter()); 
 						   }

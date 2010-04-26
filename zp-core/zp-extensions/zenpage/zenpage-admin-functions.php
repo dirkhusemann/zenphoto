@@ -294,7 +294,7 @@ function printPagesListTable($page, $flag) {
 		<td class='sort-handle' style="padding-bottom: 15px; ">
 			 <img src="<?php echo $img; ?>" alt="" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
 		<?php if(checkIfLocked($page)) {
-			echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."' title='".truncate_string(strip_tags($page->getContent()),300)."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
+			echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
 		} else {
 			echo $page->getTitle(); checkHitcounterDisplay($page->getShow());
 		}	?>

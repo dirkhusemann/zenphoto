@@ -187,10 +187,10 @@ if(is_AdminEditPage("newsarticle")) {
 <div id="tips" style="display:none">
 <br />
 <h2><?php echo gettext("Usage tips"); ?></h2>
-<p><?php echo gettext("Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode).");?>
+<p><?php echo gettext("Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode).");?></p>
 <p class="notebox"><?php echo gettext("<strong>Note:</strong> Edit titlelink overrides the permalink setting."); ?></p>
 <p class="notebox"><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p>
-<br /><?php echo gettext("If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"); ?></p>
+<p><?php echo gettext("If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"); ?></p>
 <?php if(is_AdminEditPage("newsarticle")) { ?>
 <p><?php echo gettext("<em>Custom article shortening:</em> You can set a custom article shorten length for the news loop excerpts by using the standard TinyMCE <em>page break</em> plugin button. This will override the general shorten length set on the plugin option then."); ?></p>
 <?php } ?>
@@ -201,6 +201,7 @@ if(is_AdminEditPage("newsarticle")) {
 <?php echo gettext("You also can use the codeblock fields as custom fields."); ?>
 <?php echo gettext("Note that your theme must be setup to use the codeblock functions. Note also that codeblock fields are not multi-lingual."); ?>
 </p>
+<p class="notebox"><?php echo gettext("<strong>Important:</strong> If setting a password for a page its subpages inherit the protection."); ?></p>
 <p><?php echo gettext("Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."); ?></p>
 </div>
 <?php if(is_AdminEditPage("page")) { ?>
@@ -258,12 +259,12 @@ if(is_AdminEditPage("newsarticle")) {
 						$x = $result->getPassword();
 						if (empty($x)) {
 							?>
-							<img src="../../images/lock_open.png" />
+							<img src="../../images/lock_open.png" alt="" />
 							<?php
 						} else {
 							$x = '          ';
 							?>
-							<img src="../../images/lock.png" />
+							<img src="../../images/lock.png" alt="" />
 							<?php 
 						} 
 						?>
