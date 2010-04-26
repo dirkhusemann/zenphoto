@@ -137,11 +137,11 @@ class Zenphoto_Authority {
 		}
 		if ($c > 0) {
 			if ($l > 0) {
-				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s.',
-															'<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s.', $c), $l, $text).'</p>';;
+				$msg = '<span class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s.',
+															'<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s.', $c), $l, $text).'</span>';;
 			} else {
-				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must contain at least one character from %s.',
-															'<strong>Note</strong>: passwords must contain at least one character from each of the following groups: %s.', $c), $text).'</p>';
+				$msg = '<span class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must contain at least one character from %s.',
+															'<strong>Note</strong>: passwords must contain at least one character from each of the following groups: %s.', $c), $text).'</span>';
 			}
 		} else {
 			if ($l > 0) {

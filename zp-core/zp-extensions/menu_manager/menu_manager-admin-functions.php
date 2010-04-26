@@ -12,7 +12,8 @@ function updateItemsSortorder() {
 		$orderarray = explode("&",$_POST['order']);
 		$parents = array('NULL');
 		foreach($orderarray as $order) {
-			$id = substr(strstr($order,"="),1);
+			$id = str_replace('id_','',substr(strstr($order,"="),1));
+			
 			// clear out unnecessary info from the submitted data string
 			$sortstring = strtr($order, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
 			$sortlevelex = explode("-",$sortstring);
@@ -156,7 +157,7 @@ function printItemsList($items) {
 			echo str_pad("\t",$indent,"\t")."</li>\n";
 			$open[$indent]--;
 		}
-		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$item['id']."\" class=\"clear-element page-item1 left\">";
+		echo str_pad("\t",$indent-1,"\t")."<li id=\"id_".$item['id']."\" class=\"clear-element page-item1 left\">";
 		echo printItemsListTable($item, $toodeep);
 		$open[$indent]++;
 	}
@@ -191,14 +192,14 @@ function printItemEditLink($item) {
 	}				
 	switch($item['type']) {
 		case "album":
-			$link = '<a href="../../admin-edit.php?page=edit&album='.$item['link'].'">'.$title.'</a>';
+			$link = '<a href="../../admin-edit.php?page=edit&amp;album='.$item['link'].'">'.$title.'</a>';
 			break;
 		case "zenpagepage":
-			$link = '<a href="../zenpage/admin-edit.php?page&titlelink='.$item['link'].'">'.$title.'</a>';
+			$link = '<a href="../zenpage/admin-edit.php?page&amp;titlelink='.$item['link'].'">'.$title.'</a>';
 			break;
 		case "zenpagecategory":
 			$catid = getCategoryID($item['link']);
-			$link = '<a href="../zenpage/admin-categories.php?edit&id='.$catid.'&tab=categories">'.$title.'</a>';
+			$link = '<a href="../zenpage/admin-categories.php?edit&amp;id='.$catid.'&tab=categories">'.$title.'</a>';
 			break;
 		default:
 			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.$title.'</a>';

@@ -339,5 +339,10 @@ if (isset($_GET['themelist'])) {
 }
 setOptionDefault('zp_plugin_zenphoto_news', (version_compare(PHP_VERSION, '5.0.0') == 1)?5:0);
 setOptionDefault('zp_plugin_hitcounter',1);
+// migrate search space is opton
+if (getOption('search_space_is_OR')) {
+	setOption('search_space_is', '|');
+}
+query('DELETE FROM '.prefix('options').' WHERE `name`="search_space_is_OR"',true);
 
 ?>

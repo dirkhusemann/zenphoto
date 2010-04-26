@@ -1061,7 +1061,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								});
 								// ]]> -->
 							</script>
-							<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" />
+							<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" />
 						</td>
 					</tr>
 					<tr>
@@ -1772,7 +1772,7 @@ function printAlbumEditRow($album) {
 		<?php
 		if ($album->isDynamic()) {
 			?>
-			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" /></a>
+			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" />
 			<?php
 		} else {
 			?>
@@ -1786,7 +1786,7 @@ function printAlbumEditRow($album) {
 		<?php
 		if ($album->isDynamic()) {
 			?>
-			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" /></a>
+			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" />
 			<?php
 		} else {
 			?>
@@ -1800,7 +1800,7 @@ function printAlbumEditRow($album) {
 		<?php
 		if ($album->isDynamic()) {
 			?>
-			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" /></a>
+			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" />
 			<?php
 		} else {
 			?>

@@ -56,7 +56,7 @@ printLogoAndLinks();
 			if (isset($_GET['delete'])) {
 				$kill = array();
 				foreach ($_POST as $key => $value) {
-					$key = postIndexDecode($key);
+					$key = str_replace('tags_','',postIndexDecode($key));
 					$kill[] = $_zp_UTF8->strtolower($key);
 				}
 				if (count($kill) > 0) {
@@ -136,7 +136,7 @@ printLogoAndLinks();
 				<form name="tag_delete" action="?delete=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
 					<div class="box-tags-unpadded">
 						<?php
-						tagSelector(NULL, '', true, $tagsort);
+						tagSelector(NULL, 'tags_', true, $tagsort);
 						?>
 					</div>
 						

@@ -279,9 +279,9 @@ class SearchEngine
 	 */
 	function getSearchString() {
 		$searchstring = trim($this->words);
-		$space_is_OR = getOption('search_space_is_or');
+		$space_is = getOption('search_space_is');
 		$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, '('=>2);
-		if ($space_is_OR) {
+		if ($space_is) {
 			$opChars[' '] = 1;
 		}
 		$c1 = ' ';
@@ -304,10 +304,35 @@ class SearchEngine
 					$c1 = $c;
 					break;
 				case ' ':
-					if (!$space_is_OR) {
-						$c1 = $c;
-						$target .= $c;
-						break;
+					switch ($space_is) {
+						case 'AND':
+							if (!empty($target)) {
+								$r = trim($target);
+								if (!empty($r)) {
+									$last = $result[] = $r;
+									$target = '';
+								}
+							}
+							$c1 = '&';
+							$target = '';
+							$last = $result[] = '&';
+							break;
+						case 'OR':
+							if (!empty($target)) {
+								$r = trim($target);
+								if (!empty($r)) {
+									$last = $result[] = $r;
+									$target = '';
+								}
+							}
+							$c1 = '|';
+							$target = '';
+							$last = $result[] = '|';
+							break;
+						default:
+							$c1 = $c;
+							$target .= $c;
+							break;
 					}
 				case ',':
 					if (!empty($target)) {

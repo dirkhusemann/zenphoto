@@ -255,7 +255,7 @@ if (ini_get('safe_mode')) { ?>
 }
 ?>
 
-<form name="uploadform" id="uploaderform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="post"
+<form name="uploaderform" id="uploaderform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="post"
 												onsubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" />
 	<input type="hidden" name="existingfolder" value="false" />

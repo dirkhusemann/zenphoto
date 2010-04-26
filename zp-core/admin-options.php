@@ -196,7 +196,7 @@ if (isset($_GET['action'])) {
 				}
 				setOption('search_hint', process_language_string_save('search_hint', 3));
 			}
-			setBoolOption('search_space_is_or', isset($_POST['search_space_is_or']));
+			setOption('search_space_is',sanitize($_POST['search_space_is']));
 			setBoolOption('search_no_albums', isset($_POST['search_no_albums']));
 			setBoolOption('search_no_images', isset($_POST['search_no_images']));
 			setBoolOption('search_no_pages', isset($_POST['search_no_pages']));
@@ -1101,10 +1101,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						</ul>
 						<br />
 						<p>
-							<label>
-								<input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> />
-								<?php echo gettext('Treat spaces as <em>OR</em>') ?>
-							</label>
+						<?php generateRadiobuttonsFromArray(getOption('search_space_is'),array(gettext('<em>space</em>')=>'',gettext('<em>OR</em>')=>'OR',gettext('<em>AND</em>')=>'AND'),'search_space_is'); ?>
 						</p>
 						<p>
 							<label>

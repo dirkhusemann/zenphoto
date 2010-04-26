@@ -1063,7 +1063,7 @@ $alb = removeParentAlbumNames($album);
 								});
 								// ]]> -->
 							</script>
-							<input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20em" name="<?php echo $currentimage; ?>-date"
+							<input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20" name="<?php echo $currentimage; ?>-date"
 								value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" />
 						</td>
 					</tr>
@@ -1337,10 +1337,6 @@ if (isset($_GET['saved'])) {
 
 
 	$albums = getNestedAlbumList(NULL, $gallery_nesting);
-
-	?>
-	<p>
-	<?php
 	if (count($albums) > 0) {
 		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) {
 			$sorttype = strtolower(getOption('gallery_sorttype'));
