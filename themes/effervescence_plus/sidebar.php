@@ -1,11 +1,11 @@
 <?php 
 rem_context(ZP_ALBUM | ZP_IMAGE);
 
-if(function_exists('printCustomMenu') && getOption('effervescence_custommenu')) {
+if(function_exists('printCustomMenu') && ($menu = getOption('effervescence_menu'))) {
 	?>
 	<div class="menu">
 		<?php
-		printCustomMenu('effervescence','list','',"menu-active","submenu","menu-active",2);
+		printCustomMenu($menu,'list','',"menu-active","submenu","menu-active",2);
 		?>
 	</div>
 	<?php

@@ -18,6 +18,7 @@ class ThemeOptions {
 		setThemeOptionDefault('Watermark_head_image', true);
 		setThemeOptionDefault('Theme_personality', 'Image page');
 		setThemeOptionDefault('Theme_colors', 'effervescence');
+		setThemeOptionDefault('effervescence_menu', 'effervescence');
 		
 		if (function_exists('createMenuIfNotExists')) {
 			$menuitems = array(
@@ -53,8 +54,8 @@ class ThemeOptions {
 									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => OPTION_TYPE_SELECTOR, 'selections' => array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'),
 													'desc' => gettext('Select the theme personality')),
 									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select the colors of the theme')),
-									gettext('Use custom menu') => array('key' => 'effervescence_custommenu', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check this if you want to use the <em>menu_manager</em> plugin to build a custom menu instead of the "standard" zenpage one.').
-													'<p class="notebox">'.gettext('<strong>Note:</strong> Your custom menu must be named "effervescence". This option is valid only if you have the <em>Gallery index page link</em> option set to "gallery".').'</p>')
+									gettext('Custom menu') => array('key' => 'effervescence_menu', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Set this to the <em>menu_manager</em> menu set you wish to use.').
+													'<p class="notebox">'.gettext('<strong>Note:</strong> This option is valid only if you have the <em>Gallery index page link</em> option set to "gallery". Of course the <em>menu_manager</em> plugin must also be enabled.').'</p>')
 									);
 	}
 
@@ -67,7 +68,22 @@ class ThemeOptions {
 				generateListFromFiles($currentValue, $themeroot , '.css');
 				echo "</select>\n";
 				break;
-
+			case 'effervescence_menu':
+				$menusets = array();
+				echo '<select id="EF_menuset" name="effervescence_menu"';
+				if (function_exists('printCustomMenu') && getThemeOption('custom_index_page',NULL, 'effervescence_plus') === 'gallery') {
+					$result = query_full_array("SELECT DISTINCT menuset FROM ".prefix('menu')." ORDER BY menuset");
+					foreach ($result as $set) {
+						$menusets[$set['menuset']] = $set['menuset'];
+					}
+				} else {
+					echo ' disabled="disabled"';
+				}
+				echo ">\n";
+				echo '<option value="" style="background-color:LightGray">'.gettext('*standard menu').'</option>';
+				generateListFromArray(array($currentValue), $menusets , false, false);
+				echo "</select>\n";
+				break;
 			case 'Graphic_logo':
 				$gallery = new Gallery();
 				$theme = $gallery->getCurrentTheme();
