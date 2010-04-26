@@ -304,36 +304,43 @@ class SearchEngine
 					$c1 = $c;
 					break;
 				case ' ':
+					$j = $i+1;
+					while ($j < strlen($searchstring) && substr($searchstring,$j,1)==' ') {
+						$j++;
+					}
 					switch ($space_is) {
-						case 'AND':
-							if (!empty($target)) {
-								$r = trim($target);
-								if (!empty($r)) {
-									$last = $result[] = $r;
-									$target = '';
-								}
-							}
-							$c1 = '&';
-							$target = '';
-							$last = $result[] = '&';
-							break;
 						case 'OR':
-							if (!empty($target)) {
-								$r = trim($target);
-								if (!empty($r)) {
-									$last = $result[] = $r;
-									$target = '';
-								}
+						case 'AND':
+							if ($j < strlen($searchstring)) {
+								$c3 = substr($searchstring,$j,1);
+								$nextop = array_key_exists($c3,$opChars) && $opChars[$c3] == 1;
+							} else {
+								$nextop = false;
 							}
-							$c1 = '|';
-							$target = '';
-							$last = $result[] = '|';
+							if (!$nextop) {
+								if (!empty($target)) {
+									$r = trim($target);
+									if (!empty($r)) {
+										$last = $result[] = $r;
+										$target = '';
+									}
+								}
+								if ($space_is=='AND') {
+									$c1 = '&';
+								} else {
+									$c1 = '|';
+								}
+								$target = '';
+								$last = $result[] = $c1;
+							}
 							break;
 						default:
 							$c1 = $c;
-							$target .= $c;
+							$target .= str_pad('',$j-$i);
 							break;
 					}
+					$i = $j-1;
+					break;
 				case ',':
 					if (!empty($target)) {
 						$r = trim($target);
@@ -385,6 +392,11 @@ class SearchEngine
 					$c1 = $c;
 					$target = '';
 					$last = $result[] = $c;
+					$j = $i+1;
+					while ($j < strlen($searchstring) && substr($searchstring,$j,1)==' ') {
+						$j++;
+					}
+					$i=$j-1;
 					break;
 				case 'A':
 					if (substr($searchstring, $i, 4) == 'AND ') {
@@ -527,7 +539,7 @@ class SearchEngine
 			}
 		} else {
 			foreach ($_REQUEST as $key=>$value) {
-				if (strpos($key, '_SEARCH_') !== false) {
+				if (strpos($key, 'SEARCH_') !== false) {
 					$fields[] = $value;
 				}
 			}

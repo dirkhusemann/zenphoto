@@ -28,18 +28,16 @@
 		<tr>
 			<td valign="top"><?php echo gettext("re-enter:"); ?></td>
 			<td>
-				<p style="line-height: 1em;">
-					<input type="password" id="adminpass_2" name="adminpass_2"	value="" size="23" />
-					<?php
-					$msg = $_zp_authority->passwordNote();
-					if (!empty($msg)) {
-						?>
-						<br />
-						<?php
-						echo  $msg;
-					}
+				<input type="password" id="adminpass_2" name="adminpass_2"	value="" size="23" />
+				<?php
+				$msg = $_zp_authority->passwordNote();
+				if (!empty($msg)) {
 					?>
-				</p>
+					<br />
+					<?php
+					echo  $msg;
+				}
+				?>
 			</td>
 		</tr>
 		<?php

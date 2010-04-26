@@ -89,7 +89,7 @@ echo "\n</head>";
 					<input type="hidden" name="action" value="delete" />
 					<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 					<div class="buttons">
-						<button type="submit" class="tooltip" id="delete_log" title="<?php printf(gettext("Delete %s"),$logfiletext);?>">
+						<button type="submit" class="tooltip" id="delete_log_<?php echo $subtab; ?>" title="<?php printf(gettext("Delete %s"),$logfiletext);?>">
 							<img src="images/edit-delete.png" style="border: 0px;" alt="delete" /> <?php echo gettext("Delete");?>
 						</button>
 					</div>
@@ -101,7 +101,7 @@ echo "\n</head>";
 						<input type="hidden" name="action" value="clear" />
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">
-							<button type="submit" class="tooltip" id="clear_log" title="<?php printf(gettext("Reset %s"),$logfiletext);?>">
+							<button type="submit" class="tooltip" id="clear_log_<?php echo $subtab; ?>" title="<?php printf(gettext("Reset %s"),$logfiletext);?>">
 								<img src="images/refresh.png" style="border: 0px;" alt="clear" /> <?php echo gettext("Reset");?>
 							</button>
 						</div>
@@ -111,7 +111,7 @@ echo "\n</head>";
 						<input type="hidden" name="action" value="download" />
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">
-							<button type="submit" class="tooltip" id="download_log" title="<?php printf(gettext("Download %s zipfile"),$logfiletext);?>">
+							<button type="submit" class="tooltip" id="download_log_<?php echo $subtab; ?>" title="<?php printf(gettext("Download %s zipfile"),$logfiletext);?>">
 								<img src="images/down.png" style="border: 0px;" alt="download" /> <?php echo gettext("Download");?>
 							</button>
 						</div>
@@ -153,7 +153,13 @@ echo "\n</head>";
 									foreach ($fields as $key=>$field) {
 										?>
 										<td>
+										<?php
+										if ($field) {
+											?>
 											<span class="nowrap"><?php echo $field; ?></span>
+											<?php
+										}
+										?>
 										</td>
 										<?php
 									}
@@ -167,15 +173,17 @@ echo "\n</head>";
 						} else {
 							array_unshift($logtext, $header);
 							foreach ($logtext as $line) {
-								?>
-								<p>
-									<span class="nowrap">
-									<?php
-									echo str_replace(' ','&nbsp;',strip_tags($line));
+								if ($line) {
 									?>
-									</span>
-								</p>
-								<?php
+									<p>
+										<span class="nowrap">
+										<?php
+										echo str_replace(' ','&nbsp;',strip_tags($line));
+										?>
+										</span>
+									</p>
+									<?php
+								}
 							}
 						}
 					}

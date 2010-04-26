@@ -164,7 +164,7 @@ if (isset($_GET['action'])) {
 			$search = new SearchEngine();
 			$searchfields = array();
 			foreach ($_POST as $key=>$value) {
-				if (strpos($key, '_SEARCH_') !== false) {
+				if (strpos($key, 'SEARCH_') !== false) {
 					$searchfields[] = $value;
 				}
 			}
@@ -1096,7 +1096,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						<?php echo gettext('Fields list:'); ?>
 						<ul class="searchchecklist">
 							<?php
-							generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+							generateUnorderedListFromArray($set_fields, $fields, 'SEARCH_', false, true, true);
 							?>
 						</ul>
 						<br />
@@ -1138,7 +1138,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 						<p><?php echo gettext('Search behavior settings.') ?></p>
 						<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
 						<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
-						<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
+						<p><?php echo gettext('Setting <code>Treat spaces as</code> to <em>OR</em> will cause search to trigger on any of the words in a string separated by spaces. Setting it to <em>AND</em> will cause the search to triger only when all strings are present. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
 						<p><?php echo gettext('Setting <code>Do not return <em>{item}</em> matches</code> will cause search to ignore <em>{items}</em> when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
 					</td>
 				</tr>
@@ -1954,7 +1954,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 				<td align="left">
 					<?php echo gettext('<strong>Standard options</strong>') ?>
 				</td>
-				<td colspan="2" ><em><?php echo gettext('These image and album presentation options provided by the Zenphoto core for all themes.').'<p class="notebox">'.gettext('<strong>Note:</strong> These are <em>recommendations</em> as themes may choose to override them for design reasons'); ?></p></em></td>
+				<td colspan="2" ><?php echo gettext('<em>These image and album presentation options provided by the Zenphoto core for all themes.</em>').'<p class="notebox">'.gettext('<strong>Note:</strong> These are <em>recommendations</em> as themes may choose to override them for design reasons'); ?></p></td>
 			</tr>
 			<tr>
 				<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
@@ -2172,7 +2172,7 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 						<table class="bordered" style="border: 0" id="plugin-<?php echo $extension; ?>">
 							<tr>
 							<?php
-							if (isset($_GET['_show-'.$extension])) {
+							if (isset($_GET['show-'.$extension])) {
 								$show_show = 'none';
 								$show_hide = 'block';
 								$v = 1;
@@ -2183,12 +2183,12 @@ if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 							}
 							?>
 							<th colspan="3" style="text-align:left">
-								<input type="hidden" name="_show-<?php echo $extension;?>" id="_show-<?php echo $extension;?>" value="<?php echo $v; ?>" />
+								<input type="hidden" name="show-<?php echo $extension;?>" id="show-<?php echo $extension;?>" value="<?php echo $v; ?>" />
 								<span style="display:<?php echo $show_show; ?>;" class="pluginextrashow">
-									<a href="javascript:$('#_show-<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
+									<a href="javascript:$('#show-<?php echo $extension;?>').val(1);toggleExtraInfo('<?php echo $extension;?>','plugin',true);"><?php echo $extension; ?></a>
 								</span>
 								<span style="display:<?php echo $show_hide; ?>;" class="pluginextrahide">
-									<a href="javascript:$('#_show-<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
+									<a href="javascript:$('#show-<?php echo $extension;?>').val(0);toggleExtraInfo('<?php echo $extension;?>','plugin',false);"><?php echo $extension; ?></a>
 								</span>
 							</th>
 						</tr>

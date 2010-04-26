@@ -51,7 +51,7 @@ if (isset($_POST['savealbum'])) {
 	}
 	$searchfields = array();
 	foreach ($_POST as $key=>$value) {
-		if (strpos($key, '_SEARCH_') !== false) {
+		if (strpos($key, 'SEARCH_') !== false) {
 			$searchfields[] = $value;
 		}
 	}
@@ -201,7 +201,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			}
 		}
 		
-		generateUnorderedListFromArray($selected_fields, $available_fields, '_SEARCH_', false, true, true);
+		generateUnorderedListFromArray($selected_fields, $available_fields, 'SEARCH_', false, true, true);
 		echo '</ul>';
 		?>		
 		</td>

@@ -81,7 +81,7 @@ class xmpMetadata_options {
 			$listi[$suffix] = 'xmpMetadata_examine_images_'.$suffix;
 		}
 		return array(	gettext('Sidecar file extension') => array('key' => 'xmpMetadata_suffix', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext('The plugin will look for files with </em>image_name.extension</em> and extract XMP metadata from them into the <em>image_name</em> record.')),
+										'desc' => gettext('The plugin will look for files with <em>image_name.extension</em> and extract XMP metadata from them into the <em>image_name</em> record.')),
 									gettext('Process extensions') => array('key' => 'xmpMetadata_examine_imagefile', 'type' => OPTION_TYPE_CHECKBOX_UL,
 										'checkboxes' => $listi,
 										'desc' => gettext('If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive.'))

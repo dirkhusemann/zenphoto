@@ -153,7 +153,7 @@ foreach ($filelist as $extension) {
 	}
 	$optionlink = isolate('$option_interface', $pluginStream);
 	if (!empty($optionlink)) {
-		$optionlink = FULLWEBPATH.'/'.ZENFOLDER.'/admin-options.php?page=options&amp;tab=plugin&amp;_show-'.$extension;
+		$optionlink = FULLWEBPATH.'/'.ZENFOLDER.'/admin-options.php?page=options&amp;tab=plugin&amp;show-'.$extension;
 	}
 	?>
 	<tr>

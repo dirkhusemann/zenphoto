@@ -94,8 +94,8 @@ if (isset($_GET['action'])) {
 			}
 			$returntab = "&page=users";
 			if (!empty($newuser)) {
-				$returntab .= '&_show-'.$newuser;
-				unset($_POST['_show-']);
+				$returntab .= '&show-'.$newuser;
+				unset($_POST['show-']);
 			}
 		}
 
@@ -273,7 +273,7 @@ if (empty($alterrights)) {
 		$current = true;
 	} else {
 		foreach ($_GET as $param=>$value) {
-			if (strpos($param, '_show-') === 0) {
+			if (strpos($param, 'show-') === 0) {
 				$current = false;
 				break;
 			}
@@ -286,7 +286,7 @@ if (empty($alterrights)) {
 		if ($user['valid']) {
 			$local_alterrights = $alterrights;
 			$userid = $user['user'];
-			$showlist[] = '#_show-'.$userid;
+			$showlist[] = '#show-'.$userid;
 			$userobj = $_zp_authority->newAdministrator($userid);
 			if (empty($userid)) {
 				$userobj->setGroup($user['group']);
@@ -307,7 +307,7 @@ if (empty($alterrights)) {
 					$ismaster = true;
 				}
 			}
-			if (isset($_GET['_show-'.$userid])) {
+			if (isset($_GET['show-'.$userid])) {
 				$current = true;
 			}
 			if ($background) {
@@ -325,7 +325,7 @@ if (empty($alterrights)) {
 			<tr>
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
 				<!-- individual admin table -->
-				<input type="hidden" name="_show-<?php echo $userid; ?>" id="_show-<?php echo $userid; ?>" value="<?php echo ($current);?>" /> 
+				<input type="hidden" name="show-<?php echo $userid; ?>" id="show-<?php echo $userid; ?>" value="<?php echo ($current);?>" /> 
 				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
 				<tr>
 					<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
@@ -339,7 +339,7 @@ if (empty($alterrights)) {
 					}
 					?>
 						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
-							<a href="javascript:$('#_show-<?php echo $userid; ?>').val(1);toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
+							<a href="javascript:$('#show-<?php echo $userid; ?>').val(1);toggleExtraInfo('<?php echo $id;?>','user',true);" title="<?php echo $displaytitle; ?>" >
 								<?php
 								if (empty($userid)) {
 									?>
@@ -356,7 +356,7 @@ if (empty($alterrights)) {
 							</a>
 						</span>
 						<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
-							<a href="javascript:$('#_show-<?php echo $userid; ?>').val(0);toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
+							<a href="javascript:$('#show-<?php echo $userid; ?>').val(0);toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
 								<?php 
 								if (empty($userid)) {
 									echo '<em>'.gettext("Add New User").'</em>';
@@ -426,7 +426,7 @@ if (empty($alterrights)) {
 					<br />
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 				</td>
-				<td  width="320em" <?php if (!empty($background)) echo " style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
+				<td  width="320" <?php if (!empty($background)) echo " style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
 					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 						value="<?php echo $x; ?>" />
 					<br />
@@ -435,11 +435,7 @@ if (empty($alterrights)) {
 					<?php
 					$msg = $_zp_authority->passwordNote();
 					if (!empty($msg)) {
-						?>
-						<p>
-						<?php echo $msg; ?>
-						</p>
-						<?php
+						echo $msg; 
 					}
 					?>
 				</td>
@@ -473,19 +469,21 @@ if (empty($alterrights)) {
 					} else {
 						printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
 					}
-					?>
-					<p>
-						<?php
 						if (!$ismaster) {
-							if (empty($album_alter_rights)) {
-								echo gettext("Select one or more albums for the administrator to manage.").' ';
-								echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
-							} else {
-								echo gettext("You may manage these albums subject to the above rights.");
-							}
+							?>
+							<p>
+								<?php
+								if (empty($album_alter_rights)) {
+									echo gettext("Select one or more albums for the administrator to manage.").' ';
+									echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
+								} else {
+									echo gettext("You may manage these albums subject to the above rights.");
+								}
+								?>
+							</p>
+							<?php
 						}
 						?>
-					</p>
 				</td>
 			</tr>
 			<?php echo $custom_row; ?>
