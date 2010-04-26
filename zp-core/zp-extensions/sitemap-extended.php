@@ -157,7 +157,7 @@ function sitemap_cache_purgebutton($buttons) {
 								'icon'=>'images/edit-delete.png',
 								'title'=>gettext('Clear the static sitemap cache. It will be recached if requested.'),
 								'alt'=>'',
-								'hidden'=> '<input type="hidden" name="action" value="clear_sitemap_cache">',
+								'hidden'=> '<input type="hidden" name="action" value="clear_sitemap_cache" />',
 								'rights'=> ADMIN_RIGHTS
 	);
 	return $buttons;
