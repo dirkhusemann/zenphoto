@@ -32,8 +32,9 @@ function printAdminFooter($addl='') {
 			echo ' | '. $addl;
 		}
 		?>
-		 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a>
-		 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a>
+		 | <a href="http://www.zenphoto.org/category/user-guide/" title="<?php echo gettext('User guide'); ?>"><?php echo gettext('User guide'); ?></a>
+		 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>"><?php echo gettext('Forum'); ?></a>
+		 | <a href="http://www.zenphoto.org/trac/report/10" title="<?php echo gettext('Bugtracker'); ?>"><?php echo gettext('Bugtracker'); ?></a>
 		 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
 		 <br />
 		<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
@@ -277,7 +278,7 @@ function printLogoAndLinks() {
 	echo '<a href="'.WEBPATH.'/index.php">';
 	$t = get_language_string(getOption('gallery_title'));
 	if (!empty($t))	{
-		printf(gettext("View <em>%s</em>"), $t);
+		printf(gettext("View <strong>%s</strong>"), $t);
 	} else {
 		echo gettext("View gallery index");
 	}
