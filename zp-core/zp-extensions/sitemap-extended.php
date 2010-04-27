@@ -382,7 +382,7 @@ function printSitemapZenpagePages($changefreq='') {
 			$date = substr($pageobj->getDatetime(),0,10);
 			if(!is_null($pageobj->getLastchange())) $lastchange = substr($pageobj->getLastchange(),0,10);
 			if($date > $lastchange) $date = $lastchange;
-			if(!isProtectedPage(true,$pageobj)) {
+			if(!isProtectedPage($pageobj)) {
 				if(sitemap_multilingual()) {
 					foreach($sitemap_locales as $locale) {
 						$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_PAGES.'/'.urlencode($page['titlelink']),'?p='.ZENPAGE_PAGES.'&amp;title='.urlencode($page['titlelink']),false);
