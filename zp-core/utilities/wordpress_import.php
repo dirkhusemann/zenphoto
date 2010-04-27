@@ -99,8 +99,8 @@ printAdminHeader();
 <?php echo gettext("<strong>IMPORTANT: </strong>If you are not using an fresh Zenphoto install it is <strong>strongly recommended to backup your database</strong> before running this importer. Make also sure that both databases use the same encoding so you do not get messed up character display."); ?>
 </p>
 <p class="notebox">
-<?php echo gettext("<strong>Notes:</strong> <em>Wordpress page nesting</em> is not preserved but can easily be recreated by drag&drop sorting on the pages tab.</em> <em>
-Category nesting</em> is also not directly supported by Zenpage. Therefore all categories will be plain level, you can however use the <em>menu_manager plugin</em> to recreate this if needed.</em>."); ?>
+<?php echo gettext("<strong>Notes:</strong> <em>Wordpress page nesting</em> is not preserved but can easily be recreated by drag and drop sorting on the pages tab. 
+<em>Category nesting</em> is also not directly supported by Zenpage. Therefore all categories will be plain level, you can however use the <em>menu_manager plugin</em> to recreate this if needed."); ?>
 </p>
 
 <p><?php echo gettext("In case aynthing does not work as expected the query results from the Wordpress database are logged in <code>zp-data/debug_log.txt</code>"); ?></p>
@@ -113,10 +113,10 @@ die();
 <h2><?php echo gettext('Please enter your Wordpress database details:'); ?></h2>
 <form action="" method="post" name="wordpress">
 	<input type="text" value="wordpress" id="dbname" name="dbname" /> <label for="dbname"><?php echo gettext("Database name"); ?></label><br />
-	<input type="text" value="root" id="dbuser" name="dbuser" /> <label for="db"><?php echo gettext("Database user"); ?></label><br />
-	<input type="text" value="root" id="dbpass" name="dbpass" /> <label for="dbnuser"><?php echo gettext("Database password"); ?></label><br />
+	<input type="text" value="root" id="dbuser" name="dbuser" /> <label for="dbuser"><?php echo gettext("Database user"); ?></label><br />
+	<input type="text" value="root" id="dbpass" name="dbpass" /> <label for="dbpass"><?php echo gettext("Database password"); ?></label><br />
 	<input type="text" value="localhost" id="dbhost" name="dbhost" /> <label for="dbhost"><?php echo gettext("Database host"); ?></label><br />
-	<input type="text" value="wp_" name="tableprefix" /> <label for="tableprefix"><?php echo gettext("Database table prefix"); ?></label><br />
+	<input type="text" value="wp_" name="tableprefix" id="tableprefix" /> <label for="tableprefix"><?php echo gettext("Database table prefix"); ?></label><br />
 	<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo gettext("Import"); ?>"><img src="../images/pass.png" alt="" /><strong><?php echo gettext("Import"); ?></strong></button></p>
 	<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
 	<br style="clear:both" />
@@ -352,13 +352,12 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 	?>
 	<p class="buttons"><a href="wordpress_import.php"><?php echo gettext('New import'); ?></a></p>
 	<br style="clear:both" />
-	<?php
-	
-} // if form submit if
-?>
-</ol>
+	</ol>
 </li>
 </ul>
+	<?php
+} // if form submit if
+?>
 </div><!-- content -->
 </div><!-- main -->
 <?php printAdminFooter(); ?>
