@@ -1,7 +1,7 @@
 <?php 
 if(function_exists('printCustomMenu') && getOption('zenpage_custommenu')) { ?>
 <div class="menu">
-<?php printCustomMenu('zenpage','list','',"menu-active","submenu","menu-active",1); ?>
+<?php printCustomMenu('zenpage','list','',"menu-active","submenu","menu-active",2); ?>
 </div>
 <?php
 } else {
