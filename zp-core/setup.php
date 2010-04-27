@@ -45,7 +45,7 @@ if (!file_exists($en_US)) {
 }
 
 function setupLog($message, $anyway=false, $reset=false) {
-  global $debug, $chmod;  
+	global $debug, $chmod;
 	if ($debug || $anyway) {
 		if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER)) {
 			mkdir_recursive(dirname(dirname(__FILE__)).'/'.DATA_FOLDER, $chmod);
@@ -67,7 +67,7 @@ function updateItem($item, $value) {
 
 function checkAlbumParentid($albumname, $id) {
 	Global $_zp_gallery;
-	$album = new Album($_zp_gallery, $albumname);	
+	$album = new Album($_zp_gallery, $albumname);
 	$oldid = $album->get('parentid');
 	if ($oldid !== $id) {
 		$album->set('parentid', $id);
@@ -252,7 +252,7 @@ if ($setup_checked) {
 		setupLog(gettext('Setup cookie test successful'), true);
 		setcookie('setup_test_cookie', '', time()-368000, '/');
 	} else {
-		setupLog(gettext('Setup cookie test unsuccessful'), true); 
+		setupLog(gettext('Setup cookie test unsuccessful'), true);
 	}
 } else {
 	if (isset($_POST['mysql'])) {
@@ -542,8 +542,8 @@ if (!$setup_checked) {
 	<p>
 		<?php
 		// Some descriptions about setup/upgrade.
-	  if ($upgrade) {
-	    echo gettext("Zenphoto has detected that you're upgrading to a new version.");
+		if ($upgrade) {
+			echo gettext("Zenphoto has detected that you're upgrading to a new version.");
 		} else {
 			echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server.");
 		}
@@ -614,7 +614,7 @@ if (!$setup_checked) {
 			</li>
 			<?php
 		} else {
-			?> 
+			?>
 			<li class="<?php echo $dsp; ?>"><?php echo  $text; ?></li>
 			<?php
 			$dsp .= ': '.trim($text);
@@ -622,7 +622,7 @@ if (!$setup_checked) {
 		setupLog($dsp, $check>-2 && $check<=0);
 		return $check;
 	}
-	
+
 	function folderCheck($which, $path, $class, $relaxation=true, $subfolders=NULL) {
 		global $const_webpath, $serverpath, $chmod, $permission_names;
 		$path = str_replace('\\', '/', $path);
@@ -671,8 +671,8 @@ if (!$setup_checked) {
 						?>
 						<script type="text/javascript">
 							// <!-- <![CDATA[
-							$.ajax({   
-								type: 'POST',   
+							$.ajax({
+								type: 'POST',
 								url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/setup_permissions_changer.php',
 								data: 'folder=<?php echo $path; ?>&key=<?php echo md5(filemtime(CONFIGFILE).file_get_contents(CONFIGFILE)); ?>'
 							});
@@ -710,13 +710,13 @@ if (!$setup_checked) {
 			return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
 		}
 	}
-	
-	
+
+
 	function versionCheck($required, $desired, $found) {
 		$nr = explode(".", $required . '.0.0.0');
 		$vr = $nr[0]*10000 + $nr[1]*100 + $nr[2];
 		$nf = explode(".", $found . '.0.0.0');
-		$vf = $nf[0]*10000 + $nf[1]*100 + $nf[2]; 
+		$vf = $nf[0]*10000 + $nf[1]*100 + $nf[2];
 		$nd = explode(".", $desired . '.0.0.0');
 		$vd = $nd[0]*10000 + $nd[1]*100 + $nd[2];
 		if ($vf < $vr) return 0;
@@ -765,11 +765,11 @@ if (!$setup_checked) {
 	}
 
 	$good = true;
-	
+
 	?>
 	<ul>
 	<?php
-	
+
 	$required = '4.4.8';
 	$desired = '5.2';
 	$err = versionCheck($required, $desired, PHP_VERSION);
@@ -779,7 +779,7 @@ if (!$setup_checked) {
 		if ($err == 0) $err = -1; // make it non-fatal
 		$good = checkMark($err, sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required. Use earlier versions at your own risk. Version %2$s or greater is strongly recommended.'),$required, $desired)) && $good;
 	}
-	
+
 	if (ini_get('safe_mode')) {
 		$safe = -1;
 	} else {
@@ -825,8 +825,8 @@ if (!$setup_checked) {
 						$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
 					}
 					checkMark($err, gettext("PHP graphics image support"), '', $imgmissing.
-	                    "<br />".gettext("The unsupported image types will not be viewable in your albums.").
-	                    "<br />".$mandate);
+											"<br />".gettext("The unsupported image types will not be viewable in your albums.").
+											"<br />".$mandate);
 				}
 				if (!zp_imageCanRotate()) {
 					checkMark(-1, '', gettext('Graphics Library rotation support [is not present]'), gettext('The graphics support library does not provide support for image rotation.'));
@@ -835,7 +835,7 @@ if (!$setup_checked) {
 		} else {
 			$graphicsmsg = '';
 			foreach ($_zp_graphics_optionhandlers as $handler) {
-				$graphicsmsg .= $handler->canLoadMsg($handler); 
+				$graphicsmsg .= $handler->canLoadMsg($handler);
 			}
 			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support.').' '.trim($graphicsmsg));
 		}
@@ -872,24 +872,24 @@ if (!$setup_checked) {
 		$cfg = false;
 	}
 	$good = checkMark($cfg, gettext('<em>zp-config.php</em> file'), gettext('<em>zp-config.php</em> file [does not exist]'),
- 							sprintf(gettext('Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file\'s comments and rename it to <code>zp-config.php</code>.'.
- 							' Place the file in the %s folder.'),DATA_FOLDER).
- 							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
- 	if ($cfg) {
-  	if (zp_loggedin(ADMIN_RIGHTS)) {
-  		$selector =	'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">';
-  		$c = 0;
-  		foreach ($permission_names as $key=>$permission) {
-  			$selector .= '	<option value="'.$c.'"'.($chmod==$key?' selected="selected"':'').'>'.sprintf(gettext('%1$s (0%2$o)'),$permission_names[$key],$key).'</option>';
+							sprintf(gettext('Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file\'s comments and rename it to <code>zp-config.php</code>.'.
+							' Place the file in the %s folder.'),DATA_FOLDER).
+							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
+	if ($cfg) {
+		if (zp_loggedin(ADMIN_RIGHTS)) {
+			$selector =	'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">';
+			$c = 0;
+			foreach ($permission_names as $key=>$permission) {
+				$selector .= '	<option value="'.$c.'"'.($chmod==$key?' selected="selected"':'').'>'.sprintf(gettext('%1$s (0%2$o)'),$permission_names[$key],$key).'</option>';
 				$c++;
-  		}
-  		$selector .= '</select>';
-  		$chmodselector =	'<form action="#">'.
+			}
+			$selector .= '</select>';
+			$chmodselector =	'<form action="#">'.
 												sprintf(gettext('Change file/folder permissions mask: %s'),$selector).
 												'</form><br />';
- 		} else {
- 			$chmodselector = '<p>'.gettext('You must be logged in to change permissions.').'</p>';
- 		}
+		} else {
+			$chmodselector = '<p>'.gettext('You must be logged in to change permissions.').'</p>';
+		}
 		if (array_key_exists($chmod, $permission_names)) {
 			$value = sprintf(gettext('<em>%1$s</em> (<code>0%2$o</code>)'),$permission_names[$chmod],$chmod);
 		} else {
@@ -900,11 +900,11 @@ if (!$setup_checked) {
 		} else {
 			$severity = -2;
 		}
- 		$msg = sprintf(gettext('File/Folder Permissions [are %s]'),$value);
- 		checkMark($severity, $msg, $msg,
-	 							'<p>'.gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'</p>'.
-	 							$chmodselector);
- 	}
+		$msg = sprintf(gettext('File/Folder Permissions [are %s]'),$value);
+		checkMark($severity, $msg, $msg,
+								'<p>'.gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'</p>'.
+								$chmodselector);
+	}
 	if ($sql) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
 			$db = $_zp_conf_vars['mysql_database'];
@@ -1135,7 +1135,7 @@ if ($debug) {
 			if (!$result) { $result = -1; }
 			$dbn = $_zp_conf_vars['mysql_database'];
 			checkMark($result, $msg, gettext("MySQL <em>show tables</em> [Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
- 											"<br />".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
+											"<br />".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 			if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
 				$fields = 0;
@@ -1294,7 +1294,7 @@ if ($debug) {
 		}
 		$msg2 = '';
 	}
-	
+
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
 	if (zp_loggedin(ADMIN_RIGHTS)) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	$msg = gettext("<em>.htaccess</em> file");
@@ -1362,7 +1362,7 @@ if ($debug) {
 		}
 	}
 	if ($Apache || $ch != -2) {
-		$good = checkMark($ch, $msg, $err, $desc) && $good;			
+		$good = checkMark($ch, $msg, $err, $desc) && $good;
 	}
 	$base = true;
 	$f = '';
@@ -1455,11 +1455,11 @@ if ($debug) {
 	$good = folderCheck(DATA_FOLDER, dirname(dirname(__FILE__)) . '/'.DATA_FOLDER.'/', 'std') && $good;
 	$good = folderCheck(gettext('HTML cache'), dirname(dirname(__FILE__)) . '/cache_html/', 'std', true, $Cache_html_subfolders) && $good;
 	$good = folderCheck(gettext('Third party plugins'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std', false, $plugin_subfolders) && $good;
-	
+
 	?>
 	</ul>
 	<?php
-	
+
 	if ($connection) { @mysql_close($connection); }
 	if ($good) {
 		$dbmsg = "";
@@ -1540,7 +1540,7 @@ if (file_exists(CONFIGFILE)) {
 			$_zp_conf_vars['mysql_prefix'].'captcha',$_zp_conf_vars['mysql_prefix'].'zenpage_pages',
 			$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
 			$_zp_conf_vars['mysql_prefix'].'zenpage_news',$_zp_conf_vars['mysql_prefix'].'menu');
-		
+
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {
 				$tables[$needed] = 'create';
@@ -1585,7 +1585,7 @@ if (file_exists(CONFIGFILE)) {
 
 	$db_schema = array();
 	$sql_statements = array();
-	
+
 	/***********************************************************************************
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
@@ -1728,7 +1728,7 @@ if (file_exists(CONFIGFILE)) {
 		$db_schema[] = "ALTER TABLE $tbl_images ".
 			"ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	}
-	
+
 	//v1.2.4
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_news'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_news')." (
@@ -1773,7 +1773,7 @@ if (file_exists(CONFIGFILE)) {
 		PRIMARY KEY  (`id`)
 		) $collation;";
 	}
-	
+
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_pages'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_pages')." (
 		`id` int(11) unsigned NOT NULL auto_increment,
@@ -1813,7 +1813,7 @@ if (file_exists(CONFIGFILE)) {
 		PRIMARY KEY  (`id`)
 		) $collation;";
 	}
-	
+
 	/****************************************************************************************
 	 ******                             UPGRADE SECTION                                ******
 	 ******                                                                            ******
@@ -1880,7 +1880,7 @@ if (file_exists(CONFIGFILE)) {
 	//v1.1.5
 	$sql_statements[] = " ALTER TABLE $tbl_comments DROP FOREIGN KEY `comments_ibfk1`";
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
-  //	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
+	//	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
 	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."comments`";
 	$result = mysql_query($sql, $mysql_connection);
 	$hasownerid = false;
@@ -1936,7 +1936,7 @@ if (file_exists(CONFIGFILE)) {
 		$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag ADD INDEX (`tagid`)";
 		$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag ADD INDEX (`objectid`)";
 	}
-	
+
 	//v1.2.1
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT";
@@ -1948,7 +1948,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbY` int(10) UNSIGNED default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbW` int(10) UNSIGNED default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbH` int(10) UNSIGNED default NULL;";
-	
+
 	//v1.2.4
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' DROP INDEX `cat_link`;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' ADD UNIQUE (`cat_link`);';
@@ -1956,7 +1956,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD UNIQUE (`titlelink`);';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`);';
-	// Some versions of MySQL won't allow defaults on TEXT fields. Also can't make them NOT NULL because they don't have a default (catch 22) 
+	// Some versions of MySQL won't allow defaults on TEXT fields. Also can't make them NOT NULL because they don't have a default (catch 22)
 	$sql_statements[] = 'ALTER TABLE '.$tbl_comments.' CHANGE `comment` `comment` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `title` `title` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' CHANGE `cat_name` `cat_name` TEXT;';
@@ -1974,21 +1974,21 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'DELETE FROM '.$tbl_zenpage_pages.' WHERE `titlelink`=""'; // cleanup for bad records
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`)';
-	
+
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET rating=total_value / total_votes WHERE total_votes > 0';
-	
+
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET rating=total_value / total_votes WHERE total_votes > 0';
-	
+
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `total_votes` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `total_value` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `used_ips` longtext';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
-	
+
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `total_votes` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `total_value` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
@@ -2038,7 +2038,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' ADD COLUMN `password` VARCHAR(64)';
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `password_hint` text;";
-	
+
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {
 		$s = $exifvar[4];
@@ -2050,18 +2050,13 @@ if (file_exists(CONFIGFILE)) {
 		$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `$key` $size default NULL";
 		$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `$key` `$key` $size default NULL";
 	}
-	
-	// apply any plugin enhancements
-	$custom_sql = zp_apply_filter('setup_sql',array());
-	foreach ($custom_sql as $query) {
-		$sql_statements[] = $query;
-	}
-	
+
+
 	/**************************************************************************************
-	 ******                            END of UPGRADE SECTION     
-	 ******                                                              
-	 ******                           Add all new fields above      
-	 ******                                                                         
+	 ******                            END of UPGRADE SECTION
+	 ******
+	 ******                           Add all new fields above
+	 ******
 	 ***************************************************************************************/
 
 	$createTables = true;
@@ -2196,7 +2191,7 @@ if (file_exists(CONFIGFILE)) {
 			query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
 			query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
 		}
-		
+
 		// update zenpage codeblocks--remove the base64 encoding
 		$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_news').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
 		$result = query_full_array($sql);
@@ -2221,7 +2216,7 @@ if (file_exists(CONFIGFILE)) {
 			$gallery = new Gallery();
 			$gallery->clearCache();
 		}
-		
+
 		echo "<h3>";
 		if ($taskDisplay[substr($task,0,8)] == 'create') {
 			if ($createTables) {
@@ -2243,7 +2238,7 @@ if (file_exists(CONFIGFILE)) {
 		foreach ($albums as $album) {
 			checkAlbumParentid($album, NULL);
 		}
-		
+
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
@@ -2251,7 +2246,7 @@ if (file_exists(CONFIGFILE)) {
 					echo "<p>".sprintf(gettext("You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"),UTILITIES_FOLDER)."</p>";
 				} else {
 					echo "<p>".gettext("You need to <a href=\"admin-users.php\">set your admin user and password</a>")."</p>";
-				}				
+				}
 			} else {
 				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>")."</p>";
 			}
@@ -2261,7 +2256,7 @@ if (file_exists(CONFIGFILE)) {
 		if (!empty($dbmsg)) {
 			?>
 			<h2><?php echo $dbmsg; ?></h2>
-			<?php		
+			<?php
 		}
 		?>
 		<div class="dbwindow">
