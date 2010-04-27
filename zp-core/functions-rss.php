@@ -303,10 +303,11 @@ function getRSSCacheFilename() {
  *
  */
 function startRSSCache() {
-	if(zp_loggedin(ADMIN_RIGHTS)) {
-		return false;
+	$caching = getOption("feed_cache");
+	if(zp_loggedin()) {
+		$caching = false;
 	}
-	if(getOption("feed_cache")) {
+	if($caching) {
 		$cachefilepath = SERVERPATH."/cache_html/rss/".getRSSCacheFilename();
 		if(file_exists($cachefilepath) AND time()-filemtime($cachefilepath) < getOption("feed_cache_expire")) {
 			echo file_get_contents($cachefilepath); // PHP >= 4.3
@@ -325,10 +326,11 @@ function startRSSCache() {
  *
  */
 function endRSSCache() {
-	if(zp_loggedin(ADMIN_RIGHTS)) {
-		return false;
+	$caching = getOption("feed_cache");
+	if(zp_loggedin()) {
+		$caching = false;
 	}
-	if(getOption("feed_cache")) {
+	if($caching) {
 		$cachefilepath = SERVERPATH."/cache_html/rss/".getRSSCacheFilename();
 		if(!empty($cachefilepath)) {
 			$pagecontent = ob_get_clean();

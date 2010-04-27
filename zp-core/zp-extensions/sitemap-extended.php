@@ -10,7 +10,7 @@
  * </url>
  *</urlset>
  *
- * Renders the sitemap if a gallery page is called with "<zenphoto>/sitemap.php" in the URL. The sitemap is cached as a xml file within the root "cache_html/sitemap" folder.
+ * Renders the sitemap if called via "www.yourdomain.com/zenphoto/sitemap.php". The sitemap is cached as a xml file within the root "cache_html/sitemap" folder.
  *
  * NOTE: The index links may not match if using the options for "Zenpage news on index" or a "custom home page" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!
  * 
@@ -31,8 +31,8 @@ if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') { //button
 }
 
 //$plugin_is_filter = 5;
-$plugin_description = gettext('Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if a gallery page is called with "<em>zenphoto</em>/sitemap.php" in the URL.').'<p class="notebox">'.gettext('<strong>Note:</strong> The index links may not match if using the Zenpage option "news on index" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!!').'</p>';
-$plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer)';
+$plugin_description = gettext('Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if called via "www.yourdomain.com/zenphoto/sitemap.php" in the URL.').'<p class="notebox">'.gettext('<strong>Note:</strong> The index links may not match if using the Zenpage option "news on index" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!!').'</p>';
+$plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer) and modifications by Timo';
 $plugin_version = '1.3.0';
 $plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---sitemap-extended.php.html';
 $option_interface = new sitemap();
@@ -66,6 +66,7 @@ class sitemap {
 		setOptionDefault('sitemap_changefreq_newscats', 'weekly');
 		setOptionDefault('sitemap_lastmod_albums', 'mtime');
 		setOptionDefault('sitemap_lastmod_images', 'mtime');
+		setOptionDefault('sitemap_disablecache', 0);
 	}
 
 	function getOptionsSupported() {
@@ -134,8 +135,10 @@ class sitemap {
 	gettext('Last modification date - images') => array('key' => 'sitemap_lastmod_images', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext("date")=>"date",
 																					gettext("mtime")=>"mtime"),
+										'desc' => ''),
+	gettext('Disable cache') => array('key' => 'sitemap_disablecache', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => '')
-   );
+  );
 	}
 
 	function handleOption($option, $currentValue) {
@@ -376,10 +379,10 @@ function printSitemapZenpagePages($changefreq='') {
 	if($pages) {
 		foreach($pages as $page) {
 			$pageobj = new ZenpagePage($page['titlelink']);
+			$date = substr($pageobj->getDatetime(),0,10);
+			if(!is_null($pageobj->getLastchange())) $lastchange = substr($pageobj->getLastchange(),0,10);
+			if($date > $lastchange) $date = $lastchange;
 			if(!isProtectedPage(true,$pageobj)) {
-				$date = substr($pageobj->getDatetime(),0,10);
-				if(!is_null($pageobj->getLastchange())) $lastchange = substr($pageobj->getLastchange(),0,10);
-				if($date > $lastchange) $date = $lastchange;
 				if(sitemap_multilingual()) {
 					foreach($sitemap_locales as $locale) {
 						$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_PAGES.'/'.urlencode($page['titlelink']),'?p='.ZENPAGE_PAGES.'&amp;title='.urlencode($page['titlelink']),false);
@@ -446,10 +449,10 @@ function printSitemapZenpageNewsArticles($changefreq='') {
 	if($articles) {
 		foreach($articles as $article) {
 			$articleobj = new ZenpageNews($article['titlelink']);
+			$date = substr($articleobj->getDatetime(),0,10);
+			if(!is_null($articleobj->getLastchange())) $lastchange = substr($articleobj->getLastchange(),0,10);
+			if($date > $lastchange) $date = $lastchange;
 			if(!inProtectedNewsCategory(true, $articleobj)) {
-				$date = substr($articleobj->getDatetime(),0,10);
-				if(!is_null($articleobj->getLastchange())) $lastchange = substr($articleobj->getLastchange(),0,10);
-				if($date > $lastchange) $date = $lastchange;
 				if(sitemap_multilingual()) {
 					foreach($sitemap_locales as $locale) {
 						$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_NEWS.'/'.urlencode($articleobj->getTitlelink()),'?p='.ZENPAGE_NEWS.'&amp;title=' . urlencode($articleobj->getTitlelink()),false);
@@ -515,7 +518,11 @@ function printSitemapZenpageNewsCategories($changefreq='') {
  * Starts static sitemap caching
  *
  */
-function startSitemapCache($caching=true) {
+function startSitemapCache() {
+	$caching = getOption('sitemap_disablecache');
+	if(zp_loggedin()) {
+		$caching = false;
+	} 
 	if($caching) {
 		$cachefilepath = SERVERPATH."/cache_html/sitemap/sitemap.xml";
 		if(file_exists($cachefilepath) AND time()-filemtime($cachefilepath) < getOption('sitemap_cache_expire')) {
@@ -534,7 +541,11 @@ function startSitemapCache($caching=true) {
  * Ends the static RSS caching.
  *
  */
-function endSitemapCache($caching=true) {
+function endSitemapCache() {
+	$caching = getOption('sitemap_disablecache');
+	if(zp_loggedin()) {
+		$caching = false;
+	}
 	if($caching) {
 		$cachefilepath = SERVERPATH."/cache_html/sitemap/sitemap.xml";
 		if(!empty($cachefilepath)) {
