@@ -68,7 +68,7 @@ function contains(arr, key) {
 
 function validateFolder(folderObj, msg1, msg2) {
 	var errorDiv = document.getElementById("foldererror");
-	var exists = document.uploadform.existingfolder.value != "false";
+	var exists = document.uploaderform.existingfolder.value != "false";
 	var uploadBoxesDiv = document.getElementById("uploadboxes");
 	var folder = folderObj.value;
 	if (!exists && albumArray && contains(albumArray, folder)) {

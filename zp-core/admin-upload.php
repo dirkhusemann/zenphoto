@@ -256,7 +256,7 @@ if (ini_get('safe_mode')) { ?>
 ?>
 
 <form name="uploaderform" id="uploaderform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="post"
-												onsubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
+												onsubmit="return validateFolder(document.uploaderform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" />
 	<input type="hidden" name="existingfolder" value="false" />
 
@@ -538,7 +538,7 @@ if (ini_get('safe_mode')) { ?>
 	//<!-- <![CDATA[
 	<?php echo zp_apply_filter('upload_helper_js', '')."\n"; ?>
 
-	albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');
+	albumSwitch(document.uploaderform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');
 	<?php
 		if (isset($_GET['folderdisplay'])) {
 			?>
