@@ -2887,6 +2887,7 @@ function checkNewsAccess($newsobj, &$hint, &$show) {
 		}
 		return false;
 	}
+	return true;
 }
 
 /**
