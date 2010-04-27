@@ -33,6 +33,8 @@ function processExpired($table) {
 
 /**
 	 * Gets the titlelink and sort order for all pages or published ones.
+	 * 
+	 * NOTE: Since this function only returns titlelinks for use with the object model it does not exclude pages that are password protected
 	 *
 	 * @param bool $published TRUE for published or FALSE for all pages including unpublished
 	 * @return array
@@ -92,11 +94,9 @@ function getParentPages(&$parentid,$initparents=true) {
  * Checks if the page is itself password protected or is inheriting protection from a parent pages.
  * NOTE: This function does only check if a password is set not if it has been entered! Use checkPagePassword() for that.
  *
- * @param bool $checkProtection TRUE (default) if you want to check if if this page itself is protected or inherits protection
- * 															FALSE to check if the page itself is password protected only
  * @param obj $pageobj Optional page object to test directly, otherwise the current page is checked if available.
  */
-function isProtectedPage($checkProtection=true,$pageobj=NULL) {
+function isProtectedPage($pageobj=NULL) {
 	global $_zp_current_zenpage_page;
 	if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
 	$hint = $show = '';
@@ -108,7 +108,10 @@ function isProtectedPage($checkProtection=true,$pageobj=NULL) {
 /************************************/
 
 /**
-	 * Gets news articles either all or by category or by archive date
+	 * Gets news articles titlelink either all or by category or by archive date.
+	 * 
+	 * NOTE: Since this function only returns titlelinks for use with the object model it does not exclude articles that are password protected via a category
+	 * 
 	 *
 	 * @param int $articles_per_page The number of articles to get
 	 * @param string $category The categorylink of the category
@@ -397,6 +400,8 @@ function isProtectedPage($checkProtection=true,$pageobj=NULL) {
 	 * Gets news articles and images of a gallery to show them together on the news section
 	 *
 	 * NOTE: This feature requires MySQL 4.1 or later
+	 * 
+	 * NOTE: This function does not exclude articles that are password protected via a category
 	 *
 	 * @param int $articles_per_page The number of articles to get
 	 * @param string $mode 	"latestimages-thumbnail"
@@ -645,7 +650,7 @@ function isProtectedPage($checkProtection=true,$pageobj=NULL) {
 	}
 	
 	/**
- * Checks if an article is in a password protected category and returns TRUE or FALSE
+ * Checks if an article (not CombiNews gallery items!) is in a password protected category and returns TRUE or FALSE
  * NOTE: This function does not check if the password has been entered! Use checkNewsAccess() for that.
  *
  * @param bool $checkProtection If set to TRUE (default) this check if the article is actually protected (remember only articles that are in the protected category only are!).
@@ -655,7 +660,7 @@ function isProtectedPage($checkProtection=true,$pageobj=NULL) {
  */
 function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
 	global $_zp_current_zenpage_news;
-	if(empty($articleobj) && !is_null($_zp_current_zenpage_news)) {
+	if(empty($articleobj) && !is_null($_zp_current_zenpage_news) && get_class($_zp_current_zenpage_news) == 'zenpagenews') {
 		$articleobj = $_zp_current_zenpage_news;
 	}
 	$categories = $articleobj->getCategories();

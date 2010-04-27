@@ -152,7 +152,7 @@ codeblocktabsJS();
 						echo '<p class="scheduledate"><small>'.gettext('Note: Scheduled publishing is not active unless the page is also set to <em>published</em>').'</small></p>';
 					}
 				}
-				if(inProtectedNewsCategory(true,$result)) {
+				if(isProtectedPage($result)) {
 					echo '<p class="notebox">'.gettext('<strong>Note:</strong> This page is either password protected itself or subpage of a passport protected page.').'</p>';
 				} 
 			}

@@ -412,7 +412,11 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 	global $_zp_flash_player, $_zp_current_image, $_zp_gallery, $_zp_current_zenpage_news, $_zp_page;
 	$hint = $show = '';
 	if (!checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
-		return '<p>'.gettext('<em>This article belongs to a protected category.</em>').'</p>';
+		if(is_NewsType('news')) {
+			return '<p>'.gettext('<em>This article belongs to a protected category.</em>').'</p>';
+		} else {
+			return '<p>'.gettext('<em>This entry belongs to a protected album.</em>').'</p>';
+		}
 	}
 	$excerptbreak = false;
 	if(empty($shortenindicator)) {
@@ -1042,6 +1046,8 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
  * Gets the latest news either only news articles or with the latest images or albums
  *
  * NOTE: Latest images and albums require Zenphoto's image_album_statistic plugin
+ * 
+ * NOTE: This function excludes articles that are password protected via a category for not logged in users!
  *
  * @param int $number The number of news items to get
  * @param string $option "none" for only news articles
@@ -1062,10 +1068,12 @@ function getLatestNews($number=5,$option='none', $category='') {
 	}
 	$latestnews = array();
 	$counter = "";
+	$hint = $show = '';
 	foreach($latest as $news) {
-		$counter++;
 		$article = new ZenpageNews($news['titlelink']);
-		$latestnews[$counter] = array(
+		if (checkNewsAccess($article, $hint, $show)) {
+			$counter++;
+			$latestnews[$counter] = array(
 					"id" => $article->getID(),
 					"title" => $article->getTitle(),
 					"titlelink" => $article->getTitlelink(),
@@ -1074,7 +1082,8 @@ function getLatestNews($number=5,$option='none', $category='') {
 					"date" => $article->getDateTime(),
 					"thumb" => "",
 					"filename" => ""
-		);
+					);
+		}
 	}
 	$latest = $latestnews;
 	if($option == "with_latest_images" OR $option == "with_latest_images_date") {
@@ -2245,9 +2254,6 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	if(empty($readmore)) {
 		$readmore = getOption("zenpage_read_more");
 	}
-	/* if(empty($shortenindicator)) {
-		$shortenindicator = getOption("zenpage_textshorten_indicator");
-	} */
 	if((zp_loggedin(ZENPAGE_RIGHTS))) {
 		$published = FALSE;
 	} else {
@@ -2264,17 +2270,21 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 			$subcount++;
 			$pagetitle = $pageobj->getTitle();
 			$pagecontent = $pageobj->getContent();
-			//$readmorelink = " <a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$readmore."</a>\n";
-			if(stristr($pagecontent,"<!-- pagebreak -->") !== FALSE) {
-				$array = explode("<!-- pagebreak -->",$pagecontent);
-				//$shortenindicator .= $readmorelink;
-				//$pagecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
-				$pagecontent = getNewsContentShorten($array[0], strlen($array[0]),$shortenindicator,getPageLinkURL($page['titlelink']));
-				if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
-					$pagecontent = str_replace($shortenindicator, '', $pagecontent);
+			$hint = $show = '';
+			if(!checkPagePassword($pageobj, $hint, $show) && $published) {
+				$pagecontent = '<p><em>'.gettext('This page is password protected').'</em></p>';
+			} else {
+				if(stristr($pagecontent,"<!-- pagebreak -->") !== FALSE) {
+					$array = explode("<!-- pagebreak -->",$pagecontent);
+					//$shortenindicator .= $readmorelink;
+					//$pagecontent = shortenContent($array[0], strlen($array[0]), $shortenindicator);
+					$pagecontent = getNewsContentShorten($array[0], strlen($array[0]),$shortenindicator,getPageLinkURL($page['titlelink']));
+					if ($shortenindicator && count($array) <= 1 || ($array[1] == '</p>' || trim($array[1]) =='')) {
+						$pagecontent = str_replace($shortenindicator, '', $pagecontent);
+					}
+				} else if(strlen($pagecontent) > $excerptlength) {
+					$pagecontent = getNewsContentShorten($pagecontent, $excerptlength, $shortenindicator,getPageLinkURL($page['titlelink']));
 				}
-			} else if(strlen($pagecontent) > $excerptlength) {
-				$pagecontent = getNewsContentShorten($pagecontent, $excerptlength, $shortenindicator,getPageLinkURL($page['titlelink']));
 			}
 			echo "\n<div class='pageexcerpt'>\n";
 			echo "<h4><a href=\"".getPageLinkURL($page['titlelink'])."\" title=\"".strip_tags($pagetitle)."\">".$pagetitle."</a></h4>";
@@ -2866,15 +2876,17 @@ function isMyNews($newsobj, $action) {
  * @param $show
  */
 function checkNewsAccess($newsobj, &$hint, &$show) {
-	if (isMyNews($newsobj, LIST_NEWS_RIGHTS)) return true;
-	$allcategories = $newsobj->getCategories();
-	if (count($allcategories) == 0) return true;
-	foreach ($allcategories as $category) {
-		if (checkNewsCategoryPassword($category['cat_link'], $hint, $show)) {
-			return true;
+	if(is_NewsType('news')) {
+		if (isMyNews($newsobj, LIST_NEWS_RIGHTS)) return true;
+		$allcategories = $newsobj->getCategories();
+		if (count($allcategories) == 0) return true;
+		foreach ($allcategories as $category) {
+			if (checkNewsCategoryPassword($category['cat_link'], $hint, $show)) {
+				return true;
+			}
 		}
+		return false;
 	}
-	return false;
 }
 
 /**

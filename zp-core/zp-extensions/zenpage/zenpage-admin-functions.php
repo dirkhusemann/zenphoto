@@ -312,7 +312,7 @@ function printPagesListTable($page, $flag) {
 
 	<td class="icons">
 	<?php
-	if (isProtectedPage(false,$page)) {
+	if (isProtectedPage($page)) {
 		echo '<img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" title="'.gettext('Password protected').'" />';
 	}
 	?>
