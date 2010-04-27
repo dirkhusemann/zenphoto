@@ -8,9 +8,6 @@
  */
 
 define('OFFSET_PATH', 3);
-define('RECORD_SEPARATOR', ':****:');
-define('TABLE_SEPARATOR', '::');
-define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
@@ -23,7 +20,7 @@ if(getOption('zp_plugin_zenpage')) {
 $button_text = gettext('Wordpress Importer');
 $button_hint = gettext('An importer for Wordpress posts and pages to Zenpage.');
 $button_icon = 'images/wpmini-blue.png';
-
+$button_rights = ADMIN_RIGHTS;
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");

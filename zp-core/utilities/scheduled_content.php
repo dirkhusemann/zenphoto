@@ -17,10 +17,6 @@
  */
 
 define('OFFSET_PATH', 3);
-define('RECORD_SEPARATOR', ':****:');
-define('TABLE_SEPARATOR', '::');
-define('RESPOND_COUNTER', 1000);
-
 chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
