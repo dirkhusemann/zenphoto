@@ -872,55 +872,6 @@ function inNewsCategory($catlink) {
 
 
 /**
- * Checks if an article is in a password protected category and returns TRUE or FALSE
- * NOTE: This function does not check if the password has been entered! Use checkNewsAccess() for that.
- *
- * @param bool $checkProtection If set to TRUE (default) this check if the article is actually protected (remember only articles that are in the protected category only are!).
- * 															If set to FALSE it simply checks if it is in an otherwise protected category at all
- * @param obj $articleobj Optional news article object to check directly, if empty the current news article is checked if available
- * @return bool
- */
-function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
-	global $_zp_current_zenpage_news;
-	if(empty($articleobj) && !is_null($_zp_current_zenpage_news)) {
-		$articleobj = $_zp_current_zenpage_news;
-	}
-	$categories = $articleobj->getCategories();
-	if($checkProtection) {
-		$catcount = count($categories);
-	} else {
-		$catcount = 0;
-	}
-	$count = 0;
-	if($catcount == 1) {
-		foreach($categories as $cat) {
-			if(!empty($cat['password']) || !is_null($cat['password'])) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-/**
- * Checks if a category is protected and returns TRUE or FALSE
- * NOTE: This function does only check if a password is set not if it has been entered! Use checkNewsCategoryPassword() for that.
- *
- * @param string $catlink The optional categorylink of a category, if empty the current category is checked if available
- * @return bool
- */
-function isProtectedNewsCategory($catlink='') {
-	global $_zp_current_category;
-	if(empty($catlink) && !is_null($_zp_current_category)) {
-		$catlink = $_zp_current_category;
-	}
-	$hint = $show = '';
-	return checkNewsCategoryPassword($catlink, &$hint, &$show) != 'zp_unprotected';
-}
-
-
-
-/**
  * Gets the date of the current news article
  *
  * @return string
@@ -2349,20 +2300,6 @@ function printParentPagesBreadcrumb($before='', $after='') {
 	}
 }
 
-/**
- * Checks if the page is itself password protected or is inheriting protection from a parent pages.
- * NOTE: This function does only check if a password is set not if it has been entered! Use checkPagePassword() for that.
- *
- * @param bool $checkProtection TRUE (default) if you want to check if if this page itself is protected or inherits protection
- * 															FALSE to check if the page itself is password protected only
- * @param obj $pageobj Optional page object to test directly, otherwise the current page is checked if available.
- */
-function isProtectedPage($checkProtection=true,$pageobj=NULL) {
-	global $_zp_current_zenpage_page;
-	if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
-	$hint = $show = '';
-	return checkPagePassword($pageobj, &$hint, &$show) != 'zp_unprotected';
-}
 
 /**
  * Prints a context sensitive menu of all pages as a unordered html list

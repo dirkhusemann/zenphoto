@@ -89,7 +89,7 @@ printLogoAndLinks();
 				</div>
 				<table class="bordered">
 					<tr> 
-				  	<th colspan="9"><strong><?php echo gettext('Edit this article'); ?></strong></th>
+				  	<th colspan="10"><strong><?php echo gettext('Edit this article'); ?></strong></th>
 					</tr>
 					<?php
 					foreach ($result as $article) { 
@@ -117,6 +117,13 @@ printLogoAndLinks();
 						  <td>
 						  <?php echo htmlspecialchars($article->getAuthor()); ?>
 						  </td> 
+						  <td class="icons">
+						  <?php
+						  	if(inProtectedNewsCategory(true,$article)) {
+						  		echo '<img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" title="'.gettext('Password protected').'" />';
+						  	} 
+						  	?>
+						  </td>
 						  
 						  <?php if(checkIfLocked($article)) { ?>
 							<td class="icons">

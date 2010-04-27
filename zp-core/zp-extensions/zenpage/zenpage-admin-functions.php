@@ -312,9 +312,8 @@ function printPagesListTable($page, $flag) {
 
 	<td class="icons">
 	<?php
-	$pwd = $page->getPassword();
-	if (!empty($pwd)) {
-		echo '<a title="'.gettext('Password protected').'"><img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
+	if (isProtectedPage(false,$page)) {
+		echo '<img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" title="'.gettext('Password protected').'" />';
 	}
 	?>
 	</td>
@@ -636,8 +635,13 @@ function printCategorySelection($id='', $option='') {
 		}
 		$catname = get_language_string($cats['cat_name']);
 		$catlink = $cats['cat_link'];
+		if(isProtectedNewsCategory($cats['cat_link'])) {
+			$protected = gettext('<em>(password protected)</em>');
+		} else {
+			$protected = '';
+		}
 		$catid = $cats['id'];
-		echo "<li><label for='cat".$catid."'><input name='cat".$catid."' id='cat".$catid."' type='checkbox' value='".$catid."' ".$selected." />".$catname."</label></li>\n";
+		echo "<li><label for='cat".$catid."'><input name='cat".$catid."' id='cat".$catid."' type='checkbox' value='".$catid."' ".$selected." />".$catname." ".$protected."</label></li>\n";
 	}
 	echo "</ul>\n";
 }
@@ -1030,7 +1034,7 @@ function printCategoryList() {
 	<td class="icons">
 	<?php
 	if (!empty($cat['password'])) {
-		echo '<a title="'.gettext('Password protected').'"><img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
+		echo '<img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" title="'.gettext('Password protected').'" />';
 	}
 	?>
 	</td>

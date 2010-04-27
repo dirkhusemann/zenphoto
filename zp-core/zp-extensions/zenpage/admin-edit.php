@@ -125,42 +125,48 @@ codeblocktabsJS();
 		$themepage = ZENPAGE_PAGES;
 	}
 
-?>
-<h1>
-<?php
-if(is_object($result)) {
-	if(is_AdminEditPage('newsarticle')) {
-		echo gettext('Edit Article:'); ?> <em><?php checkForEmptyTitle($result->getTitle(),'news');
-		if(is_object($result)) {
-			if($result->getDatetime() >= date('Y-m-d H:i:s')) {
-				echo ' <small><strong id="cheduldedpublishing">'.gettext('(Article scheduled for publishing)').'</strong></small>';
-				if($result->getShow() != 1) {
-					echo '<p class="scheduledate"><small>'.gettext('Note: Scheduled publishing is not active unless the article is also set to <em>published</em>').'</small></p>';
+	if(is_object($result)) {
+		if(is_AdminEditPage('newsarticle')) {
+			?>
+			<h1><?php echo gettext('Edit Article:'); ?> <em><?php checkForEmptyTitle($result->getTitle(),'news'); ?></em></h1>
+			<?php
+			if(is_object($result)) {
+				if($result->getDatetime() >= date('Y-m-d H:i:s')) {
+					echo '<small><strong id="scheduldedpublishing">'.gettext('(Article scheduled for publishing)').'</strong></small>';
+					if($result->getShow() != 1) {
+						echo '<p class="scheduledate"><small>'.gettext('<strong>Note:</strong> Scheduled publishing is not active unless the article is also set to <em>published</em>').'</small></p>';
+					}
+				}
+				if(inProtectedNewsCategory(true,$result)) {
+					echo '<p class="notebox">'.gettext('<strong>Note:</strong> This article is password protected because it is assigned to a password protected category only.').'</p>';
 				}
 			}
-		}
-	 ?>
-		</em>
-<? } else if(is_AdminEditPage('page')) {
-	echo gettext('Edit Page:'); ?> <em><?php checkForEmptyTitle($result->getTitle(),'page');
-	if(is_object($result)) {
-		if($result->getDatetime() >= date('Y-m-d H:i:s')) {
-			echo ' <small><strong id="scheduldedpublishing">'.gettext('(Page scheduled for publishing)').'</strong></small>';
-			if($result->getShow() != 1) {
-				echo '<p class="scheduledate"><small>'.gettext('Note: Scheduled publishing is not active unless the page is also set to <em>published</em>').'</small></p>';
+		} else if(is_AdminEditPage('page')) {
+			?>
+			<h1><?php	echo gettext('Edit Page:'); ?> <em><?php checkForEmptyTitle($result->getTitle(),'page'); ?></em></h1>
+			<?php
+			if(is_object($result)) {
+				if($result->getDatetime() >= date('Y-m-d H:i:s')) {
+					echo ' <small><strong id="scheduldedpublishing">'.gettext('(Page scheduled for publishing)').'</strong></small>';
+					if($result->getShow() != 1) {
+						echo '<p class="scheduledate"><small>'.gettext('Note: Scheduled publishing is not active unless the page is also set to <em>published</em>').'</small></p>';
+					}
+				}
+				if(inProtectedNewsCategory(true,$result)) {
+					echo '<p class="notebox">'.gettext('<strong>Note:</strong> This page is either password protected itself or subpage of a passport protected page.').'</p>';
+				} 
 			}
 		}
-	}
-	?> </em>
-<?php } ?>
-<?php } else {
-	if(is_AdminEditPage('newsarticle')) {
-		echo gettext('Add Article');
-	} else if(is_AdminEditPage('page')) {
-		echo gettext('Add Page');
+	} else {
+		if(is_AdminEditPage('newsarticle')) {
+			?><h1><?php echo gettext('Add Article'); ?></h1>
+			<?php
+		} else if(is_AdminEditPage('page')) {
+			?><h1><?php	echo gettext('Add Page'); ?></h1>
+<?php
 	}
 } ?>
-</h1>
+
 <p class="buttons">
 <?php 
 if(is_AdminEditPage("newsarticle")) {
