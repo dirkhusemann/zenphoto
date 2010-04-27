@@ -2051,6 +2051,11 @@ if (file_exists(CONFIGFILE)) {
 		$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `$key` `$key` $size default NULL";
 	}
 	
+	// apply any plugin enhancements
+	$custom_sql = zp_apply_filter('setup_sql',array());
+	foreach ($custom_sql as $query) {
+		$sql_statements[] = $query;
+	}
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
