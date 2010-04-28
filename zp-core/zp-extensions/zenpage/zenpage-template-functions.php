@@ -1102,13 +1102,27 @@ function getLatestNews($number=5,$option='none', $category='') {
 		$counter = "";
 		foreach($images as $image) {
 			$counter++;
+			switch($option) {
+				case "with_latest_images":
+				case "with_latest_images_date":
+					$imagedate = $image->getDateTime();
+					break;
+				case "with_latest_images_mtime":
+					$timestamp = $image->get('mtime');
+					if($timestamp == 0) {
+						$imagedate = $image->getDateTime();
+					} else {
+						$imagedate = strftime('%Y-%m-%d %T',$timestamp);
+					}
+					break;
+			}
 			$latestimages[$counter] = array(
 					"id" => $image->get("id"),
 					"title" => $image->getTitle(),
 					"titlelink" => $image->getImageLink(),
 					"category" => $image->getAlbum(),
 					"content" => $image->getDesc(),
-					"date" => $image->getDateTime(),
+					"date" => $imagedate,
 					"thumb" => $image->getThumb(),
 					"filename" => $image->getFileName()
 			);
@@ -1130,15 +1144,30 @@ function getLatestNews($number=5,$option='none', $category='') {
 		$counter = "";
 		foreach($albums as $album) {
 			$counter++;
+	
 			$tempalbum = new Album($_zp_gallery, $album['folder']);
 			$tempalbumthumb = $tempalbum->getAlbumThumbImage();
+			switch($option) {
+				case "with_latest_images":
+				case "with_latest_images_date":
+					$albumdate = $tempalbum->getDateTime();
+					break;
+				case "with_latest_images_mtime":
+					$timestamp = $tempalbum->get('mtime');
+					if($timestamp == 0) {
+						$albumdate = $tempalbum->getDateTime();
+					} else {
+						$albumdate = strftime('%Y-%m-%d %T',$timestamp);
+					}
+					break;
+			}
 			$latestalbums[$counter] = array(
 					"id" => $tempalbum->getAlbumID(),
 					"title" => $tempalbum->getTitle(),
 					"titlelink" => $tempalbum->getFolder(),
 					"category" => "",
 					"content" => $tempalbum->getDesc(),
-					"date" => $tempalbum->getDateTime(),
+					"date" => $albumdate,
 					"thumb" => $tempalbumthumb->getThumb(),
 					"filename" => ""
 			);

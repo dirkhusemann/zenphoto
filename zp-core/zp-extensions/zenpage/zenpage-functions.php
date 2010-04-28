@@ -459,11 +459,21 @@ function isProtectedPage($pageobj=NULL) {
 				$sortorder = "images.".$combinews_sortorder;
 				$type1 = query("SET @type1:='news'");
 				$type2 = query("SET @type2:='images'");
+				switch($combinews_sortorder) {
+					case 'id':
+					case 'date':
+						$imagequery = "(SELECT albums.folder, images.filename, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+							WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")";
+						break;
+					case 'mtime':
+						$imagequery = "(SELECT albums.folder, images.filename, DATE_FORMAT(images.`mtime`,'%Y-%m-%d'), @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+							WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")";
+						break;
+				}
 				$result = query_full_array("
 				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
-				(SELECT albums.folder, images.filename, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
-				WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")
+				".$imagequery."
 				ORDER By date DESC $limit
 				");
 				break;
@@ -473,11 +483,21 @@ function isProtectedPage($pageobj=NULL) {
 				$sortorder = $combinews_sortorder;
 				$type1 = query("SET @type1:='news'");
 				$type2 = query("SET @type2:='albums'");
+				switch($combinews_sortorder) {
+					case 'id':
+					case 'date':
+						$albumquery = "(SELECT albums.folder, albums.title, albums.date, @type2 FROM ".prefix('albums')." AS albums
+							".$show.$albumWhere." ORDER BY ".$sortorder.")";
+						break;
+					case 'mtime':
+						$albumquery = "(SELECT albums.folder, albums.title, DATE_FORMAT(albums.`mtime`,'%Y-%m-%d'), @type2 FROM ".prefix('albums')." AS albums
+							".$show.$albumWhere." ORDER BY ".$sortorder.")";
+						break;
+				}
 				$result = query_full_array("
 				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
-				(SELECT albums.folder, albums.title, albums.date, @type2 FROM ".prefix('albums')." AS albums
-				".$show.$albumWhere." ORDER BY ".$sortorder.")
+				".$albumquery."
 				ORDER By date DESC $limit
 				");
 				break;
@@ -497,7 +517,7 @@ function isProtectedPage($pageobj=NULL) {
 						WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY DATE_FORMAT(".$sortorder.",'%Y-%m-%d'))";
 						break;
 					case "mtime":
-						$imagequery = "(SELECT DISTINCT FROM_UNIXTIME(".$sortorder.",'%Y-%m-%d'), albums.folder, DATE_FORMAT(images.`date`,'%Y-%m-%d'), @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+						$imagequery = "(SELECT DISTINCT FROM_UNIXTIME(".$sortorder.",'%Y-%m-%d'), albums.folder, DATE_FORMAT(images.`mtime`,'%Y-%m-%d'), @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
 						WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY FROM_UNIXTIME(".$sortorder.",'%Y-%m-%d'))";
 						break;
 				}

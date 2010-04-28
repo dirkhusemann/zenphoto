@@ -225,7 +225,7 @@ function sitemap_getDateformat($obj,$option) {
 			if($timestamp == 0) {
 				$date = substr($obj->getDatetime(),0,10);
 			} else {
-				$date = strftime('%Y-%m-%d',$timestamp);
+				$date = strftime('%Y-%m-%d %T',$timestamp);
 			}
 			break;
 	}
@@ -233,7 +233,7 @@ function sitemap_getDateformat($obj,$option) {
 }
 /**
  * Prints the links to the index of a Zenphoto gallery incl. pagination
- *@param  string $changefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
+ * @param  string $changefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @return string
  */
 function printSitemapIndexLinks($changefreq='') {
