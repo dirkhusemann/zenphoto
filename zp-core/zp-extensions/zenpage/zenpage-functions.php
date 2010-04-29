@@ -571,7 +571,7 @@ function isProtectedPage($pageobj=NULL) {
 					case "latestimagesbyalbum-thumbnail-customcrop":
 					case "latestimagesbyalbum-sizedimage":
 						($published) ? $show = "WHERE `show`= 1" : $show = "";
-						$result = query("SELECT COUNT(DISTINCT date,albumid) FROM " . prefix('images'). " ".$show);
+						$result = query("SELECT COUNT(DISTINCT Date(date),albumid) FROM " . prefix('images'). " ".$show);
 						$countGalleryitems = mysql_result($result, 0);
 						break;
 				}
