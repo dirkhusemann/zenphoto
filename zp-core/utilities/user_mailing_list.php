@@ -21,6 +21,7 @@ if(getOption('zp_plugin_zenphoto_sendmail')) {
 $button_text = gettext('User mailing list');
 $button_hint = gettext('A tool to send e-mails to all registered users who have provided an e-mail address.');
 $button_icon = 'images/icon_mail.gif';
+$button_rights = ADMIN_RIGHTS;
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -43,7 +44,7 @@ printAdminHeader();
 <?php printTabs('home'); ?>
 <div id="content">
 <h1><?php echo gettext('User mailing list'); ?></h1>
-<p><?php echo gettext("A tool to send e-mails to all registered users who have provided an e-mail address. It will send the e-mails as <em>blind copies</em>."); ?></p>
+<p><?php echo gettext("A tool to send e-mails to all registered users who have provided an e-mail address. There is always a copy sent to the current admin and all e-mails are sent as <em>blind copies</em>."); ?></p>
 <?php if(!getOption('zp_plugin_PHPMailer') || !getOption('zp_plugin_zenphoto_sendmail')) { ?>
 <p class="notebox">
 <?php echo gettext("<strong>Note:</strong> Either the <em>PHPMailer</em> plugin or the <em>zenphoto_sendmail</em> plugin must be activated and properly configured."); ?>
@@ -69,14 +70,23 @@ if(isset($_GET['sendmail'])) {
 		}
 	}
 	$cc_addresses = substr($cc_addresses,0,-2);
-	zp_mail($subject, $message, null, $cc_addresses);	
-	?>
+	$currentadminmail = $_zp_current_admin_obj->getEmail();
+	if(!empty($currentadminmail)) {
+		$cc_addresses .= ', '.$currentadminmail;
+	} 
+	$err_msg = zp_mail($subject, $message, null, $cc_addresses);	
+	if($err_msg) {
+		echo '<p class="errorbox">'.$err_msg.'</p>';
+	} else {
+		echo '<p class="messagebox">'.gettext('Mail sent.').'</p>';
+		?>
 	<h3><strong><?php echo gettext('Subject:'); ?> </strong><?php echo $subject; ?></h3>
 	<p><strong><?php echo gettext('To:'); ?> </strong><?php echo $cc_addresses; ?></p>
 	<strong><?php echo gettext('Message:'); ?> </strong><?php echo $message; ?>
 	<p class="buttons"><a href="user_mailing_list.php" title="<?php echo gettext('Send another mail'); ?>"><?php echo gettext('Send another mail'); ?></a></p>
-<?php
-} else { 
+	<?php
+	}
+} else {
 ?>
 <h2><?php echo gettext('Please enter the message you want to sent.'); ?></h2>
 <form id="massmail" action="?sendmail" method="post" accept-charset="UTF-8">
@@ -90,10 +100,11 @@ if(isset($_GET['sendmail'])) {
 				</td>
 				<td valign="top" align="left">
 				<?php echo gettext('Select users:'); ?>
-				<ul class="customchecklist">
+				<ul class="customchecklist" style="height: 205px">
 				<?php 
+				$currentadminuser = $_zp_current_admin_obj->getUser();
 				foreach($admins as $admin) {
-					if(!empty($admin['email'])) {
+					if(!empty($admin['email']) && $currentadminuser != $admin['user']) {
 						echo "<li><label for='admin_".$admin['id']."'><input name='admin_".$admin['id']."' id='admin_".$admin['id']."' type='checkbox' value='".$admin['email']."' checked='checked' />".$admin['user']." (".$admin['name']." - ".$admin['email'].")</label></li>\n";
 					}
 				}
