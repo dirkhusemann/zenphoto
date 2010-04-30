@@ -462,6 +462,17 @@ echo "<br />printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navle
 
 /**
  * Prints the breadcrumbs of the current page
+ * 
+ * NOTE: this function is entirely dependedn on the menu tree you have
+ * generated. It will work only with static menu trees. That is, if the page 
+ * upon which you call this function is not present in your menu tree it will
+ * not have any parent pages. Thus, menu items generated for instance by function
+ * calls cannot have parents in the printMenumanagerBreadcrumb sense.
+ * 
+ * Likewise if you have non exclusive menu links to a page the parentage of that
+ * page with respect to breadcrumbs may not reflect on the menu transitions that
+ * the user used to arrive on the page.
+ * 
  * @param string $menuset current menu set
  * @param string $before before text
  * @param string $between between text
