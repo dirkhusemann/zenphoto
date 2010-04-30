@@ -220,7 +220,7 @@ printLogoAndLinks();
 				</form>
 				<table class="bordered">
 				 <tr> 
-				  <th colspan="4"><strong><?php echo gettext('Edit this Category'); ?></strong></th>
+				  <th colspan="5"><strong><?php echo gettext('Edit this Category'); ?></strong></th>
 				  </tr>
 					<?php printCategoryList(); ?>
 				</table>

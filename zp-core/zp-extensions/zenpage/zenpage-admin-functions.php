@@ -308,8 +308,6 @@ function printPagesListTable($page, $flag) {
 		<td class="icons3" style="text-align: left">
 			<?php echo htmlspecialchars($page->getAuthor()) ;?>
 		</td>
-
-
 	<td class="icons">
 	<?php
 	if (isProtectedPage($page)) {
@@ -609,6 +607,23 @@ function printArticleCategories($obj) {
 			echo ", ";
 		}
 		echo get_language_string($cats['cat_name']);
+	}
+}
+
+/**
+ * Print the categories of a news article for the news articles list
+ *
+ * @param obj $obj object of the news article
+ */
+function printPageArticleTags($obj) {
+	 $tags = $obj->getTags();
+	$number = 0;
+	foreach ($tags as $tag) {
+		$number++;
+		if($number != 1) {
+			echo ", ";
+		}
+		echo get_language_string($tag);
 	}
 }
 
@@ -1028,7 +1043,7 @@ function printCategoryList() {
 				$catname = "<span style='color:red; font-weight: bold'>".gettext("Untitled category")."</span>";
 			}
 ?>
- <tr>
+ <tr class="newstr">
 	<td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."&amp;tab=categories' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
 	<td class="icons3"><?php echo $count; ?> <?php echo gettext("articles"); ?></td>
 	<td class="icons">

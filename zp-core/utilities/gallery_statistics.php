@@ -21,7 +21,7 @@ if(getOption('zp_plugin_zenpage')) {
 $button_text = gettext('Gallery Statistics');
 $button_hint = gettext('Shows statistical graphs and info about your gallery\'s images and albums.');
 $button_icon = 'images/bar_graph.png';
-
+$button_rights = ADMIN_RIGHTS;
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -396,7 +396,7 @@ echo '</head>';
 <?php printLogoAndLinks(); ?>
 <div id="main">
 <a name="top"></a>
-<?php printTabs('database'); 
+<?php printTabs('home'); 
 
 // getting the counts
 $albumcount = $gallery->getNumAlbums(true);

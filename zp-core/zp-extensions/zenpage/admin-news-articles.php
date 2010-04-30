@@ -90,12 +90,12 @@ printLogoAndLinks();
 				<table class="bordered">
 					<tr> 
 				  	<th colspan="10"><strong><?php echo gettext('Edit this article'); ?></strong></th>
-					</tr>
+				 	</tr>
 					<?php
 					foreach ($result as $article) { 
 						$article = new ZenpageNews($article['titlelink']);
 						?>
-						<tr> 
+						<tr class="newstr"> 
 						  <td> 
 						   <?php 
 						   if(checkIfLocked($article)) {
@@ -107,14 +107,19 @@ printLogoAndLinks();
 						  
 						  </td>
 						  <td>
+						  <small>
 						  <?php 
 						  checkIfScheduled($article);
 						  checkIfExpires($article);
-						  ?></td>
+						  ?>
+						  </small>
+						  </td>
 						  <td>
-						  <?php printArticleCategories($article) ?>
+						  <small>
+						  <?php printArticleCategories($article) ?><br />
+						  </small>
 						  </td> 
-						  <td>
+			  		  <td>
 						  <?php echo htmlspecialchars($article->getAuthor()); ?>
 						  </td> 
 						  <td class="icons">
