@@ -449,9 +449,9 @@ table.noinput td {
 table.bordered {
 	width: 100%;
 	padding: 0px;
-	border-spacing: 1px;
+	border-spacing: 0px;
 	background: #E5E5E5;
-	border-top: 1px solid #E5E5E5;
+	border: 1px solid #E5E5E5;
 	border-bottom-width: 5px;
 }
 
@@ -472,6 +472,14 @@ table.bordered td {
 	padding: 8px 16px;
 	margin: 0px;
 	background-color: #fff;
+	border-bottom: 0px solid #E5E5E5;
+}
+
+table.bordered tr.newstr td {
+	padding: 8px 16px;
+	margin: 0px;
+	background-color: #fff;
+	border-bottom: 1px solid #ECECEC;
 }
 
 table.bordered tr.alt1 td {
