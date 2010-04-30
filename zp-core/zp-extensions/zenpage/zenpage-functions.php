@@ -100,7 +100,7 @@ function isProtectedPage($pageobj=NULL) {
 	global $_zp_current_zenpage_page;
 	if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
 	$hint = $show = '';
-	return checkPagePassword($pageobj, &$hint, &$show) != 'zp_unprotected';
+	return checkPagePassword($pageobj, $hint, $show) != 'zp_unprotected';
 }
 
 /************************************/
@@ -713,7 +713,7 @@ function isProtectedNewsCategory($catlink='') {
 		$catlink = $_zp_current_category;
 	}
 	$hint = $show = '';
-	return checkNewsCategoryPassword($catlink, &$hint, &$show) != 'zp_unprotected';
+	return checkNewsCategoryPassword($catlink, $hint, $show) != 'zp_unprotected';
 }
 
 ?>
