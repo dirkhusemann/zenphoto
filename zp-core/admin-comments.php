@@ -368,7 +368,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		$anon = $comment['anon'];
 		?>
 
-	<tr>
+	<tr class="newstr">
 		<td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
 			onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 		<td><?php echo $link; ?></td>
