@@ -348,9 +348,6 @@ function printPagesListTable($page, $flag) {
 		<a href="javascript:confirmDeleteImage('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!")); ?>')" title="<?php echo gettext("Delete page"); ?>">
 		<img src="../../images/fail.png" alt="delete" /></a>
 	</td>
-	<td class="icons">
-		<input type="checkbox" name="ids[]" value="<?php echo $page->getID(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
-	</td>
 	<?php } else { ?>
 	<td class="icons">
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
@@ -358,11 +355,8 @@ function printPagesListTable($page, $flag) {
 	<td class="icons">
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 	</td>
-	<td class="icons">
-		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-	</td>
 	<?php } ?>
-		
+
 	</tr>
  </table>
 <?php
@@ -1067,9 +1061,6 @@ function printCategoryList() {
 	<td class="icons">
 	<a href="javascript:confirmDeleteImage('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories','<?php echo js_encode(gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
 	</td>
-	<td class="icons">
-								<input type="checkbox" name="ids[]" value="<?php echo $cat['id']; ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
-							</td>
 	</tr>
  <?php
 	}
@@ -1667,56 +1658,8 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 		}
 	}
 }
-function processZenpageCheckboxAction($type) {
-	if (isset($_POST['ids'])) {
-		//echo "action for checked items:". $_POST['checkallaction'];
-		$action = sanitize($_POST['checkallaction']);
-		$ids = $_POST['ids'];
-		$total = count($ids);
-		switch($type) {
-			case 'pages':
-				$dbtable = prefix('zenpage_pages');
-				break;
-			case 'news':
-				$dbtable = prefix('zenpage_news');
-				break;
-			case 'newscategories':
-				$dbtable = prefix('zenpage_news_categories');
-				break;
-		}
-		if($action != 'noaction') {
-			if ($total > 0) {
-				$n = 0;
-				switch($action) {
-					case 'deleteall':
-						$sql = "DELETE FROM ".$dbtable." WHERE ";
-						break;
-					case 'showall':
-						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
-						break;
-					case 'hideall':
-						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
-						break;
-					case 'commentson':
-						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
-						break;
-					case 'commentsoff':
-						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
-						break;
-					case 'resethitcounter':
-						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
-						break;
-				}
-				foreach ($ids as $id) {
-					$n++;
-					$sql .= " id='".sanitize_numeric($id)."' ";
-					if ($n < $total) $sql .= "OR ";
-				}
-				query($sql);
-			}
-		}
-	}
-}
+
+
 /**
  * Extracs the first two characters from the Zenphoto locale names like 'de_DE' so that
  * TinyMCE and the Ajax File Manager who use two character locales like 'de' can set their language packs

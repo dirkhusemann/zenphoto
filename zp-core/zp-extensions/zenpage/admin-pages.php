@@ -18,14 +18,13 @@ require_once('zp-functions.php');
 </head>
 <body>
 <?php
-printLogoAndLinks();
-echo '<div id="main">';
-printTabs('pages');
-echo '<div id="content">';
-checkRights('pages');
+	printLogoAndLinks();
+	echo '<div id="main">';
+	printTabs('pages');
+	echo '<div id="content">';
+	checkRights('pages');
 // update page sort order
 if(isset($_POST['update'])) {
-	processZenpageCheckboxAction('pages');
 	updatePageSortorder();
 }
 // remove the page from the database
@@ -60,31 +59,8 @@ if(isset($_GET['hitcounter'])) {
 <br clear="all" /><br clear="all" />
 <table class="bordered" style="margin-top: 10px">
  <tr>
-	<th><strong><?php echo gettext('Edit this page'); ?></strong>
-	<?php
-	  	$checkarray = array(
-			  	gettext('*Set action for checked items*') => 'noaction',
-			  	gettext('Delete') => 'deleteall',
-			  	gettext('Set to visible') => 'showall',
-			  	gettext('Set to hidden') => 'hideall',
-			  	gettext('Disable comments') => 'commentsoff',
-			  	gettext('Enable comments') => 'commentson',
-			  	gettext('Reset hitcounter') => 'resethitcounter',
-	  	);
-	  	?>
-	  	<span style="float:right">
-	  	<select name="checkallaction" id="checkallaction" size="1">
-	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
-			</select>
-			</span>
-	</th>
+	<th><strong><?php echo gettext('Edit this page'); ?></strong></th>
  </tr>
- <tr>
-	<td class="subhead">
-		<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
-		</label>
-	</td>
-	</tr>
  <tr><td colspan="1" style="padding: 0;">
 	<ul id="left-to-right" class="page-list">
 	<?php

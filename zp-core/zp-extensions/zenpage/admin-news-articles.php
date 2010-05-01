@@ -30,9 +30,6 @@ printLogoAndLinks();
 		?>
 		<div id="tab_articles" class="tabbox">
 			<?php	
-			if(isset($_POST['processcheckeditems'])) {
-				processZenpageCheckboxAction('news');
-			}
 			if(isset($_GET['del'])) {	
 			  deleteArticle();
 			} 
@@ -76,12 +73,9 @@ printLogoAndLinks();
 			}	
 			?>
 			<span class="zenpagestats"><?php printNewsStatistic();?></span></h1>
-			<form action="admin-news-articles.php" method="post" name="checkeditems">
-					<input name="processcheckeditems" type="hidden" value="Save Order" />
 				<div style="margin-bottom:-5px">
 					<div style="float:left; margin-right: 15px; margin-top: 2px;">
 						<div class="buttons">
-							<button type="submit" title="<?php echo gettext('Process checked items'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Process checked items'); ?></strong></button>
 							<strong><a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
 							<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
 							<img src="images/folder.png" alt="" /> <?php echo gettext('Manage files'); ?></a></strong>
@@ -93,34 +87,10 @@ printLogoAndLinks();
 					<?php printArticlesPageNav($published); ?>
 					<br />
 				</div>
-				
 				<table class="bordered">
 					<tr> 
-				  	<th colspan="11"><strong><?php echo gettext('Edit this article'); ?></strong>
-				  	<?php
-				  	$checkarray = array(
-				  	gettext('*Set action for checked items*') => 'noaction',
-				  	gettext('Delete') => 'deleteall',
-				  	gettext('Set to visible') => 'showall',
-				  	gettext('Set to hidden') => 'hideall',
-				  	gettext('Disable comments') => 'commentsoff',
-				  	gettext('Enable comments') => 'commentson',
-				  	gettext('Reset hitcounter') => 'resethitcounter',
-				  	);
-				  	?> <span style="float: right">
-						  	<select name="checkallaction" id="checkallaction" size="1">
-							  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
-								</select>
-						</span>
-				  	
-				  	</th>
-						</tr>
-						<tr class="newstr">
-							<td class="subhead" colspan="11">
-								<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
-								</label>
-							</td>
-						</tr>
+				  	<th colspan="10"><strong><?php echo gettext('Edit this article'); ?></strong></th>
+				 	</tr>
 					<?php
 					foreach ($result as $article) { 
 						$article = new ZenpageNews($article['titlelink']);
@@ -195,14 +165,7 @@ printLogoAndLinks();
 									<a href="javascript:confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!')); ?>')" title="<?php echo gettext('Delete article'); ?>">
 									<img src="../../images/fail.png" alt="<?php echo gettext('Delete article'); ?>" /></a>
 								</td>
-								<td class="icons">
-									<input type="checkbox" name="ids[]" value="<?php echo $article->getID(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
-								</td>
-								</tr>
 								<?php } else { ?>
-								<td class="icons">
-									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-								</td>
 								<td class="icons">
 									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 								</td>
@@ -217,9 +180,6 @@ printLogoAndLinks();
 					}
 					?> 
 				</table>
-				<p class="buttons"><button type="submit" title="<?php echo gettext('Process checked items'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Process checked items'); ?></strong></button></p>
-				
-				</form>
 				<?php printArticlesPageNav(); ?>
 				<?php printZenpageIconLegend(); ?>
 		</div> <!-- tab_articles -->

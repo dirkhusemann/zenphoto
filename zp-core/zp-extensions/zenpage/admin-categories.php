@@ -48,9 +48,7 @@ printLogoAndLinks();
 		?>
 		<div id="tab_articles" class="tabbox">
 			<?php	
-			if(isset($_POST['processcheckeditems'])) {
-				processZenpageCheckboxAction('newscategories');
-			}
+			
 			if(isset($_GET['delete'])) {
 			  deleteCategory();
 			}
@@ -220,42 +218,13 @@ printLogoAndLinks();
 			    	</tr>
 			 		</table>
 				</form>
-				
-				<form action="admin-categories.php?page=news&amp;tab=categories" method="post" name="checkeditems">
-				<input name="processcheckeditems" type="hidden" value="Save Order" />
 				<table class="bordered">
 				 <tr> 
-				  <th colspan="6"><strong><?php echo gettext('Edit this Category'); ?></strong>
-				  	<?php
-				  	$checkarray = array(
-				  	gettext('*Set action for checked items*') => 'noaction',
-				  	gettext('Delete') => 'deleteall',
-				  	gettext('Reset hitcounter') => 'resethitcounter',
-				  	);
-				  	?> <span style="float: right"> 
-				  	  	<select name="checkallaction" id="checkallaction" size="1">
-				  			<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
-								</select>
-						</span>
-				  
-				  </th>
+				  <th colspan="5"><strong><?php echo gettext('Edit this Category'); ?></strong></th>
 				  </tr>
-				  <tr class="newstr">
-						<td class="subhead" colspan="11">
-										<span class="buttons"><button type="submit" title="<?php echo gettext('Process checked items'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Process checked items'); ?></strong></button></span>
-						
-								<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
-								</label>
-						</td>
-					</tr>
 					<?php printCategoryList(); ?>
-					<tr>
-						<td class="subhead" colspan="11">
-							<span class="buttons"><button type="submit" title="<?php echo gettext('Process checked items'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Process checked items'); ?></strong></button></span>
-						</td>
-					</tr>
 				</table>
-				</form>	
+				
 			</div> <!-- box -->
 			<ul class="iconlegend">
 				<li><img src="../../images/lock.png" alt="" /><?php echo gettext("Has Password"); ?></li>
