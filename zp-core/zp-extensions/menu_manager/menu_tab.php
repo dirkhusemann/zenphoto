@@ -47,9 +47,15 @@ if(isset($_POST['update'])) {
 	updateItemsSortorder();
 }
 if (isset($_GET['delete'])) {
-	$sql = 'DELETE FROM '.prefix('menu').' WHERE `id`='.sanitize_numeric($_GET['id']);
-	query($sql);
-	echo "<p class='messagebox' id='fade-message'>".gettext('Menu item deleted')."</p>";
+	$sql = 'SELECT `sort_order` FROM '.prefix('menu').' WHERE `id`='.sanitize_numeric($_GET['id']);
+	$result = query_single_row($sql);
+	if (empty($result)) {
+		echo "<p class='errorbox' >".gettext('Menu item deleted failed')."</p>";
+	} else {
+		$sql = 'DELETE FROM '.prefix('menu').' WHERE `sort_order` LIKE "'.$result['sort_order'].'%"';
+		query($sql);
+		echo "<p class='messagebox' id='fade-message'>".gettext('Menu item deleted')."</p>";
+	}
 }
 if (isset($_GET['deletemenuset'])) {
 	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
@@ -68,7 +74,7 @@ $count = mysql_result($result, 0);
 ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
-    function newMenuSet() {
+   function newMenuSet() {
 		var new_menuset = prompt("<?php echo gettext('Menuset id'); ?>","<?php echo 'menu_'.$count; ?>");
 		if (new_menuset) {
 			window.location = '?menuset='+encodeURIComponent(new_menuset);
@@ -79,6 +85,11 @@ $count = mysql_result($result, 0);
 			window.location = '?deletemenuset=<?php echo htmlspecialchars($menuset); ?>';
 		}
 	};
+	function deleteMenuItem(location,warn) {
+		if (confirm(warn)) {
+			window.location = location;
+		}
+	}
 	// ]]> -->
 </script>
 <h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1> 				

@@ -108,7 +108,7 @@ function printItemsListTable($item, $flag) {
 			?>					
 		</td>
 		<td class="icons">
-			<a href="menu_tab.php?delete&amp;id=<?php echo $item['id']; ?>">
+			<a href="javascript:deleteMenuItem('menu_tab.php?delete&amp;id=<?php echo $item['id']; ?>','<?php printf(gettext('Ok to delete %s? This cannot be undone.'),htmlspecialchars($array['name'])); ?>');" >
 			<img src="../../images/fail.png" alt="<?php echo gettext('delete'); ?>" title="<?php echo gettext('delete'); ?>" /></a>		
 		</td>
 	</tr>
