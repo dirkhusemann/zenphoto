@@ -22,6 +22,7 @@ printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 <script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
 <!--Nested Sortables-->
 <script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
+
 </head>
 <body>
 <?php	printLogoAndLinks(); ?>
@@ -44,6 +45,35 @@ if (empty($menuset)) {	//	setup default menuset
 }
 
 if(isset($_POST['update'])) {
+	if (isset($_POST['ids'])) {
+		$action = sanitize($_POST['checkallaction']);
+		$ids = $_POST['ids'];
+		$menuset = checkChosenMenuset();
+		$total = count($ids);
+		if($action != 'noaction') {
+			if ($total > 0) {
+				$n = 0;
+				switch($action) {
+					case 'deleteall':
+						$sql = "DELETE FROM ".prefix('menu')." WHERE menuset = '".$menuset."' AND (";
+						break;
+					case 'showall':
+						$sql = "UPDATE ".prefix('menu')." SET `show` = 1 WHERE menuset = '".$menuset."' AND (";
+						break;
+					case 'hideall':
+						$sql = "UPDATE ".prefix('menu')." SET `show` = 0 WHERE menuset = '".$menuset."' AND (";
+						break;
+				}
+				foreach ($ids as $id) {
+					$n++;
+					$sql .= " id='".sanitize_numeric($id)."' ";
+					if ($n < $total) $sql .= "OR ";
+				}
+				$sql .= ")";
+				query($sql);
+			}
+		}
+	}
 	updateItemsSortorder();
 }
 if (isset($_GET['delete'])) {
@@ -112,9 +142,18 @@ $count = mysql_result($result, 0);
 <table class="bordered" style="margin-top: 10px">
 	<tr> 
 	  <th colspan="2" style="text-align:left">
-	  	<strong><?php echo gettext("Edit the menu"); ?></strong>
-	  	<?php echo getMenuSetSelector(true); ?>
-	  	<?php printItemStatusDropdown(); ?>
+	  	<strong><?php echo gettext("Edit the menu"); ?></strong> <?php echo getMenuSetSelector(true); ?>	
+	  	<?php printItemStatusDropdown(); ?> 
+	  	<?php
+	  	$checkarray = array(
+			  	gettext('*Set action for checked items*') => 'noaction',
+			  	gettext('Delete') => 'deleteall',
+			  	gettext('Set to visible') => 'showall',
+			  	gettext('Set to hidden') => 'hideall'
+	  	); ?>
+	  	<select name="checkallaction" id="checkallaction" size="1">
+	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			</select>
 	  	<span class="buttons" style="float: right"><?php 
 if ($count > 0) {
 	$buttontext = sprintf(gettext("Delete menu set '%s'"),htmlspecialchars($menuset));
@@ -125,6 +164,12 @@ if ($count > 0) {
 ?>
 </span>
 	  </th>
+	</tr>
+	<tr>
+	<td class="subhead">
+		<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+		</label>
+	</td>
 	</tr>
 	<tr>
 	 	<td colspan="2" style="padding: 0;">
@@ -141,6 +186,7 @@ if ($count > 0) {
 			</ul>
 		</td>
 	</tr>
+	
 </table>
 <br />
 <div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
