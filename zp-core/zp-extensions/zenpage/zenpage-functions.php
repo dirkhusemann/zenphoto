@@ -678,7 +678,7 @@ function isProtectedPage($pageobj=NULL) {
  * @param obj $articleobj Optional news article object to check directly, if empty the current news article is checked if available
  * @return bool
  */
-function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
+function inProtectedNewsCategory($articleobj=NULL,$checkProtection=true) {
 	global $_zp_current_zenpage_news;
 	if(empty($articleobj) && !is_null($_zp_current_zenpage_news) && get_class($_zp_current_zenpage_news) == 'zenpagenews') {
 		$articleobj = $_zp_current_zenpage_news;

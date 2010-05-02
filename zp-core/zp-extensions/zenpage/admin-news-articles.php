@@ -124,7 +124,7 @@ printLogoAndLinks();
 						  </td> 
 						  <td class="icons">
 						  <?php
-						  	if(inProtectedNewsCategory(true,$article)) {
+						  	if(inProtectedNewsCategory($article)) {
 						  		echo '<img src="../../images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" title="'.gettext('Password protected').'" />';
 						  	} 
 						  	?>
