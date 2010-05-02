@@ -550,16 +550,19 @@ function getPluginFiles($pattern, $folder='', $stripsuffix=true) {
 			$list[$key] = $basepath.$file;
 		}
 	}
-	chdir($basepath = SERVERPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$folder);
-	$filelist = safe_glob($pattern);
-	foreach ($filelist as $file) {
-		$key = filesystemToInternal($file);
-		if ($stripsuffix) {
-			$key = substr($key,0,strrpos($key,'.'));
+	$basepath = SERVERPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$folder;
+	if (file_exists($basepath)) {
+		chdir($basepath);
+		$filelist = safe_glob($pattern);
+		foreach ($filelist as $file) {
+			$key = filesystemToInternal($file);
+			if ($stripsuffix) {
+				$key = substr($key,0,strrpos($key,'.'));
+			}
+			$list[$key] = $basepath.$file;
 		}
-		$list[$key] = $basepath.$file;
+		chdir($curdir);
 	}
-	chdir($curdir);
 	return $list;
 }
 
