@@ -684,18 +684,19 @@ function inProtectedNewsCategory($checkProtection=true, $articleobj='') {
 		$articleobj = $_zp_current_zenpage_news;
 	}
 	$categories = $articleobj->getCategories();
-	if($checkProtection) {
-		$catcount = count($categories);
-	} else {
-		$catcount = 0;
-	}
-	$count = 0;
-	if($catcount == 1) {
+	if(count($categories) > 0) {
 		foreach($categories as $cat) {
-			if(!empty($cat['password']) || !is_null($cat['password'])) {
-				return true;
+			if(empty($cat['password'])) {
+				if ($checkProtection) {
+					return false;
+				}
+			} else {
+				if (!$checkProtection) {
+					return true;
+				}
 			}
 		}
+		return $checkProtection;
 	}
 	return false;
 }
