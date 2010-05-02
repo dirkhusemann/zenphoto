@@ -475,7 +475,7 @@ table.bordered td {
 	border-bottom: 0px solid #E5E5E5;
 }
 
-table.bordered tr.newstr td {
+table.bordered tr td {
 	padding: 8px 16px;
 	margin: 0px;
 	background-color: #fff;
