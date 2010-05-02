@@ -102,7 +102,7 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
  * @param integer $count_min the minimum count for a tag to appear in the output 
  * @param integer $count_max the floor count for setting the cloud font size to $size_max
  */
-function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class="",$showcounter=true,$tagcloud=true,$size_min=1,$size_max=5,$count_min=1,$count_max=50) {
+function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$separator='',$class='',$showcounter=true,$tagcloud=true,$size_min=1,$size_max=5,$count_min=1,$count_max=50) {
 	if($mode == 'all') {
 		if(getAllTagsFromAlbum($albumname,$subalbums,'albums') OR getAllTagsFromAlbum($albumname,$subalbums,'images')) {
 			$showcounter = false;
@@ -125,9 +125,14 @@ function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$se
 	$count_min = sanitize_numeric($count_min);
 	$count_max = sanitize_numeric($count_max);
 	$separator = sanitize($separator);
+	if(!empty($class)) $class = 'class="'.sanitize($class).'"';
 	$counter = '';
 	echo "<ul ".$class.">\n";
+	$loopcount = '';
+	$tagcount = count($tags);
+	$tagcount;
 	foreach ($tags as $row) {
+		$loopcount++;
 		$count = $row['count'];
 		$tid   = $row['id'];
 		$tname = $row['name'];
@@ -142,6 +147,7 @@ function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$se
 		if($showcounter) {
 			$counter = ' ('.$count.')';
 		}
+		if($loopcount == $tagcount) $separator = '';
 		echo "<li><a class=\"tagLink\" href=\"".htmlspecialchars(getSearchURL($tname, '', 'tags',''))."\"".$style." rel=\"nofollow\">".$tname.$counter."</a>".$separator."</li>\n";
 	}
 	echo "</ul>\n";
