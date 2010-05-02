@@ -218,17 +218,18 @@ function sitemap_getDateformat($obj,$option) {
 	switch($option) {
 		case 'date':
 		default:
-			$date = substr($obj->getDatetime(),0,10);
+			$date = $obj->getDatetime();
 			break;
 		case 'mtime':
 			$timestamp = $obj->get('mtime');
-			if($timestamp == 0) {
-				$date = substr($obj->getDatetime(),0,10);
+			if($timestamp == 0 || empty($timestamp)) {
+				$date = $obj->getDatetime();
 			} else {
 				$date = strftime('%Y-%m-%d %T',$timestamp);
 			}
 			break;
 	}
+	if(empty($date)) $date = date('Y-m-d H:i:s');
 	return $date;
 }
 /**
@@ -248,7 +249,7 @@ function printSitemapIndexLinks($changefreq='') {
 			sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."/".$locale."/</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	} else {
-	sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+	sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	}
 	if(galleryAlbumsPerPage() != 0) {
 		$toplevelpages = ceil($_zp_gallery->getNumAlbums() / galleryAlbumsPerPage());
@@ -261,11 +262,11 @@ function printSitemapIndexLinks($changefreq='') {
 			if(sitemap_multilingual()) {
 				foreach($sitemap_locales as $locale) {
 					$url = FULLWEBPATH.'/'.rewrite_path($locale.'/page/'.$x,'index.php?page='.$x,false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 				}
 			} else {
 				$url = FULLWEBPATH.'/'.rewrite_path('page/'.$x,'index.php?page='.$x,false);
-				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 			}
 		}
 	}
@@ -411,11 +412,11 @@ function printSitemapZenpageNewsIndex($changefreq='') {
 	if(sitemap_multilingual()) {
 		foreach($sitemap_locales as $locale) {
 			$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_NEWS.'/1','?p='.ZENPAGE_NEWS.'&amp;page=1',false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	}else {
 		$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/1','?p='.ZENPAGE_NEWS.'&amp;page=1',false);
-		sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+		sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	}
 	// getting pages for the main news loop
 	$newspages = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
@@ -424,11 +425,11 @@ function printSitemapZenpageNewsIndex($changefreq='') {
 			if(sitemap_multilingual()) {
 				foreach($sitemap_locales as $locale) {
 					$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_NEWS.'/'.$x,'?p='.ZENPAGE_NEWS.'&amp;page='.$x,false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 				}
 			} else {
 				$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/'.$x,'?p='.ZENPAGE_NEWS.'&amp;page='.$x,false);
-				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d H:i:s')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 			}
 		}
 	}
@@ -519,11 +520,11 @@ function printSitemapZenpageNewsCategories($changefreq='') {
  *
  */
 function startSitemapCache() {
-	$caching = getOption('sitemap_disablecache');
+	$disablecaching = getOption('sitemap_disablecache');
 	if(zp_loggedin()) {
-		$caching = false;
-	} 
-	if($caching) {
+		$disablecaching = true;
+	}
+	if(!$disablecaching) {
 		$cachefilepath = SERVERPATH."/cache_html/sitemap/sitemap.xml";
 		if(file_exists($cachefilepath) AND time()-filemtime($cachefilepath) < getOption('sitemap_cache_expire')) {
 			echo file_get_contents($cachefilepath); // PHP >= 4.3
@@ -542,11 +543,11 @@ function startSitemapCache() {
  *
  */
 function endSitemapCache() {
-	$caching = getOption('sitemap_disablecache');
+	$disablecaching = getOption('sitemap_disablecache');
 	if(zp_loggedin()) {
-		$caching = false;
+		$disablecaching = true;
 	}
-	if($caching) {
+	if(!$disablecaching) {
 		$cachefilepath = SERVERPATH."/cache_html/sitemap/sitemap.xml";
 		if(!empty($cachefilepath)) {
 			$pagecontent = ob_get_clean();
