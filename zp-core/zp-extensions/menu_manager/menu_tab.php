@@ -60,7 +60,7 @@ if (isset($_GET['delete'])) {
 if (isset($_GET['deletemenuset'])) {
 	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
 	query($sql);
-	$_menu_manager_items = NULL;
+	$_menu_manager_items = array();
 	echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset']))."</p>";
 }
 

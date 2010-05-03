@@ -60,7 +60,10 @@ $_menu_manager_items = array();
  */
 function getMenuItems($menuset, $visible) {
 	global $_menu_manager_items;
-	if (isset($_menu_manager_items[$visible])) return $_menu_manager_items[$visible];
+	if (array_key_exists($menuset,$_menu_manager_items) &&
+						 array_key_exists($visible,$_menu_manager_items[$menuset])) {
+		return $_menu_manager_items[$menuset][$visible];
+	}
 	switch($visible) {
 		case 'visible':
 			$where = " WHERE `show` = 1 AND menuset = '".zp_escape_string($menuset)."'";
@@ -74,8 +77,8 @@ function getMenuItems($menuset, $visible) {
 			break;
 	}
 	$result = query_full_array("SELECT * FROM ".prefix('menu').$where." ORDER BY sort_order", true, 'sort_order');
-	$_menu_manager_items[$visible] = $result;
-	return $_menu_manager_items[$visible];
+	$_menu_manager_items[$menuset][$visible] = $result;
+	return $_menu_manager_items[$menuset][$visible];
 }
 
 /**
@@ -134,7 +137,7 @@ function getItemTitleAndURL($item) {
 			break;
 		case "album":
 			$folderFS = internalToFilesystem($item['link']);
-			$localpath = getAlbumFolder() . $folderFS . "/";
+			$localpath = getAlbumFolder() . $folderFS;
 			$dynamic = hasDynamicAlbumSuffix($folderFS);
 			$valid = file_exists($localpath) && ($dynamic || is_dir($localpath));
 			if(!$valid || strpos($localpath, '..') !== false) {
@@ -201,14 +204,8 @@ function getItemTitleAndURL($item) {
 		case 'menulabel':
 			$array = array("title"=>get_language_string($item['title']),"url" => NULL,'name'=>$item['title'],'protected'=>false);
 			break;
-		case 'menufunction':
-			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link'],'protected'=>false);
-			break;
-		case 'html':
-			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link'],'protected'=>false);
-			break;
 		default:
-			echo "<br/>bad item type ";var_dump($item);
+			$array = array("title"=>$item['title'],"url"=>$item['link'],"name"=>$item['link'],'protected'=>false);
 			break;
 	}
 	return $array;
@@ -232,15 +229,64 @@ function getMenuVisibility() {
 }
 
 /**
- * Returns the ID of the current menu item
+ * "invents" a menu item for the current page (for when one does not exist)
+ * Adds the item to the current menuset and modifies its "parent" as needed
+ * 
+ * returns a contrived sort_order for the item.
+ * 
+ * @param string $menuset
+ * @param string $visibility
+ * return string
+ */
+function inventMenuItem($menuset,$visibility) {
+	global $_zp_gallery_page, $_zp_current_album, $_zp_current_image, $_zp_current_search, $_menu_manager_items;
+	$currentkey = NULL;
+	switch ($_zp_gallery_page) {
+		case 'image.php':
+			$name = '';
+			if (in_context(ZP_SEARCH_LINKED) && !in_context(ZP_ALBUM_LINKED)) {
+				$name = $_zp_current_search->dynalbumname;
+				if (empty($name)) {	//	smple search
+					foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
+						if ($item['type']=='custompage' && $item['link'] == 'search') {
+							$currentkey = $item['sort_order'].'-9999';
+							break;
+						}
+					}
+				}
+			} else {
+				$name = $_zp_current_album->name;
+			}
+			if (!empty($name)) {
+				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
+					if ($item['type']=='album' && $item['title'] == $name) {
+						$currentkey = $item['sort_order'].'-9999';
+						break;
+					}
+				}
+			}
+			if (!empty($currentkey)) {
+				$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'image',
+																	'include_li'=>true,'title'=>$_zp_current_image->getTitle(),
+																	'show'=>1, 'link'=>'','menuset'=>$menuset);
+				$_menu_manager_items[$menuset][$visibility][$currentkey] = $item;
+				$_menu_manager_items[$menuset][$visibility] = sortMultiArray($_menu_manager_items[$menuset][$visibility], 'sort_order', false, false);
+			}
+			break;
+	}
+	return $currentkey;
+}
+
+/**
+ * Returns the sort_order of the current menu item
  * @param string $menuset current menu set
  * @return int
  */
-function getCurrentMenuItem($menuset='default') {
+function getCurrentMenuItem($menuset) {
 	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
 	$currentpageURL = str_replace('\\','/',$currentpageURL);
 	if (substr($currentpageURL,-1) == '/') $currentpageURL = substr($currentpageURL, 0, -1);
-	$items = getMenuItems($menuset, getMenuVisibility());
+	$items = getMenuItems($menuset, $visibility = getMenuVisibility());
 	$currentkey = NULL;
 	foreach ($items as $key=>$item) {
 		switch ($item['type']) {
@@ -257,6 +303,9 @@ function getCurrentMenuItem($menuset='default') {
 				break;
 		}
 	}
+	if (is_null($currentkey)) {
+		$currentkey = inventMenuItem($menuset,$visibility);
+	}
 	return $currentkey;
 }
 
@@ -266,9 +315,9 @@ function getCurrentMenuItem($menuset='default') {
  * @return string
  */
 function getMenumanagerPredicessor($menuset='default') {
+	$sortorder = getCurrentMenuItem($menuset);
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return NULL;
-	$sortorder = getCurrentMenuItem();
 	if (empty($sortorder)) return NULL;
 	$order = explode('-', $sortorder);
 	$next = array_pop($order)-1;
@@ -309,9 +358,9 @@ function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class
  * @return string
  */
 function getMenumanagerSuccessor($menuset='default') {
+	$sortorder = getCurrentMenuItem($menuset);
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return NULL;
-	$sortorder = getCurrentMenuItem();
 	if (empty($sortorder)) return NULL;
 	$order = explode('-', $sortorder);
 	$next = array_pop($order)+1;
@@ -480,9 +529,9 @@ echo "<br />printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navle
  */
 function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' | ', $after=' | ') {
 	echo $before;
+	$sortorder = getCurrentMenuItem($menuset);
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)>0){
-		$sortorder = getCurrentMenuItem();
 		if ($sortorder) {
 			$parents = array();
 			$order = explode('-', $sortorder);
@@ -539,8 +588,8 @@ function getMenuFromLink($link, $menuset='default') {
 function submenuOf($link, $menuset='default') {
 	$link_menu = getMenuFromLink($link, $menuset);
 	if (is_array($link_menu)) {
+		$current = getCurrentMenuItem($menuset);
 		$items = getMenuItems($menuset, getMenuVisibility());
-		$current = getCurrentMenuItem();
 		if (!is_null($current)) {
 			$sortorder = $link_menu['sort_order'];
 			if (strlen($current) > strlen($sortorder)) {
@@ -742,10 +791,10 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
 
+	$sortorder = getCurrentMenuItem($menuset);
 	$items = getMenuItems($menuset, getMenuVisibility());
 	if (count($items)==0) return; // nothing to do
 	echo "<ul$css_id>";
-	$sortorder = getCurrentMenuItem();
 	if (empty($sortorder)) {
 		$pageid = NULL;
 	} else {

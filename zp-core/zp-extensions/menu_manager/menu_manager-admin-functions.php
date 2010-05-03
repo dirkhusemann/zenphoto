@@ -295,8 +295,8 @@ function addSubalbumMenus($menuset, $gallery, $id, $link, $sort) {
 	$album = new Album($gallery, $link);
 	$show = $album->get('show');
 	$title = $album->getTitle();
-	$sql = "INSERT INTO ".prefix('menu')." (`link`,`type`,`show`,`menuset`,`sort_order`, `parentid`) ".
-																				'VALUES ("'.zp_escape_string($link).'", "album", "'.$show.'","'.zp_escape_string($menuset).'", "'.$sort.'",'.$id.')';
+	$sql = "INSERT INTO ".prefix('menu')." (`link`,`type`,`title`,`show`,`menuset`,`sort_order`, `parentid`) ".
+																				'VALUES ("'.zp_escape_string($link).'", "album", "'.zp_escape_string($album->name).'", "'.$show.'","'.zp_escape_string($menuset).'", "'.$sort.'",'.$id.')';
 	$result = query($sql, true);													
 	if ($result) {
 		$id = mysql_insert_id();
@@ -454,8 +454,7 @@ function addItem() {
 			echo "<p class='messagebox' id='fade-message'>".gettext("Menu items for all Zenpage categories added.")."</p>";
 			return NULL;
 		case 'album':
-			$result['title'] = NULL;
-			$result['link'] = sanitize($_POST['albumselect']);
+			$result['title'] = $result['link'] = sanitize($_POST['albumselect']);
 			if(empty($result['link'])) {
 				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to select an album.")."</p>";
 				return $result;
@@ -554,6 +553,9 @@ function addItem() {
 			}
 			$successmsg = gettext("Horizontal rule added");
 			break;
+		default:
+			break;
+			
 	}
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$rslt = query($sql);
@@ -719,7 +721,6 @@ function printCustomPageSelector($current) {
 		foreach($filelist as $file) {
 			$list[] = str_replace('.php', '', filesystemToInternal($file));
 		}
-		$list = array_diff($list, standardScripts());
 		generateListFromArray(array($current), $list, false, false);
 		chdir($curdir);
 		?>

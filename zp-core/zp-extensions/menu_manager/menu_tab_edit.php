@@ -219,7 +219,7 @@ if(is_array($result)) {
 	if (array_key_exists('link',$result)) {
 		$link = $result['link'];
 	}
-	$action = '1';
+	$action = !empty($id);
 }
 if (isset($_GET['add'])) {
 	$add = '&amp;add'
