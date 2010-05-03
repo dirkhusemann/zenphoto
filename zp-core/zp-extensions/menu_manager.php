@@ -269,10 +269,12 @@ function inventMenuItem($menuset,$visibility) {
 				$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'image',
 																	'include_li'=>true,'title'=>$_zp_current_image->getTitle(),
 																	'show'=>1, 'link'=>'','menuset'=>$menuset);
-				$_menu_manager_items[$menuset][$visibility][$currentkey] = $item;
-				$_menu_manager_items[$menuset][$visibility] = sortMultiArray($_menu_manager_items[$menuset][$visibility], 'sort_order', false, false);
 			}
 			break;
+	}
+	if (!empty($currentkey)) {
+		$_menu_manager_items[$menuset][$visibility][$currentkey] = $item;
+		$_menu_manager_items[$menuset][$visibility] = sortMultiArray($_menu_manager_items[$menuset][$visibility], 'sort_order', false, false);
 	}
 	return $currentkey;
 }
