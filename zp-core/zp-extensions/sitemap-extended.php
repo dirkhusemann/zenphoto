@@ -16,7 +16,7 @@
  * 
  * IMPORTANT: A multilingual sitemap requires the seo_locale plugin and mod_rewrite.
  *
- * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap and on contributions by timo
+ * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap and on contributions by timo and Blue Dragonfly
  * @package plugins
  */
 
@@ -32,7 +32,7 @@ if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') { //button
 
 //$plugin_is_filter = 5;
 $plugin_description = gettext('Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if called via "www.yourdomain.com/zenphoto/sitemap.php" in the URL.').'<p class="notebox">'.gettext('<strong>Note:</strong> The index links may not match if using the Zenpage option "news on index" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!!').'</p>';
-$plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer) and modifications by Timo';
+$plugin_author = 'Malte Müller (acrylian) based on the <a href="http://github.com/Tenzer/zenphoto-sitemap">plugin</a> by Jeppe Toustrup (Tenzer) and modifications by Timo and Blue Dragonfly';
 $plugin_version = '1.3.0';
 $plugin_URL = 'http://www.zenphoto.org/documentation/plugins/_'.PLUGIN_FOLDER.'---sitemap-extended.php.html';
 $option_interface = new sitemap();
@@ -222,15 +222,18 @@ function sitemap_getDateformat($obj,$option) {
 			break;
 		case 'mtime':
 			$timestamp = $obj->get('mtime');
-			if($timestamp == 0 || empty($timestamp)) {
-				$date = substr($obj->getDatetime(),0,10);
+			if($timestamp == 0) {
+				$date = $obj->getDatetime();
 			} else {
-				$date = strftime('%Y-%m-%d',$timestamp);
+        return strftime('%Y-%m-%dT%H:%M:%SZ', $timestamp);
+        // For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
+        // return strftime(DATE_ISO8601, $timestamp);
 			}
 			break;
 	}
-	if(empty($date)) $date = date('Y-m-d');
-	return $date;
+	return sitemap_getISO8601Date($date);
+	// For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
+  // return strftime(DATE_ISO8601, strtotime($date));
 }
 /**
  * Prints the links to the index of a Zenphoto gallery incl. pagination
@@ -246,10 +249,10 @@ function printSitemapIndexLinks($changefreq='') {
 	}
 	if(sitemap_multilingual()) {
 		foreach($sitemap_locales as $locale) {
-			sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."/".$locale."/</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."/".$locale."/</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	} else {
-	sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+	sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	}
 	if(galleryAlbumsPerPage() != 0) {
 		$toplevelpages = ceil($_zp_gallery->getNumAlbums() / galleryAlbumsPerPage());
@@ -262,11 +265,11 @@ function printSitemapIndexLinks($changefreq='') {
 			if(sitemap_multilingual()) {
 				foreach($sitemap_locales as $locale) {
 					$url = FULLWEBPATH.'/'.rewrite_path($locale.'/page/'.$x,'index.php?page='.$x,false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 				}
 			} else {
 				$url = FULLWEBPATH.'/'.rewrite_path('page/'.$x,'index.php?page='.$x,false);
-				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 			}
 		}
 	}
@@ -412,11 +415,11 @@ function printSitemapZenpageNewsIndex($changefreq='') {
 	if(sitemap_multilingual()) {
 		foreach($sitemap_locales as $locale) {
 			$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_NEWS.'/1','?p='.ZENPAGE_NEWS.'&amp;page=1',false);
-			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+			sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 		}
 	}else {
 		$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/1','?p='.ZENPAGE_NEWS.'&amp;page=1',false);
-		sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+		sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	}
 	// getting pages for the main news loop
 	$newspages = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
@@ -425,11 +428,11 @@ function printSitemapZenpageNewsIndex($changefreq='') {
 			if(sitemap_multilingual()) {
 				foreach($sitemap_locales as $locale) {
 					$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_NEWS.'/'.$x,'?p='.ZENPAGE_NEWS.'&amp;page='.$x,false);
-					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 				}
 			} else {
 				$url = FULLWEBPATH.'/'.rewrite_path(ZENPAGE_NEWS.'/'.$x,'?p='.ZENPAGE_NEWS.'&amp;page='.$x,false);
-				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".date('Y-m-d')."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
+				sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 			}
 		}
 	}
@@ -453,7 +456,7 @@ function printSitemapZenpageNewsArticles($changefreq='') {
 			$date = substr($articleobj->getDatetime(),0,10);
 			if(!is_null($articleobj->getLastchange())) $lastchange = substr($articleobj->getLastchange(),0,10);
 			if($date > $lastchange) $date = $lastchange;
-			if(!inProtectedNewsCategory(true, $articleobj)) {
+			if(!inProtectedNewsCategory($articleobj)) {
 				if(sitemap_multilingual()) {
 					foreach($sitemap_locales as $locale) {
 						$url = FULLWEBPATH.'/'.rewrite_path($locale.'/'.ZENPAGE_NEWS.'/'.urlencode($articleobj->getTitlelink()),'?p='.ZENPAGE_NEWS.'&amp;title=' . urlencode($articleobj->getTitlelink()),false);
@@ -523,7 +526,7 @@ function startSitemapCache() {
 	$disablecaching = getOption('sitemap_disablecache');
 	if(zp_loggedin()) {
 		$disablecaching = true;
-	}
+	} 
 	if(!$disablecaching) {
 		$cachefilepath = SERVERPATH."/cache_html/sitemap/sitemap.xml";
 		if(file_exists($cachefilepath) AND time()-filemtime($cachefilepath) < getOption('sitemap_cache_expire')) {
@@ -560,27 +563,43 @@ function endSitemapCache() {
 }
 
 /**
-	 * Cleans out the cache folder
-	 *
-	 */
-	function clearSitemapCache() {
-		$cachefolder = SERVERPATH."/cache_html/sitemap/";
-		if (is_dir($cachefolder)) {
-			$handle = opendir($cachefolder);
-			while (false !== ($filename = readdir($handle))) {
-				$fullname = $cachefolder . '/' . $filename;
-				if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
-					if (($filename != '.') && ($filename != '..')) {
-						clearRSSCache($fullname);
-						rmdir($fullname);
-					}
-				} else {
-					if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
-						unlink($fullname);
-					}
-				}
+ * Cleans out the cache folder.
+ *
+ */
+function clearSitemapCache() {
+  $cachefolder = SERVERPATH."/cache_html/sitemap/";
+  if (is_dir($cachefolder)) {
+    $handle = opendir($cachefolder);
+    while (false !== ($filename = readdir($handle))) {
+      $fullname = $cachefolder . '/' . $filename;
+      if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+        if (($filename != '.') && ($filename != '..')) {
+          clearRSSCache($fullname);
+          rmdir($fullname);
+        }
+      } else {
+        if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
+          unlink($fullname);
+        }
+      }
 
-			}
-			closedir($handle);
-		}
-	}
+    }
+    closedir($handle);
+  }
+}
+
+/**
+ * Returns an ISO-8601 compliant date/time string for the given date/time.
+ * While PHP5 can use the date format constant DATE_ISO8601, this function is designed to allow PHP4 use as well.
+ * Eventually it can be deprecated, by:
+ *   1. Replacing parameterless references to this function with date(DATE_ISO8601)
+ *   2. Replacing references to this function in sitemap_getDateformat as documented there
+ *
+ */
+function sitemap_getISO8601Date($date='') {
+  if (empty($date)) {
+    return strftime('%Y-%m-%dT%H:%M:%SZ');
+  } else {
+    return strftime('%Y-%m-%dT%H:%M:%SZ', strtotime($date));
+  }
+}
