@@ -40,7 +40,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<?php
 						if (is_null($_zp_current_album)) {
 							$search = new SearchEngine();
-							$params = trim(zp_getCookie('zenphoto_image_search_params'));
+							$params = trim(zp_getCookie('zenphoto_search_params'));
 							$search->setSearchParams($params);
 							$images = $search->getImages(0);
 							$searchwords = $search->words;

@@ -943,7 +943,8 @@ function getAllSubAlbumIDs($albumfolder='') {
  * @param string $image Name of the image
  */
 function handleSearchParms($what, $album=NULL, $image=NULL) {
-	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list, $_zp_current_album;
+	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list, $_zp_current_album,
+					$_zp_current_zenpage_news, $_zp_current_zenpage_page;;
 	$_zp_last_album = zp_getCookie('zenphoto_last_album');
 	if (is_null($album)) {
 		if (is_object($zp_request)) {
@@ -953,13 +954,13 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if ($reset) { // clear the cookie if no album and not a search
 			if (!isset($_REQUEST['preserve_serch_params'])) {
-				zp_setcookie("zenphoto_image_search_params", "", time()-368000);
+				zp_setcookie("zenphoto_search_params", "", time()-368000);
 			}
 			return;
 		}
 	}
 	$context = get_context();
-	$params = zp_getCookie('zenphoto_image_search_params');
+	$params = zp_getCookie('zenphoto_search_params');
 	if (!empty($params)) {
 		$_zp_current_search = new SearchEngine();
 		$_zp_current_search->setSearchParams($params);
@@ -987,11 +988,40 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		} else {
 			zp_setCookie('zenphoto_last_album', '', time()-368000);
 		}
+		/*	
+		while all this should work, currently there is no "memory" of zenpage search strings.
+		maybe that should change, but not just now as it is pretty complex to figure out when
+		to clear the cookie.
+		*/
+		if (!is_null($_zp_current_zenpage_page)) {
+			$pages = $_zp_current_search->getSearchPages();
+			if (!empty($pages)) {
+				$tltlelink = $_zp_current_zenpage_page->getTitlelink();
+				foreach ($pages as $apage) {
+					if ($apage['titlelink']==$tltlelink) {
+						$context = $context | ZP_SEARCH_LINKED;
+						break;
+					}
+				}
+			}
+		}
+		if (!is_null($_zp_current_zenpage_news)) {
+			$news = $_zp_current_search->getSearchNews();
+			if (!empty($news)) {
+				$tltlelink = $_zp_current_zenpage_news->getTitlelink();
+				foreach ($news as $anews) {
+					if ($anews['titlelink']==$tltlelink) {
+						$context = $context | ZP_SEARCH_LINKED;
+						break;
+					}
+				}
+			}
+		}
 		if (($context & ZP_SEARCH_LINKED)) {
 			set_context($context);
 		} else { // not an object in the current search path
 			$_zp_current_search = null;
-			zp_setcookie("zenphoto_image_search_params", "", time()-368000);
+			zp_setcookie("zenphoto_search_params", "", time()-368000);
 		}
 	}
 }

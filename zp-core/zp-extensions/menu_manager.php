@@ -239,7 +239,8 @@ function getMenuVisibility() {
  * return string
  */
 function inventMenuItem($menuset,$visibility) {
-	global $_zp_gallery_page, $_zp_current_album, $_zp_current_image, $_zp_current_search, $_menu_manager_items;
+	global $_zp_gallery_page, $_zp_current_album, $_zp_current_image, $_zp_current_search, $_menu_manager_items,
+					$_zp_current_zenpage_news, $_zp_current_zenpage_page;
 	$currentkey = NULL;
 	switch ($_zp_gallery_page) {
 		case 'image.php':
@@ -269,6 +270,41 @@ function inventMenuItem($menuset,$visibility) {
 				$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'image',
 																	'include_li'=>true,'title'=>$_zp_current_image->getTitle(),
 																	'show'=>1, 'link'=>'','menuset'=>$menuset);
+			}
+			break;
+		case ZENPAGE_NEWS.'.php':
+			if (in_context(ZP_SEARCH_LINKED)) {
+				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
+					if ($item['type']=='custompage' && $item['link'] == 'search') {
+						$currentkey = $item['sort_order'].'-9999';
+						break;
+					}
+				}
+			} else {
+				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
+					if ($item['type']=='zenpagenewsindex') {
+						$currentkey = $item['sort_order'].'-9999';
+						break;
+					}
+				}
+			}
+			if (!empty($currentkey)) {
+				$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'zenpagenews',
+																	'include_li'=>true,'title'=>$_zp_current_zenpage_news->getTitle(),
+																	'show'=>1, 'link'=>'','menuset'=>$menuset);
+			}
+			break;
+		case ZENPAGE_PAGES.'.php':
+			if (in_context(ZP_SEARCH_LINKED)) {
+				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
+					if ($item['type']=='custompage' && $item['link'] == 'search') {
+						$currentkey = $item['sort_order'].'-9999';
+						$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'zenpagepage',
+																			'include_li'=>true,'title'=>$_zp_current_zenpage_page->getTitle(),
+																			'show'=>1, 'link'=>'','menuset'=>$menuset);
+						break;
+					}
+				}
 			}
 			break;
 	}
@@ -646,7 +682,7 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 					if(getOption('zp_plugin_zenpage')) {
 						$orders[$nesting]++;
 						query("INSERT INTO ".prefix('menu')." (title`,`link`,`type`,`show`,`menuset`,`sort_order`) ".
-									"VALUES ('".gettext('News index')."', '".rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS).	"','zenpagenewsindex','1','".zp_escape_string($menuset).'","'.sprintf('%3u',$base+1).'"',true);
+									"VALUES ('".gettext('News index')."', '".rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS).	"','zenpagenewsindex','1','".zp_escape_string($menuset).'","'.sprintf('%03u',$base+1).'"',true);
 						$orders[$nesting] = addPagesToDatabase($menuset, $orders)+1;
 						$orders[$nesting] = addCategoriesToDatabase($menuset,$orders);
 					}
@@ -893,19 +929,24 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 				}
 				echo '<li class="menu_'.trim($item['type'].' '.$class).'">'.$itemtitle.$itemcounter;
 			} else {
+				if (strpos($sortorder,$item['sort_order'])===0) {	// we are in the heritage chain
+					$class = ' '.$css_class_active.'-'.($mylevel-$level);
+				} else {
+					$class = '';
+				}
 				switch ($item['type']) {
 					case 'html':
 						echo $item['link'];
 						break;
-						echo '<li class="menu_'.$item['type'].'">'.$itemtitle.$itemcounter;
+						echo '<li class="menu_'.$item['type'].$class.'">'.$itemtitle.$itemcounter;
 					case 'menufunction':
 						eval($itemURL);
 						break;
 					case 'menulabel':
-						echo '<li class="menu_'.$item['type'].'">'.$itemtitle;
+						echo '<li class="menu_'.$item['type'].$class.'">'.$itemtitle;
 						break;
 					default:
-						echo '<li class="menu_'.$item['type'].'">';
+						echo '<li class="menu_'.$item['type'].$class.'">';
 						echo '<a href="'.$itemURL.'" title="'.strip_tags($itemtitle).'">'.$itemtitle.'</a>'.$itemcounter;
 						break;
 				}

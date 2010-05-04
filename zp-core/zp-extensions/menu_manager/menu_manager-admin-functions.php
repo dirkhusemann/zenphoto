@@ -521,6 +521,7 @@ function addItem() {
 			break;
 		case 'menulabel':
 			$result['title'] = process_language_string_save("title",2);
+			$result['link'] = NULL;
 			if(empty($result['title'])) {
 				echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
 				return $result;
@@ -559,12 +560,12 @@ function addItem() {
 	}
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$rslt = query($sql);
-	$order = sprintf('%3u',mysql_result($rslt, 0));
+	$order = sprintf('%03u',mysql_result($rslt, 0));
 	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`,`include_li`) ".
 						"VALUES ('".zp_escape_string($result['title']).
 						"', '".zp_escape_string($result['link']).
 						"','".zp_escape_string($result['type'])."','".$result['show'].
-						"','".zp_escape_string($menuset)."',".$order.",".$result['include_li'].")";
+						"','".zp_escape_string($menuset)."','".$order."',".$result['include_li'].")";
 	if (query($sql, true)) {
 		echo "<p class='messagebox' id='fade-message'>".$successmsg."</p>"; 
 		//echo "<pre>"; print_r($result); echo "</pre>";
