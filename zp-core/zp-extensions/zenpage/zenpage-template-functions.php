@@ -85,9 +85,13 @@ function is_Pages() {
  *  *
  * @return string
  */
-function getNewsType() {
+function getNewsType($newsobj=NULL) {
 	global $_zp_current_zenpage_news;
-	$ownerclass = strtolower(get_class($_zp_current_zenpage_news));
+	if(is_null($newsobj)) {
+		$ownerclass = strtolower(get_class($_zp_current_zenpage_news));
+	} else {
+		$ownerclass = strtolower(get_class($newsobj));
+	}
 	switch($ownerclass) {
 		case "video":
 			$newstype = "video";
@@ -114,8 +118,8 @@ function getNewsType() {
  * 										"flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
  * @return bool
  */
-function is_NewsType($type) {
-	return getNewsType() == $type;
+function is_NewsType($type,$newsobj=NULL) {
+	return getNewsType($newsobj) == $type;
 }
 
 
@@ -2905,7 +2909,7 @@ function isMyNews($newsobj, $action) {
  * @param $show
  */
 function checkNewsAccess($newsobj, &$hint, &$show) {
-	if(is_NewsType('news')) {
+	if(is_NewsType('news',$newsobj)) {
 		if (isMyNews($newsobj, LIST_NEWS_RIGHTS)) return true;
 		$allcategories = $newsobj->getCategories();
 		if (count($allcategories) == 0) return true;
