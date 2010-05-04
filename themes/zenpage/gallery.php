@@ -79,23 +79,7 @@ if(is_GalleryNewsType()) {
   printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 } ?> 
 
-
-<?php
-
-/*
-			$sortorder = "images.id";
-			$imgdates = query_full_array("SELECT DISTINCT mtime, albumid FROM " . prefix('images'). " WHERE `show` = 1 ORDER BY mtime DESC");
-		
-			$albums = array();
-			foreach($imgdates as $imgdate) {
-				$images = query_full_array("SELECT title, filename, mtime, albumid, date FROM ".prefix('images')." AS images WHERE mtime LIKE '".substr($imgdate['mtime'],0,6)."%' AND albumid = ".$imgdate['albumid']." ORDER BY mtime DESC");
-				echo "<pre>"; print_r($images); echo "</pre><br />";
-			}
-			echo "<pre>"; print_r($imgdates); echo "</pre>"; */
-						
-?>
-
-	</div><!-- content left-->
+</div><!-- content left-->
 		
 	
 	<div id="sidebar">

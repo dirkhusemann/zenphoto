@@ -48,9 +48,16 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 	<!-- The Image -->
  <?php
- //if(function_exists("printPagedThumbsNav")) printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40);
- if (function_exists('printjCarouselThumbNav')) printjCarouselThumbNav(6,50,50,50,50,FALSE);
- 
+ //
+ if (function_exists('printjCarouselThumbNav')) {
+ 	printjCarouselThumbNav(6,50,50,50,50,FALSE);
+ }
+ else {
+ 	if (function_exists("printPagedThumbsNav")) {
+ 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40);
+ 	}
+ }
+
  ?>
 
 	<div id="image">
