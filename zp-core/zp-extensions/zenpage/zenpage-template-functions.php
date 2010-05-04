@@ -82,7 +82,8 @@ function is_Pages() {
  * Gets the news type of a news item.
  * "news" for a news article or if using the CombiNews feature
  * "flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
- *  *
+ *  
+ * @param obj $newsobj optional news object to check directly outside news context
  * @return string
  */
 function getNewsType($newsobj=NULL) {
@@ -116,6 +117,7 @@ function getNewsType($newsobj=NULL) {
  * @param string $type The type to check for
  * 										 "news" for a news article or if using the CombiNews feature
  * 										"flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
+ * @param obj $newsobj optional news object to check directly outside news context
  * @return bool
  */
 function is_NewsType($type,$newsobj=NULL) {
