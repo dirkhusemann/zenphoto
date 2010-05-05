@@ -1651,15 +1651,21 @@ function printAlbumButtons($album) {
 		</div>
 		</form>
 
-		<form name="cache_images" action="admin-cache-images.php" method="post">
-		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>" />
-		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>" />
-		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>">
-		<img src="images/cache1.png" style="border: 0px;" alt="cache" />
-		<?php echo gettext("Pre-Cache Images"); ?></button>
-		</div>
-		</form>
+		<?php
+		if (file_exists(SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/cache_images.php')) {
+		?>
+			<form name="cache_images" action="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER; ?>/cache_images.php" method="post">
+			<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>" />
+			<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>" />
+			<div class="buttons">
+			<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>">
+			<img src="images/cache1.png" style="border: 0px;" alt="cache" />
+			<?php echo gettext("Pre-Cache Images"); ?></button>
+			</div>
+			</form>
+		<?php
+		}
+		?>
 		<form name="reset_hitcounters" action="?action=reset_hitcounters" method="post">
 		<input type="hidden" name="action" value="reset_hitcounters" />
 		<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>" />
@@ -1769,20 +1775,26 @@ function printAlbumEditRow($album) {
 	}
 	?>
 	</td>
-	<td class="icons">
-		<?php
-		if ($album->isDynamic()) {
-			?>
-			<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" />
+	<?php
+	if (file_exists(SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/cache_images.php')) {
+	?>
+		<td class="icons">
 			<?php
-		} else {
+			if ($album->isDynamic()) {
+				?>
+				<img src="images/icon_inactive.png" style="border: 0px;" alt="<?php echo gettext('unavailable'); ?>" />
+				<?php
+			} else {
+				?>
+				<a class="cache" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER; ?>/cache_images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?> " title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
+				<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
+				<?php
+				}
 			?>
-			<a class="cache" href="admin-cache-images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?> " title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
-			<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
-			<?php
-			}
-		?>
-	</td>
+		</td>
+	<?php
+	}
+	?>
 	<td class="icons">
 		<?php
 		if ($album->isDynamic()) {

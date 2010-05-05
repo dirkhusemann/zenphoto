@@ -7,11 +7,15 @@
  */
 
 // force UTF-8 Ø
+define('OFFSET_PATH', 3);
+require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
+require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
-define('OFFSET_PATH', 1);
-require_once(dirname(__FILE__).'/admin-functions.php');
-require_once(dirname(__FILE__).'/admin-globals.php');
-require_once(dirname(__FILE__).'/template-functions.php');
+$button_text = gettext('Pre-Cache Images');
+$button_hint = gettext('Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the pre-cache image link for each album to avoid swamping your browser.');
+$button_icon = 'images/cache1.png';
+$button_rights = ADMIN_RIGHTS;
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -105,17 +109,17 @@ if (isset($_REQUEST['return'])) {
 	$ret = sanitize_path($_REQUEST['return']);
 	if (substr($ret, 0, 1) == '*') {
 		if (empty($ret) || $ret == '*.' || $ret == '*/') {
-			$r = '?page=edit';
+			$r = '/admin-edit.php?page=edit';
 		} else {
-			$r = '?page=edit&amp;album='.urlencode(substr($ret, 1)).'&amp;tab=subalbuminfo';
+			$r = '/admin-edit.php?page=edit&amp;album='.urlencode(substr($ret, 1)).'&amp;tab=subalbuminfo';
 		}
 	} else {
-		$r = '?page=edit&amp;album='.urlencode($ret);
+		$r = '/admin-edit.php?page=edit&amp;album='.urlencode($ret);
 	}
 } else {
-	$r = '';
+	$r = '/admin.php';
 }
-echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>";
+echo '<p><a href="'.WEBPATH.'/'.ZENFOLDER.$r.'">&laquo; '.gettext("Back").'</a></p>';
 echo "\n" . '</div>';
 echo "\n" . '</div>';
 

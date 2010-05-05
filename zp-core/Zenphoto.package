@@ -211,7 +211,6 @@ themes/zenpage/theme_description.php
 zp-core
 zp-core/404.php
 zp-core/admin-albumsort.php
-zp-core/admin-cache-images.php
 zp-core/admin-comments.php
 zp-core/admin-dynamic-album.php
 zp-core/admin-edit.php
@@ -557,6 +556,7 @@ zp-core/setup_set-mod_rewrite.php
 zp-core/template-functions.php
 zp-core/utilities
 zp-core/utilities/backup_restore.php
+zp-core/utilities/cache_images.php
 zp-core/utilities/gallery_statistics.css
 zp-core/utilities/gallery_statistics.php
 zp-core/utilities/reset_albumthumbs.php

@@ -419,17 +419,7 @@ $buttonlist[] = array(
 							'alt'=>'',
 							'hidden'=> '<input type="hidden" name="action" value="clear_rss_cache" />',
 							'rights'=> ADMIN_RIGHTS
-							);
-$buttonlist[] = array(
-							'button_text'=>gettext("Pre-Cache Images"),
-							'formname'=>'cache_images',
-							'action'=>'admin-cache-images.php',
-							'icon'=>'images/cache1.png', 
-							'title'=>gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the pre-cache image link for each album to avoid swamping your browser."),
-							'alt'=>'',
-							'hidden'=> '',
-							'rights'=> ADMIN_RIGHTS
-							);
+							);						
 $buttonlist[] = array(
 							'button_text'=>gettext("Refresh Metadata"),
 							'formname'=>'refresh_metadata',
@@ -450,10 +440,6 @@ $buttonlist[] = array(
 							'hidden'=> '<input type="hidden" name="action" value="reset_hitcounters" />',
 							'rights'=> ADMIN_RIGHTS
 							);
-?>
-<div class="box" id="overview-utility">
-<h2 class="h2_bordered"><?php echo gettext("Utility functions"); ?></h2>
-<?php
 $curdir = getcwd();
 chdir(SERVERPATH . "/" . ZENFOLDER . '/'.UTILITIES_FOLDER.'/');
 $filelist = safe_glob('*'.'php');
@@ -494,6 +480,8 @@ foreach ($buttonlist as $key=>$button) {
 }
 $count = round($count/2);
 ?>
+<div class="box" id="overview-utility">
+<h2 class="h2_bordered"><?php echo gettext("Utility functions"); ?></h2>
 	<div id="overview-maint_l">
 	<?php
 	foreach ($buttonlist as $button) {
