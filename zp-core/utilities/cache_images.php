@@ -38,12 +38,12 @@ function loadAlbum($album) {
 		echo "<br />" . $album->name . ' ';
 		while (next_image(true)) {
 			$thumb = getImageThumb();
-			if (strpos($thumb, CACHEFOLDER) !== false) {
+			if (strpos($thumb, 'i.php?') === false) {
 				$thumb = NULL;
 			}
 			if (isImagePhoto($_zp_current_image)) {
 				$image = getDefaultSizedImage();
-				if (strpos($image, CACHEFOLDER) !== false) {
+				if (strpos($image, 'i.php?') === false) {
 					$image = NULL;
 				}
 			} else {
@@ -127,7 +127,11 @@ if ($alb) {
 echo "\n" . "<br />".sprintf(gettext("Finished: Total of %u images."), $count);
 
 if (isset($_REQUEST['return'])) {
-	$ret = sanitize_path($_REQUEST['return']);
+	if (isset($_POST['return'])) {
+		$ret = sanitize_path($_POST['return']);
+	} else {
+		$ret = sanitize_path($_GET['return']);
+	}
 	if (substr($ret, 0, 1) == '*') {
 		if (empty($ret) || $ret == '*.' || $ret == '*/') {
 			$r = '/admin-edit.php?page=edit';
