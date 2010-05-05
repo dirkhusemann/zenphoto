@@ -237,10 +237,11 @@ function sitemap_getDateformat($obj,$option) {
 }
 /**
  * Prints the links to the index of a Zenphoto gallery incl. pagination
+ * @param  int $albumsperpage In case your theme performes custom option settings that are different from the admin option, set the number here.
  * @param  string $changefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @return string
  */
-function printSitemapIndexLinks($changefreq='') {
+function printSitemapIndexLinks($albumsperpage='',$changefreq='') {
 	global $_zp_gallery, $sitemap_locales;
 	if(empty($changefreq)) {
 		$changefreq = getOption('sitemap_changefreq_index');
@@ -254,11 +255,19 @@ function printSitemapIndexLinks($changefreq='') {
 	} else {
 	sitemap_echonl("\t<url>\n\t\t<loc>".FULLWEBPATH."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	}
-	if(galleryAlbumsPerPage() != 0) {
+	set_context(ZP_INDEX);
+	/*if(galleryAlbumsPerPage() != 0) {
 		$toplevelpages = ceil($_zp_gallery->getNumAlbums() / galleryAlbumsPerPage());
-	} else {
+		} else {
 		$toplevelpages = false;
+		} */
+	$albums_per_page = getOption('albums_per_page');
+	if(!empty($albumsperpage)) {
+		setOption('albums_per_page',sanitize_numeric($albumsperpage),false);
+	} else {
+		setOption('albums_per_page',$albums_per_page);
 	}
+	$toplevelpages = getTotalPages();
 	// print further index pages if avaiable
 	if($toplevelpages) {
 		for($x = 2;$x <= $toplevelpages; $x++) {
@@ -273,17 +282,21 @@ function printSitemapIndexLinks($changefreq='') {
 			}
 		}
 	}
+	restore_context();
 }
 
 /**
  * Prints links to all albums incl. pagination and their images
+ * @param  array $albumsperpage In case your theme performes custom option settings that are different from the admin option, use an array to set the number here for albums individudially.
+ * 																Example: $albumsperpage	= array('<album1name>' => <desired albums per page>, '<album2name>' => <desired albums per page>);	
+ * @param  array $imagessperpage In case your theme performes custom option settings that are different from the admin option, use an array to set the number here for albums individudially. (see example above)
  * @param  string $albumchangefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @param  string $imagechangefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @param  string $albumlastmod "date or "mtime"
  * @param  string $imagelastmod "date or "mtime"
  * @return string
  */
-function printSitemapAlbumsAndImages($albumchangefreq='',$imagechangefreq='',$albumlastmod='',$imagelastmod='') {
+function printSitemapAlbumsAndImages($albumsperpage='',$imagesperpage ='',$albumchangefreq='',$imagechangefreq='',$albumlastmod='',$imagelastmod='') {
 	global $_zp_gallery, $_zp_current_album,$sitemap_locales;
 	if(empty($albumchangefreq)) {
 		$albumchangefreq = getOption('sitemap_changefreq_albums');
@@ -305,6 +318,8 @@ function printSitemapAlbumsAndImages($albumchangefreq='',$imagechangefreq='',$al
 	} else {
 		$imagelastmod = sanitize($imagelastmod);
 	}
+	$imagesperpage = sanitize($imagesperpage);
+	$albumsperpage = sanitize($albumsperpage);
 	$passwordcheck = '';
 	$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 	foreach($albumscheck as $albumcheck) {
@@ -319,9 +334,29 @@ function printSitemapAlbumsAndImages($albumchangefreq='',$imagechangefreq='',$al
 	if($albums) {
 		foreach($albums as $album) {
 			$albumobj = new Album($_zp_gallery,$album['folder']);
-			//getting the album pages
 			set_context(ZP_ALBUM);
 			makeAlbumCurrent($albumobj);
+			//getting the album pages
+			$images_per_page = getOption('images_per_page');
+			$albums_per_page = getOption('albums_per_page');
+			if(is_array($imagesperpage)) {
+				foreach($imagesperpage as $alb=>$number) {
+					if($alb == $albumobj->name) {
+						setOption('images_per_page',$number,false);
+					} else {
+						setOption('images_per_page',$images_per_page);
+					}
+				}
+			}
+			if(is_array($albumsperpage)) {
+				foreach($albumsperpage as $alb=>$number) {
+					if($alb == $albumobj->name) {
+						setOption('albums_per_page',$number,false);
+					} else {
+						setOption('albums_per_page',$albums_per_page);
+					}
+				}
+			}
 			$pageCount = getTotalPages();
 			$date = sitemap_getDateformat($albumobj,$albumlastmod);
 			if(sitemap_multilingual()) {
@@ -402,10 +437,11 @@ function printSitemapZenpagePages($changefreq='') {
 }
 /**
  * Prints links to the main Zenpage news index incl. pagination
+ * @param  int $articlesperpage In case your theme performes custom option settings that are different from the admin option, set the number here.
  * @param  string $changefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @return string
  */
-function printSitemapZenpageNewsIndex($changefreq='') {
+function printSitemapZenpageNewsIndex($articlesperpage='',$changefreq='') {
 	global $sitemap_locales;
 	if(empty($changefreq)) {
 		$changefreq = getOption('sitemap_changefreq_newsindex');
@@ -422,7 +458,12 @@ function printSitemapZenpageNewsIndex($changefreq='') {
 		sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<lastmod>".sitemap_getISO8601Date()."</lastmod>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 	}
 	// getting pages for the main news loop
-	$newspages = ceil(getTotalArticles() / getOption("zenpage_articles_per_page"));
+	if(!empty($articlesperpage)) {
+		$zenpage_articles_per_page = sanitize_numeric($articlesperpage);
+	} else {
+		$zenpage_articles_per_page = getOption("zenpage_articles_per_page");
+	}
+	$newspages = ceil(getTotalArticles() / $zenpage_articles_per_page);
 	if($newspages > 1) {
 		for($x = 2;$x <= $newspages; $x++) {
 			if(sitemap_multilingual()) {
@@ -473,10 +514,12 @@ function printSitemapZenpageNewsArticles($changefreq='') {
 
 /**
  * Prints links to Zenpage news categories incl. pagination
+ * @param  array $albumsperpage In case your theme performes custom option settings that are different from the admin option, use an array to set the number here for categories individudially.
+ * 																Example: $albumsperpage	= array('<category1name>' => <desired articles per page>, '<category2name>' => <desired articles per page>);	
  * @param  string $changefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @return string
  */
-function printSitemapZenpageNewsCategories($changefreq='') {
+function printSitemapZenpageNewsCategories($articlesperpage='',$changefreq='') {
 	global $sitemap_locales;
 	if(empty($changefreq)) {
 		$changefreq = getOption('sitemap_changefreq_newscats');
@@ -498,8 +541,13 @@ function printSitemapZenpageNewsCategories($changefreq='') {
 					sitemap_echonl("\t<url>\n\t\t<loc>".$url."</loc>\n\t\t<changefreq>".$changefreq."</changefreq>\n\t\t<priority>0.9</priority>\n\t</url>");
 				}
 				// getting pages for the categories
+				if(!empty($articlesperpage)) {
+					$zenpage_articles_per_page = sanitize_numeric($articlesperpage);
+				} else {
+					$zenpage_articles_per_page = getOption("zenpage_articles_per_page");
+				}
 				$articlecount = countArticles($newscat['cat_link']);
-				$catpages = ceil($articlecount / getOption("zenpage_articles_per_page"));
+				$catpages = ceil($articlecount / $zenpage_articles_per_page);
 				if($catpages > 1) {
 					for($x = 2;$x <= $catpages ; $x++) {
 						if(sitemap_multilingual()) {
