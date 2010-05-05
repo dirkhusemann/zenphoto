@@ -25,25 +25,53 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 function loadAlbum($album) {
 	global $gallery, $_zp_current_album, $_zp_current_image;
 	$subalbums = $album->getAlbums();
-	$count = 0;
+	$started = false;
+	$tcount = $count = 0;
 	foreach ($subalbums as $folder) {
 		$subalbum = new Album($gallery, $folder);
-		$count = $count + loadAlbum($subalbum);
+		if (!$subalbum->isDynamic()) {
+			$tcount = $tcount + loadAlbum($subalbum);
+		}
 	}
 	$_zp_current_album = $album;
 	if (getNumImages() > 0) {
-		echo "<br />" . $album->name . "{";
+		echo "<br />" . $album->name . ' ';
 		while (next_image(true)) {
-			if (isImagePhoto($_zp_current_image)) {
-				echo '<img src="' . getImageThumb() . '" height="8" width="8" /> | <img src="' . getDefaultSizedImage() . '" height="20" width="20" />' . "\n";
-			} else {
-				echo '<img src="' . getImageThumb() . '" height="8" width="8" /> | ';
+			$thumb = getImageThumb();
+			if (strpos($thumb, CACHEFOLDER) !== false) {
+				$thumb = NULL;
 			}
-				$count++;
+			if (isImagePhoto($_zp_current_image)) {
+				$image = getDefaultSizedImage();
+				if (strpos($image, CACHEFOLDER) !== false) {
+					$image = NULL;
+				}
+			} else {
+				$image = NULL;
+				if ($_zp_current_image->objectsThumb == NULL) {
+					$thumb = NULL;
+				}
+			}
+			if (!empty($thumb) || !empty($image)) {
+				if (!$count) {
+					$started = true;
+					echo "{ ";
+				} else {
+					echo ' | ';
+				}
+			}
+			if (!empty($thumb)) echo '<img src="' . $thumb . '" height="8" width="8" /> ';
+			if (!empty($image)) echo ' <img src="' . $image . '" height="20" width="20" />';
+			if (!empty($thumb) || !empty($image)) echo "\n";
+			$count++;
 		}
-		echo "}<br />\n";
+		if ($started) echo ' } ';
+		/*TODO: remove the comment
+		printf(ngettext('[%u image]','[%u images]',$count),$count);
+		*/
+		echo "<br />\n";
 	}
-	return $count;
+	return $count + $tcount;
 }
 
 if (!($_zp_loggedin & ADMIN_RIGHTS)) {
@@ -76,31 +104,24 @@ echo "\n" . '<div id="main">';
 printTabs($tab);
 echo "\n" . '<div id="content">';
 
-if (isset($_REQUEST['clear'])) {
-	$clear = sprintf(gettext('Clearing and refreshing cache for %s'), $object);
-} else {
-	$clear = sprintf(gettext('Refreshing cache for %s'), $object);
-}
+$clear = sprintf(gettext('Refreshing cache for %s'), $object);
 $count = 0;
 
 $gallery = new Gallery();
 
 if ($alb) {
 	echo "\n<h2>".$clear."</h2>";
-	if (isset($_REQUEST['clear'])) {
-		$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
-	}
 	$album = new Album($gallery, $folder);
-	$count = loadAlbum($album);
+	$count =loadAlbum($album);
 } else {
 	echo "\n<h2>".$clear."</h2>";
-	if (isset($_REQUEST['clear'])) {
-		$gallery->clearCache(); // clean out what was there.
-	}
 	$albums = $_zp_gallery->getAlbums();
+	shuffle($albums);
 	foreach ($albums as $folder) {
 		$album = new Album($gallery, $folder);
-		$count = $count + loadAlbum($album);
+		if (!$album->isDynamic()) {
+			$count = $count + loadAlbum($album);
+		}
 	}
 }
 echo "\n" . "<br />".sprintf(gettext("Finished: Total of %u images."), $count);
