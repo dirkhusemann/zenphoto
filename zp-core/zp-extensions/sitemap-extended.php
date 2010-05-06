@@ -226,15 +226,15 @@ function sitemap_getDateformat($obj,$option) {
 			if($timestamp == 0) {
 				$date = $obj->getDatetime();
 			} else {
-				return strftime('%Y-%m-%dT%H:%M:%SZ', $timestamp);
+				return gmstrftime('%Y-%m-%dT%H:%M:%SZ', $timestamp);
 				// For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
-				// return strftime(DATE_ISO8601, $timestamp);
+				// return gmstrftime(DATE_ISO8601, $timestamp);
 			}
 			break;
 	}
 	return sitemap_getISO8601Date($date);
 	// For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
-	// return strftime(DATE_ISO8601, strtotime($date));
+	// return gmstrftime(DATE_ISO8601, strtotime($date));
 }
 /**
  * Prints the links to the index of a Zenphoto gallery incl. pagination
@@ -647,8 +647,8 @@ function clearSitemapCache() {
  */
 function sitemap_getISO8601Date($date='') {
 	if (empty($date)) {
-		return strftime('%Y-%m-%dT%H:%M:%SZ');
+		return gmstrftime('%Y-%m-%dT%H:%M:%SZ');
 	} else {
-		return strftime('%Y-%m-%dT%H:%M:%SZ', strtotime($date));
+		return gmstrftime('%Y-%m-%dT%H:%M:%SZ', strtotime($date));
 	}
 }
