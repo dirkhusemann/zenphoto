@@ -13,7 +13,7 @@
  * Renders the sitemap if called via "www.yourdomain.com/zenphoto/sitemap.php". The sitemap is cached as a xml file within the root "cache_html/sitemap" folder.
  *
  * NOTE: The index links may not match if using the options for "Zenpage news on index" or a "custom home page" that some themes provide! Also it does not "know" about "custom pages" outside Zenpage or any special custom theme setup!
- * 
+ *
  * IMPORTANT: A multilingual sitemap requires the seo_locale plugin and mod_rewrite.
  *
  * @author Malte Müller (acrylian) based on the plugin by Jeppe Toustrup (Tenzer) http://github.com/Tenzer/zenphoto-sitemap and on contributions by timo and Blue Dragonfly
@@ -138,7 +138,7 @@ class sitemap {
 										'desc' => ''),
 	gettext('Disable cache') => array('key' => 'sitemap_disablecache', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => '')
-  );
+	);
 	}
 
 	function handleOption($option, $currentValue) {
@@ -154,6 +154,7 @@ $sitemap_locales = generateLanguageList();
  */
 function sitemap_cache_purgebutton($buttons) {
 	$buttons[] = array(
+								'enable'=>true,
 								'button_text'=>gettext('Purge sitemap cache'),
 								'formname'=>'clearcache_button',
 								'action'=>PLUGIN_FOLDER.'/sitemap-extended.php?action=clear_sitemap_cache',
@@ -172,7 +173,7 @@ function sitemap_multilingual() {
 	if(getOption('multi_lingual') && getOption('zp_plugin_seo_locale') && getOption('mod_rewrite')) {
 		return true;
 	} else {
-		return false;		
+		return false;
 	}
 }
 
@@ -225,15 +226,15 @@ function sitemap_getDateformat($obj,$option) {
 			if($timestamp == 0) {
 				$date = $obj->getDatetime();
 			} else {
-        return strftime('%Y-%m-%dT%H:%M:%SZ', $timestamp);
-        // For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
-        // return strftime(DATE_ISO8601, $timestamp);
+				return strftime('%Y-%m-%dT%H:%M:%SZ', $timestamp);
+				// For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
+				// return strftime(DATE_ISO8601, $timestamp);
 			}
 			break;
 	}
 	return sitemap_getISO8601Date($date);
 	// For more streamlined but PHP5-only equivalent, remove the above line and uncomment the following:
-  // return strftime(DATE_ISO8601, strtotime($date));
+	// return strftime(DATE_ISO8601, strtotime($date));
 }
 /**
  * Prints the links to the index of a Zenphoto gallery incl. pagination
@@ -288,7 +289,7 @@ function printSitemapIndexLinks($albumsperpage='',$changefreq='') {
 /**
  * Prints links to all albums incl. pagination and their images
  * @param  array $albumsperpage In case your theme performes custom option settings that are different from the admin option, use an array to set the number here for albums individudially.
- * 																Example: $albumsperpage	= array('<album1name>' => <desired albums per page>, '<album2name>' => <desired albums per page>);	
+ * 																Example: $albumsperpage	= array('<album1name>' => <desired albums per page>, '<album2name>' => <desired albums per page>);
  * @param  array $imagessperpage In case your theme performes custom option settings that are different from the admin option, use an array to set the number here for albums individudially. (see example above)
  * @param  string $albumchangefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @param  string $imagechangefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
@@ -515,7 +516,7 @@ function printSitemapZenpageNewsArticles($changefreq='') {
 /**
  * Prints links to Zenpage news categories incl. pagination
  * @param  array $albumsperpage In case your theme performes custom option settings that are different from the admin option, use an array to set the number here for categories individudially.
- * 																Example: $albumsperpage	= array('<category1name>' => <desired articles per page>, '<category2name>' => <desired articles per page>);	
+ * 																Example: $albumsperpage	= array('<category1name>' => <desired articles per page>, '<category2name>' => <desired articles per page>);
  * @param  string $changefreq One of the supported changefrequence values regarding sitemap.org. Default is empty or wrong is "daily".
  * @return string
  */
@@ -574,7 +575,7 @@ function startSitemapCache() {
 	$disablecaching = getOption('sitemap_disablecache');
 	if(zp_loggedin()) {
 		$disablecaching = true;
-	} 
+	}
 	if(!$disablecaching) {
 		$cachefilepath = SERVERPATH."/cache_html/sitemap/sitemap.xml";
 		if(file_exists($cachefilepath) AND time()-filemtime($cachefilepath) < getOption('sitemap_cache_expire')) {
@@ -615,25 +616,25 @@ function endSitemapCache() {
  *
  */
 function clearSitemapCache() {
-  $cachefolder = SERVERPATH."/cache_html/sitemap/";
-  if (is_dir($cachefolder)) {
-    $handle = opendir($cachefolder);
-    while (false !== ($filename = readdir($handle))) {
-      $fullname = $cachefolder . '/' . $filename;
-      if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
-        if (($filename != '.') && ($filename != '..')) {
-          clearRSSCache($fullname);
-          rmdir($fullname);
-        }
-      } else {
-        if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
-          unlink($fullname);
-        }
-      }
+	$cachefolder = SERVERPATH."/cache_html/sitemap/";
+	if (is_dir($cachefolder)) {
+		$handle = opendir($cachefolder);
+		while (false !== ($filename = readdir($handle))) {
+			$fullname = $cachefolder . '/' . $filename;
+			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+				if (($filename != '.') && ($filename != '..')) {
+					clearRSSCache($fullname);
+					rmdir($fullname);
+				}
+			} else {
+				if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
+					unlink($fullname);
+				}
+			}
 
-    }
-    closedir($handle);
-  }
+		}
+		closedir($handle);
+	}
 }
 
 /**
@@ -645,9 +646,9 @@ function clearSitemapCache() {
  *
  */
 function sitemap_getISO8601Date($date='') {
-  if (empty($date)) {
-    return strftime('%Y-%m-%dT%H:%M:%SZ');
-  } else {
-    return strftime('%Y-%m-%dT%H:%M:%SZ', strtotime($date));
-  }
+	if (empty($date)) {
+		return strftime('%Y-%m-%dT%H:%M:%SZ');
+	} else {
+		return strftime('%Y-%m-%dT%H:%M:%SZ', strtotime($date));
+	}
 }

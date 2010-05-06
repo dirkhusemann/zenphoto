@@ -380,6 +380,7 @@ $buttonlist = array();
 
 if (is_connected()) {
 	$buttonlist[] = array(
+								'enable'=>true,
 								'button_text'=>gettext("Check for update"), 
 								'formname'=>'check_updates',
 								'action'=>'admin.php?action=check_for_update',
@@ -391,6 +392,7 @@ if (is_connected()) {
 								);
 }
 $buttonlist[] = array(
+							'enable'=>true,
 							'button_text'=>gettext("Refresh the Database"),
 							'formname'=>'prune_gallery',
 							'action'=>'admin-refresh-metadata.php?prune',
@@ -401,6 +403,7 @@ $buttonlist[] = array(
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
+							'enable'=>true,
 							'button_text'=>gettext("Purge Image cache"),
 							'formname'=>'clear_cache',
 							'action'=>'admin.php?action=clear_cache',
@@ -411,6 +414,7 @@ $buttonlist[] = array(
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
+							'enable'=>true,
 							'button_text'=>gettext("Purge RSS cache"),
 							'formname'=>'clear_rss_cache',
 							'action'=>'admin.php?action=clear_rss_cache',
@@ -421,6 +425,7 @@ $buttonlist[] = array(
 							'rights'=> ADMIN_RIGHTS
 							);						
 $buttonlist[] = array(
+							'enable'=>true,
 							'button_text'=>gettext("Refresh Metadata"),
 							'formname'=>'refresh_metadata',
 							'action'=>'admin-refresh-metadata.php',
@@ -431,6 +436,7 @@ $buttonlist[] = array(
 							'rights'=> ADMIN_RIGHTS
 							);
 $buttonlist[] = array(
+							'enable'=>true,
 							'button_text'=>gettext("Reset all hitcounters"),
 							'formname'=>'reset_hitcounters',
 							'action'=>'admin.php?action=reset_hitcounters=true',
@@ -448,26 +454,36 @@ foreach ($filelist as $utility) {
 	$button_text = '';
 	$button_hint = '';
 	$button_icon = '';
+	$button_alt = '';
+	$button_hidden = '';
+	$button_action = UTILITIES_FOLDER.'/'.$utility;
 	$button_rights = false;
-	
+	$button_enable = true;
+
 	$utilityStream = file_get_contents($utility);
 	eval(isolate('$button_text', $utilityStream));
 	eval(isolate('$button_hint', $utilityStream));
 	eval(isolate('$button_icon', $utilityStream));
 	eval(isolate('$button_rights', $utilityStream));
-	
+	eval(isolate('$button_alt', $utilityStream));
+	eval(isolate('$button_hidden', $utilityStream));
+	eval(isolate('$button_action', $utilityStream));
+	eval(isolate('$button_enable', $utilityStream));
+
 	$buttonlist[] = array(
-								'button_text'=>$button_text,
-								'formname'=>$utility,
-								'action'=>UTILITIES_FOLDER.'/'.$utility,
-								'icon'=>$button_icon, 
-								'title'=>$button_hint,
-								'alt'=>'',
-								'hidden'=> '',
-								'rights'=> $button_rights  | ADMIN_RIGHTS
-								);
-								
+							'enable'=>$button_enable,
+							'button_text'=>$button_text,
+							'formname'=>$utility,
+							'action'=>$button_action,
+							'icon'=>$button_icon, 
+							'title'=>$button_hint,
+							'alt'=>$button_alt,
+							'hidden'=>$button_hidden,
+							'rights'=> $button_rights  | ADMIN_RIGHTS
+	);
+
 }
+
 $buttonlist = zp_apply_filter('admin_utilities_buttons', $buttonlist);
 $buttonlist = sortMultiArray($buttonlist, 'button_text', false);
 $count = 0;
@@ -490,7 +506,7 @@ $count = round($count/2);
 		<form name="<?php echo $button['formname']; ?>"	action="<?php echo $button['action']; ?>">
 			<?php echo $button['hidden']; ?>
 			<div class="buttons">
-			<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>">
+			<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>" <?php if (!$button['enable']) echo 'disabled="disabled"'; ?>>
 			<?php
 			if(!empty($button_icon)) {
 				?>
