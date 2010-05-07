@@ -9,9 +9,9 @@
 								<td>
 									<?php
 									echo gettext("Name:");
-									if (getOption('comment_form_anon')) {
+									if (getOption('comment_form_anon') && !$disabled['anon']) {
 										?>
-										<label>(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo ' checked="checked"'; ; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)</label>
+										<label>(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo ' checked="checked"'; echo $disabled['anon']; ?> /> <?php echo gettext("<em>anonymous</em>"); ?>)</label>
 										<?php 
 									}
 									?>
@@ -140,12 +140,12 @@
 												<?php
 												echo $stored['state'];
 												?>
-												<input type="hidden" id="comment_form_state-0" name="0-comment_form_state" value="<?php echo $stored['state'];?>" />
+												<input type="hidden" name="0-comment_form_state" id="comment_form_state-0" value="<?php echo $stored['state'];?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="comment_form_state-0" id="comment_form_state" class="inputbox" size="22" value="<?php echo $stored['state']; ?>" />
+											<input type="text" name="0-comment_form_state" id="comment_form_state-0" class="inputbox" size="22" value="<?php echo $stored['state']; ?>" />
 											<?php									
 										}
 										?>
@@ -161,12 +161,12 @@
 												<?php
 												echo $stored['country'];
 												?>
-												<input type="hidden" id="comment_form_country-0" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
+												<input type="hidden" id="0-comment_form_country" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="comment_form_country-0" id="comment_form_country" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
+											<input type="text" name="0-comment_form_country" id="comment_form_country-0" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
 											<?php									
 										}
 										?>
@@ -211,12 +211,12 @@
  								</tr>
 								<?php
 							}
-							if (getOption('comment_form_private')) {
+							if (getOption('comment_form_private') && !$disabled['private']) {
 								?>
 								<tr>
 									<td colspan="2">
 										<label>
-											<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo ' checked="checked"'; ; ?> />
+											<input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo ' checked="checked"'; ?> />
 											<?php echo gettext("Private comment (don't publish)"); ?>
 										</label>
 									</td>
@@ -225,7 +225,7 @@
 							}
 							?>
 						</table>
-						<textarea name="comment" rows="6" cols="42" class="textarea_inputbox"><?php echo $stored['comment']; ?></textarea>
+						<textarea name="comment" rows="6" cols="42" class="textarea_inputbox"><?php echo $stored['comment']; echo $disabled['comment']; ?></textarea>
 						<br />
 						<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" />
 					</form>

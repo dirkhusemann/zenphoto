@@ -411,7 +411,8 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 					if (!empty($value)) $stored[$key] = $value;
 				}
 			}
-			$disabled = array();
+			$disabled = array('name'=>'',	'website'=>'', 'anon'=>'', 'private'=>'', 'comment'=>'',
+ 												'street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>'');
 			foreach ($stored as $key=>$value) {
 				$disabled[$key] = false;
 			}
@@ -427,9 +428,6 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 						}
 					}
 				}
-			}
-
-			if (zp_loggedin()) {
 				$name = $_zp_current_admin_obj->getName();
 				if (!empty($name)) {
 					$stored['name'] = $name;
@@ -451,7 +449,10 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 					$disabled['website'] = ' disabled="disabled"';
 				}
 			}
-
+			$data = zp_apply_filter('comment_form_data',array('data'=>$stored, 'disabled'=>$disabled));
+			$disabled = $data['disabled'];
+			$stored = $data['data'];
+			
 			$theme = getCurrentTheme();
 			$form = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).$formname;
 			if (file_exists($form)) {
