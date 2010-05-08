@@ -278,7 +278,7 @@ function printLogoAndLinks() {
 	echo '<a href="'.WEBPATH.'/index.php">';
 	$t = get_language_string(getOption('gallery_title'));
 	if (!empty($t))	{
-		printf(gettext("View <strong>%s</strong>"), $t);
+		printf(gettext("View <em>%s</em>"), $t);
 	} else {
 		echo gettext("View gallery index");
 	}

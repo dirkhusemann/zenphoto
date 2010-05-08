@@ -26,6 +26,10 @@ body {
 em {
  color: black;
 }
+a em {
+	color: #4D76CF;
+}
+
 
 /* Main Layout
 ------------------------------ */
