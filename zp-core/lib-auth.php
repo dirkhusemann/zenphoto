@@ -212,12 +212,12 @@ class Zenphoto_Authority {
 		}
 		$gallery = new Gallery();
 		if (is_array($albums)) {
-			$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
+			$sql = "DELETE FROM ".prefix('admin_to_object').' WHERE `adminid`='.$id.' AND `type`="album"';
 			$result = query($sql);
 			foreach ($albums as $albumname) {
 				$album = new Album($gallery, $albumname);
 				$albumid = $album->getAlbumID();
-				$sql = "INSERT INTO ".prefix('admintoalbum')." (adminid, albumid) VALUES ($id, $albumid)";
+				$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $albumid, 'album')";
 				$result = query($sql);
 			}
 		}

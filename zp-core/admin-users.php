@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
 	if ($action == 'deleteadmin') {
 		$id = sanitize_numeric($_GET['adminuser']);
 		$_zp_authority->deleteAdmin(array('id'=>$id));
-		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
+		$sql = "DELETE FROM ".prefix('admin_to_object')." WHERE `adminid`=$id";
 		query($sql);
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
 		exit();

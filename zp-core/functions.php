@@ -874,7 +874,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			}
 			if($type === "images" OR $type === "albums") { // mail to album admins
 				$id = $ur_album->getAlbumID();
-				$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
+				$sql = 'SELECT `adminid` FROM '.prefix('admin_to_object').' WHERE `objectid`='.$id.' AND `type`="album"';
 				$result = query_full_array($sql);
 				foreach ($result as $anadmin) {
 					$id = $anadmin['adminid'];
@@ -905,9 +905,9 @@ function getManagedAlbumList() {
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$sql = "SELECT `folder` FROM ".prefix('albums').' WHERE `parentid` IS NULL';
 	} else {
-		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-						$_zp_current_admin_obj->getID()." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+		$sql = 'SELECT '.prefix('albums').'.`folder` FROM '.prefix('albums').', '.
+						prefix('admin_to_object').' WHERE '.prefix('admin_to_object').'.adminid='.
+						$_zp_current_admin_obj->getID().' AND '.prefix('albums').'.id='.prefix('admin_to_object').'.objectid AND `type`="album"';
 	}
 	$albums = query_full_array($sql);
 	foreach($albums as $album) {

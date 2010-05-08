@@ -1535,7 +1535,7 @@ if (file_exists(CONFIGFILE)) {
 		}
 		$expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
 			$_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
-			$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum',
+			$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admin_to_object',
 			$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
 			$_zp_conf_vars['mysql_prefix'].'captcha',$_zp_conf_vars['mysql_prefix'].'zenpage_pages',
 			$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
@@ -1545,6 +1545,9 @@ if (file_exists(CONFIGFILE)) {
 			if (!isset($tables[$needed])) {
 				$tables[$needed] = 'create';
 			}
+		}
+		if (isset($tables[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
+			$tables[$_zp_conf_vars['mysql_prefix'].'admin_to_object'] = 'update';
 		}
 
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
@@ -1571,7 +1574,7 @@ if (file_exists(CONFIGFILE)) {
 	$tbl_images = prefix('images');
 	$tbl_options  = prefix('options');
 	$tbl_administrators = prefix('administrators');
-	$tbl_admintoalbum = prefix('admintoalbum');
+	$tbl_admin_to_object = prefix('admin_to_object');
 	$tbl_tags = prefix('tags');
 	$tbl_obj_to_tag = prefix('obj_to_tag');
 	$tbl_captcha = prefix('captcha');
@@ -1642,14 +1645,16 @@ if (file_exists(CONFIGFILE)) {
 		UNIQUE (`user`)
 		)	$collation;";
 	}
-	if (isset($create[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
-		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admintoalbum (
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'admin_to_object'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admin_to_object (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`adminid` int(11) UNSIGNED NOT NULL,
-		`albumid` int(11) UNSIGNED NOT NULL,
+		`objectid` int(11) UNSIGNED NOT NULL,
+		`type` varchar(32) DEFAULT 'album',
 		PRIMARY KEY  (`id`)
 		)	$collation;";
 	}
+
 
 	// base implementation
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'albums'])) {
@@ -1919,7 +1924,6 @@ if (file_exists(CONFIGFILE)) {
 
 	//v1.2
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `ownerid` `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
-	$sql_statements[] = "ALTER TABLE $tbl_admintoalbum CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$hastagidindex = false;
@@ -2038,6 +2042,12 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' ADD COLUMN `password` VARCHAR(64)';
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `password_hint` text;";
+	
+	//v1.3.1
+	$sql_statements[] = 'RENAME TABLE '.prefix('admintoalbum').' TO '.$tbl_admin_to_object;
+	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' ADD COLUMN `type` varchar(32) DEFAULT "album";';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' CHANGE `albumid` `objectid` int(11) UNSIGNED NOT NULL';
+	
 
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {

@@ -23,7 +23,7 @@ if (isset($_GET['action'])) {
 	if ($action == 'deletegroup') {
 		$id = sanitize_numeric($_GET['groupid']);
 		$_zp_authority->deleteAdmin(array('id'=>$id));
-		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
+		$sql = "DELETE FROM ".prefix('admin_to_object')." WHERE `adminid`=$id";
 		query($sql);
 		//first clear out existing user assignments
 		$groupname = sanitize($_GET['group'],3);

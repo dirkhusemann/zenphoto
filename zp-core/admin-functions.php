@@ -2697,8 +2697,8 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 function populateManagedAlbumList($id) {
 	$cv = array();
 	$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-					prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-					$id." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+					prefix('admin_to_object')." WHERE ".prefix('admin_to_object').".adminid=".
+					$id." AND ".prefix('albums').".id=".prefix('admin_to_object').".objectid AND ".prefix('admin_to_object').".type='album'";
 	$currentvalues = query_full_array($sql);
 	foreach($currentvalues as $albumitem) {
 		$folder = $albumitem['folder'];
