@@ -43,7 +43,7 @@ function processExpired($table) {
 		global $_zp_zenpage_all_pages;
 		processExpired('zenpage_pages');
 		if (is_null($published)) {
-			if(zp_loggedin(ZENPAGE_RIGHTS)) {
+			if(zp_loggedin(ZENPAGE_PAGE_RIGHTS)) {
 				$published = FALSE;
 			} else {
 				$published = TRUE;
@@ -131,7 +131,7 @@ function isProtectedPage($pageobj=NULL) {
 		global $_zp_current_category, $_zp_post_date;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
-			if(zp_loggedin(ZENPAGE_RIGHTS)) {
+			if(zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
 				$published = "all";
 			} else {
 				$published = "published";
@@ -250,7 +250,7 @@ function isProtectedPage($pageobj=NULL) {
 	 */
 	function countArticles($category='', $published='published') {
 		global $_zp_loggedin, $_zp_post_date;
-		if($_zp_loggedin & (ZENPAGE_RIGHTS)) {
+		if($_zp_loggedin & (ZENPAGE_NEWS_RIGHTS)) {
 			$published = "all";
 		} else {
 			$published = "published";
@@ -349,7 +349,7 @@ function isProtectedPage($pageobj=NULL) {
 		$alldates = array();
 		$cleandates = array();
 		$sql = "SELECT date FROM ". prefix('zenpage_news');
-		if (!($_zp_loggedin & (ZENPAGE_RIGHTS))) { $sql .= " WHERE `show` = 1"; }
+		if (!($_zp_loggedin & (ZENPAGE_NEWS_RIGHTS))) { $sql .= " WHERE `show` = 1"; }
 		$result = query_full_array($sql);
 		foreach($result as $row){
 			$alldates[] = $row['date'];
@@ -415,7 +415,7 @@ function isProtectedPage($pageobj=NULL) {
 		global $_zp_gallery, $_zp_flash_player,$_zp_loggedin;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
-			if(zp_loggedin(ZENPAGE_RIGHTS)) {
+			if(zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
 				$published = "all";
 			} else {
 				$published = "published";
@@ -434,7 +434,7 @@ function isProtectedPage($pageobj=NULL) {
 			$imagesshow = "";
 		}
 		$passwordcheck = "";
-		if (zp_loggedin(ZENPAGE_RIGHTS)) {
+		if (zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
 			$albumWhere = "";
 			$passwordcheck = "";
 		} else {
@@ -548,7 +548,7 @@ function isProtectedPage($pageobj=NULL) {
 		if(getOption("zenpage_combinews")) {
 			$countArticles = countArticles();
 			if(is_null($published)) {
-				if(zp_loggedin(ZENPAGE_RIGHTS)) {
+				if(zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
 					$published = FALSE;
 				} else {
 					$published = TRUE;

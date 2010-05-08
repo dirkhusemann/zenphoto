@@ -293,7 +293,7 @@ function printPagesListTable($page, $flag) {
 	 <tr>
 		<td class='sort-handle' style="padding-bottom: 15px; ">
 			 <img src="<?php echo $img; ?>" alt="" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
-		<?php if(checkIfLocked($page)) {
+		<?php if(checkIfLockedPage($page)) {
 			echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
 		} else {
 			echo $page->getTitle(); checkHitcounterDisplay($page->getShow());
@@ -315,7 +315,7 @@ function printPagesListTable($page, $flag) {
 	}
 	?>
 	</td>
-	<?php if(checkIfLocked($page)) { ?>
+	<?php if(checkIfLockedPage($page)) { ?>
 	<td class="icons">
 		<?php printPublishIconLink($page,"page"); ?>
 	</td>
@@ -339,7 +339,7 @@ function printPagesListTable($page, $flag) {
 		</td>
 
 
-	<?php if(checkIfLocked($page)) { ?>
+	<?php if(checkIfLockedPage($page)) { ?>
 	<td class="icons">
 		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Reset hitcounter"); ?>">
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
@@ -1336,7 +1336,12 @@ function zenpageJSCSS() {
  * @param string $currentpage the kind of zenphoto object being accessed.
  */
 function checkRights($currentpage) {
-	if (!(zp_loggedin(ZENPAGE_RIGHTS))) {
+	if ($currentpage == 'articles') {
+		$accessrights = ZENPAGE_NEWS_RIGHTS;
+	} else {
+		$accessrights = ZENPAGE_PAGES_RIGHTS;
+	}
+	if (!(zp_loggedin($accessrights))) {
 		echo "<div class='errorbox'>".gettext("You need Admin Rights or Zenpage rights to use Zenpage")."</div>";
 		exit;
 	}
@@ -1365,7 +1370,7 @@ function AuthorSelector($currentadmin='') {
 <select size='1' name="author" id="author">
 <?php
 foreach($admins as $admin) {
-	if($admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
+	if($admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_PAGE_RIGHTS)) {
 		if($currentadmin == $admin['user']) {
 			echo "<option selected='selected' value='".$admin['user']."'>".$admin['user']."</option>";
 		} else {
@@ -1517,11 +1522,26 @@ function printIfObject($object,$field) {
  * @param object $page The array of the page or article to check
  * @return bool
  */
-function checkIfLocked($page) {
-	global $_zp_current_admin_obj;
+function checkIfLockedPage($page) {
 	if (zp_loggedin(ADMIN_RIGHTS)) return true;
 	if($page->getLocked()) {
-		 return $_zp_current_admin_obj->getUser() == $page->getAuthor();
+		 return isMyPage($page,LIST_PAGE_RIGHTS);
+	} else {
+		return true;
+	}
+}
+
+/**
+ * Checks if the current logged in admin user is the author that locked the article.
+ * Only that author or any user with admin rights will be able to edit or unlock.
+ *
+ * @param object $page The array of the page or article to check
+ * @return bool
+ */
+function checkIfLockedNews($news) {
+	if (zp_loggedin(ADMIN_RIGHTS)) return true;
+	if($news->getLocked()) {
+		 return isMyNews($news, LIST_NEWS_RIGHTS);
 	} else {
 		return true;
 	}

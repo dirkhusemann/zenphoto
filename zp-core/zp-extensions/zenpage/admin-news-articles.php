@@ -98,7 +98,7 @@ printLogoAndLinks();
 						<tr class="newstr"> 
 						  <td> 
 						   <?php 
-						   if(checkIfLocked($article)) {
+						   if(checkIfLockedNews($article)) {
 						   	 echo '<a href="admin-edit.php?newsarticle&amp;titlelink='.urlencode($article->getTitlelink()).'&amp;pagenr='.getCurrentAdminNewsPage().'">'; checkForEmptyTitle($article->getTitle(),"news"); echo '</a>'.checkHitcounterDisplay($article->getHitcounter()); 
 						   } else {
 						   	 echo $article->getTitle().'</a>'.checkHitcounterDisplay($article->getHitcounter()); 
@@ -130,7 +130,7 @@ printLogoAndLinks();
 						  	?>
 						  </td>
 						  
-						  <?php if(checkIfLocked($article)) { ?>
+						  <?php if(checkIfLockedNews($article)) { ?>
 							<td class="icons">
 							<?php  
 								printPublishIconLink($article,'news'); ?>
@@ -155,7 +155,7 @@ printLogoAndLinks();
 						  </td> 
 						     
 							<?php
-							if(checkIfLocked($article)) {
+							if(checkIfLockedNews($article)) {
 								?>
 								<td class="icons">
 									<a href="?hitcounter=1&amp;id=<?php echo $article->getID();?>" title="<?php echo gettext('Reset hitcounter'); ?>">

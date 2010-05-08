@@ -1001,7 +1001,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	$categories = getAllCategories();
-	if((zp_loggedin(ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
+	if((zp_loggedin(ZENPAGE_NEWS_RIGHTS | LIST_ALBUM_RIGHTS))) {
 		$published = "all";
 		$pub = false;
 	} else {
@@ -2289,7 +2289,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	if(empty($readmore)) {
 		$readmore = getOption("zenpage_read_more");
 	}
-	if((zp_loggedin(ZENPAGE_RIGHTS))) {
+	if((zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 		$published = FALSE;
 	} else {
 		$published = TRUE;
@@ -2371,7 +2371,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
 
-	if((zp_loggedin(ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
+	if((zp_loggedin(ZENPAGE_PAGES_RIGHTS | LIST_ALBUM_RIGHTS))) {
 		$published = FALSE;
 	} else {
 		$published = TRUE;
@@ -2835,15 +2835,15 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
  */
 function isMyPage($pageobj=NULL, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_PAGES_RIGHTS)) {
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
 		return true;
 	}
 	if ($_zp_loggedin & $action) {
-		if (is_null($pageobj)) $pageobj = $_zp_current_admin_obj;
-		 return $_zp_current_admin_obj->getUser() == $pageobj->getAuthor();
+		if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
+		return $_zp_current_admin_obj->getUser() == $pageobj->getAuthor();
 	}
 	return false;
 }
@@ -2892,13 +2892,14 @@ function checkPagePassword($pageobj, &$hint, &$show) {
  */
 function isMyNews($newsobj, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_news;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
+	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_NEWS_RIGHTS)) {
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_NEWS_RIGHTS)) {	// sees all
 		return true;
 	}
 	if ($_zp_loggedin & $action) {
+		if (is_null($newsobj)) $newsobj = $_zp_current_zenpage_news;
 		return $_zp_current_admin_obj->getUser() == $newsobj->getAuthor();
 	}
 	return false;

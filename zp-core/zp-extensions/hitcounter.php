@@ -31,14 +31,14 @@ function hitcounter_load_script($obj) {
 				}
 				break;
 			case ZENPAGE_PAGES:
-				if (!zp_loggedin(ZENPAGE_RIGHTS)) {
+				if (!zp_loggedin(ZENPAGE_PAGES_RIGHTS)) {
 					$hc = $_zp_current_zenpage_page->get('hitcounter')+1;
 					$_zp_current_zenpage_page->set('hitcounter', $hc);
 					$_zp_current_zenpage_page->save();
 				}
 				break;
 			case ZENPAGE_NEWS:
-				if (!zp_loggedin(ZENPAGE_RIGHTS)) {
+				if (!zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
 					if(is_NewsArticle()) {
 						$hc = $_zp_current_zenpage_news->get('hitcounter')+1;
 						$_zp_current_zenpage_news->set('hitcounter', $hc);

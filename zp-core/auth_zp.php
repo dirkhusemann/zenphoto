@@ -20,6 +20,14 @@ foreach ($_zp_authority->getRights() as $key=>$right) {
 define ('LIST_ALBUM_RIGHTS', NO_RIGHTS);
 define ('LIST_PAGE_RIGHTS', NO_RIGHTS);
 define ('LIST_NEWS_RIGHTS', NO_RIGHTS);
+if (defined('ZENPAGE_RIGHTS')) {
+	define('ZENPAGE_NEWS_RIGHTS', ZENPAGE_RIGHTS);
+	define('ZENPAGE_PAGES_RIGHTS', ZENPAGE_RIGHTS);
+	define('MANAGE_ALL_NEWS_RIGHTS', false);
+	define('MANAGE_ALL_PAGES_RIGHTS', false);
+} else {
+	define('ZENPAGE_RIGHTS', ZENPAGE_NEWS_RIGHTS | ZENPAGE_PAGES_RIGHTS);
+}
 
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = false;

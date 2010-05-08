@@ -911,7 +911,7 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 						}
 						break;
 					case'zenpagecategory':
-						if((zp_loggedin(ZENPAGE_RIGHTS | LIST_ALBUM_RIGHTS))) {
+						if((zp_loggedin(ZENPAGE_NEWS_RIGHTS | LIST_ALBUM_RIGHTS))) {
 							$published = "all";
 						} else {
 							$published = "published";

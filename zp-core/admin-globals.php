@@ -43,11 +43,12 @@ if (($_zp_loggedin & (ALBUM_RIGHTS | ADMIN_RIGHTS))) {
 							'default'=>'albuminfo');
 }
 
-if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_RIGHTS))) {
+if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 	$zenphoto_tabs['pages'] = array('text'=>gettext("pages"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-pages.php',
 							'subtabs'=>NULL);
-
+}
+if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 	$zenphoto_tabs['articles'] = array('text'=>gettext("news"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-news-articles.php',
 							'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&amp;tab=articles', 
