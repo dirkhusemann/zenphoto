@@ -110,7 +110,7 @@ if(isset($_GET['sendmail'])) {
 				</td>
 				<td valign="top" align="left">
 				<?php echo gettext('Select users:'); ?>
-				<ul class="customchecklist" style="height: 205px">
+				<ul class="customchecklist" style="height: 205px; width: 30em;">
 				<?php 
 				$currentadminuser = $_zp_current_admin_obj->getUser();
 				foreach($admins as $admin) {
@@ -118,7 +118,14 @@ if(isset($_GET['sendmail'])) {
 						?>
 						<li>
 							<label for="admin_<?php echo $admin['id']; ?>">
-								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo $admin['email']; ?>" checked="checked"  <?php echo $disabled; ?>/><?php echo $admin['user']." (".$admin['name']." - ".$admin['email'].")"; ?>
+								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo $admin['email']; ?>" checked="checked"  <?php echo $disabled; ?>/>
+								<?php
+								echo $admin['user']." (";
+								if (!empty($admin['name'])) {
+									echo $admin['name']." - ";
+								}
+								echo $admin['email'].")";
+								?>
 							</label>
 						</li>
 						<?php
