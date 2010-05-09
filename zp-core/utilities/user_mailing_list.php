@@ -45,11 +45,21 @@ printAdminHeader();
 <div id="content">
 <h1><?php echo gettext('User mailing list'); ?></h1>
 <p><?php echo gettext("A tool to send e-mails to all registered users who have provided an e-mail address. There is always a copy sent to the current admin and all e-mails are sent as <em>blind copies</em>."); ?></p>
-<?php if(!getOption('zp_plugin_PHPMailer') || !getOption('zp_plugin_zenphoto_sendmail')) { ?>
-<p class="notebox">
-<?php echo gettext("<strong>Note:</strong> Either the <em>PHPMailer</em> plugin or the <em>zenphoto_sendmail</em> plugin must be activated and properly configured."); ?>
-</p>
-<?php } 
+<?php
+if (!zp_has_filter('sendmail')) {
+	$disabled = ' disabled="disabled"';
+	?>
+	<p class="notebox">
+	<?php
+//TODO:	echo gettext("<strong>Note: </strong>No <em>sendmail</em> filter is registered. You must activate and configure a mailer plugin."); 	
+	echo gettext("<strong>Note:</strong> Either the <em>PHPMailer</em> plugin or the <em>zenphoto_sendmail</em> plugin must be activated and properly configured.");
+	?>
+	</p>
+	<?php
+} else {
+	$disabled = '';
+	}
+
 if(isset($_GET['sendmail'])) {
 	//form handling stuff to add...
 	$subject = NULL;
@@ -94,9 +104,9 @@ if(isset($_GET['sendmail'])) {
 		<tr>
 				<td valign="top">
 				<labelfor="subject"><?php echo gettext('Subject:'); ?></label><br />
-				<input type="text" id="subject" name="subject" value="" size="70" /><br /><br />
+				<input type="text" id="subject" name="subject" value="" size="70"<?php echo $disabled; ?> /><br /><br />
 				<label for="message"><?php echo gettext('Message:'); ?></label><br />
-				<textarea id="message" name="message" value="" cols="68" rows="10"></textarea>
+				<textarea id="message" name="message" value="" cols="68" rows="10"<?php echo $disabled; ?> ></textarea>
 				</td>
 				<td valign="top" align="left">
 				<?php echo gettext('Select users:'); ?>
@@ -105,7 +115,13 @@ if(isset($_GET['sendmail'])) {
 				$currentadminuser = $_zp_current_admin_obj->getUser();
 				foreach($admins as $admin) {
 					if(!empty($admin['email']) && $currentadminuser != $admin['user']) {
-						echo "<li><label for='admin_".$admin['id']."'><input name='admin_".$admin['id']."' id='admin_".$admin['id']."' type='checkbox' value='".$admin['email']."' checked='checked' />".$admin['user']." (".$admin['name']." - ".$admin['email'].")</label></li>\n";
+						?>
+						<li>
+							<label for="admin_<?php echo $admin['id']; ?>">
+								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo $admin['email']; ?>" checked="checked"  <?php echo $disabled; ?>/><?php echo $admin['user']." (".$admin['name']." - ".$admin['email'].")"; ?>
+							</label>
+						</li>
+						<?php
 					}
 				}
 				?>
@@ -116,7 +132,7 @@ if(isset($_GET['sendmail'])) {
 </table>
 <p class="buttons">
 		<button class="submitbutton" type="submit"
-		title="<?php echo gettext("Send mail"); ?>"><img
+		title="<?php echo gettext("Send mail"); ?>"<?php echo $disabled; ?> ><img
 		src="../images/pass.png" alt="" /><strong><?php echo gettext("Send mail"); ?></strong></button>
 </p>
 <p class="buttons">
