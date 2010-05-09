@@ -22,12 +22,12 @@ if ($plugin_disable) {
 	$option_interface = new flowplayer3();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
 	// register the scripts needed
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.1.4.min.js"></script>
-	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist-3.0.7.min.js"></script>');
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.2.0.min.js"></script>
+	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist-3.0.8.min.js"></script>');
 }
 
 
-if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 24);
+if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 26);
 /**
  * Plugin option handling class
  *
@@ -156,8 +156,10 @@ class flowplayer3 {
 		}
 			if($ext == ".mp3" && empty($videoThumb)) {
 				$height = FLOW_PLAYER_MP3_HEIGHT;
+				$allowfullscreen = 'false';
 			} else {
 				$height = getOption('flow_player3_height');
+				$allowfullscreen = 'true';
 			}
 			$width = getOption('flow_player3_width');
 				// inline css is kind of ugly but since we need to style dynamically there is no other way
@@ -166,9 +168,13 @@ class flowplayer3 {
 			</span>
 			<script type="text/javascript">
 			// <!-- <![CDATA[
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.5.swf", {
+			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.2.0.swf", {
 			plugins: { 
+				audio: {
+					url: "flowplayer.audio-3.2.0.swf"
+				},
         controls: {
+        	url: "flowplayer.controls-3.2.0.swf",
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
         	autoHide: "'.getOption('flow_player3_controlsautohide').'",
@@ -181,7 +187,8 @@ class flowplayer3 {
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+        	fullscreen : '.$allowfullscreen.'
         }
     	},
     	canvas: {

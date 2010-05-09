@@ -152,9 +152,13 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				prev:"a.up"
 			});
 			$("div.playlist").mousewheel();
-			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.1.5.swf", {
+			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.2.0.swf", {
 			plugins: { 
+				audio: {
+					url: "flowplayer.audio-3.2.0.swf"
+				},
 				controls: {
+					url: "flowplayer.controls-3.2.0.swf",
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	autoHide: "'.getOption('flow_player3_playlistautohide').'",
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
