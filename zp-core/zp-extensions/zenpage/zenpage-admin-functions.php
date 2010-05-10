@@ -1525,7 +1525,7 @@ function printIfObject($object,$field) {
 function checkIfLockedPage($page) {
 	if (zp_loggedin(ADMIN_RIGHTS)) return true;
 	if($page->getLocked()) {
-		 return isMyPage($page,LIST_PAGE_RIGHTS);
+		 return isMyPage($page,ZENPAGE_PAGES_RIGHTS);
 	} else {
 		return true;
 	}
@@ -1541,7 +1541,7 @@ function checkIfLockedPage($page) {
 function checkIfLockedNews($news) {
 	if (zp_loggedin(ADMIN_RIGHTS)) return true;
 	if($news->getLocked()) {
-		 return isMyNews($news, LIST_NEWS_RIGHTS);
+		 return isMyNews($news, ZENPAGE_NEWS_RIGHTS);
 	} else {
 		return true;
 	}

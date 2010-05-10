@@ -40,21 +40,21 @@ if (isset($_GET['action'])) {
 					$initgroupname = trim(sanitize($_POST[$i.'-initgroup'],3));
 					$initgroup = $_zp_authority->newAdministrator($initgroupname, 0);
 					$group->setRights($initgroup->getRights());
-					$group->setAlbums(populateManagedAlbumList($initgroup->getID()));
+					$group->setObjects(processManagedObjects($group->getID()));
 				} else {
 					$group->setRights(processRights($i) | NO_RIGHTS);
-					$group->setAlbums(processManagedAlbums($i));
+					$group->setObjects(processManagedObjects($i));
 				}
 				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
 				$grouptype = trim(sanitize($_POST[$i.'-type'], 3));
-								
-				$_zp_authority->saveAdmin($groupname, NULL, $grouptype, NULL, $group->getRights(), $group->getAlbums(), $groupdesc, NULL, 0);
+
+				$_zp_authority->saveAdmin($groupname, NULL, $grouptype, NULL, $group->getRights(), $group->getObjects(), $groupdesc, NULL, 0);
 				if ($group->getName()=='group') {
 					//have to update any users who have this group designate.
 					foreach ($admins as $admin) {
 						if ($admin['valid'] && $admin['group']===$groupname) {
 							$user = $_zp_authority->newAdministrator($admin['user'], 1);
-							$_zp_authority->saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+							$_zp_authority->saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getObjects(), $user->getCustomData(), $groupname);
 						}
 					}
 					//user assignments: first clear out existing ones
@@ -64,7 +64,7 @@ if (isset($_GET['action'])) {
 					foreach ($_POST as $item=>$username) {
 						if (strpos($item, $target)!==false) {
 							$user = $_zp_authority->newAdministrator($username, 1);
-							$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getAlbums(), $user->getCustomData(), $groupname);
+							$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getObjects(), $user->getCustomData(), $groupname);
 						}
 					}
 				}
@@ -81,7 +81,7 @@ if (isset($_GET['action'])) {
 			if (empty($groupname)) {
 				$_zp_authority->updateAdminField('group', NULL, array('id'=>$user->getID()));
 			} else {
-				$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), populateManagedAlbumList($group->getID()), $user->getCustomData(), $groupname);
+				$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), processManagedObjects($group->getID()), $user->getCustomData(), $groupname);
 			}
 		}
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=assignments&saved');
@@ -217,9 +217,26 @@ echo '</head>'."\n";
 											<input type="hidden" name="<?php echo $id ?>-confirmed" value="1" />
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
-											printManagedAlbums($albumlist, '', $groupid, $id);
+											printManagedObjects('albums',$albumlist, '', $groupid, $id);
+/*TODO					
+											if (getOption('zp_plugin_zenpage')) {
+												$pagelist = array();
+												$pages = getPages(false);
+												foreach ($pages as $page) {
+													if (!$page['parentid']) {
+														$pagelist[get_language_string($page['title'])] = $page['titlelink'];
+													}
+												}
+												printManagedObjects('pages',$pagelist, '', $groupid, $id);
+												$newslist = array();
+												$categories = getAllCategories();
+												foreach ($categories as $category) {
+													$newslist[get_language_string($category['cat_name'])] = $category['cat_link'];
+												}
+												printManagedObjects('news',$newslist, '', $groupid, $id);
+											}
+*/
 											?>
-											
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 											<div id="users<?php echo $id; ?>" <?php if ($grouptype=='template') echo ' style="display:none"' ?>>

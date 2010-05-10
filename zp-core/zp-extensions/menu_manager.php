@@ -221,7 +221,7 @@ function getItemTitleAndURL($item) {
  * @return string
  */
 function getMenuVisibility() {
-	if(zp_loggedin(ZENPAGE_RIGHTS | VIEW_ALL_RIGHTS)) {
+	if(zp_loggedin(VIEW_ALL_RIGHTS)) {
 		return "all";
 	} else {
 		return "visible";

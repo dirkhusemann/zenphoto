@@ -57,10 +57,10 @@ if (isset($_GET['action'])) {
 						$admin_e = trim($_POST[$i.'-admin_email']);
 						$rights = processRights($i);
 						if (isset($_POST['alter_enabled'])) {
-							$albums = processManagedAlbums($i);
+							$objects = processManagedObjects($i);
 						} else {
 							$rights = NULL;
-							$albums = NULL;
+							$objects = NULL;
 						}
 						if (empty($pass)) {
 							$pass = NULL;
@@ -71,9 +71,9 @@ if (isset($_GET['action'])) {
 						$userobj->setName($admin_n);
 						$userobj->setEmail($admin_e);
 						$userobj->setRights($rights);
-						$userobj->setAlbums($albums);
+						$userobj->setObjects($objects);
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup(), 1, $userobj->getQuota());
+						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getObjects(), $userobj->getCustomData(), $userobj->getGroup(), 1, $userobj->getQuota());
 						if (empty($msg)) {
 							if (isset($_POST[$i.'-newuser'])) {
 								$newuser = $user;
@@ -467,12 +467,31 @@ if (empty($alterrights)) {
 					if ($current && $ismaster) {
 						echo '<p>'.gettext("The <em>master</em> account has full rights to all albums.").'</p>';
 					} else {
-						printManagedAlbums($albumlist, $album_alter_rights, $user['id'], $id);
+						printManagedObjects('albums',$albumlist, $album_alter_rights, $user['id'], $id);
+/*TODO
+						if (getOption('zp_plugin_zenpage')) {
+							$pagelist = array();
+							$pages = getPages(false);
+							foreach ($pages as $page) {
+								if (!$page['parentid']) {
+									$pagelist[get_language_string($page['title'])] = $page['titlelink'];
+								}
+							}
+							printManagedObjects('pages',$pagelist, $album_alter_rights, $user['id'], $id);
+							$newslist = array();
+							$categories = getAllCategories();
+							foreach ($categories as $category) {
+								$newslist[get_language_string($category['cat_name'])] = $category['cat_link'];
+							}
+							printManagedObjects('news',$newslist, $album_alter_rights, $user['id'], $id);
+						}
+*/
 					}
 						if (!$ismaster) {
 							?>
 							<p>
 								<?php
+								//TODO: change text to be generic objects
 								if (empty($album_alter_rights)) {
 									echo gettext("Select one or more albums for the administrator to manage.").' ';
 									echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");

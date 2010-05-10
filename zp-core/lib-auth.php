@@ -162,12 +162,12 @@ class Zenphoto_Authority {
 	 * @param string $email The email address of the admin
 	 * @param bit $rights The administrating rites for the admin
 	 * @param string $custom custom data for the administrator
-	 * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
+	 * @param array $objects an array of zenphoto objects that the admin can access.
 	 * @param int $quota Total image size quoat
 	 * @return string error message if any errors
 	 */
-	function saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom='', $group='', $valid=1, $quota=NULL) {
-		if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums, $custom, $group, $valid)"); }
+	function saveAdmin($user, $pass, $name, $email, $rights, $objects, $custom='', $group='', $valid=1, $quota=NULL) {
+		if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $objects, $custom, $group, $valid)"); }
 		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '".zp_escape_string($user)."' AND `valid`=$valid";
 		$result = query_single_row($sql);
 		if (!is_null($pass)) {
@@ -211,14 +211,36 @@ class Zenphoto_Authority {
 			if (DEBUG_LOGIN) { debugLog("saveAdmin: inserting[$id]:$result"); }
 		}
 		$gallery = new Gallery();
-		if (is_array($albums)) {
-			$sql = "DELETE FROM ".prefix('admin_to_object').' WHERE `adminid`='.$id.' AND `type`="album"';
+		if (is_array($objects)) {
+			$sql = "DELETE FROM ".prefix('admin_to_object').' WHERE `adminid`='.$id;
 			$result = query($sql);
-			foreach ($albums as $albumname) {
-				$album = new Album($gallery, $albumname);
-				$albumid = $album->getAlbumID();
-				$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $albumid, 'album')";
-				$result = query($sql);
+			foreach ($objects as $object) {
+				switch ($object['type']) {
+					case 'album':
+						$album = new Album($gallery, $object['data']);
+						$albumid = $album->getAlbumID();
+						$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $albumid, 'album')";
+						$result = query($sql);
+						break;
+					case 'pages':
+						$sql = 'SELECT * FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$object['data'].'"';
+						$result = query_single_row($sql);
+						if (is_array($result)) {
+							$objectid = $result['id'];
+							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'pages')";
+							$result = query($sql);
+						}
+						break;
+					case 'news':
+						$sql = 'SELECT * FROM '.prefix('zenpage_news_categories').' WHERE `cat_link`="'.$object['data'].'"';
+						$result = query_single_row($sql);
+						if (is_array($result)) {
+							$objectid = $result['id'];
+							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'news')";
+							$result = query($sql);
+						}
+						break;
+				}
 			}
 		}
 		return '';
@@ -647,11 +669,11 @@ class Zenphoto_Administrator extends PersistentObject {
 		return $this->get('rights');
 	}
 
-	function setAlbums($albums) {
-		$this->set('albums', $albums);
+	function setObjects($objects) {
+		$this->set('objects', $objects);
 	}
-	function getAlbums() {
-		return $this->get('albums');
+	function getObjects() {
+		return $this->get('objects');
 	}
 
 	function setCustomData($custom_data) {

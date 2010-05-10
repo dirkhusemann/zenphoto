@@ -1003,8 +1003,8 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							$x = '          ';
 							?>
 							<img src="images/lock.png" />
-							<?php 
-						} 
+							<?php
+						}
 						?>
 						</td>
 					</tr>
@@ -2691,23 +2691,56 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 /**
  * Returns a list of album names managed by $id
  *
+ * @param string $type which kind of object
  * @param int $id admin ID
  * @return array
  */
-function populateManagedAlbumList($id) {
+function populateManagedObjectsList($type,$id) {
 	$cv = array();
-	$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-					prefix('admin_to_object')." WHERE ".prefix('admin_to_object').".adminid=".
-					$id." AND ".prefix('albums').".id=".prefix('admin_to_object').".objectid AND ".prefix('admin_to_object').".type='album'";
-	$currentvalues = query_full_array($sql);
-	foreach($currentvalues as $albumitem) {
-		$folder = $albumitem['folder'];
-		if (hasDynamicAlbumSuffix($folder)) {
-			$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
-		} else {
-			$name = $folder;
+	if (empty($type) || $type=='album') {
+		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+						prefix('admin_to_object')." WHERE ".prefix('admin_to_object').".adminid=".$id.
+						" AND ".prefix('albums').".id=".prefix('admin_to_object').".objectid AND ".prefix('admin_to_object').".type='album'";
+		$currentvalues = query_full_array($sql);
+		foreach($currentvalues as $albumitem) {
+			$folder = $albumitem['folder'];
+			if (hasDynamicAlbumSuffix($folder)) {
+				$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
+			} else {
+				$name = $folder;
+			}
+			if ($type) {
+				$cv[$name] = $folder;
+			} else {
+				$cv[] = array('data'=>$folder,'type'=>'album');
+			}
 		}
-		$cv[$name] = $folder;
+	}
+	if (empty($type) || $type=='pages')  {
+		$sql = 'SELECT '.prefix('zenpage_pages').'.`title`,'.prefix('zenpage_pages').'.`titlelink` FROM '.prefix('zenpage_pages').', '.
+						prefix('admin_to_object')." WHERE ".prefix('admin_to_object').".adminid=".$id.
+						" AND ".prefix('zenpage_pages').".id=".prefix('admin_to_object').".objectid AND ".prefix('admin_to_object').".type='pages'";
+		$currentvalues = query_full_array($sql);
+		foreach ($currentvalues as $item) {
+			if ($type) {
+				$cv[get_language_string($item['title'])] = $item['titlelink'];
+			} else {
+				$cv[] = array('data'=>$item['titlelink'],'type'=>'pages');
+			}
+		}
+	}
+	if (empty($type) || $type=='news')  {
+		$sql = 'SELECT '.prefix('zenpage_news_categories').'.`cat_name`,'.prefix('zenpage_news_categories').'.`cat_link` FROM '.prefix('zenpage_news_categories').', '.
+						prefix('admin_to_object')." WHERE ".prefix('admin_to_object').".adminid=".$id.
+						" AND ".prefix('zenpage_news_categories').".id=".prefix('admin_to_object').".objectid AND ".prefix('admin_to_object').".type='news'";
+		$currentvalues = query_full_array($sql);
+		foreach ($currentvalues as $item) {
+			if ($type) {
+				$cv[get_language_string($item['cat_name'])] = $item['cat_link'];
+			} else {
+				$cv[] = array('data'=>$item['cat_link'],'type'=>'news');
+			}
+		}
 	}
 	return $cv;
 }
@@ -2715,21 +2748,41 @@ function populateManagedAlbumList($id) {
 /**
  * Creates the managed album table for Admin
  *
+ * @param string $type the kind of list
  * @param array $albumlist list of admin
  * @param string $alterrights are the items changable
  * @param int $adminid ID of the admin
  * @param int $prefix the admin row
  */
-function printManagedAlbums($albumlist, $alterrights, $adminid, $prefix) {
-	$cv = populateManagedAlbumList($adminid);
-	$rest = array_diff($albumlist, $cv);
-	$prefix = 'managed_albums_'.$prefix.'_';
+function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) {
+	switch ($type) {
+		case 'albums':
+			$cv = populateManagedObjectsList('album',$adminid);
+			$rest = array_diff($albumlist, $cv);
+			$text = gettext("Managed albums:");
+			$prefix = 'managed_albums_'.$prefix.'_';
+			break;
+/*TODO
+		case 'news':
+			$cv = populateManagedObjectsList('news',$adminid);
+			$rest = array_diff($albumlist, $cv);
+			$text = gettext("Managed news categories:");
+			$prefix = 'managed_news_'.$prefix.'_';
+			break;
+		case 'pages':
+			$cv = populateManagedObjectsList('pages',$adminid);
+			$rest = array_diff($albumlist, $cv);
+			$text = gettext("Managed pages:");
+			$prefix = 'managed_pages_'.$prefix.'_';
+			break;
+*/
+	}
 	?>
 	<h2 class="h2_bordered_albums">
-	<a href="javascript:toggle('<?php echo $prefix ?>managed_albums');"><?php echo gettext("Managed albums:"); ?></a>
+	<a href="javascript:toggle('<?php echo $prefix ?>');"><?php echo $text; ?></a>
 	</h2>
 	<div class="box-albums-unpadded">
-		<div id="<?php echo $prefix ?>managed_albums" style="display:none" >
+		<div id="<?php echo $prefix ?>" style="display:none" >
 			<ul class="albumchecklist">
 				<?php
 				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true);
@@ -2765,23 +2818,44 @@ function processRights($i) {
 	return $rights;
 }
 
-function processManagedAlbums($i) {
+function processManagedObjects($i) {
+	$objects = array();
 	$managedalbums = array();
-	$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
+	$pages = array();
+	$news = array();
+	$l_a = strlen($prefix_a = 'managed_albums_'.$i.'_');
+	$l_p = strlen($prefix_p = 'managed_pages_'.$i.'_');
+	$l_n = strlen($prefix_n = 'managed_news_'.$i.'_');
+	
 	foreach ($_POST as $key => $value) {
 		$key = postIndexDecode($key);
-		if (substr($key, 0, $l) == $albumsprefix) {
+		if (substr($key, 0, $l_a) == $prefix_a) {
 			if ($value) {
-				$managedalbums[] = substr($key, $l);
+				$managedalbums[] = substr($key, $l_a);
+			}
+		}
+		if (substr($key, 0, $l_p) == $prefix_p) {
+			if ($value) {
+				$pages[] = array('data'=>substr($key, $l_p),'type'=>'pages');
+			}
+		}
+		if (substr($key, 0, $l_n) == $prefix_n) {
+			if ($value) {
+				$news[] = array('data'=>substr($key, $l_n),'type'=>'news');
 			}
 		}
 	}
 	if (count($managedalbums > 0)) {
-		$albums = array_unique($managedalbums);
+		$albuml = array_unique($managedalbums);
+		$albums = array();
+		foreach ($albuml as $album) {
+			$albums[] = array('data'=>$album, 'type'=>'album');
+		}
 	} else {
 		$albums = NULL;
 	}
-	return $albums;
+	$objects = array_merge($albums,$pages,$news);
+	return $objects;
 }
 
 /**
@@ -2902,7 +2976,7 @@ function postAlbumSort($parentid) {
 				if ($e = $album->moveAlbum($dest)) {
 					return "&mcrerr=".$e;
 				} else {
-					$album->setSortOrder($sortorder);		
+					$album->setSortOrder($sortorder);
 					$album->save();
 				}
 			}

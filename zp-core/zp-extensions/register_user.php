@@ -21,7 +21,7 @@
 
 $plugin_description = gettext("Provides a means for placing a user registration form on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.0'; 
+$plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---register_user.php.html";
 $option_interface = new register_user_options();
 
@@ -160,10 +160,10 @@ if (!OFFSET_PATH) { // handle form post
 			$userobj->setGroup($group);
 			if (!empty($group)) {
 				$membergroup = $_zp_authority->newAdministrator($group, 0);
-				$userobj->setAlbums(populateManagedAlbumList($membergroup->getID()));
+				$userobj->setObjects(populateManagedObjectsList(NULL,$membergroup->getID()));
 			}
 			zp_apply_filter('register_user_verified', $userobj);
-			$notify = $_zp_authority->saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+			$notify = $_zp_authority->saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getObjects(), $userobj->getCustomData(), $userobj->getGroup());
 			if (getOption('register_user_notify') && !$notify) {
 				$notify = zp_mail(gettext('Zenphoto Gallery registration'),
 									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$userobj->getName(), $adminuser['user'], $admin_e));
@@ -220,7 +220,7 @@ if (!OFFSET_PATH) { // handle form post
 					$userobj->setGroup('');
 					$userobj->setCustomData('');
 					zp_apply_filter('register_user_registered', $userobj);
-					$notify = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getAlbums(), $userobj->getCustomData(), $userobj->getGroup());
+					$notify = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getObjects(), $userobj->getCustomData(), $userobj->getGroup());
 					if (empty($notify)) {
 						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
 						$message = sprintf(get_language_string(getOption('register_user_text')), $link);

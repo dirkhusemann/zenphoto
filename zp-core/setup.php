@@ -2047,6 +2047,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'RENAME TABLE '.prefix('admintoalbum').' TO '.$tbl_admin_to_object;
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' ADD COLUMN `type` varchar(32) DEFAULT "album";';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' CHANGE `albumid` `objectid` int(11) UNSIGNED NOT NULL';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `albums` `objects` varchar(64)';
 	
 
 	// do this last incase there are any field changes of like names!

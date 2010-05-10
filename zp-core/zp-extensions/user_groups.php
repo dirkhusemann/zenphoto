@@ -34,12 +34,12 @@ function user_groups_save_admin($discard, $userobj, $i) {
 			if (!empty($oldgroup)) {
 				$group = $_zp_authority->newAdministrator($oldgroup, 0);
 				$userobj->setRights($group->getRights());
-				$userobj->setAlbums(populateManagedAlbumList($group->getID()));
+				$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
 			}
 		} else {
 			$group = $_zp_authority->newAdministrator($groupname, 0);
 			$userobj->setRights($group->getRights());
-			$userobj->setAlbums(populateManagedAlbumList($group->getID()));
+				$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
 			if ($group->getName() == 'template') $groupname = '';
 		}
 		$userobj->setGroup($groupname);
@@ -118,7 +118,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 					if (disable) {
 						switch (obj.value) {';
 		foreach ($groups as $user) {
-			$cv = populateManagedAlbumList($user['id']);
+			$cv = populateManagedObjectsList('album',$user['id']);
 			$xv = array_diff($albumlist, $cv);
 			$cvo = array();
 			foreach ($cv as $albumid) {
@@ -162,7 +162,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 		if (is_array($hisgroup)) {
 			$grouppart .= '
 				window.onload = function() {';
-			$cv = populateManagedAlbumList($hisgroup['id']);
+			$cv = populateManagedObjectsList('album',$hisgroup['id']);
 			foreach ($albumlist as $albumid) {
 				if (in_array($albumid,$cv)) {
 					$grouppart .= '

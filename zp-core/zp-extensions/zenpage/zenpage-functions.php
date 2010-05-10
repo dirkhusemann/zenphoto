@@ -56,7 +56,7 @@ function processExpired($table) {
 		}
 		$_zp_zenpage_all_pages = NULL; // Disabled cache var for now because it does not return unpublishded and published if logged on index.php somehow if logged in.
 		if(is_null($_zp_zenpage_all_pages)) {
-			$_zp_zenpage_all_pages  = query_full_array("SELECT titlelink,sort_order FROM ".prefix('zenpage_pages').$show." ORDER by `sort_order`");
+			$_zp_zenpage_all_pages  = query_full_array("SELECT * FROM ".prefix('zenpage_pages').$show." ORDER by `sort_order`");
 			return $_zp_zenpage_all_pages;
 		} else {
 			return $_zp_zenpage_all_pages;
