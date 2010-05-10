@@ -6,7 +6,14 @@
  * @package plugins
  * @subpackage zenpage
  */
-include("zp-functions.php"); ?>
+define("OFFSET_PATH",4); 
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
+require_once("zenpage-admin-functions.php");
+if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
    <html xmlns="http://www.w3.org/1999/xhtml">
@@ -43,7 +50,6 @@ printLogoAndLinks();
 	?>
 	<div id="content">
 		<?php
-		checkRights('categories'); 
 		printSubtabs('articles');
 		?>
 		<div id="tab_articles" class="tabbox">

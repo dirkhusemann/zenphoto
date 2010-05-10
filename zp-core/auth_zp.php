@@ -25,8 +25,6 @@ if (defined('ZENPAGE_RIGHTS')) {
 	define('ZENPAGE_PAGES_RIGHTS', ZENPAGE_RIGHTS);
 	define('MANAGE_ALL_NEWS_RIGHTS', false);
 	define('MANAGE_ALL_PAGES_RIGHTS', false);
-} else {
-	define('ZENPAGE_RIGHTS', ZENPAGE_NEWS_RIGHTS | ZENPAGE_PAGES_RIGHTS);
 }
 
 // If the auth variable gets set somehow before this, get rid of it.

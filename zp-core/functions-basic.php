@@ -667,7 +667,7 @@ function zp_error($message, $fatal=true) {
 			$prefix = '  ';
 			?>
 			<p>
-				<?php echo gettext('strong>Backtrace:</strong>'); ?>
+				<?php echo gettext('<strong>Backtrace:</strong>'); ?>
 				<br />
 				<pre>
 					<?php

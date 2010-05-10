@@ -1330,22 +1330,6 @@ function zenpageJSCSS() {
 <?php
 }
 
-/**
- * Prevents access if improper RIGHTS
- *
- * @param string $currentpage the kind of zenphoto object being accessed.
- */
-function checkRights($currentpage) {
-	if ($currentpage == 'articles') {
-		$accessrights = ZENPAGE_NEWS_RIGHTS;
-	} else {
-		$accessrights = ZENPAGE_PAGES_RIGHTS;
-	}
-	if (!(zp_loggedin($accessrights))) {
-		echo "<div class='errorbox'>".gettext("You need Admin Rights or Zenpage rights to use Zenpage")."</div>";
-		exit;
-	}
-}
 
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">

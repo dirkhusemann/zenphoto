@@ -6,7 +6,13 @@
  * @package plugins
  * @subpackage zenpage
  */
-require_once('zp-functions.php');
+define("OFFSET_PATH",4); 
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
+require_once("zenpage-admin-functions.php");
+if(!(zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -22,7 +28,6 @@ require_once('zp-functions.php');
 	echo '<div id="main">';
 	printTabs('pages');
 	echo '<div id="content">';
-	checkRights('pages');
 // update page sort order
 if(isset($_POST['update'])) {
 	updatePageSortorder();

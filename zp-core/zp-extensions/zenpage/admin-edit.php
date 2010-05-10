@@ -6,7 +6,19 @@
  * @package plugins
  * @subpackage zenpage
  */
-include('zp-functions.php'); ?>
+define("OFFSET_PATH",4); 
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
+require_once("zenpage-admin-functions.php");
+	if(is_AdminEditPage('newsarticle')) {
+		$rights = ZENPAGE_NEWS_RIGHTS;
+	} else {
+		$rights = ZENPAGE_PAGES_RIGHTS;
+	}
+if(!(zp_loggedin($rights))) {
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -76,7 +88,6 @@ codeblocktabsJS();
 	}
 
 	if(is_AdminEditPage('newsarticle')) {
-		checkRights('articles');
 		if (!empty($page)) {
 			$zenphoto_tabs['articles']['subtabs'][gettext('articles')] .= $page;
 		}

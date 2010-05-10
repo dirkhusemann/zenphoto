@@ -241,7 +241,8 @@ function getMenuVisibility() {
 function inventMenuItem($menuset,$visibility) {
 	global $_zp_gallery_page, $_zp_current_album, $_zp_current_image, $_zp_current_search, $_menu_manager_items,
 					$_zp_current_zenpage_news, $_zp_current_zenpage_page;
-	$currentkey = NULL;
+	$currentkey = $insertpoint = NULL;
+	$newitems = array();
 	switch ($_zp_gallery_page) {
 		case 'image.php':
 			$name = '';
@@ -250,8 +251,9 @@ function inventMenuItem($menuset,$visibility) {
 				if (empty($name)) {	//	smple search
 					foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
 						if ($item['type']=='custompage' && $item['link'] == 'search') {
-							$currentkey = $item['sort_order'].'-9999';
-							break;
+						$insertpoint = $item['sort_order'];
+						$currentkey = $insertpoint.'-9999';
+						break;
 						}
 					}
 				}
@@ -261,7 +263,8 @@ function inventMenuItem($menuset,$visibility) {
 			if (!empty($name)) {
 				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
 					if ($item['type']=='album' && $item['title'] == $name) {
-						$currentkey = $item['sort_order'].'-9999';
+						$insertpoint = $item['sort_order'];
+						$currentkey = $insertpoint.'-9999';
 						break;
 					}
 				}
@@ -276,14 +279,16 @@ function inventMenuItem($menuset,$visibility) {
 			if (in_context(ZP_SEARCH_LINKED)) {
 				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
 					if ($item['type']=='custompage' && $item['link'] == 'search') {
-						$currentkey = $item['sort_order'].'-9999';
+						$insertpoint = $item['sort_order'];
+						$currentkey = $insertpoint.'-9999';
 						break;
 					}
 				}
 			} else {
 				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
 					if ($item['type']=='zenpagenewsindex') {
-						$currentkey = $item['sort_order'].'-9999';
+						$insertpoint = $item['sort_order'];
+						$currentkey = $insertpoint.'-9999';
 						break;
 					}
 				}
@@ -298,7 +303,8 @@ function inventMenuItem($menuset,$visibility) {
 			if (in_context(ZP_SEARCH_LINKED)) {
 				foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$item) {
 					if ($item['type']=='custompage' && $item['link'] == 'search') {
-						$currentkey = $item['sort_order'].'-9999';
+						$insertpoint = $item['sort_order'];
+						$currentkey = $insertpoint.'-9999';
 						$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'zenpagepage',
 																			'include_li'=>true,'title'=>$_zp_current_zenpage_page->getTitle(),
 																			'show'=>1, 'link'=>'','menuset'=>$menuset);
@@ -309,8 +315,13 @@ function inventMenuItem($menuset,$visibility) {
 			break;
 	}
 	if (!empty($currentkey)) {
-		$_menu_manager_items[$menuset][$visibility][$currentkey] = $item;
-		$_menu_manager_items[$menuset][$visibility] = sortMultiArray($_menu_manager_items[$menuset][$visibility], 'sort_order', false, false);
+		foreach ($_menu_manager_items[$menuset][$visibility] as $key=>$olditem) {
+			$newitems[$key] = $olditem;
+			if ($olditem['sort_order']==$insertpoint) {
+				$newitems[$currentkey] = $item;
+			}
+		}
+		$_menu_manager_items[$menuset][$visibility] = $newitems;
 	}
 	return $currentkey;
 }
