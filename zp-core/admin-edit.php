@@ -1381,17 +1381,10 @@ if (isset($_GET['saved'])) {
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<?php
 		}
-		$flag = $note = '';
 		if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 			<?php
-		} else {
-			if ($gallery_nesting>1) {
-				$flag = '*';
-				$note = $flag.gettext('Changes to top-level items are not permitted and will be ignored.');
-				echo $flag;
-			}
 		}
 		?>
 	</p>
@@ -1445,7 +1438,7 @@ if (isset($_GET['saved'])) {
 		<?php
 		if ($gallery_nesting>1 || $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
-			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button><?php echo $flag;?>
+			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<?php
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
@@ -1458,7 +1451,6 @@ if (isset($_GET['saved'])) {
 
 </form>
 <br clear="all" />
-<?php echo $note; ?>
 
 <?php
 	} else {

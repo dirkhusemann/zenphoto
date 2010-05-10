@@ -56,9 +56,30 @@ if(isset($_GET['hitcounter'])) {
 <div>
 <p><?php echo gettext("Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed."); ?></p>
 <p class="notebox"><?php echo gettext("<strong>Note:</strong> Subpages of password protected pages inherit the protection."); ?></p>
-<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
-<p class="buttons"><strong><a href="admin-edit.php?page&amp;add" title="<?php echo gettext('Add Page'); ?>"><img src="images/add.png" alt="" /> <?php echo gettext('Add Page'); ?></a></strong>
-<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox"><img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a></strong>
+<p class="buttons">
+	<button type="submit" title="<?php echo gettext("Save order"); ?>">
+		<img src="../../images/pass.png" alt="" />
+		<strong><?php echo gettext("Save order"); ?></strong>
+	</button>
+	<?php 
+	//TODO: inhibit add page button if user does not have MANAGE_ALL_PAGES_RIGHTS
+	if (true || zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
+		?>
+		<strong>
+			<a href="admin-edit.php?page&amp;add" title="<?php echo gettext('Add Page'); ?>">
+			<img src="images/add.png" alt="" /> <?php echo gettext('Add Page'); ?></a>
+		</strong>
+		<?php
+	}
+	if (zp_loggedin(ZENPAGE_FILES_RIGHTS)) {
+		?>
+		<strong>
+			<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
+			<img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a>
+		</strong>
+		<?php
+		}
+	?>
 </p>
 </div>
 <br clear="all" /><br clear="all" />
@@ -82,11 +103,15 @@ if(isset($_GET['hitcounter'])) {
 			echo '</div>';
 	}
 	?>
-<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
-				<input name="update" type="hidden" value="Save Order" />
-				<p class="buttons"><button type="submit" title="<?php echo gettext('Save order'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Save order'); ?></strong></button></p>
+	<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
+	<input name="update" type="hidden" value="Save Order" />
+	<p class="buttons">
+		<button type="submit" title="<?php echo gettext('Save order'); ?>">
+			<img src="../../images/pass.png" alt="" />
+			<strong><?php echo gettext('Save order'); ?></strong>
+		</button>
+	</p>
 
-			
 </form>
 <?php printZenpageIconLegend(); ?>
 </div>

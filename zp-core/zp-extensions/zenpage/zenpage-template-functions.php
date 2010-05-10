@@ -2835,14 +2835,19 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
  */
 function isMyPage($pageobj=NULL, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_PAGES_RIGHTS)) {
+	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
 		return true;
 	}
+	if (zp_apply_filter('check_pages_credentials', false)) return true;
 	if ($_zp_loggedin & $action) {
 		if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
+		$mypages = populateManagedObjectsList('pages', $_zp_current_admin_obj->get('id'));
+		if (!empty($mypages)) {
+			if (array_search($pageobj->getTitlelink(),$mypages)!==false) return true;
+		}
 		return $_zp_current_admin_obj->getUser() == $pageobj->getAuthor();
 	}
 	return false;
@@ -2892,14 +2897,21 @@ function checkPagePassword($pageobj, &$hint, &$show) {
  */
 function isMyNews($newsobj, $action) {
 	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_news;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_NEWS_RIGHTS)) {
+	if (zp_loggedin(MANAGE_ALL_NEWS_RIGHTS)) {
 		return true;
 	}
 	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_NEWS_RIGHTS)) {	// sees all
 		return true;
 	}
+	if (zp_apply_filter('check_news_credentials', false)) return true;
 	if ($_zp_loggedin & $action) {
 		if (is_null($newsobj)) $newsobj = $_zp_current_zenpage_news;
+		$mycategories = populateManagedObjectsList('news', $_zp_current_admin_obj->get('id'));
+		if (!empty($mycategories)) {
+			foreach ($newsobj->getCategories() as $category) {
+				if (array_search($category['cat_link'],$mycategories)!==false) return true;
+			}
+		}
 		return $_zp_current_admin_obj->getUser() == $newsobj->getAuthor();
 	}
 	return false;
@@ -2913,7 +2925,7 @@ function isMyNews($newsobj, $action) {
  */
 function checkNewsAccess($newsobj, &$hint, &$show) {
 	if(is_NewsType('news',$newsobj)) {
-		if (isMyNews($newsobj, LIST_NEWS_RIGHTS)) return true;
+		if (isMyNews($newsobj, ZENPAGE_NEWS_RIGHTS)) return true;
 		$allcategories = $newsobj->getCategories();
 		if (count($allcategories) == 0) return true;
 		foreach ($allcategories as $category) {

@@ -245,7 +245,7 @@ if(is_AdminEditPage("newsarticle")) {
 
 			<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Publish"); ?></h2>
 				<div class="box-edit-zenpage">
-				<p><?php echo gettext("Author:"); ?> <?php AuthorSelector(getIfObject($result,"author")) ;?></p>
+				<p><?php echo gettext("Author:"); ?> <?php authorSelector(getIfObject($result,"author")) ;?></p>
 				<?php if(is_object($result)) { ?>
 				<p class="checkbox">
 				<input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" />
@@ -266,44 +266,49 @@ if(is_AdminEditPage("newsarticle")) {
 				</p>
 				<?php
 				if(is_object($result) && get_class($result)=='ZenpagePage') {
-					?>
-					<p class="passwordextrashow">
-						<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
-						<a href="javascript:toggle_passwords('',true);">
-							<?php echo gettext("Page password:"); ?>
-						</a>
-						<?php
+					$hint = $result->getPasswordHint();
+					$user = $result->getUser();
 						$x = $result->getPassword();
-						if (empty($x)) {
-							?>
-							<img src="../../images/lock_open.png" alt="" />
-							<?php
-						} else {
-							$x = '          ';
-							?>
-							<img src="../../images/lock.png" alt="" />
-							<?php 
-						} 
-						?>
-					</p>
-					<p class="passwordextrahide" style="display:none">
-						<a href="javascript:toggle_passwords('',false);">
-						<?php echo gettext("Page guest user:"); ?>
-						</a>
-						<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="page_user" value="<?php echo htmlspecialchars($result->getUser()); ?>" />
-						<?php echo gettext("Page password:"); ?>
-						<br />
-						<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass" value="<?php echo $x; ?>" />
-						<?php echo gettext("(repeat)"); ?>
-						<br />
-						<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass_2" value="<?php echo $x; ?>" />
-						<br />
-						<?php echo gettext("Page password hint:"); ?>
-						<br />
-						<?php print_language_string_list($result->getPasswordHint(), 'page_hint', false, NULL, '', true); ?>
-					</p>
-					<?php
+				} else {
+					$hint = $user = $x = '';
 				}
+				?>
+				<p class="passwordextrashow">
+					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
+					<a href="javascript:toggle_passwords('',true);">
+						<?php echo gettext("Page password:"); ?>
+					</a>
+					<?php
+					if (empty($x)) {
+						?>
+						<img src="../../images/lock_open.png" alt="" />
+						<?php
+					} else {
+						$x = '          ';
+						?>
+						<img src="../../images/lock.png" alt="" />
+						<?php 
+					} 
+					?>
+				</p>
+				<p class="passwordextrahide" style="display:none">
+					<a href="javascript:toggle_passwords('',false);">
+					<?php echo gettext("Page guest user:"); ?>
+					</a>
+					<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="page_user" value="<?php echo htmlspecialchars($user); ?>" />
+					<?php echo gettext("Page password:"); ?>
+					<br />
+					<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass" value="<?php echo $x; ?>" />
+					<?php echo gettext("(repeat)"); ?>
+					<br />
+					<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass_2" value="<?php echo $x; ?>" />
+					<br />
+					<?php echo gettext("Page password hint:"); ?>
+					<br />
+					<?php print_language_string_list($hint, 'page_hint', false, NULL, '', true); ?>
+				</p>
+				<?php
+
 				if(is_AdminEditPage("newsarticle")) {
 					echo zp_apply_filter('publish_article_utilities', '');
 				} else {

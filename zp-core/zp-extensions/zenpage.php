@@ -143,15 +143,13 @@ function zenpageIsMyItem($fail) {
 	global $_zp_gallery_page,$_zp_current_zenpage_page,$_zp_current_zenpage_news;
 	switch($_zp_gallery_page) {
 		case ZENPAGE_PAGES.'.php':
-			if (isMyPage($_zp_current_zenpage_page, LIST_PAGE_RIGHTS)) return false;
-			$fail = true;
+			return !isMyPage($_zp_current_zenpage_page, ZENPAGE_PAGES_RIGHTS);
 			break;
 		case ZENPAGE_NEWS:
 			if (!in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
-				if (isMyNews($_zp_current_zenpage_news, LIST_NEWS_RIGHTS)) return false;
+				if (isMyNews($_zp_current_zenpage_news, ZENPAGE_NEWS_RIGHTS)) return false;
 			}
-			$fail = true;
+			return true;
 	}
-	return $fail;
 }
 ?>

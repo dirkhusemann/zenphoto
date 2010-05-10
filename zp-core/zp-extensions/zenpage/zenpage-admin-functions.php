@@ -377,36 +377,38 @@ function printPagesList($pages) {
 	$rslt = false;
 	foreach ($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
-		$order = explode('-', $pageobj->getSortOrder());
-		$level = max(1,count($order));
-		if ($toodeep = $level>1 && $order[$level-1] === '') {
-			$rslt = true;
-		}
-		if ($level > $indent) {
-			echo "\n".str_pad("\t",$indent,"\t")."<ul class=\"page-list\">\n";
-			$indent++;
-			$open[$indent] = 0;
-		} else if ($level < $indent) {
-				while ($indent > $level) {
+		if (isMyPage($pageobj,ZENPAGE_PAGES_RIGHTS)) {
+			$order = explode('-', $pageobj->getSortOrder());
+			$level = max(1,count($order));
+			if ($toodeep = $level>1 && $order[$level-1] === '') {
+				$rslt = true;
+			}
+			if ($level > $indent) {
+				echo "\n".str_pad("\t",$indent,"\t")."<ul class=\"page-list\">\n";
+				$indent++;
+				$open[$indent] = 0;
+			} else if ($level < $indent) {
+					while ($indent > $level) {
+						$open[$indent]--;
+						$indent--;
+						echo "</li>\n".str_pad("\t",$indent,"\t")."</ul>\n";
+					}
+			} else { // indent == level
+				if ($open[$indent]) {
+					echo str_pad("\t",$indent,"\t")."</li>\n";
 					$open[$indent]--;
-					$indent--;
-					echo "</li>\n".str_pad("\t",$indent,"\t")."</ul>\n";
+				} else {
+					echo "\n";
 				}
-		} else { // indent == level
+			}
 			if ($open[$indent]) {
 				echo str_pad("\t",$indent,"\t")."</li>\n";
 				$open[$indent]--;
-			} else {
-				echo "\n";
 			}
+			echo str_pad("\t",$indent-1,"\t")."<li id=\"id_".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
+			echo printPagesListTable($pageobj, $toodeep);
+			$open[$indent]++;
 		}
-		if ($open[$indent]) {
-			echo str_pad("\t",$indent,"\t")."</li>\n";
-			$open[$indent]--;
-		}
-		echo str_pad("\t",$indent-1,"\t")."<li id=\"id_".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
-		echo printPagesListTable($pageobj, $toodeep);
-		$open[$indent]++;
 	}
 	while ($indent > 1) {
 		echo "</li>\n";
@@ -1347,21 +1349,30 @@ function printZenpageIconLegend() { ?>
  *
  * @param string $currentadmin The current admin is selected if adding a new article, otherwise the original author
  */
-function AuthorSelector($currentadmin='') {
-	global $_zp_authority;
-	$admins = $_zp_authority->getAdministrators();
-	?>
-<select size='1' name="author" id="author">
-<?php
-foreach($admins as $admin) {
-	if($admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_PAGE_RIGHTS)) {
-		if($currentadmin == $admin['user']) {
-			echo "<option selected='selected' value='".$admin['user']."'>".$admin['user']."</option>";
-		} else {
-			echo "<option value='".$admin['user']."'>".$admin['user']."</option>";
-		}
+function authorSelector($author=NULL) {
+	global $_zp_authority,$_zp_current_admin_obj;
+	if (empty($author)) {
+		$author = $_zp_current_admin_obj->getUser();
 	}
-}
+	?>
+	<select size='1' name="author" id="author">
+	<?php
+	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
+		$admins = $_zp_authority->getAdministrators();
+		foreach($admins as $admin) {
+			if($admin['valid'] && $admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_PAGES_RIGHTS)) {
+				if($author == $admin['user']) {
+					echo "<option selected='selected' value='".$admin['user']."'>".$admin['user']."</option>";
+				} else {
+					echo "<option value='".$admin['user']."'>".$admin['user']."</option>";
+				}
+			}
+		}
+	} else {
+		?>
+		<option selected='selected' value='<?php echo $author; ?>'><?php echo $author; ?></option>"
+		<?php
+	}
 ?>
 </select>
 <?php

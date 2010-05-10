@@ -43,7 +43,7 @@ function processExpired($table) {
 		global $_zp_zenpage_all_pages;
 		processExpired('zenpage_pages');
 		if (is_null($published)) {
-			if(zp_loggedin(ZENPAGE_PAGE_RIGHTS)) {
+			if(zp_loggedin(ZENPAGE_PAGES_RIGHTS)) {
 				$published = FALSE;
 			} else {
 				$published = TRUE;

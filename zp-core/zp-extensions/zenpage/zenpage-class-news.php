@@ -161,7 +161,7 @@ class ZenpageNews extends PersistentObject {
 	 * @return array
 	 */
 	function getCategories() {
-		$categories = query_full_array("SELECT cat.cat_name, cat.cat_link, cat.password FROM ".prefix('zenpage_news_categories')." as cat,".prefix('zenpage_news2cat')." as newscat WHERE newscat.cat_id = cat.id AND newscat.news_id = ".$this->getID()." ORDER BY cat.cat_name",false,'cat_link');
+		$categories = query_full_array("SELECT * FROM ".prefix('zenpage_news_categories')." as cat,".prefix('zenpage_news2cat')." as newscat WHERE newscat.cat_id = cat.id AND newscat.news_id = ".$this->getID()." ORDER BY cat.cat_name",false,'cat_link');
 		return $categories;
 	}
 
