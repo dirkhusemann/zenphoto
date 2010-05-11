@@ -603,4 +603,28 @@ function checkIfNew($mode="image",$timerange=604800) {
 		return FALSE;
 	}
 }
+/**
+ * Gets the number of all subalbums of all subalbum levels of either the current album or $albumobj
+ *
+ * @param object $albumobj Optional album object to check
+ * @param string $pre Optional text you want to print before the number
+ * @return bool
+ */
+function getNumAllSubalbums($albumobj,$pre='') {
+	global $_zp_gallery, $_zp_current_album;
+	if(is_null($albumobj)) {
+		$albumobj = $_zp_current_album;
+	}
+	$count = '';
+	$albums = getAllAlbums($_zp_current_album);
+	if(count($albums) != 0) {
+		$count = '';
+		foreach ($albums as $album) {
+			$count++;
+		}
+		return $pre.$count;
+	} else {
+		return false;
+	}
+}
 ?>

@@ -3534,7 +3534,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 	}
 }
 
-define('ALLTAGS_MINFONTSIZE', 0.8);
+
 /**
  * Either prints all of the galleries tgs as a UL list or a cloud
  *
@@ -3547,9 +3547,10 @@ define('ALLTAGS_MINFONTSIZE', 0.8);
  * @param int $maxcount the floor count for setting the cloud font size to $maxfontsize
  * @param int $mincount the minimum count for a tag to appear in the output
  * @param int $limit set to limit the number of tags displayed to the top $numtags
+ * @param int $minfontsize minimum font size the cloud should display
  * @since 1.1
  */
-function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE,$maxfontsize=2,$maxcount=50,$mincount=10, $limit=NULL) {
+function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE,$maxfontsize=2,$maxcount=50,$mincount=10, $limit=NULL,$minfontsize=0.8) {
 	global $_zp_current_search;
 
 	$option = strtolower($option);
@@ -3571,9 +3572,9 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 		}
 		if ($option == "cloud") { // calculate font sizes, formula from wikipedia
 			if ($val <= $mincount) {
-				$size = ALLTAGS_MINFONTSIZE;
+				$size = $minfontsize; 
 			} else {
-				$size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), ALLTAGS_MINFONTSIZE), $maxfontsize);
+				$size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), $minfontsize), $maxfontsize);
 			}
 			$size = str_replace(',','.', $size);
 			$size = " style=\"font-size:".$size."em;\"";
