@@ -2,6 +2,8 @@
 define('OFFSET_PATH', 5);
 $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
 include('../../../../admin-functions.php');
+
+//TODO: add ZENPAGE_FILE_RIGHTS to this and display error page rather than redirect to admin.php
 if(!zp_loggedin()) {
 	header('Location: ../../../../admin.php?from=' . currentRelativeURL(__FILE__)); 
   exit();

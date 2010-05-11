@@ -49,6 +49,8 @@ class Zenphoto_Authority {
 
 	var $admin_users = NULL;
 	var $rightsset = NULL;
+	
+//TODO be sure to un-comment the getRights() code	for version 2 before changing this!
 	var $version = 1;
 
 
