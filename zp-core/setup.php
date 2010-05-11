@@ -2251,7 +2251,7 @@ if (file_exists(CONFIGFILE)) {
 		}
 
 		if ($createTables) {
-			if ($_zp_loggedin == ADMIN_RIGHTS) {
+			if (zp_loggedin(ADMIN_RIGHTS)) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
 					echo "<p>".sprintf(gettext("You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"),UTILITIES_FOLDER)."</p>";

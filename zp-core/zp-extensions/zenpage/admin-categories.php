@@ -20,7 +20,7 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <head>
 <title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<?php zenpageJSCSS(); ?>  
+<?php zenpageJSCSS(false,false); ?>  
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	<?php if(isset($_GET["edit"])) { // prevent showing the message when adding page or article ?>

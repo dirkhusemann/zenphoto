@@ -997,7 +997,7 @@ function printCurrentNewsArchive($before='',$mode='formatted',$format='%B %Y') {
  * @return string
  */
 function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id='',$css_class_active='',$startlist=true) {
-	global $_zp_loggedin, $_zp_gallery_page, $_zp_gallery;
+	global $_zp_gallery_page, $_zp_gallery;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 	$categories = getAllCategories();
@@ -1608,7 +1608,7 @@ function getTotalNewsPages() {
  * @return mixed
  */
 function getNextPrevNews($option='',$sortorder='date',$sortdirection='desc') {
-	global $_zp_current_zenpage_news, $_zp_loggedin;
+	global $_zp_current_zenpage_news;
 	$article_url = array();
 	if(!getOption("zenpage_combinews")) {
 		$current = 0;
@@ -2285,7 +2285,7 @@ function printPageLinkURL($titlelink) {
  * @return string
  */
 function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicator='') {
-	global  $_zp_current_zenpage_page, $_zp_loggedin;
+	global  $_zp_current_zenpage_page;
 	if(empty($readmore)) {
 		$readmore = getOption("zenpage_read_more");
 	}
@@ -2364,7 +2364,7 @@ function printParentPagesBreadcrumb($before='', $after='') {
  * @return string
  */
 function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$indexname='',$showsubs=0,$startlist=true) {
-	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page;
+	global $_zp_gallery_page, $_zp_current_zenpage_page;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
@@ -2834,15 +2834,15 @@ function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
  * @param bit $action
  */
 function isMyPage($pageobj=NULL, $action) {
-	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_page;
+	global $_zp_current_admin_obj, $_zp_current_zenpage_page;
 	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
 		return true;
 	}
-	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
+	if (zp_loggedin(VIEW_ALL_RIGHTS) && ($action == LIST_PAGE_RIGHTS)) {	// sees all
 		return true;
 	}
 	if (zp_apply_filter('check_pages_credentials', false)) return true;
-	if ($_zp_loggedin & $action) {
+	if (zp_loggedin($action)) {
 		if (is_null($pageobj)) $pageobj = $_zp_current_zenpage_page;
 		$mypages = populateManagedObjectsList('pages', $_zp_current_admin_obj->get('id'));
 		if (!empty($mypages)) {
@@ -2896,15 +2896,15 @@ function checkPagePassword($pageobj, &$hint, &$show) {
  * @param $action
  */
 function isMyNews($newsobj, $action) {
-	global $_zp_loggedin, $_zp_current_admin_obj, $_zp_current_zenpage_news;
+	global $_zp_current_admin_obj, $_zp_current_zenpage_news;
 	if (zp_loggedin(MANAGE_ALL_NEWS_RIGHTS)) {
 		return true;
 	}
-	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_NEWS_RIGHTS)) {	// sees all
+	if (zp_loggedin(VIEW_ALL_RIGHTS) && ($action == LIST_NEWS_RIGHTS)) {	// sees all
 		return true;
 	}
 	if (zp_apply_filter('check_news_credentials', false)) return true;
-	if ($_zp_loggedin & $action) {
+	if (zp_loggedin($action)) {
 		if (is_null($newsobj)) $newsobj = $_zp_current_zenpage_news;
 		$mycategories = populateManagedObjectsList('news', $_zp_current_admin_obj->get('id'));
 		if (!empty($mycategories)) {

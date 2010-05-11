@@ -12,7 +12,7 @@ define('UPLOAD_ERR_QUOTA', -1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!($_zp_loggedin & (UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) { // prevent nefarious access to this page.
+if (!zp_loggedin(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }

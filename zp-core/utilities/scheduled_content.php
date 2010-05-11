@@ -34,7 +34,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
+if (!zp_loggedin(ALBUM_RIGHTS)) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
@@ -226,7 +226,7 @@ if (db_connect()) {
 
 	$albumidlist = '';
 	$albumids = '';
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
+	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$albumlist = $gallery->getAlbums();
 	} else {
 		$albumlist = getManagedAlbumList();
@@ -278,7 +278,7 @@ if (db_connect()) {
 		}
 	}
 	?>
-<?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
+<?php if (zp_loggedin(ADMIN_RIGHTS)) { ?>
 <form name="set_publication" action="" method="post">
 <input type="hidden" name="set_defaults" value="true" />
 		<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Publish albums by default"); ?>

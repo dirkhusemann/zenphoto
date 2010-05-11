@@ -36,7 +36,7 @@ if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php'); 
 }
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
-	if ($_zp_loggedin == ADMIN_RIGHTS || $_zp_reset_admin  || !($_zp_loggedin&(ADMIN_RIGHTS | OVERVIEW_RIGHTS))) { // user/password set required or does not have rights to this page.
+	if ($_zp_loggedin == ADMIN_RIGHTS || $_zp_reset_admin  || !zp_loggedin(OVERVIEW_RIGHTS)) { // user/password set required or does not have rights to this page.
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php");
 	}
 	

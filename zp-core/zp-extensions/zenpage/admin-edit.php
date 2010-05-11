@@ -27,7 +27,7 @@ if(!(zp_loggedin($rights))) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php
 printTextEditorConfigJS();
-zenpageJSCSS();
+zenpageJSCSS(false, true);
 codeblocktabsJS();
 ?>
 <script type="text/javascript">
@@ -187,17 +187,28 @@ if(is_AdminEditPage("newsarticle")) {
 }
 ?>
 <strong><a href="<?php echo $backurl; ?>" title="<?php echo gettext("Back"); ?>"><img	src="../../images/arrow_left_blue_round.png" alt="" /><?php echo gettext("Back"); ?></a></strong>
-<?php if(is_AdminEditPage("newsarticle")) { ?>
+<?php
+if(is_AdminEditPage("newsarticle")) {
+	?>
 	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
-<?php } else if(is_AdminEditPage("page")) { ?>
+	<?php
+} else if(is_AdminEditPage("page")) {
+	?>
 	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
-<?php } ?>
-<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
-							<img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a></strong>
-<span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
-<?php if(is_object($result)) { ?>
+	<?php
+}
+if (zp_loggedin(ZENPAGE_FILES_RIGHTS)) {
+	?>
+	<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
+	<img src="images/folder.png" alt="" /> <?php echo gettext('Manage files'); ?></a></strong>
+	<?php 
+}
+if(is_object($result)) {
+	?>
 	<a href="../../../index.php?p=<?php echo $themepage; ?>&amp;title=<?php printIfObject($result,"titlelink") ;?>" title="<?php echo gettext("View"); ?>"><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></a>
-<?php } ?>
+	<?php
+}
+?>
 </p>
 <br style="clear: both" /><br style="clear: both" />
 

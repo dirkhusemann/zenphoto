@@ -259,7 +259,7 @@ function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true)
  * @return string
  */
 function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
-	global $_zp_current_zenpage_page, $_zp_current_zenpage_news, $_zp_loggedin;
+	global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	trigger_error(gettext('zenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
 	switch($option) {
 		case "pages":

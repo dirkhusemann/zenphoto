@@ -294,7 +294,7 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs($currenttab) {
-	global $_zp_loggedin, $subtabs, $zenphoto_tabs, $main_tab_space;
+	global $subtabs, $zenphoto_tabs, $main_tab_space;
 	$zenphoto_tabs = zp_apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
 	$chars = 0;
 	foreach ($zenphoto_tabs as $atab) {
@@ -849,7 +849,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
  * @param bool $showCounts set to true to get tag count displayed
  */
 function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
-	global $_zp_loggedin, $_zp_admin_ordered_taglist, $_zp_admin_LC_taglist, $_zp_UTF8;
+	global $_zp_admin_ordered_taglist, $_zp_admin_LC_taglist, $_zp_UTF8;
 	if (is_null($_zp_admin_ordered_taglist)) {
 		if ($mostused || $showCounts) {
 			$counts = getAllTagsCount();
@@ -910,7 +910,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
  * @since 1.1.3
  */
 function printAlbumEditForm($index, $album, $collapse_tags) {
-	global $sortby, $gallery, $_zp_loggedin, $mcr_albumlist, $albumdbfields, $imagedbfields;
+	global $sortby, $gallery, $mcr_albumlist, $albumdbfields, $imagedbfields;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
 		if (isset($saved)) {
@@ -1239,7 +1239,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Album theme:"); ?> </td>
 						<td>
-							<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"	<?php if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo 'disabled="disabled" '; ?>	>
+							<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"	<?php if (!zp_loggedin(THEMES_RIGHTS)) echo 'disabled="disabled" '; ?>	>
 							<?php
 							$themes = $gallery->getThemes();
 							$oldtheme = $album->getAlbumTheme();
@@ -1507,7 +1507,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onchange="">
 							<?php
 							$exclude = $album->name;
-							if (count(explode('/', $exclude))>1 && $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+							if (count(explode('/', $exclude))>1 && zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 								?>
 								<option value="" selected="selected">/</option>
 								<?php

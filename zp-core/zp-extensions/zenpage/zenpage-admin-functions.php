@@ -1295,9 +1295,12 @@ function printCategoriesStatistic() {
 /**
  * Prints the links to JavaScript and CSS files zenpage needs.
  * Actually the same as for zenphoto but with different paths since we are in the plugins folder.
+ * 
+ * @param bool $sortable set to true for tabs with sorts.
+ * @param bool $dates set true to include datapicker
  *
  */
-function zenpageJSCSS() {
+function zenpageJSCSS($sortable, $dates) {
 	?>
 	<link rel="stylesheet" href="../../admin.css" type="text/css" />
 	<link rel="stylesheet" href="zenpage.css" type="text/css" />
@@ -1306,19 +1309,36 @@ function zenpageJSCSS() {
 	<script src="../../js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="../../js/jqueryui/jquery_ui_zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="../../js/jqueryui/jquery_ui_zenphoto.css" type="text/css" />
-	<?php datepickerJS(); ?>
+	<?php 
+	if ($dates) {
+		datepickerJS();
+	}
+	?>
 	<script type="text/javascript" src="../../js/zenphoto.js"></script>
 	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
 	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
-	<!--Nested Sortables-->
-	<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
-	<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
-	<!--Nested Sortables End-->
+	<?php 
+	if ($sortable) {
+		?>
+		<!--Nested Sortables-->
+		<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
+		<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
+		<!--Nested Sortables End-->
+		<?php 
+	}
+	?>
 	<script type="text/javascript">
 		// <!-- <![CDATA[
-		$(document).ready(function(){
-			$("a.colorbox").colorbox({iframe:true, width:"810",height:"480" });
-		});
+		<?php 
+		$navigator_user_agent = ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) ? strtolower( $_SERVER['HTTP_USER_AGENT'] ) : '';
+		if (!$sortable || !stristr($navigator_user_agent, "msie")) {
+			?>
+			$(document).ready(function(){
+				$("a.colorbox").colorbox({iframe:true,innerWidth:"810",innerHeight:"480"});
+			});
+			<?php 
+		}
+		?>
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 		});

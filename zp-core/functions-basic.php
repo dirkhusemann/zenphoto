@@ -1175,18 +1175,18 @@ function loadLocalOptions($albumid, $theme) {
  * 						access will be allowed.
  */
 function isMyAlbum($albumfolder, $action) {
-	global $_zp_loggedin, $_zp_admin_album_list;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-		if ($_zp_loggedin & (ADMIN_RIGHTS | $action)) return true;
+	global $_zp_admin_album_list;
+	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
+		if (zp_loggedin($action)) return true;
 	}
-	if (($_zp_loggedin & VIEW_ALL_RIGHTS) && ($action == LIST_ALBUM_RIGHTS)) {	// sees all
+	if (zp_loggedin(VIEW_ALL_RIGHTS) && ($action == LIST_ALBUM_RIGHTS)) {	// sees all
 		return true;
 	}
 	if (zp_apply_filter('check_album_credentials', false)) return true;
 	if (empty($albumfolder) || $albumfolder == '/') {
 		return false;
 	}
-	if ($_zp_loggedin & $action) {
+	if (zp_loggedin($action)) {
 		if (is_null($_zp_admin_album_list)) {
 			getManagedAlbumList();
 		}

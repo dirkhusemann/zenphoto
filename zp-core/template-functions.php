@@ -81,7 +81,7 @@ function zenJavascript() {
 	?>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/zenphoto.js"></script>
-	<?php 
+	<?php
 	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
 		if (in_context(ZP_ALBUM)) {
 			$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
@@ -117,7 +117,7 @@ function zenJavascript() {
  * @param string $id the html/css theming id
  */
 function printAdminToolbox($id='admin') {
-	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin, $_zp_gallery_page;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery_page;
 	if (zp_loggedin()) {
 		$zf = WEBPATH."/".ZENFOLDER;
 		$dataid = $id . '_data';
@@ -152,7 +152,7 @@ function printAdminToolbox($id='admin') {
 			$redirect .= "&amp;page=$page";
 		}
 
-		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+		if (zp_loggedin(OPTIONS_RIGHTS)) {
 		// options link for all admins with options rights
 			echo "<li>";
 			printLink($zf . '/admin-options.php?tab=general', gettext("Options"), NULL, NULL, NULL);
@@ -168,7 +168,7 @@ function printAdminToolbox($id='admin') {
 		}
 		if ($_zp_gallery_page === $gal) {
 		// script is either index.php or the gallery index page
-			if ($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
+			if (zp_loggedin(ALBUM_RIGHTS)) {
 				// admin has edit rights so he can sort the gallery (at least those albums he is assigned)
 				?>
 				<li>
@@ -176,7 +176,7 @@ function printAdminToolbox($id='admin') {
 				</li>
 				<?php
 			}
-			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
+			if (zp_loggedin(UPLOAD_RIGHTS)) {
 				// admin has upload rights, provide an upload link for a new album
 				?>
 				<li>
@@ -248,7 +248,7 @@ function printAdminToolbox($id='admin') {
 			}
 		} else if (($_zp_gallery_page === 'search.php') && !empty($_zp_current_search->words)) {
 			// script is search.php with a search string
-			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
+			if (zp_loggedin(UPLOAD_RIGHTS)) {
 				// if admin has edit rights allow him to create a dynamic album from the search
 				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
 			}
@@ -2401,7 +2401,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 
 /**
  * Returns an array [width, height] of the default-sized image.
- * 
+ *
  * @param int $size override the 'image_zize' option
  *
  * @return array
@@ -2424,7 +2424,7 @@ function getSizeFullImage() {
 
 /**
  * The width of the default-sized image (in printDefaultSizedImage)
- * 
+ *
  * @param int $size override the 'image_zize' option
  *
  * @return int
@@ -2436,7 +2436,7 @@ function getDefaultWidth($size=NULL) {
 
 /**
  * Returns the height of the default-sized image (in printDefaultSizedImage)
- * 
+ *
  * @param int $size override the 'image_zize' option
  *
  * @return int
@@ -2727,7 +2727,7 @@ function getSizedImageURL($size) {
  * $cropy=NULL will produce a (distorted) image 200x100 pixels from a 1x0.6
  * crop of the image.
 
-	
+
  * $size=NUL, $width=200, $height=NULL, $cropw=180, $croph=120, $cropx=NULL, $cropy=NULL
  * will produce an image that is 200x133 from a 1.5x1 crop that is 5% from the left
  * and 15% from the top of the image.
@@ -3572,7 +3572,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 		}
 		if ($option == "cloud") { // calculate font sizes, formula from wikipedia
 			if ($val <= $mincount) {
-				$size = $minfontsize; 
+				$size = $minfontsize;
 			} else {
 				$size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), $minfontsize), $maxfontsize);
 			}
@@ -3777,7 +3777,7 @@ function getAlbumId() {
  * 																		"Comments-image" for latest comments of only the image it is called from
  * 																		"Comments-album" for latest comments of only the album it is called from
  * 																		"AlbumsRSS" for latest albums
- * 																		"AlbumsRSScollection" only for latest subalbums with the album it is called from 
+ * 																		"AlbumsRSScollection" only for latest subalbums with the album it is called from
  * @param string $prev text to before before the link
  * @param string $linktext title of the link
  * @param string $next text to appear after the link
@@ -4332,7 +4332,7 @@ function checkForGuest(&$hint, &$show) {
  * @since 1.1.3
  */
 function checkforPassword(&$hint, &$show) {
-	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin, $_zp_gallery_page,
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_gallery_page,
 				$_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	if (getOption('gallery_page_unprotected_'.stripSuffix($_zp_gallery_page))) return false;
 	if (zp_loggedin()) {

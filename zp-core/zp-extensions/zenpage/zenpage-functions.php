@@ -249,8 +249,8 @@ function isProtectedPage($pageobj=NULL) {
 	 * @return array
 	 */
 	function countArticles($category='', $published='published') {
-		global $_zp_loggedin, $_zp_post_date;
-		if($_zp_loggedin & (ZENPAGE_NEWS_RIGHTS)) {
+		global $_zp_post_date;
+		if(zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
 			$published = "all";
 		} else {
 			$published = "published";
@@ -345,11 +345,10 @@ function isProtectedPage($pageobj=NULL) {
 	 * @return array
 	 */
 	function getAllArticleDates() {
-		global $_zp_loggedin;
 		$alldates = array();
 		$cleandates = array();
 		$sql = "SELECT date FROM ". prefix('zenpage_news');
-		if (!($_zp_loggedin & (ZENPAGE_NEWS_RIGHTS))) { $sql .= " WHERE `show` = 1"; }
+		if (!zp_loggedin(ZENPAGE_NEWS_RIGHTS)) { $sql .= " WHERE `show` = 1"; }
 		$result = query_full_array($sql);
 		foreach($result as $row){
 			$alldates[] = $row['date'];
@@ -412,7 +411,7 @@ function isProtectedPage($pageobj=NULL) {
 	 * @return array
 	 */
 	function getCombiNews($articles_per_page, $mode='',$published=NULL) {
-		global $_zp_gallery, $_zp_flash_player,$_zp_loggedin;
+		global $_zp_gallery, $_zp_flash_player;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
 			if(zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
@@ -542,7 +541,7 @@ function isProtectedPage($pageobj=NULL) {
 	 * @return int
 	 */
 	function countCombiNews($published=NULL) {
-		global $_zp_loggedin,$_zp_gallery;
+		global $_zp_gallery;
 		$countGalleryitems = 0;
 		$countArticles = 0;
 		if(getOption("zenpage_combinews")) {

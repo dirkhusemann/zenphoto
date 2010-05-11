@@ -146,7 +146,7 @@ printSubtabs($_current_tab, 'users');
 ?>
 <div id="tab_admin" class="tabbox">
 <?php
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
+	if (zp_loggedin(ADMIN_RIGHTS)) {
 		if ($_zp_null_account && isset($_zp_reset_admin)) {
 			$admins = array($_zp_reset_admin['user'] => $_zp_reset_admin);
 			$alterrights = ' disabled="disabled"';
@@ -301,7 +301,7 @@ if (empty($alterrights)) {
 			}
 			$ismaster = false;
 			if ($id == 0 && !$_zp_null_account) {
-				if ($_zp_loggedin & ADMIN_RIGHTS) {
+				if (zp_loggedin(ADMIN_RIGHTS)) {
 					$master = "(<em>".gettext("Master")."</em>)";
 					$userobj->setRights($userobj->getRights() | ADMIN_RIGHTS);
 					$ismaster = true;
@@ -459,7 +459,7 @@ if (empty($alterrights)) {
 				</td>
 				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					<?php
-					if ($_zp_loggedin & (MANAGE_ALL_ALBUM_RIGHTS | ADMIN_RIGHTS)) {
+					if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 						$album_alter_rights = $local_alterrights;
 					} else {
 						$album_alter_rights = ' disabled="disabled"';

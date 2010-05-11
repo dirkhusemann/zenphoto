@@ -442,7 +442,7 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 <?php
 printSubtabs($_current_tab, 'general');
 
-if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
@@ -724,7 +724,7 @@ if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<!-- end of tab-general div -->
 	<?php
 }
-if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
@@ -1004,7 +1004,7 @@ if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<!-- end of tab-gallery div -->
 	<?php
 }
-if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_search" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
@@ -1156,7 +1156,7 @@ if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<!-- end of tab-search div -->
  <?php
 }
-if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_rss" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
@@ -1280,7 +1280,7 @@ if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<!-- end of tab-rss div -->
 <?php
 }
-if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		switch ($_GET['mismatch']) {
@@ -1740,7 +1740,7 @@ if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</div><!-- end of tab_image div -->
 <?php
 }
-if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+if ($subtab == 'comments' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_comments" class="tabbox">
 	<form action="?action=saveoptions" method="post" autocomplete="off">
@@ -1847,12 +1847,12 @@ if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<!-- end of tab_comments div -->
 <?php
 }
-if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
+if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 	?>
 	<div id="tab_theme" class="tabbox">
 	<?php
 	$themelist = array();
-	if (($_zp_loggedin & ADMIN_RIGHTS)) {
+	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$gallery_title = get_language_string(getOption('gallery_title'));
 		if ($gallery_title != gettext("Gallery")) {
 			$gallery_title .= ' ('.gettext("Gallery").')';
@@ -2122,7 +2122,7 @@ if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 }
 ?>
 <?php
-if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
+if ($subtab == 'plugin' && zp_loggedin(ADMIN_RIGHTS)) {
 	$_zp_plugin_count = 0;
 	?>
 	<div id="tab_plugin" class="tabbox">

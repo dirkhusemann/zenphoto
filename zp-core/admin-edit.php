@@ -12,7 +12,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | ALBUM_RIGHTS))) { // prevent nefarious access to this page.
+if (!zp_loggedin(ALBUM_RIGHTS)) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
@@ -37,7 +37,7 @@ processEditSelection($subtab);
 //check for security incursions
 if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
-	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
+	if (!zp_loggedin(ADMIN_RIGHTS)) {
 		if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 			exit();
@@ -1338,7 +1338,7 @@ if (isset($_GET['saved'])) {
 
 	$albums = getNestedAlbumList(NULL, $gallery_nesting);
 	if (count($albums) > 0) {
-		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) {
+		if (zp_loggedin(ADMIN_RIGHTS) && (count($albums)) > 1) {
 			$sorttype = strtolower(getOption('gallery_sorttype'));
 			if ($sorttype != 'manual') {
 				if (getOption('gallery_sortdirection')) {
@@ -1376,12 +1376,12 @@ if (isset($_GET['saved'])) {
 <form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
 	<p class="buttons">
 		<?php
-		if ($gallery_nesting>1 || $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		if ($gallery_nesting>1 || zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<?php
 		}
-		if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 			<?php
@@ -1436,12 +1436,12 @@ if (isset($_GET['saved'])) {
 	<input name="update" type="hidden" value="Save Order" />
 	<p class="buttons">
 		<?php
-		if ($gallery_nesting>1 || $_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		if ($gallery_nesting>1 || zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
 			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
 			<?php
 		}
-		if ($_zp_loggedin & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+		if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
 			<button type="button" title="<?php echo gettext('New album'); ?>" onclick="javascript:newAlbum('', false);"><img src="images/folder.png" alt="" /><strong><?php echo gettext('New album'); ?></strong></button>
 			<?php

@@ -20,7 +20,7 @@ if(!(zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 <head>
 <title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<?php zenpageJSCSS(); ?>
+<?php zenpageJSCSS(true,false); ?>
 </head>
 <body>
 <?php

@@ -10,7 +10,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
+if (!zp_loggedin(THEMES_RIGHTS)) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 	exit();
 }
@@ -98,7 +98,7 @@ echo "\n" . '<div id="content">';
 
 	$galleryTheme = $gallery->getCurrentTheme();
 	$themelist = array();
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
+	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$gallery_title = get_language_string(getOption('gallery_title'));
 		if ($gallery_title != gettext("Gallery")) {
 			$gallery_title .= ' ('.gettext("Gallery").')';
