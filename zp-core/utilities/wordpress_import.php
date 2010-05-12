@@ -100,7 +100,7 @@ printAdminHeader();
 <em>Category nesting</em> is also not directly supported by Zenpage. Therefore all categories will be plain level, you can however use the <em>menu_manager plugin</em> to recreate this if needed."); ?>
 </p>
 
-<p><?php echo gettext("In case aynthing does not work as expected the query results from the Wordpress database are logged in <code>zp-data/debug_log.txt</code>"); ?></p>
+<p><?php echo gettext("In case anything does not work as expected the query results from the Wordpress database are logged in <code>zp-data/debug_log.txt</code>"); ?></p>
 <?php if(!getOption('zp_plugin_zenpage')) { ?>
 <p class="errorbox"><?php echo gettext('<strong>ERROR: </strong>The Zenpage CMS plugin is not enabled.'); ?></p>
 <?php 
