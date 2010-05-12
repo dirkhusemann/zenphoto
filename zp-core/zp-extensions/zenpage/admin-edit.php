@@ -306,17 +306,17 @@ if(is_object($result)) {
 					<a href="javascript:toggle_passwords('',false);">
 					<?php echo gettext("Page guest user:"); ?>
 					</a>
-					<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="page_user" value="<?php echo htmlspecialchars($user); ?>" />
+					<input type="text" size="27" name="page_user" value="<?php echo htmlspecialchars($user); ?>" />
 					<?php echo gettext("Page password:"); ?>
 					<br />
-					<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass" value="<?php echo $x; ?>" />
+					<input type="password" size="27" name="pagepass" value="<?php echo $x; ?>" />
 					<?php echo gettext("(repeat)"); ?>
 					<br />
-					<input type="password" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="pagepass_2" value="<?php echo $x; ?>" />
+					<input type="password" size="27" name="pagepass_2" value="<?php echo $x; ?>" />
 					<br />
 					<?php echo gettext("Page password hint:"); ?>
 					<br />
-					<?php print_language_string_list($hint, 'page_hint', false, NULL, '', true); ?>
+					<?php print_language_string_list($hint, 'page_hint', false, NULL, '', 27); ?>
 				</p>
 				<?php
 
