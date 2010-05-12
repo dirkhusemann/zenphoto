@@ -29,7 +29,7 @@
 			</td>
 		</tr>
 		<?php } ?>
-		<?php if(showOrNotShowField(getOption('contactform_title'))) { ?>
+		<?php if(showOrNotShowField(getOption('contactform_street'))) { ?>
 		<tr>
 			<td><label for="street"><?php printf(gettext("Street<strong>%s</strong>:"),(checkRequiredField(getOption('contactform_street')))); ?></label></td>
 			<td><input type="text" id="street" name="street" size="50" value="<?php echo $mailcontent['street']; ?>"<?php if ($_processing_post) echo ' disabled="disabled"'; ?> />
