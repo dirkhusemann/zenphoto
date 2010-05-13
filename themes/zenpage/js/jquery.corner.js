@@ -1,12 +1,12 @@
 /*!
  * jQuery corner plugin: simple corner rounding
  * Examples and documentation at: http://jquery.malsup.com/corner/
- * version 2.04 (11-FEB-2010)
+ * version 2.10 (05-MAY-2010)
+ * Requires jQuery v1.3.2 or later
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * @author Dave Methvin (http://methvin.com/jquery/jq-corner.html)
- * @author Mike Alsup   (http://jquery.malsup.com/corner/)
+ * Authors: Dave Methvin and Mike Alsup
  */
 
 /**
@@ -19,10 +19,10 @@
  */
 ;(function($) { 
 
-var ua = navigator.userAgent;
-var moz = $.browser.mozilla && /gecko/i.test(ua);
-var webkit = $.browser.safari && /Safari\/[5-9]/.test(ua);
-
+var style = document.createElement('div').style;
+var moz = style['MozBorderRadius'] !== undefined;
+var webkit = style['WebkitBorderRadius'] !== undefined;
+var radius = style['borderRadius'] !== undefined || style['BorderRadius'] !== undefined;
 var mode = document.documentMode || 0;
 var noBottomFold = $.browser.msie && (($.browser.version < 8 && !mode) || mode < 8);
 
@@ -41,16 +41,18 @@ function hex2(s) {
     return ( s.length < 2 ) ? '0'+s : s;
 };
 function gpc(node) {
-    for ( ; node && node.nodeName.toLowerCase() != 'html'; node = node.parentNode ) {
+    while(node) {
         var v = $.css(node,'backgroundColor');
-        if (v == 'rgba(0, 0, 0, 0)')
-            continue; // webkit
-        if (v.indexOf('rgb') >= 0) { 
-            var rgb = v.match(/\d+/g); 
-            return '#'+ hex2(rgb[0]) + hex2(rgb[1]) + hex2(rgb[2]);
-        }
-        if ( v && v != 'transparent' )
+        if (v && v != 'transparent' && v != 'rgba(0, 0, 0, 0)') {
+	        if (v.indexOf('rgb') >= 0) { 
+	            var rgb = v.match(/\d+/g); 
+	            return '#'+ hex2(rgb[0]) + hex2(rgb[1]) + hex2(rgb[2]);
+	        }
             return v;
+		}
+		if (node.nodeName.toLowerCase() == 'html')
+		    break;
+		node = node.parentNode; // keep walking if transparent
     }
     return '#ffffff';
 };
@@ -93,8 +95,8 @@ $.fn.corner = function(options) {
 
     return this.each(function(index){
 		var $this = $(this);
-		var o = [ options || '', $this.attr($.fn.corner.defaults.metaAttr) || ''].join(' ').toLowerCase();
-		//var o = (options || $this.attr($.fn.corner.defaults.metaAttr) || '').toLowerCase();
+		// meta values override options
+		var o = [$this.attr($.fn.corner.defaults.metaAttr) || '', options || ''].join(' ').toLowerCase();
 		var keep = /keep/.test(o);                       // keep borders?
 		var cc = ((o.match(/cc:(#[0-9a-f]+)/)||[])[1]);  // corner color
 		var sc = ((o.match(/sc:(#[0-9a-f]+)/)||[])[1]);  // strip color
@@ -111,23 +113,27 @@ $.fn.corner = function(options) {
 			opts = { TL:1, TR:1, BL:1, BR:1 };
 			
 		// support native rounding
-		if ($.fn.corner.defaults.useNative && fx == 'round' && (moz || webkit) && !cc && !sc) {
+		if ($.fn.corner.defaults.useNative && fx == 'round' && (radius || moz || webkit) && !cc && !sc) {
 			if (opts.TL)
-				$this.css(moz ? '-moz-border-radius-topleft' : '-webkit-border-top-left-radius', width + 'px');
+				$this.css(radius ? 'border-top-left-radius' : moz ? '-moz-border-radius-topleft' : '-webkit-border-top-left-radius', width + 'px');
 			if (opts.TR)
-				$this.css(moz ? '-moz-border-radius-topright' : '-webkit-border-top-right-radius', width + 'px');
+				$this.css(radius ? 'border-top-right-radius' : moz ? '-moz-border-radius-topright' : '-webkit-border-top-right-radius', width + 'px');
 			if (opts.BL)
-				$this.css(moz ? '-moz-border-radius-bottomleft' : '-webkit-border-bottom-left-radius', width + 'px');
+				$this.css(radius ? 'border-bottom-left-radius' : moz ? '-moz-border-radius-bottomleft' : '-webkit-border-bottom-left-radius', width + 'px');
 			if (opts.BR)
-				$this.css(moz ? '-moz-border-radius-bottomright' : '-webkit-border-bottom-right-radius', width + 'px');
+				$this.css(radius ? 'border-bottom-right-radius' : moz ? '-moz-border-radius-bottomright' : '-webkit-border-bottom-right-radius', width + 'px');
 			return;
 		}
 			
 		var strip = document.createElement('div');
-		strip.style.overflow = 'hidden';
-		strip.style.height = '1px';
-		strip.style.backgroundColor = sc || 'transparent';
-		strip.style.borderStyle = 'solid';
+		$(strip).css({
+			overflow: 'hidden',
+			height: '1px',
+			minHeight: '1px',
+			fontSize: '1px',
+			backgroundColor: sc || 'transparent',
+			borderStyle: 'solid'
+		});
 	
         var pad = {
             T: parseInt($.css(this,'paddingTop'))||0,     R: parseInt($.css(this,'paddingRight'))||0,
@@ -137,7 +143,7 @@ $.fn.corner = function(options) {
         if (typeof this.style.zoom != undefined) this.style.zoom = 1; // force 'hasLayout' in IE
         if (!keep) this.style.border = 'none';
         strip.style.borderColor = cc || gpc(this.parentNode);
-        var cssHeight = $.curCSS(this, 'height');
+        var cssHeight = $(this).outerHeight();
 
         for (var j in edges) {
             var bot = edges[j];
@@ -220,8 +226,8 @@ $.fn.corner = function(options) {
 };
 
 $.fn.uncorner = function() { 
-	if (moz || webkit)
-		this.css(moz ? '-moz-border-radius' : '-webkit-border-radius', 0);
+	if (radius || moz || webkit)
+		this.css(radius ? 'border-radius' : moz ? '-moz-border-radius' : '-webkit-border-radius', 0);
 	$('div.jquery-corner', this).remove();
 	return this;
 };

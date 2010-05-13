@@ -71,7 +71,7 @@ function printZDRoundedCornerJS() {
 <script type="text/javascript">
 	//<!-- <![CDATA[
    $(document).ready(function() {
-		$(".album,input,#slideshowlink a,textarea,#exif_link a").corner("keep 5px");
+		$(".album,#slideshowlink a,textarea,#exif_link a").corner("keep 5px");
 	});
 	// ]]> -->
 </script>

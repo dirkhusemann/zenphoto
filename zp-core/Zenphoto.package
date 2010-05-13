@@ -1305,6 +1305,7 @@ zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/css
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/css/thickbox.css
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/css/tinyzenpage.css
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/editor_plugin.js
+zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/editor_plugin_src.js
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img/loadingAnimation.gif
 zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/img/magnify.png

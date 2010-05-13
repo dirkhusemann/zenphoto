@@ -387,50 +387,23 @@ class Zenphoto_Authority {
 	 * @param int $oldversion
 	 */
 	function migrateAuth($oldversion) {
+		
+//TODO: post 1.3.0 remove the ability to migrate from pre-versioned rights. Warn that rights will have to be manually corrected		
+		
 		$this->admin_users = array();
 		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 		$admins = query_full_array($sql, true);
 		if (count($admins)>0) { // something to migrate
 			printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, $this->version);
-			switch ($oldversion) {
-				case 1:
-					$oldrights = array(	'NO_RIGHTS' => 2,
-															'OVERVIEW_RIGHTS' => 4,
-															'VIEW_ALL_RIGHTS' => 8,
-															'UPLOAD_RIGHTS' => 16,
-															'POST_COMMENT_RIGHTS'=>32,
-															'COMMENT_RIGHTS' => 64,
-															'ALBUM_RIGHTS' => 256,
-															'MANAGE_ALL_ALBUM_RIGHTS' => 512,
-															'THEMES_RIGHTS' => 1024,
-															'ZENPAGE_RIGHTS' => 2048,
-															'TAGS_RIGHTS' => 4096,
-															'OPTIONS_RIGHTS' => 8192,
-															'ADMIN_RIGHTS' => 65536);
-					break;
-				case 2:
-					$oldrights = array(	'NO_RIGHTS' => 1,
-															'OVERVIEW_RIGHTS' => pow(2,2),
-															'VIEW_ALL_RIGHTS' => pow(2,4),
-															'POST_COMMENT_RIGHTS' => pow(2,6),
-															'UPLOAD_RIGHTS' => pow(2,8),
-															'COMMENT_RIGHTS' => pow(2,10),
-															'ALBUM_RIGHTS' => pow(2,12),
-															'ZENPAGE_PAGES_RIGHTS' => pow(2,14),
-															'ZENPAGE_NEWS_RIGHTS' => pow(2,16),
-															'ZENPAGE_FILES_RIGHTS' => pow(2,18),
-															'MANAGE_ALL_PAGES_RIGHTS' => pow(2,20),
-															'MANAGE_ALL_NEWS_RIGHTS' => pow(2,22),
-															'MANAGE_ALL_ALBUM_RIGHTS' => pow(2,24),
-															'THEMES_RIGHTS' => pow(2,26),
-															'TAGS_RIGHTS' => pow(2,28),
-															'OPTIONS_RIGHTS' => pow(2,29),
-															'ADMIN_RIGHTS' => pow(2,30));
-					break;
-				default: // anything before the rights version was created
-					$oldrights = NULL;
-					break;
+			if (empty($oldversion)) {
+				$oldrights = NULL;
+			} else {
+				$oldrights = array();
+				foreach ($this->getRights($oldversion) as $key=>$right) {
+					$oldrights[$key] = $right['value'];
+				}
 			}
+
 			foreach($admins as $user) {
 				$update = false;
 				if (is_array($oldrights)) {
@@ -545,52 +518,70 @@ class Zenphoto_Authority {
 		return new Zenphoto_Administrator($name, $valid);
 	}
 
-	function getRights() {
-		if (is_null($this->rightsset)) {
-			if ($this->version == 1) {
-				$this->rightsset = array(	'NO_RIGHTS' => array('value'=>2,'name'=>gettext('No rights'),'display'=>false),
-																	'OVERVIEW_RIGHTS' => array('value'=>4,'name'=>gettext('Overview'),'display'=>true),
-																	'VIEW_ALL_RIGHTS' => array('value'=>8,'name'=>gettext('View all'),'display'=>true),
-																	'UPLOAD_RIGHTS' => array('value'=>16,'name'=>gettext('Upload'),'display'=>true),
-																	'POST_COMMENT_RIGHTS'=> array('value'=>32,'name'=>gettext('Post comments'),'display'=>true),
-																	'COMMENT_RIGHTS' => array('value'=>64,'name'=>gettext('Comments'),'display'=>true),
-																	'ALBUM_RIGHTS' => array('value'=>256,'name'=>gettext('Album'),'display'=>true),
-																	'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>512,'name'=>gettext('Manage all albums'),'display'=>true),
-																	'THEMES_RIGHTS' => array('value'=>1024,'name'=>gettext('Themes'),'display'=>true),
-																	'ZENPAGE_RIGHTS' => array('value'=>2049,'name'=>gettext('Zenpage'),'display'=>true),
-																	'TAGS_RIGHTS' => array('value'=>4096,'name'=>gettext('Tags'),'display'=>true),
-																	'OPTIONS_RIGHTS' => array('value'=>8192,'name'=>gettext('Options'),'display'=>true),
-																	'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true));
+	/**
+	 * Returns an array of the rights definitions for $version (default returns current version rights)
+	 * 
+	 * @param $version
+	 */
+	function getRights($version=NULL) {
+		$rightsset = $this->rightsset;
+		if (!empty($version) || is_null($rightsset)) {
+			if (empty($version)) {
+				$v = $this->version;
 			} else {
-/*TODO for 1.3.1 remove thie comments and set the lib-auth version # to 2			
-				$this->rightsset = array(	'NO_RIGHTS' => array('value'=>1,'name'=>gettext('No rights'),'display'=>false),
-																	'OVERVIEW_RIGHTS' => array('value'=>pow(2,2),'name'=>gettext('Overview'),'display'=>true),
-																	'VIEW_ALL_RIGHTS' => array('value'=>pow(2,4),'name'=>gettext('View all'),'display'=>true),
-																	'UPLOAD_RIGHTS' => array('value'=>pow(2,6),'name'=>gettext('Upload'),'display'=>true),
-																	'POST_COMMENT_RIGHTS'=> array('value'=>pow(2,8),'name'=>gettext('Post comments'),'display'=>true),
-																	'COMMENT_RIGHTS' => array('value'=>pow(2,10),'name'=>gettext('Comments'),'display'=>true),
-																	'ALBUM_RIGHTS' => array('value'=>pow(2,12),'name'=>gettext('Albums'),'display'=>true),
-																	'ZENPAGE_PAGES_RIGHTS' => array('value'=>pow(2,14),'name'=>gettext('Pages'),'display'=>true),
-																	'ZENPAGE_NEWS_RIGHTS' => array('value'=>pow(2,16),'name'=>gettext('News'),'display'=>true),
-																	'ZENPAGE_FILES_RIGHTS' => array('value'=>pow(2,18),'name'=>gettext('Files'),'display'=>true),
-																	'MANAGE_ALL_PAGES_RIGHTS' => array('value'=>pow(2,20),'name'=>gettext('Manage all pages'),'display'=>true),
-																	'MANAGE_ALL_NEWS_RIGHTS' => array('value'=>pow(2,22),'name'=>gettext('Manage all news'),'display'=>true),
-																	'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>pow(2,24),'name'=>gettext('Manage all albums'),'display'=>true),
-																	'THEMES_RIGHTS' => array('value'=>pow(2,26),'name'=>gettext('Themes'),'display'=>true),
-																	'TAGS_RIGHTS' => array('value'=>pow(2,28),'name'=>gettext('Tags'),'display'=>true),
-																	'OPTIONS_RIGHTS' => array('value'=>pow(2,29),'name'=>gettext('Options'),'display'=>true),
-																	'ADMIN_RIGHTS' => array('value'=>pow(2,30),'name'=>gettext('Admin'),'display'=>true));
+				$v = $version;
+			}
+			switch ($v) {
+				case 1:
+					$rightsset = array(	'NO_RIGHTS' => array('value'=>2,'name'=>gettext('No rights'),'display'=>false),
+															'OVERVIEW_RIGHTS' => array('value'=>4,'name'=>gettext('Overview'),'display'=>true),
+															'VIEW_ALL_RIGHTS' => array('value'=>8,'name'=>gettext('View all'),'display'=>true),
+															'UPLOAD_RIGHTS' => array('value'=>16,'name'=>gettext('Upload'),'display'=>true),
+															'POST_COMMENT_RIGHTS'=> array('value'=>32,'name'=>gettext('Post comments'),'display'=>true),
+															'COMMENT_RIGHTS' => array('value'=>64,'name'=>gettext('Comments'),'display'=>true),
+															'ALBUM_RIGHTS' => array('value'=>256,'name'=>gettext('Album'),'display'=>true),
+															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>512,'name'=>gettext('Manage all albums'),'display'=>true),
+															'THEMES_RIGHTS' => array('value'=>1024,'name'=>gettext('Themes'),'display'=>true),
+															'ZENPAGE_RIGHTS' => array('value'=>2049,'name'=>gettext('Zenpage'),'display'=>true),
+															'TAGS_RIGHTS' => array('value'=>4096,'name'=>gettext('Tags'),'display'=>true),
+															'OPTIONS_RIGHTS' => array('value'=>8192,'name'=>gettext('Options'),'display'=>true),
+															'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true));
+					break;
+				case 2:
+/*TODO for 1.3.1 remove thie comments and set the lib-auth version # to 2
+					$rightsset = array(	'NO_RIGHTS' => array('value'=>1,'name'=>gettext('No rights'),'display'=>false),
+															'OVERVIEW_RIGHTS' => array('value'=>pow(2,2),'name'=>gettext('Overview'),'display'=>true),
+															'VIEW_ALL_RIGHTS' => array('value'=>pow(2,4),'name'=>gettext('View all'),'display'=>true),
+															'UPLOAD_RIGHTS' => array('value'=>pow(2,6),'name'=>gettext('Upload'),'display'=>true),
+															'POST_COMMENT_RIGHTS'=> array('value'=>pow(2,8),'name'=>gettext('Post comments'),'display'=>true),
+															'COMMENT_RIGHTS' => array('value'=>pow(2,10),'name'=>gettext('Comments'),'display'=>true),
+															'ALBUM_RIGHTS' => array('value'=>pow(2,12),'name'=>gettext('Albums'),'display'=>true),
+															'ZENPAGE_PAGES_RIGHTS' => array('value'=>pow(2,14),'name'=>gettext('Pages'),'display'=>true),
+															'ZENPAGE_NEWS_RIGHTS' => array('value'=>pow(2,16),'name'=>gettext('News'),'display'=>true),
+															'ZENPAGE_FILES_RIGHTS' => array('value'=>pow(2,18),'name'=>gettext('Files'),'display'=>true),
+															'MANAGE_ALL_PAGES_RIGHTS' => array('value'=>pow(2,20),'name'=>gettext('Manage all pages'),'display'=>true),
+															'MANAGE_ALL_NEWS_RIGHTS' => array('value'=>pow(2,22),'name'=>gettext('Manage all news'),'display'=>true),
+															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>pow(2,24),'name'=>gettext('Manage all albums'),'display'=>true),
+															'THEMES_RIGHTS' => array('value'=>pow(2,26),'name'=>gettext('Themes'),'display'=>true),
+															'TAGS_RIGHTS' => array('value'=>pow(2,28),'name'=>gettext('Tags'),'display'=>true),
+															'OPTIONS_RIGHTS' => array('value'=>pow(2,29),'name'=>gettext('Options'),'display'=>true),
+															'ADMIN_RIGHTS' => array('value'=>pow(2,30),'name'=>gettext('Admin'),'display'=>true));
 */				
+					break;
 			}
 			$allrights = 0;
-			foreach ($this->rightsset as $key=>$right) {
+			foreach ($rightsset as $key=>$right) {
 				$allrights = $allrights | $right['value'];
 			}
-			$this->rightsset['ALL_RIGHTS'] =	array('value'=>$allrights,'name'=>gettext('All rights'),'display'=>false);
-			$this->rightsset['DEFAULT_RIGHTS'] =	array('value'=>$this->rightsset['OVERVIEW_RIGHTS']['value']+$this->rightsset['VIEW_ALL_RIGHTS']['value']+$this->rightsset['POST_COMMENT_RIGHTS']['value'],'name'=>gettext('Default rights'),'display'=>false);
-			$this->rightsset = sortMultiArray($this->rightsset,'value',true,false,false);
+			$rightsset['ALL_RIGHTS'] =	array('value'=>$allrights,'name'=>gettext('All rights'),'display'=>false);
+			$rightsset['DEFAULT_RIGHTS'] =	array('value'=>$rightsset['OVERVIEW_RIGHTS']['value']+$rightsset['VIEW_ALL_RIGHTS']['value']+$rightsset['POST_COMMENT_RIGHTS']['value'],'name'=>gettext('Default rights'),'display'=>false);
+			$rightsset = sortMultiArray($rightsset,'value',true,false,false);
+
+			if (empty($version)) {
+				$this->rightsset = $rightsset;
+			}
 		}
-		return $this->rightsset;
+		return $rightsset;
 	}
 
 	function getVersion() {
