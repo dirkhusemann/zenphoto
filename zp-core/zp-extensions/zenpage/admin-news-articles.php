@@ -120,17 +120,13 @@ printLogoAndLinks();
 							  
 							  </td>
 							  <td>
-							  <small>
 							  <?php 
 							  checkIfScheduled($article);
 							  checkIfExpires($article);
 							  ?>
-							  </small>
 							  </td>
 							  <td>
-							  <small>
 							  <?php printArticleCategories($article) ?><br />
-							  </small>
 							  </td> 
 				  		  <td>
 							  <?php echo htmlspecialchars($article->getAuthor()); ?>
