@@ -204,7 +204,7 @@ if ($c > 0) {
 $t = $gallery->getNumComments(true);
 $c = $t - $gallery->getNumComments(false);
 if ($c > 0) {
-	printf(ngettext('<strong>%1$u</strong> Comment (<strong>%2$u</strong> in moderation)','<strong>%1$u</strong> Comments (<strong>%2$u</strong> in moderation)', $t), $t, $c);
+	printf(ngettext('<strong>%1$u</strong> Comment (%2$u in moderation)','<strong>%1$u</strong> Comments (%2$u in moderation)', $t), $t, $c);
 } else {
 	printf(ngettext('<strong>%u</strong> Comment','<strong>%u</strong> Comments', $t), $t);
 }
@@ -218,7 +218,7 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		if (empty($unpub)) {
 			printf(ngettext('<strong>%1$u</strong> Page','<strong>%1$u</strong> Pages',$total),$total,$type);
 		} else {
-			printf(ngettext('<strong>%1$u</strong> Page (<strong>%2$u</strong> unpublished)','<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> Page (%2$u unpublished)','<strong>%1$u</strong> Pages (%2$u unpublished)',$total),$total,$unpub);
 		}
 		?>
 	</li>
@@ -226,9 +226,9 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		<?php
 		list($total,$type,$unpub) = getNewsPagesStatistic("news");
 		if (empty($unpub)) {
-			printf(ngettext('<strong>%1$u</strong> News','<strong>%1$u</strong> News',$total),$total);
+			printf(ngettext('<strong>%1$u</strong> News','%1$u News',$total),$total);
 		} else {
-			printf(ngettext('<strong>%1$u</strong> News (<strong>%2$u</strong> unpublished)','<strong>%1$u</strong> News (<strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> News (%2$u unpublished)','<strong>%1$u</strong> News (%2$u unpublished)',$total),$total,$unpub);
 		}
 		?>
 	</li>
