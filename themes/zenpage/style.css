@@ -224,10 +224,6 @@ body {
 	background-image: none;
 }
 
-.menu li a.menu-active  {
-	color:  #002E5B;
-}
-
 .submenu {
 	list-style: none;
 	margin-left: -25px;
@@ -251,6 +247,15 @@ body {
 	text-align: center;
 	clear: both;
 	font-size: 1.2em;
+}
+
+.menu-active-1 .submenu li.menu_image {
+	display: none;
+	}
+
+.menu li a.menu-active,
+.menu li.menu-active-1 a {
+	color:  #002E5B;
 }
 
 /* Link Styles
