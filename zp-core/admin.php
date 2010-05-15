@@ -258,7 +258,16 @@ if (defined('RELEASE')) {
 	$graphics_lib = zp_graphicsLibInfo();
 	?>
 	<li><?php printf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
-	<li><?php printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$gallery->getCurrentTheme()); ?></li> 
+	<li>
+		<?php
+		$themes = $gallery->getThemes();
+		$currenttheme = $gallery->getCurrentTheme();
+		if (array_key_exists($currenttheme, $themes) && isset($themes[$currenttheme]['name'])) {
+			$currenttheme = $themes[$currenttheme]['name'];
+		}
+		printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$currenttheme);
+		?>
+	</li> 
 	<li><?php printf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
 	<li><?php printf(gettext("Graphics support: <strong>%s</strong>"),$graphics_lib['Library']); ?></li>
 	<li><?php printf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
