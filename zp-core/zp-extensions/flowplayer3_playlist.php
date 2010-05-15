@@ -61,7 +61,7 @@ class flowplayer3_playlist {
 		gettext('Autoplay') => array('key' => 'flow_player3_playlistautoplay', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Should the video start automatically. Yes if selected. (NOTE: Probably because of a flowplayer bug mp3s are always autoplayed.)")),
 		gettext('Controls autohide') => array('key' => 'flow_player3_playlistautohide', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext('never')=>"never", gettext('always')=>"always", gettext('fullscreen')=>"fullscreen"),
+										'selections' => array(gettext('never')=>"never", gettext('always')=>"always", gettext('full screen')=>"fullscreen"),
 										'desc' => gettext("Specifies whether the controlbar should be hidden when the user is not actively using the player.")),
 		gettext('Splash image') => array('key' => 'flow_player3_playlistsplashimage', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext("Check if you want to display the videothumb of the first playlist entry as a splash/cover image. It will be cropped to the fit the width and height of the player window and will disappear on starting the playlist."))

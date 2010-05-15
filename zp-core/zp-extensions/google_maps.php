@@ -64,7 +64,7 @@ class google_mapsOptions {
 		}
 				
 		return array(	gettext('Google Maps API key') => array('key' => 'gmaps_apikey', 'type' => OPTION_TYPE_TEXTBOX,
-																	'desc' => gettext('If you are going to be using Google Maps, <a	href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.')),
+																	'desc' => gettext('If you are going to be using Google Maps, <a href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.')),
 									gettext('All album points') => array ('key' => 'gmaps_show_all_album_points', 'type' => OPTION_TYPE_CHECKBOX,
 																	'desc' => gettext('Controls which image points are shown on an album page. Check to show points for all images in the album. If not checked points are shown only for those images whose thumbs are on the page.')),
 									gettext('Map dimensions—width') => array('key' => 'gmaps_width', 'type' => OPTION_TYPE_TEXTBOX,

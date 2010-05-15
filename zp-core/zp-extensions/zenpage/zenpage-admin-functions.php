@@ -8,7 +8,7 @@
  */
 
 /**
- * Calls the zenpage class
+ * Calls the Zenpage class
  *
  */
 require_once("zenpage-class-page.php");

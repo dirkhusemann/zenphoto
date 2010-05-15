@@ -145,7 +145,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php
 		if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow'));
 		if ($total == 0) {
-				echo "<p>".gettext("Sorry, no matches. Try refining your search.")."</p>";
+				echo "<p>".gettext("Sorry, no matches found. Try refining your search.")."</p>";
 			}
 
 			printPageListWithNav("&laquo; ".gettext("prev"),gettext("next")." &raquo;");

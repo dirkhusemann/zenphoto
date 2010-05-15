@@ -511,7 +511,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset);?>" />
 						</td>
 						<td>
-						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your time zone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+						<p><?php echo gettext("If you're in a different time zone from your server, set the offset in hours of your time zone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
 						</td>
 						<?php
 					}
@@ -548,12 +548,12 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<td>
 						<p>
 							<?php
-							echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); 
+							echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and you'll get nice cruft-free URLs."); 
 							if (is_null($mod_rewrite)) echo ' '.gettext('If the checkbox is disabled, setup did not detect a working Apache <em>mod rewrite</em> facility and proper <em>.htaccess</em> file.');
 							?>
 						</p>
 						<p><?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?></p>
-						<p><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	the <em>mod_rewrite suffix</em> to the end of image URLs. (This helps search engines.) Examples: <em>.html, .php,	/view</em>, etc."); ?></p>
+						<p><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended the <em>mod_rewrite suffix</em> to the end of image URLs. (This helps search engines.) Examples: <em>.html, .php, /view</em>, etc."); ?></p>
 					</td>
 				</tr>
 				<tr>
@@ -652,7 +652,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</td>
 					<td>
 					<?php
-					echo gettext('The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you are unsure.');
+					echo gettext('The character encoding to use internally. Leave at <em>Unicode (UTF-8)</em> if you are unsure.');
 					if (!function_exists('mb_list_encodings')) {
 						echo ' '.gettext('Character sets <span style="color:gray">shown in gray</span> have no character translation support.');
 					}
@@ -860,7 +860,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<td><?php echo gettext("Website url:"); ?></td>
 					<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="website_url"
 						value="<?php echo htmlspecialchars(getOption('website_url'));?>" /></td>
-					<td><?php echo gettext("This is used to link back to your main site, but your theme must	support it."); ?></td>
+					<td><?php echo gettext("This is used to link back to your main site, but your theme must support it."); ?></td>
 				</tr>
 				<tr>
 					<td><?php echo gettext("Sort gallery by:"); ?></td>
@@ -990,8 +990,8 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>" ); ?></p>
 						<div id="persistentarchive" style="display: none">
-						<p><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?></p>
-						<p class="notebox"><?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></p>
+						<p><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked that .zip file will be regenerated each time."); ?></p>
+						<p class="notebox"><?php echo gettext("<strong>Note: </strong>Setting this option may impact password protected albums!"); ?></p>
 						</div>
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>" ); ?></p>
@@ -1468,7 +1468,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<tr>
 				<td><?php echo gettext("Allow upscale:"); ?></td>
 				<td><input type="checkbox" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
-				<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
+				<td><?php echo gettext("Allow images to be scaled up to the requested size. This could result in loss of quality, so it's off by default."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Sharpen:"); ?></td>
@@ -1582,7 +1582,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 						value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 				</td>
 				<td>
-					<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image."); ?></p>
+					<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the image."); ?></p>
 					<p><?php echo gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></p>
 					<p><?php echo gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></p>
 					<p><?php printf(gettext('Images are in png-24 format and are located in the <code>/%s/watermarks/</code> folder.'), USER_PLUGIN_FOLDER); ?></p>

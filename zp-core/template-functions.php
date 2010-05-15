@@ -269,7 +269,7 @@ function printAdminToolbox($id='admin') {
 					$redirect .= '&amp;title='.urlencode($titlelink);
 				}
 				if (zp_loggedin(ZENPAGE_NEWS_RIGHTS)) {
-					// admin has zenpage rights, provide link to the zenpage admin tab
+					// admin has zenpage rights, provide link to the Zenpage admin tab
 					echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-news-articles.php\">".gettext("News")."</a></li>";
 					if (is_NewsArticle()) {
 						// page is a NewsArticle--provide zenpage edit, delete, and Add links

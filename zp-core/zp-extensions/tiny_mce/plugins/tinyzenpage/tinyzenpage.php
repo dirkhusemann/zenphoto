@@ -120,13 +120,13 @@ require_once("js/dialog.php");
 	 			echo "<h2 style='margin-left: 8px'>";
 	 			echo "<em>tiny</em>Zenpage (v1.3)</h2>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("This provides access to your images and albums (dropdown 'Zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
+	 			echo gettext("This provides access to your images and albums (dropdown 'Zenphoto') as well as pages, news articles and news categories (dropdown 'Zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("The options below the 'Zenphoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album).")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("The windows does not close automatically so you can include several images one after another.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("The tinyZenpage page on the Zenpage project site: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='zenpage project site'>zenpage.maltem.de/pages/tinyZenpage</a>")."</p>";
+	 			echo gettext("The tinyZenpage page on the Zenpage project site: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='Zenpage project site'>zenpage.maltem.de/pages/tinyZenpage</a>")."</p>";
 	 			
 	 			echo "<h3 style='margin-left: 1px'>Zenpage</h3>";
 	 			echo "<p style='margin-left: 8px'>";

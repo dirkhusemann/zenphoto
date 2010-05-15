@@ -64,7 +64,7 @@
 		<?php
 		if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow'));
 		if ($c == 0) {
-				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>";
+				echo "<p>".gettext("Sorry, no image matches found. Try refining your search.")."</p>";
 			}
 
 			printPageListWithNav("&laquo; ".gettext("prev"),gettext("next")." &raquo;");

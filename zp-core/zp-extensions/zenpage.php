@@ -6,7 +6,7 @@
  */
 $plugin_version = '1.3.0';
 $plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto.")
-				."<p class='notebox'>". gettext("<strong>Note:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>zenpage default</code> and <code>effervescence+</code> support Zenpage.")."</p>";
+				."<p class='notebox'>". gettext("<strong>Note:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>Zenpage default</code> and <code>effervescence+</code> support Zenpage.")."</p>";
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_".PLUGIN_FOLDER."---zenpage---zenpage-template-functions.php.html";
 $option_interface = new zenpagecms();
@@ -61,7 +61,7 @@ class zenpagecms {
 		gettext('RSS feed item number') => array('key' => 'zenpage_rss_items', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The number of news articles you want to appear in your site's News RSS feed.")),
 		gettext('RSS feed text length') => array('key' => 'zenpage_rss_length', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("The text length of the zenpage RSS feed items. No value for full length.")),
+										'desc' => gettext("The text length of the Zenpage RSS feed items. No value for full length.")),
 		gettext('News articles per page (admin)') => array('key' => 'zenpage_admin_articles', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("How many news articles you want to show per page on the news article admin page.")),
 		gettext('News page name') => array('key' => 'zenpage_news_page', 'type' => OPTION_TYPE_TEXTBOX,
@@ -82,7 +82,7 @@ class zenpagecms {
 										'desc' => gettext("The sort order for your gallery items within the CombiNews display except for <em>latest images by album</em> which is by date or mtime only. 'date' (date order), 'id' (added to db order), 'mtime' (upload order).")."<p class='notebox'>".gettext("<strong>Note: </strong> If you experience unexpected results, this refers only to the images that are fetched from the database. Even if they are fetched by id they will be sorted by date with the articles afterwards since articles only have a date."),"</p>"),
 		gettext('CombiNews: Gallery link') => array('key' => 'zenpage_combinews_gallerylink', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('image') => "image", gettext('album') => "album"),
-										'desc' => gettext("Choose if you want to link from the image entry to it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),
+										'desc' => gettext("Choose if you want to link from the image entry to its image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),
 		gettext('TinyMCE configuration') => array('key' => 'zenpage_tinymce_config', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('full') => "full", gettext('light') => "light"),
 										'desc' => gettext("Choose if you want to load the TinyMCE text editor for pages and articles light or full featured.")),

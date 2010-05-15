@@ -142,7 +142,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 					echo '</p>';
 					echo "<em class=\"count\">"  .sprintf(gettext('Total matches for <em>%1$s</em>: %2$u'),getSearchWords(), $results);
 				} else {
-					echo "<p>".gettext('Sorry, no matches. Try refining your search.')."</p>";
+					echo "<p>".gettext('Sorry, no matches found. Try refining your search.')."</p>";
 				}
 			}
 			?>

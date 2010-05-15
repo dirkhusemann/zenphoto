@@ -561,7 +561,7 @@ function printNewsContent($shorten=false,$shortenindicator='') {
  *
  * @param string $articlecontent Then news article content or image/album description to shorten
  * @param integer $shorten The lenght the content should be shortened
- * @param string $shortenindicator The placeholder to mark the shortening (e.g."(...)"). If empty the zenpage option for this is used.
+ * @param string $shortenindicator The placeholder to mark the shortening (e.g."(...)"). If empty the Zenpage option for this is used.
  * @param string $readmoreurl The url where to point the "read more" link to. (The term set in Zenpage option is used).
  */
 function getNewsContentShorten($articlecontent,$shorten,$shortenindicator='',$readmoreurl='') {

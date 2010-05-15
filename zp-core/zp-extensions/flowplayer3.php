@@ -103,7 +103,7 @@ class flowplayer3 {
 										'selections' => array(gettext('none')=>"none",gettext('low')=>"low", gettext('medium')=>"medium", gettext('high')=>"high"),
 										'desc' => gettext("Gradient setting for the sliders.")),
 		gettext('Controls button color') => array('key' => 'flow_player3_controlsbuttoncolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-										'desc' => gettext("Color of the player buttons: stop, play, pause and fullscreen.")),		
+										'desc' => gettext("Color of the player buttons: stop, play, pause and full screen.")),		
 		gettext('Controls hover button color') => array('key' => 'flow_player3_controlsbuttonovercolor', 'type' => OPTION_TYPE_COLOR_PICKER,
 										'desc' => gettext("Button color when the mouse is positioned over them.")),
 		gettext('Splash image scale') => array('key' => 'flow_player3_splashimagescale', 'type' => OPTION_TYPE_SELECTOR,

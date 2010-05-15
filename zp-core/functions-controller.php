@@ -349,7 +349,7 @@ function zp_load_image($folder, $filename) {
 /**
  * Loads a zenpage pages page
  * Sets up $_zp_current_zenpage_page and returns it as the function result.
- * @param $titlelink the titlelink of a zenpage page to setup a page object directly. Meant to be used only for the zenpage homepage feature.
+ * @param $titlelink the titlelink of a zenpage page to setup a page object directly. Meant to be used only for the Zenpage homepage feature.
  * @return object
  */
 function zenpage_load_page() {
