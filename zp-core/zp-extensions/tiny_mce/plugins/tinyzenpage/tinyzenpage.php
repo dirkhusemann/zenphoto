@@ -10,7 +10,7 @@ require_once("js/dialog.php");
 <!-- tinyZenpage - A TinyMCE plugin for Zenphoto with Zenpage
 		 Version: 1.0.6.1
 		 Author: Malte Müller (acrylian) 
-		 inspired by Alessandro "Simbul" Morandi's  ZenphotoPres (http://simbul.bzaar.net/zenphotopress)
+		 inspired by Alessandro "Simbul" Morandi's  ZenphotoPress (http://simbul.bzaar.net/zenphotopress)
 		 Licence: GPL v2 http://www.gnu.org/licenses/gpl.html -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -120,9 +120,9 @@ require_once("js/dialog.php");
 	 			echo "<h2 style='margin-left: 8px'>";
 	 			echo "<em>tiny</em>Zenpage (v1.3)</h2>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("This provides access to your images and albums (dropdown 'ZenPhoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
+	 			echo gettext("This provides access to your images and albums (dropdown 'Zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("The options below the 'ZenPhoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album).")."</p>";
+	 			echo gettext("The options below the 'Zenphoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album).")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("The windows does not close automatically so you can include several images one after another.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";

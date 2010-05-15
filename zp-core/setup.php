@@ -530,7 +530,7 @@ li {
 
 <div id="main">
 
-<h1><img src="images/zen-logo.gif" title="<?php echo gettext('ZenPhoto Setup'); ?>" alt="<?php echo gettext('ZenPhoto Setup'); ?>" align="bottom" />
+<h1><img src="images/zen-logo.gif" title="<?php echo gettext('Zenphoto Setup'); ?>" alt="<?php echo gettext('Zenphoto Setup'); ?>" align="bottom" />
 <?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?>
 </h1>
 

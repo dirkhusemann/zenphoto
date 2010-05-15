@@ -489,7 +489,7 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 					} else {
 						$imgurl = htmlspecialchars($albumthumbobj->getSizedImage($size));
 					}
-					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.$imgurl."' alt='".html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />'.$albumdesc;
+					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.$imgurl.'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />'.$albumdesc;
 					break;
 				case 'latestalbums-thumbnail':
 					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb()).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />'.$albumdesc;
