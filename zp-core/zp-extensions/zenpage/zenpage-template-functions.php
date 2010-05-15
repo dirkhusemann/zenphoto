@@ -1936,17 +1936,21 @@ $_zp_zenpage_pagelist = NULL;
 /**
  * Returns a count of the pages
  *
- * If in search context, the count is the number of items found. Otherwise it is
- * the total number of pages.
+ * If in search context, the count is the number of items found.
+ * If in a page context, the count is the number of sub-pages of the current page.
+ * Otherwise it is the total number of pages.
  *
  * @return int
  */
 function getNumPages() {
-	global $_zp_zenpage_pagelist, $_zp_current_search;
+	global $_zp_zenpage_pagelist, $_zp_current_search, $_zp_current_zenpage_page;
 	processExpired('zenpage_pages');
 	if (in_context(ZP_SEARCH)) {
 		$_zp_zenpage_pagelist = $_zp_current_search->getSearchPages();
 		$count = count($_zp_zenpage_pagelist);
+ 	} else if (in_context(ZP_ZENPAGE_PAGE)) {
+     $result = query('SELECT COUNT(*) FROM '.prefix('zenpage_pages').' WHERE parentid='.$_zp_current_zenpage_page->getID());
+     $count = mysql_result($result, 0);
 	} else {
 		$result = query('SELECT COUNT(*) FROM '.prefix('zenpage_pages'));
 		$count = mysql_result($result, 0);
