@@ -382,8 +382,8 @@ function getImageRotation($imgfile) {
 		switch ($rotation) {
 			case 1 : return false; break;
 			case 2 : return false; break; // mirrored
-			case 3 : return 180;   break; // upsidedown (not 180 but close)
-			case 4 : return 180;   break; // upsidedown mirrored
+			case 3 : return 180;   break; // upside-down (not 180 but close)
+			case 4 : return 180;   break; // upside-down mirrored
 			case 5 : return 270;   break; // 90 CW mirrored (not 270 but close)
 			case 6 : return 270;   break; // 90 CCW
 			case 7 : return 90;    break; // 90 CCW mirrored (not 90 but close)

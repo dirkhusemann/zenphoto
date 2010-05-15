@@ -64,7 +64,7 @@ if (isset($_GET['deletemenuset'])) {
 	echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset']))."</p>";
 }
 
-// publish or unpublish page by click
+// publish or un-publish page by click
 if(isset($_GET['publish'])) { 
 	publishItem($_GET['id'],$_GET['show']);
 }
@@ -148,7 +148,7 @@ if ($count > 0) {
  				<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
 </form>
 	<ul class="iconlegend">
-	<li><img src="../../images/lock_2.png" alt="" /><?php echo gettext("Menu target is pasword protected"); ?></li>
+	<li><img src="../../images/lock_2.png" alt="" /><?php echo gettext("Menu target is password protected"); ?></li>
 	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><?php echo gettext("Show/hide"); ?></li>
 	<li><img src="../zenpage/images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete"); ?></li>

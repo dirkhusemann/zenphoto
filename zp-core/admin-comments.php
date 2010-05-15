@@ -33,7 +33,7 @@ if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 /* handle posts */
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
-	
+
 	case "spam":
 		$comment = new Comment(sanitize_numeric($_GET['id']));
 		zp_apply_filter('comment_disapprove', $comment);
@@ -49,7 +49,7 @@ if (isset($_GET['action'])) {
 		$comment->save();
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
 		exit();
-	
+
 	case 'deletecomments':
 		if (isset($_POST['ids']) || isset($_GET['id'])) {
 			if (isset($_GET['id'])) {
@@ -114,7 +114,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <div class="box" style="padding: 10px">
 <?php
 	$id = sanitize_numeric($_GET['id']);
-	
+
 	$commentarr = query_single_row("SELECT * FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
 	extract($commentarr);
 	?>
@@ -144,7 +144,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo $IP; ?>" /></td>
 	</tr>
 	<?php
- 	echo zp_apply_filter('edit_comment_custom_data', '', $custom_data);
+	echo zp_apply_filter('edit_comment_custom_data', '', $custom_data);
 	?>
 	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
@@ -153,8 +153,8 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	<tr>
 		<td></td>
 		<td>
-		
-		
+
+
 		</td>
 	</tr>
 </table>
@@ -163,19 +163,19 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <div class="box-edit">
 <?php
 	if ($inmoderation) {
-		$status_moderation = gettext('Comment is unapproved');
+		$status_moderation = gettext('Comment is un-approved');
 		$link_moderation = gettext('Approve');
 		$title_moderation = gettext('Approve this comment');
 		$url_moderation = '?action=moderation&amp;id='.$id;
 		$linkimage = "images/pass.png";
 	} else {
 		$status_moderation = gettext('Comment is approved');
-		$link_moderation = gettext('Unapprove');
-		$title_moderation = gettext('Unapprove this comment');
+		$link_moderation = gettext('Un-approve');
+		$title_moderation = gettext('Un-approve this comment');
 		$url_moderation = '?action=unapprove&amp;id='.$id;
 		$linkimage = "images/warn.png";
 	}
-	
+
 	if ($private) {
 		$status_private = gettext('Comment is private');
 	} else {
@@ -295,14 +295,14 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		$link = gettext('<strong>database error</strong> '); // in case of such
 		$image = '';
 		$albumtitle = '';
-		
+
 		// ZENPAGE: switch added for zenpage comment support
 		switch ($comment['type']) {
 			case "albums":
 				$image = '';
 				$title = '';
 				$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
- 										" WHERE `id`=" . $comment['ownerid']);
+										" WHERE `id`=" . $comment['ownerid']);
 				if ($albmdata) {
 					$albumdata = $albmdata[0];
 					$album = $albumdata['folder'];
@@ -316,12 +316,12 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 					$titlelink = '';
 					$title = '';
 					$newsdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_news') .
- 										" WHERE `id`=" . $comment['ownerid']);
+										" WHERE `id`=" . $comment['ownerid']);
 					if ($newsdata) {
 						$newsdata = $newsdata[0];
 						$titlelink = $newsdata['titlelink'];
 						$title = get_language_string($newsdata['title']);
-				  	$link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[news]");
+						$link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[news]");
 					}
 				}
 				break;
@@ -330,7 +330,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 					$image = '';
 					$title = '';
 					$pagesdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_pages') .
- 										" WHERE `id`=" . $comment['ownerid']);
+										" WHERE `id`=" . $comment['ownerid']);
 					if ($pagesdata) {
 						$pagesdata = $pagesdata[0];
 						$titlelink = $pagesdata['titlelink'];
@@ -341,14 +341,14 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 				break;
 			default: // all the image types
 				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
- 										" WHERE `id`=" . $comment['ownerid']);
+										" WHERE `id`=" . $comment['ownerid']);
 				if ($imagedata) {
 					$imgdata = $imagedata[0];
 					$image = $imgdata['filename'];
 					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
 					$title = '/ ' . $title;
 					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
- 											" WHERE `id`=" . $imgdata['albumid']);
+											" WHERE `id`=" . $imgdata['albumid']);
 					if ($albmdata) {
 						$albumdata = $albmdata[0];
 						$album = $albumdata['folder'];
@@ -402,7 +402,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 			echo '<img src="images/lock_2.png" style="border: 0px;" alt="'. gettext("Mark this message as SPAM").'" /></a>';
 		}
 		?></td>
-		<td align="center"><a href="?page=editcomment&amp;id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
+		<td align="center"><a href="?page=editcomment&amp;id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>">
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
 		<td align="center">
 			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"

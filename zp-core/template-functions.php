@@ -1100,7 +1100,7 @@ function getAlbumLocation() {
  */
 function printAlbumLocation($editable=false, $editclass='', $messageIfEmpty = true) {
 	if ( $messageIfEmpty === true ) {
-		$messageIfEmpty = gettext('(No Locatrion...)');
+		$messageIfEmpty = gettext('(No Location...)');
 	}
 	printEditable('album', 'location', $editable, $editclass, $messageIfEmpty, !getOption('tinyMCEPresent'));
 }
@@ -1538,7 +1538,7 @@ function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 }
 
 	/**
- * Returns a link to a uncropped custom sized version of the current album thumb within the given height and width dimensions.
+ * Returns a link to a un-cropped custom sized version of the current album thumb within the given height and width dimensions.
 	*
  * @param int $width width
  * @param int $height height
@@ -1552,7 +1552,7 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
 }
 
 /**
- * Prints a uncropped custom sized album thumb within the given height and width dimensions.
+ * Prints a un-cropped custom sized album thumb within the given height and width dimensions.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
  *
  * @param string $alt Alt text for the url
@@ -2809,7 +2809,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 }
 
 /**
- * Returns a link to a uncropped custom sized version of the current image within the given height and width dimensions.
+ * Returns a link to a un-cropped custom sized version of the current image within the given height and width dimensions.
  * Use for sized images.
  *
  * @param int $width width
@@ -2824,7 +2824,7 @@ function getCustomSizedImageMaxSpace($width, $height) {
 }
 
 /**
- * Returns a link to a uncropped custom sized version of the current image within the given height and width dimensions.
+ * Returns a link to a un-cropped custom sized version of the current image within the given height and width dimensions.
  * Use for sized thumbnails.
  *
  * @param int $width width
@@ -2839,7 +2839,7 @@ function getCustomSizedImageThumbMaxSpace($width, $height) {
 }
 
 /**
- * Creates image thumbnails which will fit uncropped within the width & height parameters given
+ * Creates image thumbnails which will fit un-cropped within the width & height parameters given
  *
  * @param string $alt Alt text for the url
  * @param int $width width
@@ -2855,7 +2855,7 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
 }
 
 /**
- * Print normal video or uncropped within the given height and width dimensions. Use for sized images or thumbnails in an album.
+ * Print normal video or un-cropped within the given height and width dimensions. Use for sized images or thumbnails in an album.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
  *
  * @param string $alt Alt text for the url

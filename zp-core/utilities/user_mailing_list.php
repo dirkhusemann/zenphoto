@@ -51,8 +51,7 @@ if (!zp_has_filter('sendmail')) {
 	?>
 	<p class="notebox">
 	<?php
-//TODO:	echo gettext("<strong>Note: </strong>No <em>sendmail</em> filter is registered. You must activate and configure a mailer plugin."); 	
-	echo gettext("<strong>Note:</strong> Either the <em>PHPMailer</em> plugin or the <em>zenphoto_sendmail</em> plugin must be activated and properly configured.");
+	echo gettext("<strong>Note: </strong>No <em>sendmail</em> filter is registered. You must activate and configure a mailer plugin."); 	
 	?>
 	</p>
 	<?php

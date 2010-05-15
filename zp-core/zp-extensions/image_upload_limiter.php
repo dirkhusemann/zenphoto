@@ -68,7 +68,7 @@ function uploadLimiterJS($defaultJS) {
 			$j = strpos($defaultJS,'}', $i+strlen($target));
 			$body = trim(substr($defaultJS, $i+strlen($target),$j));
 			if (!empty($dody)) {
-				echo gettext("There is a plugin confilict with <em>image_upload_limiter</em>");
+				echo gettext("There is a plugin conflict with <em>image_upload_limiter</em>");
 			}
 			$js = substr($defaultJS,0,$i).substr($defaultJS,$j+1);
 		}

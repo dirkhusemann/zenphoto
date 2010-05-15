@@ -16,7 +16,7 @@ $_zp_zenpage_all_categories = NULL; // for use by getAllCategories() only!
 
 
 /**
- * Unpublishes pages/news whose expiration date has been reached
+ * Un-publishes pages/news whose expiration date has been reached
  *
  */
 function processExpired($table) {
@@ -36,7 +36,7 @@ function processExpired($table) {
 	 * 
 	 * NOTE: Since this function only returns titlelinks for use with the object model it does not exclude pages that are password protected
 	 *
-	 * @param bool $published TRUE for published or FALSE for all pages including unpublished
+	 * @param bool $published TRUE for published or FALSE for all pages including un-published
 	 * @return array
 	 */
 	function getPages($published=NULL) {
@@ -54,7 +54,7 @@ function processExpired($table) {
 		} else {
 			$show = '';
 		}
-		$_zp_zenpage_all_pages = NULL; // Disabled cache var for now because it does not return unpublishded and published if logged on index.php somehow if logged in.
+		$_zp_zenpage_all_pages = NULL; // Disabled cache var for now because it does not return un-publishded and published if logged on index.php somehow if logged in.
 		if(is_null($_zp_zenpage_all_pages)) {
 			$_zp_zenpage_all_pages  = query_full_array("SELECT * FROM ".prefix('zenpage_pages').$show." ORDER by `sort_order`");
 			return $_zp_zenpage_all_pages;
@@ -240,7 +240,7 @@ function isProtectedPage($pageobj=NULL) {
 
 
 /**
-	 * Counts news articles, either all or by category or archive date, published or unpublished
+	 * Counts news articles, either all or by category or archive date, published or un-published
 	 *
 	 * @param string $category The categorylink of the category to count
 	 * @param string $published "published" for an published articles,
@@ -406,7 +406,7 @@ function isProtectedPage($pageobj=NULL) {
 	 * @param string $mode 	"latestimages-thumbnail"
 	 * 											"latestimages-sizedimage"
 	 * @param string $published "published" for published articles,
-	 * 													"unpublished" for unpublished articles,
+	 * 													"unpublished" for un-published articles,
 	 * 													"all" for all articles
 	 * @return array
 	 */

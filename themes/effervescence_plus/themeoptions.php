@@ -19,7 +19,7 @@ class ThemeOptions {
 		setThemeOptionDefault('Theme_personality', 'Image page');
 		setThemeOptionDefault('Theme_colors', 'effervescence');
 		setThemeOptionDefault('effervescence_menu', 'effervescence');
-		
+
 		if (function_exists('createMenuIfNotExists')) {
 			$menuitems = array(
 										array('type'=>'menulabel','title'=>gettext('News Articles'),'link'=>'','show'=>1,'nesting'=>0),
@@ -41,13 +41,13 @@ class ThemeOptions {
 										);
 			createMenuIfNotExists($menuitems, 'effervescence');
 		}
-		
+
 	}
 
 	function getOptionsSupported() {
 		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => OPTION_TYPE_TEXTBOX, 'multilingual' => 1, 'desc' => gettext('The text for the theme logo')),
 									gettext('Watermark head image') => array('key' => 'Watermark_head_image', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
-									gettext('Zipfile download') => array('key' => 'enable_album_zipfile', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable album zipfile download link.')),
+									gettext('ZIP file download') => array('key' => 'enable_album_zipfile', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable album ZIP file download link.')),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable search form.')),
 									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable slideshow for the <em>Smoothgallery</em> personality.')),
 									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),

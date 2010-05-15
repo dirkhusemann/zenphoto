@@ -3,8 +3,8 @@
  * Contact form
  *
  * Prints a e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. 
- * Name, e-mail adress, subject and message are required fields by default. 
- * You need to enter a custom mail adress that should be use for the messages. 
+ * Name, e-mail address, subject and message are required fields by default. 
+ * You need to enter a custom mail address that should be use for the messages. 
  * 
  * Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.
  * 
@@ -14,7 +14,7 @@
  * @package plugins
  */
 
-$plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
+$plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail address, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail address that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---contact_form.php.html";
@@ -30,7 +30,7 @@ class contactformOptions {
 		global $_zp_authority;
 		setOptionDefault('contactform_introtext', '<p>Fields with <strong>*</strong> are required. HTML or any other code is not allowed. A copy of your e-mail will automatically be sent to the address you provided for your own records.</p>');
 		setOptionDefault('contactform_confirmtext', '<p>Please confirm that you really want to send this email. Thanks.</p>');
-		setOptionDefault('contactform_thankstext', '<p>Thanks for your message. A copy has been sent to your provided e-mail adress for your own records.</p>');
+		setOptionDefault('contactform_thankstext', '<p>Thanks for your message. A copy has been sent to your provided e-mail address for your own records.</p>');
 		setOptionDefault('contactform_newmessagelink', 'Send another message.');
 		setOptionDefault('contactform_title', "show");
 		setOptionDefault('contactform_name', "required");
@@ -131,7 +131,7 @@ function getField($field, $level=3) {
 	}
 }
 /**
- * Prints the mail contact form, handles checks and the mail sending. It uses Zenphoto's check for valid e-mail adress and website url and also supports Captcha.
+ * Prints the mail contact form, handles checks and the mail sending. It uses Zenphoto's check for valid e-mail address and website url and also supports Captcha.
  * The contact form itself is a separate file and is located within the /contact_form/form.php so that it can be style as needed.
  *
  */
@@ -159,7 +159,7 @@ function printContactForm() {
 		if (getOption('contactform_street') == "required" && empty($mailcontent['street'])) { $error[4] = gettext("a <strong>street</strong>"); }
 		if (getOption('contactform_city') == "required" && empty($mailcontent['city'])) { $error[5] = gettext("a <strong>city</strong>"); }
 		if (getOption('contactform_country') == "required" && empty($mailcontent['country'])) { $error[6] = gettext("a <strong>country</strong>"); }
-		if (getOption('contactform_email') == "required" && (empty($mailcontent['email']) || !is_valid_email_zp($mailcontent['email']))) { $error[7] = gettext("a <strong>valid email adress</strong>"); }
+		if (getOption('contactform_email') == "required" && (empty($mailcontent['email']) || !is_valid_email_zp($mailcontent['email']))) { $error[7] = gettext("a <strong>valid email address</strong>"); }
 		if (getOption('contactform_website') == "required" && empty($mailcontent['website'])) {
 			$error[8] = gettext('a <strong>website</strong>');
 		} else {

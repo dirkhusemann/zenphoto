@@ -12,7 +12,7 @@
  * shown.
  *
  * In addition, caching does not occur for pages viewed by Zenphoto users if the user has
- * ADMIN priviledges or if he is the manager of an album being viewed or whose images are
+ * ADMIN privileges or if he is the manager of an album being viewed or whose images are
  * being viewed. Likewise, Zenpage News and Pages are not cached when viewed by the author.
  *
  * @author Malte Müller (acrylian)
@@ -318,7 +318,7 @@ function static_cache_html_purgebutton($buttons) {
 								'formname'=>'clearcache_button',
 								'action'=>PLUGIN_FOLDER.'/static_html_cache.php?action=clear_html_cache',
 								'icon'=>'images/edit-delete.png',
-								'title'=>gettext('Clear the static HTML cache. HTML pages will be recached as they are viewed.'),
+								'title'=>gettext('Clear the static HTML cache. HTML pages will be re-cached as they are viewed.'),
 								'alt'=>'',
 								'hidden'=> '<input type="hidden" name="action" value="clear_html_cache">',
 								'rights'=> ADMIN_RIGHTS

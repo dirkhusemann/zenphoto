@@ -1723,7 +1723,7 @@ function printPrevNewsLink($prev="&laquo; ",$sortorder='date',$sortdirection='de
 
 /**
  * Gets the content of a codeblock for a page or news article.
- * Additionally you can print codeblocks of a published or unpublished specific page (not news artcle!) by request directly.
+ * Additionally you can print codeblocks of a published or un-published specific page (not news artcle!) by request directly.
  *
  * Note: Echoing this array's content does not execute it. Also no special chars will be escaped.
  * Use printCodeblock() if you need to execute script code.
@@ -2123,10 +2123,10 @@ function printPageLastChangeDate() {
 
 /**
  * Returns page content either of the current page or if requested by titlelink directly. If not both return false
- * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
+ * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's content. True is default
+ * @param bool $published If titlelink is set set this to false if you want to call an un-published page's content. True is default
  *
  * @return mixed
  */
@@ -2147,10 +2147,10 @@ function getPageContent($titlelink='',$published=true) {
 
 /**
  * Print page content either of the current page or if requested by titlelink directly. If not both return false
- * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
+ * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's content. True is default
+ * @param bool $published If titlelink is set set this to false if you want to call an un-published page's content. True is default
  * @return mixed
  */
 function printPageContent($titlelink='',$published=true) {
@@ -2160,10 +2160,10 @@ function printPageContent($titlelink='',$published=true) {
 
 /**
  * Returns page extra content either of the current page or if requested by titlelink directly. If not both return false
- * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
+ * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's extra content. True is default
+ * @param bool $published If titlelink is set set this to false if you want to call an un-published page's extra content. True is default
  * @return mixed
  */
 function getPageExtraContent($titlelink='',$published=true) {
@@ -2184,10 +2184,10 @@ function getPageExtraContent($titlelink='',$published=true) {
 
 /**
  * Prints page extra content if on a page either of the current page or if requested by titlelink directly. If not both return false
- * Set the titlelink of a page to call a specific even unpublished page ($published = false) as a gallery description or on another custom page for example
+ * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an unpublished page's extra content. True is default
+ * @param bool $published If titlelink is set set this to false if you want to call an un-published page's extra content. True is default
  * @return mixed
  */
 function printPageExtraContent($titlelink='',$published=true) {

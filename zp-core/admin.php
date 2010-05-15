@@ -218,7 +218,7 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		if (empty($unpub)) {
 			printf(ngettext('<strong>%1$u</strong> Page','<strong>%1$u</strong> Pages',$total),$total,$type);
 		} else {
-			printf(ngettext('<strong>%1$u</strong> Page (%2$u unpublished)','<strong>%1$u</strong> Pages (%2$u unpublished)',$total),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> Page (%2$u un-published)','<strong>%1$u</strong> Pages (%2$u un-published)',$total),$total,$unpub);
 		}
 		?>
 	</li>
@@ -228,7 +228,7 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		if (empty($unpub)) {
 			printf(ngettext('<strong>%1$u</strong> News','%1$u News',$total),$total);
 		} else {
-			printf(ngettext('<strong>%1$u</strong> News (%2$u unpublished)','<strong>%1$u</strong> News (%2$u unpublished)',$total),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> News (%2$u un-published)','<strong>%1$u</strong> News (%2$u un-published)',$total),$total,$unpub);
 		}
 		?>
 	</li>

@@ -849,7 +849,7 @@ function getNewsAdminOptionPath($categorycheck='', $postedcheck='',$publishedche
 
 
 /**
- * Prints the dropdown menu for the published/unpublishd selector for the news articles list
+ * Prints the dropdown menu for the published/un-publishd selector for the news articles list
  *
  */
 function printUnpublishedDropdown() {
@@ -873,7 +873,7 @@ function printUnpublishedDropdown() {
 			}
 	echo "<option $all value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."'>".gettext("All articles")."</option>\n";
 	echo "<option $published value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=yes'>".gettext("Published")."</option>\n";
-	echo "<option $unpublished value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=no'>".gettext("Unpublished")."</option>\n";
+	echo "<option $unpublished value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=no'>".gettext("Un-published")."</option>\n";
 	?>
 	</select>
 	<script language="JavaScript" type="text/javascript" >
@@ -1119,7 +1119,7 @@ function publishPageOrArticle($option,$id) {
 }
 
 /**
- * Skips the scheduled publishing by setting the date of a page or article to the current date to publish it immediatly
+ * Skips the scheduled publishing by setting the date of a page or article to the current date to publish it immediately
  *
  * @param string $option "page" or "news"
  * @param int $id the id of the article or page
@@ -1265,7 +1265,7 @@ function getNewsPagesStatistic($option) {
 				$pub++;
 			}
 		}
-		//echo " (unpublished: ";
+		//echo " (un-published: ";
 		$unpub = $total - $pub;
 	}
 	return array($total,$type,$unpub);
@@ -1276,7 +1276,7 @@ function printPagesStatistic() {
 	if (empty($unpub)) {
 		printf(ngettext('(<strong>%1$u</strong> page)','(<strong>%1$u</strong> pages)',$total),$total);
 	} else {
-		printf(ngettext('(<strong>%1$u</strong> page, <strong>%2$u</strong> unpublished)','(<strong>%1$u</strong> pages, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+		printf(ngettext('(<strong>%1$u</strong> page, <strong>%2$u</strong> un-published)','(<strong>%1$u</strong> pages, <strong>%2$u</strong> un-published)',$total),$total,$unpub);
 	}
 }
 function printNewsStatistic() {
@@ -1284,12 +1284,12 @@ function printNewsStatistic() {
 	if (empty($unpub)) {
 		printf(ngettext('(<strong>%1$u</strong> news)','(<strong>%1$u</strong> news)',$total),$total);
 	} else {
-		printf(ngettext('(<strong>%1$u</strong> news, <strong>%2$u</strong> unpublished)','(<strong>%1$u</strong> news, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+		printf(ngettext('(<strong>%1$u</strong> news, <strong>%2$u</strong> un-published)','(<strong>%1$u</strong> news, <strong>%2$u</strong> un-published)',$total),$total,$unpub);
 	}
 }
 function printCategoriesStatistic() {
 	list($total,$type,$unpub) = getNewsPagesStatistic("categories");
-	printf(ngettext('(<strong>%1$u</strong> categorie)','(<strong>%1$u</strong> categories)',$total),$total);
+	printf(ngettext('(<strong>%1$u</strong> category)','(<strong>%1$u</strong> categories)',$total),$total);
 }
 
 /**
@@ -1438,7 +1438,7 @@ function checkIfScheduled($object) {
 }
 
 /**
- * Prints the publish/unpublished/scheduled publishing icon with a link for the pages and news articles list.
+ * Prints the publish/un-published/scheduled publishing icon with a link for the pages and news articles list.
  *
  * @param string $object Object of the page or news article to check
  * @return string
@@ -1452,7 +1452,7 @@ function printPublishIconLink($object,$type) {
 	}
 	if ($object->getDateTime() > date('Y-m-d H:i:s')) {
 		if ($object->getShow()) {
-			$title = gettext("Publish immediatly (skip scheduling)");
+			$title = gettext("Publish immediately (skip scheduling)");
 			?>
 			<a href="?skipscheduling=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
 			<img src="images/clock.png" alt="<?php gettext("Scheduled for published"); ?>" title="<?php echo $title; ?>" /></a>
@@ -1461,7 +1461,7 @@ function printPublishIconLink($object,$type) {
 			$title = gettext("Enable scheduled publishing");
 			?>
 			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
-			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" title="<?php echo $title; ?>" /></a>
+			<img src="../../images/action.png" alt="<?php echo gettext("Un-published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		}
 	} else {
@@ -1485,7 +1485,7 @@ function printPublishIconLink($object,$type) {
 				<?php
 			}
 			?>
-			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" title= "<?php echo $title; ?>" /></a>
+			<img src="../../images/action.png" alt="<?php echo gettext("Un-published"); ?>" title= "<?php echo $title; ?>" /></a>
 			<?php
 		}
 	}

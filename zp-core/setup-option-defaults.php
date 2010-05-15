@@ -258,7 +258,7 @@ define('newuser',32);
 $groupsdefined = @unserialize(getOption('defined_groups'));
 if (!is_array($groupsdefined)) $groupsdefined = array();
 if (!in_array('administrators',$groupsdefined)) {
-	$_zp_authority->saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full priviledges'),NULL, 0);
+	$_zp_authority->saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full privileges'),NULL, 0);
 	$groupsdefined[] = 'administrators';
 }
 if (!in_array('viewers',$groupsdefined)) {

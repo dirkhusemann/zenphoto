@@ -42,7 +42,7 @@ class jcarouselOptions {
 		gettext('Crop height') => array('key' => 'jcarousel_croph', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => ""),
 		gettext('Full image link') => array('key' => 'jcarousel_fullimagelink', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("If checked the thumbs link to the full image instead of the imagepage."))
+										'desc' => gettext("If checked the thumbs link to the full image instead of the image page."))
 		);
 	}
 
@@ -71,7 +71,7 @@ if (isset($_zp_current_album) && is_object($_zp_current_album) && is_object($_zp
  * @param int $height Height Set to NULL if you want to use the backend plugin options.
  * @param int $cropw Crop width Set to NULL if you want to use the backend plugin options.
  * @param int $croph Crop heigth Set to NULL if you want to use the backend plugin options.
- * @param bool $crop TRUE for cropped thumbs, FALSE for uncropped thumbs. $width and $height then will be used as maxspace. Set to NULL if you want to use the backend plugin options.
+ * @param bool $crop TRUE for cropped thumbs, FALSE for un-cropped thumbs. $width and $height then will be used as maxspace. Set to NULL if you want to use the backend plugin options.
  * @param bool $fullimagelink Set to TRUE if you want the thumb link to link to the full image instead of the image page. Set to NULL if you want to use the backend plugin options.
  */
 function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$fullimagelink=NULL) {

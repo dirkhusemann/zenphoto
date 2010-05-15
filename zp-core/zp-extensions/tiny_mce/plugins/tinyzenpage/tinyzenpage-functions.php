@@ -48,7 +48,7 @@ function printSubLevelAlbums(&$albumobj) {
 }
 
  /**
- 	* checks if a album or image is unpublished and returns a '*'
+ 	* checks if a album or image is un-published and returns a '*'
 	*
   * @return string
  	*/
@@ -310,7 +310,7 @@ function printAllPagesList() {
 
 
  /**
- 	* checks if a news article or page is unpublished and returns a '*'
+ 	* checks if a news article or page is un-published and returns a '*'
 	*
   * @return string
  	*/
@@ -365,7 +365,7 @@ function printNewsItemsList() {
 }
 
  /**
- 	* Set the locale for gettext translation of this plugin. Somehow zenphoto's setPluginDomain() does not work here...
+ 	* Set the locale for gettext translation of this plugin. Somehow ZenPhoto's setPluginDomain() does not work here...
  	* 
  	*/
 function setTinyZenpageLocale() {

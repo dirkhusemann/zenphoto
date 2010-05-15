@@ -39,7 +39,7 @@ printLogoAndLinks();
 			if(isset($_GET['del'])) {	
 			  deleteArticle();
 			} 
-			// publish or unpublish page by click 
+			// publish or un-publish page by click 
 			if(isset($_GET['publish'])) { 
 			  publishPageOrArticle('news',$_GET['id']);
 			}

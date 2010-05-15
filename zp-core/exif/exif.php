@@ -456,8 +456,8 @@ function formatData($type,$tag,$intel,$data) {
 						case 0	:		// not set, presume normal
 						case 1  :   $data = gettext('1: Normal (0 deg)');      break;
 						case 2  :   $data = gettext('2: Mirrored');            break;
-						case 3  :   $data = gettext('3: Upsidedown');          break;
-						case 4  :   $data = gettext('4: Upsidedown Mirrored'); break;
+						case 3  :   $data = gettext('3: Upside-down');          break;
+						case 4  :   $data = gettext('4: Upside-down Mirrored'); break;
 						case 5  :   $data = gettext('5: 90 deg CW Mirrored');  break;
 						case 6  :   $data = gettext('6: 90 deg CCW');          break;
 						case 7  :   $data = gettext('7: 90 deg CCW Mirrored'); break;
@@ -508,7 +508,7 @@ function formatData($type,$tag,$intel,$data) {
 				case '9208':	// LightSource
 					switch ($data) {
 						case 1:		$data = gettext('Daylight');	break;
-						case 2:				$data = gettext('Flourescent');	break;
+						case 2:				$data = gettext('Fluorescent');	break;
 						case 3:			$data = gettext('Tungsten');	break;	// 3 Tungsten (Incandescent light)
 													// 4 Flash
 													// 9 Fine Weather
@@ -975,7 +975,7 @@ if ($result['ValidJpeg'] == 1) {
 	$v = fseek($in,$globalOffset+$ExitOffset);
 	if ($v == -1) {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = gettext('Couldnt Find SubIFD');
+		$result['Error'][$result['Errors']] = gettext('Could not Find SubIFD');
 	}
 	
 	//===========================================================
@@ -1012,7 +1012,7 @@ if ($result['ValidJpeg'] == 1) {
 	$v = fseek($in,$globalOffset+$result['IFD1Offset']);
 	if ($v == -1) {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = gettext('Couldnt Find IFD1');
+		$result['Error'][$result['Errors']] = gettext('Could not Find IFD1');
 	}
 	
 	//===========================================================
@@ -1052,7 +1052,7 @@ if ($result['ValidJpeg'] == 1) {
 	$v = fseek($in,$globalOffset+$result['SubIFD']['ExifInteroperabilityOffset']);
 	if ($v == -1) {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = gettext('Couldnt Find InteroperabilityIFD');
+		$result['Error'][$result['Errors']] = gettext('Could not Find InteroperabilityIFD');
 	}
 	
 	//===========================================================

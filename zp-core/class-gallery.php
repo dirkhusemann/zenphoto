@@ -184,7 +184,7 @@ class Gallery {
 	/**
 	 * Returns the total number of TOPLEVEL albums in the gallery (does not include sub-albums)
 	 * @param bool $db whether or not to use the database (includes ALL detected albums) or the directories
-	 * @param bool $publishedOnly set to true to exclude unpublished albums
+	 * @param bool $publishedOnly set to true to exclude un-published albums
 	 * @return int
 	 */
 	function getNumAlbums($db=false, $publishedOnly=false) {

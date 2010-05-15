@@ -453,7 +453,7 @@ function getTimezones() {
 }
 
 /**
- * Returns the difference between the server timezone and the local (users) timezone
+ * Returns the difference between the server timez one and the local (users) time zone
  *
  * @param string $server
  * @param string $local
@@ -480,7 +480,7 @@ function timezoneDiff($server, $local) {
 }
 
 setupLanguageArray();
-if (function_exists('date_default_timezone_set')) { // insure a correct timezone
+if (function_exists('date_default_timezone_set')) { // insure a correct time zone
 	$tz = getOption('time_zone');
 	if (!empty($tz)) {
 		$err = error_reporting(0);

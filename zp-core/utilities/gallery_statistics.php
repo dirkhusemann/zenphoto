@@ -406,7 +406,7 @@ $imagecount_unpub = $imagecount-$gallery->getNumImages(true);
 ?>
 <div id="content">
 <h1><?php echo gettext("Gallery Statistics"); ?></h1>
-<p><?php echo gettext("This page shows more detailed statistics of your gallery. For album statistics the bar graph always shows the total number of images in that album. For image statistics always the album the image is in is shown.<br />Unpublished items are marked in darkred. Images are marked unpublished if their (direct) album is, too."); ?></p>
+<p><?php echo gettext("This page shows more detailed statistics of your gallery. For album statistics the bar graph always shows the total number of images in that album. For image statistics always the album the image is in is shown.<br />Un-published items are marked in darkred. Images are marked un-published if their (direct) album is, too."); ?></p>
 
 <ul class="statistics_general"><li>
 <?php 
@@ -451,7 +451,7 @@ if ($commentcount_mod > 0) {
 		if (empty($unpub)) {
 			printf(gettext('<strong>%1$u</strong> Pages'),$total,$type);
 		} else {
-			printf(gettext('<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+			printf(gettext('<strong>%1$u</strong> Pages (%2$u un-published)'),$total,$unpub);
 		}
 		?>
 	</li>
@@ -461,7 +461,7 @@ if ($commentcount_mod > 0) {
 		if (empty($unpub)) {
 			printf(gettext('<strong>%1$u</strong> News articles'),$total);
 		} else {
-			printf(gettext('<strong>%1$u</strong> News articles (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+			printf(gettext('<strong>%1$u</strong> News articles (%2$u un-published)'),$total,$unpub);
 		}
 		?>
 	</li>

@@ -730,7 +730,7 @@ function printCustomPageSelector($current) {
 }
 
 /**
- * checks if a album or image is unpublished and returns a '*'
+ * checks if a album or image is un-published and returns a '*'
 	*
   * @return string
  	*/

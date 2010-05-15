@@ -207,8 +207,8 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 							case 0:		 $data = gettext("Auto");	break;
 							case 1:		$data = gettext("Preset");	break;
 							case 2:		$data = gettext("Daylight");	break;
-							case 3:		$data = gettext("Incandescense");	break;
-							case 4:		$data = gettext("Flourescence");	break;
+							case 3:		$data = gettext("Incandescence");	break;
+							case 4:		$data = gettext("Fluorescence");	break;
 							case 5:		$data = gettext("Cloudy");	break;
 							case 6:		$data = gettext("SpeedLight");	break;
 							default:	$data = gettext("Unknown").": ".$data;	break;

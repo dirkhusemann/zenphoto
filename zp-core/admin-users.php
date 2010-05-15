@@ -214,16 +214,6 @@ printSubtabs($_current_tab, 'users');
 		}
 		echo '</div>';
 	}
-	if (isset($_GET['local_failed'])) {
-		$locale = sanitize($_GET['local_failed']);
-		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>".
-					sprintf(gettext("<em>%s</em> is not available."),$_zp_languages[$locale]).
-					' '.sprintf(gettext("The locale %s is not supported on your server."),$locale).
-					'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.').
-					"</h2>";
-		echo '</div>';
-	}
 	if (isset($_GET['badurl'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".gettext("Your Website URL is not valid")."</h2>";

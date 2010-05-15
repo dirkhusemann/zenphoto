@@ -5,9 +5,9 @@
  * This plugin allows you to change the default setting of the albums: published and
  * the images: visible fields.
  *
- * It also allows you to list unpublished albums and not visible images from before a
+ * It also allows you to list un-published albums and not visible images from before a
  * specific data and time. You can select albums and images from these lists to be published.
- * NOTE: currently there is no record of when albums were first encountered, so all unpublished
+ * NOTE: currently there is no record of when albums were first encountered, so all un-published
  * albums are show.
  *
  * So you can freely upload albums and images then on a periodic basis review which ones to make available
@@ -24,7 +24,7 @@ require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 
 $button_text = gettext('Publish content');
-$button_hint = gettext('Manage unpublished content in your gallery.');
+$button_hint = gettext('Manage un-published content in your gallery.');
 $button_icon = 'images/calendar.png';
 $button_rights = ALBUM_RIGHTS;
 
@@ -297,7 +297,7 @@ if (db_connect()) {
 }
 if (count($publish_albums_list) > 0) {
 ?>
-	<form name="publish" action="" method="post"><?php echo gettext('Unpublished albums:'); ?>
+	<form name="publish" action="" method="post"><?php echo gettext('Un-published albums:'); ?>
 	<input type="hidden" name="publish_albums" value="true" />
 	<ul class="schedulealbumchecklist">
 	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, 'sched_', false, true, true); ?>
@@ -311,16 +311,16 @@ if (count($publish_albums_list) > 0) {
 	<br clear="all" />
 	</form>
 	<p class="buttons">
-		<a href="?propagate_unpublished" title="<?php echo gettext('Set all subalbums of an unpublished album to unpublished.'); ?>">
+		<a href="?propagate_unpublished" title="<?php echo gettext('Set all subalbums of an un-published album to un-published.'); ?>">
 		<img src="<?php echo $webpath; ?>images/redo.png" alt="" />
-			<?php echo gettext('Propagate unpublished state'); ?>
+			<?php echo gettext('Propagate un-published state'); ?>
 		</a>
 	</p>
 	<br clear="all" />
 	<br clear="all" />
 	<?php
 	} else {
-		echo '<p>'.gettext('No albums are unpublished.').'</p>';
+		echo '<p>'.gettext('No albums are un-published.').'</p>';
 	}
 ?>
 

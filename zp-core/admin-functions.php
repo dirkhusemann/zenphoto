@@ -35,7 +35,7 @@ function printAdminFooter($addl='') {
 		 | <a href="http://www.zenphoto.org/category/user-guide/" title="<?php echo gettext('User guide'); ?>"><?php echo gettext('User guide'); ?></a>
 		 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>"><?php echo gettext('Forum'); ?></a>
 		 | <a href="http://www.zenphoto.org/trac/report/10" title="<?php echo gettext('Bugtracker'); ?>"><?php echo gettext('Bugtracker'); ?></a>
-		 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
+		 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Change log'); ?>"><?php echo gettext('Change log'); ?></a>
 		 <br />
 		<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
 	</div>
@@ -1763,7 +1763,7 @@ function printAlbumEditRow($album) {
 	<?php
 	if ($album->getShow()) {
 		?>
-		<a class="publish" href="?action=publish&amp;value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
+		<a class="publish" href="?action=publish&amp;value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Un-publish the album %s'), $album->name); ?>">
 		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('Published'); ?>" /></a>
 
 	 <?php

@@ -443,6 +443,16 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 printSubtabs($_current_tab, 'general');
 
 if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
+	if (isset($_GET['local_failed'])) {
+		$locale = sanitize($_GET['local_failed']);
+		echo '<div class="errorbox" id="fade-message">';
+		echo  "<h2>".
+					sprintf(gettext("<em>%s</em> is not available."),$_zp_languages[$locale]).
+					' '.sprintf(gettext("The locale %s is not supported on your server."),$locale).
+					'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.').
+					"</h2>";
+		echo '</div>';
+	}
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
@@ -477,7 +487,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						$offset = timezoneDiff($_zp_server_timezone, $tz);
 						?>
 						<td>
-						<?php echo gettext("Timezone:"); ?>
+						<?php echo gettext("Time zone:"); ?>
 						</td>
 						<td>
 						<?php
@@ -489,8 +499,8 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 							</select>
 						</td>
 						<td>
-							<p><?php printf(gettext('Your server reports its timezone as: <code>%s</code>.'), $_zp_server_timezone); ?></p>
-							<p><?php printf(ngettext('Your timezone offset is %d hour. If your timezone is different from the servers, select the correct timezone here.', 'Your timezone offset is: %d hours. If your timezone is different from the servers, select the correct timezone here.', $offset), $offset); ?></p>
+							<p><?php printf(gettext('Your server reports its time zone as: <code>%s</code>.'), $_zp_server_timezone); ?></p>
+							<p><?php printf(ngettext('Your time zone offset is %d hour. If your time zone is different from the servers, select the correct time zone here.', 'Your time zone offset is: %d hours. If your time zone is different from the servers, select the correct time zone here.', $offset), $offset); ?></p>
 						</td>
 						<?php
 					} else {
@@ -501,7 +511,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset);?>" />
 						</td>
 						<td>
-						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your time zone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
 						</td>
 						<?php
 					}
@@ -1966,7 +1976,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 				<td><?php echo gettext("Thumbnails per page:"); ?></td>
 				<td><input type="text" size="3" name="images_per_page"
 					value="<?php echo getThemeOption('images_per_page',$album,$themename);?>" /></td>
-				<td><?php echo gettext("Recommended number of thumbnails on a album page.")."<p class='notebox'>".gettext("<strong>Note:</strong> You might need to adjust this for a better page layout."); ?></p></td>
+				<td><?php echo gettext("Recommended number of thumbnails on an album page.")."<p class='notebox'>".gettext("<strong>Note:</strong> You might need to adjust this for a better page layout."); ?></p></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Thumb size:"); ?></td>

@@ -49,8 +49,6 @@ class Zenphoto_Authority {
 
 	var $admin_users = NULL;
 	var $rightsset = NULL;
-	
-//TODO be sure to un-comment the getRights() code	for version 2 before changing this!
 	var $version = 1;
 
 
@@ -251,7 +249,7 @@ class Zenphoto_Authority {
 	/**
 	 * Returns an array of admin users, indexed by the userid and ordered by "privileges"
 	 *
-	 * The array contains the id, hashed password, user's name, email, and admin priviledges
+	 * The array contains the id, hashed password, user's name, email, and admin privileges
 	 *
 	 * @return array
 	 */
@@ -548,7 +546,6 @@ class Zenphoto_Authority {
 															'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true));
 					break;
 				case 2:
-/*TODO for 1.3.1 remove thie comments and set the lib-auth version # to 2
 					$rightsset = array(	'NO_RIGHTS' => array('value'=>1,'name'=>gettext('No rights'),'display'=>false),
 															'OVERVIEW_RIGHTS' => array('value'=>pow(2,2),'name'=>gettext('Overview'),'display'=>true),
 															'VIEW_ALL_RIGHTS' => array('value'=>pow(2,4),'name'=>gettext('View all'),'display'=>true),
@@ -566,7 +563,6 @@ class Zenphoto_Authority {
 															'TAGS_RIGHTS' => array('value'=>pow(2,28),'name'=>gettext('Tags'),'display'=>true),
 															'OPTIONS_RIGHTS' => array('value'=>pow(2,29),'name'=>gettext('Options'),'display'=>true),
 															'ADMIN_RIGHTS' => array('value'=>pow(2,30),'name'=>gettext('Admin'),'display'=>true));
-*/				
 					break;
 			}
 			$allrights = 0;

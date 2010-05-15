@@ -69,7 +69,7 @@ class comment_form {
 										'desc' => gettext('If checked, only logged in users will be allowed to post comments.')),
 									gettext('Allow private postings') => array('key' => 'comment_form_private', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, posters may mark their comments as private (not for publishing).')),
-									gettext('Allow anonomous posting') => array('key' => 'comment_form_anon', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('Allow anonymous posting') => array('key' => 'comment_form_anon', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, posters may exclude their personal information from the published post.')),
 									gettext('Include RSS link') => array('key' => 'comment_form_rss', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('If checked, an RSS link will be included at the bottom of the comment section.'))
@@ -279,7 +279,7 @@ function getCommentErrors() {
 			case -14: return gettext('You must supply the postal code field');
 			case  -1: return gettext("You must supply an e-mail address.");
 			case  -2: return gettext("You must enter your name.");
-			case  -3: return gettext("You must supply an WEB page URL.");
+			case  -3: return gettext("You must supply a WEB page URL.");
 			case  -4: return gettext("Captcha verification failed.");
 			case  -5: return gettext("You must enter something in the comment text.");
 			case   2: return sprintf(gettext('Your comment has been marked for moderation by the <em>%s</em> SPAM filter.'),getOption('spam_filter'));

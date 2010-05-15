@@ -256,7 +256,7 @@ if ($setup_checked) {
 	}
 } else {
 	if (isset($_POST['mysql'])) {
-		setupLog(gettext("Post of MySql credentials"), true);
+		setupLog(gettext("Post of MySQL credentials"), true);
 	} else {
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.'] '.date('r'), true, true);  // initialize the log file
 	}
@@ -1048,7 +1048,7 @@ if ($debug) {
 						} else {
 							$err = 1;
 						}
-						checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
+						checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySQL errors.'));
 					}
 				} else {
 					checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), $msg);
@@ -1298,12 +1298,7 @@ if ($debug) {
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
 	if (zp_loggedin(ADMIN_RIGHTS)) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	$msg = gettext("<em>.htaccess</em> file");
-	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
-		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."), "", "");
-		$Apache = false;
-	}	else {
-		$Apache = true;
-	}
+	$Apache = stristr($_SERVER['SERVER_SOFTWARE'], "apache");
 	$htfile = '../.htaccess';
 	$ht = @file_get_contents($htfile);
 	$htu = strtoupper($ht);
@@ -1313,14 +1308,14 @@ if ($debug) {
 	$err = '';
 	$desc = '';
 	if (empty($htu)) {
+		$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
+		$ch = -1;
 		if ($Apache) {
-			$ch = -1;
-			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
 			$desc = gettext('If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs.').
 						'<br /><br />'.gettext('You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option.');
 			if (zp_loggedin(ADMIN_RIGHTS)) $desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup create the file.');
 		} else {
-			$ch = -2;
+			$desc = gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required.");
 		}
 	} else {
 		$i = strpos($htu, 'VERSION');
@@ -1337,18 +1332,22 @@ if ($debug) {
 			}
 		}
 		if (!$ch) {
-			if (!$Apache) $ch = -1;
-			$err = gettext("<em>.htaccess</em> file [wrong version]");
-			$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
-			if (zp_loggedin(ADMIN_RIGHTS)) {
-				$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
+			if (!$Apache) {
+				$desc = gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required.");
+				$ch = -1;
+			} else {
+				$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
+				if (zp_loggedin(ADMIN_RIGHTS)) {
+					$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
+				}
 			}
+			$err = gettext("<em>.htaccess</em> file [wrong version]");
 		}
 	}
 
 	$mod = '';
 	$rw = '';
-	if ($ch) {
+	if ($ch > 0) {
 		$i = strpos($htu, 'REWRITEENGINE');
 		if ($i === false) {
 			$rw = '';
@@ -1361,9 +1360,8 @@ if ($debug) {
 			$mod = "&amp;mod_rewrite=$rw";
 		}
 	}
-	if ($Apache || $ch != -2) {
-		$good = checkMark($ch, $msg, $err, $desc) && $good;
-	}
+	$good = checkMark($ch, $msg, $err, $desc) && $good;
+
 	$base = true;
 	$f = '';
 	if ($rw == 'ON') {

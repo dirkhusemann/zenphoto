@@ -82,7 +82,7 @@ require_once("js/dialog.php");
     		s <input type="text" name="cropsize" id="cropsize" value="120" style="width:25px" /> / cw <input type="text" name="cropwidth" id="cropwidth" value="120" style="width:25px" /> x ch <input type="text" name="cropheight" id="cropheight" value="120" style="width:25px" /><label for="customthumb"><br /><span class="customtext"><?php echo gettext("Custom thumbnail"); ?></span></label><br />
     		<input type="radio" name="type" id="sizedimage" "value="1" /><label for="title"> <?php echo gettext("Sized image"); ?></label><br />
     		<input type="radio" name="type" id="customsize" value="1" />
-    		<input type="text" name="size" id="size" value="400" /><label for="customsize"><br /><span class="customtext"><?php echo gettext("Custom size (uncropped)"); ?></span></label>
+    		<input type="text" name="size" id="size" value="400" /><label for="customsize"><br /><span class="customtext"><?php echo gettext("Custom size (un-cropped)"); ?></span></label>
   		</fieldset>			
 		</div>
 	</form>
@@ -120,9 +120,9 @@ require_once("js/dialog.php");
 	 			echo "<h2 style='margin-left: 8px'>";
 	 			echo "<em>tiny</em>Zenpage (v1.3)</h2>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("This provides access to your images and albums (dropdown 'zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
+	 			echo gettext("This provides access to your images and albums (dropdown 'ZenPhoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("The options below the 'zenphoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album).")."</p>";
+	 			echo gettext("The options below the 'ZenPhoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album).")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("The windows does not close automatically so you can include several images one after another.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
@@ -130,11 +130,11 @@ require_once("js/dialog.php");
 	 			
 	 			echo "<h3 style='margin-left: 1px'>Zenpage</h3>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("Select to show a list of Zenpage pages, articles or categories. Click on a title to include a link. Hover of the link to see an excerpt of the page or article. Unpublished pages or articles are marked with an '*'. There are no further options.")."</p>";
+	 			echo gettext("Select to show a list of Zenpage pages, articles or categories. Click on a title to include a link. Hover of the link to see an excerpt of the page or article. Un-published pages or articles are marked with an '*'. There are no further options.")."</p>";
 	 			
 	 			echo "<h3 style='margin-left: 1px'>Zenphoto</h3>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("Select an album to include images from into your page or article. Click on the image to included it. Unpublished albums or images are marked with an '*'. You can also click on the magnify glass icon to see a preview of the item (Multimedia files are previewed in Flowplayer, no matter if that plugin is activated or not.). <br />Note that it is currently not possible to include multimedia files directly as a sized image or custom image. Besides that you have several options what to include and how:")."</p>";
+	 			echo gettext("Select an album to include images from into your page or article. Click on the image to included it. Un-published albums or images are marked with an '*'. You can also click on the magnify glass icon to see a preview of the item (Multimedia files are previewed in Flowplayer, no matter if that plugin is activated or not.). <br />Note that it is currently not possible to include multimedia files directly as a sized image or custom image. Besides that you have several options what to include and how:")."</p>";
 				echo "<h4 style='margin-left: 8px'>".gettext("What to include")."</h4>";
 				
 				echo "<p style='margin-left: 8px'>";

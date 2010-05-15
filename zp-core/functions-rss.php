@@ -165,9 +165,9 @@ function getRSSImageSize() {
 		$size = $size;
 	} else {
 		if($rssmode == "albums") {
-			$size = getOption('feed_imagesize_albums'); // uncropped image size
+			$size = getOption('feed_imagesize_albums'); // un-cropped image size
 		} else {
-			$size = getOption('feed_imagesize'); // uncropped image size
+			$size = getOption('feed_imagesize'); // un-cropped image size
 		}
 	}
 	return $size;

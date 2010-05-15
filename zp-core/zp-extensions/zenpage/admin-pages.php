@@ -36,7 +36,7 @@ if(isset($_POST['update'])) {
 if(isset($_GET['del'])) {
 	deletePage();
 }
-// publish or unpublish page by click
+// publish or un-publish page by click
 if(isset($_GET['publish'])) {
 	publishPageOrArticle('page',$_GET['id']);
 }

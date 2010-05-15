@@ -457,7 +457,7 @@ class pagedThumbsNav {
  * @param int $width The thumbnail crop width, if set to NULL the general admin setting is used. If cropping is FALSE this is the maxwidth of the thumb
  * @param int $height The thumbnail crop height, if set to NULL the general admin setting is used. If cropping is FALSE this is the maxwheight of the thumb
  * @param bool $crop Enter 'true' or 'false' to override the admin plugin option setting, enter NULL to use the admin plugin option (default)
- * @param bool $placeholders Enter 'true' or 'false' if you want to use placeholder for layout reasons if teh the number of thumbs does not match $imagesperpage. Recommended only for cropped thumbs. This is printed as an empty <span></span> whose width and height are set via inline css. The remaining needs to be style via the css file and can be adressed via  "#pagedthumbsimages span".
+ * @param bool $placeholders Enter 'true' or 'false' if you want to use placeholder for layout reasons if teh the number of thumbs does not match $imagesperpage. Recommended only for cropped thumbs. This is printed as an empty <span></span> whose width and height are set via inline css. The remaining needs to be style via the css file and can be addressed via  "#pagedthumbsimages span".
  * @param bool $showpagelist Enter 'true' or 'false' if you want to a list of the pages available. Can be styled via  "#pagedthumbsnav-pagelist".
  * @param bool $showprevnext If you want to show the prev and next links with the pagelist
  * @param int $navlen How many page links should be shown (not that there will be dotted ransition links like this: 1 2 3 4 ... 30).

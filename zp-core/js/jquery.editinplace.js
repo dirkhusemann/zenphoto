@@ -22,7 +22,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 // Based on version: 0.1.2
-// Modifications by Ozh <ozh at planetozh dot com> for zenphoto
+// Modifications by Ozh <ozh at planetozh dot com> for ZenPhoto
 
 (function( $ ) {
 	$.fn.eip = function( options ) {
@@ -30,7 +30,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		var opt = {
 			save_url			: document.location.href,
 			
-			eip_context			: '', // zenphoto context: will be 'image' or 'album'
+			eip_context			: '', // ZenPhoto context: will be 'image' or 'album'
 			eip_field			: '', // data field to be edited ('desc', 'title', etc...)
 
 			save_on_enter		: true,
@@ -345,7 +345,7 @@ function eip_cancel_all() {
 	jQuery('._zp_cancel_button_').click();
 }
 
-/*** Wrapper function to use in zenphoto ***/
+/*** Wrapper function to use in ZenPhoto ***/
 function editInPlace(target, context, field) {
 	var form_type = (field == 'desc') ? 'textarea' : 'text';
 	jQuery('#'+target).eip(

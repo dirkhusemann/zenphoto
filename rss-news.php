@@ -24,7 +24,7 @@ if (isset($_GET['withimages'])) {
 $host = getRSSHost();
 $serverprotocol = getOption("server_protocol");
 $uri = getRSSURI();
-$s = getOption('feed_imagesize'); // uncropped image size
+$s = getOption('feed_imagesize'); // un-cropped image size
 $locale = getRSSLocale();
 $validlocale = getRSSLocaleXML();
 $items = getOption("zenpage_rss_items"); // # of Items displayed on the feed

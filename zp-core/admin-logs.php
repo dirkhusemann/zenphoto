@@ -111,7 +111,7 @@ echo "\n</head>";
 						<input type="hidden" name="action" value="download" />
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">
-							<button type="submit" class="tooltip" id="download_log_<?php echo $subtab; ?>" title="<?php printf(gettext("Download %s zipfile"),$logfiletext);?>">
+							<button type="submit" class="tooltip" id="download_log_<?php echo $subtab; ?>" title="<?php printf(gettext("Download %s ZIP file"),$logfiletext);?>">
 								<img src="images/down.png" style="border: 0px;" alt="download" /> <?php echo gettext("Download");?>
 							</button>
 						</div>

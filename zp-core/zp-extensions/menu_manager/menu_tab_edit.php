@@ -88,7 +88,7 @@ function handleSelectorChange(type) {
 		case 'all_zenpagepages':
 			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo js_encode(gettext("All Zenpage pages")); ?>');
-			$('#description').html('<?php echo js_encode(gettext("This adds menu items for all Zenppage pages.")); ?>');
+			$('#description').html('<?php echo js_encode(gettext("This adds menu items for all Zenpage pages.")); ?>');
 			break;
 		case 'zenpagepage':
 			$('#albumselector,#categoryselector,#custompageselector,#link_row,#titleinput').hide();
@@ -112,7 +112,7 @@ function handleSelectorChange(type) {
 		case 'all_zenpagecategorys':
 			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo js_encode(gettext("All Zenpage categories")); ?>');
-			$('#description').html('<?php echo js_encode(gettext("This adds menu items for all Zenppage categories.")); ?>');
+			$('#description').html('<?php echo js_encode(gettext("This adds menu items for all Zenpage categories.")); ?>');
 			break;
 		case 'zenpagecategory':
 			$('#albumselector,#pageselector,#custompageselector,#custompageselector,#titleinput,#link_row').hide();
@@ -236,7 +236,7 @@ if (isset($_GET['add'])) {
 			<option value="all_zenpagepages"><?php echo gettext("All Zenpage pages"); ?></option>
 			<option value="zenpagepage"><?php echo gettext("Zenpage page"); ?></option>
 			<option value="zenpagenewsindex"><?php echo gettext("Zenpage news index"); ?></option>
-			<option value="all_zenpagecategorys"><?php echo gettext("All Zenpage news categorys"); ?></option>
+			<option value="all_zenpagecategorys"><?php echo gettext("All Zenpage news categories"); ?></option>
 			<option value="zenpagecategory"><?php echo gettext("Zenpage news category"); ?></option>
 			<?php
 		}
