@@ -230,7 +230,7 @@ printAdminHeader();
 		<?php printTabs('edit'); ?>
 		<div id="content">
 				<h1><?php echo gettext("Image cropping").": <em>".$albumobj->name." (".$albumobj->getTitle().") /".$imageobj->filename." (".$imageobj->getTitle().")</em>"; ?></h1>
-				<p><?php echo gettext("You can crop your image by draging the crop handles on the image.<br /><br /><strong>Note:</strong> If you save these changes they are permanent!"); ?></p>
+				<p><?php echo gettext("You can crop your image by dragging the crop handles on the image.<br /><br /><strong>Note:</strong> If you save these changes they are permanent!"); ?></p>
 				<div style="display:block">
 		 			
 					<div style="text-align:left; float: left;">

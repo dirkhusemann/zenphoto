@@ -114,7 +114,7 @@ if ((($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp
 } ?>
 <?php  echo $datecontent; ?>
 </description>
-<?php // enables download of embeded content like images or movies in some rss clients. just for testing, shall become a real option
+<?php // enables download of embeded content like images or movies in some RSS clients. just for testing, shall become a real option
 if(getOption("feed_enclosure") AND $rssmode != "albums") { ?>
 <enclosure url="<?php echo $serverprotocol; ?>://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile);?>" />
 <?php  } ?>

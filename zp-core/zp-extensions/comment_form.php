@@ -280,7 +280,7 @@ function getCommentErrors() {
 			case  -1: return gettext("You must supply an e-mail address.");
 			case  -2: return gettext("You must enter your name.");
 			case  -3: return gettext("You must supply a WEB page URL.");
-			case  -4: return gettext("Captcha verification failed.");
+			case  -4: return gettext("CAPTCHA verification failed.");
 			case  -5: return gettext("You must enter something in the comment text.");
 			case   2: return sprintf(gettext('Your comment has been marked for moderation by the <em>%s</em> SPAM filter.'),getOption('spam_filter'));
 			case	 3: return sprintf(gettext('Your comment was rejected by the <em>%s</em> SPAM filter.'),getOption('spam_filter'));

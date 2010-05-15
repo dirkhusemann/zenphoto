@@ -94,7 +94,7 @@ if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
 		$subtabs[gettext("theme")] = 'admin-options.php?page=options&amp;tab=theme';
 	}
 	if (zp_loggedin(OPTIONS_RIGHTS)) {
-		$subtabs[gettext("rss")] = 'admin-options.php?page=options&amp;tab=rss';
+		$subtabs[gettext("RSS")] = 'admin-options.php?page=options&amp;tab=rss';
 	}
 }
 if (!empty($subtabs)) {

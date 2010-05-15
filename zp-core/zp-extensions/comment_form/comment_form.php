@@ -200,7 +200,7 @@
  								<tr>
 	 								<td>
 	 									<label>
-		 									<?php echo gettext("Enter Captcha:"); ?>
+		 									<?php echo gettext("Enter CAPTCHA:"); ?>
 		 									<img src=<?php echo "\"$img\"";?> alt="Code" align="middle" />
 	 									</label>
 	 								</td>

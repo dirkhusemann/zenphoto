@@ -54,8 +54,8 @@ class register_user_options {
 												'desc' => gettext('Text for the body of the email sent to the user. <strong>Note:</strong> You must include <code>%s</code> in your message where you wish the registration completion link to appear.')),
 											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM,
 												'desc' => gettext('If this option is set, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
-											gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
-												'desc' => gettext('If checked, captcha validation will be required for user registration.'))
+											gettext('Use CAPTCHA') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
+												'desc' => gettext('If checked, CAPTCHA validation will be required for user registration.'))
 											);
 		$admins = $_zp_authority->getAdministrators();
 		$ordered = array();
@@ -298,7 +298,7 @@ function printRegistrationForm($thanks=NULL) {
 					echo gettext('Enter a valid email address.');
 					break;
 				case 'invalidcaptcha':
-					echo gettext('The captcha you entered was not correct.');
+					echo gettext('The CAPTCHA you entered was not correct.');
 					break;
 				case 'not_verified':
 					echo gettext('Your registration request could not be completed.');

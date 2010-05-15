@@ -7,7 +7,7 @@
 
 /*
  RSS Extractor and Displayer
- (c) 2007-2009  Scriptol.com - Licence Mozilla 1.1.
+ (c) 2007-2009  Scriptol.com - License Mozilla 1.1.
  rsslib.php
  
  Modified for zenphoto by s. billard

@@ -2130,7 +2130,7 @@ function printPageLastChangeDate() {
  * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an un-published page's content. True is default
+ * @param bool $published If titlelink is set, set this to false if you want to call an un-published page's content. True is default
  *
  * @return mixed
  */
@@ -2154,7 +2154,7 @@ function getPageContent($titlelink='',$published=true) {
  * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an un-published page's content. True is default
+ * @param bool $published If titlelink is set, set this to false if you want to call an un-published page's content. True is default
  * @return mixed
  */
 function printPageContent($titlelink='',$published=true) {
@@ -2167,7 +2167,7 @@ function printPageContent($titlelink='',$published=true) {
  * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an un-published page's extra content. True is default
+ * @param bool $published If titlelink is set, set this to false if you want to call an un-published page's extra content. True is default
  * @return mixed
  */
 function getPageExtraContent($titlelink='',$published=true) {
@@ -2191,7 +2191,7 @@ function getPageExtraContent($titlelink='',$published=true) {
  * Set the titlelink of a page to call a specific even un-published page ($published = false) as a gallery description or on another custom page for example
  *
  * @param string $titlelink the titlelink of the page to print the content from
- * @param bool $published If titlelink is set set this to false if you want to call an un-published page's extra content. True is default
+ * @param bool $published If titlelink is set, set this to false if you want to call an un-published page's extra content. True is default
  * @return mixed
  */
 function printPageExtraContent($titlelink='',$published=true) {
@@ -2276,7 +2276,7 @@ function printPageLinkURL($titlelink) {
 
 
 /**
- * Prints excerpts of the direct sub pages (1 level) of a page for a kind of overview. The setup is:
+ * Prints excerpts of the direct subpages (1 level) of a page for a kind of overview. The setup is:
  * <div class='pageexcerpt'>
  * <h4>page title</h3>
  * <p>page content excerpt</p>
@@ -2655,7 +2655,7 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
  * 																		"Comments" for all news articles and latest images
  * 																		"Comments-news" for comments of only the news article it is called from
  * 																		"Comments-page" for comments of only the page it is called from
- * @param string $categorylink The specific category you want a rss feed from (only 'Category' mode)
+ * @param string $categorylink The specific category you want a RSS feed from (only 'Category' mode)
  * @param string $prev text to before before the link
  * @param string $linktext title of the link
  * @param string $next text to appear after the link
@@ -2726,7 +2726,7 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
  * @param string $option type of RSS: "News" feed for all news articles
  * 																		"Category" for only the news articles of a specific category
  * 																		"NewsWithImages" for all news articles and latest images
- * @param string $categorylink The specific category you want a rss feed from (only 'Category' mode)
+ * @param string $categorylink The specific category you want a RSS feed from (only 'Category' mode)
  * @param string $linktext title of the link
  * @param string $lang optional to display a feed link for a specific language (currently works for latest images only). Enter the locale like "de_DE" (the locale must be installed on your Zenphoto to work of course). If empty the locale set in the admin option or the language selector (getOption('locale') is used.
  *

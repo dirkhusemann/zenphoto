@@ -822,7 +822,7 @@ if (!$setup_checked) {
 						$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
 						$err = 0;
 						$good = false;
-						$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
+						$mandate = gettext("To correct this you need to install GD with appropriate image support in your PHP");
 					}
 					checkMark($err, gettext("PHP graphics image support"), '', $imgmissing.
 											"<br />".gettext("The unsupported image types will not be viewable in your albums.").
@@ -851,7 +851,7 @@ if (!$setup_checked) {
 			$mb = -1;
 		}
 		$m2 = gettext('Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly.');
-		checkMark($mb, gettext("PHP <code>mbstring</code> package"), sprintf(gettext('PHP <code>mbstring</code> package [Your internal characater set is <strong>%s</strong>]'), $charset), $m2);
+		checkMark($mb, gettext("PHP <code>mbstring</code> package"), sprintf(gettext('PHP <code>mbstring</code> package [Your internal character set is <strong>%s</strong>]'), $charset), $m2);
 	} else {
 		$test = $_zp_UTF8->convert('test', FILESYSTEM_CHARSET, 'UTF-8');
 		if (empty($test)) {
@@ -1005,7 +1005,7 @@ if ($debug) {
 		}
 	}
 	if ($connection) {
-		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
+		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is preferred.'),$required,$desired)) && $good;
 		if ($DBcreated || !empty($connectDBErr)) {
 			if (empty($connectDBErr)) {
 				$severity = 1;
@@ -1189,7 +1189,7 @@ if ($debug) {
 				}
 				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
 			} else {
-				checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
+				checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
 			}
 		}
 	}
@@ -1336,7 +1336,7 @@ if ($debug) {
 				$desc = gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required.");
 				$ch = -1;
 			} else {
-				$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changs with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
+				$desc = sprintf(gettext("The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changes with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."),ZENFOLDER);
 				if (zp_loggedin(ADMIN_RIGHTS)) {
 					$desc .= ' '.gettext('Click <a href="?copyhtaccess" >here</a> to have setup replace your <em>.htaccess</em> file with the current version.');
 				}

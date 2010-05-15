@@ -64,7 +64,7 @@ class flowplayer3_playlist {
 										'selections' => array(gettext('never')=>"never", gettext('always')=>"always", gettext('fullscreen')=>"fullscreen"),
 										'desc' => gettext("Specifies whether the controlbar should be hidden when the user is not actively using the player.")),
 		gettext('Splash image') => array('key' => 'flow_player3_playlistsplashimage', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("Check if you want to display the videothumb of the first playlist entry as a splash/cover image. It will be cropped to the fit the width and height of the player window and will dissapear on starting the playlist."))
+										'desc' => gettext("Check if you want to display the videothumb of the first playlist entry as a splash/cover image. It will be cropped to the fit the width and height of the player window and will disappear on starting the playlist."))
 		);
 	}
 }

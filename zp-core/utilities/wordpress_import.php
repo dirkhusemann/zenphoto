@@ -138,7 +138,7 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 		die();
 	}
 	printWPDatabaseInfo($wp_dbname,$wp_dbbuser,$wp_dbpassword,$wp_dbhost,$wp_prefix);
-		$wpdbconnection = @mysql_connect($wp_dbhost,$wp_dbbuser,$wp_dbpassword,true); // open 2nd connection to Wordpress additonally to the existing Zenphoto connection
+		$wpdbconnection = @mysql_connect($wp_dbhost,$wp_dbbuser,$wp_dbpassword,true); // open 2nd connection to Wordpress additionally to the existing Zenphoto connection
 		if(!$wpdbconnection) {
 			wpimport_TryAgainError(gettext('<strong>ERROR:</strong> Could not connect to the Wordpress database - Query failed : ') . mysql_error());
 			die();

@@ -97,7 +97,7 @@ if(isset($_GET['sendmail'])) {
 	}
 } else {
 ?>
-<h2><?php echo gettext('Please enter the message you want to sent.'); ?></h2>
+<h2><?php echo gettext('Please enter the message you want to send.'); ?></h2>
 <form id="massmail" action="?sendmail" method="post" accept-charset="UTF-8">
 	<table>
 		<tr>

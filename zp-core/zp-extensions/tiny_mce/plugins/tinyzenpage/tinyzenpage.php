@@ -11,7 +11,7 @@ require_once("js/dialog.php");
 		 Version: 1.0.6.1
 		 Author: Malte Müller (acrylian) 
 		 inspired by Alessandro "Simbul" Morandi's  ZenphotoPress (http://simbul.bzaar.net/zenphotopress)
-		 Licence: GPL v2 http://www.gnu.org/licenses/gpl.html -->
+		 License: GPL v2 http://www.gnu.org/licenses/gpl.html -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -138,7 +138,7 @@ require_once("js/dialog.php");
 				echo "<h4 style='margin-left: 8px'>".gettext("What to include")."</h4>";
 				
 				echo "<p style='margin-left: 8px'>";
-				echo gettext("Include the image itself, only its title, the title of its album or a custom text.")."</p>";
+				echo gettext("Include the image itself, only its title, the title of its album, or a custom text.")."</p>";
 				
 				echo "<h4 style='margin-left: 8px'>".gettext("Image size")."</h4>";
 				echo "<p style='margin-left: 8px'>";
@@ -146,7 +146,7 @@ require_once("js/dialog.php");
 				
 				echo "<h4 style='margin-left: 8px'>".gettext("Link type")."</h4>";
 				echo "<p style='margin-left: 8px'>";
-				echo gettext("Select to link to the image page of the image, to the album the image is in, no link at all or a custom url.")."</p>";
+				echo gettext("Select to link to the image page of the image, to the album the image is in, no link at all or a custom URL.")."</p>";
 				
 				echo "<h4 style='margin-left: 8px'>".gettext("Text wrap")."</h4>";
 				echo "<p style='margin-left: 8px'>";

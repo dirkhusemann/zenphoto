@@ -68,7 +68,7 @@
 						?>
 					</td>
 				</tr>
-				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label>" .gettext('Enter Captcha').' ', ":</label></th><td>", "</td></tr>\n", 8); ?>
+				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label>" .gettext('Enter CAPTCHA').' ', ":</label></th><td>", "</td></tr>\n", 8); ?>
 				<tr valign="top" align="left">
 					<th><?php echo gettext('Private comment:'); ?></th>
 					<td>

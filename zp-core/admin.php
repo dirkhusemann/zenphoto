@@ -281,7 +281,7 @@ if (defined('RELEASE')) {
 	?>
 	</li>
 	<li><?php printf(gettext('Spam filter: <strong>%s</strong>'), getOption('spam_filter')) ?></li>
-	<li><?php printf(gettext('Captcha generator: <strong>%s</strong>'), getOption('captcha')) ?></li>
+	<li><?php printf(gettext('CAPTCHA generator: <strong>%s</strong>'), getOption('captcha')) ?></li>
 	<?php
 	if (!zp_has_filter('sendmail')) {
 		?>

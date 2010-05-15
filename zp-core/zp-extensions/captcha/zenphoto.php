@@ -28,21 +28,21 @@ class captcha {
 		return array(
 								gettext('Hash key') => array('key' => 'zenphoto_captcha_key', 'type' => OPTION_TYPE_TEXTBOX, 
 												'order'=> 2,
-												'desc' => gettext('The key used in hashing the Captcha string. Note: this key will change with each successful Captcha verification.')),
+												'desc' => gettext('The key used in hashing the CAPTCHA string. Note: this key will change with each successful CAPTCHA verification.')),
 								gettext('Allowed characters') => array('key' => 'zenphoto_captcha_string', 'type' => OPTION_TYPE_TEXTBOX, 
 												'order'=> 1,
-												'desc' => gettext('The characters which may appear in the Captcha string.')),
+												'desc' => gettext('The characters which may appear in the CAPTCHA string.')),
 								gettext('Captcha length') => array('key' => 'zenphoto_captcha_length', 'type' => OPTION_TYPE_RADIO, 
 												'order'=> 0,
 												'buttons' => array(gettext('3')=>3, gettext('4')=>4, gettext('5')=>5, gettext('6')=>6),
-												'desc' => gettext('The number of characters in the Captcha.')),
+												'desc' => gettext('The number of characters in the CAPTCHA.')),
 								gettext('Captcha font') => array('key' => 'zenphoto_captcha_font', 'type' => OPTION_TYPE_SELECTOR,
 												'order'=> 3,
 												'selections' => zp_getFonts(),
-												'desc' => gettext('The font to use for captcha characters.')),
+												'desc' => gettext('The font to use for CAPTCHA characters.')),
 								'' 			=> array('key' => 'zenphoto_captcha_image', 'type' => OPTION_TYPE_CUSTOM,
 												'order' => 4,
-												'desc' => gettext('Sample Captcha image'))
+												'desc' => gettext('Sample CAPTCHA image'))
 								);
 	}
 	function handleOption($key, $cv) {
@@ -64,7 +64,7 @@ class captcha {
 
 	
 	/**
-	 * gets (or creates) the captcha encryption key
+	 * gets (or creates) the CAPTCHA encryption key
 	 *
 	 * @return string
 	 */
@@ -86,7 +86,7 @@ class captcha {
 	}
 
 	/**
-	 * Checks if a Captcha string matches the Captcha attached to the comment post
+	 * Checks if a CAPTCHA string matches the CAPTCHA attached to the comment post
 	 * Returns true if there is a match.
 	 *
 	 * @param string $key

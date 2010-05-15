@@ -54,7 +54,7 @@ if(isset($_GET['hitcounter'])) {
  <form action="admin-pages.php" method="post" name="update">
 
 <div>
-<p><?php echo gettext("Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed."); ?></p>
+<p><?php echo gettext("Select a page to edit or drag the pages into the order, including subpage levels, you wish them displayed."); ?></p>
 <p class="notebox"><?php echo gettext("<strong>Note:</strong> Subpages of password protected pages inherit the protection."); ?></p>
 <p class="buttons">
 	<button type="submit" title="<?php echo gettext("Save order"); ?>">

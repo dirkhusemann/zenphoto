@@ -132,7 +132,7 @@ codeblocktabsJS();
 		$updateitem = gettext('Update Page');
 		$saveitem = gettext('Save Page');
 		$deleteitem = gettext('Delete Page');
-		$deletemessage = js_encode(gettext('Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!'));
+		$deletemessage = js_encode(gettext('Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUBPAGES OF THIS PAGE!'));
 		$themepage = ZENPAGE_PAGES;
 	}
 

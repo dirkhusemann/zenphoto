@@ -116,7 +116,7 @@ if ( $file_to_edit ) {
 				echo gettext('Javascript files (.js)');
 				break;
 			case 'css':
-				echo gettext('Stylesheets (.css)');
+				echo gettext('Style sheets (.css)');
 				break;
 			default:
 				echo gettext('Other text files');

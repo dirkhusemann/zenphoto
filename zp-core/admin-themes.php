@@ -72,9 +72,9 @@ printAdminHeader();
 		jQuery('li.zp_copy_theme p.buttons a').each(function(){
 			var source = jQuery(this).attr('title');
 			jQuery(this).click(function(){
-				var targetname = prompt('<?php echo gettext('New theme name? (eg. "My Theme")'); ?>', '<?php echo gettext('My Theme'); ?>');
+				var targetname = prompt('<?php echo gettext('New theme name? (e.g. "My Theme")'); ?>', '<?php echo gettext('My Theme'); ?>');
 				if (targetname) {
-					var targetdir = prompt('<?php echo gettext('New directory name? (eg. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
+					var targetdir = prompt('<?php echo gettext('New directory name? (e.g. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
 					if (targetdir) {
 						launchScript('',['action=copytheme','source='+encodeURIComponent(source),'target='+encodeURIComponent(targetdir),'name='+encodeURIComponent(targetname)]);
 						return false;

@@ -665,7 +665,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 				}
 				?>
 				<tr>
-					<td><?php echo gettext('Captcha generator:'); ?></td>
+					<td><?php echo gettext('CAPTCHA generator:'); ?></td>
 					<td>
 						<select id="captcha" name="captcha">
 						<?php
@@ -674,7 +674,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						?>
 						</select>
 					</td>
-					<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
+					<td><?php echo gettext('Select the <em>CAPTCHA</em> generator to be used by Zenphoto.'); ?></td>
 				</tr>
 				<?php customOptions($_zp_captcha, "&nbsp;&nbsp;&nbsp;-&nbsp;"); ?>
 				<tr>
@@ -975,7 +975,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<td>
 						<p><?php  echo gettext("<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>" ); ?></p>
 						<div id="albumdate" style="display: none">
-							<p><?php echo gettext("If you wish your album date to reflect the date of the latest image uploaded set set this option. Otherwise the date will be set initially to the date the album was created.") ?></p>
+							<p><?php echo gettext("If you wish your album date to reflect the date of the latest image uploaded set this option. Otherwise the date will be set initially to the date the album was created.") ?></p>
 						</div>
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('username');\" >Details</a> for <em>enable user name login field</em>" ); ?></p>
@@ -985,7 +985,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>" ); ?></p>
 						<div id="visualthumb" style="display: none">
-						<p><?php echo gettext("Setting this places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "); ?></p>
+						<p><?php echo gettext("Setting this option places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "); ?></p>
 						</div>
 
 						<p><?php  echo gettext("<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>" ); ?></p>
@@ -1148,7 +1148,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext('Search behavior settings.') ?></p>
 						<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
 						<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
-						<p><?php echo gettext('Setting <code>Treat spaces as</code> to <em>OR</em> will cause search to trigger on any of the words in a string separated by spaces. Setting it to <em>AND</em> will cause the search to triger only when all strings are present. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
+						<p><?php echo gettext('Setting <code>Treat spaces as</code> to <em>OR</em> will cause search to trigger on any of the words in a string separated by spaces. Setting it to <em>AND</em> will cause the search to trigger only when all strings are present. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
 						<p><?php echo gettext('Setting <code>Do not return <em>{item}</em> matches</code> will cause search to ignore <em>{items}</em> when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
 					</td>
 				</tr>
@@ -1260,12 +1260,12 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td><?php echo gettext("RSS enclosure:"); ?></td>
 			<td><input type="checkbox" name="feed_enclosure"
 				value="1" <?php echo checked('1', getOption('feed_enclosure')); ?> /></td>
-			<td><?php echo gettext("Check if you want to enable the <em>rss enclosure</em> feature which provides a direct download for full images, movies etc. from within certain rss reader clients <em>(only Images RSS)</em>."); ?></td>
+			<td><?php echo gettext("Check if you want to enable the <em>RSS enclosure</em> feature which provides a direct download for full images, movies etc. from within certain RSS reader clients <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 			<tr>
 			<td><?php echo gettext("Media RSS:"); ?></td>
 			<td><input type="checkbox" name="feed_mediarss" value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
-			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."); ?></td>
+			<td><?php echo gettext("Check if <em>media RSS</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("RSS cache"); ?></td>
@@ -1461,7 +1461,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 				<td>
 					<p><?php	echo gettext("Automatically rotate images based on the EXIF orientation setting."); ?></p>
 					<?php
-					if (!function_exists('imagerotate')) echo '<p class="notebox">'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.").'</p>';
+					if (!function_exists('imagerotate')) echo '<p class="notebox">'.gettext("Image rotation requires the <em>imagerotate</em> function found in the bundled GD library of PHP version 4.3 or greater.").'</p>';
 					?>
 				</td>
 			</tr>
@@ -1834,7 +1834,7 @@ if ($subtab == 'comments' && zp_loggedin(OPTIONS_RIGHTS)) {
 								<label>
 									<input type="checkbox" name="Use_Captcha" id="Use_Captcha"
 											value="1" <?php checked('1', getOption('Use_Captcha')); ?> />
-									<?php echo gettext("Captcha"); ?>
+									<?php echo gettext("CAPTCHA"); ?>
 								</label>
 							</span>
 						</td>
@@ -2007,7 +2007,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo gettext("Grayscale conversion:"); ?></td>
+				<td><?php echo gettext("Gray scale conversion:"); ?></td>
 				<td>
 				<span style="white-space:nowrap">
 					<label>
@@ -2024,7 +2024,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 					</label>
 				</span>
 				</td>
-				<td><?php echo gettext("If checked, images/thumbnails will be created in grayscale."); ?></td>
+				<td><?php echo gettext("If checked, images/thumbnails will be created in gray scale."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Image size:"); ?></td>

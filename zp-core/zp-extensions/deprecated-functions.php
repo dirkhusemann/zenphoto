@@ -1,6 +1,6 @@
 <?php
 /**
- * These functions have been removed from mainstream Zenphoto as as they have been
+ * These functions have been removed from mainstream Zenphoto as they have been
  * supplanted. 
  * 
  * They are not maintained and they are not guarentted to function correctly with the
@@ -8,7 +8,7 @@
  * 
  * @package plugins
  */
-$plugin_description = gettext("Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as as they have been supplanted. They are not maintained and they are not guaranteed to function correctly with the current version of Zenphoto.");
+$plugin_description = gettext("Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as they have been supplanted. They are not maintained and they are not guaranteed to function correctly with the current version of Zenphoto.");
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---deprecated-functions.php.html";
 
 /**
@@ -16,7 +16,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."-
  * Gets the hitcount of a page, news article or news category
  * 
  * @param string $mode Pass "news", "page" or "category" to get the hitcounter of the current page, article or category if one is set
- * @param mixed $obj If you want to get the hitcount of a specific page or article you additonally can to pass its object.
+ * @param mixed $obj If you want to get the hitcount of a specific page or article you additionally can to pass its object.
  * 									 If you want to get the hitcount of a specific category you need to pass its cat_link. 
  * 									 In any case $mode must be set!
  * @return int

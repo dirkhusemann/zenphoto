@@ -234,7 +234,7 @@ function updatePage() {
 
 
 /**
- * Deletes a page (and also if existing its sub pages) from the database
+ * Deletes a page (and also if existing its subpages) from the database
  *
  */
 function deletePage() {
@@ -248,7 +248,7 @@ function deletePage() {
 		}
 	}
 	query("DELETE FROM ".prefix('zenpage_pages')." WHERE id = ".$id." OR `sort_order` like '".$sortorder."-%'"); // Delete the actual page
-	//query("DELETE FROM ".prefix('zenpage_pages')." WHERE OR `sort_order` like '".$sortorder."%'"); // delete sub pages if there are some
+	//query("DELETE FROM ".prefix('zenpage_pages')." WHERE OR `sort_order` like '".$sortorder."%'"); // delete subpages if there are some
 	echo"<p class='messagebox' id='fade-message'>".gettext("Page successfully deleted!")."</p>";
 }
 
@@ -345,7 +345,7 @@ function printPagesListTable($page, $flag) {
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
-		<a href="javascript:confirmDeleteImage('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUB PAGES OF THIS PAGE!")); ?>')" title="<?php echo gettext("Delete page"); ?>">
+		<a href="javascript:confirmDeleteImage('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUBPAGES OF THIS PAGE!")); ?>')" title="<?php echo gettext("Delete page"); ?>">
 		<img src="../../images/fail.png" alt="delete" /></a>
 	</td>
 	<?php } else { ?>

@@ -169,7 +169,7 @@
     }
 
     /**
-     * Load an image from a string (eg. from a database table)
+     * Load an image from a string (e.g. from a database table)
      * 
      * @param  string $string
      * @return bool 

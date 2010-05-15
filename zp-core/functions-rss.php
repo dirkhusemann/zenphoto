@@ -72,7 +72,7 @@ function getRSSAlbumTitle() {
 }
 
 /**
- * Returns the rss type from the feed's url
+ * Returns the RSS type from the feed's url
  *
  * @return string
  */
@@ -111,7 +111,7 @@ function getRSSLocaleXML() {
 }
 
 /**
- * Returns the albums rss mode from the feed's url
+ * Returns the albums RSS mode from the feed's url
  *
  * @return string
  */
@@ -268,7 +268,7 @@ function getMimeType($ext) {
 }
 
 /**
- * Gets the rss file name from the feed url and clears out query items and special chars
+ * Gets the RSS file name from the feed url and clears out query items and special chars
  *
  * @return string
  */

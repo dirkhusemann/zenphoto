@@ -1,6 +1,6 @@
 <?php
 /**
- * creates the captcha images
+ * creates the CAPTCHA images
  * @package core
  */
 

@@ -2,11 +2,11 @@
 /**
  * Contact form
  *
- * Prints a e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. 
+ * Prints an e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. 
  * Name, e-mail address, subject and message are required fields by default. 
- * You need to enter a custom mail address that should be use for the messages. 
+ * You need to enter a custom mail address that should be used for the messages. 
  * 
- * Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.
+ * Supports Zenphoto's CAPTCHA and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.
  * 
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
@@ -14,7 +14,7 @@
  * @package plugins
  */
 
-$plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail address, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail address that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
+$plugin_description = gettext("Prints an e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. Name, e-mail address, subject and message (and if enabled CAPTCHA) are required fields. You need to enter a custom mail address that should be used for the messages. Supports Zenphoto's CAPTCHA and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---contact_form.php.html";
@@ -62,7 +62,7 @@ class contactformOptions {
 										'desc' => gettext("The intro text for your contact form")),
 									gettext('Confirm text') => array('key' => 'contactform_confirmtext', 'type' => OPTION_TYPE_TEXTAREA,
 										'order' => 14,
-										'desc' => gettext("The text that asks the vistior to confirm that he really wants to send the message.")),
+										'desc' => gettext("The text that asks the visitor to confirm that he really wants to send the message.")),
 									gettext('Thanks text') => array('key' => 'contactform_thankstext', 'type' => OPTION_TYPE_TEXTAREA,
 										'order' => 15,
 										'desc' => gettext("The text that is shown after a message has been confirmed and sent.")),
@@ -99,9 +99,9 @@ class contactformOptions {
 									gettext('Website field') => array('key' => 'contactform_website', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
 										'order' => 8,
 										'desc' => sprintf($mailfieldinstruction,gettext("Website field."))),
-									gettext('Captcha field') => array('key' => 'contactform_captcha', 'type' => OPTION_TYPE_CHECKBOX,
+									gettext('CAPTCHA field') => array('key' => 'contactform_captcha', 'type' => OPTION_TYPE_CHECKBOX,
 										'order' => 9,
-										'desc' => gettext("If Captcha should be required.")),
+										'desc' => gettext("If CAPTCHA should be required.")),
 									gettext('Phone field') => array('key' => 'contactform_phone', 'type' => OPTION_TYPE_RADIO, 'buttons' => $list,
 										'order' => 10,
 										'desc' => sprintf($mailfieldinstruction,gettext("Phone number field."))),
@@ -131,7 +131,7 @@ function getField($field, $level=3) {
 	}
 }
 /**
- * Prints the mail contact form, handles checks and the mail sending. It uses Zenphoto's check for valid e-mail address and website url and also supports Captcha.
+ * Prints the mail contact form, handles checks and the mail sending. It uses Zenphoto's check for valid e-mail address and website URL and also supports CAPTCHA.
  * The contact form itself is a separate file and is located within the /contact_form/form.php so that it can be style as needed.
  *
  */
@@ -173,13 +173,13 @@ function printContactForm() {
 		if (getOption("contactform_subject") == "required" && empty($mailcontent['subject'])) { $error[10] = gettext("a <strong>subject</strong>"); }
 		if (getOption("contactform_message") == "required" && empty($mailcontent['message'])) { $error[11] = gettext("a <strong>message</strong>"); }
 				
-		// captcha start
+		// CAPTCHA start
 		if(getOption("contactform_captcha")) {
 			$code_ok = trim($_POST['code_h']);
 			$code = trim($_POST['code']);
-			if (!$_zp_captcha->checkCaptcha($code, $code_ok)) { $error[5] = gettext("<strong>the correct captcha verification code</strong>"); } // no ticket
+			if (!$_zp_captcha->checkCaptcha($code, $code_ok)) { $error[5] = gettext("<strong>the correct CAPTCHA verification code</strong>"); } // no ticket
 		} 
-		// captcha end
+		// CAPTCHA end
 		
 		// If required fields are empty or not valide print note
 		if(count($error) != 0) {
@@ -298,7 +298,7 @@ function showOrNotShowField($option) {
 
 /**
  * Helper function that checks if the field is a required one. If it returns '*" to be appended to the field name as an indicator. 
- * Not for the captcha field that is always required if shown...
+ * Not for the CAPTCHA field that is always required if shown...
  *
  * @param string $option the option value
  * @return string

@@ -2,7 +2,7 @@
 /**
  * Provides the means to set an limit of the number of images that can be uploaded to an album in total. 
  * Of course this is bypassed if using FTP upload or ZIP files!
- * If you want to limit the latter you need to use the quota_managment plugin additonally.
+ * If you want to limit the latter you need to use the quota_managment plugin additionally.
  * NOTE: The http browser single file upload is disabled if using this plugin! 
  *
  * @author Malte Müller (acrylian)

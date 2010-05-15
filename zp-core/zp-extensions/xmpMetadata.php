@@ -27,7 +27,7 @@
  */
 
 $plugin_is_filter = 9;
-$plugin_description = gettext('Extracts <em>xmp</em> metadata from images and <code>xmp</code> sidecar files.');
+$plugin_description = gettext('Extracts <em>XMP</em> metadata from images and <code>XMP</code> sidecar files.');
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---xmpMetadata.php.html";
 $plugin_version = '1.3.0'; 
@@ -84,7 +84,7 @@ class xmpMetadata_options {
 										'desc' => gettext('The plugin will look for files with <em>image_name.extension</em> and extract XMP metadata from them into the <em>image_name</em> record.')),
 									gettext('Process extensions') => array('key' => 'xmpMetadata_examine_imagefile', 'type' => OPTION_TYPE_CHECKBOX_UL,
 										'checkboxes' => $listi,
-										'desc' => gettext('If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>xmp</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive.'))
+										'desc' => gettext('If no sidecar file exists and the extension is enabled, the plugin will search within that type <em>image</em> file for an <code>XMP</code> block. <strong>Warning</strong> do not set this option unless you require it. Searching image files can be computationally intensive.'))
 		);
 	}
 	

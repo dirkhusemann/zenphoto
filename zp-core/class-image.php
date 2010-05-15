@@ -892,8 +892,8 @@ class _Image extends PersistentObject {
 	 * @param string $email Comment author email
 	 * @param string $website Comment author website
 	 * @param string $comment body of the comment
-	 * @param string $code Captcha code entered
-	 * @param string $code_ok Captcha md5 expected
+	 * @param string $code CAPTCHA code entered
+	 * @param string $code_ok CAPTCHA md5 expected
 	 * @param string $ip the IP address of the comment poster
 	 * @param bool $private set to true if the comment is for the admin only
 	 * @param bool $anon set to true if the poster wishes to remain anonymous
@@ -978,7 +978,7 @@ class _Image extends PersistentObject {
 	 * @param string $class Optional style class
 	 * @param string $id Optional style id
 	 * @param bool $thumbStandin set true to inhibit watermarking
-	 * @param bool $gray set true to force grayscale
+	 * @param bool $gray set true to force gray scale
 	 * @return string
 	 */
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {

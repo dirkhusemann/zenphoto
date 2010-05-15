@@ -1060,7 +1060,7 @@
   // Function : deleteByIndex()
   // Description :
   //   ***** Deprecated *****
-  //   delete(PCLZIP_OPT_BY_INDEX, $p_index) should be prefered.
+  //   delete(PCLZIP_OPT_BY_INDEX, $p_index) should be preferred.
   // --------------------------------------------------------------------------------
   function deleteByIndex($p_index)
   {

@@ -19,7 +19,7 @@ function db_connect() {
 	global $mysql_connection, $_zp_conf_vars;
 	$db = $_zp_conf_vars['mysql_database'];
 	if (!function_exists('mysql_connect')) {
-		zp_error(gettext('MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add MySQL support to your PHP installation.'));
+		zp_error(gettext('MySQL Error: The PHP MySQL extensions have not been installed. Please ask your administrator to add MySQL support to your PHP installation.'));
 		return false;
 	}
 	if (!is_array($_zp_conf_vars)) {

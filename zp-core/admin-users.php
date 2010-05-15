@@ -403,7 +403,7 @@ if (empty($alterrights)) {
 						?>
 						<td colspan="2" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 							<span class="notebox">
-								<?php echo gettext('<strong>Note:</strong> You must have ADMIN rights to alter anything but your personal infrormation.')?>
+								<?php echo gettext('<strong>Note:</strong> You must have ADMIN rights to alter anything but your personal information.')?>
 							</span>
 						</td>
 						<?php

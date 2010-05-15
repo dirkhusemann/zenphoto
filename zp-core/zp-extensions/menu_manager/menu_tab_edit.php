@@ -136,7 +136,7 @@ function handleSelectorChange(type) {
 		case "customlink":
 			$('#albumselector,#pageselector,#categoryselector,#custompageselector').hide();
 			$('#selector').html('<?php echo js_encode(gettext("Custom link")); ?>');
-			$('#description').html('<?php echo js_encode(gettext("Creates a link outside the Zenphoto structure. Use of a full URL is recommended (e.g http://www.domain.com).")); ?>');
+			$('#description').html('<?php echo js_encode(gettext("Creates a link outside the Zenphoto structure. Use of a full URL is recommended (e.g. http://www.domain.com).")); ?>');
 			$('#link').removeAttr('disabled');
 			$('#link_label').html('<?php echo js_encode(gettext('URL')); ?>');
 			$('#titleinput').show();

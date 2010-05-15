@@ -24,7 +24,7 @@
  */
 
 $plugin_is_filter = 5;
-$plugin_description = gettext("Provides a quota management system to limit the sum of sizes of images a user uploads.")."<p class='notebox'>".gettext("<strong>Note:</strong> if FTP is used to upload images, manual user assignment is necessary. ZIP file upload is disabled as as quotas are not applied to the files contained therein.")."</p>";
+$plugin_description = gettext("Provides a quota management system to limit the sum of sizes of images a user uploads.")."<p class='notebox'>".gettext("<strong>Note:</strong> if FTP is used to upload images, manual user assignment is necessary. ZIP file upload is disabled as quotas are not applied to the files contained therein.")."</p>";
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-quota.php.html";
@@ -69,8 +69,8 @@ class Quota_management {
 	function getOptionsSupported() {
 		return array(	gettext('Default quota') => array('key' => 'quota_default', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext('Default size limit in kilobytes.')),
-									gettext('Allow ZIPfiles') => array('key' => 'quota_allowZIP', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('The size of a ZIP file may be slightly smaller than the sum of the <em>image</em> files it contains. Un-check this box if you wish to disable uploaing of ZIP files.'))
+									gettext('Allow ZIP files') => array('key' => 'quota_allowZIP', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('The size of a ZIP file may be slightly smaller than the sum of the <em>image</em> files it contains. Un-check this box if you wish to disable uploading of ZIP files.'))
 		);
 	}
 

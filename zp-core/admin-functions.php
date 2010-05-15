@@ -238,7 +238,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label><img src=\"" . $img . "\" alt=\"Code\" align=\"middle\"/></label>";
 		?>
 		<tr>
-			<td align="left"><?php echo gettext("*Enter captcha in place of <em>Password</em> to request a password reset."); ?></td>
+			<td align="left"><?php echo gettext("*Enter CAPTCHA in place of <em>Password</em> to request a password reset."); ?></td>
 			<td><?php echo $html; ?></td>
 		</tr>
 		<?php
@@ -1449,7 +1449,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						?>
 						<label>
 							<input type="checkbox" name="reset_hitcounter" />
-							<?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?>
+							<?php echo sprintf(gettext("Reset hitcounter (Hits: %u)"), $hc); ?>
 						</label>
 					</p>
 					<p>
@@ -2466,7 +2466,7 @@ function copyThemeDirectory($source, $target, $newname) {
 	foreach ( $source_files as $file ) {
 		$newfile = str_replace($source, $target, $file);
 		if (! copy("$file", "$newfile" ) )
-			return sprintf(gettext("An error occured while copying files. Please delete manually the new theme directory '%s' and retry or copy files manually."), basename($target));
+			return sprintf(gettext("An error occurred while copying files. Please delete manually the new theme directory '%s' and retry or copy files manually."), basename($target));
 		chmod("$newfile", CHMOD_VALUE);
 	}
 

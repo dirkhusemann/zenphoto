@@ -4,7 +4,7 @@
  * @package plugins
  */
 $plugin_is_filter = 5;
-$plugin_description = gettext("Filter applied to filenames to translate accented characters to unaccented ones for seo friendly URLs.");
+$plugin_description = gettext("Filter applied to filenames to translate accented characters to unaccented ones for SEO friendly URLs.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-seo.php.html";

@@ -10,7 +10,7 @@
  */
 
 
-$plugin_description = gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time and the class-video plugin must be enabled, too. <br /> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
+$plugin_description = gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time and the class-video plugin must be enabled, too. <br /> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its license.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flowplayer3.php.html";

@@ -73,7 +73,7 @@
 		<?php if(getOption("contactform_captcha") && !$_processing_post) { $captchaCode=generateCaptcha($img); ?>
  		<tr>
  			<td>
- 				<label><?php echo gettext("Enter Captcha<strong>*</strong>:"); ?>
+ 				<label><?php echo gettext("Enter CAPTCHA<strong>*</strong>:"); ?>
  					<img src=<?php echo "\"$img\"";?> alt="Code" align="middle" />
  				</label>
  			</td>

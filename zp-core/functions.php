@@ -714,8 +714,8 @@ define ('COMMENT_SEND_EMAIL', 32);
  * @param string $email Comment author email
  * @param string $website Comment author website
  * @param string $comment body of the comment
- * @param string $code Captcha code entered
- * @param string $code_ok Captcha md5 expected
+ * @param string $code CAPTCHA code entered
+ * @param string $code_ok CAPTCHA md5 expected
  * @param string $type 'albums' if it is an album or 'images' if it is an image comment
  * @param object $receiver the object (image or album) to which to post the comment
  * @param string $ip the IP address of the comment poster
