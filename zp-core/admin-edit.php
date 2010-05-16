@@ -1405,9 +1405,9 @@ if (isset($_GET['saved'])) {
 		<ul class="iconlegend">
 			<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
 			<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Un-published"); ?></li>
-			<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
+			<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache the album"); ?></li>
 			<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
-			<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
+			<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset hitcounters"); ?></li>
 			<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 		</ul>
 	</div>
