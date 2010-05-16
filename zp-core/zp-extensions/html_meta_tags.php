@@ -10,7 +10,7 @@
  * @package plugins 
  */
 
-$plugin_description = gettext("A plugin to print the most common html meta tags (except the charset one which is standard to all theme files anyway) to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
+$plugin_description = gettext("A plugin to print the most common HTML meta tags (except the charset one which is standard to all theme files anyway) to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.3.0'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---html_meta_tags.php.html";
@@ -104,7 +104,7 @@ class htmlmetatags {
 												"name='DC.relation'" => "htmlmeta_name-DC.relation",
 												"name='DC.Date.created'" => "htmlmeta_name-DC.Date.created"
 												),
-										"desc" => gettext("Which of the html meta tags should be used. For info about these in detail please refer to the net."))
+										"desc" => gettext("Which of the HTML meta tags should be used. For info about these in detail please refer to the net."))
 		
 		);
 	}
