@@ -27,7 +27,7 @@ define('TEXT_INPUT_SIZE_SHORT', 30);
 function printAdminFooter($addl='') {
 	?>
 	<div id="footer">
-		<?php printf(gettext('<a href="http://www.zenphoto.org" title="A simpler web photo album">zen<strong>photo</strong></a> version %1$s [%2$s]'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE);
+		<?php printf(gettext('<a href="http://www.zenphoto.org" title="A simpler web photo album">Zen<strong>photo</strong></a> version %1$s [%2$s]'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE);
 		if (!empty($addl)) {
 			echo ' | '. $addl;
 		}
