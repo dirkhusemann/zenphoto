@@ -26,9 +26,6 @@ body {
 em {
  color: black;
 }
-a em {
-	color: #4D76CF;
-}
 
 
 /* Main Layout
@@ -416,7 +413,7 @@ code {
 
 /* Miscellaneous
 ------------------------------ */
-a {
+a, a em {
 	color: #4D76CF;
 	text-decoration: none;
 }
@@ -425,7 +422,8 @@ a img {
 	border-width: 1px;
 }
 
-a:hover {
+a:hover,
+a:hover em {
 	color: #FF8A00;
 }
 

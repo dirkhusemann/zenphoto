@@ -266,7 +266,7 @@ function printLoginForm($redirect=null, $logo=true) {
 function printLogoAndLinks() {
 	global $_zp_current_admin_obj;
 	?>
-	<span id="administration"><img id="logo" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/zen-logo.gif" title="<?php echo gettext('Zenphoto Administration'); ?>" alt="<?php echo gettext('Zenphoto Administration'); ?>" align="bottom" /></span>
+	<span id="administration"><img id="logo" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/zen-logo.png" title="<?php echo gettext('Zenphoto Administration'); ?>" alt="<?php echo gettext('Zenphoto Administration'); ?>" align="bottom" /></span>
 	<?php
 	echo "\n<div id=\"links\">";
 	echo "\n  ";
