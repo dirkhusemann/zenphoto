@@ -1033,6 +1033,8 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 			$catcount = countArticles($category['cat_link'],$published);
 			if($counter) {
 				$count = "<small> (".$catcount.")</small>";
+			} else {
+				$count = '';
 			}
 			if($catcount != 0) {
 				if(getCurrentNewsCategoryID() == $category['id']) {

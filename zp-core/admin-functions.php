@@ -189,7 +189,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	?>
 	<div id="loginform">
 	<?php
-	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" alt=\"Zen Photo\" /></p>";
+	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.png\" title=\"Zen Photo\" alt=\"Zen Photo\" /></p>";
 	switch ($_zp_login_error) {
 		case 1:
 			?>
