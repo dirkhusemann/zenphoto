@@ -565,7 +565,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 								print_language_string_list($v, $key, $type, NULL, $editor);
 							} else {
 								?>
-								<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo html_encode($v); ?>" />
+								<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo htmlentities($v); ?>" />
 								<?php
 							}
 							?>
