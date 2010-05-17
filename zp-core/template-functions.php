@@ -3904,10 +3904,11 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
  *
  * @param string $option type of RSS (Gallery, Album, Collection, Comments)
  * @param string $linktext title of the link
+ * @param string $lang optional to display a feed link for a specific language. Enter the locale like "de_DE" (the locale must be installed on your Zenphoto to work of course). If empty the locale set in the admin option or the language selector (getOption('locale') is used.
  *
  * @since 1.1.6
  */
-function printRSSHeaderLink($option, $linktext) {
+function printRSSHeaderLink($option, $linktext, $lang='') {
 	echo getRSSHeaderLink($option, $linktext);
 }
 

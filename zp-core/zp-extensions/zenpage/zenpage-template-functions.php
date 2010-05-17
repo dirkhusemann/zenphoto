@@ -1067,7 +1067,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
  * @param string $category Optional news articles by category (only "none" option"
  * @return array
  */
-function getLatestNews($number=5,$option='none', $category='') {
+function getLatestNews($number=2,$option='none', $category='') {
 	global $_zp_current_zenpage_news;
 	if(!empty($category) AND $option =="none") {
 		$latest = getNewsArticles($number,$category,NULL,true);
@@ -2771,10 +2771,12 @@ function getZenpageRSSHeaderLink($option='', $categorylink='', $linktext='', $la
  *
  * @param string $option type of RSS (News, NewsCategory, NewsWithLatestImages)
  * @param string $linktext title of the link
+ * @param string $categorylink The specific category you want a RSS feed from (only 'Category' mode)
+ * @param string $lang optional to display a feed link for a specific language (currently works for latest images only). Enter the locale like "de_DE" (the locale must be installed on your Zenphoto to work of course). If empty the locale set in the admin option or the language selector (getOption('locale') is used.
  *
  */
-function printZenpageRSSHeaderLink($option, $linktext) {
-	echo getZenpageRSSHeaderLink($option, $linktext);
+function printZenpageRSSHeaderLink($option,$linktext,$category,$lang) {
+	echo getZenpageRSSHeaderLink($option,$category,$linktext,$lang);
 }
 
 /**
