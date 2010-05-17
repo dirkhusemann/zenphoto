@@ -118,7 +118,8 @@ function addPage() {
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getcheckboxState('locked');
 	
-	$rslt = query_single_row('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"',true);
+	$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"';
+	$rslt = query_single_row($sql,true);
 	if ($rslt) {
 		$titlelink .= '_'.seoFriendly($date); // force unique so that data may be saved.
 	}
