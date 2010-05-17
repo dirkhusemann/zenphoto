@@ -150,11 +150,8 @@ function isProtectedPage($pageobj=NULL) {
 		} else {
 			$postdate = NULL;
 		}
-		if($ignorepagination) {
-			$limit = "";
-		} else {
-			$limit = getLimitAndOffset($articles_per_page);
-		}
+		$limit = getLimitAndOffset($articles_per_page,$ignorepagination);
+	
 		// sortorder and sortdirection (only used for all news articles and categories naturally)
 		$sortorder = sanitize($sortorder);
 		switch($sortorder) {
@@ -313,9 +310,10 @@ function isProtectedPage($pageobj=NULL) {
 	 * Gets the LIMIT and OFFSET for the MySQL query that gets the news articles
 	 *
 	 * @param int $articles_per_page The number of articles to get
+	 * @param bool $ignorepagination If pagination should be ingored so always with the first is started (false is default)
 	 * @return string
 	 */
-	function getLimitAndOffset($articles_per_page) {
+	function getLimitAndOffset($articles_per_page,$ignorepagination=false) {
 		global $_zp_zenpage_total_pages;
 		if(strstr(dirname($_SERVER['REQUEST_URI']), '/'.PLUGIN_FOLDER.'/zenpage')) {
 			$page = getCurrentAdminNewsPage();
@@ -325,10 +323,13 @@ function isProtectedPage($pageobj=NULL) {
 		if(!empty($articles_per_page)) {
 			$_zp_zenpage_total_pages = ceil(getTotalArticles() / $articles_per_page);
 		}
-		$offset = ($page - 1) * $articles_per_page;
-
+		if($ignorepagination) {
+			$offset = 0;
+		} else {
+			$offset = ($page - 1) * $articles_per_page;
+		}
 		// Prevent sql limit/offset error when saving plugin options and on the plugins page
-		if (empty($articles_per_page)) {
+		if(empty($articles_per_page)) {
 			$limit = "";
 		} else {
 			$limit = " LIMIT ".$offset.",".$articles_per_page;
