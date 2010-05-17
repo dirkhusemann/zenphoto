@@ -21,7 +21,7 @@ $IPlist = query_single_row("SELECT * FROM $dbtable WHERE id= $id");
 if (is_array($IPlist)) {
 	$oldrating = getRatingByIP($ip, $IPlist['used_ips'], $IPlist['rating']);
 } else {
-	$oldrating =false;
+	$oldrating = false;
 }
 if(!$oldrating || getOption('rating_recast')) {
 	if ($rating) {

@@ -4485,6 +4485,25 @@ function printZenphotoLink() {
  * @return string
  */
 function shortenContent($articlecontent, $shorten, $shortenindicator) {
+	$short = substr($articlecontent, 0, $shorten);
+	$short2 = sanitize($short.'</p>');
+	if (strlen($articlecontent) > $shorten && ($l2 = strlen($short2)) < $shorten)	{
+		$c = 0;
+		$l1 = $shorten;
+		$delta = $shorten-$l2;
+		while ($l2 < $shorten && $c++ < 5) {
+			$open = strrpos($short, '<');
+			if ($open > strrpos($short, '>')) {
+				$l1 = strpos($articlecontent,'>',$l1+1)+$delta;
+			} else {
+				$l1 = $l1 + $delta;
+			}
+			$short = substr($articlecontent, 0, $l1);
+			$short2 = sanitize($short.'</p>');
+			$l2 = strlen($short2);
+		}
+		$shorten = $l1;
+	}
 	$short = truncate_string($articlecontent, $shorten, '');
 	// drop open tag strings
 	$open = strrpos($short, '<');
