@@ -740,20 +740,24 @@ class SearchEngine
 					default:
 						$targetfound = true;
 						query('SET @serachtarget="'.zp_escape_string($singlesearchstring).'"');
-						$fieldsql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE (';
-
+						$fieldsql = '';
 						foreach ($fields as $fieldname) {
-							if ($tbl=='albums' && $fieldname='filename') {
+							if ($tbl=='albums' && $fieldname=='filename') {
 								$fieldname = 'folder';
+							} else {
+								$fieldname = strtolower($fieldname);
 							}
 							if ($fieldname && in_array($fieldname, $columns)) {
 								$fieldsql .= ' `'.$fieldname.'` LIKE "%'.zp_escape_string($singlesearchstring).'%" OR ';
 							}
 						}
-						$fieldsql = substr($fieldsql, 0, strlen($fieldsql)-4).') ORDER BY `id`';
-						$objects = query_full_array($fieldsql, true);
-						if (is_array($objects)) {
-							$field_objects = array_merge($field_objects, $objects);
+						if (!empty($fieldsql)) {
+							$fieldsql = substr($fieldsql, 0, strlen($fieldsql)-4).') ORDER BY `id`';
+							$sql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE ('.$fieldsql;
+							$objects = query_full_array($sql, true);
+							if (is_array($objects)) {
+								$field_objects = array_merge($field_objects, $objects);
+							}
 						}
 				}
 			}
