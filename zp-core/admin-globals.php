@@ -55,6 +55,7 @@ if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 																gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&amp;tab=categories'),
 																'default'=>'articles');
 }
+//TODO: add tab for "files". Remove buttons from pages, news tabs
 
 if (zp_loggedin(TAGS_RIGHTS)) {
 	$zenphoto_tabs['tags'] = array('text'=>gettext("tags"),

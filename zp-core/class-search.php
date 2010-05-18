@@ -582,7 +582,7 @@ class SearchEngine
 			if ($searchdate == "0000-00") {
 				$sql .= "`$whichdate`=\"0000-00-00 00:00:00\"";
 			} else {
-				$datesize = sizeof(split('-', $searchdate));
+				$datesize = sizeof(explode('-', $searchdate));
 				// search by day
 				if ($datesize == 3)	{
 					$d1 = $searchdate." 00:00:00";
