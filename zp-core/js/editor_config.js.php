@@ -5,10 +5,10 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER .'/'. PLUGIN_FOLDER. "/tiny_mce/tin
 	<script language="javascript" type="text/javascript">
 		// <!-- <![CDATA[
 		tinyMCE.init({
-			mode : "textareas",
+			mode : "specific_textareas",
 			theme : "zenphoto",
 			language: "en",
-		  editor_selector: "texteditor",
+		  editor_selector: "texteditor", // to enable TinyMCE on album and image customdata set to /(texteditor|texteditor_albumcustomdata|texteditor_imagecustomdata)/
 		  plugins : "safari,fullscreen,inlinepopups",
 			theme_zenphoto_toolbar_location : "top",
 			theme_zenphoto_toolbar_align : "left",

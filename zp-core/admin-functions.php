@@ -1077,7 +1077,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		?>
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Custom data:"); ?></td>
-						<td><?php print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true); ?></td>
+						<td><?php print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true,NULL,'texteditor_albumcustomdata'); ?></td>
 					</tr>
 		<?php
 	} else {

@@ -1096,7 +1096,7 @@ $alb = removeParentAlbumNames($album);
 						?>
 						<tr>
 							<td valign="top"><?php echo gettext("Custom data:"); ?></td>
-							<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?></td>
+							<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true,NULL,'texteditor_imagecustomdata'); ?></td>
 						</tr>
 						<?php
 						} else {
