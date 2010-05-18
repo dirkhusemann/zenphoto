@@ -19,8 +19,8 @@ function printFullAlbumsList() {
 	foreach($albumlist as $album) {
 		if (isMyAlbum($album, LIST_ALBUM_RIGHTS)) {
 			$albumobj = new Album($galleryobj,$album);
+			echo "<option value='".urlencode($albumobj->name)."'>".$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj)." (".$albumobj->getNumImages().")</option>";
 			if (!$albumobj->isDynamic()) {
-				echo "<option value='".urlencode($albumobj->name)."'>".$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj)." (".$albumobj->getNumImages().")</option>";
 				printSubLevelAlbums($albumobj);
 			}
 		}
@@ -37,15 +37,15 @@ function printSubLevelAlbums(&$albumobj) {
 	$albumlist = $albumobj->getAlbums();
 	foreach($albumlist as $album) {
 		$subalbumobj = new Album($galleryobj,$album);
-		if (!$subalbumobj->isDynamic()) {
 		$subalbumname = $subalbumobj->name;
-			$level = substr_count($subalbumname,"/");
-			$arrow = "";
-			for($count = 1; $count <= $level; $count++) {
-				$arrow .= "&raquo; ";
-			}
-			echo "<option value='".urlencode($subalbumobj->name)."'>";
-			echo $arrow.$subalbumobj->getTitle().unpublishedZenphotoItemCheck($subalbumobj)." (".$subalbumobj->getNumImages().")</option>";
+		$level = substr_count($subalbumname,"/");
+		$arrow = "";
+		for($count = 1; $count <= $level; $count++) {
+			$arrow .= "&raquo; ";
+		}
+		echo "<option value='".urlencode($subalbumobj->name)."'>";
+		echo $arrow.$subalbumobj->getTitle().unpublishedZenphotoItemCheck($subalbumobj)." (".$subalbumobj->getNumImages().")</option>";
+		if (!$subalbumobj->isDynamic()) {
 			printSubLevelAlbums($subalbumobj);
 		}
 	}
