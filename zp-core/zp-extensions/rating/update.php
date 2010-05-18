@@ -33,16 +33,21 @@ if(!$oldrating || getOption('rating_recast')) {
 	}
 	$insertip = serialize($_rating_current_IPlist);
 	if ($oldrating) {
-		$voting = 0;
+		if ($rating) {
+			$voting = ' total_votes=total_votes-1,';	// retract vote
+		} else {
+			$voting = '';
+		}
 		$valuechange = $rating-$oldrating;
 		if ($valuechange>=0) {
-			$valuechange = '+'.$valuechange;
+			$valuechange = '+'.$valuechange.',';
 		}
+		$valuechange = ' total_value=total_value'.$valuechange.',';
 	} else {
-		$voting = 1;
-		$valuechange = '+'.$rating;
+		$voting = ' total_votes=total_votes+1,';
+		$valuechange = ' total_value=total_value+'.$rating.',';
 	}
-	$sql = "UPDATE ".$dbtable.' SET total_votes=total_votes+'.$voting.", total_value=total_value".$valuechange.", rating=total_value/total_votes, used_ips='".$insertip."' WHERE id='".$id."'";
+	$sql = "UPDATE ".$dbtable.' SET'.$voting.$valuechange." rating=total_value/total_votes, used_ips='".$insertip."' WHERE id='".$id."'";
 	$rslt = query($sql,true);
 }
 

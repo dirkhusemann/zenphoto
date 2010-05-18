@@ -192,6 +192,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
   ?>
 	<script type="text/javascript">
 		// <!-- <![CDATA[
+		var recast = <?php printf('%u',$recast && $oldrating); ?>;
 		$(function() {
 			$('#star_rating<?php echo $unique; ?> :radio.star').rating('select','<?php echo $starselector; ?>');
 			<?php
@@ -225,7 +226,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 			  <span id="submit_button<?php echo $unique; ?>">
 			  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onclick="javascript:
 						var dataString = $(this.form).serialize();
-						if (dataString || <?php printf('%u',$recast && $oldrating); ?>) {
+						if (dataString || recast) {
 							<?php
 							if ($recast) {
 								?>
@@ -245,6 +246,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 								url: '<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4); ?>/update.php',   
 								data: dataString+'&amp;id=<?php echo $id; ?>&amp;table=<?php echo $table; ?>'
 							});
+							recast = <?php printf('%u',$recast); ?>;
 							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');
 						} else {
 							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('nothing to submit'); ?>');
