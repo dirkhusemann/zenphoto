@@ -4,16 +4,16 @@ function toggle(x) {
 	jQuery('#'+x).toggle();
 }
 
-function confirmDeleteAlbum(url, message1, message2) {
-	if (confirm(message1)) {
-		if (confirm(message2)) {
+function confirmDeleteAlbum(url) {
+	if (confirm(deleteAlbum1)) {
+		if (confirm(deleteAlbum2)) {
 			window.location = url;
 		}
 	}
 }
 
-function confirmDeleteImage(url, message) {
-	if (confirm(message)) {
+function confirmDelete(url,msg) {
+	if (confirm(msg)) {
 		window.location = url;
 	}
 }

@@ -21,6 +21,11 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <title><?php echo gettext("zenphoto administration"); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php zenpageJSCSS(false,true); ?> 
+<script type="text/javascript">
+	//<!-- <![CDATA[
+	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+	// ]]> -->
+</script>
 </head>
 <body>
 <?php 
@@ -171,7 +176,7 @@ printLogoAndLinks();
 										<img src="../../images/reset.png" alt="<?php echo gettext('Reset hitcounter'); ?>" /></a>
 									</td>
 									<td class="icons">
-										<a href="javascript:confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!')); ?>')" title="<?php echo gettext('Delete article'); ?>">
+										<a href="javascript:confirmDelete('admin-news-articles.php?del=<?php echo $article->getID(); ?>',deleteArticle)" title="<?php echo gettext('Delete article'); ?>">
 										<img src="../../images/fail.png" alt="<?php echo gettext('Delete article'); ?>" /></a>
 									</td>
 									<?php } else { ?>

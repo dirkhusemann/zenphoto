@@ -436,6 +436,8 @@ if (empty($subtab) || $subtab=='albuminfo') {
 ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
+	var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
+	var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
 	function newAlbum(folder,albumtab) {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {

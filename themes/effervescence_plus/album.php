@@ -383,9 +383,6 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 printFooter();
 ?>
 
-
-<?php printAdminToolbox(); ?>
-
 </body>
 </html>
 <?php

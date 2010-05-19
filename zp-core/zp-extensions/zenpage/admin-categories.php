@@ -23,6 +23,7 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <?php zenpageJSCSS(false,false); ?>  
 <script type="text/javascript">
 	//<!-- <![CDATA[
+	var deleteCategory = "<?php echo gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!"); ?>";
 	<?php if(isset($_GET["edit"])) { // prevent showing the message when adding page or article ?>
 	$(document).ready(function() {
 		if(jQuery('#edittitlelink:checked').val() != 1) {

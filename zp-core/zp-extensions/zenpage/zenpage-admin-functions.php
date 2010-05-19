@@ -346,7 +346,7 @@ function printPagesListTable($page, $flag) {
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
-		<a href="javascript:confirmDeleteImage('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUBPAGES OF THIS PAGE!")); ?>')" title="<?php echo gettext("Delete page"); ?>">
+		<a href="javascript:confirmDelete('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>',deletePage)" title="<?php echo gettext("Delete page"); ?>">
 		<img src="../../images/fail.png" alt="delete" /></a>
 	</td>
 	<?php } else { ?>
@@ -1062,7 +1062,7 @@ function printCategoryList() {
 		</a>
 	</td>
 	<td class="icons">
-	<a href="javascript:confirmDeleteImage('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories','<?php echo js_encode(gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
+	<a href="javascript:confirmDelete('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories',deleteCategory)" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
 	</td>
 	</tr>
  <?php

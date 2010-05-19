@@ -32,6 +32,8 @@ codeblocktabsJS();
 ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
+	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+	var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
 	<?php if(!isset($_GET['add'])) { // prevent showing the message when adding page or article ?>
 	$(document).ready(function() {
 		$('#date').change(function() {
@@ -111,7 +113,7 @@ codeblocktabsJS();
 		$updateitem = gettext('Update Article');
 		$saveitem = gettext('Save Article');
 		$deleteitem = gettext('Delete Article');
-		$deletemessage = js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!'));
+		$deletemessage = 'deleteArticle';
 		$themepage = ZENPAGE_NEWS;
 	}
 
@@ -132,7 +134,7 @@ codeblocktabsJS();
 		$updateitem = gettext('Update Page');
 		$saveitem = gettext('Save Page');
 		$deleteitem = gettext('Delete Page');
-		$deletemessage = js_encode(gettext('Are you sure you want to delete this page? THIS CANNOT BE UNDONE AND WILL ALSO DELETE ALL SUBPAGES OF THIS PAGE!'));
+		$deletemessage = 'deletePage';
 		$themepage = ZENPAGE_PAGES;
 	}
 
@@ -333,7 +335,8 @@ if(is_object($result)) {
 				<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
 				<br style="clear:both" />
 				<?php if(is_object($result)) { ?>
-				<p class="buttons"><a class="submitbutton" href="javascript:confirmDeleteImage('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?><?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>','<?php echo $deletemessage; ?>')" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
+				<p class="buttons"><a class="submitbutton" href="javascript:confirmDelete('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?>
+				<?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>',<?php echo $deletemessage; ?>)" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
 				<br style="clear:both" />
 				<?php } ?>
 				</div>

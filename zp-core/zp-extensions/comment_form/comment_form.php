@@ -161,12 +161,12 @@
 												<?php
 												echo $stored['country'];
 												?>
-												<input type="hidden" id="0-comment_form_country" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
+												<input type="hidden" id="comment_form_country" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="0-comment_form_country" id="comment_form_country-0" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
+											<input type="text" name="comment_form_country" id="comment_form_country-0" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
 											<?php									
 										}
 										?>

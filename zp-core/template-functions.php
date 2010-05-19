@@ -99,6 +99,11 @@ function zenJavascript() {
 					'Saving' : "<?php echo gettext('Saving'); ?>",
 					'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
 				};
+				var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
+				var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
+				var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
+				var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+				var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
 				// ]]> -->
 			</script>
 			<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
@@ -209,10 +214,8 @@ function printAdminToolbox($id='admin') {
 					}
 				}
 				// and a delete link
-				echo "<li><a href=\"javascript:confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=" .
-					urlencode(urlencode($albumname)) .
-					"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
-					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
+				echo "<li><a href=\"javascript:confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=".urlencode(urlencode($albumname)).');"'.
+					' title="'.gettext('Delete the album').'">'.gettext('Delete album')."</a></li>\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
@@ -236,8 +239,8 @@ function printAdminToolbox($id='admin') {
 				$imagename = $_zp_current_image->filename;
 				if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
 					// if admin has edit rights on this album, provide a delete link for the image.
-					echo "<li><a href=\"javascript:confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
-					urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+					echo "<li><a href=\"javascript:confirmDelete('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
+					urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "',deleteImage);\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 					echo "</li>\n";
 
 					echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode($albumname).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo#IT" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
@@ -275,7 +278,7 @@ function printAdminToolbox($id='admin') {
 						// page is a NewsArticle--provide zenpage edit, delete, and Add links
 						echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Article")."</a></li>";
 						?>
-						<li><a href="javascript:confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
+						<li><a href="javascript:confirmDelete('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>',deleteArticle)" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 						<?php
 						echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
 						zp_apply_filter('admin_toolbox_news', $titlelink);
@@ -287,7 +290,7 @@ function printAdminToolbox($id='admin') {
 						// page is zenpage page--provide edit, delete, and add links
 						echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Page")."</a></li>";
 						?>
-						<li><a href="javascript:confirmDeleteImage('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
+						<li><a href="javascript:confirmDelete('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>',deletePage)" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
 						<?php
 						echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
 						zp_apply_filter('admin_toolbox_page', $titlelink);

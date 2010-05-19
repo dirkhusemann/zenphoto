@@ -137,12 +137,12 @@
 						<?php 
 						if ($disabled['country']) {
 							?>
-							<input name="0-comment_form_country" id="comment_form_country" class="text" type="hidden" size="22" value="<?php echo $address['country']; ?>" />
+							<input name="comment_form_country" id="comment_form_country" class="text" type="hidden" size="22" value="<?php echo $address['country']; ?>" />
 							<?php echo $address['country']; ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_country" id="comment_form_country" class="text" size="22" value="<?php echo $address['country']; ?>" />
+							<input name="comment_form_country" id="comment_form_country" class="text" size="22" value="<?php echo $address['country']; ?>" />
 							<?php
 						}
 						?>

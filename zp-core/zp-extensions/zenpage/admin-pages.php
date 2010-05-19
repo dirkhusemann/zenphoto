@@ -21,6 +21,13 @@ if(!(zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 <title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php zenpageJSCSS(true,false); ?>
+<script type="text/javascript">
+	//<!-- <![CDATA[
+	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+	var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+	// ]]> -->
+</script>
+
 </head>
 <body>
 <?php
