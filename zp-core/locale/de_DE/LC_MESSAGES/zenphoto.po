@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-19 11:09+0100\n"
-"PO-Revision-Date: 2010-05-20 20:13+0100\n"
+"PO-Revision-Date: 2010-05-21 19:13+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -1151,7 +1151,7 @@ msgstr "Benutzerdefiniertes Menü verwenden"
 
 #: zTRANSLATE/themes/zenpage/themeoptions.php:39
 msgid "Check this if you want to use the <em>menu_manager</em> plugin if enabled to build a custom menu instead of the separate standard ones. As standard menu set named \"zenpage\" is created and used automatically."
-msgstr ""
+msgstr "Wählen Sie dies, wenn Sie das <em>Menü-Manager</em>Plugin, sofern diese aktiviert ist, verwenden möchten, um ein benutzerdefiniertes Menü zu erstellen, anstatt die vorgegebenen Standardmenüs zu verwenden. Ein Sandard-Menüset namens \"zenpage\" wird automatisch erstellt und verwendet."
 
 #: zTRANSLATE/themes/zenpage/themeoptions.php:47
 msgid "No unpublished pages available"
@@ -1951,7 +1951,7 @@ msgstr "Forum"
 
 #: zTRANSLATE/zp-core/admin-functions.php:37
 msgid "Bugtracker"
-msgstr ""
+msgstr "Bugtracker"
 
 #: zTRANSLATE/zp-core/admin-functions.php:38
 msgid "View Change log"
@@ -4042,7 +4042,7 @@ msgstr "Sie haben versucht, ein zu großes Bild hochzuladen"
 
 #: zTRANSLATE/zp-core/admin-upload.php:141
 msgid "You have exceeded your upload quota"
-msgstr ""
+msgstr "Sie haben Ihr Uploadkontingent überschritten"
 
 #: zTRANSLATE/zp-core/admin-upload.php:144
 msgid "There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!"
@@ -4056,7 +4056,7 @@ msgstr "Sind Sie sicher, dass Sie die Datei %s löschen wollen?"
 #: zTRANSLATE/zp-core/admin-upload.php:158
 #, php-format
 msgid "Upload queue is full. The upload limit is %u."
-msgstr ""
+msgstr "Die Upload-Warteschlange ist voll. Das Uploadlimit ist %u."
 
 #: zTRANSLATE/zp-core/admin-upload.php:196
 msgid "Upload Photos"
@@ -4078,7 +4078,7 @@ msgstr "<strong>Anmerkung:</strong>"
 
 #: zTRANSLATE/zp-core/admin-upload.php:221
 msgid "ZIP files must contain only Zenphoto supported <em>image</em> types."
-msgstr ""
+msgstr "ZIP-Dateien dürfen nur von Zenphoto unterstützte Bildformate enthalten."
 
 #: zTRANSLATE/zp-core/admin-upload.php:224
 #, php-format
@@ -4103,7 +4103,7 @@ msgstr "Hochladen vollständig"
 
 #: zTRANSLATE/zp-core/admin-upload.php:245
 msgid "Your files have been uploaded."
-msgstr ""
+msgstr "Ihren Dateien wurden hochgeladen."
 
 #: zTRANSLATE/zp-core/admin-upload.php:251
 msgid "PHP Safe Mode Restrictions in effect!"
@@ -4165,7 +4165,7 @@ msgstr "Unterstützte Dateiformate | Alle Dateien"
 
 #: zTRANSLATE/zp-core/admin-upload.php:487
 msgid "There appears to be no <em>Flash</em> plugin installed in your browser."
-msgstr ""
+msgstr "Es scheint, dass kein <em>Flash</em>-Plugin für Ihren Browser installiert ist."
 
 #: zTRANSLATE/zp-core/admin-upload.php:491
 #: zTRANSLATE/zp-core/admin-upload.php:520
@@ -5647,7 +5647,7 @@ msgstr "Seitenfehler: %2$s (%1$s)"
 #: zTRANSLATE/zp-core/functions.php:2064
 #, php-format
 msgid "Zenphoto processed a 404 error on %s. See the debug log for details."
-msgstr ""
+msgstr "Zenphoto gibt einen 404-Fehler auf %s aus. Sehen Sie in das Debuglog. "
 
 #: zTRANSLATE/zp-core/i.php:128
 msgid "The cache directory does not exist. Please create it and set the permissions to 0777."
@@ -5773,7 +5773,7 @@ msgstr "Passwortverschlüsselung erweitern:"
 
 #: zTRANSLATE/zp-core/lib-auth.php:605
 msgid "Extra text appended when hashing password to strengthen Zenphoto authentication."
-msgstr ""
+msgstr "Extratext beim Passworterstellen angehängt, um die Authenifizierung zu verstärken."
 
 #: zTRANSLATE/zp-core/lib-auth.php:605
 msgid "<strong>Note:</strong> Changing this will require all users to reset their passwords! You should change your password immediately if you change this text."
@@ -5810,7 +5810,7 @@ msgstr "Imagick aktivieren"
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:43
 msgid "Your PHP has support for Imagick. Check this option if you wish to use the Imagick graphics library."
-msgstr ""
+msgstr "Ihr PHP unterstützt Imagick. Wählen Sie dies, wenn Sie die Imagick Graphics Libary verwenden möchten."
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:44
 msgid "Imagick memory limit"
@@ -5818,11 +5818,11 @@ msgstr "Imagick-Speichergrenze"
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:47
 msgid "Amount of memory allocated to Imagick in megabytes. Set to <strong>0</strong> for unlimited memory."
-msgstr ""
+msgstr "Die Imagick zugewiesene Speichergröße in Megabyte. Für unbegrenzten Speicher auf <strong>0</strong> einstellen."
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:47
 msgid "<strong>Note</strong>: Image processing will be faster with a higher memory limit. However, if your server experiences problems with image processing, try setting this lower."
-msgstr ""
+msgstr "<strong>Anmerkung</strong>: Bilderstellung wird mit einem höheren Speicherlimit schneller sein. Wenn jedoch Probleme mit der Bilderstellung auftreten, versuchen Sie dies niedriger einzustellen. "
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:48
 msgid "CAPTCHA font size"
@@ -5830,7 +5830,7 @@ msgstr "CAPTCHA-Schriftgröße"
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:51
 msgid "The font size (in pixels) for CAPTCHAs. Default is <strong>18</strong>."
-msgstr ""
+msgstr "Die Schriftgröße (in Pixeln) für CAPTCHAs. Standard <strong>18</strong>."
 
 #: zTRANSLATE/zp-core/lib-Imagick.php:61
 msgid "The <strong><em>Imagick</em></strong> library version must be <strong>2.1.0</strong> or later."
@@ -8648,15 +8648,15 @@ msgstr "Benutzer-Rundmail"
 
 #: zTRANSLATE/zp-core/utilities/user_mailing_list.php:22
 msgid "A tool to send e-mails to all registered users who have provided an e-mail address."
-msgstr ""
+msgstr "Ein Werkzeug, um Rundmails an alle registrierten Benutzer, die eine E-Mail-Adresse angegeben haben, zu schicken."
 
 #: zTRANSLATE/zp-core/utilities/user_mailing_list.php:47
 msgid "A tool to send e-mails to all registered users who have provided an e-mail address. There is always a copy sent to the current admin and all e-mails are sent as <em>blind copies</em>."
-msgstr ""
+msgstr "Ein Werkzeug, um Rundmails an alle registrierten Benutzer, die eine E-Mail-Adresse angegeben haben, zu schicken. Eine Kopie wird auch an den derzeitigen Benutzer selbst und alle Mails als <em>Blindkopien</em>."
 
 #: zTRANSLATE/zp-core/utilities/user_mailing_list.php:54
 msgid "<strong>Note: </strong>No <em>sendmail</em> filter is registered. You must activate and configure a mailer plugin."
-msgstr ""
+msgstr "<strong>Anmerkung: </strong>Es ist kein <em>sendmail</em>-Filter registriert. Sie müssen ein Mailerplugin aktivieren und konfigurieren."
 
 #: zTRANSLATE/zp-core/utilities/user_mailing_list.php:90
 msgid "Mail sent."
@@ -8682,7 +8682,7 @@ msgstr "Weitere Mail schicken"
 
 #: zTRANSLATE/zp-core/utilities/user_mailing_list.php:100
 msgid "Please enter the message you want to send."
-msgstr ""
+msgstr "Bitte geben Sie die Nachricht ein, die Sie verschicken möchten."
 
 #: zTRANSLATE/zp-core/utilities/user_mailing_list.php:111
 msgid "Select users:"
@@ -8696,11 +8696,11 @@ msgstr "E-Mail schicken"
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:20
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:86
 msgid "Wordpress Importer"
-msgstr ""
+msgstr "Wordpress-Importer"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:21
 msgid "An importer for Wordpress posts and pages to Zenpage."
-msgstr ""
+msgstr "Ein Importer für Wordpress Artikel und Seiten nach Zenpage."
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:40
 msgid "Query failed : "
@@ -8736,7 +8736,7 @@ msgstr "Datenbankserver"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:87
 msgid "An importer for <strong>Wordpress 2.9.x</strong> to the Zenpage CMS plugin that imports the following:"
-msgstr ""
+msgstr "Ein Importer für <strong>Wordpress 2.9.x</strong> zum Zenpage CMS Plugin, der folgendes importiert:"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:89
 msgid "<strong>Posts => Zenpage articles</strong>"
@@ -8748,37 +8748,39 @@ msgstr "<strong>Seiten => Zenpage Seiten</strong>"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:91
 msgid "<strong>Post categories => Zenpage categories including assignment to their article</strong>"
-msgstr ""
+msgstr "<strong>Artikelkategorien => Zenpage Kategorien inklusive der Artikelzuweisung</strong>"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:92
 msgid "<strong>Post tags => Zenphoto tags including assignment to their article</strong>"
-msgstr ""
+msgstr "<strong>Artikelschlagwörter => Zenphoto Schlagwörter inklusive der Artikelzuweisung</strong>"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:93
 msgid "<strong>Post and page comments => Zenphoto comments including assignment to their article</strong>"
-msgstr ""
+msgstr "<strong>Artikel- und Seitenkommentare => Zenphoto Kommentare inklusive der Artikelzuweisung</strong>"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:96
 msgid "<strong>IMPORTANT: </strong>If you are not using an fresh Zenphoto install it is <strong>strongly recommended to backup your database</strong> before running this importer. Make also sure that both databases use the same encoding so you do not get messed up character display."
-msgstr ""
+msgstr "<strong>WICHTIG: </strong>Wenn Sie keine frische Zenphoto-Installation verwenden, ist es <strong>dringend empfohlen, die Datenbank zu sichern</strong> bevor Sie diesen Importer verwenden. Stellen Sie außerdem sicher, dass beide Datenbanken die gleiche Zeichenkodierung verwenden, um zerschosses Zeichen zu vermeiden."
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:99
 msgid ""
 "<strong>Notes:</strong> <em>Wordpress page nesting</em> is not preserved but can easily be recreated by drag and drop sorting on the pages tab. \n"
 "<em>Category nesting</em> is also not directly supported by Zenpage. Therefore all categories will be plain level, you can however use the <em>menu_manager plugin</em> to recreate this if needed."
 msgstr ""
+"<strong>Anmerkungen:</strong> <em>Wordpress Seitenverschachtelung</em> wird nicht beibehalten, kann aber auf der Seitenverwaltung einfach über Drag + Drop wiederhergestellt werden. \n"
+"<em>Kategorieverschachtelung</em> wird von Zenpage nicht direkt unterstützt. Daher werden alle Kategorien auf der selben Ebene sein. Sie können jedoch das <em>Menu-Verwaltungs</em>-Plugin dafür verwenden."
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:103
 msgid "In case anything does not work as expected the query results from the Wordpress database are logged in <code>zp-data/debug_log.txt</code>"
-msgstr ""
+msgstr "Für den Fall das irgendetwas nicht wie erwartet funktioniert, werden die Abfrageergebnisse von der Wordpress-Datenbank in <code>zp-data/debug_log.txt</code> dokumentiert."
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:105
 msgid "<strong>ERROR: </strong>The Zenpage CMS plugin is not enabled."
-msgstr ""
+msgstr "<strong>FEHLER: </strong>Das Zenpage-CMS-Plugin ist nicht aktiviert."
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:110
 msgid "Please enter your Wordpress database details:"
-msgstr ""
+msgstr "Bitte geben Sie Ihre Wordpress-Daten ein:"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:117
 msgid "Import"
@@ -8790,15 +8792,15 @@ msgstr "Fehlt"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:137
 msgid "<strong>ERROR:</strong> Wordpress database info incomplete"
-msgstr ""
+msgstr "<strong>FEHLER:</strong> Wordpress-Datenbank-Information nicht vollständig"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:143
 msgid "<strong>ERROR:</strong> Could not connect to the Wordpress database - Query failed : "
-msgstr ""
+msgstr "<strong>FEHLER:</strong> Keine Verbindung mit der Wordpress-Datenbank - Abfrage fehlgeschlagen: "
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:147
 msgid "<strong>ERROR:</strong> Wordpress database could not be selected - Query failed : "
-msgstr ""
+msgstr "<strong>FEHLER:</strong> Wordpress-Datenbank konnte nicht ausgewählt werden - Abfrage fehlgeschlagen: "
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:152
 msgid "Categories"
@@ -8880,7 +8882,7 @@ msgstr "Keine Kommentare zu importieren"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:347
 msgid "No posts or pages to import."
-msgstr ""
+msgstr "Keine Artikel oder Seiten zum Importieren vorhanden."
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:350
 msgid "New import"
@@ -8954,7 +8956,7 @@ msgstr "Kommentarblock ausblenden"
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:67
 msgid "If checked, existing comments will be initially hidden. Clicking on the provided button will show them."
-msgstr ""
+msgstr "Wenn ausgewählt, werden existierende Kommentar verborgen. Ein Klick auf den entsprechenden Button zeigt sie an."
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:68
 msgid "Only members can comment"
@@ -9033,14 +9035,12 @@ msgid "You must enter your name."
 msgstr "Sie müssen Ihren Namen eintragen."
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:282
-#, fuzzy
 msgid "You must supply a WEB page URL."
 msgstr "Sie müssen eine Websiteadresse angeben."
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:283
-#, fuzzy
 msgid "CAPTCHA verification failed."
-msgstr "Captcha-Verifizierung gescheitert."
+msgstr "CAPTCHA-Verifizierung gescheitert."
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:284
 msgid "You must enter something in the comment text."
@@ -9070,14 +9070,12 @@ msgid "No Comments"
 msgstr "Keine Kommentare"
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:364
-#, fuzzy
 msgid "show comments"
-msgstr "Kommentare erlauben"
+msgstr "Kommentare zeigen"
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:367
-#, fuzzy
 msgid "hide comments"
-msgstr "Kommentare erlauben"
+msgstr "Kommentare verbergen"
 
 #: zTRANSLATE/zp-core/zp-extensions/comment_form.php:464
 msgid "Only registered users may post comments."
@@ -9095,9 +9093,8 @@ msgid "Subscribe to comments"
 msgstr "Kommentare abonnieren"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:17
-#, fuzzy
 msgid "Prints an e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. Name, e-mail address, subject and message (and if enabled CAPTCHA) are required fields. You need to enter a custom mail address that should be used for the messages. Supports Zenphoto's CAPTCHA and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway."
-msgstr "Gibt eine E-Mail-Kontaktform aus, die Zenphotos interne Validierungsfunktionen nutzt. Name, E-Mail, E-Mail-Titel und Nachricht (und Captcha sofern aktiviert) sind Pflichtfelder. Sie müssen eine benutzerdefinierte E-Mail-Adresse, die zum Versenden verwendet werden soll, eingeben. Verwendet Zenphotos Captcha und erfordert eine Bestätigung der E-Mail, bevor diese gesendet wird. Andere Spamfilter werden nicht unterstützt, da Mailanbieter diese ebenfalls bereitstellen."
+msgstr "Gibt eine E-Mail-Kontaktform aus, die Zenphotos interne Validierungsfunktionen nutzt. Name, E-Mail, E-Mail-Titel und Nachricht (und CAPTCHA sofern aktiviert) sind Pflichtfelder. Sie müssen eine benutzerdefinierte E-Mail-Adresse, die zum Versenden verwendet werden soll, eingeben. Verwendet Zenphotos CAPTCHA und erfordert eine Bestätigung der E-Mail, bevor diese gesendet wird. Andere Spamfilter werden nicht unterstützt, da Mailanbieter diese ebenfalls bereitstellen."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:58
 msgid "show"
@@ -9125,7 +9122,6 @@ msgid "Confirm text"
 msgstr "Bestätigungstext"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:65
-#, fuzzy
 msgid "The text that asks the visitor to confirm that he really wants to send the message."
 msgstr "Der Text, der auffordert zu bestätigen, dass die Mail wirklich gesendet werden soll."
 
@@ -9154,13 +9150,12 @@ msgid "The e-mail address the messages should be sent to. Enter more than one ad
 msgstr "Die E-Mail-Adresse, an die die Nachrichten geschickt werden sollen. Trennen Sie mehrere E-Mail-Adress  mit Kommata und ohne Leerzeichen."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:75
-#, fuzzy
 msgid "Require confirmation"
-msgstr "Registrierungsbestätigung"
+msgstr "Bestätigung erforderlich"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:77
 msgid "If checked, a confirmation form will be presented before sending the contact message."
-msgstr ""
+msgstr "Wenn ausgewählt, wird zunächst ein Bestätigungsformular angezeigt, bevor die Nachricht verschickt wird."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:78
 msgid "Title field"
@@ -9227,14 +9222,12 @@ msgid "Website field."
 msgstr "Website-Feld."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:102
-#, fuzzy
 msgid "CAPTCHA field"
-msgstr "Captcha-Feld"
+msgstr "CAPTCHA-Feld"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:104
-#, fuzzy
 msgid "If CAPTCHA should be required."
-msgstr "Wenn Captcha erforderlich sein soll."
+msgstr "Ob CAPTCHA erforderlich sein soll."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:105
 msgid "Phone field"
@@ -9285,9 +9278,8 @@ msgid "a <strong>country</strong>"
 msgstr "ein <strong>Land</strong>"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:162
-#, fuzzy
 msgid "a <strong>valid email address</strong>"
-msgstr "Geben Sie eine gültige E-Mail-Adresse an."
+msgstr "Geben Sie eine <strong>gültige E-Mail-Adresse</strong> an."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:164
 msgid "a <strong>website</strong>"
@@ -9306,9 +9298,8 @@ msgid "a <strong>message</strong>"
 msgstr "eine <strong>Nachricht</strong>"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:180
-#, fuzzy
 msgid "<strong>the correct CAPTCHA verification code</strong>"
-msgstr "<strong>den korrekten Captcha-Bestätigungs-Code</strong>"
+msgstr "<strong>den korrekten CAPTCHA-Bestätigungs-Code</strong>"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:186
 msgid "<p style='color:red'>Please enter "
@@ -9331,7 +9322,6 @@ msgid "Discard"
 msgstr "Verwerfen"
 
 #: zTRANSLATE/zp-core/zp-extensions/deprecated-functions.php:11
-#, fuzzy
 msgid "Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as they have been supplanted. They are not maintained and they are not guaranteed to function correctly with the current version of Zenphoto."
 msgstr "Veraltetet Zephoto-Funktionen.Dieses Funktion wurden von den Hauptdateien von Zenphoto entfernt, da sie überflüssig geworden sind. Sie werden nicht mehr gepflegt und es kann nicht garantiert werden, dass sie mit der jeweils aktuellen Zenphoto-Version problemlos funkionieren."
 
@@ -9409,14 +9399,12 @@ msgid "Image cropping"
 msgstr "Bildbeschnitt"
 
 #: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:233
-#, fuzzy
 msgid "You can crop your image by dragging the crop handles on the image.<br /><br /><strong>Note:</strong> If you save these changes they are permanent!"
 msgstr "Sie können Bilder beschneiden, indem Sie den Rahmen verschieben.<br /><br /><strong>ANMERKUNG:</strong> Diese Änderungen sind permanet, wenn Sie sie abspeichern!"
 
 #: zTRANSLATE/zp-core/zp-extensions/filter-zenphoto_seo.php:7
-#, fuzzy
 msgid "Filter applied to filenames to translate accented characters to unaccented ones for SEO friendly URLs."
-msgstr "Filter, der auf Dateinamen angewendet wird, um akzentuierte Buchstaben zu nicht akzentuierte für suchmaschinenfreundliche URLs umzuwandeln."
+msgstr "Filter, der auf Dateinamen angewendet wird, um akzentuierte Buchstaben in nicht akzentuierte für suchmaschinenfreundliche URLs umzuwandeln."
 
 #: zTRANSLATE/zp-core/zp-extensions/filter-zenphoto_seo.php:37
 msgid "Lowercase only"
@@ -9427,13 +9415,11 @@ msgid "When set, all characters are converted to lower case."
 msgstr "Wenn gesetzt, werden alle Zeichen in Kleinbuchstaben umgewandelt."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:13
-#, fuzzy
 msgid "Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time and the class-video plugin must be enabled, too. <br /> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its license."
 msgstr "Aktiviert <strong>flowplayer 3</strong> zum Abspielen von Multimediadateien. WICHTIG: Es kann nur ein Flash-Player-Plugin zur Zeit aktiviert sein. br>.  Bitte besuchen Sie <a href='http://flowplayer.org'>flowplayer.org</a> für mehr Information über den Player und seine Lizenz."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:17
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:21
-#, fuzzy
 msgid "Flash players do not support <em>External Albums</em>."
 msgstr "Die Flash Player unterstützen keine <em>externen Alben</em>"
 
@@ -9578,7 +9564,6 @@ msgid "Value for the font color in the time field that specifies the total durat
 msgstr "Farbwert der Gesamtlängenanzeige der Mulitmediadatei."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:90
-#, fuzzy
 msgid "Controls progress bar color"
 msgstr "Verlauf der Steuerungs-Hintergrundfarbe"
 
@@ -9587,7 +9572,6 @@ msgid "Color of the progress bar. This is the bar in the timeline from zero time
 msgstr "Farbwert des Fortschrittsbalkens. Dies ist der Balken, der anzeigt wo im Clip man sich befindet."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:92
-#, fuzzy
 msgid "Controls progress bar gradient"
 msgstr "Farbverlauf für den Fortschrittsbalken."
 
@@ -9632,7 +9616,6 @@ msgid "Controls button color"
 msgstr "Steuerung Farbe Schaltknopf"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:106
-#, fuzzy
 msgid "Color of the player buttons: stop, play, pause and full screen."
 msgstr "Farbe der Steuerknöpfe Stop, Play, Pause und Vollbild."
 
@@ -9678,13 +9661,12 @@ msgid "Video scale"
 msgstr "Videoskalierung"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:17
-#, fuzzy
 msgid "Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3."
-msgstr "Ein Plugin, um den Inhalt eines Media-Albums ausschließlich mit .flv/.mp4/.mp3-Film-/Audiodateien entweder als Wiedergabeliste oder als separate Player mit Flowplayer 3 anzuzeigen. <strong>Anmerkung:</strong> Das Flowplayer 3-Plugin muß aktiviert sein."
+msgstr "Ein Plugin, um den Inhalt eines Media-Albums ausschließlich mit .flv/.mp4/.mp3-Film-/Audiodateien entweder als Wiedergabeliste oder als separate Player mit Flowplayer 3 anzuzeigen. "
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:17
 msgid "<strong>Important:</strong> The Flowplayer 3 plugin needs to be activated to use this plugin and your theme needs to be modified."
-msgstr ""
+msgstr "<strong>Wichtig:</strong> Das Flowplayer 3-Plugin muss aktiviert sein und Ihr Theme muss bearbeitet werden."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:58
 msgid "Player width (Note this refers to the player window. The playlist display itself is styled via CSS.)"
@@ -9695,16 +9677,14 @@ msgid "Player height (Note this refers to the player window. The playlist displa
 msgstr "Playerhöhe (Bedenken Sie, dass sich dies sich nur auf das Playerfenster bezieht. Die Playlist selbst wird über CSS gestaltet.)"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:64
-#, fuzzy
 msgid "full screen"
-msgstr "Originalgröße"
+msgstr "Vollbild"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:66
 msgid "Splash image"
 msgstr "Coverbild"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:67
-#, fuzzy
 msgid "Check if you want to display the videothumb of the first playlist entry as a splash/cover image. It will be cropped to the fit the width and height of the player window and will disappear on starting the playlist."
 msgstr "Aktivieren Sie dies, wenn Sie das Videothumbnail des ersten Playlisteintrage als Cover/Vorschaubild anzeigen lassen möchten. Es wird beschnitten, so dass es die Breite und Höhe des Playerfenster ausfüllt und ausgeblendet, sobald die Playlist gestartet wird."
 
@@ -9747,7 +9727,6 @@ msgid "Google Maps API key"
 msgstr "Google-Maps-API-Schlüssel"
 
 #: zTRANSLATE/zp-core/zp-extensions/google_maps.php:67
-#, fuzzy
 msgid "If you are going to be using Google Maps, <a href=\"http://www.google.com/apis/maps/signup.html\" target=\"_blank\">get an API key</a> and enter it here."
 msgstr "Wenn Sie Google Maps benutzen möchten, benötigen Sie einen <a\thref=\"http://www.google.com/apis/maps/signup.html\" target=\"_blank\">API-Schlüssel</a>, den Sie hier eingeben müssen."
 
@@ -9830,10 +9809,9 @@ msgstr "Google Map anzeigen oder verstecken."
 
 #: zTRANSLATE/zp-core/zp-extensions/hitcounter.php:7
 msgid "Automatically increments hitcounters on Zenphoto objects viewed by a \"visitor\"."
-msgstr ""
+msgstr "Erhöht automatisch den Besucherzähler für Zenphoto-Objekte, die von einem \"Besucher\" angesehen werden."
 
 #: zTRANSLATE/zp-core/zp-extensions/html_meta_tags.php:13
-#, fuzzy
 msgid "A plugin to print the most common HTML meta tags (except the charset one which is standard to all theme files anyway) to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."
 msgstr "Ein Plugin, um die gebräuchlichsten HTML-Meta-Tags (ausgenommen das Charset, das standardmäßig in jedem Standardtheme enthalten ist) im Kopfbereich Ihrer Seiten auszugeben, die die allgemeinen existierenden Information Ihrer Zenphoto-Installation wie Galeriebeschreibungen, Schlagwörter oder Zenpage-Kategorien verwenden."
 
@@ -9882,7 +9860,6 @@ msgid "HTML meta tags"
 msgstr "HTML meta tags"
 
 #: zTRANSLATE/zp-core/zp-extensions/html_meta_tags.php:107
-#, fuzzy
 msgid "Which of the HTML meta tags should be used. For info about these in detail please refer to the net."
 msgstr "Welches der HTML-Meta-Tagsg verwendet werden soll. Genauere Information über diese sind im Internet zu finden."
 
@@ -9913,51 +9890,48 @@ msgstr "Besucher: %u"
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:13
 msgid "Provides the means to set an limit of the number of images that can be uploaded to an album in total. Of course this is bypassed if using FTP upload or ZIP files! If you want to limit the latter you need to use the quota_management plugin additionally."
-msgstr ""
+msgstr "Stellte eine Möglichkeit zur Verfügung, die Anzahl der Bilder, die ingesamt in ein Album hochgeladen werden können, zu beschränken. Natürlich wird dies umgangen, wenn Sie direkt FTP ode ZIP-Dateien verwenden. Wenn Sie letztere ebenfalls beschränken möchten, müssen Sie zusätzlich das quota_management-Plugin verwenden."
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:44
-#, fuzzy
 msgid "Upload limit"
-msgstr "Upload-Ordner"
+msgstr "Upload-Beschränkung"
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:45
 msgid "The maximum number of images per album if uploading via the multifile upload."
-msgstr ""
+msgstr "Die maximale Anzahl Bilder pro Album, wenn der Mehrdateiupload verwendet wird."
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:46
-#, fuzzy
 msgid "Disable new album creation"
-msgstr "Tabellenerstellung begonnen."
+msgstr "Erstellung neuer Alben deaktivieren"
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:47
 msgid "If checked users cannot create new albums."
-msgstr ""
+msgstr "Wenn ausgewählt, können Benutzer keine neuen Alben erstellen."
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:71
 msgid "There is a plugin conflict with <em>image_upload_limiter</em>"
-msgstr ""
+msgstr "Es ist ein Pluginkonflikt mit dem <em>image_upload_limiter</em> aufgetreten."
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:114
 msgid "The album exceeded the image number limit. You cannot upload more images!"
-msgstr ""
+msgstr "Das Album hat das Bildlimit erreicht. Sie können keine weiteren Bilder hochladen!"
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:119
 msgid "Maximum number of images left for this album: "
-msgstr ""
+msgstr "Maximale Anzahl an Bildern erlaubt für dieses Album:"
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:180
-#, fuzzy
 msgid "HTTP single file uploading is disabled because upload limitations are in effect. Please use the <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >multi file upload</a>"
-msgstr "Versuchen Sie den <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >Mehrfach-Datei-Upload</a>"
+msgstr "HTTP-Einzeldatei-Upload ist aufgrund von vorhandenen Uploadbeschränkungen deaktiviert. Bitte nutzen Sie den <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >Mehrdateiupload</a>"
 
 #: zTRANSLATE/zp-core/zp-extensions/image_upload_limiter.php:183
 #, php-format
 msgid "<strong>Note:</strong> You can upload a maximum of %s images to each album."
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Sie können maximal %s Bilder pro Album hochladen."
 
 #: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:12
 msgid "jQuery jCarousel thumb nav plugin with dynamic loading of thumbs on request via JavaScript. Place printjCarousel() on your theme's image.php where you want it to appear. Supports theme based css files (place jcarousel.css and needed images in your theme's folder)."
-msgstr ""
+msgstr "jQuery jCarousel thumb nav Plugin mit dynamischen Nachladen de Thumbnails via JavaScript. Platzieren Sie printjCarousel() auf image.php Ihres Themes, wo Sie es verwenden möchten. Es unterstützt Themebasierte CSS-Dateien (legen jcarousel.css und ggf. benötigten Bilder in Ihren Themeordner)."
 
 #: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:34
 msgid "Thumbs number"
@@ -9965,7 +9939,7 @@ msgstr "Thumbnailnummer"
 
 #: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:35
 msgid "The number of thumbs to scroll by. Note that the CSS might need to be adjusted."
-msgstr ""
+msgstr "Die Anzahl Thumbnails zum Scrollen. Bedenken Sie, dass das CSS ggf. angepaßt werden muß."
 
 #: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:44
 msgid "Full image link"
@@ -9973,28 +9947,26 @@ msgstr "Vollbildlink"
 
 #: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:45
 msgid "If checked the thumbs link to the full image instead of the image page."
-msgstr ""
+msgstr "Wenn ausgewählt, verlinken die Thumbnails auf das Vollbild anstatt auf die Bildseite."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:16
 msgid "A menu creation facility. The <em>Menu</em> tab admin interface lets you create arbitrary menu trees. They are placed on your theme pages by the <code>printCustomMenu()</code> function."
-msgstr ""
+msgstr "Ein Menüerstellungswerkzeug, mit dem Sie benutzerdefinierte Menübäume erstellen können. Platzieren Sie dazu die Funktion <code>printCustomMenu()</code> in Ihren Themedateien."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:34
-#, fuzzy
 msgid "menu"
 msgstr "Menü"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:696
-#, fuzzy
 msgid "News index"
-msgstr "Neuigkeiten auf Index"
+msgstr "Neuigkeiten-Index"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:721
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:735
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:749
 #, php-format
 msgid "createMenuIfNotExists item %s has an empty link."
-msgstr ""
+msgstr "createMenuIfNotExists-Eintrag %s hat einen leeren Link."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:728
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:742
@@ -10002,43 +9974,43 @@ msgstr ""
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:769
 #, php-format
 msgid "createMenuIfNotExists item %s has an empty title."
-msgstr ""
+msgstr "createMenuIfNotExists-Eintrag %s hat einen leeren Titel."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:755
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:776
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:782
 #, php-format
 msgid "createMenuIfNotExists item %s has an empty title or link."
-msgstr ""
+msgstr "createMenuIfNotExists-Eintrag %s hat einen leeren Titel oder Link."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:787
 #, php-format
 msgid "createMenuIfNotExists item %s has an invalid type."
-msgstr ""
+msgstr "createMenuIfNotExists-Eintrag %s ist ein ungültiger Typ."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:804
-#, fuzzy, php-format
+#, php-format
 msgid "createMenuIfNotExists item %1$s MySQL query (%2$s) failed: %3$s."
-msgstr "MySQL-Abfrage ( <em>%1$s</em> ) fehlgeschlagen. Fehler: %2$s"
+msgstr "createMenuIfNotExists Element %1$s MySQL-Abfrage (%2$s) gescheitert: %3$s."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:812
 msgid "createMenuIfNotExists has posted processing errors to your debug log."
-msgstr ""
+msgstr "createMenuIfNotExists hat die festgestellten Fehler im Debuglog dokumentiert."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:919
 #: zTRANSLATE/zp-core/zp-extensions/print_album_menu.php:194
-#, fuzzy, php-format
+#, php-format
 msgid "(%u image)"
 msgid_plural "(%u images)"
-msgstr[0] "Bild"
+msgstr[0] "(%u Bild)"
 msgstr[1] "(%u Bilder)"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:921
 #: zTRANSLATE/zp-core/zp-extensions/print_album_menu.php:199
-#, fuzzy, php-format
+#, php-format
 msgid "(%u album)"
 msgid_plural "(%u albums)"
-msgstr[0] "Album:"
+msgstr[0] " (%u Album)"
 msgstr[1] " (%u Alben)"
 
 #: zTRANSLATE/zp-core/zp-extensions/paged_thumbs_nav.php:8
@@ -10050,7 +10022,6 @@ msgid "Thumbs per page"
 msgstr "Thumbnails pro Seite"
 
 #: zTRANSLATE/zp-core/zp-extensions/paged_thumbs_nav.php:37
-#, fuzzy
 msgid "Controls the number of images on a page. You might need to change this after switching themes to make it look better."
 msgstr "Legt die Anzahl der Bilder pro Seite fest. Möglicherweise muss der Wert angepasst werden, wenn Sie Ihr Theme wechseln."
 
@@ -10091,7 +10062,6 @@ msgid "Crop"
 msgstr "Beschneiden"
 
 #: zTRANSLATE/zp-core/zp-extensions/paged_thumbs_nav.php:49
-#, fuzzy
 msgid "If checked the thumbnail will be a centered portion of the image with the given width and height after being resized to thumb size (by shortest side). Otherwise, it will be the full image resized to thumb size (by shortest side)."
 msgstr "Wenn angewählt, werden die Thumbnails aus dem Mittelteil des Bildes mit der eingestellten Breite und Höhe erstellt, nachdem das Bild auf die Thumbnailgrösse umgerechnet wurde (gemäß der kürzesten Seite)."
 
@@ -10147,7 +10117,6 @@ msgid "Zenphoto outgoing mail handler based on the <em>PHPMailer</em> class mail
 msgstr "Zenphoto E-Mail-Funktionalität basierend auf der <em>PHPMailer</em>-Klasse. "
 
 #: zTRANSLATE/zp-core/zp-extensions/PHPMailer.php:14
-#, fuzzy
 msgid "PHP version 5 or greater is required."
 msgstr "PHP 5 oder neuer ist erforderlich"
 
@@ -10234,73 +10203,66 @@ msgstr "Wenn ausgewählt, wird die Anzahl der Bilder/Alben in der Menüliste mit
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:27
 msgid "Provides a quota management system to limit the sum of sizes of images a user uploads."
-msgstr ""
+msgstr "Ein Kontingent-System, um die Summe der Bildgrößen, die ein Benutzer hochladen kann, zu beschränken."
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:27
 msgid "<strong>Note:</strong> if FTP is used to upload images, manual user assignment is necessary. ZIP file upload is disabled as quotas are not applied to the files contained therein."
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Wenn FTP zum Hochladen verwendet wird, ist manuelles Zuweisen der Benutzer notwenig. . ZIP-Datei-Hochladen ist deaktiviert, da die Kontingent-Beschränkung nicht auf darin enthaltene Dateien angewendet wird."
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:70
-#, fuzzy
 msgid "Default quota"
-msgstr "Standardgröße"
+msgstr "Standardkontingent"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:71
 msgid "Default size limit in kilobytes."
-msgstr ""
+msgstr "Standard-Größen-Beschränkung in Kilobytes."
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:72
-#, fuzzy
 msgid "Allow ZIP files"
-msgstr "Javascript-Dateien (.js)"
+msgstr "ZIP-Dateien erlauben"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:73
 msgid "The size of a ZIP file may be slightly smaller than the sum of the <em>image</em> files it contains. Un-check this box if you wish to disable uploading of ZIP files."
-msgstr ""
+msgstr "Die Größe einer ZIP-Datei kann deutlich kleiner als die Summer der enthaltenenen <em>Bilddateien</em> sein. Deaktivieren Sie dies, um ZIP-Datei-Hochladen zu verbieten."
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:115
 msgid "Quota:"
-msgstr ""
+msgstr "Kontingent:"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:117
-#, fuzzy, php-format
+#, php-format
 msgid "Allowed: %s kb"
-msgstr "Erlaubte HTML-Befehle:"
+msgstr "Erlaubt: %s kb"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:118
-#, fuzzy, php-format
+#, php-format
 msgid "(%s kb used)"
-msgstr "meist benutzte"
+msgstr "(%s kb benutzt)"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:121
-#, fuzzy
 msgid "Image quota information."
-msgstr "@image-Datei „%s“ nicht lesbar: %s"
+msgstr "Bildkontingent-Information."
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:172
-#, fuzzy
 msgid "Owner:"
-msgstr "Über"
+msgstr "Besitzer"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:175
-#, fuzzy
 msgid "*no owner"
-msgstr "Keine Übereinstimmung"
+msgstr "*kein Besitzer"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:206
-#, fuzzy
 msgid "Assign images to:"
-msgstr "Benutzer Gruppen zuweisen."
+msgstr "Bild zuweisen:"
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:320
-#, fuzzy
 msgid "Uploading is disabled."
-msgstr "Dieses Plugin ist deaktiviert: %s."
+msgstr "Hochladen ist deaktiviert: %s."
 
 #: zTRANSLATE/zp-core/zp-extensions/quota_manager.php:325
 #, php-format
 msgid "Your available upload quota is <span %1$s>%2$s</span> kb."
-msgstr ""
+msgstr "Ihre verfügbares Kontingent ist <span %1$s>%2$s</span> kb."
 
 #: zTRANSLATE/zp-core/zp-extensions/rating.php:17
 msgid "Adds several theme functions to enable images, album, news, or pages to be rated by users."
@@ -10460,9 +10422,9 @@ msgid "Email notification text"
 msgstr "E-Mail-Benachrichtigungstext"
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:54
-#, fuzzy, php-format
+#, php-format
 msgid "Text for the body of the email sent to the user. <strong>Note:</strong> You must include <code>%s</code> in your message where you wish the registration completion link to appear."
-msgstr "Text für die E-Mail, die an den Benutzer gesendet wird. <strong>ANMERKUNG</strong>: Sie müssen  <code>%s</code> in Ihre Nachricht  dort einfügen, wo der Link zur Abschließen der Registrierung erscheinen soll. "
+msgstr "Text für die E-Mail, die an den Benutzer gesendet wird. <strong>Anmerkung</strong>: Sie müssen  <code>%s</code> in Ihre Nachricht  dort einfügen, wo der Link zur Abschließen der Registrierung erscheinen soll. "
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:55
 msgid "User registration page"
@@ -10473,14 +10435,12 @@ msgid "If this option is set, the visitor login form will include a link to this
 msgstr "Wenn diese Einstellung eingestellt ist, enthält das Besucher-Anmeldungsformular einen Link zu dieser Seite. Der Linktext wird mit dem angegebenen Text betitelt."
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:57
-#, fuzzy
 msgid "Use CAPTCHA"
-msgstr "Captcha verwenden"
+msgstr "CAPTCHA verwenden"
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:58
-#, fuzzy
 msgid "If checked, CAPTCHA validation will be required for user registration."
-msgstr "Wenn ausgewählt, ist eine Captcha-Überprüfung bei jeder neuen Benutzerregistrierung notwendig."
+msgstr "Wenn ausgewählt, ist eine CAPTCHA-Überprüfung bei jeder neuen Benutzerregistrierung notwendig."
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:77
 msgid "Initial group assignment for the new user."
@@ -10568,9 +10528,8 @@ msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse an."
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:301
-#, fuzzy
 msgid "The CAPTCHA you entered was not correct."
-msgstr "Sie haben das Captcha nicht korrekt eingegeben."
+msgstr "Sie haben das CAPTCHA nicht korrekt eingegeben."
 
 #: zTRANSLATE/zp-core/zp-extensions/register_user.php:304
 msgid "Your registration request could not be completed."
@@ -10578,16 +10537,15 @@ msgstr "Ihr Registrierungsanforderung konnte nicht ausgeführt werden."
 
 #: zTRANSLATE/zp-core/zp-extensions/seo_locale.php:19
 msgid "Allows setting language locale through the URI."
-msgstr ""
+msgstr "Erlaubt das Setzen der Sprachelokale durch die URL."
 
 #: zTRANSLATE/zp-core/zp-extensions/seo_locale.php:19
 msgid "<strong>Note:</strong> This plugin is not activated for <em>back-end</em> (administrative) URLs. However, once activated, the language is remembered, even for the <em>back-end</em>."
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Diese Plugin ist nicht für die <em>Administration-URLs</em> aktiviert. Jedoch wird die Spracheinstellung auch dafür gespeichert, wenn es aktiviert ist."
 
 #: zTRANSLATE/zp-core/zp-extensions/seo_locale.php:22
-#, fuzzy
 msgid "<em>mod_rewrite</em> must be enabled for this plugin to function."
-msgstr "Das flvplayer-Plugin ist nicht aktiviert. Es muss aktiviert sein, damit diese Plugin funktioniert."
+msgstr "<em>mod_rewrite</em> muss aktiviert sein, damit dieses Plugin funktioniert."
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:29
 msgid "sitemap cache cleared."
@@ -10595,11 +10553,11 @@ msgstr "Sitemap-Cache gelöscht."
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:34
 msgid "Generates a sitemaps.org compatible XML file, for use with Google and other search engines. It supports albums and images as well as optionally Zenpage pages, news articles and news categories. Renders the sitemap if called via \"www.yourdomain.com/zenphoto/sitemap.php\" in the URL."
-msgstr ""
+msgstr "Erstellt ein mit sitemaps.org kompatible XML-Datei für Google und andere Suchmaschinen. Es unterstützt sowohl Bilder und Alben als auch Zenpage Artikel, Kategorien und Seiten. Die Sitemap wird erstellt, wenn über \"www.yourdomain.com/zenphoto/sitemap.php\" aufgerufen."
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:34
 msgid "<strong>Note:</strong> The index links may not match if using the Zenpage option \"news on index\" that some themes provide! Also it does not \"know\" about \"custom pages\" outside Zenpage or any special custom theme setup!!"
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Die Indexlink können falsch sein, wenn Sie die Zenpage -Option \"Neuigkeiten auf Indexseite\" verwenden, die einige Themes übergehen. Außerdem berücksichtigt es auch keine \"benutzerdefinierte Seiten\" außerhalb von Zenpage oder andere benutzerdefinierte Themestrukturen!!"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:45
 msgid "sitemap cache folder could not be created. Please try to create it manually via FTP with chmod 0777."
@@ -10645,7 +10603,7 @@ msgstr "Täglich"
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:119
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:127
 msgid "weekly"
-msgstr ""
+msgstr "wöchentlich"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:80
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:88
@@ -10655,7 +10613,7 @@ msgstr ""
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:120
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:128
 msgid "yearly"
-msgstr ""
+msgstr "jährlich"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:83
 msgid "Change frequency - albums"
@@ -10697,7 +10655,7 @@ msgstr "Filemtime"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:135
 msgid "Last modification date - images"
-msgstr ""
+msgstr "Dabum der letzte Änderung - Bilder"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:139
 msgid "Disable cache"
@@ -10916,7 +10874,7 @@ msgstr "eine Adaption von Remy Sharps <a href='http://remysharp.com/2007/12/28/j
 
 #: zTRANSLATE/zp-core/zp-extensions/tags_from_album.php:10
 msgid "Prints a tag cloud of all image tags from an album optionally including the subalbums or the album tags including sub album tags. Note the optional counter prints the total number of the tag used, not just for the selected album (as clicking on it will return all anyway)."
-msgstr ""
+msgstr "Gibt eine Schlagwortwolke aller Bildschlagworte innerhalb eines Albums, optional inklusiver aller Unteralben sowie ebenfalls optional der Albumtags. Bedenken Sie, dass der Zähler die Gesamtanzahl der Schlagwortverwendung ausgibt und nicht nur die innerhalb des ausgewählten Albums (zumal das Klicken auf ein Tag sowieso zu Ergebnissen aller Nutzungen führt)."
 
 #: zTRANSLATE/zp-core/zp-extensions/user_groups.php:8
 msgid "Provides rudimentary user groups."
@@ -11030,7 +10988,7 @@ msgstr "Dateiendung der Begleitdatei"
 
 #: zTRANSLATE/zp-core/zp-extensions/xmpMetadata.php:84
 msgid "The plugin will look for files with <em>image_name.extension</em> and extract XMP metadata from them into the <em>image_name</em> record."
-msgstr ""
+msgstr "Dies Plugin sucht nach Dateien mit der <em>Bildname.extension</em> und extrahiert XMP Metadaten in den <em>Bildname</em>-Eintrag."
 
 #: zTRANSLATE/zp-core/zp-extensions/xmpMetadata.php:85
 msgid "Process extensions"
@@ -11042,7 +11000,7 @@ msgstr "Wenn keine Begleitdateien exisitieren und dieses Plugin is akativiert, w
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:8
 msgid "A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto."
-msgstr ""
+msgstr "Ein CMS-Plugin, dass die Möglichkeit gibt, eine komplette Galerie fokussierte Website mit Zenphoto zu betreiben."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:9
 msgid "<strong>Note:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>Zenpage default</code> and <code>effervescence+</code> support Zenpage."
@@ -11115,7 +11073,7 @@ msgstr "Wenn Sie die Themeseite <em>news.php</em>, die verwendet wird, um Artike
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:68
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:70
 msgid "<strong>Note: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!"
-msgstr ""
+msgstr "<strong>Anmerkung: </strong> Wenn Sie  mod_rewrite nutzen, müsssen Sie Ihre <em>.htaccess</em>-Datei manuell ebenfalls modifizieren!"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:69
 msgid "Pages page name"
@@ -11131,7 +11089,7 @@ msgstr "CombiNews"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:72
 msgid "Set to enable the CombiNews feature to show news articles and latest gallery items together on the news section's overview page(s)."
-msgstr ""
+msgstr "Aktiviert die CombiNews-Einstellung, um Artikel und neueste Galerieeinträge zusammen als Neuigkeiten zu zeigen."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:72
 msgid "<strong>Note:</strong> Images/albums and news articles are still separate, your Zenphoto gallery is not touched in any way! <strong>IMPORTANT: This feature requires MySQL 4.1 or later.</strong>"
@@ -11470,75 +11428,67 @@ msgstr "Sortierung gesichert."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:67
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:71
-#, fuzzy
 msgid "The object of this menu is under password protection"
-msgstr "Dieses Album ist passwortgeschützt."
+msgstr "Dieser Menüeintrag ist passwortgeschützt."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:80
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:84
-#, fuzzy
 msgid "show/hide"
-msgstr "Details verstecken"
+msgstr "Zeigen/Verstecken"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:96
-#, fuzzy
 msgid "view"
 msgstr "Ansehen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:111
 #, php-format
 msgid "Ok to delete %s? This cannot be undone."
-msgstr ""
+msgstr "Wollen Sie  %s löschen? Dies kann nicht rückgängig gemacht werden."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:112
-#, fuzzy
 msgid "delete"
 msgstr "Löschen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:189
-#, fuzzy
 msgid "The target for this menu element no longer exists"
-msgstr "Der Text für das Theme-Logo"
+msgstr "Das Ziel für diese Menüeintrag exisitiert nicht mehr"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:235
-#, fuzzy
 msgid "Hidden and visible items"
-msgstr "Überprüfen der nicht sichtbaren Bilder."
+msgstr "Versteckte und sichtbare Einträge"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:236
-#, fuzzy
 msgid "Visible items"
-msgstr "Sichtbar machen: "
+msgstr "Sichtbare Einträge"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:237
-#, fuzzy
 msgid "hidden items"
-msgstr "Anzahl der RSS-Einträge:"
+msgstr "Versteckte Einträge"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:442
 msgid "Menu items for all Zenphoto objects added."
-msgstr ""
+msgstr "Menueinträge für alle Zenphoto-Objekte hinzugefügt."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:446
 msgid "Menu items for all albums added."
-msgstr ""
+msgstr "Menüeinträge für alle Alben hinzugefügt."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:450
 msgid "Menu items for all Zenpage pages added."
-msgstr ""
+msgstr "Menüeinträge für alle Zenpage Seiten hinzugefügt."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:454
 msgid "Menu items for all Zenpage categories added."
-msgstr ""
+msgstr "Menüeinträge für alle Zenpage Kategorien hinzugefügt."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:459
 msgid "You forgot to select an album."
-msgstr ""
+msgstr "Sie haben vergessen, ein Album auszuwählen."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:462
-#, fuzzy, php-format
+#, php-format
 msgid "Album menu item <em>%s</em> added"
-msgstr "Artikel <em>%s</em> hinzugefügt"
+msgstr "Album-Menüeintrag <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:468
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:486
@@ -11548,208 +11498,185 @@ msgstr "Artikel <em>%s</em> hinzugefügt"
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:534
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:547
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:609
-#, fuzzy
 msgid "You forgot to give your menu item a <strong>title</strong>!"
-msgstr "Sie haben vergessen, der Kategorie einen <strong>Titel oder Titellink</strong> zu geben!"
+msgstr "Sie haben vergessen, dem Menüeintrag einen <strong>Titel</strong> zu geben!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:471
-#, fuzzy, php-format
+#, php-format
 msgid "Gallery index menu item <em>%s</em> added"
-msgstr "Kategorie <em>%s</em> hinzugefügt"
+msgstr "Galerieindex-Menüeintrag <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:477
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:495
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:611
-#, fuzzy
 msgid "You forgot to give your menu item a <strong>link</strong>!"
-msgstr "Sie haben vergessen, Ihrer Seite einen <strong>Titel</strong> zu geben!"
+msgstr "Sie haben vergessen, Ihrem Menüeintrag einen <strong>Titel</strong> zu geben!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:480
-#, fuzzy, php-format
+#, php-format
 msgid "Zenpage page menu item <em>%s</em> added"
-msgstr "Seite <em>%s</em> hinzugefügt"
+msgstr "Zenpage Seiten-Menüeintrag <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:489
-#, fuzzy, php-format
+#, php-format
 msgid "Zenpage news index menu item <em>%s</em> added"
-msgstr "Seite <em>%s</em> hinzugefügt"
+msgstr "Zenpage Artikelindex-Menüeintrag <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:498
-#, fuzzy, php-format
+#, php-format
 msgid "Zenpage news category menu item <em>%s</em> added"
-msgstr "Kategorie <em>%s</em> hinzugefügt"
+msgstr "Zenpage Kategorie-Menüeintrag  <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:507
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:520
-#, fuzzy, php-format
+#, php-format
 msgid "Custom page menu item <em>%s</em> added"
-msgstr "Seite <em>%s</em> hinzugefügt"
+msgstr "Benutzerdefinierte Seiten-Menüeintrag <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:517
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:539
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:552
-#, fuzzy
 msgid "You forgot to provide a <strong>function</strong>!"
-msgstr "Sie haben vergesse, Ihrer Seite einen <strong>Titel</strong> zu geben!"
+msgstr "Sie haben vergessen, eine <strong>Funktion</strong> einzugeben!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:529
-#, fuzzy
 msgid "Custom label added"
-msgstr "Seite <em>%s</em> hinzugefügt"
+msgstr "Benutzerdefiniertes Label hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:542
-#, fuzzy, php-format
+#, php-format
 msgid "Function  menu item <em>%s</em> added"
-msgstr "Artikel <em>%s</em> hinzugefügt"
+msgstr "Funktions-Menüeintrag <em>%s</em> hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:555
-#, fuzzy
 msgid "Horizontal rule added"
-msgstr "Seite <em>%s</em> hinzugefügt"
+msgstr "Horizontale Begrenzungslinie hinzugefügt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:576
-#, fuzzy, php-format
+#, php-format
 msgid "A <em>%1$s</em> item already exists in <em>%2$s</em>!"
-msgstr "Menüeintrag „%s“ bereits vorhanden, und zwar für Datei „%s“"
+msgstr "Menüeintrag <em>%1$s</em> bereits in <em>%2$s</em> vorhanden!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:578
-#, fuzzy, php-format
+#, php-format
 msgid "A <em>%1$s</em> item with the link <em>%2$s</em> already exists in <em>%3$s</em>!"
-msgstr "Eine Seite mit dem Titel/Titellink <em>%s</em> existiert bereits."
+msgstr "Ein Menüeintrag <em>%1$s</em> mit dem Link <em>%2$s</em> existiert bereits in <em>%3$s</em>!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:613
-#, fuzzy
 msgid "Menu item updated!"
-msgstr "Diesen Menüeintrag auswählen"
+msgstr "Menüeintrag aktualisiert"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:627
-#, fuzzy
 msgid "Custom menu item successfully deleted!"
-msgstr "Artikel erfolgreich gelöscht!"
+msgstr "Benutzerdefinierter Menüeintrag erfolgreich gelöscht!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:53
-#, fuzzy
 msgid "Menu item deleted failed"
-msgstr "Diesen Menüeintrag auswählen"
+msgstr "Menüeintrag löschen fehlgeschlagen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:57
-#, fuzzy
 msgid "Menu item deleted"
-msgstr "Diesen Menüeintrag auswählen"
+msgstr "Menüeintrag gelöscht"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:64
-#, fuzzy, php-format
+#, php-format
 msgid "Menu set '%s' deleted"
-msgstr "Seite erfolgreich gelöscht!"
+msgstr "Menüset '%s' gelöscht"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:78
-#, fuzzy
 msgid "Menuset id"
-msgstr "Benutzer-ID:"
+msgstr "Menüset-DI"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:84
 #, php-format
 msgid "Ok to delete menu set %s? This cannot be undone!"
-msgstr ""
+msgstr "Wollen Sie das Menüset %s löschen? Dies kann nicht rückgängig gemacht werden!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:95
-#, fuzzy
 msgid "Menu Manager"
-msgstr "Menüeintrag (%s): "
+msgstr "Menü-Manager"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:95
-#, fuzzy, php-format
+#, php-format
 msgid " (Menu set: %s)"
-msgstr "Setze Variable: "
+msgstr " (Menüsset: %s)"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:100
 msgid "Drag the items into the order, including sub levels, you wish them displayed. This lets you create arbitrary menus and place them on your theme pages. Use printCustomMenu() to place them on your pages."
-msgstr ""
+msgstr "Verschieben Sie die Einträge in die gewünschte Reihenfolge inklusive Untereinträgen. Dies ermöglicht es, benutzerdefinierte Menüs zu erstellen und diese auf Ihren Themeseiten auszugeben. Platzieren Sie dazu printCustomMenu()."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:103
 msgid "<strong>IMPORTANT:</strong> This menu's order is completely independent from any order of albums or pages set on the other admin pages. It is recommend to uses is with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!"
-msgstr ""
+msgstr "<strong>WICHTIG:</strong> Die Reihenfolge dieses Menüs ist vollständig unabhängig von irgendeiner Reihenfolge der Alben oder Seiten, die auf anderen Verwaltungsseiten eingestellt ist. Es wird empfohlen, dies vorallem mit benutzerdefinierten Themes zu verwenden, die nicht die Themestandardstruktur aufweisen. Standard-Zenphoto -Funktionen wie die breadcrumb-Funktionen oder die next_album()-Schleife berücksichtigen die Struktur dieses Menüs NICHT!"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:107
-#, fuzzy
 msgid "Add Menu Items"
-msgstr "Neue Kategorie hinzufügen"
+msgstr "Menüeinträge hinzufügen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:108
-#, fuzzy
 msgid "Add Menu set"
-msgstr "Setze %s auf den Wert (%d): "
+msgstr "Menüset hinzufügen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:115
-#, fuzzy
 msgid "Edit the menu"
-msgstr "Menüeintrag (%s): "
+msgstr "Menü bearbeiten"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:120
-#, fuzzy, php-format
+#, php-format
 msgid "Delete menu set '%s'"
-msgstr "Setze %s auf den Wert (%d): "
+msgstr "Menüset '%s' löschen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:151
-#, fuzzy
 msgid "Menu target is password protected"
-msgstr "Dieses Album ist passwortgeschützt!"
+msgstr "Menü-Ziel ist passwortgeschützt"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:152
-#, fuzzy
 msgid "Show/hide"
-msgstr "Details verstecken"
+msgstr "Zeigen/Verstecken"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:56
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:141
-#, fuzzy
 msgid "URL"
-msgstr "URL:"
+msgstr "URL"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:61
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:229
-#, fuzzy
 msgid "All menu items"
-msgstr "Alle Monate anzeigen"
+msgstr "Alle Menüeinträge"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:62
 msgid "This adds menu items for all Zenphoto objects. (It creates a \"default\" menuset.)"
-msgstr ""
+msgstr "Dies fügt Menüeinträge für alle Zenphoto-Elemente ein. (Es erstellt ein \"default\"-Menüset.)"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:67
-#, fuzzy
 msgid "This is the normal Zenphoto gallery Index page."
-msgstr "Die Fotogalerie besuchen"
+msgstr "Dies ist die normale Zenphoto-Galerieindex-Seite"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:75
 msgid "This adds menu items for all Zenphoto albums."
-msgstr ""
+msgstr "Dies fügt Menüeinträge für alle Zenphoto-Alben ein."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:80
-#, fuzzy
 msgid "Creates a link to a Zenphoto Album."
-msgstr "Auswählen, um den Album-Zip-Datei-Downloadlink zu aktivieren."
+msgstr "Erstellt einen Link zu einem Album."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:90
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:236
-#, fuzzy
 msgid "All Zenpage pages"
-msgstr "Name der Seitenthemeseite "
+msgstr "Alle Zenpage Seiten"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:91
-#, fuzzy
 msgid "This adds menu items for all Zenpage pages."
-msgstr "Dies wird auf alle Nachrichten angewendet."
+msgstr "Dies fügt Menüeinträge für alle Zenpage Seiten hinzu."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:95
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:237
-#, fuzzy
 msgid "Zenpage page"
-msgstr "Theme-Seite"
+msgstr "Zenpage Seite"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:96
 msgid "Creates a link to a Zenpage Page."
-msgstr ""
+msgstr "Erstellt einen Link zu einer Zenpage Seite."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:99
 msgid "Page"
@@ -11757,47 +11684,41 @@ msgstr "Seite"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:106
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:238
-#, fuzzy
 msgid "Zenpage news index"
-msgstr "Neuigkeiten auf Index"
+msgstr "Zenpage Artikelindex"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:107
 msgid "Creates a link to the Zenpage News Index."
-msgstr ""
+msgstr "Erstellt einen Link zum Zenpage-Neuigkeitenindex."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:114
-#, fuzzy
 msgid "All Zenpage categories"
-msgstr "Zenpagekommentar RSS"
+msgstr "Alle zenpage Kategorien"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:115
-#, fuzzy
 msgid "This adds menu items for all Zenpage categories."
-msgstr "Zenpagekommentar RSS"
+msgstr "Dies fügt Menüeinträge für Zenpage Kategorien hinzu."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:119
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:240
-#, fuzzy
 msgid "Zenpage news category"
-msgstr "Kategorie RR"
+msgstr "Zenpage Kategorie"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:120
 msgid "Creates a link to a Zenpage News article category."
-msgstr ""
+msgstr "Erstellt einen Link zu einer Zenpage Kategorie."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:131
-#, fuzzy
 msgid "Custom page"
-msgstr "Theme-Seite"
+msgstr "Benutzerdefinierte Seite"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:132
 msgid "Creates a link to a custom theme page as described in the theming tutorial."
-msgstr ""
+msgstr "Erstellt einen Link zu einer benutzerdefinierten Seite wie im Theming Tutorial beschrieben."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:133
-#, fuzzy
 msgid "Script page"
-msgstr "Theme-Seite"
+msgstr "Skriptseite"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:138
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:245
@@ -11806,17 +11727,16 @@ msgstr "Benutzerdefinierter Link"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:139
 msgid "Creates a link outside the Zenphoto structure. Use of a full URL is recommended (e.g. http://www.domain.com)."
-msgstr ""
+msgstr "Erstellt einen Link zu einem Ziel außerhalb von Zenphoto. Die Verwendung der vollen URL (z.B. http://www.domain.com) wird empfohlen."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:146
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:246
-#, fuzzy
 msgid "Label"
-msgstr "Groß"
+msgstr "Beschriftung"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:147
 msgid "Creates a <em>label</em> to use in menu structures)."
-msgstr ""
+msgstr "Erstellt eine <em>Beschriftung</em> zur Verwendung innerhalb der Menüstruktur)."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:152
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:154
@@ -11826,66 +11746,58 @@ msgstr "Funktion"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:153
 msgid "Executes the PHP function provided."
-msgstr ""
+msgstr "Führt die eingegebene PHP-Funktion aus."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:161
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:163
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:248
-#, fuzzy
 msgid "HTML"
-msgstr "HTML-Cache"
+msgstr "HTML"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:162
-#, fuzzy
 msgid "Inserts custom HTML."
-msgstr "HTML meta tags"
+msgstr "Fügt benutzerdefiniertes HTML ein."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:202
-#, fuzzy
 msgid "Menu Manager: Edit Menu Item"
-msgstr "Diesen Menüeintrag auswählen"
+msgstr "Menü-Manager: Menueintrag bearbeiten"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:204
 msgid "Menu Manager: Edit Menu Item or add new Menu Item"
-msgstr ""
+msgstr "Menü-Manager: Menüeintrag bearbeiten oder Menüeintrag hinzufügen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:207
-#, fuzzy
 msgid "Menu Manager: Add Menu Item"
-msgstr "Diesen Menüeintrag auswählen"
+msgstr "Menü-Manager: Menüeintrag hinzufügen"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:228
 msgid "*Select the type of the menus item you wish to add*"
-msgstr ""
+msgstr "*Wählen Sie die Art der hinzu zufügenden Menüeinträge*"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:239
-#, fuzzy
 msgid "All Zenpage news categories"
-msgstr "Statistiken für Neuigkeiten-Kategorien"
+msgstr "Alle Zenpage Kategorien"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:244
-#, fuzzy
 msgid "Custom theme page"
-msgstr "Artikel pro Seite (Theme)"
+msgstr "Benutzerdefinierte Themeseite"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:270
-#, fuzzy, php-format
+#, php-format
 msgid "Menu set <em>%s</em>"
-msgstr "Auf <em>%s</em> setzen"
+msgstr "Meüset <em>%s</em>"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:273
-#, fuzzy
 msgid "Type:"
-msgstr "Linktyp"
+msgstr "Typ:"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:300
-#, fuzzy
 msgid "visible"
 msgstr "Sichtbar"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:306
 msgid "Include <em>&lt;LI&gt;</em> element"
-msgstr ""
+msgstr "em>&lt;LI&gt;</em>-Element einschließen"
 
 #: zTRANSLATE/zp-core/zp-extensions/rating/functions-rating.php:58
 #, php-format
@@ -12024,7 +11936,6 @@ msgid "Sized image"
 msgstr "Großbild"
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:85
-#, fuzzy
 msgid "Custom size (un-cropped)"
 msgstr "Eigene Größe (unbeschnitten)"
 
@@ -12055,12 +11966,10 @@ msgid "No wrap"
 msgstr "Kein Textumfluß"
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:123
-#, fuzzy
 msgid "This provides access to your images and albums (dropdown 'Zenphoto') as well as pages, news articles and news categories (dropdown 'Zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them."
-msgstr "Es erlaubt den Zugriff sowohl auf die Bilder und Alben (Ausklappmenü \"Zenphoto\") als auch Seiten und Artikel (Ausklappmenü \"Zenpage\"), um sie einfach in Ihren Seiten und Artikel einzufügen. Sie benötigen mindestens 'Alle Alben verwalten'- oder 'Bearbeiten'-Rechte für spezielle Alben, um Bilder aus ihnen einfügen zu können."
+msgstr "Es erlaubt den Zugriff sowohl auf die Bilder und Alben (Ausklappmenü 'Zenphoto') als auch Seiten und Artikel (Ausklappmenü 'Zenpage'), um sie einfach in Ihren Seiten und Artikel einzufügen. Sie benötigen mindestens 'Alle Alben verwalten'- oder 'Bearbeiten'-Rechte für spezielle Alben, um Bilder aus ihnen einfügen zu können."
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:125
-#, fuzzy
 msgid "The options below the 'Zenphoto' drop down do only affect including images and albums. These options are be used on the fly and are not sticky if you reload the page (selecting another album or moving between pages in an album)."
 msgstr "Die Einstellung unter dem 'Zenphoto'-Ausklappmenu stehen nur für das Einfügen von Bildern und Alben zur Verfügung. Diese Einstellungen werden on-the-fly gesetzt und bleiben nicht erhalten, wenn die Seite neu geladen wird (z.B. bei Auswahl eines anderen Albums oder beim Bewegen zwischen zwei Seiten)."
 
@@ -12069,22 +11978,18 @@ msgid "The windows does not close automatically so you can include several image
 msgstr "Das Fenster schließt sich nicht automatisch, so dass Sie mehrere Bilder nacheinander einfügen können."
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:129
-#, fuzzy
 msgid "The tinyZenpage page on the Zenpage project site: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='Zenpage project site'>zenpage.maltem.de/pages/tinyZenpage</a>"
 msgstr "Die tinyZenpage-Seite auf der Zenpage-Projekt-Site: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='zenpage project site'>zenpage.maltem.de/pages/tinyZenpage</a>"
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:133
-#, fuzzy
 msgid "Select to show a list of Zenpage pages, articles or categories. Click on a title to include a link. Hover of the link to see an excerpt of the page or article. Un-published pages or articles are marked with an '*'. There are no further options."
 msgstr "Hier können Sie auswählen, wenn Sie eine Liste der Zenpage-Seiten, Artikel oder Kategorien anzeigen möchten. Klicken Sie auf einen Titel, um einen Link einzufügen. Bewegen Sie die Maus über einen Titel, um einen Auszug aus dem Seiten- oder Artikelinhalt zu lesen. Unveröffentlichte Seite und Artikel sind mit einem '*' markiert. Es gibt keine weiteren Einstellungen."
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:137
-#, fuzzy
 msgid "Select an album to include images from into your page or article. Click on the image to included it. Un-published albums or images are marked with an '*'. You can also click on the magnify glass icon to see a preview of the item (Multimedia files are previewed in Flowplayer, no matter if that plugin is activated or not.). <br />Note that it is currently not possible to include multimedia files directly as a sized image or custom image. Besides that you have several options what to include and how:"
 msgstr "Wählen Sie ein Album, aus dem Sie Bilder einfügen möchten. Klicken Sie auf das Bild, um es einzufügen. Unveröffentlichte Seite und Artikel sind mit einem '*' markiert. Sie können auf das Lupen-Icon für eine Voransicht des betreffenden Bildes zu anzusehen. (Multimediadateien werden immer mit Flowplyer angezeigt, egal ob dieses Plugin aktiviert ist oder nicht). <br /> Bedenken Sie, dass es derzeit nicht möglich ist, Multimedia-Dateien direkt als Großbild oder benutzerdefiniertes Bild einzufügen. Davon abgesehen stehen verschiedene Einstellungen zur Verfügung:"
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:141
-#, fuzzy
 msgid "Include the image itself, only its title, the title of its album, or a custom text."
 msgstr "Wählen Sie, ob Sie das Bild selbst, nur den Titel, den Titel seines Albums oder einen benutzerdefinierten Text einfügen möchten."
 
@@ -12093,7 +11998,6 @@ msgid "Include the thumbnail of the size set in Zenphoto's options, a custom thu
 msgstr "Einfügen des Thumbnails gemäß der Größe, die in Zenphotos Einstellungen gesetzt ist, ein benutzerdefiniertes Thumbnail (Größe für die längste Seite, Beschnittbreite x Beschnitthöhe), das Großbild wie in Zenphotos Einstellungen gesetzt oder eine benutzerdefinierte Größe ohne Beschnitt."
 
 #: zTRANSLATE/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:149
-#, fuzzy
 msgid "Select to link to the image page of the image, to the album the image is in, no link at all or a custom URL."
 msgstr "Wählen Sie, ob Sie einen Link zur Bildseite des Bildes, zum Album des Bildes, gar keinen Link oder einen benutzerdefinierten Link verwenden möchten."
 
@@ -12233,23 +12137,20 @@ msgstr "Titellink bearbeiten"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:148
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:179
-#, fuzzy
 msgid "Category password:"
-msgstr "Passwortgeschützt"
+msgstr "Kategorie-Passwort:"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:170
-#, fuzzy
 msgid "Category guest user:"
-msgstr "Album-Gastbenutzer:"
+msgstr "Kategorie-Gastbenutzer:"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:191
-#, fuzzy
 msgid "Category password hint:"
-msgstr "Galeriepasswort-Hinweis:"
+msgstr "Kategoriepasswort-Hinweis:"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:199
 msgid "<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected."
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Artikel, die mehreren Kategorien zugewiesen sind, werden den Passwortschutz der am wenigsten strikten Kategorie übernehmen. Wenn also ein Artikel zu irgendeiner ungeschützen Kategorie gehört, ist er ungeschützt."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:206
 msgid "Update Category"
@@ -12312,13 +12213,12 @@ msgid "(Article scheduled for publishing)"
 msgstr "(Artikel wird zeitgesteuert veröffentlicht)"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:150
-#, fuzzy
 msgid "<strong>Note:</strong> Scheduled publishing is not active unless the article is also set to <em>published</em>"
-msgstr "Anmerkung: Zeitgesteuertes Veröffentlichen ist nicht aktiviert, bevor der Artikel nicht auf <em>veröffentlicht</em> gesetzt ist."
+msgstr "<strong>Anmerkung:</strong> Zeitgesteuertes Veröffentlichen ist nicht aktiviert, bevor der Artikel nicht auf <em>veröffentlicht</em> gesetzt ist."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:154
 msgid "<strong>Note:</strong> This article is password protected because it is assigned to a password protected category only."
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Dieser Artikel ist passwortgeschützt, da er einer passwortgeschützen Kategorie zugewiesen ist."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:159
 msgid "Edit Page:"
@@ -12334,7 +12234,7 @@ msgstr "Anmerkung: Zeitgesteuertes Veröffentlichen ist nicht aktiviert, bevor d
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:169
 msgid "<strong>Note:</strong> This page is either password protected itself or subpage of a passport protected page."
-msgstr ""
+msgstr "<strong>Anmerkung:</strong> Diese Seite ist entweder selbst passwortgeschützt oder die Unterseite einer geschützten Seite."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:205
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:95
@@ -12343,14 +12243,12 @@ msgid "Manage files"
 msgstr "Dateien verwalten"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:220
-#, fuzzy
 msgid "Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode)."
 msgstr "Wählen Sie <em>Titellink bearbeiten</em>, wenn Sie anpassen möchten, wie der Titel in URLs erscheint.  Andernfalls wird er jedesmal automatisch jeder Änderung am Titel angepaßt. Wenn Sie dies verhindern möchten, wählen Sie <em>PermaTitellink aktivieren</em> und der Titellink bleibt immer derselbe (empfohlen, wenn Sie Zenphoto im mehrsprachigen Modus verwenden). <strong>Anmerkung: </strong> <em>Titellink bearbeiten</em> übergeht die <em>PermaTitellink aktivieren</em>-Einstellung."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:221
-#, fuzzy
 msgid "<strong>Note:</strong> Edit titlelink overrides the permalink setting."
-msgstr "<strong>Anmerkung!</strong> Für mehr Details klicken"
+msgstr "<strong>Anmerkung:</strong> Titellinkbearbeitung übergeht die PermaTitelink-Einstellung."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:223
 msgid "If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"
@@ -12365,7 +12263,6 @@ msgid "<em>Scheduled publishing:</em> To automatically publish a page/news artic
 msgstr "<em>Zeitgesteuertes Veröffentlichen:</em> Um eine Seite/einen Artikel zeitgesteuert zu veröffentlichen, setzen Sie ihn auf 'veröffentlicht' und geben ein zukünftiges Datum ein. Achtung, dies arbeitet nach Serverzeit!"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:228
-#, fuzzy
 msgid "<em>Expiration date:</em> Enter a future date in the date field manually to set a date the page or article will be set un-published automatically. After the page/article has been expired it can only be published again if the expiration date is deleted. Note this works on server time!"
 msgstr "<em>Ungültigkeitsdatum:</em> Geben Sie ein zukünftiges Datum in diesem Datumsfeld ein und die Seite/der Artikel werden automatisch an diesem auf unveröffentlicht gesetzt. Nachdem eine Seite oder ein Artikel ungültig wurden, können sie nur wieder durch das Löschen des Ungültigkeitsdatums erneut veröffentlicht werden."
 
@@ -12387,7 +12284,7 @@ msgstr "Bedenken Sie, dass Ihr Theme über die Codeblock-Funktionen verfügen mu
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:234
 msgid "<strong>Important:</strong> If setting a password for a page its subpages inherit the protection."
-msgstr ""
+msgstr "<strong>Wichtig:</strong> Wenn Sie ein Passwort vergeben, erben Unterseiten dieses."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:270
 msgid "Enable permaTitlelink"
@@ -12399,19 +12296,16 @@ msgstr "Für Änderungen gesperrt"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:292
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:312
-#, fuzzy
 msgid "Page password:"
-msgstr "Passwortgeschützt"
+msgstr "Seitenpasswort:"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:309
-#, fuzzy
 msgid "Page guest user:"
-msgstr "Album-Gastbenutzer:"
+msgstr "Seiten-Gastbenutzer:"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:319
-#, fuzzy
 msgid "Page password hint:"
-msgstr "Galeriepasswort-Hinweis:"
+msgstr "Seitenpasswort-Hinweis:"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:380
 msgid "Expiration date:"
@@ -12495,14 +12389,12 @@ msgid "View article"
 msgstr "Artikel ansehen"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:64
-#, fuzzy
 msgid "Select a page to edit or drag the pages into the order, including subpage levels, you wish them displayed."
 msgstr "Wählen Sie eine Seite zum Bearbeiten oder verschieben Sie die Seiten in die gewünschte Reihenfolge, inklusive Unterebenen."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:65
-#, fuzzy
 msgid "<strong>Note:</strong> Subpages of password protected pages inherit the protection."
-msgstr "<strong>Anmerkung</strong>: Passwörter müssen mindestens  %u Zeichen lang sein."
+msgstr "<strong>Anmerkung:</strong> Unterseiten erben Passwortschutz von ihren übergeordneten Seiten."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:95
 msgid "Edit this page"
@@ -12519,17 +12411,15 @@ msgstr "Die Seite <em>%s</em> wurde hinzugefügt, aber Sie müssen ihr noch eine
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:146
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:226
-#, fuzzy
 msgid "You must supply a password for the Protected Page user"
-msgstr "Es muss ein Passwort für den Gastsuchbenutzer eingegeben werden"
+msgstr "Es muss ein Passwort für den Gastbenutzer eingegeben werden"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:148
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:228
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:954
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1007
-#, fuzzy
 msgid "Your passwords were empty or did not match"
-msgstr "Ihre %s Passwörter waren leer oder stimmten nicht überein"
+msgstr "Ihre Passwörter waren leer oder stimmten nicht überein"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:150
 #, php-format
@@ -12589,9 +12479,8 @@ msgid "Article successfully deleted!"
 msgstr "Artikel erfolgreich gelöscht!"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:657
-#, fuzzy
 msgid "<em>(password protected)</em>"
-msgstr "Dieses Album ist passwortgeschützt."
+msgstr "<em>(passwortgeschützt)</em>"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:687
 msgid "View all months"
@@ -12612,9 +12501,8 @@ msgstr "Alle Artikel"
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:877
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1465
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1489
-#, fuzzy
 msgid "Un-published"
-msgstr "Veröffentlicht/unveröffentlicht"
+msgstr "Unveröffentlicht"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:950
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1003
@@ -12623,9 +12511,8 @@ msgstr "Sie haben vergessen, der Kategorie einen <strong>Titel oder Titellink</s
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:952
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1005
-#, fuzzy
 msgid "You must supply a password for the Protected Category user"
-msgstr "Es muss ein Passwort für den Gastsuchbenutzer eingegeben werden"
+msgstr "Es muss ein Passwort für den Gastbenutzer eingegeben werden"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1009
 msgid "Category updated!"
@@ -12676,10 +12563,10 @@ msgstr[0] "(<strong>%1$u</strong> Seite)"
 msgstr[1] "(<strong>%1$u</strong> Seiten)"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1280
-#, fuzzy, php-format
+#, php-format
 msgid "(<strong>%1$u</strong> page, <strong>%2$u</strong> un-published)"
 msgid_plural "(<strong>%1$u</strong> pages, <strong>%2$u</strong> un-published)"
-msgstr[0] "<strong>%1$u</strong> Album (%2$u nicht veröffentlicht)"
+msgstr[0] "(<strong>%1$u</strong> Seite, <strong>%2$u</strong> unveröffentlicht)"
 msgstr[1] "(<strong>%1$u</strong> Seiten, <strong>%2$u</strong> unveröffentlicht)"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1286
@@ -12690,17 +12577,17 @@ msgstr[0] "(<strong>%1$u</strong> Artikel)"
 msgstr[1] "<strong>%1$u</strong> Artikel)"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1288
-#, fuzzy, php-format
+#, php-format
 msgid "(<strong>%1$u</strong> news, <strong>%2$u</strong> un-published)"
 msgid_plural "(<strong>%1$u</strong> news, <strong>%2$u</strong> un-published)"
-msgstr[0] "<strong>%1$u</strong> Album (%2$u nicht veröffentlicht)"
-msgstr[1] "(<strong>%1$u</strong>, Artikel <strong>%2$u</strong> unveröffentlicht)"
+msgstr[0] "(<strong>%1$u</strong> Artikel, <strong>%2$u</strong> unveröffentlicht)"
+msgstr[1] "(<strong>%1$u</strong> Artikel, <strong>%2$u</strong> unveröffentlicht)"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1293
-#, fuzzy, php-format
+#, php-format
 msgid "(<strong>%1$u</strong> category)"
 msgid_plural "(<strong>%1$u</strong> categories)"
-msgstr[0] "<strong>%1$u</strong> Kategorie"
+msgstr[0] "(<strong>%1$u</strong> Kategorie)"
 msgstr[1] "(<strong>%1$u</strong> Kategorien)"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1359
@@ -12722,7 +12609,6 @@ msgid "Expires: %s"
 msgstr "Wird ungültig am: %s"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1456
-#, fuzzy
 msgid "Publish immediately (skip scheduling)"
 msgstr "Sofort veröffentlichen (Zeitsteuerung abbrechen)"
 
@@ -12750,11 +12636,11 @@ msgstr "Editor ausblenden"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:422
 msgid "<em>This article belongs to a protected category.</em>"
-msgstr ""
+msgstr "<em>Dieser Artikel gehört zu einer geschützen Kategorie.</em>"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:424
 msgid "<em>This entry belongs to a protected album.</em>"
-msgstr ""
+msgstr "<em>Dieser Eintrag gehört zu einem geschützten Album.</em>"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:596
 msgid "No flash player installed."
@@ -12765,9 +12651,8 @@ msgid "Prev page"
 msgstr "Vorherige Seite"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2316
-#, fuzzy
 msgid "This page is password protected"
-msgstr "Dieses Album ist passwortgeschützt!"
+msgstr "Diese Seite ist passwortgeschützt"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2693
 msgid "News RSS"
@@ -12812,17 +12697,17 @@ msgstr "%s ansehen"
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2820
 #, php-format
 msgid "<code>zenpageAlbumImage()</code> did not find the image %1$s:%2$s"
-msgstr ""
+msgstr "<code>zenpageAlbumImage()</code> konnte das Bild %1$s:%2$s nicht finden"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2830
 #, php-format
 msgid "<code>zenpageAlbumImage()</code> did not find the album %1$s"
-msgstr ""
+msgstr "<code>zenpageAlbumImage()</code> konnte das Album %1$s nicht finden"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenphoto_news/rsslib.php:96
-#, fuzzy, php-format
+#, php-format
 msgid "Failed to retrieve link <em>%s</em>"
-msgstr "<code>PHPMailer</code> konnte <em>%1$s</em> nicht senden. Fehlerinfo: %2$s"
+msgstr "Der Link <em>%s</em> konnte nicht abgerufen werden"
 
 #, fuzzy
 #~ msgid ""
