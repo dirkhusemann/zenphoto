@@ -603,7 +603,11 @@ class SearchEngine
 
 		switch ($tbl) {
 			case 'zenpage_news':
-				$key = '`id`';
+				if (empty($sorttype)) {
+					$key = '`date` DESC';
+				} else {
+					$key = trim('`'.$sorttype.'`'.' '.$sortdirection);
+				}
 				break;
 			case 'zenpage_pages':
 				$key = '`sort_order`';
@@ -912,7 +916,11 @@ class SearchEngine
 
 		switch ($tbl) {
 			case 'zenpage_news':
-				$key = '`id`';
+				if (empty($sorttype)) {
+					$key = '`date` DESC';
+				} else {
+					$key = trim('`'.$sorttype.'`'.' '.$sortdirection);
+				}
 				break;
 			case 'zenpage_pages':
 				$key = '`sort_order`';
@@ -1209,19 +1217,24 @@ class SearchEngine
 
 	/**
 	 * Returns a list of News IDs found in the search
+	 * 
+	 * @param string $sortorder "date" for sorting by date (default)
+	 * 													"title" for sorting by title
+	 * @param string $sortdirection "desc" (default) for descending sort order
+	 * 													    "asc" for ascending sort order
 	 *
 	 * @return array
 	 */
-	function getSearchNews() {
+	function getSearchNews($sortorder="date", $sortdirection="desc") {
 		if (getOption('zp_plugin_zenpage')) {
 			if (getOption('search_no_news')) return array();
 			$searchstring = $this->getSearchString();
 			$searchdate = $this->dates;
 			if (empty($searchstring) && empty($searchdate)) { return array(); } // nothing to find
 			if (empty($searchdate)) {
-				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_news', false, false);
+				$search_results = $this->searchFieldsAndTags($searchstring, 'zenpage_news', $sortorder, $sortdirection);
 			} else {
-				$search_results = $this->SearchDate($searchstring, $searchdate, 'zenpage_news', false, false,$this->whichdates);
+				$search_results = $this->SearchDate($searchstring, $searchdate, 'zenpage_news', $sortorder, $sortdirection,$this->whichdates);
 			}
 			return $search_results;
 		}

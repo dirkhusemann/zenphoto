@@ -213,7 +213,7 @@ function next_news($sortorder="date", $sortdirection="desc") {
 	if (is_null($_zp_zenpage_articles)) {
 		if (in_context(ZP_SEARCH)) {
 			processExpired('zenpage_news');
-			$_zp_zenpage_articles = $_zp_current_search->getSearchNews();
+			$_zp_zenpage_articles = $_zp_current_search->getSearchNews($sortorder, $sortdirection);
 		} else if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
 			$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
 		} else {

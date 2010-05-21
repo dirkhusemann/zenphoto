@@ -360,7 +360,7 @@ function isProtectedPage($pageobj=NULL) {
 			}
 		}
 		$datecount = array_count_values($cleandates);
-		arsort($datecount);
+		krsort($datecount);
 		return $datecount;
 	}
 
