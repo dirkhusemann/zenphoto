@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-19 11:09+0100\n"
-"PO-Revision-Date: 2010-05-21 19:13+0100\n"
+"PO-Revision-Date: 2010-05-21 20:49+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -8488,7 +8488,7 @@ msgstr "Albumthumbnails zurücksetzen"
 #: zTRANSLATE/zp-core/utilities/reset_albumthumbs.php:17
 #, php-format
 msgid "Reset album thumbnails to either random or %s"
-msgstr "Alle Albumthumbnails auf entweder \"zufällig\" oder \"%s\" zurücksetzen."
+msgstr "Alle Albumthumbnails entweder auf zufällig oder %s zurücksetzen."
 
 #: zTRANSLATE/zp-core/utilities/reset_albumthumbs.php:38
 msgid "oldest"
@@ -9303,7 +9303,7 @@ msgstr "<strong>den korrekten CAPTCHA-Bestätigungs-Code</strong>"
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:186
 msgid "<p style='color:red'>Please enter "
-msgstr "<p style='color:red'>Bitte geben Sie"
+msgstr "<p style='color:red'>Bitte geben Sie "
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:194
 msgid " and "
