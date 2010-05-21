@@ -205,6 +205,9 @@ if (zp_loggedin(ZENPAGE_FILES_RIGHTS)) {
 	<img src="images/folder.png" alt="" /> <?php echo gettext('Manage files'); ?></a></strong>
 	<?php 
 }
+?>
+<span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
+<?php
 if(is_object($result)) {
 	?>
 	<a href="../../../index.php?p=<?php echo $themepage; ?>&amp;title=<?php printIfObject($result,"titlelink") ;?>" title="<?php echo gettext("View"); ?>"><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></a>
