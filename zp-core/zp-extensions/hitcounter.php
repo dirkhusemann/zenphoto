@@ -17,14 +17,14 @@ function hitcounter_load_script($obj) {
 	if (!checkforPassword($hint, $show)) { // count only if permitted to access
 		switch ($_zp_gallery_page) {
 			case 'album.php':
-				if (!isMyALbum($_zp_current_album->name, LIST_ALBUM_RIGHTS) && getCurrentPage() == 1) {
+				if (!isMyALbum($_zp_current_album->name, ALBUM_RIGHTS) && getCurrentPage() == 1) {
 					$hc = $_zp_current_album->get('hitcounter')+1;
 					$_zp_current_album->set('hitcounter', $hc);
 					$_zp_current_album->save();
 				}
 				break;
 			case 'image.php':
-				if (!isMyALbum($_zp_current_album->name, LIST_ALBUM_RIGHTS)) { //update hit counter
+				if (!isMyALbum($_zp_current_album->name, ALBUM_RIGHTS)) { //update hit counter
 					$hc = $_zp_current_image->get('hitcounter')+1;
 					$_zp_current_image->set('hitcounter', $hc);
 					$_zp_current_image->save();

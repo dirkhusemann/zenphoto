@@ -141,6 +141,8 @@ if (isset($_GET['action'])) {
 					$errormsg = gettext('You have exceeded your upload quota');
 					break;
 				default:
+//TODO: add in $error to the message.
+//$errormsg = sprintf(gettext("The error %s was reported when submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!"),$error);					
 					$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!");
 					break;
 			}
