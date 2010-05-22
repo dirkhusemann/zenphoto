@@ -142,12 +142,12 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			define ('TRUNCATE_LENGTH',80);
 			define ('SHOW_ITEMS', 5);
 			?>
-			<div id="zenpagesearch">
+			<div id="efsearch">
 			<?php
 	
 			if ($numpages>0) {
 				?>
-				<div id="zenpagesearchhead">
+				<div id="efsearchhead_pages">
 					<h3><?php printf(gettext('Pages (%s)'),$numpages); ?></h3>
 					<?php
 					if ($numpages>SHOW_ITEMS) {
@@ -158,7 +158,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					}
 					?>
 				</div>
-				<div class="zenpagesearchtext">
+				<div class="efsearchtext">
 					<ul>
 					<?php
 					$c = 0;
@@ -179,7 +179,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if ($numnews>0) {
 				if ($numpages>0) echo '<br />';
 				?>
-				<div id="zenpagesearchhead">
+				<div id="efsearchhead_news">
 					<h3><?php printf(gettext('Articles (%s)'),$numnews); ?></h3>
 					<?php
 					if ($numnews>SHOW_ITEMS) {
@@ -190,7 +190,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					}
 					?>
 				</div>
-				<div class="zenpagesearchtext">
+				<div class="efsearchtext">
 					<ul>
 					<?php
 					$c=0;
@@ -211,21 +211,23 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if ($total>0 && ($numpages + $numnews) > 0) {
 				?>
 				<br />
-				<h3>
-				<?php
-				if (getOption('search_no_albums')) {
-					if (!getOption('search_no_images')) {
-						printf(gettext('Images (%s)'),$numimages);
-					}
-				} else {
-					if (getOption('search_no_images')) {
-						printf(gettext('Albums (%s)'),$numalbums);
+				<div id="efsearchhead_gallery">
+					<h3>
+					<?php
+					if (getOption('search_no_albums')) {
+						if (!getOption('search_no_images')) {
+							printf(gettext('Images (%s)'),$numimages);
+						}
 					} else {
-						printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
+						if (getOption('search_no_images')) {
+							printf(gettext('Albums (%s)'),$numalbums);
+						} else {
+							printf(gettext('Albums (%1$s) &amp; Images (%2$s)'),$numalbums,$numimages);
+						}
 					}
-				}
-				?>
-				</h3>
+					?>
+					</h3>
+				</div>
 				<?php
 			}
 			?>

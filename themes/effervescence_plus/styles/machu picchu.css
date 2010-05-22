@@ -1095,34 +1095,51 @@ table.password td.hint{
 	width: 250px;
 	padding: 2px;
 }
-#zenpagesearch {
+#efsearch {
 padding: 0px;
 }
-#zenpagesearchhead {
+#efsearchhead_pages {
 padding: 10px;
 background: #607848;
 }
-#zenpagesearchhead p {
+#efsearchhead_pages p {
 text-align: right;
 font-size: 80%;
 }
-.zenpagesearchtext {
+#efsearchhead_news {
+padding: 10px;
+background: #607848;
+}
+#efsearchhead_news p {
+text-align: right;
+font-size: 80%;
+}
+#efsearchhead_gallery {
+padding: 10px;
+background: #607848;
+}
+#efsearchhead_gallery p {
+text-align: right;
+font-size: 80%;
+}
+
+.efsearchtext {
 margin-top: 5px;
 padding: 0 5px;
 color: #ECEBE1; /*comment text color*/
 }
-.zenpagesearchtext a {
+.efsearchtext a {
 color: #ECEBE1;
 cursor: pointer;
 }
-.zenpagesearchtext a:hover {
+.efsearchtext a:hover {
 color: #FFFFFF;
 text-decoration: underline;
 }
-.zenpagesearchtext ul {
+.efsearchtext ul {
 list-style-type: none;
 padding-left:20px
 }
-.zenpagesearchtext p {
+.efsearchtext p {
 text-indent: 1em;
 }
