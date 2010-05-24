@@ -1021,16 +1021,18 @@ $alb = removeParentAlbumNames($album);
 									<?php echo gettext('270 degrees'); ?>
 								</span>
 							</label>
-							<hr />
-							<p class="buttons" style="clear: both">
-								<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
-											title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
-									<img src="images/shape_handles.png" alt="" /><?php echo gettext("Crop thumbnail"); ?>
-								</a>
-							</p>
-							<span style="line-height: 0em;"><br clear="all" /></span>
 							<?php
 						}
+						?>
+						<hr />
+						<p class="buttons" style="clear: both">
+							<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
+										title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
+								<img src="images/shape_handles.png" alt="" /><?php echo gettext("Crop thumbnail"); ?>
+							</a>
+						</p>
+						<span style="line-height: 0em;"><br clear="all" /></span>
+						<?php
 						echo zp_apply_filter('edit_image_utilities', '<!--image-->', $image, $currentimage, $pagenum, $tagsort); //pass space as HTML because there is already a button shown for cropimage
 						?>
 						<span style="line-height: 0em;"><br clear="all" /></span>
