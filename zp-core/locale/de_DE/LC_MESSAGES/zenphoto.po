@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: zenphoto 1.2.5\n"
+"Project-Id-Version: Zenphoto 1.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-19 11:09+0100\n"
-"PO-Revision-Date: 2010-05-21 20:49+0100\n"
-"Last-Translator: acrylian <wartgart@gmx.net>\n"
+"PO-Revision-Date: 2010-05-24 13:08+0100\n"
+"Last-Translator: Malte Müller (acrylian)\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgstr "von"
 
 #: zTRANSLATE/rss-news-comments.php:26
 msgid "latest news and pages comments"
-msgstr "Neueste Neuigkeiten- und Seitenkommentare"
+msgstr "Neuste Neuigkeiten- und Seitenkommentare"
 
 #: zTRANSLATE/rss.php:74
 #, php-format
@@ -973,7 +973,7 @@ msgstr "Album %s ansehen"
 
 #: zTRANSLATE/themes/stopdesign/index.php:97
 msgid "Recent images"
-msgstr "Neueste Bilder"
+msgstr "Neuste Bilder"
 
 #: zTRANSLATE/themes/stopdesign/index.php:116
 #: zTRANSLATE/themes/stopdesign/index.php:144
@@ -1638,7 +1638,7 @@ msgstr "Metadaten aktualisieren"
 #: zTRANSLATE/zp-core/admin-edit.php:1412
 #: zTRANSLATE/zp-core/admin-functions.php:1675
 msgid "Reset hitcounters"
-msgstr "Besucherzähler zurücksetzen"
+msgstr "Besucherzähler-Reset"
 
 #: zTRANSLATE/zp-core/admin-edit.php:779
 msgid "Click on the image to change the thumbnail cropping."
@@ -2924,7 +2924,7 @@ msgstr "Galerie-Verhalten:"
 
 #: zTRANSLATE/zp-core/admin-options.php:934
 msgid "use latest image date as album date"
-msgstr "Datum des neuestes Bildes als Albumdatum verwenden"
+msgstr "Datum des neustes Bildes als Albumdatum verwenden"
 
 #: zTRANSLATE/zp-core/admin-options.php:943
 msgid "enable user name login field"
@@ -2944,7 +2944,7 @@ msgstr "Galeriesessions aktivieren"
 
 #: zTRANSLATE/zp-core/admin-options.php:976
 msgid "<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>"
-msgstr "<a href=\"javascript:toggle('albumdate');\" >Details</a> uzr<em>Verwendung des Datums des neuesten Bilds als Albumdatum</em>"
+msgstr "<a href=\"javascript:toggle('albumdate');\" >Details</a> uzr<em>Verwendung des Datums des neusten Bilds als Albumdatum</em>"
 
 #: zTRANSLATE/zp-core/admin-options.php:978
 msgid "If you wish your album date to reflect the date of the latest image uploaded set this option. Otherwise the date will be set initially to the date the album was created."
@@ -3130,11 +3130,11 @@ msgstr "Neuste nach ID"
 
 #: zTRANSLATE/zp-core/admin-options.php:1243
 msgid "latest by date"
-msgstr "Neueste nach Datum"
+msgstr "Neuste nach Datum"
 
 #: zTRANSLATE/zp-core/admin-options.php:1244
 msgid "latest by mtime"
-msgstr "Neueste nach mtime"
+msgstr "Neuste nach mtime"
 
 #: zTRANSLATE/zp-core/admin-options.php:1247
 msgid "latest updated"
@@ -4326,7 +4326,7 @@ msgstr "Die Besucherzähler wurden zurückgesetzt"
 
 #: zTRANSLATE/zp-core/admin.php:89
 msgid "You are running the latest zenphoto version."
-msgstr "Sie verwenden bereits die neueste Zenphoto-Version."
+msgstr "Sie verwenden bereits die neuste Zenphoto-Version."
 
 #: zTRANSLATE/zp-core/admin.php:93
 msgid "Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>"
@@ -4531,7 +4531,7 @@ msgstr "Hilfsfunktionen"
 
 #: zTRANSLATE/zp-core/admin.php:476
 msgid "10 Most Recent Comments"
-msgstr "Die 10 neuesten Kommentare"
+msgstr "Die 10 neusten Kommentare"
 
 #: zTRANSLATE/zp-core/admin.php:550
 #, php-format
@@ -5875,7 +5875,7 @@ msgstr "Neu registrierte und bestätigte Benutzer."
 
 #: zTRANSLATE/zp-core/setup-option-defaults.php:319
 msgid "most recent"
-msgstr "neuesten"
+msgstr "neusten"
 
 #: zTRANSLATE/zp-core/setup-primitive.php:85
 msgid "A simpler web photo album"
@@ -8268,7 +8268,7 @@ msgstr "Update suchen"
 
 #: zTRANSLATE/zp-core/utilities/check_for_update.php:5
 msgid "Queries the Zenphoto web site for the latest version and compares that with the one that is running."
-msgstr "Überprüft und vergleicht die laufende Zenphoto-Version mit der neuesten auf der Zenphoto-Website verfügbaren."
+msgstr "Überprüft und vergleicht die laufende Zenphoto-Version mit der neusten auf der Zenphoto-Website verfügbaren."
 
 #: zTRANSLATE/zp-core/utilities/gallery_statistics.php:21
 #: zTRANSLATE/zp-core/utilities/gallery_statistics.php:408
@@ -8332,7 +8332,7 @@ msgstr "mit den meisten Bildern"
 #: zTRANSLATE/zp-core/utilities/gallery_statistics.php:484
 #: zTRANSLATE/zp-core/utilities/gallery_statistics.php:493
 msgid "latest"
-msgstr "die neuesten"
+msgstr "die neusten"
 
 #: zTRANSLATE/zp-core/utilities/gallery_statistics.php:201
 msgid "No statistic available"
@@ -8455,7 +8455,7 @@ msgstr "Zurück nach oben"
 #: zTRANSLATE/zp-core/utilities/purge_image_cache.php:2
 #: zTRANSLATE/zp-core/utilities/purge_image_cache.php:6
 msgid "Purge Image cache"
-msgstr "Bildzwischenspeicher löschen"
+msgstr "Bild-Cache löschen"
 
 #: zTRANSLATE/zp-core/utilities/purge_image_cache.php:5
 msgid "Clears the image cache. Images will be re-cached as they are viewed."
@@ -8483,7 +8483,7 @@ msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder aus."
 
 #: zTRANSLATE/zp-core/utilities/reset_albumthumbs.php:16
 msgid "Reset album thumbs"
-msgstr "Albumthumbnails zurücksetzen"
+msgstr "Albumthumbnail-Reset"
 
 #: zTRANSLATE/zp-core/utilities/reset_albumthumbs.php:17
 #, php-format
@@ -8544,7 +8544,7 @@ msgstr "Die Besucherzähler wurden zurückgesetzt"
 
 #: zTRANSLATE/zp-core/utilities/reset_hitcounters.php:5
 msgid "Sets all hitcounters to zero."
-msgstr "Setzt alle Bewertungen auf null."
+msgstr "Bewertung-Reset"
 
 #: zTRANSLATE/zp-core/utilities/scheduled_content.php:26
 msgid "Publish content"
@@ -11089,7 +11089,7 @@ msgstr "CombiNews"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:72
 msgid "Set to enable the CombiNews feature to show news articles and latest gallery items together on the news section's overview page(s)."
-msgstr "Aktiviert die CombiNews-Einstellung, um Artikel und neueste Galerieeinträge zusammen als Neuigkeiten zu zeigen."
+msgstr "Aktiviert die CombiNews-Einstellung, um Artikel und neuste Galerieeinträge zusammen als Neuigkeiten zu zeigen."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:72
 msgid "<strong>Note:</strong> Images/albums and news articles are still separate, your Zenphoto gallery is not touched in any way! <strong>IMPORTANT: This feature requires MySQL 4.1 or later.</strong>"
@@ -11133,15 +11133,15 @@ msgstr "Neuste Bilder: Benutzerdefinierter Thumbnailbeschnitt"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:76
 msgid "latest images by album: thumbnail"
-msgstr "Neueste Bilder pro Album: Thumbnail"
+msgstr "Neuste Bilder pro Album: Thumbnail"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:76
 msgid "latest images by album: thumbnail-customcrop"
-msgstr "Neueste Bilder pro Album: Benutzerdefinierter Thumbnailbeschnitt"
+msgstr "Neuste Bilder pro Album: Benutzerdefinierter Thumbnailbeschnitt"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:76
 msgid "latest images by album: sized image"
-msgstr "Neueste Bilder pro Album: Großbild"
+msgstr "Neuste Bilder pro Album: Großbild"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:77
 msgid "What you want to show within the CombiNews section.<br /><ul><li>Latest images: Entries for all images ever added</li><li>Latest albums: Entries for all albums ever created</li><li>Latest images by album: Entries for all images but grouped by images that have been added within a day to each album (Scheme: 'x new images in album y on date z')</li></ul>"
@@ -11234,7 +11234,7 @@ msgstr "CombiNews: Bildbeschreibung anzeigen"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:102
 msgid "Set to show the image description with every item if using the CombiNews mode <em>latest images by album</em> only. Printed as a paragraph."
-msgstr "Auswählen, wenn die Bildbeschreibung mit jedem Eintrag gezeigt werden soll, wenn der CombiNews Modus <em>Neueste Bild pro Album</em> eingestelt ist. Sie wird als paragraph ausgegeben."
+msgstr "Auswählen, wenn die Bildbeschreibung mit jedem Eintrag gezeigt werden soll, wenn der CombiNews Modus <em>Neuste Bild pro Album</em> eingestelt ist. Sie wird als Absatz ausgegeben."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:103
 msgid "CombiNews: Show image title"
@@ -11252,7 +11252,7 @@ msgstr "CombiNews: Benutzerdefinierter Titel (Singular)"
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:108
 #, php-format
 msgid "Custom title for the article in sprintf() syntax. %1$u = number of new items, %2$s = title of the album they are in, %3$s = titles of the new items. Never leave any of these three out! (<em>latest images by album</em> option only)."
-msgstr "Benutzerdefinierte Titel in sprintf()-Syntax. %1$u = Anzahl der neuen Einträge, %2$s = Titel des Album, in dem sie sich befinden, %3$s = Titel der neuen Einträge. Lassen Sie niemals diese drei Werte aus!  (nur <em>Neueste Bild pro Album</em>-Modus)."
+msgstr "Benutzerdefinierte Titel in sprintf()-Syntax. %1$u = Anzahl der neuen Einträge, %2$s = Titel des Album, in dem sie sich befinden, %3$s = Titel der neuen Einträge. Lassen Sie niemals diese drei Werte aus!  (nur <em>Neuste Bild pro Album</em>-Modus)."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:107
 msgid "CombiNews: Custom title (plural)"
@@ -11264,7 +11264,7 @@ msgstr "CombiNews: Benutzerdefinierter Titel - Anzahl der Bildtitel"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage.php:110
 msgid "How many images titles you want to show with the custom title (<em>latest images by album</em> option only)."
-msgstr "Die Anzahl an Bildtiteln, die Sie im benutzerdefinierten Titel anzeigen möchten (nur <em>Neueste Bild pro Album</em>-Modus)."
+msgstr "Die Anzahl an Bildtiteln, die Sie im benutzerdefinierten Titel anzeigen möchten (nur <em>Neuste Bilder pro Album</em>-Modus)."
 
 #: zTRANSLATE/zp-core/zp-extensions/zenphoto_news.php:10
 msgid "Places the latest 3 news articles from Zenphoto.org on the admin overview page."
