@@ -216,7 +216,7 @@ if (!OFFSET_PATH) { // handle form post
 					$userobj->setName($admin_n);
 					$userobj->setEmail($admin_e);
 					$userobj->setRights(0);
-					$userobj->setAlbums(NULL);
+					$userobj->setObjects(NULL);
 					$userobj->setGroup('');
 					$userobj->setCustomData('');
 					zp_apply_filter('register_user_registered', $userobj);
