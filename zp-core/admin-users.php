@@ -458,7 +458,6 @@ if (empty($alterrights)) {
 						echo '<p>'.gettext("The <em>master</em> account has full rights to all albums.").'</p>';
 					} else {
 						printManagedObjects('albums',$albumlist, $album_alter_rights, $user['id'], $id);
-/*TODO
 						if (getOption('zp_plugin_zenpage')) {
 							$pagelist = array();
 							$pages = getPages(false);
@@ -475,18 +474,16 @@ if (empty($alterrights)) {
 							}
 							printManagedObjects('news',$newslist, $album_alter_rights, $user['id'], $id);
 						}
-*/
 					}
 						if (!$ismaster) {
 							?>
 							<p>
 								<?php
-								//TODO: change text to be generic objects
-								if (empty($album_alter_rights)) {
-									echo gettext("Select one or more albums for the administrator to manage.").' ';
-									echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
+									if (empty($album_alter_rights)) {
+									echo gettext("Select one or more objects for the administrator to manage.").' ';
+									echo gettext("Administrators with <em>User admin</em> or <em>Manage all...</em> rights can manage all objects. All others may manage only those that are selected.");
 								} else {
-									echo gettext("You may manage these albums subject to the above rights.");
+									echo gettext("You may manage these objects subject to the above rights.");
 								}
 								?>
 							</p>

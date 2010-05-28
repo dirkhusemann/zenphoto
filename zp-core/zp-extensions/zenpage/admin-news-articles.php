@@ -88,14 +88,6 @@ printLogoAndLinks();
 					<div style="float:left; margin-right: 15px; margin-top: 2px;">
 						<div class="buttons">
 							<strong><a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
-							<?php 
-							if (zp_loggedin(ZENPAGE_FILES_RIGHTS)) {
-								?>
-								<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
-								<img src="images/folder.png" alt="" /> <?php echo gettext('Manage files'); ?></a></strong>
-								<?php 
-							}
-							?>
 						</div>
 					</div>
 					<?php printCategoryDropdown(); printArticleDatesDropdown(); printUnpublishedDropdown(); ?>

@@ -30,11 +30,28 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 						'subtabs'=>NULL);
 }
 
-if (zp_loggedin(UPLOAD_RIGHTS)) {
+if (zp_loggedin(UPLOAD_RIGHTS) && zp_loggedin(FILES_RIGHTS)) {
+	$locale = substr(getOption("locale"),0,2);
+	if (empty($locale)) $locale = 'en';
+	$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
+							'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php',
+							'subtabs'=>array(	gettext('images')=>WEBPATH."/".ZENFOLDER.'/admin-upload.php?page=upload&amp;tab=albums', 
+																gettext('files')=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language='.$locale.'&amp;tab=files'),
+							'default'=>'albums');
+	
+} else if (zp_loggedin(UPLOAD_RIGHTS) && !zp_loggedin(FILES_RIGHTS)) {
 	$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php',
 							'subtabs'=>NULL);
+} else if (zp_loggedin(FILES_RIGHTS) && !zp_loggedin(UPLOAD_RIGHTS)) {
+	$locale = substr(getOption("locale"),0,2);
+	if (empty($locale)) $locale = 'en';
+	$zenphoto_tabs['upload'] = array('text'=>gettext("files"),
+							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language='.$locale,
+							'subtabs'=>NULL,
+							'default'=>'files');
 }
+
 
 if (zp_loggedin(ALBUM_RIGHTS)) {
 	$zenphoto_tabs['edit'] = array('text'=>gettext("albums"),
@@ -55,7 +72,6 @@ if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 																gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&amp;tab=categories'),
 																'default'=>'articles');
 }
-//TODO: add tab for "files". Remove buttons from pages, news tabs
 
 if (zp_loggedin(TAGS_RIGHTS)) {
 	$zenphoto_tabs['tags'] = array('text'=>gettext("tags"),

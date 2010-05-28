@@ -2762,7 +2762,6 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 			$text = gettext("Managed albums:");
 			$prefix = 'managed_albums_'.$prefix.'_';
 			break;
-/*TODO
 		case 'news':
 			$cv = populateManagedObjectsList('news',$adminid);
 			$rest = array_diff($albumlist, $cv);
@@ -2775,7 +2774,6 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 			$text = gettext("Managed pages:");
 			$prefix = 'managed_pages_'.$prefix.'_';
 			break;
-*/
 	}
 	?>
 	<h2 class="h2_bordered_albums">

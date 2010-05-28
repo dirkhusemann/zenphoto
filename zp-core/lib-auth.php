@@ -49,7 +49,7 @@ class Zenphoto_Authority {
 
 	var $admin_users = NULL;
 	var $rightsset = NULL;
-	var $version = 1;
+	var $version = 2;
 
 
 	/**
@@ -137,7 +137,7 @@ class Zenphoto_Authority {
 		}
 		if ($c > 0) {
 			if ($l > 0) {
-				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from %2$s.',
+				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note:</strong> passwords must be at least %1$u characters long and contain at least one character from %2$s.',
 															'<strong>Note</strong>: passwords must be at least %1$u characters long and contain at least one character from each of the following groups: %2$s.', $c), $l, $text).'</p>';;
 			} else {
 				$msg = '<p class="notebox">'.sprintf(ngettext('<strong>Note</strong>: passwords must contain at least one character from %s.',
@@ -385,73 +385,40 @@ class Zenphoto_Authority {
 	 * @param int $oldversion
 	 */
 	function migrateAuth($oldversion) {
-		
-//TODO: post 1.3.0 remove the ability to migrate from pre-versioned rights. Warn that rights will have to be manually corrected		
-		
 		$this->admin_users = array();
 		$sql = "SELECT * FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 		$admins = query_full_array($sql, true);
 		if (count($admins)>0) { // something to migrate
 			printf(gettext('Migrating lib-auth data version %1$s => version %2$s'), $oldversion, $this->version);
-			if (empty($oldversion)) {
-				$oldrights = NULL;
-			} else {
-				$oldrights = array();
-				foreach ($this->getRights($oldversion) as $key=>$right) {
-					$oldrights[$key] = $right['value'];
-				}
+			$oldrights = array();
+			foreach ($this->getRights($oldversion) as $key=>$right) {
+				$oldrights[$key] = $right['value'];
 			}
 
 			foreach($admins as $user) {
 				$update = false;
-				if (is_array($oldrights)) {
-					$rights = $user['rights'];
-					$newrights = 0;
-					foreach ($this->getRights() as $key=>$right) {
-						if ($right['display']) {
-							if (array_key_exists($key, $oldrights) && $rights & $oldrights[$key]) {
-								$newrights = $newrights | $right['value'];
-							}
+				$rights = $user['rights'];
+				$newrights = 0;
+				foreach ($this->getRights() as $key=>$right) {
+					if ($right['display']) {
+						if (array_key_exists($key, $oldrights) && $rights & $oldrights[$key]) {
+							$newrights = $newrights | $right['value'];
 						}
 					}
-					switch ($oldversion) {	// need to migrate zenpage rights
-						case NULL:
-						case '1':
-							if ($rights & $oldrights['ZENPAGE_RIGHTS']) {
-								$newrights = $newrights | ZENPAGE_PAGES_RIGHTS | ZENPAGE_NEWS_RIGHTS | ZENPAGE_FILES_RIGHTS;
-							}
-							break;
-						default:
-							if ($this->version == 1) {
-								if ($rights & ($oldrights['ZENPAGE_PAGES_RIGHTS'] | $oldrights['ZENPAGE_NEWS_RIGHTS'] | $oldrights['ZENPAGE_FILES_RIGHTS'])) {
-									$newrights = $newrights | ZENPAGE_RIGHTS;
-								}
-							}
-							break;
-					}
-				} else {
-					$newrights = $user['rights'];
-					if (NO_RIGHTS == 2) {
-						if (($rights = $user['rights']) & 1) { // old compressed rights
-							$newrights = OVERVIEW_RIGHTS;
-							if ($rights & 2) $newrights = $newrights | UPLOAD_RIGHTS;
-							if ($rights & 4) $newrights = $newrights | COMMENT_RIGHTS;
-							if ($rights & 8) $newrights = $newrights | ALBUM_RIGHTS;
-							if ($rights & 16) $newrights = $newrights | THEMES_RIGHTS;
-							if ($rights & 32) $newrights = $newrights | OPTIONS_RIGHTS;
-							if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
+				}
+				switch ($oldversion) {	// need to migrate zenpage rights
+					case '1':
+						if ($rights & $oldrights['ZENPAGE_RIGHTS']) {
+							$newrights = $newrights | ZENPAGE_PAGES_RIGHTS | ZENPAGE_NEWS_RIGHTS | FILES_RIGHTS;
 						}
-					} else {
-						if (!(($rights = $user['rights']) & 1)) { // new expanded rights
-							$newrights = OVERVIEW_RIGHTS;
-							if ($rights & 16) $newrights = $newrights | UPLOAD_RIGHTS;
-							if ($rights & 64) $newrights = $newrights | COMMENT_RIGHTS;
-							if ($rights & 256) $newrights = $newrights | ALBUM_RIGHTS;
-							if ($rights & 1024) $newrights = $newrights | THEMES_RIGHTS;
-							if ($rights & 8192) $newrights = $newrights | OPTIONS_RIGHTS;
-							if ($rights & 65536) $newrights = $newrights | ADMIN_RIGHTS;
+						break;
+					default:
+						if ($this->version == 1) {
+							if ($rights & ($oldrights['ZENPAGE_PAGES_RIGHTS'] | $oldrights['ZENPAGE_NEWS_RIGHTS'] | $oldrights['FILES_RIGHTS'])) {
+								$newrights = $newrights | ZENPAGE_RIGHTS;
+							}
 						}
-					}
+						break;
 				}
 				$sql = 'UPDATE '.prefix('administrators').' SET `rights`='.$newrights.' WHERE `id`='.$user['id'];
 				query($sql);
@@ -555,7 +522,7 @@ class Zenphoto_Authority {
 															'ALBUM_RIGHTS' => array('value'=>pow(2,12),'name'=>gettext('Albums'),'display'=>true),
 															'ZENPAGE_PAGES_RIGHTS' => array('value'=>pow(2,14),'name'=>gettext('Pages'),'display'=>true),
 															'ZENPAGE_NEWS_RIGHTS' => array('value'=>pow(2,16),'name'=>gettext('News'),'display'=>true),
-															'ZENPAGE_FILES_RIGHTS' => array('value'=>pow(2,18),'name'=>gettext('Files'),'display'=>true),
+															'FILES_RIGHTS' => array('value'=>pow(2,18),'name'=>gettext('Files'),'display'=>true),
 															'MANAGE_ALL_PAGES_RIGHTS' => array('value'=>pow(2,20),'name'=>gettext('Manage all pages'),'display'=>true),
 															'MANAGE_ALL_NEWS_RIGHTS' => array('value'=>pow(2,22),'name'=>gettext('Manage all news'),'display'=>true),
 															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>pow(2,24),'name'=>gettext('Manage all albums'),'display'=>true),

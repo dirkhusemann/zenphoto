@@ -218,7 +218,6 @@ echo '</head>'."\n";
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
 											printManagedObjects('albums',$albumlist, '', $groupid, $id);
-/*TODO					
 											if (getOption('zp_plugin_zenpage')) {
 												$pagelist = array();
 												$pages = getPages(false);
@@ -235,7 +234,6 @@ echo '</head>'."\n";
 												}
 												printManagedObjects('news',$newslist, '', $groupid, $id);
 											}
-*/
 											?>
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">

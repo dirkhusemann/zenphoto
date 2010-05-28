@@ -69,8 +69,7 @@ if(isset($_GET['hitcounter'])) {
 		<strong><?php echo gettext("Save order"); ?></strong>
 	</button>
 	<?php 
-	//TODO: inhibit add page button if user does not have MANAGE_ALL_PAGES_RIGHTS
-	if (true || zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
+	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
 		?>
 		<strong>
 			<a href="admin-edit.php?page&amp;add" title="<?php echo gettext('Add Page'); ?>">
@@ -78,14 +77,6 @@ if(isset($_GET['hitcounter'])) {
 		</strong>
 		<?php
 	}
-	if (zp_loggedin(ZENPAGE_FILES_RIGHTS)) {
-		?>
-		<strong>
-			<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER; ?>/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>" class="colorbox">
-			<img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a>
-		</strong>
-		<?php
-		}
 	?>
 </p>
 </div>

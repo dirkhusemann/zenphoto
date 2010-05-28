@@ -66,9 +66,7 @@ function loadAlbum($album) {
 			$count++;
 		}
 		if ($started) echo ' } ';
-		/*TODO: remove the comment
 		printf(ngettext('[%u image]','[%u images]',$count),$count);
-		*/
 		echo "<br />\n";
 	}
 	return $count + $tcount;

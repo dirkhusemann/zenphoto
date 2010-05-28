@@ -44,7 +44,7 @@ class lib_Imagick_Options {
 							gettext('Imagick memory limit') =>	array(	'key' => 'magick_mem_lim',
 																		'type' => OPTION_TYPE_TEXTBOX,
 																		'order' => 1,		
-																		'desc' => '<p>' . gettext('Amount of memory allocated to Imagick in megabytes. Set to <strong>0</strong> for unlimited memory.') . '</p><p class="notebox">' . gettext('<strong>Note</strong>: Image processing will be faster with a higher memory limit. However, if your server experiences problems with image processing, try setting this lower.') . '</p>'),
+																		'desc' => '<p>' . gettext('Amount of memory allocated to Imagick in megabytes. Set to <strong>0</strong> for unlimited memory.') . '</p><p class="notebox">' . gettext('<strong>Note:</strong> Image processing will be faster with a higher memory limit. However, if your server experiences problems with image processing, try setting this lower.') . '</p>'),
 							gettext('CAPTCHA font size') =>		array(	'key' => 'magick_font_size',
 																		'type' => OPTION_TYPE_TEXTBOX,
 																		'order' => 2,

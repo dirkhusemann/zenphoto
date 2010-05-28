@@ -563,6 +563,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</select>
 					<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
 					<?php echo gettext('Multi-lingual'); ?>
+					<p class="notebox"><?php echo gettext('Please check the <a href="http://www.zenphoto.org/trac/report/9?asc=0&sort=version">translation tickets</a> for new and updated language translations.')?></p>
 					</td>
 					<td>
 						<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>
@@ -1149,8 +1150,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
 						<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
 						<p><?php echo gettext('Setting <code>Treat spaces as</code> to <em>OR</em> will cause search to trigger on any of the words in a string separated by spaces. Setting it to <em>AND</em> will cause the search to trigger only when all strings are present. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
-<?php //TODO: this should not reference the next_album loop. Generalize. ?>
-						<p><?php echo gettext('Setting <code>Do not return <em>{item}</em> matches</code> will cause search to ignore <em>{items}</em> when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
+						<p><?php echo gettext('Setting <code>Do not return <em>{item}</em> matches</code> will cause search to ignore <em>{items}</em> when looking for matches.') ?></p>
 					</td>
 				</tr>
 				<tr>
@@ -2003,8 +2003,8 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 				</td>
 				<td>
 					<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
-					<br />
-					<p class='notebox'><?php echo gettext('<strong>Note</strong>: changing crop height or width will invalidate existing crops.'); ?></p>
+					<br />					
+					<p class='notebox'><?php echo gettext('<strong>Note:</strong> changing crop height or width will invalidate existing crops.'); ?></p>
 				</td>
 			</tr>
 			<tr>
