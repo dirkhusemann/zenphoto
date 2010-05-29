@@ -29,29 +29,24 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 						'link'=>WEBPATH."/".ZENFOLDER.'/admin.php',
 						'subtabs'=>NULL);
 }
-
-if (zp_loggedin(UPLOAD_RIGHTS) && zp_loggedin(FILES_RIGHTS)) {
-	$locale = substr(getOption("locale"),0,2);
-	if (empty($locale)) $locale = 'en';
+if (zp_loggedin(UPLOAD_RIGHTS) || zp_loggedin(FILES_RIGHTS)) {
 	$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
-							'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php',
-							'subtabs'=>array(	gettext('images')=>WEBPATH."/".ZENFOLDER.'/admin-upload.php?page=upload&amp;tab=albums', 
-																gettext('files')=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language='.$locale.'&amp;tab=files'),
-							'default'=>'albums');
-	
-} else if (zp_loggedin(UPLOAD_RIGHTS) && !zp_loggedin(FILES_RIGHTS)) {
-	$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
-							'link'=>WEBPATH."/".ZENFOLDER.'/admin-upload.php',
 							'subtabs'=>NULL);
-} else if (zp_loggedin(FILES_RIGHTS) && !zp_loggedin(UPLOAD_RIGHTS)) {
 	$locale = substr(getOption("locale"),0,2);
 	if (empty($locale)) $locale = 'en';
-	$zenphoto_tabs['upload'] = array('text'=>gettext("files"),
-							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language='.$locale,
-							'subtabs'=>NULL,
-							'default'=>'files');
+	if (zp_loggedin(UPLOAD_RIGHTS) && zp_loggedin(FILES_RIGHTS)) {
+		$locale = substr(getOption("locale"),0,2);
+		if (empty($locale)) $locale = 'en';
+		$zenphoto_tabs['upload']['link'] = WEBPATH."/".ZENFOLDER.'/admin-upload.php';
+		$zenphoto_tabs['upload']['subtabs'] = array(gettext('images')=>WEBPATH."/".ZENFOLDER.'/admin-upload.php?page=upload&amp;tab=albums',
+																								gettext('files')=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language='.$locale.'&amp;tab=files');
+		$zenphoto_tabs['upload']['default'] = 'albums';
+	} else if (zp_loggedin(UPLOAD_RIGHTS)) {
+		$zenphoto_tabs['upload']['link'] = WEBPATH."/".ZENFOLDER.'/admin-upload.php';
+	} else {
+		$zenphoto_tabs['upload']['link'] = WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language='.$locale;
+	}
 }
-
 
 if (zp_loggedin(ALBUM_RIGHTS)) {
 	$zenphoto_tabs['edit'] = array('text'=>gettext("albums"),
