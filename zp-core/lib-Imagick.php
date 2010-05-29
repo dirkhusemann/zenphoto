@@ -1,4 +1,4 @@
-<?php
+<?php // perhaps add option for user to choose Imagick::FILTER_*?
 
 /**
  * Library for image handling using the Imagick library of functions
@@ -10,7 +10,8 @@
 
 // Suggested ImageMagick v6.3.8
 $_imagick_present = extension_loaded('imagick');
-$_imagick_version = version_compare(phpversion('imagick'), '2.1.0', '>=');
+$_imagick_required_version = '2.1.0';
+$_imagick_version = version_compare(phpversion('imagick'), $_imagick_required_version, '>=');
 $_zp_imagick_present = $_imagick_present && $_imagick_version;
 
 $_zp_graphics_optionhandlers[] = new lib_Imagick_Options();
@@ -55,10 +56,10 @@ class lib_Imagick_Options {
 	}
 
 	function canLoadMsg() {
-		global $_imagick_present, $_imagick_version;
+		global $_imagick_present, $_imagick_version, $_imagick_required_version;
 		if ($_imagick_present) {
 			if (!$_imagick_version) {
-				return gettext('The <strong><em>Imagick</em></strong> library version must be <strong>2.1.0</strong> or later.');
+				return sprintf(gettext('The <strong><em>Imagick</em></strong> library version must be <strong>%s</strong> or later.'), $_imagick_required_version);
 			}
 		} else {
 			return gettext('The <strong><em>Imagick</em></strong> extension is not available.');
@@ -304,8 +305,8 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageCanRotate() {
 		global $_imagick_can_rotate;
-		if (is_null($_imagick_can_rotate)) {
-			$_imagick_can_rotate = in_array(strtolower('rotateImage'), array_map('strtolower', get_class_methods('Imagick')));
+		if (!isset($_imagick_can_rotate)) {
+			$_imagick_can_rotate = in_array('rotateimage', array_map('strtolower', get_class_methods('Imagick')));
 		}
 		return $_imagick_can_rotate;
 	}
@@ -332,7 +333,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	function zp_imageDims($filename) {
 		$ping = new Imagick();
 		if ($ping->pingImage($filename)) {
-			return array('width'=>$ping->getImageWidth(), 'height'=>$ping->getImageHeight());
+			return array('width' => $ping->getImageWidth(), 'height' => $ping->getImageHeight());
 		}
 		return false;
 	}
