@@ -314,6 +314,7 @@ class staticCache {
  */
 function static_cache_html_purgebutton($buttons) {
 	$buttons[] = array(
+								'enable'=>true,
 								'button_text'=>gettext('Purge HTML cache'),
 								'formname'=>'clearcache_button',
 								'action'=>PLUGIN_FOLDER.'/static_html_cache.php?action=clear_html_cache',
