@@ -59,31 +59,13 @@ error_reporting(E_ALL^E_NOTICE);
 		$view = CONFIG_DEFAULT_VIEW;
 	}
 
-$page = 'upload';
-/* TODO:
-//needed parts of printAdminHeader()
-$path = WEBPATH.'/'.ZENFOLDER.'/';
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-header('Content-Type: text/html; charset=' . getOption('charset'));
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
-<title><?php echo gettext("zenphoto administration") ?></title>
-<link rel="stylesheet" href="<?php echo $path; ?>admin.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
-<?php
-// end printAdminHeader() parts
-*/
-//TODO: remove the following when above is enabled
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" debug="true">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ajax File Manager</title>
-<?php //TODO: End of above?>
+
 
 <script type="text/javascript" src="jscripts/ajaxfilemanager_c.js"></script>
 <!--<script type="text/javascript" src="jscripts/jquery.js"></script>
@@ -226,29 +208,16 @@ $(document).ready(
 <body>
 
 	<?php
-/* TODO: enable this
-	printLogoAndLinks(); ?>
-	<div id="main">
-		<?php printTabs('upload'); ?>
-		<div id="content" style="background-color:#E8E8E8;">
-			<?php
-			if (zp_loggedin(UPLOAD_RIGHTS)) {
-				printSubtabs('upload', 'files');
-			}
-			?>
-			<div class="tabbox">
-			<?php
-*/
-			if(!zp_loggedin(FILES_RIGHTS)) {
-				?>
-				<p class="notebox">
-				<?php
-				echo gettext('You do not have priviledges to use this facility.');
-				?>
-				</p>
-				<?php
-			} else {
-			?>
+	if(!zp_loggedin(FILES_RIGHTS)) {
+		?>
+		<p class="notebox">
+		<?php
+		echo gettext('You do not have priviledges to use this facility.');
+		?>
+		</p>
+		<?php
+	} else {
+	?>
 	<div id="wrapper">
 		<div id="header">
 			<dl id="currentFolderInfo">
@@ -748,15 +717,6 @@ $(document).ready(
 	<?php
 	}
 
-/* TODO: admin tab div closes
-	?>
-</div><!-- end of container -->
-
-</div><!-- end of content -->
-</div><!-- end of main -->
-<?php
-printAdminFooter();
-*/
 ?>
 </body>
 </html>

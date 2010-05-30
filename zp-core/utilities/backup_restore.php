@@ -469,9 +469,8 @@ echo '</p><p>';
 echo gettext('Ideally a restore should be done only on the same version of Zenphoto on which the backup was created. If you are intending to upgrade, first do the restore on the version of Zenphoto you were running, then install the new Zenphoto. If this is not possible the restore can still be done, but if the database fields have changed between versions, data from changed fields will not be restored.');
 echo '</p>'
 ?>
-</div>
-<!-- content --></div>
-<!-- main -->
+</div><!-- content -->
+</div><!-- main -->
 <?php printAdminFooter(); ?>
 </body>
 <?php echo "</html>"; ?>
