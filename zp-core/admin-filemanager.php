@@ -25,12 +25,13 @@ echo "\n</head>";
 				$locale = substr(getOption("locale"),0,2);
 				if (empty($locale)) $locale = 'en';
 				?>
-				<iframe src="zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo $locale; ?>&tab=files" width="100%" height="480" style="border: 0" />
+				<iframe src="zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo $locale; ?>&tab=files" width="100%" height="480" style="border: 0">
+				</iframe>
 			</div>
 		</div>
 	</div>
 </div>
-<br clear="all" />"
+<br clear="all" />
 <?php printAdminFooter(); ?>
 
 </body>
