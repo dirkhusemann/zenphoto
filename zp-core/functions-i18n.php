@@ -338,11 +338,11 @@ function parseHttpAcceptLanguage($str=NULL) {
  * @param string $userlocale
  */
 function validateLocale($userlocale,$source) {
+	if (DEBUG_LOCALE) debugLog("validateLocale($userlocale,$source)");
 	$languageSupport = generateLanguageList();
 	$locale = NULL;
 	if (!empty($userlocale)) {
-		
-		foreach ($languageSupport as $key=>$value) {
+			foreach ($languageSupport as $key=>$value) {
 			$userlocale = strtoupper($userlocale);
 			if (strtoupper($value) == $userlocale) { // we got a match
 				$locale = $value;
@@ -366,7 +366,14 @@ function validateLocale($userlocale,$source) {
 function getUserLocale() {
 	if (DEBUG_LOCALE) debugLogBackTrace("getUserLocale()");
 	if (isset($_REQUEST['locale'])) {
-		$locale = validateLocale(sanitize($_REQUEST['locale'], 0), 'URI string');
+		if (isset($_POST['locale'])) {
+			$locale = validateLocale(sanitize($_POST['locale'], 0), 'POST');
+		} else {
+			$locale = validateLocale(sanitize($_GET['locale'], 0), 'URI string');
+		}
+		if ($locale) {
+			zp_setCookie('dynamic_locale', $locale);
+		}
 		if (DEBUG_LOCALE) debugLog("dynamic_locale from URL: ".sanitize($_REQUEST['locale'], 0)."=>$locale");
 	} else {
 		$locale = false;
