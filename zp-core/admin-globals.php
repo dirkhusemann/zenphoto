@@ -21,7 +21,7 @@ $sortby = array(gettext('Filename') => 'filename',
 								gettext('ID') => 'id',
 								gettext('Filemtime') => 'mtime'
 								);
-									
+
 // setup sub-tab arrays for use in dropdown
 $zenphoto_tabs = array();
 if (zp_loggedin(OVERVIEW_RIGHTS)) {
@@ -36,8 +36,8 @@ if (zp_loggedin(UPLOAD_RIGHTS) || zp_loggedin(FILES_RIGHTS)) {
 		$locale = substr(getOption("locale"),0,2);
 		if (empty($locale)) $locale = 'en';
 		$zenphoto_tabs['upload']['link'] = WEBPATH."/".ZENFOLDER.'/admin-upload.php';
-		$zenphoto_tabs['upload']['subtabs'] = array(gettext('images')=>WEBPATH."/".ZENFOLDER.'/admin-upload.php?page=upload&amp;tab=albums',
-																								gettext('files')=>WEBPATH."/".ZENFOLDER.'/admin-filemanager.php?page=upload&amp;tab=files');
+		$zenphoto_tabs['upload']['subtabs'] = array(gettext('images')=>'admin-upload.php?page=upload&amp;tab=albums',
+																								gettext('files')=>'admin-filemanager.php?page=upload&amp;tab=files');
 		$zenphoto_tabs['upload']['default'] = 'albums';
 	} else if (zp_loggedin(UPLOAD_RIGHTS)) {
 		$zenphoto_tabs['upload']['link'] = WEBPATH."/".ZENFOLDER.'/admin-upload.php';
@@ -61,7 +61,7 @@ if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 if (getOption('zp_plugin_zenpage') && (zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 	$zenphoto_tabs['articles'] = array('text'=>gettext("news"),
 							'link'=>WEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/zenpage/admin-news-articles.php',
-							'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&amp;tab=articles', 
+							'subtabs'=>array(	gettext('articles')=>PLUGIN_FOLDER.'/zenpage/admin-news-articles.php?page=news&amp;tab=articles',
 																gettext('categories')=>PLUGIN_FOLDER.'/zenpage/admin-categories.php?page=news&amp;tab=categories'),
 																'default'=>'articles');
 }
@@ -79,8 +79,8 @@ if (zp_loggedin(COMMENT_RIGHTS)) {
 }
 
 $zenphoto_tabs['users'] = array('text'=>gettext("users"),
- 						'link'=>WEBPATH."/".ZENFOLDER.'/admin-users.php?page=users',
- 						'subtabs'=>NULL);
+						'link'=>WEBPATH."/".ZENFOLDER.'/admin-users.php?page=users',
+						'subtabs'=>NULL);
 
 $subtabs = array();
 $optiondefault='';
@@ -109,7 +109,7 @@ if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
 }
 if (!empty($subtabs)) {
 	$zenphoto_tabs['options'] = array('text'=>gettext("options"),
-			'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=options'.$optiondefault, 
+			'link'=>WEBPATH."/".ZENFOLDER.'/admin-options.php?page=options'.$optiondefault,
 			'subtabs'=>$subtabs,
 			'default'=>'gallery');
 }
