@@ -40,6 +40,7 @@
 	define('DIR_AJAX_EDIT_AREA', DIR_AJAX_JS . 'edit_area' . DIRECTORY_SEPARATOR);
 	define('DIR_LANG', DIR_AJAX_ROOT . 'langs' . DIRECTORY_SEPARATOR);
 
+	
 	//Class Declarations
 	define('CLASS_FILE', DIR_AJAX_INC .'class.file.php');
 	define("CLASS_UPLOAD", DIR_AJAX_INC .  'class.upload.php');

@@ -113,7 +113,7 @@
 
 							$fileTime = @filemtime($path);
 							$fileSize = @filesize($path);	
-							if($this->searchkeywords['name'] !== ''  && @preg_match(':'.$this->searchkeywords['name'].':i', $file) === false)
+							if($this->searchkeywords['name'] !== ''  && @eregi($this->searchkeywords['name'], $file) === false)
 							{
 								$isValid = false;
 							}
@@ -150,9 +150,9 @@
 								
 								$tem['path'] = backslashToSlash($finalPath);		
 								$tem['type'] = (is_dir($finalPath)?'folder':'file');
-								$tem['size'] = transformFileSize($tem['size']);
+/*								$tem['size'] = transformFileSize($tem['size']);
 								$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']);
-								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);
+								$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);*/
 								$tem['flag'] = (array_search($tem['path'], $selectedDocuments) !== false?($this->sessionAction->getAction() == "copy"?'copyFlag':'cutFlag'):'noFlag');
 								$tem['url'] = getFileUrl($tem['path']);
 								$this->rootFolderInfo['file']++;

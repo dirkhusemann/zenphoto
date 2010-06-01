@@ -50,7 +50,7 @@
 				}
 			}else 
 			{
-				trigger_error('No such file exists. ' . $path, E_USER_NOTICE);	
+				trigger_error('File does not exist ', E_USER_NOTICE);	
 			}				
 			}
 

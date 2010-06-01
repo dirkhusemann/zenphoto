@@ -56,6 +56,10 @@ border-left-color:#ece9d8;
 border-bottom-color:#716f64;
 
 }
+label.labelModeActive{
+color: #A1040B;
+}
+
 .imageInput{width:35px;}
 #controls
 {

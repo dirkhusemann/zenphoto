@@ -133,7 +133,7 @@
  *     url: myJsonUrl.php,
  *     dataType: 'json',
  *     success: function(data) {
- *        // 'data' is an object representing the evaluated json data
+ *        // 'data' is an object representing the the evaluated json data
  *     }
  * };
  * $('#myForm').ajaxSubmit(options);

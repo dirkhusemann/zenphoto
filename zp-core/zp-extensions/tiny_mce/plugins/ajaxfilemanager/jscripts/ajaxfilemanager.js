@@ -277,6 +277,7 @@ function changeView()
 							urls.present = getUrl('home', true, true);
 							initAfterListingLoaded();
 						});
+		return true;
 };
 
 function goParentFolder()
@@ -1165,8 +1166,14 @@ function showThickBox(linkElem, url)
 function uploadFileWin(linkElem)
 {
 	showThickBox(linkElem, appendQueryString('#TB_inline', 'height=200' + '&width=450' + '&inlineId=winUpload&modal=true'));
-	addMoreFile();
 
+	if($('#fileUploadBody tr').length <= 1) {
+	
+	addMoreFile();
+	
+	}	
+	
+	return false;
 };
 /**
 *	bring up a new folder window
@@ -1174,6 +1181,7 @@ function uploadFileWin(linkElem)
 function newFolderWin(linkElem)
 {
 	showThickBox(linkElem, appendQueryString('#TB_inline', 'height=100'  + '&width=250' + '&inlineId=winNewFolder&modal=true'));
+	$('#new_folder').val('');
 	return false;
 };
 /**
@@ -1243,7 +1251,7 @@ function doCreateFolder()
 /**
 * selecte documents and fire an ajax call to delete them
 */
-function deleteDocuments(msgNoDocSelected, msgUnableToDelete, msgWarning, elements)
+function deleteDocuments()
 {
 	if(!window.confirm(warningDel))
 	{
@@ -1271,11 +1279,7 @@ function deleteDocuments(msgNoDocSelected, msgUnableToDelete, msgWarning, elemen
 										$(hiddenSelectedDoc).addOption($(this).val(), getNum($(this).attr('id')), true);
 										isSelected = true;
 										 });		
-	if(!isSelected)
-	{
-		alert(msgNoDocSelected);
-	}
-	else
+	if(isSelected)
 	{//remove them via ajax call
 			var options = 
 			{ 
@@ -1391,7 +1395,7 @@ function doRename()
 								$('#check' + num).val(files[num].path);								
 								$('#a' + num).attr('href', files[num].path);							
 								$('#tdnd' + num).text(files[num].name);
-								$('#tdth' + num).text(files[num].name);								
+								$('#tdth' + num).text(files[num].mtime);								
 						}
 						
 						tb_remove();											
@@ -1410,6 +1414,7 @@ function doRename()
 function windowRefresh()
 {
 	document.location.href = urls.present;
+	return false;
 	//document.location.reload();
 };
 /**
@@ -1419,6 +1424,7 @@ function infoWin(linkElem)
 {
 	
 	showThickBox(linkElem, appendQueryString('#TB_inline', 'height=180' + '&width=500'+ '&inlineId=winInfo&modal=true'));
+	return false;
 
 };
 /**
@@ -1780,7 +1786,7 @@ function setDocInfo(type, num)
 			}	
 			$('#folderFieldSet').css('display', 'none');
 			$('#fileFieldSet').css('display', '');
-		   if(typeof(selectFile) != 'undefined')
+		   if(typeof(selectFile) != 'undefined' && $('#fileList input[@type=checkbox][@checked]').length==1)
 		   {
 		   	$('#selectCurrentUrl').unbind('click').click( 
 		   		function()
@@ -1825,6 +1831,7 @@ function setDocInfo(type, num)
 		{
 			tb_remove();
 			$('#playGround').empty();
+			return false;
 		};
 		
 		function closeWindow(msg)

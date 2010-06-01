@@ -1,8 +1,8 @@
 <pre>Array
 (
-    [currentFolderPath] => ../uploaded/3/New Folder/
-    [new_folder] => sdfds
+    [currentFolderPath] => ../uploaded/asdasd/
+    [new_folder] => test11
 )
 </pre>
 
-28/Aug/2008 22:57:37
+07/Feb/2010 01:56:11

@@ -115,6 +115,7 @@
 							{//save as request
 								//check save to folder if exists
 								$imagePath = addTrailingSlash(backslashToSlash($_POST['save_to'])) . $_POST['new_name'] . "." . getFileExt($_POST['path']); 
+								
 								if(!file_exists($_POST['save_to']) || !is_dir($_POST['save_to']))
 								{
 									$error = IMG_SAVE_AS_FOLDER_NOT_FOUND;
@@ -172,7 +173,7 @@
 				}			
 			}else 
 			{
-				$error = IMG_SAVE_IMG_OPEN_FAILED;
+				$error = IMG_SAVE_IMG_OPEN_FAILED . $originalImage;
 			}		
 
 		}else 
