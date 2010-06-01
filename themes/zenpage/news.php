@@ -30,7 +30,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	
 <div id="content-left">
 
-<?php printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev')); ?>
+
 <?php 
 // single news article
 if(is_NewsArticle()) { 
@@ -52,6 +52,7 @@ if (function_exists('printCommentForm')) { ?>
 	</div>
 	<?php  } // comments allowed - end
 } else {
+printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 echo "<hr />";	
 // news article loop
   while (next_news()): ;?> 
