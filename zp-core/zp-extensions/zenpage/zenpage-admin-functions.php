@@ -1696,6 +1696,60 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 }
 
 
+//processing the bulk checkbox actions on news, categories and pages
+
+function processCheckboxActions($type) {
+	if (isset($_POST['ids'])) {
+		//echo "action for checked items:". $_POST['checkallaction'];
+		$action = sanitize($_POST['checkallaction']);
+		$ids = $_POST['ids'];
+		$total = count($ids);
+		switch($type) {
+			case 'pages':
+				$dbtable = prefix('zenpage_pages');
+				break;
+			case 'news':
+				$dbtable = prefix('zenpage_news');
+				break;
+			case 'newscategories':
+				$dbtable = prefix('zenpage_news_categories');
+				break;
+		}
+		if($action != 'noaction') {
+			if ($total > 0) {
+				$n = 0;
+				switch($action) {
+					case 'deleteall':
+						$sql = "DELETE FROM ".$dbtable." WHERE ";
+						break;
+					case 'showall':
+						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
+						break;
+					case 'hideall':
+						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
+						break;
+					case 'commentson':
+						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
+						break;
+					case 'commentsoff':
+						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
+						break;
+					case 'resethitcounter':
+						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
+						break;
+				}
+				foreach ($ids as $id) {
+					$n++;
+					$sql .= " id='".sanitize_numeric($id)."' ";
+					if ($n < $total) $sql .= "OR ";
+				}
+				query($sql);
+			}
+		}
+	}
+}
+
+
 /**
  * Extracs the first two characters from the Zenphoto locale names like 'de_DE' so that
  * TinyMCE and the Ajax File Manager who use two character locales like 'de' can set their language packs

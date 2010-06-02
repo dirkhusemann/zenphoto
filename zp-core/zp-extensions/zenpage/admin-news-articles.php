@@ -24,6 +24,20 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+	$(document).ready(function(){
+		$('form #checkallaction').change(function(){
+			if($(this).val() == 'deleteall') {
+				// general text about "items" so it can be reused!
+				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
+			}
+		});
+		$('form #applybutton').click(function(){
+			if($('form #checkallaction').val() == 'deleteall') {
+				// general text about "items" so it can be reused!
+				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
+			}
+		});
+	});
 	// ]]> -->
 </script>
 </head>
@@ -40,7 +54,10 @@ printLogoAndLinks();
 		printSubtabs('articles');
 		?>
 		<div id="tab_articles" class="tabbox">
-			<?php	
+			<?php
+			if(isset($_POST['processcheckeditems'])) {
+				processCheckboxActions('news');
+			}	
 			if(isset($_GET['del'])) {	
 			  deleteArticle();
 			} 
@@ -84,10 +101,13 @@ printLogoAndLinks();
 			}	
 			?>
 			<span class="zenpagestats"><?php printNewsStatistic();?></span></h1>
+			<form action="admin-news-articles.php" method="post" name="checkeditems">
+			<input name="processcheckeditems" type="hidden" value="Save Order" />
 				<div style="margin-bottom:-5px">
 					<div style="float:left; margin-right: 15px; margin-top: 2px;">
 						<div class="buttons">
-							<strong><a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
+							<button type="submit" id="applybutton" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /> <strong><?php echo gettext('Apply'); ?></strong></button>
+							<a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <strong><?php echo gettext("Add Article"); ?></strong></a>
 						</div>
 					</div>
 					<?php printCategoryDropdown(); printArticleDatesDropdown(); printUnpublishedDropdown(); ?>
@@ -98,8 +118,31 @@ printLogoAndLinks();
 				</div>
 				<table class="bordered">
 					<tr> 
-				  	<th colspan="10"><strong><?php echo gettext('Edit this article'); ?></strong></th>
-				 	</tr>
+				  	<th colspan="11"><strong><?php echo gettext('Edit this article'); ?></strong>
+				  	<?php
+				  	$checkarray = array(
+				  	gettext('*Bulk actions*') => 'noaction',
+				  	gettext('Delete') => 'deleteall',
+				  	gettext('Set to visible') => 'showall',
+				  	gettext('Set to hidden') => 'hideall',
+				  	gettext('Disable comments') => 'commentsoff',
+				  	gettext('Enable comments') => 'commentson',
+				  	gettext('Reset hitcounter') => 'resethitcounter',
+				  	);
+				  	?> <span style="float: right">
+						  	<select name="checkallaction" id="checkallaction" size="1">
+							  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+								</select>
+						</span>
+				  	
+				  	</th>
+						</tr>
+						<tr class="newstr">
+							<td class="subhead" colspan="11">
+								<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+								</label>
+							</td>
+						</tr>
 					<?php
 					foreach ($result as $article) { 
 						$article = new ZenpageNews($article['titlelink']);
@@ -164,20 +207,27 @@ printLogoAndLinks();
 								if(checkIfLockedNews($article)) {
 									?>
 									<td class="icons">
-										<a href="?hitcounter=1&amp;id=<?php echo $article->getID();?>" title="<?php echo gettext('Reset hitcounter'); ?>">
-										<img src="../../images/reset.png" alt="<?php echo gettext('Reset hitcounter'); ?>" /></a>
-									</td>
-									<td class="icons">
-										<a href="javascript:confirmDelete('admin-news-articles.php?del=<?php echo $article->getID(); ?>',deleteArticle)" title="<?php echo gettext('Delete article'); ?>">
-										<img src="../../images/fail.png" alt="<?php echo gettext('Delete article'); ?>" /></a>
-									</td>
-									<?php } else { ?>
-									<td class="icons">
-										<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-									</td>
-									<td class="icons">
-										<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
-									</td>
+									<a href="?hitcounter=1&amp;id=<?php echo $article->getID();?>" title="<?php echo gettext('Reset hitcounter'); ?>">
+									<img src="../../images/reset.png" alt="<?php echo gettext('Reset hitcounter'); ?>" /></a>
+								</td>
+								<td class="icons">
+									<a href="javascript:confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!')); ?>')" title="<?php echo gettext('Delete article'); ?>">
+									<img src="../../images/fail.png" alt="<?php echo gettext('Delete article'); ?>" /></a>
+								</td>
+								<td class="icons">
+									<input type="checkbox" name="ids[]" value="<?php echo $article->getID(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+								</td>
+								</tr>
+								<?php } else { ?>
+								<td class="icons">
+									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+								</td>
+								<td class="icons">
+									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+								</td>
+								<td class="icons">
+									<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+								</td>
 									<?php
 								}
 								?>
@@ -187,7 +237,9 @@ printLogoAndLinks();
 					}
 					?> 
 				</table>
-				<?php printArticlesPageNav(); ?>
+				<p class="buttons"><button type="submit" id="applybutton" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
+				</form>
+					<?php printArticlesPageNav(); ?>
 				<?php printZenpageIconLegend(); ?>
 		</div> <!-- tab_articles -->
 	</div> <!-- content -->
