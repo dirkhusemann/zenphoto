@@ -480,7 +480,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			?> 
 			<script type="text/javascript">
 			// <!-- <![CDATA[
-			flowplayer('slideshow','<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer-3.1.5.swf', {
+			flowplayer('slideshow','<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer-3.2.0.swf', {
 			
 			playlist: [
 			<?php 
@@ -516,6 +516,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 	 	],
     plugins:  { 
         controls: { 
+					url: '<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3/flowplayer.controls-3.2.0.swf',
             playlist: true, 
             autoHide: 'always'
         }  
@@ -549,9 +550,9 @@ function printSlideShowJS() {
 <script	src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.'/'.PLUGIN_FOLDER ?>/slideshow/jquery.cycle.all.js" type="text/javascript"></script>
 <?php 
 if(!getOption('zp_plugin_flowplayer3')) {;?>
-<script type="text/javascript" src="<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3/flowplayer-3.1.4.min.js"></script>
+<script type="text/javascript" src="<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3/flowplayer-3.2.0.min.js"></script>
 <?php } ?>
-<script type="text/javascript" src="<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer.playlist-3.0.7.min.js"></script>
+<script type="text/javascript" src="<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer.playlist-3.0.8.min.js"></script>
 	<?php 
 }
 
