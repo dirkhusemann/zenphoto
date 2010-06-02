@@ -169,6 +169,22 @@ if ($updatechmod || $newconfig) {
 	$updatezp_config = true;
 }
 
+if ($updatefileset = isset($_REQUEST['FILESYSTEM_CHARSET'])) {
+	$fileset = $_REQUEST['FILESYSTEM_CHARSET'];
+	$i = strpos($zp_cfg, "define('FILESYSTEM_CHARSET',");
+	if ($i === false) {
+		$i = strpos($zp_cfg, "define('SERVERPATH',");
+		$i = strpos($zp_cfg, ';', $i);
+		$i = strpos($zp_cfg, '/**', $i);
+		$zp_cfg = substr($zp_cfg, 0, $i)."if (!defined('FILESYSTEM_CHARSET')) { define('FILESYSTEM_CHARSET', '$fileset'); }\n".substr($zp_cfg, $i);
+	} else {
+		$i = $i +28;
+		$j = strpos($zp_cfg, ")", $i);
+		$zp_cfg = substr($zp_cfg, 0, $i)."'".$fileset."'".substr($zp_cfg, $j);
+	}
+	$updatezp_config = true;
+}
+
 if ($updatezp_config) {
 	@chmod(CONFIGFILE, 0666 & $chmod);
 	if (is_writeable(CONFIGFILE)) {
@@ -853,7 +869,7 @@ if (!$setup_checked) {
 		$m2 = gettext('Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly.');
 		checkMark($mb, gettext("PHP <code>mbstring</code> package"), sprintf(gettext('PHP <code>mbstring</code> package [Your internal character set is <strong>%s</strong>]'), $charset), $m2);
 	} else {
-		$test = $_zp_UTF8->convert('test', FILESYSTEM_CHARSET, 'UTF-8');
+		$test = $_zp_UTF8->convert('test', 'ISO-8859-1', 'UTF-8');
 		if (empty($test)) {
 			$m2 = gettext("You need to install the <code>mbstring</code> package or correct the issue with <code>iconv(()</code>");
 			checkMark(0, '', gettext("PHP <code>mbstring</code> package [is not present and <code>iconv()</code> is not working]"), $m2);
@@ -904,6 +920,32 @@ if (!$setup_checked) {
 		checkMark($severity, $msg, $msg,
 								'<p>'.gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'</p>'.
 								$chmodselector);
+								
+		if (zp_loggedin(ADMIN_RIGHTS)) {
+			$selector =	'<select id="FILESYSTEM_CHARSET" name="FILESYSTEM_CHARSET" onchange="this.form.submit()">';
+			$totalsets = $_zp_UTF8->charsets;
+			asort($totalsets);
+			foreach ($totalsets as $key=>$char) {
+				$selector .= '	<option value="'.$key.'"';
+				if ($key == FILESYSTEM_CHARSET) {
+					$selector .= ' selected="selected">';
+				} else {
+					$selector .= '>';
+				}
+				$selector .= $key.'</option>';
+			}
+			$selector .= '</select>';
+			$filesetopt = '<form action="#">'.
+										sprintf(gettext('Change the filesystem character set define to %s'),$selector).
+										'</form><br />';
+		} else {
+			$filesetopt = '<p>'.gettext('You must be logged in to change the filesystem character set.');
+		}						
+		$msg = sprintf(gettext('The filesystem character set is defined as %s.'),FILESYSTEM_CHARSET);
+		checkMark(-2, $msg, $msg,
+								'<p>'.gettext('If your server filesystem character set different from this value accented characaters in file and folder names will cause problems.').'</p>'.
+								$filesetopt);
+		
 	}
 	if ($sql) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {

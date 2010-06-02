@@ -117,7 +117,7 @@ function addPage() {
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getcheckboxState('locked');
-	
+
 	$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.zp_escape_string($titlelink).'"';
 	$rslt = query_single_row($sql,true);
 	if ($rslt) {
@@ -177,7 +177,7 @@ function updatePage() {
 	$codeblock3 = sanitize($_POST['codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$locked = getcheckboxState('locked');
-	
+
 	if (getcheckboxState('edittitlelink')) {
 		$titlelink = sanitize($_POST['titlelink'],3);
 	} else if($permalink) {
@@ -217,7 +217,7 @@ function updatePage() {
 	processTags($page);
 	$msg = zp_apply_filter('update_page', '', $page, $oldtitlelink);
 	$page->save();
-		
+
 	if (!$rslt) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
 	} else 	if(empty($title)) {
@@ -1296,7 +1296,7 @@ function printCategoriesStatistic() {
 /**
  * Prints the links to JavaScript and CSS files zenpage needs.
  * Actually the same as for zenphoto but with different paths since we are in the plugins folder.
- * 
+ *
  * @param bool $sortable set to true for tabs with sorts.
  * @param bool $dates set true to include datapicker
  *
@@ -1307,39 +1307,26 @@ function zenpageJSCSS($sortable, $dates) {
 	<link rel="stylesheet" href="zenpage.css" type="text/css" />
 	<script type="text/javascript" src="../../js/admin.js"></script>
 	<script type="text/javascript" src="../../js/jquery.js"></script>
-	<script src="../../js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="../../js/jqueryui/jquery_ui_zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="../../js/jqueryui/jquery_ui_zenphoto.css" type="text/css" />
-	<?php 
+	<?php
 	if ($dates) {
 		datepickerJS();
 	}
 	?>
 	<script type="text/javascript" src="../../js/zenphoto.js"></script>
-	<link rel="stylesheet" href="../../js/colorbox/colorbox.css" type="text/css" />
-	<script type="text/javascript" src="../../js/colorbox/jquery.colorbox-min.js"></script>
-	<?php 
+	<?php
 	if ($sortable) {
 		?>
 		<!--Nested Sortables-->
 		<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
 		<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
 		<!--Nested Sortables End-->
-		<?php 
+		<?php
 	}
 	?>
 	<script type="text/javascript">
 		// <!-- <![CDATA[
-		<?php 
-		$navigator_user_agent = ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) ? strtolower( $_SERVER['HTTP_USER_AGENT'] ) : '';
-		if (!$sortable || !stristr($navigator_user_agent, "msie")) {
-			?>
-			$(document).ready(function(){
-				$("a.colorbox").colorbox({iframe:true,innerWidth:"810",innerHeight:"480"});
-			});
-			<?php 
-		}
-		?>
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 		});
@@ -1347,7 +1334,7 @@ function zenpageJSCSS($sortable, $dates) {
 			$("#tip a").click(function() {
 				$("#tips").toggle("slow");
 			});
-	 	});
+		});
 		// ]]> -->
 	</script>
 <?php

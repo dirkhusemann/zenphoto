@@ -97,7 +97,6 @@ function printAdminHeader($tinyMCE=NULL) {
 	<script type="text/javascript" src="<?php echo $path; ?>js/nestedsortables/inestedsortable.js"></script>
 	<!--Nested Sortables End-->
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
-	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="<?php echo $path; ?>js/colorbox/colorbox.css" type="text/css" />
 	<script src="<?php echo $path; ?>js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
@@ -294,11 +293,11 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs($currenttab) {
-	global $subtabs, $zenphoto_tabs, $main_tab_space;
+	global $subtabs, $zenphoto_tabs, $main_tab_space, $_zp_UTF8;
 	$zenphoto_tabs = zp_apply_filter('admin_tabs', $zenphoto_tabs, $currenttab);
 	$chars = 0;
 	foreach ($zenphoto_tabs as $atab) {
-		$chars = $chars + strlen($atab['text']);
+		$chars = $chars + $_zp_UTF8->strlen($atab['text']);
 	}
 	$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*6.5))/11);
 	?>
@@ -2824,7 +2823,7 @@ function processManagedObjects($i) {
 	$l_a = strlen($prefix_a = 'managed_albums_'.$i.'_');
 	$l_p = strlen($prefix_p = 'managed_pages_'.$i.'_');
 	$l_n = strlen($prefix_n = 'managed_news_'.$i.'_');
-	
+
 	foreach ($_POST as $key => $value) {
 		$key = postIndexDecode($key);
 		if (substr($key, 0, $l_a) == $prefix_a) {

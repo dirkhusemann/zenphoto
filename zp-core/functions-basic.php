@@ -14,7 +14,6 @@ if(!function_exists("gettext")) {
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
-define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', !defined('RELEASE')); // set to true to supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
@@ -53,6 +52,7 @@ if (!file_exists(dirname(dirname(__FILE__)).'/'.DATA_FOLDER . "/zp-config.php"))
 // Including zp-config.php more than once is OK, and avoids $conf missing.
 require(dirname(dirname(__FILE__)).'/'.DATA_FOLDER.'/zp-config.php');
 
+if (!defined('FILESYSTEM_CHARSET')) {define('FILESYSTEM_CHARSET', 'ISO-8859-1'); }
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
 if (!defined('COOKIE_PESISTENCE')) { define('COOKIE_PESISTENCE', 5184000); }

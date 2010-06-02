@@ -63,6 +63,10 @@ $conf['album_folder_class'] = 'std';
 // to change the gallery configuration server protocal option.
 $conf['server_protocol'] = "http";
 
+// File system character set
+// Change this if your server filesystem uses a character set other than ISO-8859-1
+$conf['FILESYSTEM_CHARSET'] = 'ISO-8859-1';
+
 ////////////////////////////////////////////////////////////////////////////////
 // Path Overrides
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +80,8 @@ $conf['server_protocol'] = "http";
 // define('SERVERPATH', '/full/server/path/to/zenphoto');
 
 ////////////////////////////////////////////////////////////////////////////////
+if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE',0755); }
+if (!defined('FILESYSTEM_CHARSET')) { define('FILESYSTEM_CHARSET','ISO-8859-1'); }
 /** Do not edit below this line. **/
 /**********************************/
 
