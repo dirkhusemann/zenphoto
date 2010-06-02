@@ -31,10 +31,14 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
 			}
 		});
-		$('form #applybutton').click(function(){
+		$('form #applybutton1,form #applybutton2').click(function(){
 			if($('form #checkallaction').val() == 'deleteall') {
 				// general text about "items" so it can be reused!
-				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
+				if(confirm('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>')) {
+			     
+				} else {
+					
+				}
 			}
 		});
 	});
@@ -106,7 +110,7 @@ printLogoAndLinks();
 				<div style="margin-bottom:-5px">
 					<div style="float:left; margin-right: 15px; margin-top: 2px;">
 						<div class="buttons">
-							<button type="submit" id="applybutton" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /> <strong><?php echo gettext('Apply'); ?></strong></button>
+							<button type="submit" id="applybutton1" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /> <strong><?php echo gettext('Apply'); ?></strong></button>
 							<a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <strong><?php echo gettext("Add Article"); ?></strong></a>
 						</div>
 					</div>
@@ -211,7 +215,7 @@ printLogoAndLinks();
 									<img src="../../images/reset.png" alt="<?php echo gettext('Reset hitcounter'); ?>" /></a>
 								</td>
 								<td class="icons">
-									<a href="javascript:confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!')); ?>')" title="<?php echo gettext('Delete article'); ?>">
+									<a href="javascript:confirmDelete('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext('Are you sure you want to delete this article? THIS CANNOT BE UNDONE!')); ?>')" title="<?php echo gettext('Delete article'); ?>">
 									<img src="../../images/fail.png" alt="<?php echo gettext('Delete article'); ?>" /></a>
 								</td>
 								<td class="icons">
@@ -237,7 +241,7 @@ printLogoAndLinks();
 					}
 					?> 
 				</table>
-				<p class="buttons"><button type="submit" id="applybutton" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
+				<p class="buttons"><button type="submit" id="applybutton2" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
 				</form>
 					<?php printArticlesPageNav(); ?>
 				<?php printZenpageIconLegend(); ?>
