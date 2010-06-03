@@ -339,7 +339,6 @@ function printPagesListTable($page, $flag) {
 			</a>
 		</td>
 
-
 	<?php if(checkIfLockedPage($page)) { ?>
 	<td class="icons">
 		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Reset hitcounter"); ?>">
@@ -349,7 +348,13 @@ function printPagesListTable($page, $flag) {
 		<a href="javascript:confirmDelete('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>',deletePage)" title="<?php echo gettext("Delete page"); ?>">
 		<img src="../../images/fail.png" alt="delete" /></a>
 	</td>
+	<td class="icons">
+		<input type="checkbox" name="ids[]" value="<?php echo $page->getID(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+	</td>
 	<?php } else { ?>
+	<td class="icons">
+		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
+	</td>
 	<td class="icons">
 		<img src="../../images/icon_inactive.png" alt="<?php gettext('locked'); ?>" />
 	</td>
@@ -1064,6 +1069,9 @@ function printCategoryList() {
 	<td class="icons">
 	<a href="javascript:confirmDelete('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories',deleteCategory)" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
 	</td>
+		<td class="icons">
+			<input type="checkbox" name="ids[]" value="<?php echo $cat['id']; ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+		</td>
 	</tr>
  <?php
 	}

@@ -37,6 +37,7 @@ if(!(zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 	echo '<div id="content">';
 // update page sort order
 if(isset($_POST['update'])) {
+	processCheckboxActions('pages');
 	updatePageSortorder();
 }
 // remove the page from the database
@@ -58,15 +59,15 @@ if(isset($_GET['hitcounter'])) {
 }
 ?>
 <h1><?php echo gettext('Pages'); ?><span class="zenpagestats"><?php printPagesStatistic();?></span></h1>
- <form action="admin-pages.php" method="post" name="update">
+<form action="admin-pages.php" method="post" name="update" onsubmit="return confirm('<?php echo js_encode(gettext("Are you sure you want to apply this action to the checked items?")); ?>');">
 
 <div>
 <p><?php echo gettext("Select a page to edit or drag the pages into the order, including subpage levels, you wish them displayed."); ?></p>
 <p class="notebox"><?php echo gettext("<strong>Note:</strong> Subpages of password protected pages inherit the protection."); ?></p>
 <p class="buttons">
-	<button type="submit" title="<?php echo gettext("Save order"); ?>">
+	<button type="submit" title="<?php echo gettext("Apply"); ?>">
 		<img src="../../images/pass.png" alt="" />
-		<strong><?php echo gettext("Save order"); ?></strong>
+		<strong><?php echo gettext("Apply"); ?></strong>
 	</button>
 	<?php 
 	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
@@ -83,8 +84,31 @@ if(isset($_GET['hitcounter'])) {
 <br clear="all" /><br clear="all" />
 <table class="bordered" style="margin-top: 10px">
  <tr>
-	<th><strong><?php echo gettext('Edit this page'); ?></strong></th>
+	<th><strong><?php echo gettext('Edit this page'); ?></strong>
+	<?php
+	  	$checkarray = array(
+			  	gettext('*Bulk actions*') => 'noaction',
+			  	gettext('Delete') => 'deleteall',
+			  	gettext('Set to visible') => 'showall',
+			  	gettext('Set to hidden') => 'hideall',
+			  	gettext('Disable comments') => 'commentsoff',
+			  	gettext('Enable comments') => 'commentson',
+			  	gettext('Reset hitcounter') => 'resethitcounter',
+	  	);
+	  	?>
+	  	<span style="float:right">
+	  	<select name="checkallaction" id="checkallaction" size="1">
+	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			</select>
+			</span>
+	</th>
  </tr>
+  <tr>
+	<td class="subhead">
+		<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+		</label>
+	</td>
+	</tr>
  <tr><td colspan="1" style="padding: 0;">
 	<ul id="left-to-right" class="page-list">
 	<?php
@@ -104,9 +128,9 @@ if(isset($_GET['hitcounter'])) {
 	<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
 	<input name="update" type="hidden" value="Save Order" />
 	<p class="buttons">
-		<button type="submit" title="<?php echo gettext('Save order'); ?>">
+		<button type="submit" title="<?php echo gettext('Apply'); ?>">
 			<img src="../../images/pass.png" alt="" />
-			<strong><?php echo gettext('Save order'); ?></strong>
+			<strong><?php echo gettext('Apply'); ?></strong>
 		</button>
 	</p>
 

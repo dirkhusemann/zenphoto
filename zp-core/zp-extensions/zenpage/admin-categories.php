@@ -36,6 +36,12 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 				$('#catlink').attr("disabled", true); 
 			}
 		});
+		$('form [name=checkeditems] #checkallaction').change(function(){
+			if($(this).val() == 'deleteall') {
+				// general text about "items" so it can be reused!
+				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
+			}
+		});
 	});
 	<?php } ?>
 	// ]]> -->
@@ -55,7 +61,9 @@ printLogoAndLinks();
 		?>
 		<div id="tab_articles" class="tabbox">
 			<?php	
-			
+			if(isset($_POST['processcheckeditems'])) {
+				processCheckboxActions('newscategories');
+			}	
 			if(isset($_GET['delete'])) {
 			  deleteCategory();
 			}
@@ -225,13 +233,39 @@ printLogoAndLinks();
 			    	</tr>
 			 		</table>
 				</form>
+				<hr />
+			<form action="admin-categories.php?page=news&amp;tab=categories" method="post" id="checkeditems" name="checkeditems" onsubmit="return confirm('<?php echo js_encode(gettext("Are you sure you want to apply this action to the checked items?")); ?>');">
+			<input name="processcheckeditems" type="hidden" value="apply" />
+			<p class="buttons"><button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
+			<br clear="all" /><br />
 				<table class="bordered">
 				 <tr> 
-				  <th colspan="5"><strong><?php echo gettext('Edit this Category'); ?></strong></th>
+				  <th colspan="6"><strong><?php echo gettext('Edit this Category'); ?></strong>
+				  	<?php
+				  	$checkarray = array(
+				  	gettext('*Bulk actions*') => 'noaction',
+				  	gettext('Delete') => 'deleteall',
+				  	gettext('Reset hitcounter') => 'resethitcounter',
+				  	);
+				  	?> <span style="float: right"> 
+				  	  	<select name="checkallaction" id="checkallaction" size="1">
+				  			<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+								</select>
+						</span>
+				  
+				  </th>
 				  </tr>
+				  <tr class="newstr">
+						<td class="subhead" colspan="6">
+							<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+							</label>
+						</td>
+					</tr>
 					<?php printCategoryList(); ?>
-				</table>
-				
+					</table>
+				<p class="buttons"><button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
+					
+			</form>	
 			</div> <!-- box -->
 			<ul class="iconlegend">
 				<li><img src="../../images/lock.png" alt="" /><?php echo gettext("Has Password"); ?></li>

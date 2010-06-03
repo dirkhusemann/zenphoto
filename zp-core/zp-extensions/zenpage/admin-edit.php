@@ -282,8 +282,8 @@ if(is_object($result)) {
 				} else {
 					$hint = $user = $x = '';
 				}
-				?>
-				<p class="passwordextrashow">
+				if(is_AdminEditPage('page')) { ?>
+  				<p class="passwordextrashow">
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<a href="javascript:toggle_passwords('',true);">
 						<?php echo gettext("Page password:"); ?>
@@ -301,6 +301,7 @@ if(is_object($result)) {
 					} 
 					?>
 				</p>
+				<?php } ?>
 				<p class="passwordextrahide" style="display:none">
 					<a href="javascript:toggle_passwords('',false);">
 					<?php echo gettext("Page guest user:"); ?>

@@ -24,14 +24,6 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
-	$(document).ready(function(){
-		$('form #checkallaction').change(function(){
-			if($(this).val() == 'deleteall') {
-				// general text about "items" so it can be reused!
-				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
-			}
-		});
-	});
 	// ]]> -->
 </script>
 </head>
@@ -49,7 +41,7 @@ printLogoAndLinks();
 		?>
 		<div id="tab_articles" class="tabbox">
 			<?php
-			if(isset($_POST['processcheckeditems']) && isset($_GET['apply'])) {
+			if(isset($_POST['processcheckeditems'])) {
 				processCheckboxActions('news');
 			}	
 			if(isset($_GET['del'])) {	
@@ -104,7 +96,7 @@ printLogoAndLinks();
 					<br style="clear: both" />
 					<?php printArticlesPageNav($published); ?>
 					</div>
-				<form action="admin-news-articles.php?apply" method="post" name="checkeditems" onsubmit="return confirm('<?php echo gettext("Are you sure you want to apply these actions to the checked items?"); ?>');">
+				<form action="admin-news-articles.php" method="post" name="checkeditems" onsubmit="return confirm('<?php echo js_encode(gettext("Are you sure you want to apply this action to the checked items?")); ?>');">
 				<input name="processcheckeditems" type="hidden" value="apply" />
 				<div class="buttons">
 					<button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button>
