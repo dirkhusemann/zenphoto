@@ -56,26 +56,22 @@ class hitcounter_options {
 		<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue); ?>" />
 		<script language="javascript" type="text/javascript">
 		// <!-- <![CDATA[
-		var browserIP = 0;
 		function hitcounter_insertIP() {
 			if ($('#hitcounter_ignoreIPList').val() == '') {
-				$('#hitcounter_ignoreIPList').val(browserIP);
+				$('#hitcounter_ignoreIPList').val('<?php echo getUserIP(); ?>');
 			} else {
-				$('#hitcounter_ignoreIPList').val($('#hitcounter_ignoreIPList').val()+','+browserIP);
+				$('#hitcounter_ignoreIPList').val($('#hitcounter_ignoreIPList').val()+',<?php echo getUserIP(); ?>');
 			}$('#hitcounter_ip_button').attr('disabled','disabled');
 		}
 		jQuery(window).load(function(){
-			$.getJSON("http://jsonip.appspot.com?callback=?",function(data){
-				browserIP = data.ip;
-				var current = $('#hitcounter_ignoreIPList').val();
-				if (current.indexOf(browserIP) < 0) {
-					$('#hitcounter_ip_button').removeAttr('disabled');
-				}
-			});
+			var current = $('#hitcounter_ignoreIPList').val();
+			if (current.indexOf('<?php echo getUserIP(); ?>') < 0) {
+				$('#hitcounter_ip_button').removeAttr('disabled');
+			}
 		});
 		// ]]> -->	
 		</script>
-		<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disaabled" /></label>		
+		<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>		
 		<?php
 	}
 
