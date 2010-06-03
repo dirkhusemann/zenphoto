@@ -36,13 +36,13 @@ class hitcounter_options {
 											'order' => 1,
 											'key' => 'hitcounter_ignoreIPList',
 							        'type' => OPTION_TYPE_CUSTOM,
-							        'desc' => gettext('A comma-separated list of IP addresses to ignore.'),
+							        'desc' => gettext('Comma-separated list of IP addresses to ignore.'),
 									),
-									gettext('Enable filters') => array(
+									gettext('Filter') => array(
 											'order' => 0,
 							        'key' => 'hitcounter_ignore',
 							        'type' => OPTION_TYPE_CHECKBOX_ARRAY,
-											'checkboxes' => array(gettext('IP list')  => 'hitcounter_ignoreIPList_enable',gettext('Search Crawlers') => 'hitcounter_ignoreSearchCrawlers_enable'),
+											'checkboxes' => array(gettext('IP addresses')  => 'hitcounter_ignoreIPList_enable',gettext('Search Crawlers') => 'hitcounter_ignoreSearchCrawlers_enable'),
 											'desc' => gettext('Check to enable filters.'),
 									),
 									gettext('Search Crawler list') => array(
