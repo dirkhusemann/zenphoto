@@ -32,18 +32,22 @@ class hitcounter_options {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Ignore IP Addresses') => array(
-							        'key' => 'hitcounter_ignoreIPList',
+		return array(	gettext('IP list') => array(
+											'order' => 1,
+											'key' => 'hitcounter_ignoreIPList',
 							        'type' => OPTION_TYPE_CUSTOM,
 							        'desc' => gettext('A comma-separated list of IP addresses to ignore.'),
 									),
-									gettext('Ignore Search Crawlers') => array(
-							        'key' => 'hitcounter_ignoreSearchCrawlers',
-							        'type' => OPTION_TYPE_CHECKBOX,
-							        'desc' => gettext('Ignore hits from search crawlers.'),
+									gettext('Enable filters') => array(
+											'order' => 0,
+							        'key' => 'hitcounter_ignore',
+							        'type' => OPTION_TYPE_CHECKBOX_ARRAY,
+											'checkboxes' => array(gettext('Search Crawlers') => 'hitcounter_ignoreSearchCrawlers_enable', gettext('IP list')  => 'hitcounter_ignoreIPList_enable'),
+											'desc' => gettext('Check to enable filters.'),
 									),
-									gettext('Search Crawler List') => array(
-							        'key' => 'hitcounter_searchCrawlerList',
+									gettext('Search Crawler list') => array(
+											'order' => 2,
+											'key' => 'hitcounter_searchCrawlerList',
 							        'type' => OPTION_TYPE_TEXTAREA,
 							        'desc' => gettext('Comma-separated list of search bot user agent names.'),
 									)
@@ -51,36 +55,44 @@ class hitcounter_options {
 	}
 	
 	function handleOption($option, $currentValue) {
-		?>
-		<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX; ?>'text-hitcounter_ignoreIPList" value="0" />
-		<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue); ?>" />
-		<script language="javascript" type="text/javascript">
-		// <!-- <![CDATA[
-		function hitcounter_insertIP() {
-			if ($('#hitcounter_ignoreIPList').val() == '') {
-				$('#hitcounter_ignoreIPList').val('<?php echo getUserIP(); ?>');
-			} else {
-				$('#hitcounter_ignoreIPList').val($('#hitcounter_ignoreIPList').val()+',<?php echo getUserIP(); ?>');
-			}$('#hitcounter_ip_button').attr('disabled','disabled');
+		switch ($option) {
+			case 'hitcounter_ignoreIPList':
+				?>
+				<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX; ?>'text-hitcounter_ignoreIPList" value="0" />
+				<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue); ?>" />
+				<script language="javascript" type="text/javascript">
+				// <!-- <![CDATA[
+				function hitcounter_insertIP() {
+					if ($('#hitcounter_ignoreIPList').val() == '') {
+						$('#hitcounter_ignoreIPList').val('<?php echo getUserIP(); ?>');
+					} else {
+						$('#hitcounter_ignoreIPList').val($('#hitcounter_ignoreIPList').val()+',<?php echo getUserIP(); ?>');
+					}$('#hitcounter_ip_button').attr('disabled','disabled');
+				}
+				jQuery(window).load(function(){
+					var current = $('#hitcounter_ignoreIPList').val();
+					if (current.indexOf('<?php echo getUserIP(); ?>') < 0) {
+						$('#hitcounter_ip_button').removeAttr('disabled');
+					}
+				});
+				// ]]> -->	
+				</script>
+				<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>		
+				<?php
+				break;
 		}
-		jQuery(window).load(function(){
-			var current = $('#hitcounter_ignoreIPList').val();
-			if (current.indexOf('<?php echo getUserIP(); ?>') < 0) {
-				$('#hitcounter_ip_button').removeAttr('disabled');
-			}
-		});
-		// ]]> -->	
-		</script>
-		<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>		
-		<?php
 	}
 
 }
 
 function hitcounter_load_script($obj) {
 	$ignoreIPList = explode(',', str_replace(' ', '', getOption('hitcounter_ignoreIPList')));
-	$skip = in_array(getUserIP(), $ignoreIPList);
-	if (getOption('hitcounter_ignoreSearchCrawlers') && !$skip) {
+	if (getOption('hitcounter_ignoreIPList_enable')) {
+		$skip = in_array(getUserIP(), $ignoreIPList);
+	} else {
+		$skip = false;
+	}
+	if (getOption('hitcounter_ignoreSearchCrawlers_enable') && !$skip) {
 		$botList = explode(',', getOption('hitcounter_searchCrawlerList'));
 		foreach($botList as $bot) {
 			if(stripos($_SERVER['HTTP_USER_AGENT'], trim($bot))) {
