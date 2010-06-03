@@ -42,7 +42,7 @@ class hitcounter_options {
 											'order' => 0,
 							        'key' => 'hitcounter_ignore',
 							        'type' => OPTION_TYPE_CHECKBOX_ARRAY,
-											'checkboxes' => array(gettext('Search Crawlers') => 'hitcounter_ignoreSearchCrawlers_enable', gettext('IP list')  => 'hitcounter_ignoreIPList_enable'),
+											'checkboxes' => array(gettext('IP list')  => 'hitcounter_ignoreIPList_enable',gettext('Search Crawlers') => 'hitcounter_ignoreSearchCrawlers_enable'),
 											'desc' => gettext('Check to enable filters.'),
 									),
 									gettext('Search Crawler list') => array(
