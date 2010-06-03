@@ -20,7 +20,7 @@ zp_register_filter('load_theme_script', 'hitcounter_load_script');
 class hitcounter_options {
 
 	function hitcounter_options() {
-		setOptionDefault('hitcounter_ignoreIPList',getUserIP());
+		setOptionDefault('hitcounter_ignoreIPList','');
 		setOptionDefault('hitcounter_ignoreSearchCrawlers', false);
 		setOptionDefault('hitcounter_searchCrawlerList', implode(',', array('Teoma', 'alexa', 'froogle', 'Gigabot', 'inktomi',
                       'looksmart', 'URL_Spider_SQL', 'Firefly', 'NationalDirectory',
@@ -34,8 +34,8 @@ class hitcounter_options {
 	function getOptionsSupported() {
 		return array(	gettext('Ignore IP Addresses') => array(
 							        'key' => 'hitcounter_ignoreIPList',
-							        'type' => OPTION_TYPE_TEXTBOX,
-							        'desc' => gettext('A comma-separated list of IP addresses to ignore. Defaults to the server IP address.'),
+							        'type' => OPTION_TYPE_CUSTOM,
+							        'desc' => gettext('A comma-separated list of IP addresses to ignore.'),
 									),
 									gettext('Ignore Search Crawlers') => array(
 							        'key' => 'hitcounter_ignoreSearchCrawlers',
@@ -49,24 +49,45 @@ class hitcounter_options {
 									)
 		);
 	}
+	
+	function handleOption($option, $currentValue) {
+		?>
+		<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX; ?>'text-hitcounter_ignoreIPList" value="0" />
+		<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue); ?>" />
+		<script language="javascript" type="text/javascript">
+		// <!-- <![CDATA[
+		var browserIP = 0;
+		function hitcounter_insertIP() {
+			if ($('#hitcounter_ignoreIPList').val() == '') {
+				$('#hitcounter_ignoreIPList').val(browserIP);
+			} else {
+				$('#hitcounter_ignoreIPList').val($('#hitcounter_ignoreIPList').val()+','+browserIP);
+			}$('#hitcounter_ip_button').attr('disabled','disabled');
+		}
+		jQuery(window).load(function(){
+			$.getJSON("http://jsonip.appspot.com?callback=?",function(data){
+				browserIP = data.ip;
+				var current = $('#hitcounter_ignoreIPList').val();
+				if (current.indexOf(browserIP) < 0) {
+					$('#hitcounter_ip_button').removeAttr('disabled');
+				}
+			});
+		});
+		// ]]> -->	
+		</script>
+		<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disaabled" /></label>		
+		<?php
+	}
 
 }
 
 function hitcounter_load_script($obj) {
 	$ignoreIPList = explode(',', str_replace(' ', '', getOption('hitcounter_ignoreIPList')));
-	$ignoreSearchCrawlers = getOption('hitcounter_ignoreSearchCrawlers');
-
-	$skip = false;
-
-	if (in_array($_SERVER['REMOTE_ADDR'], $ignoreIPList)) {
-		$skip = true;
-	}
-
-	if ($ignoreSearchCrawlers && !$skip) {
-		$botList = explode(',', str_replace(', ', ',', getOption('hitcounter_searchCrawlerList')));
-
+	$skip = in_array(getUserIP(), $ignoreIPList);
+	if (getOption('hitcounter_ignoreSearchCrawlers') && !$skip) {
+		$botList = explode(',', getOption('hitcounter_searchCrawlerList'));
 		foreach($botList as $bot) {
-			if(stripos($_SERVER['HTTP_USER_AGENT'], $bot)) {
+			if(stripos($_SERVER['HTTP_USER_AGENT'], trim($bot))) {
 				$skip = true;
 				break;
 			}
