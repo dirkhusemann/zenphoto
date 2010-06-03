@@ -31,16 +31,6 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 				alert('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>');
 			}
 		});
-		$('form #applybutton1,form #applybutton2').click(function(){
-			if($('form #checkallaction').val() == 'deleteall') {
-				// general text about "items" so it can be reused!
-				if(confirm('<?php echo js_encode(gettext('Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!')); ?>')) {
-			     
-				} else {
-					
-				}
-			}
-		});
 	});
 	// ]]> -->
 </script>
@@ -59,7 +49,7 @@ printLogoAndLinks();
 		?>
 		<div id="tab_articles" class="tabbox">
 			<?php
-			if(isset($_POST['processcheckeditems'])) {
+			if(isset($_POST['processcheckeditems']) && isset($_GET['apply'])) {
 				processCheckboxActions('news');
 			}	
 			if(isset($_GET['del'])) {	
@@ -86,6 +76,9 @@ printLogoAndLinks();
 			}
 			if (isset($_GET['date'])) {
 			  echo '<em><small> ('.$_GET['date'].')</small></em>';
+			  // require for getNewsArticles() so the date dropdown is working 
+			  set_context(ZP_ZENPAGE_NEWS_DATE);
+			  $_zp_post_date = sanitize($_GET['date']);
 			}
 			
 			if(isset($_GET['published']) AND $_GET['published'] == 'no') {
@@ -105,21 +98,20 @@ printLogoAndLinks();
 			}	
 			?>
 			<span class="zenpagestats"><?php printNewsStatistic();?></span></h1>
-			<form action="admin-news-articles.php" method="post" name="checkeditems">
-			<input name="processcheckeditems" type="hidden" value="Save Order" />
-				<div style="margin-bottom:-5px">
-					<div style="float:left; margin-right: 15px; margin-top: 2px;">
-						<div class="buttons">
-							<button type="submit" id="applybutton1" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /> <strong><?php echo gettext('Apply'); ?></strong></button>
-							<a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <strong><?php echo gettext("Add Article"); ?></strong></a>
-						</div>
-					</div>
-					<?php printCategoryDropdown(); printArticleDatesDropdown(); printUnpublishedDropdown(); ?>
+			<div style="float:right">
+			<?php printCategoryDropdown(); printArticleDatesDropdown(); printUnpublishedDropdown(); ?>
 					<?php //echo "optionpath: ".getNewsAdminOptionPath(true,true,true); // debugging only; ?>
 					<br style="clear: both" />
 					<?php printArticlesPageNav($published); ?>
-					<br />
+					</div>
+				<form action="admin-news-articles.php?apply" method="post" name="checkeditems" onsubmit="return confirm('<?php echo gettext("Are you sure you want to apply these actions to the checked items?"); ?>');">
+				<input name="processcheckeditems" type="hidden" value="apply" />
+				<div class="buttons">
+					<button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button>
+					<a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext('Add Article'); ?>"><img src="images/add.png" alt="" /> <strong><?php echo gettext("Add Article"); ?></strong></a>
 				</div>
+				<br style="clear: both" /><br />
+			
 				<table class="bordered">
 					<tr> 
 				  	<th colspan="11"><strong><?php echo gettext('Edit this article'); ?></strong>
@@ -241,7 +233,7 @@ printLogoAndLinks();
 					}
 					?> 
 				</table>
-				<p class="buttons"><button type="submit" id="applybutton2" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
+				<p class="buttons"><button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
 				</form>
 					<?php printArticlesPageNav(); ?>
 				<?php printZenpageIconLegend(); ?>
