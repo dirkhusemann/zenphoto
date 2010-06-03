@@ -24,6 +24,13 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+	function confirmAction() {
+		if ($('#checkallaction').val() == 'deleteall') {
+			return confirm('<?php echo js_encode(gettext("Are you sure you want to delete the checked items?")); ?>');
+		} else {
+			return true;
+		}
+	}
 	// ]]> -->
 </script>
 </head>
@@ -96,7 +103,7 @@ printLogoAndLinks();
 					<br style="clear: both" />
 					<?php printArticlesPageNav($published); ?>
 					</div>
-				<form action="admin-news-articles.php" method="post" name="checkeditems" onsubmit="return confirm('<?php echo js_encode(gettext("Are you sure you want to apply this action to the checked items?")); ?>');">
+				<form action="admin-news-articles.php" method="post" name="checkeditems" onsubmit="return confirmAction();">
 				<input name="processcheckeditems" type="hidden" value="apply" />
 				<div class="buttons">
 					<button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button>
@@ -111,8 +118,8 @@ printLogoAndLinks();
 				  	$checkarray = array(
 				  	gettext('*Bulk actions*') => 'noaction',
 				  	gettext('Delete') => 'deleteall',
-				  	gettext('Set to visible') => 'showall',
-				  	gettext('Set to hidden') => 'hideall',
+				  	gettext('Set to published') => 'showall',
+				  	gettext('Set to unpublished') => 'hideall',
 				  	gettext('Disable comments') => 'commentsoff',
 				  	gettext('Enable comments') => 'commentson',
 				  	gettext('Reset hitcounter') => 'resethitcounter',

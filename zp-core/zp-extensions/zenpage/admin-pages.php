@@ -25,6 +25,13 @@ if(!(zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 	//<!-- <![CDATA[
 	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
 	var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+	function confirmAction() {
+		if ($('#checkallaction').val() == 'deleteall') {
+			return confirm('<?php echo js_encode(gettext("Are you sure you want to delete the checked items?")); ?>');
+		} else {
+			return true;
+		}
+	}
 	// ]]> -->
 </script>
 
@@ -59,7 +66,7 @@ if(isset($_GET['hitcounter'])) {
 }
 ?>
 <h1><?php echo gettext('Pages'); ?><span class="zenpagestats"><?php printPagesStatistic();?></span></h1>
-<form action="admin-pages.php" method="post" name="update" onsubmit="return confirm('<?php echo js_encode(gettext("Are you sure you want to apply this action to the checked items?")); ?>');">
+<form action="admin-pages.php" method="post" name="update" onsubmit="return confirmAction();">
 
 <div>
 <p><?php echo gettext("Select a page to edit or drag the pages into the order, including subpage levels, you wish them displayed."); ?></p>

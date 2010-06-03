@@ -24,6 +24,13 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteCategory = "<?php echo gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!"); ?>";
+	function confirmAction() {
+		if ($('#checkallaction').val() == 'deleteall') {
+			return confirm('<?php echo js_encode(gettext("Are you sure you want to delete the checked items?")); ?>');
+		} else {
+			return true;
+		}
+	}
 	<?php if(isset($_GET["edit"])) { // prevent showing the message when adding page or article ?>
 	$(document).ready(function() {
 		if(jQuery('#edittitlelink:checked').val() != 1) {
@@ -234,7 +241,7 @@ printLogoAndLinks();
 			 		</table>
 				</form>
 				<hr />
-			<form action="admin-categories.php?page=news&amp;tab=categories" method="post" id="checkeditems" name="checkeditems" onsubmit="return confirm('<?php echo js_encode(gettext("Are you sure you want to apply this action to the checked items?")); ?>');">
+			<form action="admin-categories.php?page=news&amp;tab=categories" method="post" id="checkeditems" name="checkeditems" onsubmit="return confirmAction();">
 			<input name="processcheckeditems" type="hidden" value="apply" />
 			<p class="buttons"><button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
 			<br clear="all" /><br />
