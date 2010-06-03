@@ -32,8 +32,8 @@ require_once("js/dialog.php");
 <body>
 <div id="main" style="margin-top: -10px;">
 <div class="optionsdiv">
-
-<form name="zenpagelist" action="tinyzenpage.php?" method="get" style="margin: 8px 0px 8px 0px">
+<?php if(getOption('zp_plugin_zenpage')) { ?>
+ <form name="zenpagelist" action="tinyzenpage.php?" method="get" style="margin: 8px 0px 8px 0px">
 		<div class="panel current">
 			<fieldset>
 				<legend>Zenpage</legend>
@@ -45,7 +45,7 @@ require_once("js/dialog.php");
   		</fieldset>			
 		</div>
 	</form>
-
+<?php } ?>
 	<form name="albumlist" action="tinyzenpage.php?" method="get" style="margin: 8px 0px 8px 0px">
 		<div class="panel current">
 			<fieldset>
@@ -60,7 +60,7 @@ require_once("js/dialog.php");
 	</form>
 	
 <?php if(showZenphotoOptions()) { ?>
-<form name="includetype" action="" method="post" style="margin: 8px 0px 8px 0px">
+<form name="includetype" id="includetypye" action="" method="post" style="margin: 8px 0px 8px 0px">
 		<div class="panel current">
 			<fieldset>
 				<legend><?php echo gettext("What to include"); ?></legend>
