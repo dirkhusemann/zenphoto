@@ -1774,6 +1774,10 @@ function printAlbumEditRow($album) {
 	}
 	?>
 	</td>
+	<td class="icons">
+		<a href="?commentson=<?php echo $album->getCommentsAllowed(); ?>&amp;id=<?php echo $album->getAlbumID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
+		<?php echo checkIfCommentsAllowed($album->getCommentsAllowed()); ?></a>
+	</td>
 	<?php
 	if (file_exists(SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/cache_images.php')) {
 	?>
@@ -1826,7 +1830,9 @@ function printAlbumEditRow($album) {
 		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>');" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
 	</td>
-
+	<td class="icons">
+		<input type="checkbox" name="ids[]" value="<?php echo $album->getAlbumID(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+	</td>
 	</tr>
 	</table>
 	<?php
@@ -3170,5 +3176,119 @@ function processEditSelection($subtab) {
 	}
 }
 
+/**
+ * Checks if comments are allowed for a article or page and prints the matching image icon for the articles or pages list
+ *
+ * @param string $commentson the comments array field of "commentson"
+ * @return string
+ */
+function checkIfCommentsAllowed($commentson=false,$plugin=false) {
+	if($plugin) {
+		$path = '../../';
+	} else {
+		$path = '';
+	}
+	if ($commentson) {
+		$check = '<img src="'.$path.'images/comments-on.png" alt="'.gettext("Comments on").'" />';
+	} else {
+		$check = '<img src="'.$path.'images/comments-off.png" alt="'.gettext("Comments off").'" />';
+	}
+	return $check;
+}
+
+
+/**
+ * Enables comments for a news article or page
+ *
+ * @param string $type "news" or "pages"
+ */
+function enableComments($type) {
+	if($_GET['commentson']) {
+		$comments = "0";
+	} else {
+		$comments = "1";
+	}
+	switch($type) {
+		case "news":
+			$dbtable = prefix('zenpage_news');
+			break;
+		case "page":
+			$dbtable = prefix('zenpage_pages');
+			break;
+		case "album":
+			$dbtable = prefix('albums');
+			break;
+	}
+	query("UPDATE ".$dbtable." SET `commentson` = ".$comments." WHERE id = ".sanitize_numeric($_GET['id']));
+}
+
+//processing the bulk checkbox actions on news, categories and pages
+
+function processCheckboxActions($type) {
+	if (isset($_POST['ids'])) {
+		//echo "action for checked items:". $_POST['checkallaction'];
+		$action = sanitize($_POST['checkallaction']);
+		$ids = $_POST['ids'];
+		$total = count($ids);
+		switch($type) {
+			case 'pages':
+				$dbtable = prefix('zenpage_pages');
+				break;
+			case 'news':
+				$dbtable = prefix('zenpage_news');
+				break;
+			case 'newscategories':
+				$dbtable = prefix('zenpage_news_categories');
+				break;
+			case 'albums':
+				$dbtable = prefix('albums');
+				break;
+		}
+		if($action != 'noaction') {
+			if ($total > 0) {
+				$n = 0;
+				switch($action) {
+					case 'deleteall':
+						$sql = "DELETE FROM ".$dbtable." WHERE ";
+						break;
+					case 'showall':
+						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
+						break;
+					case 'hideall':
+						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
+						break;
+					case 'commentson':
+						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
+						break;
+					case 'commentsoff':
+						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
+						break;
+					case 'resethitcounter':
+						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
+						break;
+				}
+				foreach ($ids as $id) {
+					$n++;
+					$sql .= " id='".sanitize_numeric($id)."' ";
+					if ($n < $total) $sql .= "OR ";
+				}
+				query($sql);
+			}
+		}
+	}
+}
+
+
+/**
+ * Extracs the first two characters from the Zenphoto locale names like 'de_DE' so that
+ * TinyMCE and the Ajax File Manager who use two character locales like 'de' can set their language packs
+ *
+ * @return string
+ */
+function getLocaleForTinyMCEandAFM() {
+	$locale = substr(getOption("locale"),0,2);
+	if (empty($locale)) $locale = 'en';
+	return $locale;
+}
 
 ?>

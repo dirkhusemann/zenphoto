@@ -59,6 +59,7 @@ if (isset($_GET['action'])) {
 			setOption('gallery_sorttype','manual');
 			setOption('gallery_sortdirection',0);
 			$notify = postAlbumSort(NULL);
+			processCheckboxActions('albums');
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&saved'.$notify);
 			exit();
 			break;
@@ -442,6 +443,13 @@ if (empty($subtab) || $subtab=='albuminfo') {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {
 			launchScript('',['action=newalbum','album='+folder,'name='+encodeURIComponent(album),'albumtab='+albumtab]);
+		}
+	}
+	function confirmAction() {
+		if ($('#checkallaction').val() == 'deleteall') {
+			return confirm('<?php echo js_encode(gettext("Are you sure you want to delete the checked items?")); ?>');
+		} else {
+			return true;
 		}
 	}
 	// ]]> -->
@@ -1338,7 +1346,9 @@ if (isset($_GET['saved'])) {
 		echo  "<h2>".sprintf(gettext("<em>%s</em> already exists."),sanitize($_GET['exists']))."</h2>";
 		echo '</div>';
 	}
-
+	if(isset($_GET['commentson'])) {
+		enableComments('album');
+	}
 
 	$albums = getNestedAlbumList(NULL, $gallery_nesting);
 	if (count($albums) > 0) {
@@ -1377,12 +1387,12 @@ if (isset($_GET['saved'])) {
 	<?php
 	printEditDropdown('');
 	?>
-<form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm">
+<form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm" onsubmit="return confirmAction();">
 	<p class="buttons">
 		<?php
 		if ($gallery_nesting>1 || zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
-			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+			<button type="submit" title="<?php echo gettext("Apply"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button>
 			<?php
 		}
 		if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
@@ -1395,7 +1405,30 @@ if (isset($_GET['saved'])) {
 	<br clear="all" /><br />
 	<table class="bordered" width="100%">
 		<tr>
-			<th style="text-align: left;"><?php echo gettext("Edit this album"); ?></th>
+			<th style="text-align: left;"><?php echo gettext("Edit this album"); ?>
+			<?php
+	  	$checkarray = array(
+			  	gettext('*Bulk actions*') => 'noaction',
+			  	gettext('Delete') => 'deleteall',
+			  	gettext('Set to published') => 'showall',
+			  	gettext('Set to unpublished') => 'hideall',
+			  	gettext('Disable comments') => 'commentsoff',
+			  	gettext('Enable comments') => 'commentson',
+			  	gettext('Reset hitcounter') => 'resethitcounter',
+	  	);
+	  	?>
+	  	<span style="float:right">
+	  	<select name="checkallaction" id="checkallaction" size="1">
+	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			</select>
+			</span>
+			</th>
+		</tr>
+		 <tr>
+			<td class="subhead">
+				<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+				</label>
+			</td>
 		</tr>
 		<tr>
 			<td style="padding: 0px" colspan="1">
@@ -1442,7 +1475,7 @@ if (isset($_GET['saved'])) {
 		<?php
 		if ($gallery_nesting>1 || zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 			?>
-			<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save Order"); ?></strong></button>
+			<button type="submit" title="<?php echo gettext("Apply"); ?>" class="buttons"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button>
 			<?php
 		}
 		if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {

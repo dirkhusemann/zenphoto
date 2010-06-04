@@ -181,7 +181,7 @@ printLogoAndLinks();
 								</td>
 							 	<td class="icons">
 									<a href="?commentson=<?php echo $article->getCommentsAllowed(); ?>&amp;id=<?php echo $article->getID(); ?>" title="<?php echo gettext('Enable or disable comments'); ?>">
-									<?php echo checkIfCommentsAllowed($article->getCommentsAllowed()); ?></a>
+									<?php echo checkIfCommentsAllowed($article->getCommentsAllowed(),true); ?></a>
 							 	</td>
 							 		 <?php } else { ?>
 								<td class="icons">

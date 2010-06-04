@@ -96,8 +96,8 @@ if(isset($_GET['hitcounter'])) {
 	  	$checkarray = array(
 			  	gettext('*Bulk actions*') => 'noaction',
 			  	gettext('Delete') => 'deleteall',
-			  	gettext('Set to visible') => 'showall',
-			  	gettext('Set to hidden') => 'hideall',
+			  	gettext('Set to published') => 'showall',
+			  	gettext('Set to unpublished') => 'hideall',
 			  	gettext('Disable comments') => 'commentsoff',
 			  	gettext('Enable comments') => 'commentson',
 			  	gettext('Reset hitcounter') => 'resethitcounter',

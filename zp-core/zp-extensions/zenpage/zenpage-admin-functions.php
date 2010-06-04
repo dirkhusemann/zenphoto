@@ -322,7 +322,7 @@ function printPagesListTable($page, $flag) {
 	</td>
 	<td class="icons">
 		<a href="?commentson=<?php echo $page->getCommentsAllowed(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
-		<?php echo checkIfCommentsAllowed($page->getCommentsAllowed()); ?></a>
+		<?php echo checkIfCommentsAllowed($page->getCommentsAllowed(),true); ?></a>
 	</td>
 	<?php } else { ?>
 	<td class="icons">
@@ -1147,45 +1147,6 @@ function skipScheduledPublishing($option,$id) {
 }
 
 /**
- * Checks if comments are allowed for a article or page and prints the matching image icon for the articles or pages list
- *
- * @param string $commentson the comments array field of "commentson"
- * @return string
- */
-function checkIfCommentsAllowed($commentson=false) {
-	if ($commentson) {
-		$check = "<img src=\"images/comments-on.png\" alt=\"".gettext("Comments on")."\" />";
-	} else {
-		$check = "<img src=\"images/comments-off.png\" alt=\"".gettext("Comments off")."\" />";
-	}
-	return $check;
-}
-
-
-/**
- * Enables comments for a news article or page
- *
- * @param string $type "news" or "pages"
- */
-function enableComments($type) {
-	if($_GET['commentson']) {
-		$comments = "0";
-	} else {
-		$comments = "1";
-	}
-	switch($type) {
-		case "news":
-			$dbtable = prefix('zenpage_news');
-			break;
-		case "page":
-			$dbtable = prefix('zenpage_pages');
-			break;
-	}
-	query("UPDATE ".$dbtable." SET `commentson` = ".$comments." WHERE id = ".sanitize_numeric($_GET['id']));
-}
-
-
-/**
  * Resets the hitcounter for a page, article or category
  *
  * @param string $option "news", "page" or "cat"
@@ -1352,8 +1313,8 @@ function zenpageJSCSS($sortable, $dates) {
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">
 	<li><img src="../../images/lock.png" alt="" /><?php echo gettext("Has Password"); ?></li>	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><img src="images/clock.png" alt="" /><?php echo gettext("Published/Not published/Scheduled for publishing"); ?></li>
-	<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
-	<li><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></li>
+	<li><img src="../../images/comments-on.png" alt="" /><img src="../../images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
+	<li><img src="../../images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>
 	<li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete"); ?></li>
 	</ul>
@@ -1690,72 +1651,6 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 	}
 }
 
-
-//processing the bulk checkbox actions on news, categories and pages
-
-function processCheckboxActions($type) {
-	if (isset($_POST['ids'])) {
-		//echo "action for checked items:". $_POST['checkallaction'];
-		$action = sanitize($_POST['checkallaction']);
-		$ids = $_POST['ids'];
-		$total = count($ids);
-		switch($type) {
-			case 'pages':
-				$dbtable = prefix('zenpage_pages');
-				break;
-			case 'news':
-				$dbtable = prefix('zenpage_news');
-				break;
-			case 'newscategories':
-				$dbtable = prefix('zenpage_news_categories');
-				break;
-		}
-		if($action != 'noaction') {
-			if ($total > 0) {
-				$n = 0;
-				switch($action) {
-					case 'deleteall':
-						$sql = "DELETE FROM ".$dbtable." WHERE ";
-						break;
-					case 'showall':
-						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
-						break;
-					case 'hideall':
-						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
-						break;
-					case 'commentson':
-						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
-						break;
-					case 'commentsoff':
-						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
-						break;
-					case 'resethitcounter':
-						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
-						break;
-				}
-				foreach ($ids as $id) {
-					$n++;
-					$sql .= " id='".sanitize_numeric($id)."' ";
-					if ($n < $total) $sql .= "OR ";
-				}
-				query($sql);
-			}
-		}
-	}
-}
-
-
-/**
- * Extracs the first two characters from the Zenphoto locale names like 'de_DE' so that
- * TinyMCE and the Ajax File Manager who use two character locales like 'de' can set their language packs
- *
- * @return string
- */
-function getLocaleForTinyMCEandAFM() {
-	$locale = substr(getOption("locale"),0,2);
-	if (empty($locale)) $locale = 'en';
-	return $locale;
-}
 
 /**
  * Calls the configuration file for the rich text editor used for pages and news articles.
