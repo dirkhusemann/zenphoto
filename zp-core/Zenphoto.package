@@ -297,6 +297,8 @@ zp-core/images/cache.png
 zp-core/images/cache1.png
 zp-core/images/calendar.png
 zp-core/images/captcha_background.png
+zp-core/images/comments-off.png
+zp-core/images/comments-on.png
 zp-core/images/down.png
 zp-core/images/drag_handle.png
 zp-core/images/drag_handle_flag.png
@@ -1468,8 +1470,6 @@ zp-core/zp-extensions/zenpage/editor_config_light.js.php
 zp-core/zp-extensions/zenpage/images
 zp-core/zp-extensions/zenpage/images/add.png
 zp-core/zp-extensions/zenpage/images/clock.png
-zp-core/zp-extensions/zenpage/images/comments-off.png
-zp-core/zp-extensions/zenpage/images/comments-on.png
 zp-core/zp-extensions/zenpage/images/folder.png
 zp-core/zp-extensions/zenpage/images/info.png
 zp-core/zp-extensions/zenpage/images/loadingAnimation.gif
