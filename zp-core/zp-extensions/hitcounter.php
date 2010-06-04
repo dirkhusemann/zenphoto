@@ -21,7 +21,6 @@ class hitcounter_options {
 
 	function hitcounter_options() {
 		setOptionDefault('hitcounter_ignoreIPList','');
-		setOptionDefault('hitcounter_ignoreSearchCrawlers', false);
 		setOptionDefault('hitcounter_searchCrawlerList', implode(',', array('Teoma', 'alexa', 'froogle', 'Gigabot', 'inktomi',
                       'looksmart', 'URL_Spider_SQL', 'Firefly', 'NationalDirectory',
                       'Ask Jeeves', 'TECNOSEEK', 'InfoSeek', 'WebFindBot', 'girafabot',

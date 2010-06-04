@@ -354,7 +354,7 @@ function printSubtabs($tab, $default=NULL) {
 	if (!is_array($tabs)) return $default;
 	$current = getSubtabs($tab, $default);
 	?>
-	<ul class="subnav" style="width: <?php echo ($main_tab_space-5); ?>em">
+	<ul class="subnav" >
 	<?php
 	foreach ($tabs as $key=>$link) {
 		$i = strrpos($link, 'tab=');
