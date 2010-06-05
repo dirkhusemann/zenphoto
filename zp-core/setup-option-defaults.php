@@ -258,28 +258,57 @@ define('newuser',32);
 $groupsdefined = @unserialize(getOption('defined_groups'));
 if (!is_array($groupsdefined)) $groupsdefined = array();
 if (!in_array('administrators',$groupsdefined)) {
-	$_zp_authority->saveAdmin('administrators', NULL, 'group', NULL, ALL_RIGHTS, array(), gettext('Users with full privileges'),NULL, 0);
+	$groupobj = $_zp_authority->newAdministrator('administrators');
+	$groupobj->setName('group');
+	$groupobj->setRights(ALL_RIGHTS);
+	$groupobj->setCustomData(gettext('Users with full privileges'));
+	$groupobj->setValid(0);
+	$groupobj->save();	
 	$groupsdefined[] = 'administrators';
 }
 if (!in_array('viewers',$groupsdefined)) {
-	$_zp_authority->saveAdmin('viewers', NULL, 'group', NULL, NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS, array(), gettext('Users allowed only to view albums'),NULL, 0);
+	$groupobj = $_zp_authority->newAdministrator('viewers');
+	$groupobj->setName('group');
+	$groupobj->setRights(NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS);
+	$groupobj->setCustomData(gettext('Users allowed only to view zenphoto objects'));
+	$groupobj->setValid(0);
+	$groupobj->save();
 	$groupsdefined[] = 'viewers';
 }
 if (!in_array('bozos',$groupsdefined)) {
-	$_zp_authority->saveAdmin('bozos', NULL, 'group', NULL, 0, array(), gettext('Banned users'),NULL, 0);
+	$groupobj = $_zp_authority->newAdministrator('bozos');
+	$groupobj->setName('group');
+	$groupobj->setRights(0);
+	$groupobj->setCustomData(gettext('Banned users'));
+	$groupobj->setValid(0);
+	$groupobj->save();
 	$groupsdefined[] = 'bozos';
 }
 if (!in_array('album managers',$groupsdefined)) {
-	$_zp_authority->saveAdmin('album managers', NULL, 'template', NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS
-	| COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS, array(), gettext('Managers of one or more albums.'),NULL, 0);
+	$groupobj = $_zp_authority->newAdministrator('album managers');
+	$groupobj->setName('template');
+	$groupobj->setRights(NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS);
+	$groupobj->setCustomData(gettext('Managers of one or more albums'));
+	$groupobj->setValid(0);
+	$groupobj->save();	
 	$groupsdefined[] = 'album managers';
 }
 if (!in_array('default',$groupsdefined)) {
-	$_zp_authority->saveAdmin('default', NULL, 'template', NULL, DEFAULT_RIGHTS, array(), gettext('Default user settings.'),NULL, 0);
+	$groupobj = $_zp_authority->newAdministrator('default');
+	$groupobj->setName('template');
+	$groupobj->setRights(DEFAULT_RIGHTS);
+	$groupobj->setCustomData(gettext('Default user settings'));
+	$groupobj->setValid(0);
+	$groupobj->save();	
 	$groupsdefined[] = 'default';
 }
 if (!in_array('newuser',$groupsdefined)) {
-	$_zp_authority->saveAdmin('newuser', NULL, 'template', NULL, NO_RIGHTS, array(), gettext('Newly registered and verified users.'),NULL, 0);
+	$groupobj = $_zp_authority->newAdministrator('newuser');
+	$groupobj->setName('template');
+	$groupobj->setRights(NO_RIGHTS);
+	$groupobj->setCustomData(gettext('Newly registered and verified users'));
+	$groupobj->setValid(0);
+	$groupobj->save();	
 	$groupsdefined[] = 'newuser';
 }
 setOption('defined_groups',serialize($groupsdefined)); // record that these have been set once (and never again)

@@ -154,99 +154,6 @@ class Zenphoto_Authority {
 	}
 
 	/**
-	 * Saves an admin user's settings
-	 *
-	 * @param string $user The username of the admin
-	 * @param string $pass The password associated with the user name
-	 * @param string $name The display name of the admin
-	 * @param string $email The email address of the admin
-	 * @param bit $rights The administrating rites for the admin
-	 * @param string $custom custom data for the administrator
-	 * @param array $objects an array of zenphoto objects that the admin can access.
-	 * @param int $quota Total image size quoat
-	 * @return string error message if any errors
-	 */
-	function saveAdmin($user, $pass, $name, $email, $rights, $objects, $custom='', $group='', $valid=1, $quota=NULL) {
-		if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $objects, $custom, $group, $valid)"); }
-		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '".zp_escape_string($user)."' AND `valid`=$valid";
-		$result = query_single_row($sql);
-		if (!is_null($pass)) {
-			// validate the password.
-			$msg = $this->validatePassword($pass);
-			if (!empty($msg)) return $msg;
-		}
-		if ($result) {
-			$id = $result['id'];
-			if (is_null($pass)) {
-				$password = '';
-			} else {
-				$password = "`pass`='" . zp_escape_string($this->passwordHash($user, $pass))."', ";
-			}
-			if (is_null($rights)) {
-				$rightsset = '';
-			} else {
-				$rightsset = "`rights`='" . zp_escape_string($rights)."', ";
-			}
-			if (is_null($quota)) {
-				$quotaset = '';
-			} else {
-				$quotaset = '`quota`='.$quota.',';
-			}
-			$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . zp_escape_string($name)."', " . $password .
-					"`email`='" . zp_escape_string($email)."', " . $rightsset . $quotaset . "`custom_data`='".zp_escape_string($custom)."', `valid`=".$valid.", `group`='".
-			zp_escape_string($group)."' WHERE `id`='" . $id ."'";
-			$result = query($sql);
-			if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
-		} else {
-			$passupdate = 'NULL';
-			if (!is_null($pass)) {
-				$passupdate = "'".zp_escape_string($this->passwordHash($user, $pass))."'";
-			}
-			$sql = "INSERT INTO " . prefix('administrators') . " (`user`, `pass`, `name`, `email`, `rights`, `custom_data`, `valid`, `group`) VALUES ('" .
-			zp_escape_string($user) . "'," . $passupdate . ",'" . zp_escape_string($name) . "','" .
-			zp_escape_string($email) . "'," . $rights . ", '".zp_escape_string($custom)."', ".$valid.", '".
-			zp_escape_string($group)."')";
-			$result = query($sql);
-			$id = mysql_insert_id();
-			if (DEBUG_LOGIN) { debugLog("saveAdmin: inserting[$id]:$result"); }
-		}
-		$gallery = new Gallery();
-		if (is_array($objects)) {
-			$sql = "DELETE FROM ".prefix('admin_to_object').' WHERE `adminid`='.$id;
-			$result = query($sql);
-			foreach ($objects as $object) {
-				switch ($object['type']) {
-					case 'album':
-						$album = new Album($gallery, $object['data']);
-						$albumid = $album->getAlbumID();
-						$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $albumid, 'album')";
-						$result = query($sql);
-						break;
-					case 'pages':
-						$sql = 'SELECT * FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$object['data'].'"';
-						$result = query_single_row($sql);
-						if (is_array($result)) {
-							$objectid = $result['id'];
-							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'pages')";
-							$result = query($sql);
-						}
-						break;
-					case 'news':
-						$sql = 'SELECT * FROM '.prefix('zenpage_news_categories').' WHERE `cat_link`="'.$object['data'].'"';
-						$result = query_single_row($sql);
-						if (is_array($result)) {
-							$objectid = $result['id'];
-							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'news')";
-							$result = query($sql);
-						}
-						break;
-				}
-			}
-		}
-		return '';
-	}
-
-	/**
 	 * Returns an array of admin users, indexed by the userid and ordered by "privileges"
 	 *
 	 * The array contains the id, hashed password, user's name, email, and admin privileges
@@ -600,7 +507,12 @@ class Zenphoto_Administrator extends PersistentObject {
 	}
 
 	function setPass($pwd) {
+		global $_zp_authority;
+		$msg = $_zp_authority->validatePassword($pwd);
+		if (!empty($msg)) return $msg;	// password validation failure
+		$pwd = $_zp_authority->passwordHash($this->getUser(),$pwd);
 		$this->set('pass', $pwd);
+		return false;
 	}
 	function getPass() {
 		return $this->get('pass');
@@ -667,6 +579,46 @@ class Zenphoto_Administrator extends PersistentObject {
 	}
 	function getQuota() {
 		return $this->get('quota');
+	}
+	
+	function save() {
+		if (DEBUG_LOGIN) { debugLogVar("Zenphoto_Adminministratir->save()", $this); }
+		$objects = $this->getObjects();
+		$gallery = new Gallery();
+		parent::save();
+		$id = $this->getID();
+		if (is_array($objects)) {
+			$sql = "DELETE FROM ".prefix('admin_to_object').' WHERE `adminid`='.$id;
+			$result = query($sql);
+			foreach ($objects as $object) {
+				switch ($object['type']) {
+					case 'album':
+						$album = new Album($gallery, $object['data']);
+						$albumid = $album->getAlbumID();
+						$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $albumid, 'album')";
+						$result = query($sql);
+						break;
+					case 'pages':
+						$sql = 'SELECT * FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$object['data'].'"';
+						$result = query_single_row($sql);
+						if (is_array($result)) {
+							$objectid = $result['id'];
+							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'pages')";
+							$result = query($sql);
+						}
+						break;
+					case 'news':
+						$sql = 'SELECT * FROM '.prefix('zenpage_news_categories').' WHERE `cat_link`="'.$object['data'].'"';
+						$result = query_single_row($sql);
+						if (is_array($result)) {
+							$objectid = $result['id'];
+							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'news')";
+							$result = query($sql);
+						}
+						break;
+				}
+			}
+		}
 	}
 
 }

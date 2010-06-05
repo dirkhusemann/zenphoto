@@ -151,9 +151,7 @@ if (!OFFSET_PATH) { // handle form post
 		if (is_null($adminuser)) {
 			$notify = 'not_verified';	// User ID no longer exists
 		} else {
-			$userobj = $_zp_authority->newAdministrator(''); // get a transient object
-			$userobj->setUser($adminuser['user']);
-			$userobj->setPass(NULL);
+			$userobj = $_zp_authority->newAdministrator($adminuser['user']);
 			$userobj->setName($admin_n = $adminuser['name']);
 			$userobj->setEmail($admin_e = $adminuser['email']);
 			$userobj->setRights($rights | NO_RIGHTS);
@@ -163,8 +161,9 @@ if (!OFFSET_PATH) { // handle form post
 				$userobj->setObjects(populateManagedObjectsList(NULL,$membergroup->getID()));
 			}
 			zp_apply_filter('register_user_verified', $userobj);
-			$notify = $_zp_authority->saveAdmin($adminuser['user'], NULL, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getObjects(), $userobj->getCustomData(), $userobj->getGroup());
-			if (getOption('register_user_notify') && !$notify) {
+			$userobj->save();
+			$notify = false;
+			if (getOption('register_user_notify')) {
 				$notify = zp_mail(gettext('Zenphoto Gallery registration'),
 									sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$userobj->getName(), $adminuser['user'], $admin_e));
 			}
@@ -206,26 +205,31 @@ if (!OFFSET_PATH) { // handle form post
 				foreach ($currentadmins as $admin) {
 					if ($admin['user'] == $user) {
 						$notify = 'exists';
-						break;
 					}
 				}
 				if (empty($notify)) {
-					$userobj = $_zp_authority->newAdministrator(''); // get a transient object
-					$userobj->setUser($user);
-					$userobj->setPass(NULL);
-					$userobj->setName($admin_n);
-					$userobj->setEmail($admin_e);
-					$userobj->setRights(0);
-					$userobj->setObjects(NULL);
-					$userobj->setGroup('');
-					$userobj->setCustomData('');
-					zp_apply_filter('register_user_registered', $userobj);
-					$notify = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getObjects(), $userobj->getCustomData(), $userobj->getGroup());
+					$notify = $_zp_authority->validatePassword($pass);	//	test for valid password
 					if (empty($notify)) {
-						$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
-						$message = sprintf(get_language_string(getOption('register_user_text')), $link);
-						$notify = zp_mail(get_language_string(gettext('Registration confirmation')), $message, array($user=>$admin_e));
-						if (empty($notify)) $notify = 'accepted';
+						$userobj = $_zp_authority->newAdministrator($user);
+						$userobj->setPass($pass);
+						$userobj->setName($admin_n);
+						$userobj->setEmail($admin_e);
+						$userobj->setRights(0);
+						$userobj->setObjects(NULL);
+						$userobj->setGroup('');
+						$userobj->setCustomData('');
+						zp_apply_filter('register_user_registered', $userobj);
+						if ($userobj->transient) {
+							if (empty($notify)) {
+								$notify = 'filter';
+							}
+						} else {
+							$userobj->save();
+							$link = FULLWEBPATH.'/index.php?p='.substr($_zp_gallery_page,0, -4).'&verify='.bin2hex(serialize(array('user'=>$user,'email'=>$admin_e)));
+							$message = sprintf(get_language_string(getOption('register_user_text')), $link);
+							$notify = zp_mail(get_language_string(gettext('Registration confirmation')), $message, array($user=>$admin_e));
+							if (empty($notify)) $notify = 'accepted';
+						}
 					}
 				}
 			} else {
@@ -236,6 +240,7 @@ if (!OFFSET_PATH) { // handle form post
 		}
 	}
 }
+
 
 /**
  * places the user registration form
@@ -302,6 +307,9 @@ function printRegistrationForm($thanks=NULL) {
 					break;
 				case 'not_verified':
 					echo gettext('Your registration request could not be completed.');
+					break;
+				case 'filter':
+					echo gettext('Your registration attempt failed a <code>register_user_registered</code> filter check.');
 					break;
 				default:
 					echo $notify;

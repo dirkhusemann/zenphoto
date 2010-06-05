@@ -45,16 +45,19 @@ if (isset($_GET['action'])) {
 					$group->setRights(processRights($i) | NO_RIGHTS);
 					$group->setObjects(processManagedObjects($i));
 				}
-				$groupdesc = trim(sanitize($_POST[$i.'-desc'], 3));
-				$grouptype = trim(sanitize($_POST[$i.'-type'], 3));
+				$group->setCustomData(trim(sanitize($_POST[$i.'-desc'], 3)));
+				$group->setName(trim(sanitize($_POST[$i.'-type'], 3)));
+				$group->setValid(0);
+				$group->save();
 
-				$_zp_authority->saveAdmin($groupname, NULL, $grouptype, NULL, $group->getRights(), $group->getObjects(), $groupdesc, NULL, 0);
 				if ($group->getName()=='group') {
 					//have to update any users who have this group designate.
 					foreach ($admins as $admin) {
 						if ($admin['valid'] && $admin['group']===$groupname) {
 							$user = $_zp_authority->newAdministrator($admin['user'], 1);
-							$_zp_authority->saveAdmin($admin['user'], NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getObjects(), $user->getCustomData(), $groupname);
+							$user->setRights($group->getRights());
+							$user->setObjects($group->getObjects());
+							$user->save();
 						}
 					}
 					//user assignments: first clear out existing ones
@@ -64,7 +67,10 @@ if (isset($_GET['action'])) {
 					foreach ($_POST as $item=>$username) {
 						if (strpos($item, $target)!==false) {
 							$user = $_zp_authority->newAdministrator($username, 1);
-							$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), $group->getObjects(), $user->getCustomData(), $groupname);
+							$user->setRights($group->getRights());
+							$user->setObjects($group->getObjects());
+							$user->setGroup($groupname);
+							$user->save();
 						}
 					}
 				}
@@ -81,7 +87,10 @@ if (isset($_GET['action'])) {
 			if (empty($groupname)) {
 				$_zp_authority->updateAdminField('group', NULL, array('id'=>$user->getID()));
 			} else {
-				$_zp_authority->saveAdmin($username, NULL, $user->getName(), $user->getEmail(), $group->getRights(), processManagedObjects($group->getID()), $user->getCustomData(), $groupname);
+				$user->setRights($group->getRights());
+				$user->setObjects(processManagedObjects($group->getID()));
+				$user->setGroup($groupname);
+				$user->save();
 			}
 		}
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=assignments&saved');

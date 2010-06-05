@@ -62,18 +62,18 @@ if (isset($_GET['action'])) {
 							$rights = NULL;
 							$objects = NULL;
 						}
-						if (empty($pass)) {
-							$pass = NULL;
-						}
-						$userobj = $_zp_authority->newAdministrator(''); // get a transient object
-						$userobj->setuser($user);
-						$userobj->setPass(NULL);
+						$userobj = $_zp_authority->newAdministrator($user);
 						$userobj->setName($admin_n);
 						$userobj->setEmail($admin_e);
 						$userobj->setRights($rights);
 						$userobj->setObjects($objects);
+						if (empty($pass)) {
+							$msg = '';
+						} else {
+							$msg = $userobj->setPass($pass);
+						}
 						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
-						$msg = $_zp_authority->saveAdmin($user, $pass, $userobj->getName(), $userobj->getEmail(), $userobj->getRights(), $userobj->getObjects(), $userobj->getCustomData(), $userobj->getGroup(), 1, $userobj->getQuota());
+						$userobj->save();
 						if (empty($msg)) {
 							if (isset($_POST[$i.'-newuser'])) {
 								$newuser = $user;
