@@ -1831,7 +1831,7 @@ function printAlbumEditRow($album) {
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
 	</td>
 	<td class="icons">
-		<input type="checkbox" name="ids[]" value="<?php echo $album->getAlbumID(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+		<input type="checkbox" name="ids[]" value="<?php echo $album->getFolder(); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
 	</td>
 	</tr>
 	</table>
@@ -3222,57 +3222,44 @@ function enableComments($type) {
 	query("UPDATE ".$dbtable." SET `commentson` = ".$comments." WHERE id = ".sanitize_numeric($_GET['id']));
 }
 
-//processing the bulk checkbox actions on news, categories and pages
-
-function processCheckboxActions($type) {
-	if (isset($_POST['ids'])) {
+/**
+ * Processes the check box bulk actions for albums
+ *
+ */
+function processAlbumBulkActions() {
+	global $gallery;
+	if (isset($_POST['ids'])) { // these is actually the folder name here!
 		//echo "action for checked items:". $_POST['checkallaction'];
 		$action = sanitize($_POST['checkallaction']);
 		$ids = $_POST['ids'];
 		$total = count($ids);
-		switch($type) {
-			case 'pages':
-				$dbtable = prefix('zenpage_pages');
-				break;
-			case 'news':
-				$dbtable = prefix('zenpage_news');
-				break;
-			case 'newscategories':
-				$dbtable = prefix('zenpage_news_categories');
-				break;
-			case 'albums':
-				$dbtable = prefix('albums');
-				break;
-		}
+		$dbtable = prefix('albums');
 		if($action != 'noaction') {
 			if ($total > 0) {
-				$n = 0;
-				switch($action) {
-					case 'deleteall':
-						$sql = "DELETE FROM ".$dbtable." WHERE ";
-						break;
-					case 'showall':
-						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
-						break;
-					case 'hideall':
-						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
-						break;
-					case 'commentson':
-						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
-						break;
-					case 'commentsoff':
-						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
-						break;
-					case 'resethitcounter':
-						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
-						break;
+				foreach ($ids as $albumname) {
+					$albumobj = new Album($gallery,$albumname);
+					switch($action) {
+						case 'deleteall':
+							$albumobj->deleteAlbum();
+							break;
+						case 'showall':
+							$albumobj->set('show',1);
+							break;
+						case 'hideall':
+							$albumobj->set('show',0);
+							break;
+						case 'commentson':
+							$albumobj->set('commentson',1);
+							break;
+						case 'commentsoff':
+							$albumobj->set('commentson',0);
+							break;
+						case 'resethitcounter':
+							$albumobj->set('hitcounter',0);
+							break;
+					}
+					$albumobj->save();
 				}
-				foreach ($ids as $id) {
-					$n++;
-					$sql .= " id='".sanitize_numeric($id)."' ";
-					if ($n < $total) $sql .= "OR ";
-				}
-				query($sql);
 			}
 		}
 	}

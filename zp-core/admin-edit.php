@@ -59,7 +59,7 @@ if (isset($_GET['action'])) {
 			setOption('gallery_sorttype','manual');
 			setOption('gallery_sortdirection',0);
 			$notify = postAlbumSort(NULL);
-			processCheckboxActions('albums');
+			processAlbumBulkActions();
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&saved'.$notify);
 			exit();
 			break;
@@ -69,6 +69,7 @@ if (isset($_GET['action'])) {
 			$album->setSortDirection('album', 0);
 			$album->save();
 			$notify = postAlbumSort($album->get('id'));
+			processAlbumBulkActions();
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$folder.'&tab=subalbuminfo&saved'.$notify);
 			exit();
 			break;
@@ -649,7 +650,7 @@ $alb = removeParentAlbumNames($album);
 		?>
 		<div id="tab_subalbuminfo" class="tabbox">
 		<?php printEditDropdown('subalbuminfo'); ?>
-		<form action="?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;action=savesubalbumorder&amp;tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm">
+		<form action="?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;action=savesubalbumorder&amp;tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm" onsubmit="return confirmAction();">
 			<p>
 			<?php
 				$sorttype = strtolower($album->getAlbumSortType());
@@ -683,9 +684,9 @@ $alb = removeParentAlbumNames($album);
 				<img	src="images/arrow_left_blue_round.png" alt="" />
 				<strong><?php echo gettext("Back"); ?></strong>
 				</button>
-				<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons">
+				<button type="submit" title="<?php echo gettext("Apply"); ?>" class="buttons">
 				<img src="images/pass.png" alt="" />
-				<strong><?php echo gettext("Save Order"); ?></strong>
+				<strong><?php echo gettext("Apply"); ?></strong>
 				</button>
 				<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);">
 				<img src="images/folder.png" alt="" />
@@ -694,6 +695,32 @@ $alb = removeParentAlbumNames($album);
 			</p>
 			<br clear="all" /><br />
 			<table class="bordered" width="100%">
+			<tr>
+			<th style="text-align: left;"><?php echo gettext("Edit this album"); ?>
+			<?php
+	  	$checkarray = array(
+			  	gettext('*Bulk actions*') => 'noaction',
+			  	gettext('Delete') => 'deleteall',
+			  	gettext('Set to published') => 'showall',
+			  	gettext('Set to unpublished') => 'hideall',
+			  	gettext('Disable comments') => 'commentsoff',
+			  	gettext('Enable comments') => 'commentson',
+			  	gettext('Reset hitcounter') => 'resethitcounter',
+	  	);
+	  	?>
+	  	<span style="float:right">
+	  	<select name="checkallaction" id="checkallaction" size="1">
+	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			</select>
+			</span>
+			</th>
+		</tr>
+		 <tr>
+			<td class="subhead">
+				<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+				</label>
+			</td>
+		</tr>
 			<tr>
 				<td style="padding: 0px" colspan="1">
 					<ul id="left-to-right" class="page-list">
@@ -707,6 +734,7 @@ $alb = removeParentAlbumNames($album);
 				<ul class="iconlegend">
 				<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
 				<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Un-published"); ?></li>
+				<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
 				<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache the album"); ?></li>
 				<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset hitcounters"); ?></li>
@@ -719,9 +747,9 @@ $alb = removeParentAlbumNames($album);
 					<img	src="images/arrow_left_blue_round.png" alt="" />
 					<strong><?php echo gettext("Back"); ?></strong>
 					</button>
-					<button type="submit" title="<?php echo gettext("Save Order"); ?>" class="buttons">
+					<button type="submit" title="<?php echo gettext("Apply"); ?>" class="buttons">
 					<img src="images/pass.png" alt="" />
-					<strong><?php echo gettext("Save Order"); ?></strong>
+					<strong><?php echo gettext("Apply"); ?></strong>
 					</button>
 					<button type="button" title="<?php echo gettext('New subalbum'); ?>" onclick="javascript:newAlbum('<?php echo pathurlencode($album->name); ?>',false);">
 					<img src="images/folder.png" alt="" />
@@ -1442,6 +1470,7 @@ if (isset($_GET['saved'])) {
 		<ul class="iconlegend">
 			<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
 			<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Un-published"); ?></li>
+			<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
 			<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache the album"); ?></li>
 			<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
 			<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset hitcounters"); ?></li>

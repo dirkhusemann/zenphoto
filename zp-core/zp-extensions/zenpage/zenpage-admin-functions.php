@@ -238,9 +238,17 @@ function updatePage() {
  * Deletes a page (and also if existing its subpages) from the database
  *
  */
-function deletePage() {
-	$id = sanitize_numeric($_GET['del']);
-	$sortorder = sanitize($_GET['sortorder']);
+function deletePage($id=NULL,$sortorder=NULL) {
+	if(is_null($id)) {
+		$id = sanitize_numeric($_GET['del']);
+	} else {
+		$id = sanitize_numeric($id); 
+	}
+	if(is_null($sortorder)) {
+		$sortorder = sanitize($_GET['sortorder']);
+	} else {
+		$sortorder = sanitize($sortorder); 
+	}
 	query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_pages' AND `objectid`=" . $id);
 	$result = query_full_array('SELECT `id` FROM '.prefix('zenpage_pages')." WHERE `sort_order` like '".$sortorder."-%'");
 	if (is_array($result)) {
@@ -250,7 +258,7 @@ function deletePage() {
 	}
 	query("DELETE FROM ".prefix('zenpage_pages')." WHERE id = ".$id." OR `sort_order` like '".$sortorder."-%'"); // Delete the actual page
 	//query("DELETE FROM ".prefix('zenpage_pages')." WHERE OR `sort_order` like '".$sortorder."%'"); // delete subpages if there are some
-	echo"<p class='messagebox' id='fade-message'>".gettext("Page successfully deleted!")."</p>";
+	if(is_null($id)) echo"<p class='messagebox' id='fade-message'>".gettext("Page successfully deleted!")."</p>";
 }
 
 
@@ -592,12 +600,16 @@ function updateArticle() {
  * Deletes an news article from the database
  *
  */
-function deleteArticle() {
-	$id = sanitize_numeric($_GET['del']);
+function deleteArticle($id=NULL) {
+	if(is_null($id)) {
+		$id = sanitize_numeric($_GET['del']);
+	} else {
+		$id = sanitize_numeric($id);
+	}
 	query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_news' AND `objectid`=" . $id);
 	query("DELETE FROM ".prefix('zenpage_news')." WHERE id = $id");  // remove the article
 	query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE news_id = $id"); // delete the category association
-	echo "<p class='messagebox' id='fade-message'>".gettext("Article successfully deleted!")."</p>";
+	if(is_null($id)) echo "<p class='messagebox' id='fade-message'>".gettext("Article successfully deleted!")."</p>";
 }
 
 
@@ -1650,6 +1662,81 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 		}
 	}
 }
+
+
+/**
+ * Processes the check box bulk actions
+ *
+ */
+function processZenpageBulkActions($type) {
+	if (isset($_POST['ids'])) {
+		//echo "action for checked items:". $_POST['checkallaction'];
+		$action = sanitize($_POST['checkallaction']);
+		$ids = $_POST['ids'];
+		$total = count($ids);
+		switch($type) {
+			case 'pages':
+				$dbtable = prefix('zenpage_pages');
+				break;
+			case 'news':
+				$dbtable = prefix('zenpage_news');
+				break;
+			case 'newscategories':
+				$dbtable = prefix('zenpage_news_categories');
+				break;
+		}
+		if($action != 'noaction') {
+			if ($total > 0) {
+				$n = 0;
+				switch($action) {
+					case 'deleteall':
+						//$sql = "DELETE FROM ".$dbtable." WHERE ";
+						break;
+					case 'showall':
+						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
+						break;
+					case 'hideall':
+						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
+						break;
+					case 'commentson':
+						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
+						break;
+					case 'commentsoff':
+						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
+						break;
+					case 'resethitcounter':
+						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
+						break;
+				}
+				foreach ($ids as $id) {
+					if($type != 'newscategories' && $action == 'deleteall') {
+						switch($type) {
+							case 'pages':
+								// subpage deletion in deletePage() requires the sortorder so we need to get it via SQL
+								// TODO Does not work somehow...
+								$result = query_single_row('SELECT sort_order FROM '.$dbtable.' WHERE id = '.$id);
+								if($result) {
+									deletePage($id,$result['sort_order']);
+								}
+								break;
+							case 'news':
+								deleteArticle($id);
+								break;
+						}
+					} else {
+						$n++;
+						$sql .= " id='".sanitize_numeric($id)."' ";
+						if ($n < $total) $sql .= "OR ";
+					}
+				}
+				if(($type != 'news' || $type != 'pages') && $action != 'deleteall') {
+					query($sql);
+				} 
+			}
+		}
+	}
+}
+
 
 
 /**

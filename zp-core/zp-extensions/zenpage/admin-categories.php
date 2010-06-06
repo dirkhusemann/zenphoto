@@ -69,7 +69,7 @@ printLogoAndLinks();
 		<div id="tab_articles" class="tabbox">
 			<?php	
 			if(isset($_POST['processcheckeditems'])) {
-				processCheckboxActions('newscategories');
+				processZenpageBulkActions('newscategories');
 			}	
 			if(isset($_GET['delete'])) {
 			  deleteCategory();

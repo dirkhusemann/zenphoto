@@ -44,7 +44,7 @@ if(!(zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 	echo '<div id="content">';
 // update page sort order
 if(isset($_POST['update'])) {
-	processCheckboxActions('pages');
+	processZenpageBulkActions('pages');
 	updatePageSortorder();
 }
 // remove the page from the database
