@@ -3233,7 +3233,6 @@ function processAlbumBulkActions() {
 		$action = sanitize($_POST['checkallaction']);
 		$ids = $_POST['ids'];
 		$total = count($ids);
-		$dbtable = prefix('albums');
 		if($action != 'noaction') {
 			if ($total > 0) {
 				foreach ($ids as $albumname) {
@@ -3265,6 +3264,43 @@ function processAlbumBulkActions() {
 	}
 }
 
+/**
+ * Processes the check box bulk actions for comments
+ *
+ */
+function processCommentBulkActions() {
+	global $gallery;
+	if (isset($_POST['ids'])) { // these is actually the folder name here!
+		//echo "action for checked items:". $_POST['checkallaction'];
+		$action = sanitize($_POST['checkallaction']);
+		$ids = $_POST['ids'];
+		$total = count($ids);
+		$dbtable = prefix('comments');
+		
+		if($action != 'noaction') {
+			if ($total > 0) {
+				$n = 0;
+				switch($action) {
+					case 'deleteall':
+						$sql = "DELETE FROM ".$dbtable." WHERE ";
+						break;
+					case 'spam':
+						$sql = "UPDATE ".$dbtable." SET `inmoderation` = 1 WHERE ";
+						break;
+					case 'approve':
+						$sql = "UPDATE ".$dbtable." SET `inmoderation` = 0 WHERE ";
+						break;
+				}
+				foreach ($ids as $id) {
+					$n++;
+					$sql .= " id='".sanitize_numeric($id)."' ";
+					if ($n < $total) $sql .= "OR ";
+				}
+				query($sql);
+			}
+		}
+	}
+}
 
 /**
  * Extracs the first two characters from the Zenphoto locale names like 'de_DE' so that

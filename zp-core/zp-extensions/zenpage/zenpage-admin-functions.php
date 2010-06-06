@@ -1713,7 +1713,6 @@ function processZenpageBulkActions($type) {
 						switch($type) {
 							case 'pages':
 								// subpage deletion in deletePage() requires the sortorder so we need to get it via SQL
-								// TODO Does not work somehow...
 								$result = query_single_row('SELECT sort_order FROM '.$dbtable.' WHERE id = '.$id);
 								if($result) {
 									deletePage($id,$result['sort_order']);

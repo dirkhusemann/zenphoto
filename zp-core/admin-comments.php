@@ -51,30 +51,21 @@ if (isset($_GET['action'])) {
 		exit();
 
 	case 'deletecomments':
-		if (isset($_POST['ids']) || isset($_GET['id'])) {
-			if (isset($_GET['id'])) {
-				$ids = array($_GET['id']);
-			} else {
-				$ids = $_POST['ids'];
-			}
-			$total = count($ids);
-			if ($total > 0) {
-				$n = 0;
-				$sql = "DELETE FROM ".prefix('comments')." WHERE ";
-				foreach ($ids as $id) {
-					$n++;
-					$sql .= "id='".sanitize_numeric($id)."' ";
-					if ($n < $total) $sql .= "OR ";
-				}
-				query($sql);
-			}
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=$n");
+		if (isset($_POST['ids'])) {
+			processCommentBulkActions();
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
 		} else {
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=0");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
 		}
-
+ case 'deletecomment':
+ 		$id = $_GET['id'];
+ 		$sql = "DELETE FROM ".prefix('comments')." WHERE id =".$id;
+ 		query($sql);
+ 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=1");
+		exit();
+ 	
 	case 'savecomment':
 		if (!isset($_POST['id'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
@@ -102,6 +93,19 @@ if (isset($_GET['action'])) {
 
 
 printAdminHeader();
+?>
+<script type="text/javascript">
+	//<!-- <![CDATA[
+	function confirmAction() {
+		if ($('#checkallaction').val() == 'deleteall') {
+			return confirm('<?php echo js_encode(gettext("Are you sure you want to delete the checked items?")); ?>');
+		} else {
+			return true;
+		}
+	}
+	// ]]> -->
+</script>
+<?php
 echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
@@ -265,27 +269,43 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	</div>
 	<?php } ?>
 
-<form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
+<form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirmAction();">
 <input type="hidden" name="subpage" value="<?php echo $pagenum ?>" />
+<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
+<p class="buttons">
+<?php if(!$fulltext) { ?>
+			<a href="?fulltext=1<?php echo $viewall ? "&amp;viewall":""; ?>"><img src="images/arrow_out.png" alt="" /> <?php echo gettext("View full text"); ?></a><?php
+		} else {
+			?> <a	href="admin-comments.php?fulltext=0"<?php echo $viewall ? "?viewall":""; ?>"><img src="images/arrow_in.png" alt="" /> <?php echo gettext("View truncated"); ?></a> <?php
+		} ?>
+</p>
+<br clear="all" /><br />
 <table class="bordered">
 	<tr>
-		<th>&nbsp;</th>
-		<th><?php echo gettext("Album/Image"); ?></th>
-		<th><?php echo gettext("Author/Link"); ?></th>
-		<th><?php echo gettext("Date/Time"); ?></th>
-		<th><?php echo gettext("Comment"); ?>
-		<?php if(!$fulltext) { ?>(
-			<a href="?fulltext=1<?php echo $viewall ? "&amp;viewall":""; ?>"><?php echo gettext("View full text"); ?></a> ) <?php
-		} else {
-			?>( <a	href="admin-comments.php?fulltext=0"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a> )<?php
-		} ?>
+		<th colspan="11"><?php echo gettext("Edit this comment"); ?>
+		<?php
+	  	$checkarray = array(
+			  	gettext('*Bulk actions*') => 'noaction',
+			  	gettext('Delete') => 'deleteall',
+			  	gettext('Mark as spam') => 'spam',
+			  	gettext('Approve') => 'approve',
+	  	);
+	  	?>
+	  	<span style="float:right">
+	  	<select name="checkallaction" id="checkallaction" size="1">
+	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			</select>
+			</span>
 		</th>
-		<th><?php echo gettext("E&#8209;Mail"); ?></th>
-		<th><?php echo gettext("IP address"); ?></th>
-		<th><?php echo gettext("Private"); ?></th>
-		<th><?php echo gettext("SPAM"); ?></th>
-		<th><?php echo gettext("Edit"); ?></th>
-		<th><?php echo gettext("Delete"); ?></th>
+		
+	</tr>
+	<tr>
+		<td colspan="11" class="subhead">
+			<label style="float: right"><?php echo gettext("Check All"); ?>
+				<input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+				
+			</label>
+		</td>
 	</tr>
 	<?php
 	foreach ($comments as $comment) {
@@ -367,11 +387,9 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		$private = $comment['private'];
 		$anon = $comment['anon'];
 		?>
-
 	<tr class="newstr">
-		<td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
-			onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
-		<td><?php echo $link; ?></td>
+		<td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
+		<td><?php echo $date; ?></td>
 		<td>
 		<?php
 		echo $website ? "<a href=\"$website\">$author</a>" : $author;
@@ -380,13 +398,10 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		}
 		?>
 		</td>
-		<td><?php echo $date; ?></td>
-		<td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
-		<td align="center"><a
-			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply'); ?>">
-		<img src="images/envelope.png" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a></td>
+		<td><?php echo $link; ?></td>
+		
 		<td><?php echo $comment['IP']; ?></td>
-		<td align="center">
+		<td class="icons">
 			<?php
 			if($private) {
 				echo '<a title="'.gettext("Private message").'"><img src="images/reset.png" style="border: 0px;" alt="'. gettext("Private message").'" /></a>';
@@ -396,33 +411,38 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td align="center"><?php
 		if ($inmoderation) {
 			echo "<a href=\"?action=notspam&amp;id=" . $id . "\" title=\"".gettext('Approve this message (not SPAM)')."\">";
-			echo '<img src="images/lock_open.png" style="border: 0px;" alt="'. gettext("Approve this message (not SPAM").'" /></a>';
+			echo '<img src="images/warn.png" style="border: 0px;" alt="'. gettext("Approve this message (not SPAM").'" /></a>';
 		} else {
 			echo "<a href=\"?action=spam&amp;id=" . $id . "\" title=\"".gettext('Mark this message as SPAM')."\">";
-			echo '<img src="images/lock_2.png" style="border: 0px;" alt="'. gettext("Mark this message as SPAM").'" /></a>';
+			echo '<img src="images/pass.png" style="border: 0px;" alt="'. gettext("Mark this message as SPAM").'" /></a>';
 		}
 		?></td>
-		<td align="center"><a href="?page=editcomment&amp;id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>">
+		<td class="icons"><a href="?page=editcomment&amp;id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>">
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
-		<td align="center">
-			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+		<td class="icons"><a
+			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply:').' '.$email; ?>">
+		<img src="images/icon_mail.gif" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a></td>
+		<td class="icons">
+			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>'; }"
 			title="<?php echo gettext('Delete this comment.'); ?>" > <img
 			src="images/fail.png" style="border: 0px;" alt="<?php echo gettext('Delete'); ?>" /></a></td>
+		<td class="icons"><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
+			onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 	</tr>
 	<?php } ?>
-	<tr>
-		<td colspan="11" class="subhead">
-			<label>
-				<input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
-				<?php echo gettext("Check All"); ?>
-			</label>
-		</td>
-	</tr>
+	
 
 
 </table>
-<br />
-<p class="buttons"><button type="submit" title="<?php echo gettext("Delete Selected Comments"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Delete Selected Comments"); ?></strong></button></p>
+<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
+		<ul class="iconlegend">
+				<li><img src="images/reset.png" alt="" /><?php echo gettext("Private message"); ?></li>
+				<li><img src="images/warn.png" alt="Marked as spam" /><img src="images/pass.png" alt="Approved" /><?php echo gettext("Marked as spam/approved"); ?></li>
+				<li><img src="images/action.png" alt="Cache the album" /><?php echo gettext("Anonymous posting"); ?></li>
+				<li><img src="images/pencil.png" alt="Edit comment" /><?php echo gettext("Edit comment"); ?></li>
+				<li><img src="images/icon_mail.gif" alt="E-mail comment author" /><?php echo gettext("E-mail comment author"); ?></li>
+				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
+		</ul>
 
 </form>
 
