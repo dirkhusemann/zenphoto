@@ -167,16 +167,16 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <div class="box-edit">
 <?php
 	if ($inmoderation) {
-		$status_moderation = gettext('Comment is un-approved');
+		$status_moderation = '<span style="color: red">'.gettext('Comment is un-approved').'</span>';
 		$link_moderation = gettext('Approve');
 		$title_moderation = gettext('Approve this comment');
-		$url_moderation = '?action=moderation&amp;id='.$id;
+		$url_moderation = '?action=notspam&amp;id='.$id;
 		$linkimage = "images/pass.png";
 	} else {
-		$status_moderation = gettext('Comment is approved');
+		$status_moderation = '<span style="color: green">'.gettext('Comment is approved').'</span>';
 		$link_moderation = gettext('Un-approve');
 		$title_moderation = gettext('Un-approve this comment');
-		$url_moderation = '?action=unapprove&amp;id='.$id;
+		$url_moderation = '?action=spam&amp;id='.$id;
 		$linkimage = "images/warn.png";
 	}
 
@@ -201,7 +201,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <p><?php echo $status_anon; ?></p>
 <hr />
 <p class="buttons">
-<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>'; }"
 		title="<?php echo gettext('Delete'); ?>" ><img src="images/fail.png" alt="" />
 		<?php echo gettext('Delete'); ?></a></p>
 		<br style="clear:both" />
