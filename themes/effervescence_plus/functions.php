@@ -183,36 +183,14 @@ function annotateImage() {
 }
 
 function printFooter() {
-	global $_zp_themeroot, $_zp_gallery_page, $_zp_current_zenpage_news;
+	global $_zp_themeroot, $_zp_gallery_page, $_zp_current_zenpage_news, $_zp_current_zenpage_page;
 	$h = NULL;
 	?>
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php
+		$h = getHitcounter();
 		$page = gettext('page');
-		switch ($_zp_gallery_page) {
-			case 'album.php':
-				$page = gettext('album');
-				$h = getHitcounter();
-				break;
-			case 'image.php':
-				$page = gettext('image');
-				$h = getHitcounter();
-				break;
-			case ZENPAGE_NEWS.'.php':
-				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
-					$page = gettext('category');
-				$h = getHitcounter();
-				} else {
-					if (!is_null($_zp_current_zenpage_news)) {
-						$page = gettext('article');
-						$h = getHitcounter();
-					}
-				}
-				break;
-			default:
-				break;
-		}
 		if (!is_null($h)) {
 			?>
 			<p>

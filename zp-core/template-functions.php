@@ -3211,10 +3211,10 @@ function getHitcounter($obj=NULL) {
 			case 'image.php':
 				$obj = $_zp_current_image;
 				break;
-			case ZENPAGE_PAGES:
+			case ZENPAGE_PAGES.'.php':
 				$obj = $_zp_current_zenpage_page;
 				break;
-			case ZENPAGE_NEWS:
+			case ZENPAGE_NEWS.'.php':
 				if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 					$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$_zp_current_category."'");
 					return $hc["hitcounter"];
