@@ -111,6 +111,9 @@ function printItemsListTable($item, $flag) {
 			<a href="javascript:deleteMenuItem('menu_tab.php?delete&amp;id=<?php echo $item['id']; ?>','<?php printf(gettext('Ok to delete %s? This cannot be undone.'),htmlspecialchars($array['name'])); ?>');" >
 			<img src="../../images/fail.png" alt="<?php echo gettext('delete'); ?>" title="<?php echo gettext('delete'); ?>" /></a>		
 		</td>
+		<td class="icons">
+		<input type="checkbox" name="ids[]" value="<?php echo $item['id']; ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+	</td>
 	</tr>
 </table>
 	<?php
@@ -741,5 +744,39 @@ function unpublishedZenphotoItemCheck($obj,$dropdown=true) {
 		$show = "";
 	}
 	return $show;
+}
+
+/**
+ * Processes the check box bulk actions
+ *
+ */
+function processMenuBulkActions() {
+	if (isset($_POST['ids'])) {
+		$action = sanitize($_POST['checkallaction']);
+		$ids = $_POST['ids'];
+		$total = count($ids);
+		if($action != 'noaction') {
+			if ($total > 0) {
+				$n = 0;
+				switch($action) {
+					case 'deleteall':
+						$sql = "DELETE FROM ".prefix('menu')." WHERE ";
+						break;
+					case 'showall':
+						$sql = "UPDATE ".prefix('menu')." SET `show` = 1 WHERE ";
+						break;
+					case 'hideall':
+						$sql = "UPDATE ".prefix('menu')." SET `show` = 0 WHERE ";
+						break;
+				}
+				foreach ($ids as $id) {
+					$n++;
+					$sql .= " id='".sanitize_numeric($id)."' ";
+					if ($n < $total) $sql .= "OR ";
+				}
+				query($sql);
+			}
+		}
+	}
 }
 ?>

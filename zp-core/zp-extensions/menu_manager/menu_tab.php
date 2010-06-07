@@ -44,6 +44,7 @@ if (empty($menuset)) {	//	setup default menuset
 }
 
 if(isset($_POST['update'])) {
+	processMenuBulkActions();
 	updateItemsSortorder();
 }
 if (isset($_GET['delete'])) {
@@ -90,11 +91,18 @@ $count = mysql_result($result, 0);
 			window.location = location;
 		}
 	}
+	function confirmAction() {
+		if ($('#checkallaction').val() == 'deleteall') {
+			return confirm('<?php echo js_encode(gettext("Are you sure you want to delete the checked items?")); ?>');
+		} else {
+			return true;
+		}
+	}
 	// ]]> -->
 </script>
 <h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1> 				
  
-<form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update">
+<form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update" onsubmit="return confirmAction();">
 
 <p>
 <?php echo gettext("Drag the items into the order, including sub levels, you wish them displayed. This lets you create arbitrary menus and place them on your theme pages. Use printCustomMenu() to place them on your pages."); ?>
@@ -103,7 +111,7 @@ $count = mysql_result($result, 0);
 <?php echo gettext("<strong>IMPORTANT:</strong> This menu's order is completely independent from any order of albums or pages set on the other admin pages. It is recommend to uses is with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!");?>
 </p>
 <p class="buttons">
-<button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button>
+<button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button>
 <strong><a href="menu_tab_edit.php?add&amp;menuset=<?php echo urlencode($menuset); ?>" title="<?php echo gettext("Add Menu Items"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu Items"); ?></a></strong>
 <strong><a href="javascript:newMenuSet();" title="<?php echo gettext("Add Menu set"); ?>"><img src="../../images/add.png" alt="" /> <?php echo gettext("Add Menu set"); ?></a></strong>
 </p>
@@ -115,6 +123,19 @@ $count = mysql_result($result, 0);
 	  	<strong><?php echo gettext("Edit the menu"); ?></strong>
 	  	<?php echo getMenuSetSelector(true); ?>
 	  	<?php printItemStatusDropdown(); ?>
+	  	<?php
+	  	$checkarray = array(
+			  	gettext('*Bulk actions*') => 'noaction',
+			  	gettext('Delete') => 'deleteall',
+			  	gettext('Set to published') => 'showall',
+			  	gettext('Set to unpublished') => 'hideall'
+	  	);
+	  	?>
+	  	<span style="float: right">
+	  	<select name="checkallaction" id="checkallaction" size="1">
+	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			</select>
+			</span>
 	  	<span class="buttons" style="float: right"><?php 
 if ($count > 0) {
 	$buttontext = sprintf(gettext("Delete menu set '%s'"),htmlspecialchars($menuset));
@@ -125,6 +146,12 @@ if ($count > 0) {
 ?>
 </span>
 	  </th>
+	</tr>
+	 <tr>
+	<td class="subhead">
+		<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
+		</label>
+	</td>
 	</tr>
 	<tr>
 	 	<td colspan="2" style="padding: 0;">
@@ -145,7 +172,7 @@ if ($count > 0) {
 <br />
 <div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
  				<input name="update" type="hidden" value="Save Order" />
- 				<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
+ 				<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 </form>
 	<ul class="iconlegend">
 	<li><img src="../../images/lock_2.png" alt="" /><?php echo gettext("Menu target is password protected"); ?></li>
