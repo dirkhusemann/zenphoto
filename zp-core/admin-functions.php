@@ -108,6 +108,7 @@ function printAdminHeader($tinyMCE=NULL) {
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 			$("#fade-message2").fadeTo(5000, 1).fadeOut(1000);
+			$(".fade-message").fadeTo(5000, 1).fadeOut(1000);
 			$('.tooltip').tooltip({
 				left: -80
 			});
@@ -3233,32 +3234,42 @@ function processAlbumBulkActions() {
 		$action = sanitize($_POST['checkallaction']);
 		$ids = $_POST['ids'];
 		$total = count($ids);
+		$message = NULL;
 		if($action != 'noaction') {
 			if ($total > 0) {
+				$n = 0;
 				foreach ($ids as $albumname) {
+					$n++;
 					$albumobj = new Album($gallery,$albumname);
 					switch($action) {
 						case 'deleteall':
 							$albumobj->deleteAlbum();
+							if($n == 1) $message = gettext('Selected items deleted');
 							break;
 						case 'showall':
 							$albumobj->set('show',1);
+							if($n == 1) $message = gettext('Selected items published');
 							break;
 						case 'hideall':
 							$albumobj->set('show',0);
+							if($n == 1) $message = gettext('Selected items unpublished');
 							break;
 						case 'commentson':
 							$albumobj->set('commentson',1);
+							if($n == 1) $message = gettext('Comments enabled for selected items');
 							break;
 						case 'commentsoff':
 							$albumobj->set('commentson',0);
+							if($n == 1) $message = gettext('Comments disabled for selected items');
 							break;
 						case 'resethitcounter':
 							$albumobj->set('hitcounter',0);
+							if($n == 1) $message = gettext('Hitcounter for selected items');
 							break;
 					}
 					$albumobj->save();
 				}
+				if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
 			}
 		}
 	}
@@ -3276,19 +3287,22 @@ function processCommentBulkActions() {
 		$ids = $_POST['ids'];
 		$total = count($ids);
 		$dbtable = prefix('comments');
-		
+		$message = NULL;
 		if($action != 'noaction') {
 			if ($total > 0) {
 				$n = 0;
 				switch($action) {
 					case 'deleteall':
 						$sql = "DELETE FROM ".$dbtable." WHERE ";
+						$message = gettext('Selected items deleted');
 						break;
 					case 'spam':
 						$sql = "UPDATE ".$dbtable." SET `inmoderation` = 1 WHERE ";
+						$message = gettext('Selected items marked as spam');
 						break;
 					case 'approve':
 						$sql = "UPDATE ".$dbtable." SET `inmoderation` = 0 WHERE ";
+						$message = gettext('Selected items appoved');
 						break;
 				}
 				foreach ($ids as $id) {
@@ -3298,6 +3312,7 @@ function processCommentBulkActions() {
 				}
 				query($sql);
 			}
+			//if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
 		}
 	}
 }

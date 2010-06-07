@@ -755,18 +755,22 @@ function processMenuBulkActions() {
 		$action = sanitize($_POST['checkallaction']);
 		$ids = $_POST['ids'];
 		$total = count($ids);
+		$message = NULL;
 		if($action != 'noaction') {
 			if ($total > 0) {
 				$n = 0;
 				switch($action) {
 					case 'deleteall':
 						$sql = "DELETE FROM ".prefix('menu')." WHERE ";
+						$message = gettext('Selected items deleted');
 						break;
 					case 'showall':
 						$sql = "UPDATE ".prefix('menu')." SET `show` = 1 WHERE ";
+						$message = gettext('Selected items published');
 						break;
 					case 'hideall':
 						$sql = "UPDATE ".prefix('menu')." SET `show` = 0 WHERE ";
+						$message = gettext('Selected items unpublished');
 						break;
 				}
 				foreach ($ids as $id) {
@@ -776,6 +780,7 @@ function processMenuBulkActions() {
 				}
 				query($sql);
 			}
+			if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
 		}
 	}
 }

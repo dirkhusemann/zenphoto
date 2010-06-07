@@ -1310,6 +1310,7 @@ function zenpageJSCSS($sortable, $dates) {
 		// <!-- <![CDATA[
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
+			$(".fade-message").fadeTo(5000, 1).fadeOut(1000);
 		});
 		$(document).ready(function(){
 			$("#tip a").click(function() {
@@ -1674,6 +1675,7 @@ function processZenpageBulkActions($type) {
 		$action = sanitize($_POST['checkallaction']);
 		$ids = $_POST['ids'];
 		$total = count($ids);
+		$message = NULL;
 		switch($type) {
 			case 'pages':
 				$dbtable = prefix('zenpage_pages');
@@ -1690,22 +1692,27 @@ function processZenpageBulkActions($type) {
 				$n = 0;
 				switch($action) {
 					case 'deleteall':
-						//$sql = "DELETE FROM ".$dbtable." WHERE ";
+						$message = gettext('Selected items deleted');
 						break;
 					case 'showall':
 						$sql = "UPDATE ".$dbtable." SET `show` = 1 WHERE ";
+						$message = gettext('Selected items published');
 						break;
 					case 'hideall':
 						$sql = "UPDATE ".$dbtable." SET `show` = 0 WHERE ";
+						$message = gettext('Selected items unpublished');
 						break;
 					case 'commentson':
 						$sql = "UPDATE ".$dbtable." SET `commentson` = 1 WHERE ";
+						$message = gettext('Comments enabled for selected items');
 						break;
 					case 'commentsoff':
 						$sql = "UPDATE ".$dbtable." SET `commentson` = 0 WHERE ";
+						$message = gettext('Comments disabled for selected items');
 						break;
 					case 'resethitcounter':
 						$sql = "UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE ";
+						$message = gettext('Hitcounter for selected items');
 						break;
 				}
 				foreach ($ids as $id) {
@@ -1731,6 +1738,7 @@ function processZenpageBulkActions($type) {
 				if(($type != 'news' || $type != 'pages') && $action != 'deleteall') {
 					query($sql);
 				} 
+				if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
 			}
 		}
 	}
