@@ -21,19 +21,16 @@ if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	$themeswitch = false;
 	if ($action == 'deletegroup') {
-		$id = sanitize_numeric($_GET['groupid']);
-		$_zp_authority->deleteAdmin(array('id'=>$id));
-		$sql = "DELETE FROM ".prefix('admin_to_object')." WHERE `adminid`=$id";
-		query($sql);
-		//first clear out existing user assignments
-		$groupname = sanitize($_GET['group'],3);
+		$groupname = trim(sanitize($_GET['group'],0));
+		$groupobj = new Zenphoto_Administrator($groupname, 0);
+		$groupobj->delete();
+		// clear out existing user assignments
 		$_zp_authority->updateAdminField('group', NULL, array('valid'=>1, 'group'=>$groupname));
 		header("Location: ".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER.'/user_groups/user_groups-tab.php?page=users&tab=groups&deleted');
 		exit();
 	} else if ($action == 'savegroups') {
 		for ($i = 0; $i < $_POST['totalgroups']; $i++) {
-			$groupname = trim(sanitize($_POST[$i.'-group'],3));
-			$groupname = str_replace('"','',$groupname);
+			$groupname = trim(sanitize($_POST[$i.'-group'],0));
 			if (!empty($groupname)) {
 				$group = $_zp_authority->newAdministrator($groupname, 0);
 				if (isset($_POST[$i.'-initgroup']) && !empty($_POST[$i.'-initgroup'])) {
@@ -100,6 +97,9 @@ if (isset($_GET['action'])) {
 $page = 'users';
 
 printAdminHeader();
+?>
+<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/sprintf.js"></script>
+<?php
 echo '</head>'."\n";
 ?>
 
@@ -151,7 +151,7 @@ echo '</head>'."\n";
 							echo gettext("Set group rights and select one or more albums for the users in the group to manage. Users with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
 							?>
 						</p>
-						<form action="?action=savegroups&amp;tab=groups" method="post" autocomplete="off">
+						<form action="?action=savegroups&amp;tab=groups" method="post" autocomplete="off" onsubmit="return checkNewgroup()" >
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
@@ -179,14 +179,14 @@ echo '</head>'."\n";
 													<label><input type="radio" name="<?php echo $id; ?>-type" value="template" onclick="javascrpt:toggle('users<?php echo $id; ?>');" /><?php echo gettext('template'); ?></label>
 												</em>
 												<br />
-												<input type="text" size="35" name="<?php echo $id ?>-group" value="" />
+												<input type="text" size="35" id="group-<?php echo $id ?>" name="<?php echo $id ?>-group" value="" />
 												<?php
 											} else {
 												?>
 												<em><?php if ($grouptype == 'group') echo gettext('group'); else echo gettext('template'); ?></em>
 												<br />
 												<strong><?php echo $groupname; ?></strong>
-												<input type="hidden" name="<?php echo $id ?>-group" value="<?php echo htmlspecialchars($groupname); ?>" />
+												<input type="hidden" id="group-<?php echo $id ?>" name="<?php echo $id ?>-group" value="<?php echo htmlspecialchars($groupname); ?>" />
 												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo htmlspecialchars($grouptype); ?>" />
 												<?php
 											}
@@ -270,7 +270,7 @@ echo '</head>'."\n";
 										if (!empty($groupname)) {
 											$msg = gettext('Are you sure you want to delete this group?');
 											?>
-											<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&groupid=<?php echo $groupid; ?>&group=<?php echo addslashes($groupname); ?>'; }"
+											<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&group=<?php echo addslashes($groupname); ?>'; }"
 																title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
 												<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
 											</a> 
@@ -291,6 +291,26 @@ echo '</head>'."\n";
 							</p>
 							<input type="hidden" name="totalgroups" value="<?php echo $id; ?>" />
 						</form>
+						<script language="javascript" type="text/javascript">
+							//<!-- <![CDATA[
+							function checkNewgroup() {
+								newgroupid = <?php echo ($id-1); ?>;
+								newgroup = $('#group-'+newgroupid).val().replace(/^\s+|\s+$/g,"");
+								if (newgroup=='') return true;
+								if (newgroup.indexOf('?')>=0 || newgroup.indexOf('&')>=0 || newgroup.indexOf('"')>=0 || newgroup.indexOf('\'')>=0) {
+									alert('<?php echo gettext('Group names may not contain "?", "&", or quotation marks.'); ?>');
+									return false;
+								}
+								for (i=newgroupid-1;i>=0;i--) {
+									if ($('#group-'+i).val() == newgroup) {
+										alert(sprintf('<?php echo gettext('The group "%s" already exists.'); ?>',newgroup));
+										return false;
+									}
+								} 
+								return true;
+							}
+							// ]]> -->
+						</script>
 						<br clear="all" /><br />
 						<?php
 						break;
@@ -307,7 +327,7 @@ echo '</head>'."\n";
 							echo gettext("Assign users to groups.");
 							?>
 						</p>
-						<form action="?action=saveauserassignments" method="post" autocomplete="off">
+						<form action="?action=saveauserassignments" method="post" autocomplete="off" >
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>

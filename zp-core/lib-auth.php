@@ -343,21 +343,6 @@ class Zenphoto_Authority {
 	}
 
 	/**
-	 * Deletes admin record(s)
-	 *
-	 * @param array $constraints field value pairs for constraining the delete
-	 * @return mixed Query result
-	 */
-	function deleteAdmin($constraints) {
-		$where = '';
-		foreach ($constraints as $field=>$clause) {
-			$where .= '`'.$field.'`="'.$clause.'" ';
-		}
-		$sql = "DELETE FROM ".prefix('administrators')." WHERE $where";
-		return query($sql);
-	}
-
-	/**
 	 * Updates a field in admin record(s)
 	 *
 	 * @param string $field name of the field
@@ -619,6 +604,14 @@ class Zenphoto_Administrator extends PersistentObject {
 				}
 			}
 		}
+	}
+	
+	function delete() {
+		$id = $this->getID();
+		$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=".$id;
+		query($sql);
+		$sql = "DELETE FROM ".prefix('admin_to_object')." WHERE `adminid`=$id";
+		query($sql);
 	}
 
 }

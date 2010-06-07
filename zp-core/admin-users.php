@@ -30,10 +30,8 @@ if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
-		$id = sanitize_numeric($_GET['adminuser']);
-		$_zp_authority->deleteAdmin(array('id'=>$id));
-		$sql = "DELETE FROM ".prefix('admin_to_object')." WHERE `adminid`=$id";
-		query($sql);
+		$adminobj = new Zenphoto_Administrator(sanitize($_GET['adminuser']),1);
+		$adminobj->delete();
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
 		exit();
 	} else if ($action == 'saveoptions') {
@@ -46,7 +44,7 @@ if (isset($_GET['action'])) {
 			$newuser = false;
 			for ($i = 0; $i < $_POST['totaladmins']; $i++) {
 				$pass = trim($_POST[$i.'-adminpass']);
-				$user = trim($_POST[$i.'-adminuser']);
+				$user = trim(sanitize($_POST[$i.'-adminuser'],0));
 				if (empty($user) && !empty($pass)) {
 					$notify = '?mismatch=nothing';
 				}
@@ -113,7 +111,9 @@ if (isset($_GET['action'])) {
 printAdminHeader();
 ?>
 <script type="text/javascript" src="js/farbtastic.js"></script>
+<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER;?>/js/sprintf.js"></script>
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
+
 <?php
 $subtab = getSubtabs($_current_tab, 'users');
 ?>
@@ -223,7 +223,7 @@ printSubtabs($_current_tab, 'users');
 	
 	
 ?> 
-<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" autocomplete="off">
+<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" autocomplete="off" onsubmit="return checkNewuser();" >
 <input type="hidden" name="saveadminoptions" value="yes" />
 <?php			
 if (empty($alterrights)) {
@@ -338,7 +338,7 @@ if (empty($alterrights)) {
 									<?php
 								} else {
 									?>
-									<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
+									<input type="hidden" id="adminuser-<?php echo $id; ?>" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 									<?php
 									echo '<strong>'.$userid.'</strong>'; 
 								}
@@ -364,7 +364,7 @@ if (empty($alterrights)) {
 						<?php 
 						if (empty($userid)) {
 								?>
-								<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
+								<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" id="adminuser-<?php echo $id; ?>" name="<?php echo $id; ?>-adminuser" value=""
 									onclick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
 								<?php
 							} else {
@@ -390,7 +390,7 @@ if (empty($alterrights)) {
 									$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
 								}
 							?>
-							<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+							<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo addslashes($user['user']); ?>'; }"
 								title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
 								src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
 							<?php
@@ -513,6 +513,22 @@ if (empty($alterrights)) {
 </form>
 <script language="javascript" type="text/javascript">
 	//<!-- <![CDATA[
+	function checkNewuser() {
+		newuserid = <?php echo ($id-1); ?>;
+		newuser = $('#adminuser-'+newuserid).val().replace(/^\s+|\s+$/g,"");;
+		if (newuser=='') return true;
+		if (newuser.indexOf('?')>=0 || newuser.indexOf('&')>=0 || newuser.indexOf('"')>=0 || newuser.indexOf('\'')>=0) {
+			alert('<?php echo gettext('User names may not contain "?", "&", or quotation marks.'); ?>');
+			return false;
+		}
+		for (i=newuserid-1;i>=0;i--) {
+			if ($('#adminuser-'+i).val() == newuser) {
+				alert(sprintf('<?php echo gettext('The user "%s" already exists.'); ?>',newuser));
+				return false;
+			}
+		} 
+		return true;
+	}
 	function setShow(v) {
 		<?php
 		foreach ($showlist as $show) {
