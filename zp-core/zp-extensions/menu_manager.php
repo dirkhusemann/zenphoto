@@ -293,7 +293,7 @@ function inventMenuItem($menuset,$visibility) {
 					}
 				}
 			}
-			if (!empty($currentkey)) {
+			if (is_object($_zp_current_zenpage_news) && !empty($currentkey)) {
 				$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'zenpagenews',
 																	'include_li'=>true,'title'=>$_zp_current_zenpage_news->getTitle(),
 																	'show'=>1, 'link'=>'','menuset'=>$menuset);
