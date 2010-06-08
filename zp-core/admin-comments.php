@@ -52,8 +52,8 @@ if (isset($_GET['action'])) {
 
 	case 'deletecomments':
 		if (isset($_POST['ids'])) {
-			processCommentBulkActions();
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
+			$action = processCommentBulkActions();
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?bulk=".$action);
 			exit();
 		} else {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
@@ -253,7 +253,25 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <h1><?php echo gettext("Comments"); ?></h1>
 
 <?php /* Display a message if needed. Fade out and hide after 2 seconds. */
-	if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
+
+if(isset($_GET['bulk'])) {
+	$bulkaction = sanitize($_GET['bulk']);
+	switch($bulkaction) {
+		case 'deleteall':
+			$message = gettext('Selected items deleted');
+			break;
+		case 'spam':
+			$message = gettext('Selected items marked as spam');
+			break;
+		case 'approve':
+			$message = gettext('Selected items appoved');
+			break;
+	}
+	?>
+<div class="messagebox fade-message"><?php echo $message; ?></div>
+<?php	
+}
+if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
 <div class="messagebox" id="fade-message"><?php if (isset($_GET['ndeleted'])) { ?>
 <h2><?php echo $_GET['ndeleted']; ?> <?php echo gettext("Comments deleted successfully."); ?></h2>
 <?php } ?> <?php if (isset($_GET['sedit'])) { ?>
@@ -271,7 +289,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 <form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirmAction();">
 <input type="hidden" name="subpage" value="<?php echo $pagenum ?>" />
-<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
+<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 <p class="buttons">
 <?php if(!$fulltext) { ?>
 			<a href="?fulltext=1<?php echo $viewall ? "&amp;viewall":""; ?>"><img src="images/arrow_out.png" alt="" /> <?php echo gettext("View full text"); ?></a><?php
@@ -434,7 +452,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 
 </table>
-<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
+<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 		<ul class="iconlegend">
 				<li><img src="images/reset.png" alt="" /><?php echo gettext("Private message"); ?></li>
 				<li><img src="images/warn.png" alt="Marked as spam" /><img src="images/pass.png" alt="Approved" /><?php echo gettext("Marked as spam/approved"); ?></li>

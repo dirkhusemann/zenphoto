@@ -3294,15 +3294,12 @@ function processCommentBulkActions() {
 				switch($action) {
 					case 'deleteall':
 						$sql = "DELETE FROM ".$dbtable." WHERE ";
-						$message = gettext('Selected items deleted');
 						break;
 					case 'spam':
 						$sql = "UPDATE ".$dbtable." SET `inmoderation` = 1 WHERE ";
-						$message = gettext('Selected items marked as spam');
 						break;
 					case 'approve':
 						$sql = "UPDATE ".$dbtable." SET `inmoderation` = 0 WHERE ";
-						$message = gettext('Selected items appoved');
 						break;
 				}
 				foreach ($ids as $id) {
@@ -3315,6 +3312,7 @@ function processCommentBulkActions() {
 			//if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
 		}
 	}
+	return $action;
 }
 
 /**
