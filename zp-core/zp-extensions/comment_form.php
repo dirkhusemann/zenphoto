@@ -309,9 +309,11 @@ function printCommentErrors($class = 'error') {
 /**
  * prints a form for posting comments
  * @param bool $showcomments defaults to true for showing list of comments
+ * @param string $addcommenttext alternate text for "Add a comment:"
+ * @param bool $addheader set true to display comment count header
  *
  */
-function printCommentForm($showcomments=true, $addcommenttext=NULL) {
+function printCommentForm($showcomments=true, $addcommenttext=NULL, $addheader=true) {
 	global $_zp_gallery_page, $_zp_themeroot,	$_zp_current_admin_obj, $_zp_current_comment;
 	if (is_null($addcommenttext)) $addcommenttext = gettext('Add a comment:');
 	switch ($_zp_gallery_page) {
@@ -347,61 +349,54 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 		<?php
 		if ($showcomments) {
 			$num = getCommentCount();
-			switch ($num) {
-				case 0:
-					echo '<h3>'.gettext('No Comments').'</h3><br />';
-					$display = '';
-					break;
-				default:
-					echo '<h3>'.sprintf(ngettext('%u Comment','%u Comments',$num), $num).'</h3>';
-					if (getOption('comment_form_toggle')) {
-						?>
-						<script type="text/javascript">
-							// <!-- <![CDATA[
-							function toggleComments(hide) {
-								if (hide) {
-									$('div.comment').hide();
-									$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(false);"><?php echo gettext('show comments')?></button>');
-								} else {
-									$('div.comment').show();
-									$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(true);"><?php echo gettext('hide comments')?></button>');
-								}
+			if ($num==0) {
+				if ($addheader) echo '<h3>'.gettext('No Comments').'</h3><br />';
+				$display = '';
+			} else {
+				if ($addheader) echo '<h3>'.sprintf(ngettext('%u Comment','%u Comments',$num), $num).'</h3>';
+				if (getOption('comment_form_toggle')) {
+					?>
+					<script type="text/javascript">
+						// <!-- <![CDATA[
+						function toggleComments(hide) {
+							if (hide) {
+								$('div.comment').hide();
+								$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(false);"><?php echo gettext('show comments')?></button>');
+							} else {
+								$('div.comment').show();
+								$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(true);"><?php echo gettext('hide comments')?></button>');
 							}
-							$(document).ready(function() {
-								toggleComments(true);
-							});
-							// ]]> -->
-						</script>
-						<?php
-						$display = ' style="display:none"';
-					} else {
-						$display = '';
-					}
+						}
+						$(document).ready(function() {
+							toggleComments(true);
+						});
+						// ]]> -->
+					</script>
+					<?php
+					$display = ' style="display:none"';
+				} else {
+					$display = '';
+				}
 			}
 			?>
-			<div id="comments">
-				<div id="comment_toggle"><!-- place holder for toggle button --></div>
-				<?php
-				while (next_comment()) {
-					?>
-					<div class="comment"<?php echo $display; ?>><a name="<?php echo $_zp_current_comment['id']; ?>"></a>
-						<div class="commentinfo">
-							<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
-						</div>
-						<div class="commenttext">
-							<?php echo getCommentBody();?>
-						</div>
-					</div>
-					<?php
-				}
-				?>
-			</div>
-			<?php
-		}
-		?>
-
-		<!-- Comment Box -->
+		<div id="comments">
+		<div id="comment_toggle"><!-- place holder for toggle button --></div>
 		<?php
+						while (next_comment()) {
+							?>
+		<div class="comment" <?php echo $display; ?>><a
+			name="<?php echo $_zp_current_comment['id']; ?>"></a>
+		<div class="commentinfo">
+		<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
+		</div>
+		<div class="commenttext"><?php echo getCommentBody();?></div>
+		</div>
+		<?php
+						}
+						?></div>
+		<?php
+		}
+		?> <!-- Comment Box --> <?php
 		if ($comments_open) {
 			$stored = array_merge(getCommentStored(),array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>''));
 			$raw = $stored['custom'];
@@ -465,26 +460,23 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL) {
 			} else {
 				if (!empty($addcommenttext)) {
 					?>
-					<h3><?php echo $addcommenttext; ?></h3>
-					<?php
+<h3><?php echo $addcommenttext; ?></h3>
+<?php
 				}
 				?>
-				<div id="commententry">
-					<?php
+<div id="commententry"><?php
 					require_once($form);
-					?>
-				</div>
-				<?php
+					?></div>
+<?php
 			}
 		} else {
 			?>
-			<div id="commententry">
-				<h3><?php echo gettext('Closed for comments.');?></h3>
-			</div>
-			<?php
-		}
-	?>
+<div id="commententry">
+<h3><?php echo gettext('Closed for comments.');?></h3>
 </div>
+<?php
+		}
+	?></div>
 <?php
 if (getOption('comment_form_rss')) {
 	switch($_zp_gallery_page) {
