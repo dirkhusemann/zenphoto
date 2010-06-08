@@ -59,8 +59,11 @@ if (isset($_GET['action'])) {
 			setOption('gallery_sorttype','manual');
 			setOption('gallery_sortdirection',0);
 			$notify = postAlbumSort(NULL);
-			processAlbumBulkActions();
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&saved'.$notify);
+			if (isset($_POST['ids'])) { 
+				$action = processAlbumBulkActions();
+				if(!empty($action)) $action = '&bulkmessage='.$action;
+			}
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit'.$action.'&saved'.$notify);
 			exit();
 			break;
 		case 'savesubalbumorder':
@@ -69,8 +72,11 @@ if (isset($_GET['action'])) {
 			$album->setSortDirection('album', 0);
 			$album->save();
 			$notify = postAlbumSort($album->get('id'));
-			processAlbumBulkActions();
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album='.$folder.'&tab=subalbuminfo&saved'.$notify);
+			if (isset($_POST['ids'])) { 
+				$action = processAlbumBulkActions();
+				if(!empty($action)) $action = '&bulkmessage='.$action;
+			}
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit'.$action.'&album='.$folder.'&tab=subalbuminfo&saved'.$notify);
 			exit();
 			break;
 		case 'sorttags':
@@ -620,6 +626,32 @@ $alb = removeParentAlbumNames($album);
 	if (isset($_GET['exists'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".sprintf(gettext("<em>%s</em> already exists."),sanitize($_GET['exists']))."</h2>";
+		echo '</div>';
+	}
+	if (isset($_GET['bulkmessage'])) {
+		$action = sanitize($_GET['bulkmessage']);
+		switch($action) {
+			case 'deleteall':
+				$message = gettext('Selected items deleted');
+				break;
+			case 'showall':
+				$message = gettext('Selected items published');
+				break;
+			case 'hideall':
+				$message = gettext('Selected items unpublished');
+				break;
+			case 'commentson':
+				$message = gettext('Comments enabled for selected items');
+				break;
+			case 'commentsoff':
+				$message = gettext('Comments disabled for selected items');
+				break;
+			case 'resethitcounter':
+				$message = gettext('Hitcounter for selected items');
+				break;
+		}
+		echo '<div class="messagebox fade-message">';
+		echo  "<h2>".$message."</h2>";
 		echo '</div>';
 	}
 	setAlbumSubtabs($album);
@@ -1377,7 +1409,32 @@ if (isset($_GET['saved'])) {
 	if(isset($_GET['commentson'])) {
 		enableComments('album');
 	}
-
+if (isset($_GET['bulkmessage'])) {
+		$action = sanitize($_GET['bulkmessage']);
+		switch($action) {
+			case 'deleteall':
+				$message = gettext('Selected items deleted');
+				break;
+			case 'showall':
+				$message = gettext('Selected items published');
+				break;
+			case 'hideall':
+				$message = gettext('Selected items unpublished');
+				break;
+			case 'commentson':
+				$message = gettext('Comments enabled for selected items');
+				break;
+			case 'commentsoff':
+				$message = gettext('Comments disabled for selected items');
+				break;
+			case 'resethitcounter':
+				$message = gettext('Hitcounter for selected items');
+				break;
+		}
+		echo '<div class="messagebox fade-message">';
+		echo  "<h2>".$message."</h2>";
+		echo '</div>';
+	}
 	$albums = getNestedAlbumList(NULL, $gallery_nesting);
 	if (count($albums) > 0) {
 		if (zp_loggedin(ADMIN_RIGHTS) && (count($albums)) > 1) {

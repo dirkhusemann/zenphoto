@@ -3244,33 +3244,27 @@ function processAlbumBulkActions() {
 					switch($action) {
 						case 'deleteall':
 							$albumobj->deleteAlbum();
-							if($n == 1) $message = gettext('Selected items deleted');
 							break;
 						case 'showall':
 							$albumobj->set('show',1);
-							if($n == 1) $message = gettext('Selected items published');
 							break;
 						case 'hideall':
 							$albumobj->set('show',0);
-							if($n == 1) $message = gettext('Selected items unpublished');
 							break;
 						case 'commentson':
 							$albumobj->set('commentson',1);
-							if($n == 1) $message = gettext('Comments enabled for selected items');
 							break;
 						case 'commentsoff':
 							$albumobj->set('commentson',0);
-							if($n == 1) $message = gettext('Comments disabled for selected items');
 							break;
 						case 'resethitcounter':
 							$albumobj->set('hitcounter',0);
-							if($n == 1) $message = gettext('Hitcounter for selected items');
 							break;
 					}
 					$albumobj->save();
 				}
-				if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
 			}
+			return $action;
 		}
 	}
 }
