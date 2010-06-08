@@ -20,8 +20,11 @@ if (!empty($_FILES)) {
 		trigger_error(sprintf(gettext('Uploadify error on %1$s. Review your debug log.'),$name));
 	} else {
 		$tempFile = sanitize($_FILES['Filedata']['tmp_name'],3);
-		$albumparmas = explode(':', sanitize($_POST['folder'],3),3);
-
+		$folder = trim(sanitize($_POST['folder'],3));
+		if (substr($folder,0,1) == '/') {
+			$folder = substr($folder,1);
+		}
+		$albumparmas = explode(':', $folder,3);
 		$folder = trim($albumparmas[1]);
 		if (substr($folder,0,1) == '/') {
 			$folder = substr($folder,1);
