@@ -293,10 +293,14 @@ function inventMenuItem($menuset,$visibility) {
 					}
 				}
 			}
-			if (is_object($_zp_current_zenpage_news) && !empty($currentkey)) {
-				$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'zenpagenews',
-																	'include_li'=>true,'title'=>$_zp_current_zenpage_news->getTitle(),
-																	'show'=>1, 'link'=>'','menuset'=>$menuset);
+			if (!empty($currentkey)) {
+				if (is_object($_zp_current_zenpage_news)) {
+					$item = array('id'=>9999, 'sort_order'=>$currentkey,'parentid'=>$item['id'],'type'=>'zenpagenews',
+																		'include_li'=>true,'title'=>$_zp_current_zenpage_news->getTitle(),
+																		'show'=>1, 'link'=>'','menuset'=>$menuset);
+				} else {
+					$currentkey = false;	// not a news page, must be the index?
+				}
 			}
 			break;
 		case ZENPAGE_PAGES.'.php':
@@ -335,6 +339,26 @@ function getCurrentMenuItem($menuset) {
 	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
 	$currentpageURL = str_replace('\\','/',$currentpageURL);
 	if (substr($currentpageURL,-1) == '/') $currentpageURL = substr($currentpageURL, 0, -1);
+	
+	if (isset($_GET['page'])) {	// must strip out page numbers, all "pages" are equal
+		if (getOption('mod_rewrite')) {
+			if (isset($_GET['album'])) {
+				$target = '/page/'.$_GET['page'];
+			} else {
+				$target = '/'.$_GET['page'];
+			}
+			$i = strrpos($currentpageURL,$target);
+			if ($i == (strlen($currentpageURL) - strlen($target))) {
+				$currentpageURL = substr($currentpageURL,0,$i);
+			}
+		} else {
+			$target = '&amp;page='.$_GET['page'];
+			$i = strpos($currentpageURL,$target);
+			if ($i !== false) {
+				$currentpageURL = substr($currentpageURL,0,$i).substr($currentpageURL,$i+strlen($target));
+			}
+		}
+	}
 	$items = getMenuItems($menuset, $visibility = getMenuVisibility());
 	$currentkey = NULL;
 	foreach ($items as $key=>$item) {
