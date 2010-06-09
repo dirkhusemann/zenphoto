@@ -935,10 +935,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			$parent = '&amp;album='.$parent.'&amp;tab=subalbuminfo';
 		}
 		?>
-		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+		<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 		<img	src="images/arrow_left_blue_round.png" alt="" />
 		<strong><?php echo gettext("Back"); ?></strong>
-		</button>
+		</a>
 		<button type="submit" title="<?php echo gettext("Save"); ?>">
 		<img	src="images/pass.png" alt="" />
 		<strong><?php echo gettext("Save"); ?></strong>
@@ -957,10 +957,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<?php
 		}
 		?>
-		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" >
+		<a title="<?php echo gettext('View Album'); ?>" href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>">
 		<img src="images/view.png" alt="" />
 		<strong><?php echo gettext('View Album'); ?></strong>
-		</button>
+		</a>
 	</p>
 <br clear="all" /><br />
 	<table>
@@ -1601,10 +1601,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 
 <br clear="all" />
 	<p class="buttons">
-		<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+		<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 		<img	src="images/arrow_left_blue_round.png" alt="" />
 		<strong><?php echo gettext("Back"); ?></strong>
-		</button>
+		</a>
 		<button type="submit" title="<?php echo gettext("Save"); ?>">
 		<img	src="images/pass.png" alt="" />
 		<strong><?php echo gettext("Save"); ?></strong>
@@ -1623,10 +1623,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 			<?php
 		}
 		?>
-		<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" >
+		<a title="<?php echo gettext('View Album'); ?>" href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>">
 		<img src="images/view.png" alt="" />
 		<strong><?php echo gettext('View Album'); ?></strong>
-		</button>
+		</a>
 	</p>
 <br clear="all" />
 <?php

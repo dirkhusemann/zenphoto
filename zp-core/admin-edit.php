@@ -712,10 +712,10 @@ $alb = removeParentAlbumNames($album);
 				?>
 			</p>
 			<p class="buttons">
-				<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+				<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 				<img	src="images/arrow_left_blue_round.png" alt="" />
 				<strong><?php echo gettext("Back"); ?></strong>
-				</button>
+				</a>
 				<button type="submit" title="<?php echo gettext("Apply"); ?>" class="buttons">
 				<img src="images/pass.png" alt="" />
 				<strong><?php echo gettext("Apply"); ?></strong>
@@ -775,10 +775,10 @@ $alb = removeParentAlbumNames($album);
 					<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
 					<input name="update" type="hidden" value="Save Order" />
 					<p class="buttons">
-					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+					<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 					<img	src="images/arrow_left_blue_round.png" alt="" />
 					<strong><?php echo gettext("Back"); ?></strong>
-					</button>
+					</a>
 					<button type="submit" title="<?php echo gettext("Apply"); ?>" class="buttons">
 					<img src="images/pass.png" alt="" />
 					<strong><?php echo gettext("Apply"); ?></strong>
@@ -878,10 +878,10 @@ $alb = removeParentAlbumNames($album);
 			<tr>
 				<td colspan="4">
 					<p class="buttons">
-						<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+						<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 						<img	src="images/arrow_left_blue_round.png" alt="" />
 						<strong><?php echo gettext("Back"); ?></strong>
-						</button>
+						</a>
 						<button type="submit" title="<?php echo gettext("Save"); ?>">
 						<img src="images/pass.png" alt="" />
 						<strong><?php echo gettext("Save"); ?></strong>
@@ -1264,10 +1264,10 @@ $alb = removeParentAlbumNames($album);
 				<td colspan="4">
 
 				<p class="buttons">
-					<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+					<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 					<img	src="images/arrow_left_blue_round.png" alt="" />
 					<strong><?php echo gettext("Back"); ?></strong>
-					</button>
+					</a>
 					<button type="submit" title="<?php echo gettext("Save"); ?>">
 					<img src="images/pass.png" alt="" />
 					<strong><?php echo gettext("Save"); ?></strong>

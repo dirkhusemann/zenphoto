@@ -121,10 +121,10 @@ if (!isset($_GET['album'])) {
 					<img	src="images/pass.png" alt="" />
 					<strong><?php echo gettext("Save"); ?></strong>
 					</button>
-					<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" >
+					<a title="<?php echo gettext('View Album'); ?>" href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>">
 					<img src="images/view.png" alt="" />
 					<strong><?php echo gettext('View Album'); ?></strong>
-					</button>
+					</a>
 				</p>
 				<br clear="all"/><br />
 				<p><?php echo gettext("Set the image order by dragging them to the positions you desire."); ?></p>
@@ -142,18 +142,18 @@ if (!isset($_GET['album'])) {
 				<div>
 					<input type="hidden" id="sortableList" name="sortableList" value="" />
 					<p class="buttons">
-						<button type="button" title="<?php echo gettext('Back to the album list'); ?>" onclick="window.location='<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>'" >
+						<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">
 						<img	src="images/arrow_left_blue_round.png" alt="" />
 						<strong><?php echo gettext("Back"); ?></strong>
-						</button>
+						</a>
 						<button type="button" title="<?php echo gettext("Save order"); ?>" onclick="postSort(this.form);" >
 						<img	src="images/pass.png" alt="" />
 						<strong><?php echo gettext("Save"); ?></strong>
 						</button>
-						<button type="button" title="<?php echo gettext('View Album'); ?>" onclick="window.location='<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>'" >
+						<a title="<?php echo gettext('View Album'); ?>" href="<?php echo WEBPATH . "/index.php?album=". urlencode($album->getFolder()); ?>">
 						<img src="images/view.png" alt="" />
 						<strong><?php echo gettext('View Album'); ?></strong>
-						</button>
+						</a>
 					</p>
 					</div>
 			</form>
