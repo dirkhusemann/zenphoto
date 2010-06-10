@@ -22,37 +22,37 @@ class hitcounter_options {
 	function hitcounter_options() {
 		setOptionDefault('hitcounter_ignoreIPList','');
 		setOptionDefault('hitcounter_searchCrawlerList', implode(',', array('Teoma', 'alexa', 'froogle', 'Gigabot', 'inktomi',
-                      'looksmart', 'URL_Spider_SQL', 'Firefly', 'NationalDirectory',
-                      'Ask Jeeves', 'TECNOSEEK', 'InfoSeek', 'WebFindBot', 'girafabot',
-                      'crawler', 'www.galaxy.com', 'Googlebot', 'Scooter', 'Slurp',
-                      'msnbot', 'appie', 'FAST', 'WebBug', 'Spade', 'ZyBorg', 'rabaz',
-                      'Baiduspider', 'Feedfetcher-Google', 'TechnoratiSnoop', 'Rankivabot',
-                      'Mediapartners-Google', 'Sogou web spider', 'WebAlta Crawler')));
+											'looksmart', 'URL_Spider_SQL', 'Firefly', 'NationalDirectory',
+											'Ask Jeeves', 'TECNOSEEK', 'InfoSeek', 'WebFindBot', 'girafabot',
+											'crawler', 'www.galaxy.com', 'Googlebot', 'Scooter', 'Slurp',
+											'msnbot', 'appie', 'FAST', 'WebBug', 'Spade', 'ZyBorg', 'rabaz',
+											'Baiduspider', 'Feedfetcher-Google', 'TechnoratiSnoop', 'Rankivabot',
+											'Mediapartners-Google', 'Sogou web spider', 'WebAlta Crawler')));
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('IP list') => array(
+		return array(	gettext('IP address list') => array(
 											'order' => 1,
 											'key' => 'hitcounter_ignoreIPList',
-							        'type' => OPTION_TYPE_CUSTOM,
-							        'desc' => gettext('Comma-separated list of IP addresses to ignore.'),
+											'type' => OPTION_TYPE_CUSTOM,
+											'desc' => gettext('Comma-separated list of IP addresses to ignore.'),
 									),
 									gettext('Filter') => array(
 											'order' => 0,
-							        'key' => 'hitcounter_ignore',
-							        'type' => OPTION_TYPE_CHECKBOX_ARRAY,
+											'key' => 'hitcounter_ignore',
+											'type' => OPTION_TYPE_CHECKBOX_ARRAY,
 											'checkboxes' => array(gettext('IP addresses')  => 'hitcounter_ignoreIPList_enable',gettext('Search Crawlers') => 'hitcounter_ignoreSearchCrawlers_enable'),
-											'desc' => gettext('Check to enable filters.'),
+											'desc' => gettext('Check to enable. If a filter is enabled, viewers from in its associated list will not count hits.'),
 									),
 									gettext('Search Crawler list') => array(
 											'order' => 2,
-											'key' => 'hitcounter_searchCrawlerList',
-							        'type' => OPTION_TYPE_TEXTAREA,
-							        'desc' => gettext('Comma-separated list of search bot user agent names.'),
+											'key' => 'hitcounter_ignoreSearchCrawlers',
+											'type' => OPTION_TYPE_TEXTAREA,
+											'desc' => gettext('Comma-separated list of search bot user agent names.'),
 									)
 		);
 	}
-	
+
 	function handleOption($option, $currentValue) {
 		switch ($option) {
 			case 'hitcounter_ignoreIPList':
@@ -74,9 +74,9 @@ class hitcounter_options {
 						$('#hitcounter_ip_button').removeAttr('disabled');
 					}
 				});
-				// ]]> -->	
+				// ]]> -->
 				</script>
-				<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>		
+				<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>
 				<?php
 				break;
 		}
@@ -85,14 +85,13 @@ class hitcounter_options {
 }
 
 function hitcounter_load_script($obj) {
-	$ignoreIPList = explode(',', str_replace(' ', '', getOption('hitcounter_ignoreIPList')));
 	if (getOption('hitcounter_ignoreIPList_enable')) {
 		$skip = in_array(getUserIP(), $ignoreIPList);
 	} else {
 		$skip = false;
 	}
 	if (getOption('hitcounter_ignoreSearchCrawlers_enable') && !$skip) {
-		$botList = explode(',', getOption('hitcounter_searchCrawlerList'));
+		$botList = explode(',', getOption('hitcounter_ignoreSearchCrawlers'));
 		foreach($botList as $bot) {
 			if(stripos($_SERVER['HTTP_USER_AGENT'], trim($bot))) {
 				$skip = true;
