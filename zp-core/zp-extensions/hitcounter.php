@@ -86,7 +86,8 @@ class hitcounter_options {
 
 function hitcounter_load_script($obj) {
 	if (getOption('hitcounter_ignoreIPList_enable')) {
-		$skip = in_array(getUserIP(), $ignoreIPList);
+    $ignoreIPAddressList = explode(',', str_replace(' ', '', getOption('hitcounter_ignoreIPList')));
+		$skip = in_array(getUserIP(), $ignoreIPAddressList);
 	} else {
 		$skip = false;
 	}
