@@ -1,18 +1,31 @@
-<?php // perhaps add option for user to choose Imagick::FILTER_*?
+<?php
 
 /**
  * Library for image handling using the Imagick library of functions
  *
+ * @internal Imagick::setResourceLimit() causes a PHP crash if called statically (fixed in Imagick 3.0.0RC1).
+ *		Imagick::getResourceLimit(), Imagick::getVersion(), Imagick::queryFonts(), and Imagick::queryFormats()
+ *		might also cause PHP to crash as well, though they can be called statically.
+ *
  * @package core
+ *
+ * @todo Split the options array to support shared options with Gmagick
+ *		Perhaps add option for user to choose Imagick::FILTER_*?
  */
 
 // force UTF-8 Ø
 
-// Suggested ImageMagick v6.3.8
-$_imagick_present = extension_loaded('imagick');
+/**
+ * Requires Imagick 2.1.0+ (Imagick 2.0.0+ requires PHP5)
+ * Imagick 2.3.0b1+ and ImageMagick 6.3.8+ suggested to avoid deprecated functions
+ */
+$_imagick_loaded = extension_loaded('imagick');
+
+$_imagick_version = phpversion('imagick');
 $_imagick_required_version = '2.1.0';
-$_imagick_version = version_compare(phpversion('imagick'), $_imagick_required_version, '>=');
-$_zp_imagick_present = $_imagick_present && $_imagick_version;
+$_imagick_version_pass = version_compare($_imagick_version, $_imagick_required_version, '>=');
+
+$_zp_imagick_present = version_compare(phpversion(), '5', '>=') && $_imagick_loaded && $_imagick_version_pass;
 
 $_zp_graphics_optionhandlers[] = new lib_Imagick_Options();
 
