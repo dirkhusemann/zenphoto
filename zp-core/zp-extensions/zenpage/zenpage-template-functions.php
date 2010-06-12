@@ -495,7 +495,7 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb()).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />'.$albumdesc;
 					break;
 				case 'latestalbums-thumbnail-customcrop':
-					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy)).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />'.$albumdesc;
+					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getAlbumLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.htmlspecialchars($albumthumbobj->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy,true)).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />'.$albumdesc;
 					break;
 				case 'latestimagesbyalbum-thumbnail':
 				case 'latestimagesbyalbum-thumbnail-customcrop':
