@@ -480,9 +480,9 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 		case 'album':
 			$_zp_page = 1;
 			$albumdesc = '<p>'.getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator).'</p>';
+			$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
 			switch($mode) {
 				case 'latestalbums-sizedimage':
-					$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
 					$class = get_class($albumthumbobj);
 					if($class != "_Image") {
 						$imgurl = htmlspecialchars($_zp_current_zenpage_news->getAlbumThumb());
