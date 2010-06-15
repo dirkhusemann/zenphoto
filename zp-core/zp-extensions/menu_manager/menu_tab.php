@@ -16,12 +16,9 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 }
 
 $page = 'edit';
-printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
+printAdminHeader();
 ?>
 <link rel="stylesheet" href="../zenpage/zenpage.css" type="text/css" />
-<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
-<!--Nested Sortables-->
-<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
 </head>
 <body>
 <?php	printLogoAndLinks(); ?>
@@ -66,7 +63,7 @@ if (isset($_GET['deletemenuset'])) {
 }
 
 // publish or un-publish page by click
-if(isset($_GET['publish'])) { 
+if(isset($_GET['publish'])) {
 	publishItem($_GET['id'],$_GET['show']);
 }
 $sql = 'SELECT COUNT(DISTINCT `menuset`) FROM '.prefix('menu');
@@ -75,7 +72,7 @@ $count = mysql_result($result, 0);
 ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
-   function newMenuSet() {
+	 function newMenuSet() {
 		var new_menuset = prompt("<?php echo gettext('Menuset id'); ?>","<?php echo 'menu_'.$count; ?>");
 		if (new_menuset) {
 			window.location = '?menuset='+encodeURIComponent(new_menuset);
@@ -100,8 +97,8 @@ $count = mysql_result($result, 0);
 	}
 	// ]]> -->
 </script>
-<h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1> 				
- 
+<h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1>
+
 <form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update" onsubmit="return confirmAction();">
 
 <p>
@@ -118,25 +115,25 @@ $count = mysql_result($result, 0);
 <br clear="all" /><br />
 
 <table class="bordered" style="margin-top: 10px">
-	<tr> 
-	  <th colspan="2" style="text-align:left">
-	  	<strong><?php echo gettext("Edit the menu"); ?></strong>
-	  	<?php echo getMenuSetSelector(true); ?>
-	  	<?php printItemStatusDropdown(); ?>
-	  	<?php
-	  	$checkarray = array(
-			  	gettext('*Bulk actions*') => 'noaction',
-			  	gettext('Delete') => 'deleteall',
-			  	gettext('Set to published') => 'showall',
-			  	gettext('Set to unpublished') => 'hideall'
-	  	);
-	  	?>
-	  	<span style="float: right">
-	  	<select name="checkallaction" id="checkallaction" size="1">
-	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+	<tr>
+		<th colspan="2" style="text-align:left">
+			<strong><?php echo gettext("Edit the menu"); ?></strong>
+			<?php echo getMenuSetSelector(true); ?>
+			<?php printItemStatusDropdown(); ?>
+			<?php
+			$checkarray = array(
+					gettext('*Bulk actions*') => 'noaction',
+					gettext('Delete') => 'deleteall',
+					gettext('Set to published') => 'showall',
+					gettext('Set to unpublished') => 'hideall'
+			);
+			?>
+			<span style="float: right">
+			<select name="checkallaction" id="checkallaction" size="1">
+			<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
 			</select>
 			</span>
-	  	<span class="buttons" style="float: right"><?php 
+			<span class="buttons" style="float: right"><?php
 if ($count > 0) {
 	$buttontext = sprintf(gettext("Delete menu set '%s'"),htmlspecialchars($menuset));
 	?>
@@ -145,7 +142,7 @@ if ($count > 0) {
 }
 ?>
 </span>
-	  </th>
+		</th>
 	</tr>
 	 <tr>
 	<td class="subhead">
@@ -154,7 +151,7 @@ if ($count > 0) {
 	</td>
 	</tr>
 	<tr>
-	 	<td colspan="2" style="padding: 0;">
+		<td colspan="2" style="padding: 0;">
 			<ul id="left-to-right" class="page-list">
 			<?php
 			if(isset($_GET['visible'])) {
@@ -171,15 +168,15 @@ if ($count > 0) {
 </table>
 <br />
 <div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
- 				<input name="update" type="hidden" value="Save Order" />
- 				<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
+				<input name="update" type="hidden" value="Save Order" />
+				<p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 </form>
 	<ul class="iconlegend">
 	<li><img src="../../images/lock_2.png" alt="" /><?php echo gettext("Menu target is password protected"); ?></li>
 	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><?php echo gettext("Show/hide"); ?></li>
 	<li><img src="../zenpage/images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete"); ?></li>
-	</ul>	
+	</ul>
 </div>
 <script type="text/javascript">
 	//<!-- <![CDATA[

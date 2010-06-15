@@ -289,7 +289,9 @@ zp-core/images/admin-buttonback.jpg
 zp-core/images/admin-headerback.jpg
 zp-core/images/admin-headlineback.jpg
 zp-core/images/admin-navtabback.jpg
+zp-core/images/arrow_in.png
 zp-core/images/arrow_left_blue_round.png
+zp-core/images/arrow_out.png
 zp-core/images/bar_graph.png
 zp-core/images/burst.png
 zp-core/images/burst1.png
@@ -370,7 +372,6 @@ zp-core/js/colorbox/images/loading.gif
 zp-core/js/colorbox/images/loading_background.png
 zp-core/js/colorbox/images/overlay.png
 zp-core/js/colorbox/jquery.colorbox-min.js
-zp-core/js/editor_config.js.php
 zp-core/js/farbtastic.css
 zp-core/js/farbtastic.js
 zp-core/js/flash_detect_min.js
@@ -674,6 +675,11 @@ zp-core/zp-extensions/tag_suggest
 zp-core/zp-extensions/tag_suggest/tag.css
 zp-core/zp-extensions/tag_suggest.php
 zp-core/zp-extensions/tiny_mce
+zp-core/zp-extensions/tiny_mce/config
+zp-core/zp-extensions/tiny_mce/config/zenpage-default-full.js.php
+zp-core/zp-extensions/tiny_mce/config/zenpage-default-light.js.php
+zp-core/zp-extensions/tiny_mce/config/zenphoto-default-with-customdatafield.js.php
+zp-core/zp-extensions/tiny_mce/config/zenphoto-default.js.php
 zp-core/zp-extensions/tiny_mce/langs
 zp-core/zp-extensions/tiny_mce/langs/de.js
 zp-core/zp-extensions/tiny_mce/langs/en.js
@@ -1454,6 +1460,7 @@ zp-core/zp-extensions/tiny_mce/utils/editable_selects.js
 zp-core/zp-extensions/tiny_mce/utils/form_utils.js
 zp-core/zp-extensions/tiny_mce/utils/mctabs.js
 zp-core/zp-extensions/tiny_mce/utils/validate.js
+zp-core/zp-extensions/tiny_mce.php
 zp-core/zp-extensions/user_groups
 zp-core/zp-extensions/user_groups/user_groups-tab.php
 zp-core/zp-extensions/user_groups.php
