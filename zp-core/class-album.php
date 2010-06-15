@@ -948,7 +948,7 @@ class Album extends PersistentObject {
 				// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
 				// Get the subalbums.
 				$oldf = zp_escape_string($oldfolder);
-				$sql = "SELECT id, folder FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
+				$sql = "SELECT id, folder FROM " . prefix('albums') . " WHERE folder LIKE '$oldf/%'";
 				$result = query_full_array($sql);
 				foreach ($result as $subrow) {
 					$newsubfolder = $subrow['folder'];
@@ -1082,9 +1082,8 @@ class Album extends PersistentObject {
 				@copy(substr($this->localpath,0,-1).'.xmp',$dest.'.xmp'); // copy the sidecar
 				// Get the subalbums.
 				$oldf = zp_escape_string($oldfolder);
-				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
+				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf/%'";
 				$result = query_full_array($sql);
-
 				$allsuccess = true;
 				foreach ($result as $subrow) {
 					$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, $subrow['folder'] == $oldfolder);
