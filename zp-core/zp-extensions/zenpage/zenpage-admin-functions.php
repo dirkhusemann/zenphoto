@@ -1743,23 +1743,4 @@ function processZenpageBulkActions($type) {
 		}
 	}
 }
-
-
-
-/**
- * Calls the configuration file for the rich text editor used for pages and news articles.
- * Default is TinyMCE, but basically other editors would be possible, too.
- * The by default included Ajax File Manager does only work with TinyMCE and FCKEditor though.
- *
- */
-switch(getOption('zenpage_tinymce_config')) {
-	case "full":
-		$tinymceconfig = "editor_config.js.php";
-		break;
-	case "light":
-	default:
-		$tinymceconfig = "editor_config_light.js.php";
-		break;
-}
-require_once($tinymceconfig);
 ?>

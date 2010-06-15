@@ -70,12 +70,7 @@ function datepickerJS() {
  *
  * @params $tinyMCE bool set to true to attempt to load tinyMCE, to false to inhibit the load.
  */
-function printAdminHeader($tinyMCE=NULL) {
-	global $_tinyMCEPresent;
-	$_tinyMCEPresent = $tinyMCE;
-	if (is_null($tinyMCE)) {
-		$_tinyMCEPresent = $tinyMCE = getOption('tinyMCEPresent');
-	}
+function printAdminHeader() {
 	$path = WEBPATH.'/'.ZENFOLDER.'/';
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	header('Content-Type: text/html; charset=' . getOption('charset'));
@@ -116,15 +111,6 @@ function printAdminHeader($tinyMCE=NULL) {
 		// ]]> -->
 	</script>
 	<?php
-	if ($tinyMCE) {
-		if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) {
-			require_once(dirname(__FILE__).'/js/editor_config.js.php');
-			if (!getOption('tinyMCEPresent')) $_tinyMCEPresent = -1;
-		} else {
-			setOption('tinyMCEPresent',0);
-			$_tinyMCEPresent = -1;
-		}
-	}
 }
 
 /**

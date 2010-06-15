@@ -72,7 +72,6 @@ if (isset($_GET['action'])) {
 			}
 			setOption('charset', sanitize($_POST['charset']),3);
 			setOption('site_email', sanitize($_POST['site_email']),3);
-			setBoolOption('tinyMCEPresent', isset($_POST['tinyMCEPresent']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
 			if ($newloc != $oldloc) {
@@ -386,6 +385,8 @@ if (isset($_GET['action'])) {
 
 }
 printAdminHeader();
+//TODO
+zp_apply_filter('texteditor_config', '','zenphoto'); 
 ?>
 <script type="text/javascript" src="js/farbtastic.js"></script>
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
@@ -695,24 +696,6 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?></p>
 					</td>
 				</tr>			
-				<tr>
-					<td><?php echo gettext("TinyMCE editing:"); ?></td>
-					<td>
-						<label>
-							<input type="checkbox" name="tinyMCEPresent" <?php if ($_tinyMCEPresent>=0) {echo 'value="1"'; if ($_tinyMCEPresent) echo ' checked="checked"';} else { echo 'disabled="disabled" value= "0"';} ?> />
-							<?php echo gettext('enabled'); ?>
-						</label>
-					</td>
-					<td>
-						<?php
-						if ($_tinyMCEPresent>=0) {
-							echo gettext('Enable TinyMCE for use in back-end editing.');
-						} else {
-							echo gettext('TinyMCE is not available.');
-						}
-						?>
-					</td>
-				</tr>
 				<tr>
 					<td width="175"><?php echo gettext("Site email:"); ?></td>
 					<td width="350">

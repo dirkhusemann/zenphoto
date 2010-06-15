@@ -461,7 +461,9 @@ if (empty($subtab) || $subtab=='albuminfo') {
 	}
 	// ]]> -->
 </script>
+ 
 <?php
+zp_apply_filter('texteditor_config', '','zenphoto');
 $result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
 $dbfields = array();
 while ($row = mysql_fetch_row($result)) {

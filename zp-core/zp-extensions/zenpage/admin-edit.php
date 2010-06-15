@@ -26,7 +26,8 @@ if(!(zp_loggedin($rights))) {
 <title><?php echo gettext("zenphoto administration"); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php
-printTextEditorConfigJS();
+//TODO
+zp_apply_filter('texteditor_config', '','zenpage'); 
 zenpageJSCSS(false, true);
 codeblocktabsJS();
 ?>

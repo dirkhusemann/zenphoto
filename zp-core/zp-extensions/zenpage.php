@@ -35,7 +35,6 @@ class zenpagecms {
 		setOptionDefault('zenpage_combinews_imagesize', '300');
 		setOptionDefault('zenpage_combinews_sortorder', 'mtime');
 		setOptionDefault('zenpage_combinews_gallerylink', 'image');
-		setOptionDefault('zenpage_tinymce_config', 'light');
 		setOptionDefault('combinews-thumbnail-cropwidth','');
 		setOptionDefault('combinews-thumbnail-cropheight','');
 		setOptionDefault('combinews-thumbnail-width', '');
@@ -83,9 +82,6 @@ class zenpagecms {
 		gettext('CombiNews: Gallery link') => array('key' => 'zenpage_combinews_gallerylink', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('image') => "image", gettext('album') => "album"),
 										'desc' => gettext("Choose if you want to link from the image entry to its image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),
-		gettext('TinyMCE configuration') => array('key' => 'zenpage_tinymce_config', 'type' => OPTION_TYPE_SELECTOR,
-										'selections' => array(gettext('full') => "full", gettext('light') => "light"),
-										'desc' => gettext("Choose if you want to load the TinyMCE text editor for pages and articles light or full featured.")),
 		gettext('CombiNews: Thumbnail crop width') => array('key' => 'combinews-thumbnail-cropwidth', 'type' => OPTION_TYPE_TEXTBOX,
 															'desc' => gettext("For <em>thumbnail custom crop</em> only. Leave empty if you don't want to use it.")),
 		gettext('CombiNews: Thumbnail crop height') => array('key' => 'combinews-thumbnail-cropheight', 'type' => OPTION_TYPE_TEXTBOX,
