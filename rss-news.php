@@ -99,8 +99,8 @@ foreach($latest as $item) {
 	<link><?php echo '<![CDATA['.$serverprotocol.'://'.$host.$link.']]>';?></link>
 	<description>
 	<?php 
-	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
-		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'">'. $title.$ext.'</a><p>' . $content . '</p>]]>';
+	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov") || ($ext == ".txt") || ($ext == ".html")) {
+		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'">'.$thumb.'</a><p>' . $content . '</p>]]>';
 	}
 	if (($ext == ".jpeg") || ($ext == ".jpg") || ($ext == ".gif") ||  ($ext == ".png")) {
 		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
