@@ -1629,7 +1629,7 @@ function dircopy($srcdir, $dstdir) {
 					}
 				}
 				else if(is_dir($srcfile)) {
-					$num += dircopy($srcfile, $dstfile, $verbose);
+					$num += dircopy($srcfile, $dstfile);
 				}
 			}
 		}
