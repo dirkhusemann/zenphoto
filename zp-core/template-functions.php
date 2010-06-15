@@ -214,8 +214,12 @@ function printAdminToolbox($id='admin') {
 					}
 				}
 				// and a delete link
-				echo "<li><a href=\"javascript:confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=".urlencode(urlencode($albumname)).');"'.
-					' title="'.gettext('Delete the album').'">'.gettext('Delete album')."</a></li>\n";
+				?>
+				<li>
+					<a href="javascript:confirmDeleteAlbum('<?php echo $zf; ?>/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($albumname)) ?>');"
+							title="<?php echo gettext('Delete the album'); ?>"><?php echo gettext('Delete album'); ?></a>
+				</li>
+				<?php 
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
