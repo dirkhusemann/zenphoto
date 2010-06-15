@@ -20,7 +20,7 @@ if(!(zp_loggedin(ZENPAGE_NEWS_RIGHTS))) {
 <head>
 <title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<?php zenpageJSCSS(false,false); ?>  
+<?php zenpageJSCSS(false); ?>  
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteCategory = "<?php echo gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!"); ?>";

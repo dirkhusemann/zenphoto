@@ -1279,10 +1279,9 @@ function printCategoriesStatistic() {
  * Actually the same as for zenphoto but with different paths since we are in the plugins folder.
  *
  * @param bool $sortable set to true for tabs with sorts.
- * @param bool $dates set true to include datapicker
  *
  */
-function zenpageJSCSS($sortable, $dates) {
+function zenpageJSCSS($sortable) {
 	?>
 	<link rel="stylesheet" href="../../admin.css" type="text/css" />
 	<link rel="stylesheet" href="zenpage.css" type="text/css" />
@@ -1291,9 +1290,6 @@ function zenpageJSCSS($sortable, $dates) {
 	<script src="../../js/jqueryui/jquery_ui_zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="../../js/jqueryui/jquery_ui_zenphoto.css" type="text/css" />
 	<?php
-	if ($dates) {
-		datepickerJS();
-	}
 	?>
 	<script type="text/javascript" src="../../js/zenphoto.js"></script>
 	<?php

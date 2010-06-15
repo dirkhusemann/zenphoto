@@ -435,8 +435,16 @@ $page = "edit";
 
 // Print our header
 printAdminHeader();
-
-if (empty($subtab) || $subtab=='albuminfo') {
+datepickerJS();
+if (!isset($_GET['album']) || $subtab=='subalbuminfo') {
+	?>
+	<!--Nested Sortables-->
+	<script type="text/javascript" src="js/nestedsortables/interface-1.2.js"></script>
+	<script type="text/javascript" src="js/nestedsortables/inestedsortable.js"></script>
+	<!--Nested Sortables End-->
+	<?php
+}
+if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo')) {
 	?>
 	<script type="text/javascript" src="js/tag.js"></script>
 	<?php

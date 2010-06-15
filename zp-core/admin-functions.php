@@ -86,11 +86,6 @@ function printAdminHeader() {
 	<script src="<?php echo $path; ?>js/zenphoto.js" type="text/javascript" ></script>
 	<script src="<?php echo $path;?>js/jqueryui/jquery_ui_zenphoto.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="<?php echo $path;?>js/jqueryui/jquery_ui_zenphoto.css" type="text/css" />
-	<?php datepickerJS(); ?>
-	<!--Nested Sortables-->
-	<script type="text/javascript" src="<?php echo $path; ?>js/nestedsortables/interface-1.2.js"></script>
-	<script type="text/javascript" src="<?php echo $path; ?>js/nestedsortables/inestedsortable.js"></script>
-	<!--Nested Sortables End-->
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="<?php echo $path; ?>js/colorbox/colorbox.css" type="text/css" />

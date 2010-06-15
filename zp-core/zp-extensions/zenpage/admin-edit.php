@@ -28,7 +28,8 @@ if(!(zp_loggedin($rights))) {
 <?php
 //TODO
 zp_apply_filter('texteditor_config', '','zenpage'); 
-zenpageJSCSS(false, true);
+zenpageJSCSS(false);
+datepickerJS();
 codeblocktabsJS();
 ?>
 <script type="text/javascript">

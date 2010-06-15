@@ -43,6 +43,7 @@ $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
 printAdminHeader();
+datepickerJS();
 ?>
 <style type="text/css">
 .schedulealbumchecklist li {

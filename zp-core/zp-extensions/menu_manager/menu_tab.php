@@ -18,6 +18,10 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 $page = 'edit';
 printAdminHeader();
 ?>
+<!--Nested Sortables-->
+<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
+<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
+<!--Nested Sortables End-->
 <link rel="stylesheet" href="../zenpage/zenpage.css" type="text/css" />
 </head>
 <body>
