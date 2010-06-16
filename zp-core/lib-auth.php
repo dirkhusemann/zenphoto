@@ -484,7 +484,7 @@ class Zenphoto_Administrator extends PersistentObject {
 	 * @return Administrator
 	 */
 	function Zenphoto_Administrator($user, $valid) {
-		parent::PersistentObject('administrators',  array('user' => $user, 'valid'=>$valid), 'user', !empty($user), empty($user));
+		parent::PersistentObject('administrators',  array('user' => $user, 'valid'=>$valid), NULL, false, empty($user));
 	}
 
 	function getID() {

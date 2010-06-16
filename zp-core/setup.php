@@ -217,7 +217,10 @@ if (file_exists(CONFIGFILE)) {
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
 			if ($result) {
-				if (@mysql_num_rows($result) > 0) $upgrade = true;
+				if (@mysql_num_rows($result) > 0) {
+					$upgrade = true;
+					@mysql_query("ALTER TABLE " . $_zp_conf_vars['mysql_prefix'].'administrators' . " ADD COLUMN `valid` int(1) default 1", $connection);
+				}
 			}
 			$environ = true;
 			require_once(dirname(__FILE__).'/admin-functions.php');
@@ -2291,15 +2294,15 @@ if (file_exists(CONFIGFILE)) {
 		}
 
 		if ($createTables) {
-			if (zp_loggedin(ADMIN_RIGHTS)) {
-				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>")."</p>";
-			} else {
+			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
 					echo "<p>".sprintf(gettext("You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"),UTILITIES_FOLDER)."</p>";
 				} else {
 					echo "<p>".gettext("You need to <a href=\"admin-users.php\">set your admin user and password</a>")."</p>";
 				}
+			} else {
+				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>")."</p>";
 			}
 		}
 
