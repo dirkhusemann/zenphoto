@@ -138,6 +138,8 @@ function isProtectedPage($pageobj=NULL) {
 			}
 		}
 		$show = "";
+		$category = sanitize($category);
+		$articles_per_page = sanitize_numeric($articles_per_page);
 		if (!empty($category)) {
 			$cat = " cat.cat_id = '".getCategoryID($category)."' AND cat.news_id = news.id ";
 		} elseif(in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
@@ -409,9 +411,10 @@ function isProtectedPage($pageobj=NULL) {
 	 * @param string $published "published" for published articles,
 	 * 													"unpublished" for un-published articles,
 	 * 													"all" for all articles
+	 * @param string $sortorder 	id, date or mtime, only for latestimages-... modes
 	 * @return array
 	 */
-	function getCombiNews($articles_per_page, $mode='',$published=NULL) {
+	function getCombiNews($articles_per_page='', $mode='',$published=NULL,$sortorder='') {
 		global $_zp_gallery, $_zp_flash_player;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
@@ -447,10 +450,12 @@ function isProtectedPage($pageobj=NULL) {
 			}
 			$albumWhere = "AND albums.show=1".$passwordcheck;
 		}
-		$limit = getLimitAndOffset(getOption("zenpage_articles_per_page"));
-		$combinews_sortorder = getOption("zenpage_combinews_sortorder");
-		if(empty($combinews_sortorder)) {
-			$combinews_sortorder = "id";
+		$articles_per_page = sanitize_numeric($articles_per_page);
+		$limit = getLimitAndOffset($articles_per_page);
+		if(empty($sortorder)) {
+			$combinews_sortorder = getOption("zenpage_combinews_sortorder");
+		} else {
+			$combinews_sortorder = sanitize($sortorder);
 		}
 		switch($mode) {
 			case "latestimages-thumbnail":
@@ -529,6 +534,50 @@ function isProtectedPage($pageobj=NULL) {
 				");
 				//echo "<pre>"; print_r($result); echo "</pre>";
 				//$result = "";
+				break;
+			case "latestupdatedalbums-thumbnail":
+			case "latestupdatedalbums-thumbnail-customcrop":
+			case "latestupdatedalbums-sizedimage":
+				$latest = getNewsArticles($articles_per_page,'',NULL,true);
+				$counter = '';
+				foreach($latest as $news) {
+					$article = new ZenpageNews($news['titlelink']);
+					if (checkNewsAccess($article, $hint, $show)) {
+						$counter++;
+						$latestnews[$counter] = array(
+						"albumname" => $article->getTitle(),
+						"titlelink" => $article->getTitlelink(),
+						"date" => $article->getDateTime(),
+						"type" => "news"
+					);
+					}
+				}
+				$albums = getAlbumStatistic($articles_per_page, "latestupdated");
+				$latestalbums = array();
+				$counter = "";
+				foreach($albums as $album) {
+					$counter++;
+					$tempalbum = new Album($_zp_gallery, $album['folder']);
+					$tempalbumthumb = $tempalbum->getAlbumThumbImage();
+					$timestamp = $tempalbum->get('mtime');
+					if($timestamp == 0) {
+						$albumdate = $tempalbum->getDateTime();
+					} else {
+						$albumdate = strftime('%Y-%m-%d %T',$timestamp);
+					}
+					$latestalbums[$counter] = array(
+					"albumname" => $tempalbum->getFolder(),
+					"titlelink" => $tempalbum->getTitle(),
+					"date" => $albumdate,
+					"type" => 'albums'
+					);
+				}
+				//$latestalbums = array_merge($latestalbums, $item);
+				$latest = array_merge($latestnews, $latestalbums);
+				$result = sortMultiArray($latest,"date",true);
+			  if(count($result) > $articles_per_page) {
+					$result = array_slice($result,0,10);
+				}
 				break;
 		}
 		//$result = "";

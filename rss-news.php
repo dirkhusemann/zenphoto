@@ -58,57 +58,59 @@ foreach($latest as $item) {
 	$category = "";
 	$categories = "";
 	//get the type of the news item
-	if(empty($item['thumb'])) {
-		$title = htmlspecialchars(get_language_string($item['title'],$locale), ENT_QUOTES);
-		$link = getNewsURL($item['titlelink']);
-		$count2 = 0;
-		$newsobj = new ZenpageNews($item['titlelink']);
-		$category = $newsobj->getCategories();
-		foreach($category as $cat){
-			$count2++;
-			if($count2 != 1) {
-				$categories = $categories.", ";
+	switch($item['type']) {
+		case 'news':
+			$obj = new ZenpageNews($item['titlelink']);
+			$title = htmlspecialchars(get_language_string($obj->get('title'),$locale), ENT_QUOTES);
+			$link = getNewsURL($obj->getTitlelink());
+			$count2 = 0;
+			$category = $obj->getCategories();
+			foreach($category as $cat){
+				$count2++;
+				if($count2 != 1) {
+					$categories = $categories.", ";
+				}
+				$categories = $categories.get_language_string($cat['cat_name'], $locale);
 			}
-			$categories = $categories.get_language_string($cat['cat_name'], $locale);
-		}
-		$thumb = "";
-		$filename = "";
-		$content = get_language_string($item['content'],$locale);
-		$type = "news";
-		$ext = "";
-		$album = "";
-	} else {
-		$categories = $item['category']->getTitle();
-		$title = strip_tags(htmlspecialchars($item['title'], ENT_QUOTES));
-		$link = $item['titlelink'];
-		$content = $item['content'];
-		$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$item['thumb']."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
-		$filename = $item['filename'];
-	
-		$type = "image";
-		$ext = strtolower(strrchr($filename, "."));
-		$album = $item['category']->getFolder();
-		$fullimagelink = $host.WEBPATH."/albums/".$item['category']->getFolder()."/".$item['filename'];
-		$imagefile = "albums/".$item['category']->getFolder()."/".$item['filename'];
-		$mimetype = getMimeType($ext);
+			$thumb = "";
+			$filename = "";
+			$content = truncate_string(get_language_string($obj->get('content'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
+			$content = '<![CDATA[<p>'.$content.'</p>]]>';
+			$type = "news";
+			$ext = "";
+			$album = "";
+			break;
+		case 'images':
+			$albumobj = new Album($_zp_gallery,$item['albumname']);
+			$obj = newImage($albumobj,$item['titlelink']);
+			$categories = $albumobj->getTitle();
+			$title = strip_tags(htmlspecialchars($obj->get('title'), ENT_QUOTES));
+			$link = $obj->getImageLink();
+			$content = truncate_string(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
+			if(isImagePhoto($obj)) {
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
+			} else {
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a><p>'.$content.'</p>]]>';
+			}
+			//$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
+			$filename = $obj->getFilename();
+			$type = "image";
+			$ext = strtolower(strrchr($filename, "."));
+			$album = $albumobj->getFolder();
+			$fullimagelink = $host.WEBPATH."/albums/".$album."/".$filename;
+			$imagefile = "albums/".$album."/".$filename;
+			$mimetype = getMimeType($ext);
+			break;
+		case 'albums':
+			break;
 	}
-	$categories = htmlspecialchars($categories);
+	$categories = htmlspecialchars($categories);			
 ?>
 <item>
 	<title><?php echo $title." (".$categories.")"; ?></title>
 	<link><?php echo '<![CDATA['.$serverprotocol.'://'.$host.$link.']]>';?></link>
 	<description>
-	<?php 
-	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov") || ($ext == ".txt") || ($ext == ".html")) {
-		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'">'.$thumb.'</a><p>' . $content . '</p>]]>';
-	}
-	if (($ext == ".jpeg") || ($ext == ".jpg") || ($ext == ".gif") ||  ($ext == ".png")) {
-		echo '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
-	}
-	if (empty($ext)) {
-		echo '<![CDATA[<p>'.$content.'</p>]]>';
-	}
-	?>
+	<?php echo $content;	?>
 </description>
 <?php if(getOption("feed_enclosure") AND !empty($item['thumb'])) { ?>
 	<enclosure url="<?php echo $serverprotocol; ?>://<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" length="<?php echo filesize($imagefile); ?>" />

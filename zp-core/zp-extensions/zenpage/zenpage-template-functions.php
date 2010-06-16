@@ -1053,8 +1053,6 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 /**
  * Gets the latest news either only news articles or with the latest images or albums
  *
- * NOTE: Latest images and albums require Zenphoto's image_album_statistic plugin
- * 
  * NOTE: This function excludes articles that are password protected via a category for not logged in users!
  *
  * @param int $number The number of news items to get
@@ -1064,130 +1062,42 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
  * 											 "with_latest_images_mtime" for news articles with the latest images by mtime (upload date)
  * 											 "with_latest_albums" for news articles with the latest albums by id
  * 											 "with_latestupdated_albums" for news articles with the latest updated albums
- * @param string $category Optional news articles by category (only "none" option"
+ * @param string $category Optional news articles by category (only "none" option)
  * @return array
  */
 function getLatestNews($number=2,$option='none', $category='') {
 	global $_zp_current_zenpage_news;
-	if(!empty($category) AND $option =="none") {
-		$latest = getNewsArticles($number,$category,NULL,true);
-	} else {
-		$latest = getNewsArticles($number,'',NULL,true);
-	}
-	$latestnews = array();
-	$counter = "";
-	$hint = $show = '';
-	foreach($latest as $news) {
-		$article = new ZenpageNews($news['titlelink']);
-		if (checkNewsAccess($article, $hint, $show)) {
-			$counter++;
-			$latestnews[$counter] = array(
-					"id" => $article->getID(),
-					"title" => $article->getTitle(),
-					"titlelink" => $article->getTitlelink(),
-					"category" => $article->getCategories(),
-					"content" => $article->getContent(),
-					"date" => $article->getDateTime(),
-					"thumb" => "",
-					"filename" => ""
-					);
-		}
-	}
-	$latest = $latestnews;
-	if($option == "with_latest_images" OR $option == "with_latest_images_date") {
-		switch($option) {
-			case "with_latest_images":
-				$images = getImageStatistic($number, "latest");
-				break;
-			case "with_latest_images_date":
-				$images = getImageStatistic($number, "latest-date");
-				break;
-			case "with_latest_images_mtime":
-				$images = getImageStatistic($number, "latest-mtime");
-				break;
-		}
-		$latestimages = array();
-		$counter = "";
-		foreach($images as $image) {
-			$counter++;
-			switch($option) {
-				case "with_latest_images":
-				case "with_latest_images_date":
-					$imagedate = $image->getDateTime();
-					break;
-				case "with_latest_images_mtime":
-					$timestamp = $image->get('mtime');
-					if($timestamp == 0) {
-						$imagedate = $image->getDateTime();
-					} else {
-						$imagedate = strftime('%Y-%m-%d %T',$timestamp);
-					}
-					break;
+	$latest = '';
+	$number = sanitize_numeric($number);
+	switch($option) {
+		case 'none':
+			if(!empty($category)) {
+				$latest = getNewsArticles($number,$category,NULL,true);
+			} else {
+				$latest = getNewsArticles($number,'',NULL,true);
 			}
-			$latestimages[$counter] = array(
-					"id" => $image->get("id"),
-					"title" => $image->getTitle(),
-					"titlelink" => $image->getImageLink(),
-					"category" => $image->getAlbum(),
-					"content" => $image->getDesc(),
-					"date" => $imagedate,
-					"thumb" => $image->getThumb(),
-					"filename" => $image->getFileName()
-			);
-		}
-		//$latestimages = array_merge($latestimages, $item);
-		$latest = array_merge($latest, $latestimages);
-		$latest = sortMultiArray($latest,"date",true);
-	}
-	if($option == "with_latest_albums" OR $option == "with_latestupdated_albums") {
-		switch($option) {
-			case "with_latest_albums":
-				$albums = getAlbumStatistic($number, "latest");
-				break;
-			case "with_latestupdated_albums":
-				$albums = getAlbumStatistic($number, "latestupdated");
-				break;
-		}
-		$latestalbums = array();
-		$counter = "";
-		foreach($albums as $album) {
-			$counter++;
-	
-			$tempalbum = new Album($_zp_gallery, $album['folder']);
-			$tempalbumthumb = $tempalbum->getAlbumThumbImage();
-			switch($option) {
-				case "with_latest_images":
-				case "with_latest_images_date":
-					$albumdate = $tempalbum->getDateTime();
-					break;
-				case "with_latest_images_mtime":
-					$timestamp = $tempalbum->get('mtime');
-					if($timestamp == 0) {
-						$albumdate = $tempalbum->getDateTime();
-					} else {
-						$albumdate = strftime('%Y-%m-%d %T',$timestamp);
-					}
-					break;
-			}
-			$latestalbums[$counter] = array(
-					"id" => $tempalbum->getAlbumID(),
-					"title" => $tempalbum->getTitle(),
-					"titlelink" => $tempalbum->getFolder(),
-					"category" => "",
-					"content" => $tempalbum->getDesc(),
-					"date" => $albumdate,
-					"thumb" => $tempalbumthumb->getThumb(),
-					"filename" => ""
-			);
-		}
-		//$latestalbums = array_merge($latestalbums, $item);
-		$latest = array_merge($latestnews, $latestalbums);
-		$latest = sortMultiArray($latest,"date",true);
+			break;
+		case 'with_latest_images':
+			$latest = getCombiNews($number,'latestimages-thumbnail',NULL,'id');
+			break;
+		case 'with_latest_images_date':
+			$latest = getCombiNews($number,'latestimages-thumbnail',NULL,'date');
+			break;
+		case 'with_latest_images_mtime':
+			$latest = getCombiNews($number,'latestimages-thumbnail',NULL,'mtime');
+			break;
+		case 'with_latest_albums':
+			$latest = getCombiNews($number,'latestalbums-thumbnail',NULL,'id');
+			break;
+		case 'with_latestupdated_albums':
+			$latest = getCombiNews($number,'latestupdatedalbums-thumbnail',NULL,'');
+			break;
+		/*case "latestimagesbyalbum-thumbnail":
+			$latest = getCombiNews($number,'latestalbums-thumbnail',NULL,'id');
+			break; */
 	}
 	return $latest;
 }
-
-
 
 
 /**
@@ -1211,49 +1121,57 @@ function getLatestNews($number=2,$option='none', $category='') {
  */
 function printLatestNews($number=5,$option='with_latest_images', $category='', $showdate=true, $showcontent=true, $contentlength=70, $showcat=true){
 	global $_zp_gallery, $_zp_current_zenpage_news;
-	$latest = getLatestNews($number,$option,$category,true);
+	//trigger_error(gettext('printLatestNews is deprecated. Use printLatestCombiNews().'), E_USER_NOTICE);
+	$latest = getLatestNews($number,$option,$category);
 	echo "\n<ul id=\"latestnews\">\n";
 	$count = "";
 	foreach($latest as $item) {
 		$count++;
 		$category = "";
 		$categories = "";
-		//get the type of the news item
-		if(empty($item['thumb'])) {
-			$title = htmlspecialchars($item['title']);
-			$link = getNewsURL($item['titlelink']);
-			$count2 = 0;
-			$newsobj = new ZenpageNews($item['titlelink']);
-			$category = $newsobj->getCategories();
-			foreach($category as $cat){
-				$count2++;
-				if($count2 != 1) {
-					$categories = $categories.", ";
+		switch($item['type']) {
+			case 'news':
+				$obj = new ZenpageNews($item['titlelink']);
+				$title = htmlspecialchars($obj->getTitle());
+				$link = getNewsURL($item['titlelink']);
+				$count2 = 0;
+				$category = $obj->getCategories();
+				foreach($category as $cat){
+					$count2++;
+					if($count2 != 1) {
+						$categories = $categories.", ";
+					}
+					$categories = $categories.get_language_string($cat['cat_name']);
 				}
-				$categories = $categories.get_language_string($cat['cat_name']);
-			}
-			$thumb = "";
-			$content = strip_tags($item['content']);
-			$type = "news";
-		} else {
-			if($option == "with_latest_images" OR $option == "with_latest_images_date") {
-				$categories = $item['category']->getTitle();
-				$title = htmlspecialchars($item['title']);
-				$link = htmlspecialchars($item['titlelink']);
-				$content = $item['content'];
-				$thumb = "<a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title))."\"><img src=\"".$item['thumb']."\" alt=\"".strip_tags($title)."\" /></a>\n";
+				$thumb = "";
+				$content = strip_tags($obj->getContent());
+				$date = zpFormattedDate(getOption('date_format'),strtotime($item['date']));
+				$type = 'news';
+				break;
+			case 'images':
+				$obj = newImage(new Album($_zp_gallery,$item['albumname']),$item['titlelink']);
+				$categories = $item['albumname'];
+				$title = htmlspecialchars($obj->getTitle());
+				$link = htmlspecialchars($obj->getImageLink());
+				$content = $obj->getDesc();
+				if($option == "with_latest_image_date") {
+					$date = zpFormattedDate(getOption('date_format'),$item['date']);
+				} else {
+					$date = zpFormattedDate(getOption('date_format'),strtotime($item['date']));
+				}
+				$thumb = "<a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title))."\"><img src=\"".$obj->getThumb()."\" alt=\"".strip_tags($title)."\" /></a>\n";
 				$type = "image";
-			}
-			if($option == "with_latest_albums" OR $option == "with_latestupdated_albums") {
-				//$image = newImage(new Album($_zp_gallery, $item['categorylink']), $item['titlelink']);
-				$category = $item['titlelink'];
+				break;
+			case 'albums':
+				$obj = new Album($_zp_gallery,$item['albumname']);
+				$title = htmlspecialchars($obj->getTitle());
 				$categories = "";
-				$link = htmlspecialchars($item['titlelink']);
-				$title = htmlspecialchars($item['title']);
-				$thumb = "<a href=\"".$link."\" title=\"".$title."\"><img src=\"".$item['thumb']."\" alt=\"".strip_tags($title)."\" /></a>\n";
-				$content = $item['content'];
+				$link = htmlspecialchars($obj->getAlbumLink());
+				$thumb = "<a href=\"".$link."\" title=\"".$title."\"><img src=\"".$obj->getAlbumThumb()."\" alt=\"".strip_tags($title)."\" /></a>\n";
+				$content = $obj->getDesc();
+				$date = zpFormattedDate(getOption('date_format'),strtotime($item['date']));
 				$type = "album";
-			}
+				break;
 		}
 		echo "<li>";
 		if(!empty($thumb)) {
@@ -1261,11 +1179,6 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 		}
 		echo "<h3><a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title,ENT_QUOTES))."\">".htmlspecialchars($title)."</a></h3>\n";;
 		if($showdate) {
-			if($option == "with_latest_image_date" AND $type == "image") {
-				$date = zpFormattedDate(getOption('date_format'),$item['date']);
-			} else {
-				$date = zpFormattedDate(getOption('date_format'),strtotime($item['date']));
-			}
 			echo "<p class=\"latestnews-date\">". $date."</p>\n";
 		}
 		if($showcontent) {
@@ -1281,7 +1194,6 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 	}
 	echo "</ul>\n";
 }
-
 
 /************************************************/
 /* News article URL functions
