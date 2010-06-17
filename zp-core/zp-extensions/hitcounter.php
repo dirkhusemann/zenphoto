@@ -20,18 +20,21 @@ zp_register_filter('load_theme_script', 'hitcounter_load_script');
 class hitcounter_options {
 
 	function hitcounter_options() {
+		setOptionDefault('hitcounter_ignoreIPList_enable',0);
+		setOptionDefault('hitcounter_ignoreSearchCrawlers_enable',0);
 		setOptionDefault('hitcounter_ignoreIPList','');
-		setOptionDefault('hitcounter_searchCrawlerList', implode(',', array('Teoma', 'alexa', 'froogle', 'Gigabot', 'inktomi',
+		setOptionDefault('hitcounter_searchCrawlerList_default', implode(',', array('Teoma', 'alexa', 'froogle', 'Gigabot', 'inktomi',
 											'looksmart', 'URL_Spider_SQL', 'Firefly', 'NationalDirectory',
 											'Ask Jeeves', 'TECNOSEEK', 'InfoSeek', 'WebFindBot', 'girafabot',
 											'crawler', 'www.galaxy.com', 'Googlebot', 'Scooter', 'Slurp',
 											'msnbot', 'appie', 'FAST', 'WebBug', 'Spade', 'ZyBorg', 'rabaz',
 											'Baiduspider', 'Feedfetcher-Google', 'TechnoratiSnoop', 'Rankivabot',
 											'Mediapartners-Google', 'Sogou web spider', 'WebAlta Crawler')));
+		setOptionDefault('hitcounter_searchCrawlerList', getOption('hitcounter_searchCrawlerList_default'));
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('IP address list') => array(
+		return array(	gettext('IP Address list') => array(
 											'order' => 1,
 											'key' => 'hitcounter_ignoreIPList',
 											'type' => OPTION_TYPE_CUSTOM,
@@ -46,15 +49,38 @@ class hitcounter_options {
 									),
 									gettext('Search Crawler list') => array(
 											'order' => 2,
-											'key' => 'hitcounter_ignoreSearchCrawlers',
+											'key' => 'hitcounter_searchCrawlerList',
 											'type' => OPTION_TYPE_TEXTAREA,
+											'multilingual' => false,
 											'desc' => gettext('Comma-separated list of search bot user agent names.'),
+									),
+									' ' => array(
+											'order' => 3,
+											'key' => 'hitcounter_set_defaults',
+											'type' => OPTION_TYPE_CUSTOM,
+											'desc' => gettext('Reset options to their default settjngs.')
 									)
 		);
 	}
 
 	function handleOption($option, $currentValue) {
 		switch ($option) {
+			case 'hitcounter_set_defaults':
+				?>
+				<script language="javascript" type="text/javascript">
+				// <!-- <![CDATA[
+				function hitcounter_defaults() {
+					$('#hitcounter_ignoreIPList').val('');
+					$('#hitcounter_ip_button').removeAttr('disabled');
+					$('#hitcounter_ignoreIPList_enable').removeAttr('checked');
+					$('#hitcounter_ignoreSearchCrawlers_enable').removeAttr('checked');
+					$('#hitcounter_searchCrawlerList').val('<?php echo getOption('hitcounter_searchCrawlerList_default'); ?>');
+				}
+				// ]]> -->
+				</script>
+				<label><input id="hitcounter_reset_button" type="button" value="<?php echo gettext('Defaults')?>" onclick="hitcounter_defaults();" /></label>
+				<?php
+				break;
 			case 'hitcounter_ignoreIPList':
 				?>
 				<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX; ?>'text-hitcounter_ignoreIPList" value="0" />
@@ -66,7 +92,8 @@ class hitcounter_options {
 						$('#hitcounter_ignoreIPList').val('<?php echo getUserIP(); ?>');
 					} else {
 						$('#hitcounter_ignoreIPList').val($('#hitcounter_ignoreIPList').val()+',<?php echo getUserIP(); ?>');
-					}$('#hitcounter_ip_button').attr('disabled','disabled');
+					}
+					$('#hitcounter_ip_button').attr('disabled','disabled');
 				}
 				jQuery(window).load(function(){
 					var current = $('#hitcounter_ignoreIPList').val();
@@ -92,7 +119,7 @@ function hitcounter_load_script($obj) {
 		$skip = false;
 	}
 	if (getOption('hitcounter_ignoreSearchCrawlers_enable') && !$skip) {
-		$botList = explode(',', getOption('hitcounter_ignoreSearchCrawlers'));
+		$botList = explode(',', getOption('hitcounter_searchCrawlerList'));
 		foreach($botList as $bot) {
 			if(stripos($_SERVER['HTTP_USER_AGENT'], trim($bot))) {
 				$skip = true;

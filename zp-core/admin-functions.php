@@ -545,9 +545,15 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 							if ($multilingual) {
 								print_language_string_list($v, $key, $type, NULL, $editor);
 							} else {
-								?>
-								<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo htmlentities($v); ?>" />
-								<?php
+								if ($type == OPTION_TYPE_TEXTAREA) {
+									?>
+									<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" cols="<?php echo TEXTAREA_COLUMNS; ?>"	style="width: 320px" rows="6"><?php  echo htmlentities($v,ENT_COMPAT,getOption("charset")); ?></textarea>							
+									<?php
+								} else {
+									?>
+									<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo htmlentities($v,ENT_COMPAT,getOption("charset")); ?>" />
+									<?php
+								}
 							}
 							?>
 						</td>
