@@ -222,7 +222,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!-- Smoothimage section -->
 						<div id="smoothImages">
 						<?php
-						while (next_image(false, $firstPageImages)){
+						while (next_image(true, 0)){
 							if (isImagePhoto()) { // Smoothgallery does not do videos
 						?>
 							<div class="imageElement">
