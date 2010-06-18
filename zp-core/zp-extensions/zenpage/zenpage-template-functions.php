@@ -526,9 +526,9 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 							case 'latestimagesbyalbum-sizedimage':
 								if(getOption('combinews-latestimagesbyalbum-imgtitle')) $articlecontent .= '<h4>'.$imageobj->getTitle().'</h4>';
 								if(isImageVideo($imageobj)) {
-									$articlecontent = getNewsVideoContent($imageobj).$imagedesc;
+									$articlecontent .= getNewsVideoContent($imageobj).$imagedesc;
 								} else {
-									$articlecontent = '<a href="'.htmlspecialchars($imageobj->getImageLink()).'" title="'.html_encode($imageobj->getTitle()).'"><img src="'.htmlspecialchars($imageobj->getSizedImage($size)).'" alt="'.html_encode($imageobj->getTitle()).'" /></a>'.$imagedesc;
+									$articlecontent .= '<a href="'.htmlspecialchars($imageobj->getImageLink()).'" title="'.html_encode($imageobj->getTitle()).'"><img src="'.htmlspecialchars($imageobj->getSizedImage($size)).'" alt="'.html_encode($imageobj->getTitle()).'" /></a>'.$imagedesc;
 								}
 								break;
 						} // switch "latest images by album end"
@@ -1075,6 +1075,21 @@ function getLatestNews($number=2,$option='none', $category='') {
 				$latest = getNewsArticles($number,$category,NULL,true);
 			} else {
 				$latest = getNewsArticles($number,'',NULL,true);
+			}
+			$counter = '';
+			$latestnews = array();
+			foreach($latest as $item) {
+				$article = new ZenpageNews($item['titlelink']);
+				if (checkNewsAccess($article, $hint, $show)) {
+						$counter++;
+						$latestnews[$counter] = array(
+						"albumname" => $article->getTitle(),
+						"titlelink" => $article->getTitlelink(),
+						"date" => $article->getDateTime(),
+						"type" => "news"
+					);
+				}
+				$latest = $latestnews;
 			}
 			break;
 		case 'with_latest_images':
