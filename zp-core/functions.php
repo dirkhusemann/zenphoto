@@ -361,13 +361,15 @@ function is_valid_email_zp($input_email) {
  * @param string $from_mail Optional sender for the email.
  * @param string $from_name Optional sender for the name.
  * @param array $email_list a list of email addresses
+ * @param array $cc_addresses a list of addresses to send copies to.
+ * @param array $bcc_addresses a list of addresses to send blind copies to.
  *
  * @return string
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
+function zp_mail($subject, $message, $email_list=NULL, $cc_addresses=NULL, $bcc_addresses=NULL) {
 	global $_zp_authority;
 	$result = '';
 	if (is_null($email_list)) {
@@ -376,7 +378,7 @@ function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
 	if (is_null($cc_addresses)) {
 		$cc_addresses = array();
 	}
-	if (count($email_list) > 0) {
+	if (count($email_list) + count($bcc_addresses) > 0) {
 		if (zp_has_filter('sendmail')) {
 			// Make sure no one is trying to use our forms to send Spam
 			// Stolen from Hosting Place:
@@ -414,7 +416,14 @@ function zp_mail($subject, $message, $email_list=null, $cc_addresses=NULL) {
 			}
 
 			// Send the mail
-			$result = zp_apply_filter('sendmail', '', $email_list, $subject, $message, $from_mail, $from_name, $cc_addresses); // will be true if all mailers succeeded
+			if (count($email_list) > 0) {
+				$result = zp_apply_filter('sendmail', '', $email_list, $subject, $message, $from_mail, $from_name, $cc_addresses); // will be true if all mailers succeeded
+			}
+			if (count($bcc_addresses) > 0) {
+				foreach ($bcc_addresses as $bcc) {
+					$result = zp_apply_filter('sendmail', '', array($bcc), $subject, $message, $from_mail, $from_name, array()); // will be true if all mailers succeeded
+				}
+			}
 		} else {
 			$result = gettext('Mail send failed. There is no mail handler configured.');
 		}
