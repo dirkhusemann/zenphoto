@@ -23,7 +23,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 require_once(dirname(__FILE__). "/".ZENFOLDER.'/controller.php');
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
-$obj = '';
+$_zp_obj = '';
 
 // Display an arbitrary theme-included PHP page
 if (isset($_GET['p'])) {
@@ -35,17 +35,17 @@ if (isset($_GET['p'])) {
 		$_GET['z'] = true;
 	}
 	if (isset($_GET['z'])) { // system page
-		$_zp_gallery_page = basename($obj = ZENFOLDER."/".$page.".php");
+		$_zp_gallery_page = basename($_zp_obj = ZENFOLDER."/".$page.".php");
 	} else {
-		$obj = THEMEFOLDER."/$theme/$page.php";
-		$_zp_gallery_page = basename($obj);
+		$_zp_obj = THEMEFOLDER."/$theme/$page.php";
+		$_zp_gallery_page = basename($_zp_obj);
 	}
 
 // Display an Image page.
 } else if (in_context(ZP_IMAGE)) {
 	handleSearchParms('image', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
-	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
+	$_zp_gallery_page = basename($_zp_obj = THEMEFOLDER."/$theme/image.php");
 	
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
@@ -57,13 +57,13 @@ if (isset($_GET['p'])) {
 		handleSearchParms('album', $_zp_current_album);
 	}
 	$theme = setupTheme();
-	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
+	$_zp_gallery_page = basename($_zp_obj = THEMEFOLDER."/$theme/album.php");
 
 	// Display the Index page.
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms('index');
 	$theme = setupTheme();
-	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
+	$_zp_gallery_page = basename($_zp_obj = THEMEFOLDER."/$theme/index.php");
 }
 
 if (!isset($theme)) {
@@ -87,9 +87,9 @@ if (file_exists($custom)) {
 
 
 if ($zp_request) {
-	$obj = zp_apply_filter('load_theme_script',$obj);
+	$_zp_obj = zp_apply_filter('load_theme_script',$_zp_obj);
 }
-if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
+if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($_zp_obj))) {
 	$hint = $show = false;
 	if (checkforPassword($hint, $show)) { // password protected object
 		$passwordpage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/password.php';
@@ -100,7 +100,7 @@ if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
 		header("Status: 200 OK");
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		include($passwordpage);
-		exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );
+		exposeZenPhotoInformations($_zp_obj, $_zp_loaded_plugins, $theme, $_zp_filters);
 		exit();
 	}
 
@@ -113,7 +113,7 @@ if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
 	header("HTTP/1.0 200 OK");
 	header("Status: 200 OK");
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-	include(internalToFilesystem($obj));
+	include(internalToFilesystem($_zp_obj));
 
 } else {
 	// If the requested object does not exist, issue a 404 and redirect to the theme's
@@ -134,7 +134,7 @@ if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($obj))) {
 	$_zp_HTML_cache = NULL;
 }
 
-exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );
+exposeZenPhotoInformations($_zp_obj, $_zp_loaded_plugins, $theme, $_zp_filters);
 
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
 
