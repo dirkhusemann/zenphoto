@@ -69,19 +69,16 @@ if(isset($_GET['sendmail'])) {
 	if(isset($_POST['message'])) {
 		$message = sanitize($_POST['message']);
 	}
-	$cc_addresses = NULL;
-	$count = '';
+	$cc_addresses = array();
 	$admincount = count($admins);
 	foreach($admins as $admin) {
-		$count++;
 		if (isset($_POST["admin_".$admin['id']])) {
-			$cc_addresses .= $admin['email'].", ";
+			$cc_addresses[] = $admin['email'];
 		}
 	}
-	$cc_addresses = substr($cc_addresses,0,-2);
 	$currentadminmail = $_zp_current_admin_obj->getEmail();
 	if(!empty($currentadminmail)) {
-		$cc_addresses .= ', '.$currentadminmail;
+		$cc_addresses[] = $currentadminmail;
 	} 
 	$err_msg = zp_mail($subject, $message, null, $cc_addresses);	
 	if($err_msg) {
