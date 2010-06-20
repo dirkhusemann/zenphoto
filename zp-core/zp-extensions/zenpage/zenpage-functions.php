@@ -407,7 +407,19 @@ function isProtectedPage($pageobj=NULL) {
 	 *
 	 * @param int $articles_per_page The number of articles to get
 	 * @param string $mode 	"latestimages-thumbnail"
-	 * 											"latestimages-sizedimage"
+	 *											"latestimages-thumbnail-customcrop"	
+	 *											"latestimages-sizedimage"
+	 *											"latestalbums-thumbnail"
+	 *		 									"latestalbums-thumbnail-customcrop"
+	 *		 									"latestalbums-sizedimage"
+	 *		 									"latestimagesbyalbum-thumbnail"
+	 *		 									"latestimagesbyalbum-thumbnail-customcrop"
+	 *		 									"latestimagesbyalbum-sizedimage"
+	 *		 									"latestupdatedalbums-thumbnail"
+	 *		 									"latestupdatedalbums-thumbnail-customcrop"
+	 *		 									"latestupdatedalbums-sizedimage"
+	 *	NOTE: The "latestupdatedalbums" variants do NOT support pagination as required on the news loop!
+	 *
 	 * @param string $published "published" for published articles,
 	 * 													"unpublished" for un-published articles,
 	 * 													"all" for all articles
