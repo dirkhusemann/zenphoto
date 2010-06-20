@@ -2581,9 +2581,10 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
  * @param string $option type of RSS: "News" feed for all news articles
  * 																		"Category" for only the news articles of the category that is currently selected
  * 																		"NewsWithImages" for all news articles and latest images
- * 																		"Comments" for all news articles and latest images
+ * 																		"Comments" for all news articles and pages
  * 																		"Comments-news" for comments of only the news article it is called from
  * 																		"Comments-page" for comments of only the page it is called from
+ * 																		"Comments-all" for comments from all albums, images, news articels and pages			
  * @param string $categorylink The specific category you want a RSS feed from (only 'Category' mode)
  * @param string $prev text to before before the link
  * @param string $linktext title of the link
@@ -2632,17 +2633,22 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
 			break;
 		case "Comments":
 			if (getOption('RSS_article_comments')) {
-				echo $prev."<a $class href=\"".WEBPATH."/rss-news-comments.php?lang=".$lang."\" title=\"".gettext("Zenpage Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-comments.php?type=zenpage&amp;lang=".$lang."\" title=\"".gettext("Zenpage Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Comments-news":
 			if (getOption('RSS_article_comments')) {
-				echo $prev."<a $class href=\"".WEBPATH."/rss-news-comments.php?id=".getNewsID()."&amp;title=".urlencode(getNewsTitle())."&amp;type=news&amp;lang=".$lang."\" title=\"".gettext("News article comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-comments.php?id=".getNewsID()."&amp;title=".urlencode(getNewsTitle())."&amp;type=news&amp;lang=".$lang."\" title=\"".gettext("News article comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Comments-page":
 			if (getOption('RSS_article_comments')) {
-				echo $prev."<a $class href=\"".WEBPATH."/rss-news-comments.php?id=".getPageID()."&amp;title=".urlencode(getPageTitle())."&amp;type=page&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-comments.php?id=".getPageID()."&amp;title=".urlencode(getPageTitle())."&amp;type=page&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			}
+			break;
+			case "Comments-all":
+			if (getOption('RSS_article_comments')) {
+				echo $prev."<a $class href=\"".WEBPATH."/rss-comments.php?type=allcomments&amp;lang=".$lang."\" title=\"".gettext("Page Comments RSS")."\"  rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 	}

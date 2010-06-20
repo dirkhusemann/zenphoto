@@ -3780,7 +3780,7 @@ function getAlbumId() {
  * @param string $option type of RSS: "Gallery" feed for latest images of the whole gallery
  * 																		"Album" for latest images only of the album it is called from
  * 																		"Collection" for latest images of the album it is called from and all of its subalbums
- * 																		"Comments" for all comments
+ * 																		"Comments" for all comments of all albums and images
  * 																		"Comments-image" for latest comments of only the image it is called from
  * 																		"Comments-album" for latest comments of only the album it is called from
  * 																		"AlbumsRSS" for latest albums
@@ -3824,7 +3824,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 			break;
 		case "Comments":
 			if (getOption('RSS_comments')) {
-				echo $prev."<a $class href=\"".WEBPATH."/rss-comments.php?lang=".$lang."\" title=\"".gettext("Latest comments RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+				echo $prev."<a $class href=\"".WEBPATH."/rss-comments.php?type=gallery&amp;lang=".$lang."\" title=\"".gettext("Latest comments RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			}
 			break;
 		case "Comments-image":
