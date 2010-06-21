@@ -9,7 +9,7 @@ require_once("js/dialog.php");
 ?>
 <!-- tinyZenpage - A TinyMCE plugin for Zenphoto with Zenpage
 		 Version: 1.0.6.1
-		 Author: Malte Müller (acrylian) 
+		 Author: Malte Müller (acrylian), Stephen Billard (sbillard) 
 		 inspired by Alessandro "Simbul" Morandi's  ZenphotoPress (http://simbul.bzaar.net/zenphotopress)
 		 License: GPL v2 http://www.gnu.org/licenses/gpl.html -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -126,7 +126,6 @@ require_once("js/dialog.php");
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("The windows does not close automatically so you can include several images one after another.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
-	 			echo gettext("The tinyZenpage page on the Zenpage project site: <a href='http://zenpage.maltem.de/pages/tinyZenpage' title='Zenpage project site'>zenpage.maltem.de/pages/tinyZenpage</a>")."</p>";
 	 			
 	 			echo "<h3 style='margin-left: 1px'>Zenpage</h3>";
 	 			echo "<p style='margin-left: 8px'>";
