@@ -1293,117 +1293,117 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<option <?php if ($showThumb) {	?>class="thumboption" style="background-color:#B1F7B6"<?php		}
 								if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo getOption('AlbumThumbSelecorText'); ?>
 							</option>
-						<option <?php if ($showThumb) { ?>class="thumboption" value="\" style="background-color:#B1F7B6" <?php } ?>
-							<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
-						</option>
-						<?php
-						if ($album->isDynamic()) {
-							$params = $album->getSearchParams();
-							$search = new SearchEngine(true);
-							$search->setSearchParams($params);
-							$images = $search->getImages(0);
-							$thumb = $album->get('thumb');
-							$imagelist = array();
-							foreach ($images as $imagerow) {
-								$folder = $imagerow['folder'];
-								$filename = $imagerow['filename'];
-								$imagelist[] = '/'.$folder.'/'.$filename;
-							}
-							if (count($imagelist) == 0) {
-								$subalbums = $search->getAlbums(0);
-								foreach ($subalbums as $folder) {
-									$newalbum = new Album($gallery, $folder);
-									if (!$newalbum->isDynamic()) {
-										$images = $newalbum->getImages(0);
-										foreach ($images as $filename) {
-											$imagelist[] = '/'.$folder.'/'.$filename;
+							<option <?php if ($showThumb) { ?>class="thumboption" style="background-color:#B1F7B6" <?php } ?>
+								<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
+							</option>
+							<?php
+							if ($album->isDynamic()) {
+								$params = $album->getSearchParams();
+								$search = new SearchEngine(true);
+								$search->setSearchParams($params);
+								$images = $search->getImages(0);
+								$thumb = $album->get('thumb');
+								$imagelist = array();
+								foreach ($images as $imagerow) {
+									$folder = $imagerow['folder'];
+									$filename = $imagerow['filename'];
+									$imagelist[] = '/'.$folder.'/'.$filename;
+								}
+								if (count($imagelist) == 0) {
+									$subalbums = $search->getAlbums(0);
+									foreach ($subalbums as $folder) {
+										$newalbum = new Album($gallery, $folder);
+										if (!$newalbum->isDynamic()) {
+											$images = $newalbum->getImages(0);
+											foreach ($images as $filename) {
+												$imagelist[] = '/'.$folder.'/'.$filename;
+											}
 										}
 									}
 								}
-							}
-							foreach ($imagelist as $imagepath) {
-								$list = explode('/', $imagepath);
-								$filename = $list[count($list)-1];
-								unset($list[count($list)-1]);
-								$folder = implode('/', $list);
-								$albumx = new Album($gallery, $folder);
-								$image = newImage($albumx, $filename);
-								$selected = ($imagepath == $thumb);
-								echo "\n<option";
-								if ($showThumb) {
-									echo " class=\"thumboption\"";
-									echo " style=\"background-image: url(" . $image->getThumb() .	"); background-repeat: no-repeat;\"";
-								}
-								echo " value=\"".$imagepath."\"";
-								if ($selected) {
-									echo " selected=\"selected\"";
-								}
-								echo ">" . $image->getTitle();
-								echo  " ($imagepath)";
-								echo "</option>";
-							}
-						} else {
-							$images = $album->getImages();
-							if (count($images) == 0 && $album->getNumAlbums() > 0) {
-								$imagearray = array();
-								$albumnames = array();
-								$strip = strlen($album->name) + 1;
-								$subIDs = getAllSubAlbumIDs($album->name);
-								if(!is_null($subIDs)) {
-									foreach ($subIDs as $ID) {
-										$albumnames[$ID['id']] = $ID['folder'];
-										$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
-										$ID['id'] .'"';
-										$imagearray = array_merge($imagearray, query_full_array($query));
+								foreach ($imagelist as $imagepath) {
+									$list = explode('/', $imagepath);
+									$filename = $list[count($list)-1];
+									unset($list[count($list)-1]);
+									$folder = implode('/', $list);
+									$albumx = new Album($gallery, $folder);
+									$image = newImage($albumx, $filename);
+									$selected = ($imagepath == $thumb);
+									echo "\n<option";
+									if ($showThumb) {
+										echo " class=\"thumboption\"";
+										echo " style=\"background-image: url(" . $image->getThumb() .	"); background-repeat: no-repeat;\"";
 									}
-									foreach ($imagearray as $imagerow) {
-										$filename = $imagerow['filename'];
-										$folder = $albumnames[$imagerow['albumid']];
-										$imagepath = substr($folder, $strip).'/'.$filename;
-										if (substr($imagepath, 0, 1) == '/') { $imagepath = substr($imagepath, 1); }
-										$albumx = new Album($gallery, $folder);
-										$image = newImage($albumx, $filename);
+									echo " value=\"".$imagepath."\"";
+									if ($selected) {
+										echo " selected=\"selected\"";
+									}
+									echo ">" . $image->getTitle();
+									echo  " ($imagepath)";
+									echo "</option>";
+								}
+							} else {
+								$images = $album->getImages();
+								if (count($images) == 0 && $album->getNumAlbums() > 0) {
+									$imagearray = array();
+									$albumnames = array();
+									$strip = strlen($album->name) + 1;
+									$subIDs = getAllSubAlbumIDs($album->name);
+									if(!is_null($subIDs)) {
+										foreach ($subIDs as $ID) {
+											$albumnames[$ID['id']] = $ID['folder'];
+											$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
+											$ID['id'] .'"';
+											$imagearray = array_merge($imagearray, query_full_array($query));
+										}
+										foreach ($imagearray as $imagerow) {
+											$filename = $imagerow['filename'];
+											$folder = $albumnames[$imagerow['albumid']];
+											$imagepath = substr($folder, $strip).'/'.$filename;
+											if (substr($imagepath, 0, 1) == '/') { $imagepath = substr($imagepath, 1); }
+											$albumx = new Album($gallery, $folder);
+											$image = newImage($albumx, $filename);
+											if (is_valid_image($filename)) {
+												$selected = ($imagepath == $thumb);
+												echo "\n<option";
+												if (getOption('thumb_select_images')) {
+													echo " class=\"thumboption\"";
+													echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
+												}
+												echo " value=\"".$imagepath."\"";
+												if ($selected) {
+													echo " selected=\"selected\"";
+												}
+												echo ">" . $image->getTitle();
+												echo  " ($imagepath)";
+												echo "</option>";
+											}
+										}
+									}
+								} else {
+									foreach ($images as $filename) {
+										$image = newImage($album, $filename);
+										$selected = ($filename == $album->get('thumb'));
 										if (is_valid_image($filename)) {
-											$selected = ($imagepath == $thumb);
 											echo "\n<option";
 											if (getOption('thumb_select_images')) {
 												echo " class=\"thumboption\"";
 												echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
 											}
-											echo " value=\"".$imagepath."\"";
+											echo " value=\"" . $filename . "\"";
 											if ($selected) {
 												echo " selected=\"selected\"";
 											}
 											echo ">" . $image->getTitle();
-											echo  " ($imagepath)";
+											if ($filename != $image->getTitle()) {
+												echo  " ($filename)";
+											}
 											echo "</option>";
 										}
 									}
 								}
-							} else {
-								foreach ($images as $filename) {
-									$image = newImage($album, $filename);
-									$selected = ($filename == $album->get('thumb'));
-									if (is_valid_image($filename)) {
-										echo "\n<option";
-										if (getOption('thumb_select_images')) {
-											echo " class=\"thumboption\"";
-											echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
-										}
-										echo " value=\"" . $filename . "\"";
-										if ($selected) {
-											echo " selected=\"selected\"";
-										}
-										echo ">" . $image->getTitle();
-										if ($filename != $image->getTitle()) {
-											echo  " ($filename)";
-										}
-										echo "</option>";
-									}
-								}
 							}
-						}
-						?>
+							?>
 						</select>
 						</td>
 					</tr>
