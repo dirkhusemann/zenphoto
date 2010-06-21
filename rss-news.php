@@ -46,7 +46,7 @@ switch ($option) {
 		$latest = getLatestNews($items,"none",$catlink); 	
 		break;
 	case "news":
-		$latest = getLatestNews($items,"none");
+		$latest = getLatestNews($items,"none"); 	
 		break;
 	case "withimages":
 		$latest = getLatestNews($items,"with_latest_images_date");
@@ -83,8 +83,8 @@ foreach($latest as $item) {
 		case 'images':
 			$albumobj = new Album($_zp_gallery,$item['albumname']);
 			$obj = newImage($albumobj,$item['titlelink']);
-			$categories = $albumobj->getTitle();
-			$title = strip_tags(htmlspecialchars($obj->get('title'), ENT_QUOTES));
+			$categories = get_language_string($albumobj->get('title'),$locale);
+			$title = strip_tags(htmlspecialchars(get_language_string($obj->get('title'),$locale), ENT_QUOTES));
 			$link = $obj->getImageLink();
 			$content = truncate_string(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
 			if(isImagePhoto($obj)) {
