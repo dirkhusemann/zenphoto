@@ -944,7 +944,9 @@ $alb = removeParentAlbumNames($album);
 								title="<?php printf(gettext('crop %s'), $image->filename); ?>"
 								/>
 						</a>
-						<p class="buttons"><a href="<?php echo $image->getFullImage(); ?>" rel="colorbox"><img src="images/magnify.png" alt="" /><strong><?php echo gettext('Zoom'); ?></strong></a></p><br style="clear: both" />
+						<?php if(isImagePhoto($image)) { ?>
+							<p class="buttons"><a href="<?php echo $image->getFullImage(); ?>" rel="colorbox"><img src="images/magnify.png" alt="" /><strong><?php echo gettext('Zoom'); ?></strong></a></p><br style="clear: both" />
+						<?php } ?>
 						<p class="buttons"><a href="<?php echo $image->getImageLink();?>" title="<?php echo gettext('View image on website'); ?>"><img src="images/view.png" alt="" /><strong><?php echo gettext('View'); ?></strong></a></p><br style="clear: both" />
 						<p><?php echo gettext('<strong>Filename:</strong>'); ?><br /><?php echo $image->filename; ?></p>
 						<p><?php echo gettext('<strong>Image id:</strong>'); ?> <?php echo $image->get('id'); ?></p>
