@@ -1758,6 +1758,11 @@ function printAlbumEditRow($album) {
 		<a href="?commentson=<?php echo $album->getCommentsAllowed(); ?>&amp;id=<?php echo $album->getAlbumID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
 		<?php echo checkIfCommentsAllowed($album->getCommentsAllowed()); ?></a>
 	</td>
+	<td class="icons">
+		<a href="<?php echo WEBPATH; ?>/index.php?album=<?php echo pathurlencode($album->name); ?>" title="<?php echo gettext("View album"); ?>">
+			<img src="images/view.png" style="border: 0px;" alt="<?php echo sprintf(gettext('View album %s'), $album->name); ?>" />
+		</a>
+	</td>
 	<?php
 	if (file_exists(SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/cache_images.php')) {
 	?>

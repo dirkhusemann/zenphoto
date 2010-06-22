@@ -777,6 +777,7 @@ $alb = removeParentAlbumNames($album);
 				<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
 				<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Un-published"); ?></li>
 				<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
+				<li><img src="images/view.png" alt="View the album" /><?php echo gettext("View the album"); ?></li>
 				<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache the album"); ?></li>
 				<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset hitcounters"); ?></li>
@@ -943,7 +944,8 @@ $alb = removeParentAlbumNames($album);
 								title="<?php printf(gettext('crop %s'), $image->filename); ?>"
 								/>
 						</a>
-						<p class="buttons"><a href="<?php echo $image->getFullImage();?>" rel="colorbox"><img src="images/magnify.png" alt="" /><strong>Zoom</strong></a></p><br style="clear: both" />
+						<p class="buttons"><a href="<?php echo $image->getFullImage(); ?>" rel="colorbox"><img src="images/magnify.png" alt="" /><strong><?php echo gettext('Zoom'); ?></strong></a></p><br style="clear: both" />
+						<p class="buttons"><a href="<?php echo $image->getImageLink();?>" title="<?php echo gettext('View image on website'); ?>"><img src="images/view.png" alt="" /><strong><?php echo gettext('View'); ?></strong></a></p><br style="clear: both" />
 						<p><?php echo gettext('<strong>Filename:</strong>'); ?><br /><?php echo $image->filename; ?></p>
 						<p><?php echo gettext('<strong>Image id:</strong>'); ?> <?php echo $image->get('id'); ?></p>
 						<p><?php echo gettext("<strong>Dimensions:</strong>"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
@@ -1524,6 +1526,7 @@ if (isset($_GET['bulkmessage'])) {
 			<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
 			<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Un-published"); ?></li>
 			<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
+			<li><img src="images/view.png" alt="View the album" /><?php echo gettext("View the album"); ?></li>
 			<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache the album"); ?></li>
 			<li><img src="images/refresh1.png" alt="Refresh metadata" /><?php echo gettext("Refresh metadata"); ?></li>
 			<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset hitcounters"); ?></li>

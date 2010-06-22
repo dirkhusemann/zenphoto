@@ -1474,6 +1474,7 @@ ul.pagelist li.current {
 .iconlegend li {
 	display: inline;
 	margin-right: 10px;
+	white-space:nowrap;
 }
 
 .iconlegend li img {
