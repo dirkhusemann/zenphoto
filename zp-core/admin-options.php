@@ -1167,23 +1167,16 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 		<tr>
 			<td width="175"><?php echo gettext("RSS feeds enabled:"); ?></td>
 			<td>
-				<span style="white-space:nowrap">
-					<label>
+ 				<label class="checkboxlabel">
 						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('Gallery'); ?>
-					</label>
-				</span>
-				<span style="white-space:nowrap">
-					<label>
+				</label>
+				<label class="checkboxlabel">
 						<input type="checkbox" name="RSS_comments" value=<?php if (getOption('RSS_comments')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('Comments'); ?>
 					</label>
-				</span>
-				<span style="white-space:nowrap">
-					<label>
+					<label class="checkboxlabel">
 						<input type="checkbox" name="RSS_articles" value=<?php if (getOption('RSS_articles')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('All news'); ?>
 					</label>
-				</span>
-				<span style="white-space:nowrap">
-					<label>
+					<label class="checkboxlabel">
 						<input type="checkbox" name="RSS_article_comments" value=<?php if (getOption('RSS_article_comments')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('News/Page comments'); ?>
 					</label>
 				</span>

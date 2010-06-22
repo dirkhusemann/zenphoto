@@ -1463,31 +1463,23 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 				<div class="box-edit">
 
-					<span style="white-space:nowrap">
-						<label style="padding-right: .5em">
+						<label class="checkboxlabel">
 							<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
 								onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 							<?php echo gettext("Move");?>
 						</label>
-					</span>
 
-					<span style="white-space:nowrap">
-						<label style="padding-right: .5em">
+						<label class="checkboxlabel">
 							<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
 								onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 							<?php echo gettext("Copy");?>
 						</label>
-					</span>
 
-					<span style="white-space:nowrap">
-						<label style="padding-right: .5em">
+						<label class="checkboxlabel">
 							<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
 								onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
 							<?php echo gettext("Rename Folder");?>
 						</label>
-					</span>
-
-
 
 					<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
 						<?php echo gettext("to:"); ?>

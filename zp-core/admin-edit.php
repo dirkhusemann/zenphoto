@@ -1000,29 +1000,22 @@ $alb = removeParentAlbumNames($album);
 						<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 						<div class="box-edit">
 						<!-- Move/Copy/Rename this image -->
-						<label style="padding-right: .5em">
-							<span style="white-space:nowrap">
+						<label class="checkboxlabel">
 								<input type="radio" id="move-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
-									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Move");?>
-							</span>
+									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');"  /> <?php echo gettext("Move");?>
 						</label>
-						<label style="padding-right: .5em">
-							<span style="white-space:nowrap">
+						<label class="checkboxlabel">
 								<input type="radio" id="copy-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
-									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Copy");?>
-							</span>
+									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');"  /> <?php echo gettext("Copy");?>
 						</label>
-						<label style="padding-right: .5em">
-							<span style="white-space:nowrap">
+						<label class="checkboxlabel">
 								<input type="radio" id="rename-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
-									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" style="display:inline" /> <?php echo gettext("Rename File");?>
-							</span>
+									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');"  /> <?php echo gettext("Rename File");?>
+							
 						</label>
-						<label style="padding-right: .5em">
-							<span style="white-space:nowrap">
+						<label class="checkboxlabel">
 								<input type="radio" id="Delete-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
-									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image") ?>
-							</span>
+									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" /> <?php echo gettext("Delete image") ?>
 						</label>
 						<div id="movecopydiv-<?php echo $currentimage; ?>"
 							style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
@@ -1075,33 +1068,26 @@ $alb = removeParentAlbumNames($album);
 							if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
 							?>
 							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
-							<label style="padding-right: .5em">
-								<span style="white-space:nowrap">
+							<label class="checkboxlabel">
 									<input type="radio" id="rotation_none-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('none'); ?>
-								</span>
 							</label>
-							<label style="padding-right: .5em">
-								<span style="white-space:nowrap">
+							<label class="checkboxlabel">
 									<input type="radio" id="rotation_90-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('90 degrees'); ?>
-								</span>
 							</label>
-							<label style="padding-right: .5em">
-								<span style="white-space:nowrap">
+							<label class="checkboxlabel">
 									<input type="radio" id="rotation_180-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('180 degrees'); ?>
-								</span>
 							</label>
-							<label style="padding-right: .5em">
-								<span style="white-space:nowrap">
+							<label class="checkboxlabel">
 									<input type="radio" id="rotation_270-<?php echo $currentimage; ?>"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> />
 									<?php echo gettext('270 degrees'); ?>
-								</span>
 							</label>
 							<?php
 						}
 						?>
+						<br clear="all" />
 						<hr />
 						<p class="buttons" style="clear: both">
 							<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"

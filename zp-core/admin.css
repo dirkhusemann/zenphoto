@@ -516,7 +516,7 @@ table.checkboxes {
 	margin: 0px;
 	line-height: 10px;
 	border: 0px;
-}
+} 
 
 table.checkboxes tr {
 	padding: 0px;
@@ -1540,6 +1540,11 @@ span.tagMatches span {
 	line-height: 1.5em;
 }
 
+.checkboxlabel {
+	padding-right: .5em; 
+	white-space:nowrap;
+	float: left;
+	}
 .box-edit-unpadded {
 	margin: 0 0 10px 0;
 	padding: 0px 0px 0px 0px;
