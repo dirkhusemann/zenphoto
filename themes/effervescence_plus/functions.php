@@ -244,9 +244,6 @@ function commonNewsLoop($paged) {
 						echo ' | ';
 				 		printf(gettext("Comments: %d"),  $count);  
 					}
-					if (!empty($cat)) {
-						echo ' | ';
-					}
 					?>
 				</span>
 
