@@ -3187,7 +3187,10 @@ function printLatestComments($number, $shorten='123',$type="all",$itemID="") {
 		}
 		$date = $comment['date'];
 		$albumtitle = get_language_string($comment['albumtitle']);
-		if ($comment['title'] == "") $title = $image; else $title = get_language_string($comment['title']);
+		$title = '';
+		if($comment['type'] != 'albums') {
+			if ($comment['title'] == "") $title = ''; else $title = get_language_string($comment['title']);
+		}
 		$website = $comment['website'];
 		$shortcomment = truncate_string($comment['comment'], $shorten);
 		if(!empty($title)) {
