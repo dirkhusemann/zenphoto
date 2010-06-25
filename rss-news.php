@@ -86,20 +86,21 @@ foreach($latest as $item) {
 			$categories = get_language_string($albumobj->get('title'),$locale);
 			$title = strip_tags(htmlspecialchars(get_language_string($obj->get('title'),$locale), ENT_QUOTES));
 			$link = $obj->getImageLink();
-			$content = truncate_string(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
-			if(isImagePhoto($obj)) {
-				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
-			} else {
-				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a><p>'.$content.'</p>]]>';
-			}
-			//$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
-			$filename = $obj->getFilename();
 			$type = "image";
 			$ext = strtolower(strrchr($filename, "."));
 			$album = $albumobj->getFolder();
 			$fullimagelink = $host.WEBPATH."/albums/".$album."/".$filename;
 			$imagefile = "albums/".$album."/".$filename;
 			$mimetype = getMimeType($ext);
+			$content = truncate_string(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
+			$filename = $obj->getFilename();
+			if(isImagePhoto($obj)) {
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
+			} else {
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a><p>'.$content.'</p>]]>';
+			}
+			//$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
+			
 			break;
 		case 'albums':
 			break;
