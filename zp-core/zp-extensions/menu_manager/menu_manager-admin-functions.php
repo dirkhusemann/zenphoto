@@ -652,7 +652,7 @@ function printAlbumsSelector() {
 		for($count = 1; $count <= $level; $count++) {
 			$arrow .= "&raquo; ";
 		}
-		echo "<option value='".pathurlencode($albumobj->name)."'>";
+		echo "<option value='".htmlspecialchars($albumobj->name)."'>";
 		echo $arrow.$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj)."</option>";
 	}
 	?>
@@ -678,7 +678,7 @@ function printZenpagePagesSelector() {
 		for($count = 1; $count <= $level; $count++) {
 			$arrow .= "&raquo; ";
 		}
-		echo "<option value='".urlencode($pageobj->getTitlelink())."'>";
+		echo "<option value='".htmlspecialchars($pageobj->getTitlelink())."'>";
 		echo $arrow.$pageobj->getTitle().unpublishedZenphotoItemCheck($pageobj)."</option>";
 	}
 	?>
@@ -699,7 +699,7 @@ function printZenpageNewsCategorySelector() {
 <?php
 	$cats = getAllCategories();
 	foreach($cats  as $cat) {
-		echo "<option value='".urlencode($cat['cat_link'])."'>";
+		echo "<option value='".htmlspecialchars($cat['cat_link'])."'>";
 		echo get_language_string($cat['cat_name'])."</option>";
 	}
 ?>

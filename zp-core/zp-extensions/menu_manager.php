@@ -18,12 +18,14 @@ $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--menu_manager.php.html";
 
+require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 zp_register_filter('admin_tabs', 'menu_tabs');
+
 /**
- * Enter description here...
+ * Adds menu manager to admin tabs
  *
- * @param unknown_type $tabs
- * @param unknown_type $current
+ * @param $tabs array Admin tabs
+ * @param string $current current tab
  * @return unknown
  */
 function menu_tabs($tabs, $current) {
