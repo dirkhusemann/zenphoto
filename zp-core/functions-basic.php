@@ -21,6 +21,21 @@ define('DEBUG_404', !defined('RELEASE')); // set to true to log 404 error proces
 define('DEBUG_EXIF', false); // set to true to log start/finish of exif processing. Useful to find problematic images.
 define('DEBUG_PLUGINS', false); // set to true to log plugin load sequence.
 
+// Contexts (Bitwise and combinable)
+define("ZP_INDEX",   1);
+define("ZP_ALBUM",   2);
+define("ZP_IMAGE",   4);
+define("ZP_COMMENT", 8);
+define("ZP_SEARCH", 16);
+define("ZP_SEARCH_LINKED", 32);
+define("ZP_ALBUM_LINKED", 64);
+define('ZP_IMAGE_LINKED', 128);
+define('ZP_ZENPAGE_NEWS_ARTICLE', 256);
+define('ZP_ZENPAGE_NEWS_CATEGORY', 512);
+define('ZP_ZENPAGE_NEWS_DATE', 1024);
+define('ZP_ZENPAGE_PAGE', 2048);
+define('ZP_ZENPAGE_SINGLE', 4096);
+
 if (DEBUG_LOGIN || DEBUG_IMAGE || DEBUG_404 || DEBUG_EXIF) {
 	debugLog("Zenphoto v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']');
 }
