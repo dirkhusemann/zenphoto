@@ -1704,21 +1704,6 @@ function dateTimeConvert($datetime, $raw=false) {
  * at any given time. They should be set and unset with those variables.
  */
 
-// Contexts (Bitwise and combinable)
-define("ZP_INDEX",   1);
-define("ZP_ALBUM",   2);
-define("ZP_IMAGE",   4);
-define("ZP_COMMENT", 8);
-define("ZP_SEARCH", 16);
-define("ZP_SEARCH_LINKED", 32);
-define("ZP_ALBUM_LINKED", 64);
-define('ZP_IMAGE_LINKED', 128);
-define('ZP_ZENPAGE_NEWS_ARTICLE', 256);
-define('ZP_ZENPAGE_NEWS_CATEGORY', 512);
-define('ZP_ZENPAGE_NEWS_DATE', 1024);
-define('ZP_ZENPAGE_PAGE', 2048);
-define('ZP_ZENPAGE_SINGLE', 4096);
-
 if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-template-functions.php');
 }

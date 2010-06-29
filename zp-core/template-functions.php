@@ -446,7 +446,7 @@ function getNumAlbums() {
 function getCurrentTheme() {
 	global $_zp_gallery, $_zp_current_album;
 	$theme = $_zp_gallery->getCurrentTheme();
-	if ( in_context(ZP_ALBUM)) {
+	if (in_context(ZP_ALBUM)) {
 		$parent = getUrAlbum($_zp_current_album);
 		$albumtheme = $parent->getAlbumTheme();
 		if (!empty($albumtheme)) {
