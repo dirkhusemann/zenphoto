@@ -16,7 +16,9 @@ $plugin_version = '1.3.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---html_meta_tags.php.html";
 $option_interface = new htmlmetatags();
 
-if (!OFFSET_PATH) addPluginScript(getHTMLMetaData()); // insert the meta tags into the <head></head> if on a theme page.
+if (in_context(ZP_INDEX)) {
+	addPluginScript(getHTMLMetaData()); // insert the meta tags into the <head></head> if on a theme page.
+}
 
 class htmlmetatags {
 

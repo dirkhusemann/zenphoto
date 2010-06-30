@@ -44,7 +44,7 @@ if (isset($_GET['image'])) { $__redirect .= "&image=" . $_GET['image']; }
 if (isset($_GET['title'])) { $__redirect .= "&title=" . $_GET['title']; }
 if (isset($_GET['page'])) { $__redirect .= "&page=" . $_GET['page']; }
 
-if (!OFFSET_PATH) {
+if (in_context(ZP_INDEX)) {
 	$cookies = array();
 	$candidate = array();
 	if (isset($_COOKIE)) $candidate = $_COOKIE;

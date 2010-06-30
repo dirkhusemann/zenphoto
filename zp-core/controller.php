@@ -13,8 +13,6 @@ require_once(dirname(__FILE__).'/functions-controller.php');
 
 
 // Initialize the global objects and object arrays:
-$_zp_gallery = new Gallery();
-
 $_zp_current_album = NULL;
 $_zp_current_album_restore = NULL;
 $_zp_albums = NULL;
@@ -31,17 +29,16 @@ $_zp_current_category = NULL;
 $_zp_post_date = NULL;
 $_zp_pre_authorization = array();
 
-
 /*** Request Handler **********************
  ******************************************/
 // This is the main top-level action handler for user requests. It parses a
 // request, validates the input, loads the appropriate objects, and sets
 // the context. All that is done in functions-controller.php.
 
-// Handle the request for an image or album.
+zp_load_gallery();	//	load the gallery and set the context to be on the front-end
 $zp_request = zp_load_request();
 
-// handle any album passwords that might have been posted
+// handle any passwords that might have been posted
 zp_handle_password();
 
 // Handle any comments that might be posted.

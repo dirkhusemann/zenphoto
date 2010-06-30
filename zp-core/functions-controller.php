@@ -180,7 +180,7 @@ function zp_handle_comment() {
 				if ($activeImage !== false AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND !in_context(ZP_ZENPAGE_PAGE)) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
 					$_zp_current_album = $activeImage->getAlbum();
-					set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
+					add_context(ZP_ALBUM | ZP_INDEX);
 				}
 			}
 		}
@@ -279,8 +279,7 @@ function zp_load_page($pagenum=NULL) {
 
 
 /**
- * Loads the gallery if it hasn't already been loaded. This function doesn't
- * really do anything, since the gallery is always loaded in init...
+ * Loads the gallery if it hasn't already been loaded.
  */
 function zp_load_gallery() {
 	global $_zp_gallery;
@@ -299,7 +298,7 @@ function zp_load_search() {
 	if ($_zp_current_search == NULL) {
 		$_zp_current_search = new SearchEngine();
 	}
-	set_context(ZP_INDEX | ZP_SEARCH);
+	add_context(ZP_SEARCH);
 	$params = $_zp_current_search->getSearchParams();
 	zp_setcookie("zenphoto_search_params", $params, 0);
 	return $_zp_current_search;
@@ -321,7 +320,7 @@ function zp_load_album($folder, $force_nocache=false) {
 	} else {
 		$_zp_dynamic_album = null;
 	}
-	set_context(ZP_ALBUM | ZP_INDEX);
+	add_context(ZP_ALBUM);
 	return $_zp_current_album;
 }
 
@@ -342,7 +341,7 @@ function zp_load_image($folder, $filename) {
 	if (!is_object($album) || !$album->exists) return false;
 	$_zp_current_image = newImage($album, $filename);
 	if (is_null($_zp_current_image) || !$_zp_current_image->exists) return false;
-	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
+	add_context(ZP_IMAGE | ZP_ALBUM);
 	return $_zp_current_image;
 }
 
@@ -456,7 +455,6 @@ function zp_load_request() {
 				break;
 		}
 	}
-	if ($success) add_context(ZP_INDEX);
 	return $success;
 }
 

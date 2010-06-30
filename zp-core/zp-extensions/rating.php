@@ -46,7 +46,7 @@ if (getOption('rating_image_individual_control')) {
 
 $ME = substr(basename(__FILE__),0,-4);
 // register the scripts needed
-if (isset($_zp_gallery) && !is_null($_zp_gallery)) {
+if (in_context(ZP_INDEX)) {
 	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.MetaData.js"></script>');
 	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.rating.js"></script>');
 	$theme = getCurrentTheme();
@@ -112,7 +112,6 @@ class jquery_rating {
 
 }
 
-$_rating_css_loaded = false;
 /**
  * Prints the rating star form and the current rating
  * Insert this function call in the page script where you 
@@ -128,7 +127,7 @@ $_rating_css_loaded = false;
  * @param bool $text if false, no annotation text is displayed
  */
 function printRating($vote=3, $object=NULL, $text=true) {
-	global $_zp_gallery_page, $_rating_css_loaded;
+	global $_zp_gallery_page;
 	if (is_null($object)) {
 		$object = getCurrentPageObject();
 	}

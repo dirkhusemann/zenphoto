@@ -21,7 +21,6 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
  * Invoke the controller to handle requests
  */
 require_once(dirname(__FILE__). "/".ZENFOLDER.'/controller.php');
-
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $_zp_obj = '';
 
@@ -52,7 +51,6 @@ if (isset($_GET['p'])) {
 	if ($_zp_current_album->isDynamic()) {
 		$search = $_zp_current_album->getSearchEngine();
 		zp_setcookie("zenphoto_search_params", $search->getSearchParams(), 0);
-		set_context(ZP_INDEX | ZP_ALBUM);
 	} else {
 		handleSearchParms('album', $_zp_current_album);
 	}
