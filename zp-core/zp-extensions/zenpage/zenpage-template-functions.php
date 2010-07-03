@@ -110,6 +110,19 @@ function getNewsType($newsobj=NULL) {
  return $newstype;
 }
 
+/**
+ * returns the "sticky" value of the news article
+ * @param obj $newsobj optional news object to check directly outside news context
+ * @return bool
+ */
+function stickyNews($newsobj=NULL) {
+	global $_zp_current_zenpage_news;
+	if (is_null($newsobj)) {
+		$newsobj = $_zp_current_zenpage_news;
+	}
+	return $newsobj->getSticky();
+}
+
 
 /**
  * Checks what type the current news item is (See get NewsType())

@@ -125,9 +125,10 @@ function isProtectedPage($pageobj=NULL) {
 	 * @param string $sortdirection "desc" (default) for descending sort order
 	 * 													    "asc" for ascending sort order
 	 * 											        This parameter is not used for date archives
+	 * @param bool $sticky set to true to place "sticky" articles at the front of the list.
 	 * @return array
 	 */
-	function getNewsArticles($articles_per_page='', $category='', $published=NULL,$ignorepagination=false,$sortorder="date", $sortdirection="desc") {
+	function getNewsArticles($articles_per_page='', $category='', $published=NULL,$ignorepagination=false,$sortorder="date", $sortdirection="desc",$sticky=true) {
 		global $_zp_current_category, $_zp_post_date;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
@@ -153,18 +154,19 @@ function isProtectedPage($pageobj=NULL) {
 			$postdate = NULL;
 		}
 		$limit = getLimitAndOffset($articles_per_page,$ignorepagination);
+		if ($sticky) {
+			$sticky = 'sticky DESC,';
+		}
 	
 		// sortorder and sortdirection (only used for all news articles and categories naturally)
 		$sortorder = sanitize($sortorder);
 		switch($sortorder) {
 			case "date":
 			default:
-				$sort1 = "news.date";
-				$sort2 = "date";
+				$sort1 = "date";
 			break;
 			case "title":
-				$sort1 = "news.title";
-				$sort2 = "title";
+				$sort1 = "title";
 			break;
 		}
 		$sortdirection = sanitize($sortdirection);
@@ -175,6 +177,7 @@ function isProtectedPage($pageobj=NULL) {
 			break;
 			case "asc":
 				$dir = "ASC";
+				$sticky = false;	//makes no sense
 			break;
 		}
 		/*** get articles by category ***/
@@ -187,6 +190,9 @@ function isProtectedPage($pageobj=NULL) {
 				case "unpublished":
 					$show = " AND `show` = 0 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
+				case 'sticky':
+					$show = ' AND `sticky` <> 0';
+					break;
 				case "all":
 					$show = "";
 					break;
@@ -194,12 +200,13 @@ function isProtectedPage($pageobj=NULL) {
 
 			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 				$datesearch = " AND news.date LIKE '".$postdate."%' ";
-				$order = " ORDER BY news.date DESC";
+				$order = " ORDER BY ".$sticky."news.date DESC";
 			} else {
 				$datesearch = "";
-				$order = " ORDER BY ".$sort1." ".$dir;
+				$order = " ORDER BY ".$sticky."news.$sort1 $dir";
 			}
-			$result = query_full_array("SELECT news.titlelink FROM ".prefix('zenpage_news')." as news, ".prefix('zenpage_news2cat')." as cat WHERE".$cat.$show.$datesearch.$order.$limit);
+			$sql = "SELECT news.titlelink FROM ".prefix('zenpage_news')." as news, ".prefix('zenpage_news2cat')." as cat WHERE".$cat.$show.$datesearch.$order.$limit;
+			$result = query_full_array($sql);
 
 			/***get all articles ***/
 		} else {
@@ -210,6 +217,9 @@ function isProtectedPage($pageobj=NULL) {
 					break;
 				case "unpublished":
 					$show = " WHERE `show` = 0 AND date <= '".date('Y-m-d H:i:s')."'";
+					break;
+				case 'sticky':
+					$show = ' WHERE `sticky` <> 0';
 					break;
 				case "all":
 					$show = "";
@@ -223,16 +233,20 @@ function isProtectedPage($pageobj=NULL) {
 					case "unpublished":
 						$datesearch = " WHERE date LIKE '$postdate%' ";
 						break;
+					case 'sticky':
+						$show = ' WHERE `sticky` <> 0';
+						break;
 					case "all":
 						$datesearch = " WHERE date LIKE '$postdate%' ";
 						break;
 				}
-				$order = " ORDER BY date DESC";
+				$order = " ORDER BY $sticky date DESC";
 			} else {
 				$datesearch = "";
-				$order = " ORDER BY ".$sort2." ".$dir;
+				$order = " ORDER BY ".$sticky.$sort1." ".$dir;
 			}
-			$result = query_full_array("SELECT titlelink FROM ".prefix('zenpage_news').$show.$datesearch." ".$order.$limit);
+			$sql = "SELECT titlelink FROM ".prefix('zenpage_news').$show.$datesearch." ".$order.$limit;
+			$result = query_full_array($sql);
 		}
 		return $result;
 	}

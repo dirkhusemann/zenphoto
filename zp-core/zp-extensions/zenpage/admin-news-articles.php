@@ -83,21 +83,26 @@ printLogoAndLinks();
 			  set_context(ZP_ZENPAGE_NEWS_DATE);
 			  $_zp_post_date = sanitize($_GET['date']);
 			}
-			
-			if(isset($_GET['published']) AND $_GET['published'] == 'no') {
-				$published = 'unpublished';
-			} 
-			if(isset($_GET['published']) AND $_GET['published'] == 'yes') {
-				$published = 'published';
-			} 
-			if(!isset($_GET['published'])) {
+				
+			if(isset($_GET['published'])) {
+				switch ($_GET['published']) {
+					case 'no':
+						$published = 'unpublished';
+						break;
+					case 'yes':
+						$published = 'published';
+						break;
+					case 'sticky':
+						$published = 'sticky';
+				}
+			} else {
 				$published = 'all';
 			}
-			
+				
 			if(isset($_GET['category'])) {
-			  $result = getNewsArticles(getOption('zenpage_admin_articles'),$_GET['category'],$published);
+			  $result = getNewsArticles(getOption('zenpage_admin_articles'),$_GET['category'],$published,false,'date','desc',false);
 			} else {
-			  $result = getNewsArticles(getOption('zenpage_admin_articles'),"",$published);
+			  $result = getNewsArticles(getOption('zenpage_admin_articles'),"",$published,false,'date','desc',false);
 			}	
 			?>
 			<span class="zenpagestats"><?php printNewsStatistic();?></span></h1>

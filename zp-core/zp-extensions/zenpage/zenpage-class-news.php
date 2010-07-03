@@ -281,6 +281,13 @@ class ZenpageNews extends PersistentObject {
 		}
 		return $this->commentcount;
 	}
+	
+	function getSticky() {
+		return $this->get('sticky');
+	}
+	function setSticky($v) {
+		$this->set('sticky',$v);
+	}
 		
 } // zenpage news class end
 

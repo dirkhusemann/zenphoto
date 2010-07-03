@@ -272,6 +272,24 @@ if(is_object($result)) {
 				<input name="show" type="checkbox" id="show" value="1" <?php checkIfChecked(getIfObject($result,"show"));?> />
 				<label for="show"><?php echo gettext("Published"); ?></label>
 				</p>
+				<?php
+				if(is_AdminEditPage('newsarticle')) {
+					if (is_object($result)) {
+						$sticky = $result->get('sticky');
+					} else {
+						$sticky = 0;
+					}
+				?>
+					<p><?php echo("Position:"); ?>
+						<select id="sticky" name="sticky">
+							<option value="0" <?php if ($sticky==0) echo 'selected="selected"';?>><?php echo gettext("normal"); ?></option>
+							<option value="1" <?php if ($sticky==1) echo 'selected="selected"';?>><?php echo gettext("sticky"); ?></option>
+							<option value="9" <?php if ($sticky==9) echo 'selected="selected"';?>><?php echo gettext("Stick to top"); ?></option>
+						</select>
+					</p>
+					<?php
+				}
+				?>
 				<p class="checkbox">
 				<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked")); ?> />
 				<label for="locked"><?php echo gettext("Locked for changes"); ?></label>

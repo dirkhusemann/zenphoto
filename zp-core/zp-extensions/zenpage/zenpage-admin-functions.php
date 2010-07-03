@@ -485,6 +485,7 @@ function addArticle() {
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
+	$article->setSticky(sanitize_numeric($_POST['sticky']));
 	processTags($article);
 	$msg = zp_apply_filter('new_article', '', $article);
 	$article->save();
@@ -562,6 +563,7 @@ function updateArticle() {
 	$article->set('permalink',$permalink);
 	$article->set('locked',$locked);
 	$article->set('expiredate',$expiredate);
+	$article->setSticky(sanitize_numeric($_POST['sticky']));
 	if(getcheckboxState('resethitcounter')) {
 		$page->set('hitcounter',0);
 	}
@@ -874,34 +876,42 @@ function printUnpublishedDropdown() {
 	global $_zp_current_zenpage_news;
 	$currentpage = getCurrentAdminNewsPage();
 ?>
-	<form name="AutoListBox3" style="float:left; margin-left: 10px;" action="#" >
-	<select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
- <?php
-		$all="";
-		$published="";
-		$unpublished="";
-		 if(isset($_GET['published']) AND $_GET['published'] == "no") {
+<form name="AutoListBox3" style="float: left; margin-left: 10px;"	action="#">
+	<select name="ListBoxURL" size="1"	onchange="gotoLink(this.form)">
+	<?php
+	$all="";
+	$published="";
+	$unpublished="";
+	$sticky = '';
+	if(isset($_GET['published'])) {
+		switch ($_GET['published']) {
+			case "no":
 				$unpublished="selected='selected'";
-		 }
-		 if(isset($_GET['published']) AND $_GET['published'] == "yes") {
+				break;
+			case "yes":
 				$published="selected='selected'";
-			}
-			if(!isset($_GET['published'])) {
-				$all="selected='selected'";
-			}
+				break;
+			case 'sticky':
+				$sticky="selected='selected'";
+				break;
+		}
+	} else {
+		$all="selected='selected'";
+	}
 	echo "<option $all value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."'>".gettext("All articles")."</option>\n";
 	echo "<option $published value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=yes'>".gettext("Published")."</option>\n";
 	echo "<option $unpublished value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=no'>".gettext("Un-published")."</option>\n";
+	echo "<option $sticky value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(true,true,false)."&amp;published=sticky'>".gettext("Sticky")."</option>\n";
 	?>
-	</select>
-	<script language="JavaScript" type="text/javascript" >
+</select>
+	<script language="JavaScript" type="text/javascript">
 		// <!-- <![CDATA[
 		function gotoLink(form) {
 		var OptionIndex=form.ListBoxURL.selectedIndex;
 		parent.location = form.ListBoxURL.options[OptionIndex].value;}
 		// ]]> -->
 	</script>
-	</form>
+</form>
 <?php
 }
 

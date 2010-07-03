@@ -2092,6 +2092,10 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' CHANGE `albumid` `objectid` int(11) UNSIGNED NOT NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `albums` `objects` varchar(64)';
 	
+	//v1.3.1
+	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news ADD COLUMN `sticky` int(1) default 0";
+	
+	
 
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {

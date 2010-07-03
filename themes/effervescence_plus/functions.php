@@ -230,10 +230,16 @@ function printFooter() {
 }
 
 function commonNewsLoop($paged) {
+	$newstypes = array('album'=>gettext('album'),'image'=>gettext('image'),'video'=>gettext('video'),'news'=>gettext('news'));
 	while (next_news()) {
+		$newstype = getNewsType();
+		$newstypedisplay = $newstypes[$newstype];
+		if (stickyNews()) {
+			$newstypedisplay .= ' <small><em>'.gettext('sticky').'</em></small>';
+		}
 	?> 
- 		<div class="newsarticle"> 
-    	<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
+ 		<div class="newsarticle<?php if (stickyNews()) echo ' sticky'; ?>"> 
+    	<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".$newstypedisplay."]</span>"; ?></h3>
 			<div class="newsarticlecredit">
 				<span class="newsarticlecredit-left">
 					<?php 
