@@ -132,7 +132,7 @@ function printImageslist($number) {
 				$imgurl = $host.WEBPATH.'/'.ZENFOLDER."/i.php?a=".urlencode(urlencode($linkalbumobj->name))."&amp;i=".urlencode(urlencode($imageobj->filename));
 				$imgsizeurl = $imageobj->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 				echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>\n";
-				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode(urlencode($imageobj->filename))."','".urlencode(urlencode($imageobj->getTitle()))."','".urlencode(urlencode($linkalbumobj->getTitle()))."','zenphoto');\" title='".$imageobj->getTitle()." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
+				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode(urlencode($imageobj->filename))."','".urlencode(urlencode($imageobj->getTitle()))."','".urlencode(urlencode($linkalbumobj->getTitle()))."','".urlencode($imageobj->getFullImage())."','zenphoto');\" title='".$imageobj->getTitle()." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
 				echo "<a href='zoom.php?image=".urlencode($imageobj->filename)."&amp;album=".urlencode($linkalbumobj->name)."' title='Zoom' rel='colorbox' style='outline: none;'><img src='img/magnify.png' alt='' style='border: 0' /></a> ".shortentitle($imageobj->getTitle(),8).unpublishedZenphotoItemCheck($imageobj,false);
 				echo "</div>\n";
 				if ($nr === $endimage[$currentpage]){
@@ -146,7 +146,7 @@ function printImageslist($number) {
 			$imgsizeurl = $albumthumb->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 			echo "<p style='margin-left: 8px'>".gettext("<strong>Note:</strong> This album does not contain any images.")."</p>";
 			echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>";
-			echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','','','".urlencode(urlencode($albumobj->getTitle()))."','zenphoto');\" title='".$albumobj->getTitle()." (".$albumobj->name.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>";
+			echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','','','".urlencode(urlencode($albumobj->getTitle()))."','','zenphoto');\" title='".$albumobj->getTitle()." (".$albumobj->name.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>";
 			echo "</div>";
 		}	// if/else  no image end
 	} // if GET album end
@@ -357,10 +357,10 @@ function printNewsItemsList() {
 			}
 			echo "<li style='".$firstitemcss."'>";
 			if($_GET['zenpage'] == "articles") { 
-				echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_NEWS."/".$newsobj->getTitlelink()."','".$newsobj->getTitlelink()."','".$newsobj->getTitle()."','','articles');\" title='".truncate_string(strip_tags($newsobj->getContent()),300)."'>".$newsobj->getTitle().unpublishedZenpageItemCheck($newsobj)."</a>";
+				echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_NEWS."/".$newsobj->getTitlelink()."','".$newsobj->getTitlelink()."','".$newsobj->getTitle()."','','','articles');\" title='".truncate_string(strip_tags($newsobj->getContent()),300)."'>".$newsobj->getTitle().unpublishedZenpageItemCheck($newsobj)."</a>";
 			}
 			if($_GET['zenpage'] == "categories") { 
-				echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_NEWS."/category/".$item['cat_link']."','".$item['cat_link']."','".get_language_string($item['cat_name'])."','','categories');\" title='".$item['cat_link']."'>".get_language_string($item['cat_name'])."</a>";
+				echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_NEWS."/category/".$item['cat_link']."','".$item['cat_link']."','".get_language_string($item['cat_name'])."','','','categories');\" title='".$item['cat_link']."'>".get_language_string($item['cat_name'])."</a>";
 			}
 			echo "</li>";
 		}

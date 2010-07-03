@@ -6,7 +6,7 @@ var ZenpageDialog = {
 		tinyMCEPopup.resizeToInnerSize();
 	},
 
-	insert : function(imgurl,imgname,imgtitle,albumtitle,type) {
+	insert : function(imgurl,imgname,imgtitle,albumtitle,fullimage,type) {
 		
 		var ed = tinyMCEPopup.editor, dom = ed.dom;
 		var imglink = '';
@@ -23,38 +23,38 @@ var ZenpageDialog = {
 		var modrewritesuffix = '<?php echo getOption("mod_rewrite_image_suffix"); ?>';
 					
 		// getting the image size checkbox values
-		if(jQuery('#thumbnail:checked').val() == 1) {	
+		if($('#thumbnail:checked').val() == 1) {	
 			imagesize = '&amp;s=<?php echo getOption("thumb_size"); ?>&amp;cw=<?php echo getOption("thumb_crop_width"); ?>&amp;ch=<?php echo getOption("thumb_crop_height"); ?>&amp;t=true'; 
 			cssclass ='zenpage_thumb';
 		}
-		if(jQuery('#customthumb:checked').val() == 1) {	
-			imagesize = '&amp;s='+jQuery('#cropsize').val()+'&amp;cw='+jQuery('#cropwidth').val()+'&amp;ch='+jQuery('#cropheight').val()+'&amp;t=true'; 
+		if($('#customthumb:checked').val() == 1) {	
+			imagesize = '&amp;s='+$('#cropsize').val()+'&amp;cw='+$('#cropwidth').val()+'&amp;ch='+$('#cropheight').val()+'&amp;t=true'; 
 			cssclass ='zenpage_customthumb';
 		}
 		
-		if(jQuery('#sizedimage:checked').val() == 1) { 
+		if($('#sizedimage:checked').val() == 1) { 
 			imagesize = '&amp;s=<?php echo getOption("image_size"); ?>'; 
 			cssclass ='zenpage_sizedimage';
 		}
-		if(jQuery('#customsize:checked').val() == 1) { 
-			imagesize = '&amp;s='+jQuery('#size').val(); 
+		if($('#customsize:checked').val() == 1) { 
+			imagesize = '&amp;s='+$('#size').val(); 
 			cssclass ='zenpage_customimage';
 		}
 		
 		// getting the text wrap checkbox values 
 		// Customize the textwrap variable if you need specific CSS
-		if(jQuery('#nowrap:checked').val() == 1) {	
+		if($('#nowrap:checked').val() == 1) {	
 			textwrap = 'class=\''+cssclass+'\''; 
 		}
-		if(jQuery('#rightwrap:checked').val() == 1) {	
+		if($('#rightwrap:checked').val() == 1) {	
 			textwrap = 'class=\''+cssclass+'_left\' style=\'float: left;\''; 
 		}
-		if(jQuery('#leftwrap:checked').val() == 1) {	
+		if($('#leftwrap:checked').val() == 1) {	
 			textwrap = 'class=\''+cssclass+'_right\' style=\'float: right;\''; 
 		}
 		
 		// getting the link type checkbox values
-		if(jQuery('#imagelink:checked').val() == 1) {	
+		if($('#imagelink:checked').val() == 1) {	
 			if(modrewrite == '1') {
 				linkpart1 = '<a href=\''+webpath+'/'+albumname+'/'+imgname+modrewritesuffix+'\' title=\''+imgtitle+'\'>';
 		  } else {
@@ -62,7 +62,11 @@ var ZenpageDialog = {
 		  }
 		  linkpart2 = '</a>';
 		}
-		if(jQuery('#albumlink:checked').val() == 1) {
+		if($('#fullimagelink:checked').val() == 1) {	
+				linkpart1 = '<a href=\''+fullimage+'\' title=\''+imgtitle+'\'>';
+ 			  linkpart2 = '</a>';
+		}
+		if($('#albumlink:checked').val() == 1) {
 			if(modrewrite == '1') {
 				linkpart1 = '<a href=\''+webpath+'/'+albumname+'\' title=\''+albumtitle+'\' >'; 
 		  } else {
@@ -71,23 +75,23 @@ var ZenpageDialog = {
 		  linkpart2 = '</a>';
 		}
 		
-		if(jQuery('#customlink:checked').val() == 1) {	
-			linkpart1 = '<a href=\''+jQuery('#linkurl').val()+'\' title=\''+linktype+'\' '+textwrap+'>'; 
+		if($('#customlink:checked').val() == 1) {	
+			linkpart1 = '<a href=\''+$('#linkurl').val()+'\' title=\''+linktype+'\' '+textwrap+'>'; 
 		  linkpart2 = '</a>';
 		}
 					
 		// getting the include type checkbox values
-		if(jQuery('#image:checked').val() == 1) { 
+		if($('#image:checked').val() == 1) { 
 			includetype = '<img src=\''+imgurl+imagesize+'\' alt=\''+imgtitle+'\' '+textwrap+' />';
 		}	
-		if(jQuery('#imagetitle:checked').val() == 1) { 
+		if($('#imagetitle:checked').val() == 1) { 
 			includetype = imgtitle; 
 		}	
-		if(jQuery('#albumtitle:checked').val() == 1) { 
+		if($('#albumtitle:checked').val() == 1) { 
 			includetype = albumtitle;
 		}	
-		if(jQuery('#customtext:checked').val() == 1) { 
-			includetype = jQuery('#text').val(); 
+		if($('#customtext:checked').val() == 1) { 
+			includetype = $('#text').val(); 
 		}	
 		
 		// building the final item to include

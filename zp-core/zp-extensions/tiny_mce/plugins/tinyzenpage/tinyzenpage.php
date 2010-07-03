@@ -73,7 +73,7 @@ require_once("js/dialog.php");
 		</div>
 	</form>
 	
-	<form name="imagesize" action="" method="post" style="margin: 8px 0px 8px 0px">
+	<form name="imagesize" id="imagesize" action="" method="post" style="margin: 8px 0px 8px 0px">
 		<div class="panel current">
 			<fieldset>
 				<legend><?php echo gettext("Image size"); ?></legend>
@@ -82,7 +82,7 @@ require_once("js/dialog.php");
     		s <input type="text" name="cropsize" id="cropsize" value="120" style="width:25px" /> / cw <input type="text" name="cropwidth" id="cropwidth" value="120" style="width:25px" /> x ch <input type="text" name="cropheight" id="cropheight" value="120" style="width:25px" /><label for="customthumb"><br /><span class="customtext"><?php echo gettext("Custom thumbnail"); ?></span></label><br />
     		<input type="radio" name="type" id="sizedimage" "value="1" /><label for="title"> <?php echo gettext("Sized image"); ?></label><br />
     		<input type="radio" name="type" id="customsize" value="1" />
-    		<input type="text" name="size" id="size" value="400" /><label for="customsize"><br /><span class="customtext"><?php echo gettext("Custom size (un-cropped)"); ?></span></label>
+    		<input type="text" name="size" id="size" value="400" /><label for="customsize"><br /><span class="customtext"><?php echo gettext("Custom size (un-cropped)"); ?></span></label><br />
   		</fieldset>			
 		</div>
 	</form>
@@ -91,7 +91,9 @@ require_once("js/dialog.php");
 		<div class="panel current">
 			<fieldset>
 				<legend><?php echo gettext("Link type"); ?></legend>
-    		<?php if(checkAlbumForImages()) { ?><input type="radio" name="link" id="imagelink" value="1" checked='checked' /><label for="imagelink"> <?php echo gettext("Link to image"); ?></label><br /><?php } ?>
+    		<?php if(checkAlbumForImages()) { ?>
+    		<input type="radio" name="link" id="imagelink" value="1" checked='checked' /><label for="imagelink"> <?php echo gettext("Link to image"); ?></label><br />
+    		<input type="radio" name="link" id="fullimagelink" value="1"><label for="fullimagelink" /> <?php echo gettext("Link to full image"); ?></label><br /><?php } ?>
     		<input type="radio" name="link" id="albumlink" value="1" /><label for="albumlink"> <?php echo gettext("Link to album"); ?></label><br />
     		<input type="radio" name="link" id="nolink" value="1" /><label for="nolink"> <?php echo gettext("No link"); ?></label><br />
     		<input type="radio" name="link" id="customlink" value="1" />
@@ -156,13 +158,13 @@ require_once("js/dialog.php");
 				echo "</ul>";
 				
 				echo "<p style='margin-left: 8px'>";
-				echo gettext("Also tinyZenpage attaches a default CSS class to the image (if image is chosen) to be styled with your theme's css:");
+				echo gettext("Also tinyZenpage attaches a default CSS class to the image (if image is chosen) to be styled with your theme's css. If you choose left or right align '_left' or '_right' is appendend:");
 				echo "</p>";
 				echo "<ul style='margin-left: 8px'>";
-				echo "<li>".gettext("Default thumbnail: <em>zenpage_thumb_left</em> or <em>zenpage_thumb_right</em>")."</li>";
-				echo "<li>".gettext("Custom thumbnail: <em>zenpage_customthumb_left</em> or <em>zenpage_customthumb_right</em>")."</li>";
-				echo "<li>".gettext("Sized image: <em>zenpage_sizedimage_left</em> or <em>zenpage_sizedimage_right</em>")."</li>";
-				echo "<li>".gettext("Custom image: <em>zenpage_customimage_left</em> or <em>zenpage_customimage_right</em>")."</li>";
+				echo "<li>".gettext("Default thumbnail: <em>zenpage_thumb</em> or <em>zenpage_thumb</em>")."</li>";
+				echo "<li>".gettext("Custom thumbnail: <em>zenpage_customthumb</em> or <em>zenpage_customthumb</em>")."</li>";
+				echo "<li>".gettext("Sized image: <em>zenpage_sizedimage</em> or <em>zenpage_sizedimage</em>")."</li>";
+				echo "<li>".gettext("Custom image: <em>zenpage_customimage</em> or <em>zenpage_customimage</em>")."</li>";
 				echo "</ul>";
 				echo "<p style='margin-left: 8px'>";
 				echo gettext("If you like to do some direct styling you can also use TinyMCE's image button or source code editor. <br />Also you can customize the CSS output yourself by directly changing the textwrap variables in line 47 and 50 in <em>tinyzenpage/js/dialog.php</em>.");
