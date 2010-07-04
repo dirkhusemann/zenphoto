@@ -87,13 +87,13 @@ foreach($latest as $item) {
 			$title = strip_tags(htmlspecialchars(get_language_string($obj->get('title'),$locale), ENT_QUOTES));
 			$link = $obj->getImageLink();
 			$type = "image";
+			$filename = $obj->getFilename();
 			$ext = strtolower(strrchr($filename, "."));
 			$album = $albumobj->getFolder();
 			$fullimagelink = $host.WEBPATH."/albums/".$album."/".$filename;
 			$imagefile = "albums/".$album."/".$filename;
 			$mimetype = getMimeType($ext);
 			$content = truncate_string(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
-			$filename = $obj->getFilename();
 			if(isImagePhoto($obj)) {
 				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
 			} else {
