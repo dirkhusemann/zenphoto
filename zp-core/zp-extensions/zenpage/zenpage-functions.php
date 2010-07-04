@@ -117,6 +117,7 @@ function isProtectedPage($pageobj=NULL) {
 	 * @param string $category The categorylink of the category
 	 * @param string $published "published" for an published articles,
 	 * 													"unpublished" for an unpublised articles,
+	 * 													"sticky" for sticky articles,	
 	 * 													"all" for all articles
 	 * @param boolean $ignorepagination Since also used for the news loop this function automatically paginates the results if the "page" GET variable is set. To avoid this behaviour if using it directly to get articles set this TRUE (default FALSE)
 	 * @param string $sortorder "date" for sorting by date (default)
@@ -429,18 +430,19 @@ function isProtectedPage($pageobj=NULL) {
 	 *		 									"latestimagesbyalbum-thumbnail"
 	 *		 									"latestimagesbyalbum-thumbnail-customcrop"
 	 *		 									"latestimagesbyalbum-sizedimage"
-	 *		 									"latestupdatedalbums-thumbnail"
-	 *		 									"latestupdatedalbums-thumbnail-customcrop"
-	 *		 									"latestupdatedalbums-sizedimage"
+	 *		 									"latestupdatedalbums-thumbnail" (for RSS and getLatestNews() used only)
+	 *		 									"latestupdatedalbums-thumbnail-customcrop" (for RSS and getLatestNews() used only)
+	 *		 									"latestupdatedalbums-sizedimage" (for RSS and getLatestNews() used only)
 	 *	NOTE: The "latestupdatedalbums" variants do NOT support pagination as required on the news loop!
 	 *
 	 * @param string $published "published" for published articles,
 	 * 													"unpublished" for un-published articles,
 	 * 													"all" for all articles
 	 * @param string $sortorder 	id, date or mtime, only for latestimages-... modes
+	 * @param bool $sticky set to true to place "sticky" articles at the front of the list.
 	 * @return array
 	 */
-	function getCombiNews($articles_per_page='', $mode='',$published=NULL,$sortorder='') {
+	function getCombiNews($articles_per_page='', $mode='',$published=NULL,$sortorder='',$sticky=true) {
 		global $_zp_gallery, $_zp_flash_player;
 		processExpired('zenpage_news');
 		if (is_null($published)) {
@@ -483,6 +485,11 @@ function isProtectedPage($pageobj=NULL) {
 		} else {
 			$combinews_sortorder = sanitize($sortorder);
 		}
+		$stickyorder = '';
+		if($sticky) {
+			$stickyorder = 'sticky DESC,';
+		}
+		$type3 = query("SET @type3:='0'");
 		switch($mode) {
 			case "latestimages-thumbnail":
 			case "latestimages-thumbnail-customcrop":	
@@ -493,19 +500,19 @@ function isProtectedPage($pageobj=NULL) {
 				switch($combinews_sortorder) {
 					case 'id':
 					case 'date':
-						$imagequery = "(SELECT albums.folder, images.filename, images.date, @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+						$imagequery = "(SELECT albums.folder, images.filename, images.date, @type2, @type3 as sticky FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
 							WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 					case 'mtime':
-						$imagequery = "(SELECT albums.folder, images.filename, DATE_FORMAT(images.`mtime`,'%Y-%m-%d'), @type2 FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+						$imagequery = "(SELECT albums.folder, images.filename, DATE_FORMAT(images.`mtime`,'%Y-%m-%d'), @type2, @type3 as sticky FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
 							WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 				}
 				$result = query_full_array("
-				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
+				(SELECT title as albumname, titlelink, date, @type1 as type, sticky FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
 				".$imagequery."
-				ORDER By date DESC $limit
+				ORDER BY $stickyorder date DESC  $limit
 				");
 				break;
 			case "latestalbums-thumbnail":
@@ -517,19 +524,19 @@ function isProtectedPage($pageobj=NULL) {
 				switch($combinews_sortorder) {
 					case 'id':
 					case 'date':
-						$albumquery = "(SELECT albums.folder, albums.title, albums.date, @type2 FROM ".prefix('albums')." AS albums
+						$albumquery = "(SELECT albums.folder, albums.title, albums.date, @type2, @type3 as sticky FROM ".prefix('albums')." AS albums
 							".$show.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 					case 'mtime':
-						$albumquery = "(SELECT albums.folder, albums.title, DATE_FORMAT(albums.`mtime`,'%Y-%m-%d'), @type2 FROM ".prefix('albums')." AS albums
+						$albumquery = "(SELECT albums.folder, albums.title, DATE_FORMAT(albums.`mtime`,'%Y-%m-%d'), @type2, @type3 as sticky FROM ".prefix('albums')." AS albums
 							".$show.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 				}
 				$result = query_full_array("
-				(SELECT title as albumname, titlelink, date, @type1 as type FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
+				(SELECT title as albumname, titlelink, date, @type1 as type, sticky FROM ".prefix('zenpage_news')." ".$show." ORDER BY date)
 				UNION
 				".$albumquery."
-				ORDER By date DESC $limit
+				ORDER BY $stickyorder date DESC $limit
 				");
 				break;
 			case "latestimagesbyalbum-thumbnail": 
@@ -574,7 +581,7 @@ function isProtectedPage($pageobj=NULL) {
 						"albumname" => $article->getTitle(),
 						"titlelink" => $article->getTitlelink(),
 						"date" => $article->getDateTime(),
-						"type" => "news"
+						"type" => "news",
 					);
 					}
 				}
@@ -595,7 +602,7 @@ function isProtectedPage($pageobj=NULL) {
 					"albumname" => $tempalbum->getFolder(),
 					"titlelink" => $tempalbum->getTitle(),
 					"date" => $albumdate,
-					"type" => 'albums'
+					"type" => 'albums',
 					);
 				}
 				//$latestalbums = array_merge($latestalbums, $item);
