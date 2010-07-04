@@ -4,7 +4,7 @@
  *
  * @package plugins
  */
-$plugin_version = '1.3.0';
+$plugin_version = '1.3.1';
 $plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto.")
 				."<p class='notebox'>". gettext("<strong>Note:</strong> This feature must be integrated into your theme. Of the distributed themes, only <code>Zenpage default</code> and <code>effervescence+</code> support Zenpage.")."</p>";
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";

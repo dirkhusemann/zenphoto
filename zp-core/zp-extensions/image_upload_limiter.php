@@ -12,7 +12,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides the means to set an limit of the number of images that can be uploaded to an album in total. Of course this is bypassed if using FTP upload or ZIP files! If you want to limit the latter you need to use the quota_management plugin additionally.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.0'; 
+$plugin_version = '1.3.1'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-image_uplad_limiter.php.html";
 
 $option_interface = new uploadlimit();

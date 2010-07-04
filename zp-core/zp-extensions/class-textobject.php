@@ -57,7 +57,7 @@
 $plugin_is_filter = 9;
 $plugin_description = gettext('Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file.');
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.0';
+$plugin_version = '1.3.1';
 
 addPluginType('htm', 'TextObject');
 addPluginType('html', 'TextObject');

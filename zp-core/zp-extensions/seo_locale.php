@@ -20,7 +20,7 @@ $plugin_description = gettext("Allows setting language locale through the URI.")
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---seo_locale.php.html";
 $plugin_disable = (!getOption('mod_rewrite'))?gettext('<em>mod_rewrite</em> must be enabled for this plugin to function.'):false;
-$plugin_version = '1.3.0'; 
+$plugin_version = '1.3.1'; 
 
 if ($plugin_disable) {
 	setOption('zp_plugin_seo_locale',0);

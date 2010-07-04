@@ -26,7 +26,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides a quota management system to limit the sum of sizes of images a user uploads.")."<p class='notebox'>".gettext("<strong>Note:</strong> if FTP is used to upload images, manual user assignment is necessary. ZIP file upload is disabled as quotas are not applied to the files contained therein.")."</p>";
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.0';
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-quota.php.html";
 
 $option_interface = new Quota_management();

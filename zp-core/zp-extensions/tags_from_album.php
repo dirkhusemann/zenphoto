@@ -9,7 +9,7 @@
 
 $plugin_description = gettext("Prints a tag cloud of all image tags from an album optionally including the subalbums or the album tags including sub album tags. Note the optional counter prints the total number of the tag used, not just for the selected album (as clicking on it will return all anyway)."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.0'; 
+$plugin_version = '1.3.1'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---tags_from_album.php.html";
 
 /**

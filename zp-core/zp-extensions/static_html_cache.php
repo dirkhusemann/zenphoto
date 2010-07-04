@@ -25,7 +25,7 @@ require_once(dirname(dirname(__FILE__)).'/functions.php');
 $plugin_is_filter = 5;
 $plugin_description = gettext("Adds static HTML cache functionality to Zenphoto v1.2 or higher. Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php. This plugin uses the folder <em>cache_html</em> and it's subfolders <em>index, images, albums</em> and <em>pages</em> in Zenphoto's root folder.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.0';
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---static_html_cache.php.html";
 $option_interface = new staticCache();
 $_zp_HTML_cache = $option_interface; // register as the HTML cache handler
