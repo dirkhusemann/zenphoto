@@ -35,12 +35,16 @@ class user_logout_options {
 
 
 $__redirect = '';
+if (in_context(ZP_ALBUM)) {
+	$__redirect .= "&album=" . $_zp_current_album->name;
+}
+if (in_context(ZP_IMAGE)) {
+	 $__redirect .= "&image=" . $_zp_current_image->filename;
+}
 if (isset($_GET['p'])) { $__redirect .= "&p=" . $_GET['p']; }
 if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . $_GET['searchfields']; }
 if (isset($_GET['words'])) { $__redirect .= "&words=" . $_GET['words']; }
 if (isset($_GET['date'])) { $__redirect .= "&date=" . $_GET['date']; }
-if (isset($_GET['album'])) { $__redirect .= "&album=" . $_GET['album']; }
-if (isset($_GET['image'])) { $__redirect .= "&image=" . $_GET['image']; }
 if (isset($_GET['title'])) { $__redirect .= "&title=" . $_GET['title']; }
 if (isset($_GET['page'])) { $__redirect .= "&page=" . $_GET['page']; }
 
@@ -99,7 +103,7 @@ function printUserLogin_out($before='', $after='', $showLoginForm=false, $logout
 			<?php
 		}
 	} else {
-		echo $before.'<a href="?userlog=0'.htmlspecialchars($__redirect).'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
+		echo $before.'<a href="/index.php?userlog=0'.htmlspecialchars($__redirect).'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
 	}
 }
 
