@@ -1720,7 +1720,10 @@ function getCodeblock($number=0,$titlelink='') {
 function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_pages;
 	$number = sanitize_numeric($number);
-	switch($option) {
+	$statsarticles = array();
+	$statscats = array();
+	$statspages = array();
+	switch($mode) {
 		case "popular":
 			$sortorder = "hitcounter"; break;
 		case "mostrated":
@@ -1729,24 +1732,27 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 			$sortorder = "rating"; break;
 		}
 	if($option == "all" OR $option == "news") {
-		$articles = query_full_array("SELECT id, title, titlelink, hitcounter, total_votes, rating FROM " . prefix('zenpage_news')." ORDER BY $sortorder DESC LIMIT $number");
+		$articles = query_full_array("SELECT titlelink FROM " . prefix('zenpage_news')." ORDER BY $sortorder DESC LIMIT $number");
 		$counter = "";
 		$statsarticles = array();
 		foreach ($articles as $article) {
 		$counter++;
+			$obj = new ZenpageNews($article['titlelink']);
 			$statsarticles[$counter] = array(
-					"id" => $article['id'],
-					"title" => htmlspecialchars(get_language_string($article['title'])),
-					"titlelink" => getNewsURL($article['titlelink']),
-					"hitcounter" => $article['hitcounter'],
-					"total_votes" => $article['total_votes'],
-					"rating" => $article['rating'],
+					"id" => $obj->getID(),
+					"title" => $obj->getTitle(),
+					"titlelink" => $article['titlelink'],
+					"hitcounter" => $obj->getHitcounter(),
+					"total_votes" => $obj->get('total_votes'),
+					"rating" => $obj->get('rating'),
+					"content" => $obj->getContent(),
+					"date" => $obj->getDateTime(),
 					"type" => "News"
 			);
 		}
 		$stats = $statsarticles;
 	}
-	if(($option == "all" OR $option == "categories") AND ($mode != "mostrated" OR $mode != "toprated")) {
+	if(($option == "all" OR $option == "categories") && $mode != "mostrated" && $mode != "toprated") {
 		$categories = query_full_array("SELECT id, cat_name as title, cat_link as titlelink, hitcounter FROM " . prefix('zenpage_news_categories')." ORDER BY $sortorder DESC LIMIT $number");
 		$counter = "";
 		$statscats = array();
@@ -1759,24 +1765,29 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
 					"hitcounter" => $cat['hitcounter'],
 					"total_votes" => "",
 					"rating" => "",
+					"content" => '',
+					"date" => '',
 					"type" => "Category"
 			);
 		}
 		$stats = $statscats;
 	}
 	if($option == "all" OR $option == "pages") {
-		$pages = query_full_array("SELECT id, title, titlelink, hitcounter, total_votes, rating FROM " . prefix('zenpage_pages')." ORDER BY $sortorder DESC LIMIT $number");
+		$pages = query_full_array("SELECT titlelink FROM " . prefix('zenpage_pages')." ORDER BY $sortorder DESC LIMIT $number");
 		$counter = "";
 		$statspages = array();
 		foreach ($pages as $page) {
 			$counter++;
+			$pageobj = new ZenpagePage($page['titlelink']);
 			$statspages[$counter] = array(
-					"id" => $cat['id'],
-					"title" => htmlspecialchars(get_language_string($page['title'])),
-					"titlelink" => getPageLinkURL($page['titlelink']),
-					"hitcounter" => $page['hitcounter'],
-					"total_votes" => $page['total_votes'],
-					"rating" => $page['rating'],
+					"id" => $pageobj->getID(),
+					"title" => $pageobj->getTitle(),
+					"titlelink" => $page['titlelink'],
+					"hitcounter" => $pageobj->getHitcounter(),
+					"total_votes" => $pageobj->get('total_votes'),
+					"rating" => $pageobj->get('rating'),
+					"content" => $pageobj->getContent(),
+					"date" => $pageobj->getDateTime(),
 					"type" => "Page"
 			);
 		}
@@ -1800,32 +1811,67 @@ function getZenpageStatistic($number=10, $option="all",$mode="popular") {
  * 										 "mostrated" for news articles and pages
  * 										 "toprated" for news articles and pages
  * @param bool $showstats if the value should be shown
+ * @param bool $showtype if the type should be shown
+ * @param bool $showdate if the date should be shown (news articles and pages only)
+ * @param bool $showcontent if the content should be shown (news articles and pages only)
+ * @param bool $contentlength The shortened lenght of the content
  */
-function printZenpageStatistic($number=10, $option="all",$mode="popular",$showstats=true) {
+function printZenpageStatistic($number=10, $option="all",$mode="popular",$showstats=true,$showtype=true, $showdate=true, $showcontent=true, $contentlength=40) {
 	$stats = getZenpageStatistic($number, $option,$mode);
+	$contentlength = sanitize_numeric($contentlength);
+	switch($mode) {
+		case 'popular':
+			$cssid = "'zenpagemostpopular'";
+			break;
+		case 'mostrated':
+			$cssid ="'zenpagemostrated'";
+			break;
+		case 'toprated':
+			$cssid ="'zenpagetoprated'";
+			break;
+	}
 	echo "<ul id=$cssid>";
 	foreach($stats as $item) {
 		switch($mode) {
-			case "popular":
-				$cssid = "'zenpagemostpopular'";
-				$statsvalue = $stats['hitcounter'];
+			case 'popular':
+				$statsvalue = $item['hitcounter'];
 				break;
-			case "mostrated":
-				$cssid ="'zenpagemostrated'";
-				$statsvalue = $stats['total_votes'];
+			case 'mostrated':
+				$statsvalue = $item['total_votes'];
 				break;
-			case "toprated":
-				$cssid ="'zenpagetoprated'";
-				$statsvalue = $stats['rating'];
+			case 'toprated':
+				$statsvalue = $item['rating'];
 				break;
 		}
-		echo "<li><a href='".$item['titlelink']."' title='".strip_tags($item['title'])."'><h3>".$item['title']." <small>[".$item['type']."]";
-		if($showhitcount) {
-			echo " (".$statsvalue.")</small>";
+		switch($item['type']) {
+			case 'Page':
+				$titlelink = getPageLinkURL($item['titlelink']);
+			case 'News':
+				$titlelink = getNewsURL($item['titlelink']);
+				break;
+			case 'Category':
+				$titlelink = getNewsCategoryURL($item['titlelink']);
+				break;
 		}
-		echo "</h3></a>";
+		echo '<li><a href="'.$titlelink.'" title="'.strip_tags($item['title']).'"><h3>'.$item['title'];
+		echo '<small>';
+		if($showtype) {
+			echo ' ['.$item['type'].']';
+		}
+		if($showstats && ($item['type'] != 'Category' && $mode != 'mostrated' && $mode != 'toprated')) {
+			echo ' ('.$statsvalue.')';
+		}
+		echo '</small>';
+		echo '</h3></a>';
+		if($showdate && $item['type'] != 'Category') {
+			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($item['date']))."</p>";
+		}
+		if($showcontent && $item['type'] != 'Category') {
+			echo '<p>'.truncate_string($item['content'], $contentlength).'</p>';
+		}
+		echo '</li>';
 	}
-	echo "</ul>";
+	echo '</ul>';
 }
 
 /**
@@ -1835,10 +1881,14 @@ function printZenpageStatistic($number=10, $option="all",$mode="popular",$showst
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
  * 											 "pages" for pages
- * @param bool $showstats if the votes should be shown
+ * @param bool $showstats if the value should be shown
+ * @param bool $showtype if the type should be shown
+ * @param bool $showdate if the date should be shown (news articles and pages only)
+ * @param bool $showcontent if the content should be shown (news articles and pages only)
+ * @param bool $contentlength The shortened lenght of the content
  */
-function printMostPopularItems($number=10, $option="all",$showstats=true) {
-	printZenpageStatistic($number, $option,"popular",$showstats);
+function printMostPopularItems($number=10, $option="all",$showstats=true,$showtype=true, $showdate=true, $showcontent=true, $contentlength=40) {
+	printZenpageStatistic($number, $option,"popular",$showstats,$showtype, $showdate, $showcontent, $contentlength);
 }
 
 /**
@@ -1848,10 +1898,14 @@ function printMostPopularItems($number=10, $option="all",$showstats=true) {
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
  * 											 "pages" for pages
- * @param bool $showstats if the votes should be shown
+ * @param bool $showstats if the value should be shown
+ * @param bool $showtype if the type should be shown
+ * @param bool $showdate if the date should be shown (news articles and pages only)
+ * @param bool $showcontent if the content should be shown (news articles and pages only)
+ * @param bool $contentlength The shortened lenght of the content
  */
-function printMostRatedItems($number=10, $option="all",$showstats=true) {
-	printZenpageStatistic($number, $option,"mostrated",$showstats);
+function printMostRatedItems($number=10, $option="all",$showstats=true,$showtype=true, $showdate=true, $showcontent=true, $contentlength=40) {
+	printZenpageStatistic($number, $option,"mostrated",$showstats,$showtype, $showdate, $showcontent, $contentlength);
 }
 
 /**
@@ -1861,10 +1915,14 @@ function printMostRatedItems($number=10, $option="all",$showstats=true) {
  * @param string $option "all" pages and articles
  * 											 "news" for news articles
  * 											 "pages" for pages
- * @param bool $showstats if the votes should be shown
+ * @param bool $showstats if the value should be shown
+ * @param bool $showtype if the type should be shown
+ * @param bool $showdate if the date should be shown (news articles and pages only)
+ * @param bool $showcontent if the content should be shown (news articles and pages only)
+ * @param bool $contentlength The shortened lenght of the content
  */
-function printTopRatedItems($number=10, $option="all",$showstats=true) {
-	printZenpageStatistic($number, $option,"toprated",$showstats);
+function printTopRatedItems($number=10, $option="all",$showstats=true,$showtype=true, $showdate=true, $showcontent=true, $contentlength=40) {
+	printZenpageStatistic($number, $option,"toprated",$showstats,$showtype, $showdate, $showcontent, $contentlength);
 }
 
 
