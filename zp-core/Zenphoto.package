@@ -657,6 +657,7 @@ zp-core/zp-extensions/rating.php
 zp-core/zp-extensions/register_user
 zp-core/zp-extensions/register_user/register_user_form.php
 zp-core/zp-extensions/register_user.php
+zp-core/zp-extensions/security-logger.php
 zp-core/zp-extensions/seo_locale.php
 zp-core/zp-extensions/sitemap-extended.php
 zp-core/zp-extensions/slideshow
