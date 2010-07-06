@@ -51,10 +51,10 @@ class register_user_options {
 											gettext('Email ID') => array('key' => 'register_user_email_is_id', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, The user\'s e-mail address will be used as his User ID.')),
 											gettext('Email notification text') => array('key' => 'register_user_text', 'type' => OPTION_TYPE_TEXTAREA,
-												'desc' => gettext('Text for the body of the email sent to the user. <strong>Note:</strong> You must include <code>%s</code> in your message where you wish the registration completion link to appear.')),
+												'desc' => gettext('Text for the body of the email sent to the user. <p class="notebox"><strong>Note:</strong> You must include <code>%s</code> in your message where you wish the registration completion link to appear.</p>')),
 											gettext('User registration page') => array('key' => 'register_user_page', 'type' => OPTION_TYPE_CUSTOM,
 												'desc' => gettext('If this option is set, the visitor login form will include a link to this page. The link text will be labeled with the text provided.')),
-											gettext('Use CAPTCHA') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
+											gettext('CAPTCHA') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, CAPTCHA validation will be required for user registration.'))
 											);
 		$admins = $_zp_authority->getAdministrators();

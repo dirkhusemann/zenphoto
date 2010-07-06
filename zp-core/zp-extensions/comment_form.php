@@ -380,23 +380,26 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL, $addheader=t
 			}
 			?>
 		<div id="comments">
-		<div id="comment_toggle"><!-- place holder for toggle button --></div>
-		<?php
-						while (next_comment()) {
-							?>
-		<div class="comment" <?php echo $display; ?>><a
-			name="<?php echo $_zp_current_comment['id']; ?>"></a>
-		<div class="commentinfo">
-		<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
+			<div id="comment_toggle"><!-- place holder for toggle button --></div>
+			<?php
+			while (next_comment()) {
+				?>
+				<div class="comment" <?php echo $display; ?>>
+					<a name="<?php echo $_zp_current_comment['id']; ?>"></a>
+					<div class="commentinfo">
+						<h4><?php printCommentAuthorLink(); ?>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?></h4>
+					</div>
+					<div class="commenttext"><?php echo getCommentBody();?></div>
+				</div>
+				<?php
+			}
+			?>
 		</div>
-		<div class="commenttext"><?php echo getCommentBody();?></div>
-		</div>
-		<?php
-						}
-						?></div>
 		<?php
 		}
-		?> <!-- Comment Box --> <?php
+		?>
+		<!-- Comment Box -->
+		<?php
 		if ($comments_open) {
 			$stored = array_merge(getCommentStored(),array('street'=>'', 'city'=>'', 'state'=>'', 'country'=>'', 'postal'=>''));
 			$raw = $stored['custom'];
@@ -455,29 +458,31 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL, $addheader=t
 			} else {
 				$form = SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/comment_form'.$formname;
 			}
-			if (getOption('comment_form_members_only') && !zp_loggedin(ADMIN_RIGHTS | POST_COMMENT_RIGHTS)) {
+			if (getOption('comment_form_members_only') && !zp_loggedin(POST_COMMENT_RIGHTS)) {
 				echo gettext('Only registered users may post comments.');
 			} else {
 				if (!empty($addcommenttext)) {
 					?>
-<h3><?php echo $addcommenttext; ?></h3>
-<?php
+					<h3><?php echo $addcommenttext; ?></h3>
+					<?php
 				}
 				?>
-<div id="commententry"><?php
-					require_once($form);
-					?></div>
-<?php
+				<div id="commententry">
+				
+				<?php require_once($form); ?>
+				</div>
+				<?php
 			}
 		} else {
 			?>
-<div id="commententry">
-<h3><?php echo gettext('Closed for comments.');?></h3>
-</div>
-<?php
+			<div id="commententry">
+				<h3><?php echo gettext('Closed for comments.');?></h3>
+			</div>
+			<?php
 		}
-	?></div>
-<?php
+		?>
+		</div>
+	<?php
 if (getOption('comment_form_rss')) {
 	switch($_zp_gallery_page) {
 		case "image.php":

@@ -738,7 +738,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<td width="350">
 					<?php print_language_string_list(getOption('gallery_title'), 'gallery_title', false) ?>
 					</td>
-					<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
+					<td><?php echo gettext("What you want to call your Zenphoto site."); ?></td>
 				</tr>
 				<tr>
 					<td width="175"><?php echo gettext("Gallery description:"); ?></td>
@@ -1769,7 +1769,7 @@ if ($subtab == 'comments' && zp_loggedin(OPTIONS_RIGHTS)) {
 		?>
 		<!-- end of SPAM filter options -->
 		<tr>
-			<td><?php echo gettext("Require fields:"); ?></td>
+			<td><?php echo gettext("Required fields:"); ?></td>
 			<td>
 				<table class="checkboxes">
 					<tr>
@@ -1818,7 +1818,7 @@ if ($subtab == 'comments' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</tr>
 				</table>
 			</td>
-			<td><?php echo gettext("Checked fields must be valid in a comment posting."); ?></td>
+			<td><?php echo gettext("Comment posting will be rejected if any of the checked fields is not valid."); ?></td>
 		</tr>
 		<tr>
 			<td colspan="3">
