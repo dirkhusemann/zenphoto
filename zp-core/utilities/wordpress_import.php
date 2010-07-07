@@ -22,15 +22,7 @@ $button_hint = gettext('An importer for Wordpress posts and pages to Zenpage.');
 $button_icon = 'images/wpmini-blue.png';
 $button_rights = ADMIN_RIGHTS;
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
-
-if (!zp_loggedin(OVERVIEW_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';

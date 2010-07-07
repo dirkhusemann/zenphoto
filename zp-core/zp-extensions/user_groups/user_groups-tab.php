@@ -8,6 +8,9 @@ define ('OFFSET_PATH', 4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+
+
 $admins = $_zp_authority->getAdministrators();
 $ordered = array();
 foreach ($admins as $key=>$admin) {

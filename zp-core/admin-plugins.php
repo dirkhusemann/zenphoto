@@ -10,15 +10,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!zp_loggedin(ADMIN_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
-
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 $gallery = new Gallery();
 $_GET['page'] = 'plugins';

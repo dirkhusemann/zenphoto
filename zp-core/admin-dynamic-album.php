@@ -11,10 +11,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/template-functions.php');
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
+admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 $imagelist = array();
 
@@ -32,15 +29,13 @@ function getSubalbumImages($folder) {
 	}
 }
 
-if (!zp_loggedin()) {
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
 $search = new SearchEngine(true);
 if (isset($_POST['savealbum'])) {
 	$albumname = sanitize($_POST['album']);
 	if (!isMyAlbum($albumname, ALBUM_RIGHTS)) {
-		die(gettext("You do not have edit rights on this album."));
+		if (!zp_apply_filter('admin_allow_access',false, $return)) {
+			die(gettext("You do not have edit rights on this album."));
+		}
 	}
 	$album = sanitize($_POST['albumselect']);
 	$words = sanitize($_POST['words']);

@@ -28,16 +28,7 @@ $button_hint = gettext('Manage un-published content in your gallery.');
 $button_icon = 'images/calendar.png';
 $button_rights = ALBUM_RIGHTS;
 
-
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
-
-if (!zp_loggedin(ALBUM_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
+admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';

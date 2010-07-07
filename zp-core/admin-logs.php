@@ -7,10 +7,9 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
-if (!zp_loggedin(ADMIN_RIGHTS)) {
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
+
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+
 if (isset($_GET['action'])) {
 	$action = sanitize($_GET['action'],3);
 	$file = SERVERPATH.'/'.DATA_FOLDER . '/'.sanitize($_POST['filename'],3);

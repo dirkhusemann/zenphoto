@@ -4,17 +4,16 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/functions-image.php');
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
+admin_securityChecks(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
 
 if (!isMyALbum($albumname, ALBUM_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
+	if (!zp_apply_filter('admin_allow_access',false, $return)) {
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+		exit();
+	}
 }
 
 // get what image side is being used for resizing

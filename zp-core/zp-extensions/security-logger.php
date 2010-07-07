@@ -1,6 +1,6 @@
 <?php
 /**
- * Places login attempts into a security log
+ * Places security information in a security log
  * The logged data includes the ip address of the site attempting the login, the type of login, the user/user name,
  * and the success/failure. On failure, the password used in the attempt is also shown.
  * 
@@ -8,13 +8,14 @@
  * @package plugins
  */
 $plugin_is_filter = 5;
-$plugin_description = sprintf(gettext("Logs all attempts to login to the admin pages to <em>security_log.txt</em> in the %s folder."),DATA_FOLDER);
+$plugin_description = sprintf(gettext("Logs all attempts to login to or illegally access the admin pages. Log is kept in <em>security_log.txt</em> in the %s folder."),DATA_FOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.3.1'; 
 $option_interface = new security_logger();
 
 if (getOption('logger_log_admin')) zp_register_filter('admin_login_attempt', 'security_logger_adminLoginLogger');
 if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'security_logger_guestLoginLogger');
+zp_register_filter('admin_allow_access', 'security_logger_adminGate');
 
 /**
  * Option handler class
@@ -62,32 +63,19 @@ class security_logger {
  * @param string $name
  * @param string $ip
  * @param string $type
- * @param bool $authority kind of login
+ * @param string $authority kind of login
+ * @param string $addl more info
  */
-function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, $authority) {
-	switch (getOption('logger_log_type')) {
-		case 'all': 
-			break;
-		case 'success':
-			if (!$success) return;
-			break;
-		case 'fail':
-			if ($success) return;
-			break;
-	}
+function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, $authority, $addl=NULL) {
 	$file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt';
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
-		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'athority'."\n"));
+		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'athority'."\t\n"));
 	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
-	if ($type == 'frontend') {
-		$message .= gettext('Front-end')."\t";
-	} else {
-		$message .= gettext('Back-end')."\t";
-	}
+	$message .= $type."\t";
 	$message .= $user."\t";
 	if ($success) {
 		$message .= "**********\t";
@@ -98,6 +86,9 @@ function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, 
 	}
 	if ($success) {
 		$message .= substr($authority, 0, strrpos($authority,'_auth'));
+	}
+	if ($addl) {
+		$message .= "\t".$addl;
 	}
 	fwrite($f, $message . "\n");
 	fclose($f);
@@ -115,6 +106,16 @@ function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, 
  */
 function security_logger_adminLoginLogger($success, $user, $pass) {
 	global $_zp_authority;
+	switch (getOption('logger_log_type')) {
+		case 'all': 
+			break;
+		case 'success':
+			if (!$success) return false;
+			break;
+		case 'fail':
+			if ($success) return true;
+			break;
+	}
 	if ($success) {
 		$admins = $_zp_authority->getAdministrators();
 		foreach ($admins as $admin) {
@@ -126,7 +127,7 @@ function security_logger_adminLoginLogger($success, $user, $pass) {
 	} else {
 		$name = '';
 	}
-	security_logger_loginLogger($success, $user, $pass, $name, getUserIP(), 'backend', 'zp_admin_auth');
+	security_logger_loginLogger($success, $user, $pass, $name, getUserIP(), gettext('Back-end'), 'zp_admin_auth');
 	return $success;
 }
 
@@ -141,8 +142,35 @@ function security_logger_adminLoginLogger($success, $user, $pass) {
  * @return bool
  */
 function security_logger_guestLoginLogger($success, $user, $pass, $athority) {
-	security_logger_loginLogger($success, $user, $pass, '', getUserIP(), 'frontend', $athority);
+	switch (getOption('logger_log_type')) {
+		case 'all': 
+			break;
+		case 'success':
+			if (!$success) return false;
+			break;
+		case 'fail':
+			if ($success) return true;
+			break;
+	}
+	security_logger_loginLogger($success, $user, $pass, '', getUserIP(), gettext('Front-end'), $athority);
 	return $success;
+}
+
+/**
+ * Logs blocked accesses to Admin pages
+ * @param bool $allow set to true to override the block
+ * @param string $page the "return" link
+ */
+function security_logger_adminGate($allow, $page) {
+	global $_zp_current_admin_obj;
+	if (zp_loggedin()) {
+		$user = $_zp_current_admin_obj->getUser();
+		$name = $_zp_current_admin_obj->getName();
+	} else {
+		$user = $name = '';
+	}
+	security_logger_loginLogger(false, $user, '', $name, getUserIP(), gettext('Blocked access'), '', $page);
+	return $allow;
 }
 
 ?>

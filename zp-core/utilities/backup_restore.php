@@ -24,18 +24,7 @@ $button_hint = gettext('Backup and restore your gallery database.');
 $button_icon = 'images/folder.png';
 $button_rights = ADMIN_RIGHTS;
 
-
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
-
-if (!is_null(getOption('admin_reset_date'))) {
-	if (!zp_loggedin(ADMIN_RIGHTS)) { // prevent nefarious access to this page.
-		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-		exit();
-	}
-}
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 $buffer = '';
 

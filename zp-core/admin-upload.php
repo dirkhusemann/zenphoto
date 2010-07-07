@@ -12,15 +12,8 @@ define('UPLOAD_ERR_QUOTA', -1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!zp_loggedin(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
+admin_securityChecks(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
 $uploadtype = zp_getcookie('uploadtype');
 if (isset($_GET['uploadtype'])) {
 	$uploadtype = sanitize($_GET['uploadtype'])	;

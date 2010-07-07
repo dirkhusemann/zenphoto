@@ -17,10 +17,7 @@ $button_hint = gettext('Finds newly uploaded images that have not been cached an
 $button_icon = 'images/cache1.png';
 $button_rights = ADMIN_RIGHTS;
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 function loadAlbum($album) {
 	global $gallery, $_zp_current_album, $_zp_current_image;

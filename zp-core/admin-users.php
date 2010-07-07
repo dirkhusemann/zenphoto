@@ -14,16 +14,9 @@ $gallery = new Gallery();
 $_GET['page'] = 'users'; // must be a user with no options rights
 $_current_tab = sanitize($_GET['page'],3);
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
 
-if (!$_zp_loggedin) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 /* handle posts */
 if (isset($_GET['action'])) {

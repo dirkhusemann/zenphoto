@@ -23,15 +23,7 @@ $button_hint = gettext('Shows statistical graphs and info about your gallery\'s 
 $button_icon = 'images/bar_graph.png';
 $button_rights = ADMIN_RIGHTS;
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
-
-if (!zp_loggedin(OVERVIEW_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
+admin_securityChecks(OVERVIEW_RIGHTS, currentRelativeURL(__FILE__));
 
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';

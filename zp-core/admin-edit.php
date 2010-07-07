@@ -12,15 +12,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-if (!zp_loggedin(ALBUM_RIGHTS)) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
-
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
-}
+admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 if (isset($_GET['tab'])) {
 	$subtab = sanitize($_GET['tab']);
@@ -37,8 +29,9 @@ processEditSelection($subtab);
 //check for security incursions
 if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
-	if (!zp_loggedin(ADMIN_RIGHTS)) {
-		if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+
+	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+		if (!zp_apply_filter('admin_allow_access',false, $return)) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 			exit();
 		}
