@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/template-functions.php');
 
-admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 $imagelist = array();
 
@@ -33,7 +33,7 @@ $search = new SearchEngine(true);
 if (isset($_POST['savealbum'])) {
 	$albumname = sanitize($_POST['album']);
 	if (!isMyAlbum($albumname, ALBUM_RIGHTS)) {
-		if (!zp_apply_filter('admin_allow_access',false, $return)) {
+		if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
 			die(gettext("You do not have edit rights on this album."));
 		}
 	}

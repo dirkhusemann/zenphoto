@@ -33,7 +33,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
-
+$msg = '';
 if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php'); 
 }
@@ -116,9 +116,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 												'reset_hitcounters'=>gettext('reset all hitcounters'));
 			$msg = sprintf(gettext('You do not have proper rights to %s.'),$actions[$action]);
 		}
-	} else if (isset($_GET['from'])) {
-		$class = 'errorbox';
-		$msg = sprintf(gettext('You do not have proper rights to access %s.'),urldecode(sanitize($_GET['from'])));
+	} else {
+		if (isset($_GET['from'])) {
+			$class = 'errorbox';
+			$msg = sprintf(gettext('You do not have proper rights to access %s.'),urldecode(sanitize($_GET['from'])));
+		}
 	}
 
 /************************************************************************************/
@@ -127,6 +129,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	
 }
 
+if (empty($msg) && zp_loggedin() && !zp_loggedin(OVERVIEW_RIGHTS)) {	// admin access without overview rights, redirect to first tab
+	$tab = array_shift($zenphoto_tabs);
+	$link = $tab['link'];
+	header('location:'.$link);
+	exit();
+}
 
 // Print our header
 printAdminHeader();
@@ -383,8 +391,8 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	</div>
 	
 	<?php
+	zp_apply_filter('admin_overview_left', '');
 }
-zp_apply_filter('admin_overview_left', '');
 ?>
 
 <br clear="all" />
@@ -562,8 +570,8 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	</div>
 	
 	<?php
+	zp_apply_filter('admin_overview_right', '');
 }
-zp_apply_filter('admin_overview_right', '');
 ?>
 
 <br clear="all" />

@@ -54,14 +54,14 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 require_once(dirname(dirname(__FILE__)).'/functions-image.php');
 
-admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
 
 if (!isMyALbum($albumname, ALBUM_RIGHTS)) { // prevent nefarious access to this page.
-	if (!zp_apply_filter('admin_allow_access',false, $return)) {
-		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+	if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
 		exit();
 	}
 }

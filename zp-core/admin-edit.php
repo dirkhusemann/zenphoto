@@ -12,7 +12,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 if (isset($_GET['tab'])) {
 	$subtab = sanitize($_GET['tab']);
@@ -31,8 +31,8 @@ if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
 
 	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
-		if (!zp_apply_filter('admin_allow_access',false, $return)) {
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
+		if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
 			exit();
 		}
 	}

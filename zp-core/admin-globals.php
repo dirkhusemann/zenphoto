@@ -24,10 +24,11 @@ $sortby = array(gettext('Filename') => 'filename',
 
 // setup sub-tab arrays for use in dropdown
 $zenphoto_tabs = array();
-$zenphoto_tabs['home'] = array('text'=>gettext("overview"),
-					'link'=>WEBPATH."/".ZENFOLDER.'/admin.php',
-					'subtabs'=>NULL);
-
+if (zp_loggedin(OVERVIEW_RIGHTS)) {
+	$zenphoto_tabs['home'] = array('text'=>gettext("overview"),
+						'link'=>WEBPATH."/".ZENFOLDER.'/admin.php',
+						'subtabs'=>NULL);
+}
 if (zp_loggedin(UPLOAD_RIGHTS) || zp_loggedin(FILES_RIGHTS)) {
 	$zenphoto_tabs['upload'] = array('text'=>gettext("upload"),
 							'subtabs'=>NULL);

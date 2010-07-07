@@ -1,6 +1,8 @@
 <?php
 define('OFFSET_PATH', 3);
+require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
 if (!zp_loggedin()) {
 	if (isset($_POST['auth'])) {
 		$auth = $_POST['auth'];
@@ -13,6 +15,9 @@ if (!zp_loggedin()) {
 		}
 	}
 }
+
+admin_securityChecks(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
+
 if (!empty($_FILES)) {
 	$name = trim(basename(sanitize($_FILES['Filedata']['name'],3)));
 	if (isset($_FILES['Filedata']['error']) && $_FILES['Filedata']['error']) {
@@ -33,7 +38,13 @@ if (!empty($_FILES)) {
 			$folder = substr($folder,0,-1);
 		}
 		$targetPath = getAlbumFolder().internalToFilesystem($folder);
-		if (!empty($folder) && isMyAlbum($folder, UPLOAD_RIGHTS)) {
+		if (!empty($folder)) {
+			if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
+				if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+					header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
+					exit();
+				}
+			}
 			if (!is_dir($targetPath)) {
 				mkdir_recursive($targetPath, CHMOD_VALUE);
 				$album = new Album(new Gallery(), $folder);
@@ -48,16 +59,16 @@ if (!empty($_FILES)) {
 					$soename = seoFriendly($name);
 					if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
 					$targetFile =  $targetPath.'/'.internalToFilesystem($soename);
-	
-						$rslt = move_uploaded_file($tempFile,$targetFile);
-						@chmod($targetFile, 0666 & CHMOD_VALUE);
-						$album = new Album(New Gallery(), $folder);
-						$image = newImage($album, $soename);
-						if ($name != $soename && $image->getTitle() == substr($soename, 0, strrpos($soename, '.'))) {
-							$image->setTitle(substr($name, 0, strrpos($name, '.')));
-							$image->save();
-						}
-	
+
+					$rslt = move_uploaded_file($tempFile,$targetFile);
+					@chmod($targetFile, 0666 & CHMOD_VALUE);
+					$album = new Album(New Gallery(), $folder);
+					$image = newImage($album, $soename);
+					if ($name != $soename && $image->getTitle() == substr($soename, 0, strrpos($soename, '.'))) {
+						$image->setTitle(substr($name, 0, strrpos($name, '.')));
+						$image->save();
+					}
+
 				} else if (is_zip($name)) {
 					unzip($tempFile, $targetPath);
 				}
@@ -65,6 +76,7 @@ if (!empty($_FILES)) {
 		}
 	}
 }
+
 
 echo '1';
 

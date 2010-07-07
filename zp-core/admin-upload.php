@@ -12,7 +12,7 @@ define('UPLOAD_ERR_QUOTA', -1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-admin_securityChecks(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, currentRelativeURL(__FILE__));
+admin_securityChecks(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 $uploadtype = zp_getcookie('uploadtype');
 if (isset($_GET['uploadtype'])) {
@@ -39,7 +39,9 @@ if (isset($_GET['action'])) {
 			$folder = trim(sanitize_path($_POST['folder']));
 			// see if he has rights to the album.
 			if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
-				$error = UPLOAD_ERR_CANT_WRITE;
+				if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+					$error = UPLOAD_ERR_CANT_WRITE;
+				}
 			}
 			if (!$error) {
 

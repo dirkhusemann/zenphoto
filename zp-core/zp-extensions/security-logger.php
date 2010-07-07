@@ -16,6 +16,7 @@ $option_interface = new security_logger();
 if (getOption('logger_log_admin')) zp_register_filter('admin_login_attempt', 'security_logger_adminLoginLogger');
 if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'security_logger_guestLoginLogger');
 zp_register_filter('admin_allow_access', 'security_logger_adminGate');
+zp_register_filter('admin_managed_albums_access', 'security_logger_adminAlbumGate');
 
 /**
  * Option handler class
@@ -71,7 +72,7 @@ function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, 
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
-		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'athority'."\t\n"));
+		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'authority'."\t\n"));
 	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
@@ -170,6 +171,23 @@ function security_logger_adminGate($allow, $page) {
 		$user = $name = '';
 	}
 	security_logger_loginLogger(false, $user, '', $name, getUserIP(), gettext('Blocked access'), '', $page);
+	return $allow;
+}
+
+/**
+ * Logs blocked accesses to Managed albums
+ * @param bool $allow set to true to override the block
+ * @param string $page the "return" link
+ */
+function security_logger_adminAlbumGate($allow, $page) {
+	global $_zp_current_admin_obj;
+	if (zp_loggedin()) {
+		$user = $_zp_current_admin_obj->getUser();
+		$name = $_zp_current_admin_obj->getName();
+	} else {
+		$user = $name = '';
+	}
+	security_logger_loginLogger(false, $user, '', $name, getUserIP(), gettext('Blocked album'), '', $page);
 	return $allow;
 }
 
