@@ -59,7 +59,7 @@ class hitcounter_options {
 											'order' => 3,
 											'key' => 'hitcounter_set_defaults',
 											'type' => OPTION_TYPE_CUSTOM,
-											'desc' => gettext('Reset options to their default settngs.')
+											'desc' => gettext('Reset options to their default settings.')
 									)
 		);
 	}
