@@ -13,6 +13,9 @@ require_once("zenpage-admin-functions.php");
 
 admin_securityChecks(ZENPAGE_PAGES_RIGHTS, currentRelativeURL(__FILE__));
 
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
+header('Content-Type: text/html; charset=' . getOption('charset'));
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
