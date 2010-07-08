@@ -280,7 +280,7 @@ if(is_object($result)) {
 						$sticky = 0;
 					}
 				?>
-					<p><?php echo("Position:"); ?>
+					<p><?php echo gettext("Position:"); ?>
 						<select id="sticky" name="sticky">
 							<option value="0" <?php if ($sticky==0) echo 'selected="selected"';?>><?php echo gettext("normal"); ?></option>
 							<option value="1" <?php if ($sticky==1) echo 'selected="selected"';?>><?php echo gettext("sticky"); ?></option>

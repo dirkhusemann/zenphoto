@@ -162,7 +162,7 @@ printLogoAndLinks();
 				
 				</form>
 				<div class="tagtext">
-					<p><?php echo gettext('Place a checkmark in the box for each tag you wish to delete then press the <em>Delete checked tags</em> button. The brackets contain the number of times the tag appears.)'); ?></p>
+					<p><?php echo gettext('Place a checkmark in the box for each tag you wish to delete then press the <em>Delete checked tags</em> button. The brackets contain the number of times the tag appears.'); ?></p>
 				</div>
 			</td>
 			
