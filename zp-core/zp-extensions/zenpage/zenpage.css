@@ -190,77 +190,7 @@ IMG {
 	margin: 5px;
 }
 
-UL.tabNavigation {
-	list-style: none;
-	margin: 2px;
-	padding: 0;
-}
 
-UL.tabNavigation LI {
-	display: inline;
-}
-
-UL.tabNavigation LI A {
-	padding: 3px 5px;
-	background-color: #EEEEEE;
-	color: #6b7d84;
-	text-decoration: none;
-	border: 1px solid #C7D3D8;
-}
-
-UL.tabNavigation LI A.selected {
-	background-color: white;
-	color: black;
-	padding: 3px 5px;
-}
-
-UL.tabNavigation LI A:hover {
-	background-color: white;
-	color: gray;
-	padding: 3px 5px;
-}
-
-UL.tabNavigation LI A:active {
-	background-color: white;
-	color: black;
-	padding: 3px 5px;
-}
-
-UL.tabNavigation LI A:focus {
-	outline: 0;
-	color: #6b7d84;
-}
-
-div.tabs>div {
-	padding: 0px;
-	margin: 0px;
-	border: 0px solid #333;
-}
-
-div.tabs>div h2 {
-	margin: 0;
-}
-
-#first {
-	background-color: none;
-	margin-left: 0px;
-}
-
-#second {
-	background-color: none;
-	margin-left: 0px;
-}
-
-#third {
-	background-color: none;
-	margin-left: 0px;
-}
-
-.tabs textarea {
-	border: 1px solid #C7D3D8;
-	width: 600px;
-	height: 150px;
-}
 
 /* admin text fields 
 ***************************/

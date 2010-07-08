@@ -1421,5 +1421,14 @@ class Album extends PersistentObject {
 		$this->set('album_theme', $theme);
 	}
 	
+	/**
+	 * Returns the codeblocks of the album as an serialized array
+	 *
+	 * @return array
+	 */
+	function getCodeblock() {
+		return $this->get("codeblock");
+	}
+	
 }
 ?>

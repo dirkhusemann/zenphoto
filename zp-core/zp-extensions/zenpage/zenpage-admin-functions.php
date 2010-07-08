@@ -1563,32 +1563,6 @@ function is_AdminEditPage($page) {
 	}
 }
 
-/**
- * Codeblock tabs javascript code
- *
- */
-function codeblocktabsJS() {
-	?>
-	<script type="text/javascript" charset="utf-8">
-		// <!-- <![CDATA[
-		$(function () {
-			var tabContainers = $('div.tabs > div');
-			tabContainers.hide().filter(':first').show();
-
-			$('div.tabs ul.tabNavigation a').click(function () {
-				tabContainers.hide();
-				tabContainers.filter(this.hash).show();
-				$('div.tabs ul.tabNavigation a').removeClass('selected');
-				$(this).addClass('selected');
-				return false;
-			}).filter(':first').click();
-		});
-		// ]]> -->
-	</script>
-<?php
-}
-
-
 
 // test of the hack of shortschoolbus
 function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $locale=NULL) {

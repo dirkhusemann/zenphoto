@@ -1201,6 +1201,15 @@ class _Image extends PersistentObject {
 		$this->set('owner',$owner);
 	}
 	
+		/**
+	 * Returns the codeblocks of the image as an serialized array
+	 *
+	 * @return array
+	 */
+	function getCodeblock() {
+		return $this->get("codeblock");
+	}
+	
 
 }
 

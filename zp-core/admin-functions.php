@@ -1407,6 +1407,38 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						</select>
 						</td>
 					</tr>
+					<tr valign="top">
+		<td class="topalign-nopadding"><br /><?php echo gettext("Codeblocks:"); ?></td>
+		<td>
+		<br />
+			<div class="tabs">
+				<ul class="tabNavigation">
+					<li><a href="#first"><?php echo gettext("Codeblock 1"); ?></a></li>
+					<li><a href="#second"><?php echo gettext("Codeblock 2"); ?></a></li>
+					<li><a href="#third"><?php echo gettext("Codeblock 3"); ?></a></li>
+				</ul>
+					<?php
+							$getcodeblock = $album->getCodeblock();
+							if(!empty($getcodeblock)) {
+								$codeblock = unserialize($getcodeblock);
+							} else {
+								$codeblock[1] = "";
+								$codeblock[2] = "";
+								$codeblock[3] = "";
+							}
+							?>
+				<div id="first">
+					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo $codeblock[1]; ?></textarea>
+				</div>
+				<div id="second">
+					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo $codeblock[2]; ?></textarea>
+				</div>
+				<div id="third">
+					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo $codeblock[3]; ?></textarea>
+				</div>
+			</div>
+		</td>
+		</tr>
 				</table>
 			</td>
 			<td valign="top">
@@ -3304,5 +3336,31 @@ function getLocaleForTinyMCEandAFM() {
 	if (empty($locale)) $locale = 'en';
 	return $locale;
 }
+
+/**
+ * Codeblock tabs javascript code
+ *
+ */
+function codeblocktabsJS() {
+	?>
+	<script type="text/javascript" charset="utf-8">
+		// <!-- <![CDATA[
+		$(function () {
+			var tabContainers = $('div.tabs > div');
+			tabContainers.hide().filter(':first').show();
+
+			$('div.tabs ul.tabNavigation a').click(function () {
+				tabContainers.hide();
+				tabContainers.filter(this.hash).show();
+				$('div.tabs ul.tabNavigation a').removeClass('selected');
+				$(this).addClass('selected');
+				return false;
+			}).filter(':first').click();
+		});
+		// ]]> -->
+	</script>
+<?php
+}
+
 
 ?>
