@@ -9,6 +9,7 @@
 
 require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/functions-image.php');
+require_once(PHPScript('5.0.0', '_template_functions.php'));
 
 $_zp_conf_vars['images_first_page'] = NULL; // insure it is initialized
 $_zp_gallery = new Gallery();
@@ -4578,6 +4579,46 @@ function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $fil
 		}
 		echo " -->";
 	}
+}
+
+/**
+ * Gets the content of a codeblock for an image, album or Zenpage newsarticle or page.
+ * Additionally you can print codeblocks of a published or un-published specific Zenpage page (not news artcle!) by request directly.
+ *
+ * Note: Echoing this array's content does not execute it. Also no special chars will be escaped.
+ * Use printCodeblock() if you need to execute script code.
+ *
+ * Note: Meant for script code this field is not multilingual.
+ *
+ * @param int $number The codeblock you want to get
+ * @param string $titlelink The titlelink of a specific page you want to get the codeblock of (only for Zenpage pages!)
+ *
+ * @return string
+ */
+function getCodeblock($number=0,$titlelink='') {
+	global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
+	$getcodeblock = '';
+	if (empty($titlelink)) {
+		if(is_News()) {
+			if(get_class($_zp_current_zenpage_news) == "ZenpageNews") {
+				$hint = $show = '';
+				if (checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
+					$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+				} else {
+					$getcodeblock = '';
+				}
+			}
+		}
+		if(is_Pages()) {
+			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
+		}
+	}	else { // direct page request
+		$page = new ZenpagePage($titlelink);
+		$getcodeblock = $page->getCodeblock();
+	}
+	if (empty($getcodeblock)) return '';
+	$codeblock = unserialize($getcodeblock);
+	return $codeblock[$number];
 }
 
 ?>
