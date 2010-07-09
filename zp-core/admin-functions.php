@@ -1260,7 +1260,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					<tr>
 						<td align="left" valign="top" width="150"><?php echo gettext("Album watermark:"); ?> </td>
 						<td>
-							<select id="album_watermark" name="album_watermark">
+							<select id="album_watermark" name="<?php echo $prefix; ?>album_watermark">
 								<option value="!" <?php if ($current=='!') echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*no watermark'); ?></option>
 								<option value="" <?php if (empty($current)) echo ' selected="selected"' ?> style="background-color:LightGray"><?php echo gettext('*default'); ?></option>
 								<?php
@@ -1428,13 +1428,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							}
 							?>
 				<div id="first">
-					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo $codeblock[1]; ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock1" id="codeblock1<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_COMPAT); ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo $codeblock[2]; ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock2" id="codeblock2<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_COMPAT); ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo $codeblock[3]; ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock3" id="codeblock3<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_COMPAT); ?></textarea>
 				</div>
 			</div>
 		</td>
@@ -1467,7 +1467,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						if (empty($hc)) { $hc = '0'; }
 						?>
 						<label>
-							<input type="checkbox" name="reset_hitcounter" />
+							<input type="checkbox" name="<?php echo $prefix; ?>reset_hitcounter" />
 							<?php echo sprintf(gettext("Reset hitcounter (Hits: %u)"), $hc); ?>
 						</label>
 					</p>
@@ -1481,7 +1481,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							printf(gettext('Rating: <strong>%u</strong>'), $hc);
 							?>
 							<label>
-								<input type="checkbox" id="<?php echo $prefix; ?>reset_rating" name="<?php echo $prefix; ?>reset_rating" value="1" />
+								<input type="checkbox" id="reset_rating<?php echo $suffix; ?>" name="<?php echo $prefix; ?>reset_rating" value="1" />
 								<?php echo gettext("Reset"); ?>
 							</label>
 							<?php
@@ -1960,6 +1960,12 @@ function processAlbumEdit($index, $album, &$redirectto) {
 		$album->set('watermark', $new);
 		if ($new != $old) $gallery->clearCache(SERVERCACHE . '/' . $album->name);
 	}
+	$codeblock1 = sanitize($_POST[$prefix.'codeblock1'], 0);
+	$codeblock2 = sanitize($_POST[$prefix.'codeblock2'], 0);
+	$codeblock3 = sanitize($_POST[$prefix.'codeblock3'], 0);
+	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
+	$album->set('codeblock',$codeblock);
+	
 	$custom = process_language_string_save($prefix.'album_custom_data', 1);
 	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
 	zp_apply_filter('save_album_utilities_data', $album, $prefix);

@@ -261,6 +261,12 @@ if (isset($_GET['action'])) {
 											$image->setWMUse($wmuse);
 										}
 									}
+									$codeblock1 = sanitize($_POST['codeblock1-'.$i], 0);
+									$codeblock2 = sanitize($_POST['codeblock2-'.$i], 0);
+									$codeblock3 = sanitize($_POST['codeblock3-'.$i], 0);
+									$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
+									$image->set('codeblock',$codeblock);
+									
 									$custom = process_language_string_save("$i-custom_data", 1);
 									$image->setCustomData(zp_apply_filter('save_image_custom_data', $custom, $i));
 									zp_apply_filter('save_image_utilities_data', $image, $i);
@@ -1254,13 +1260,13 @@ $alb = removeParentAlbumNames($album);
 									}
 									?>
 									<div id="first-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock1-<?php echo $image->get('id'); ?>" id="codeblock1-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo $codeblock[1]; ?></textarea>
+										<textarea name="codeblock1-<?php echo $currentimage;?>" id="codeblock1-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_COMPAT); ?></textarea>
 									</div>
 									<div id="second-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock2-<?php echo $image->get('id'); ?>" id="codeblock2-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo $codeblock[2]; ?></textarea>
+										<textarea name="codeblock2-<?php echo $currentimage;?>" id="codeblock2-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_COMPAT); ?></textarea>
 									</div>
 									<div id="third-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock3-<?php echo $image->get('id'); ?>" id="codeblock3-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo $codeblock[3]; ?></textarea>
+										<textarea name="codeblock3-<?php echo $currentimage;?>" id="codeblock3-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_COMPAT); ?></textarea>
 									</div>
 								</div>
 							</td>
