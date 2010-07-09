@@ -325,13 +325,7 @@ if (isset($_GET['action'])) {
 				/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
 				$notify = '';
-				for ($i = 0; $i < $_POST['totalalbums']; $i++) {
-					if ($i>0) {
-						$prefix = $i."-";
-					} else {
-						$prefix = '';
-					}
-					$folder = sanitize_path(trim($_POST[$prefix.'folder']));
+				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
 					$album = new Album($gallery, $folder);
 					$returnalbum = '';
 					$rslt = processAlbumEdit($i, $album, $returnalbum);
@@ -1395,7 +1389,7 @@ if (isset($_GET['saved'])) {
 <form name="albumedit" autocomplete="off"	action="?page=edit&amp;action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
-	$currentalbum = 0;
+	$currentalbum = 1;
 	foreach ($albums as $folder) {
 		$album = new Album($gallery, $folder);
 		$images = $album->getImages();

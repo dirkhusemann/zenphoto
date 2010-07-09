@@ -1272,6 +1272,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					</tr>
 		<?php
 	}
+	if ($index==0) {	// suppress for mass-edit
 	?>
 					<tr>
 						<td align="left" valign="top" width="150"><?php echo gettext("Thumbnail:"); ?> </td>
@@ -1407,6 +1408,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						</select>
 						</td>
 					</tr>
+		<?php 
+	}
+	?>					
 					<tr valign="top">
 		<td class="topalign-nopadding"><br /><?php echo gettext("Codeblocks:"); ?></td>
 		<td>
