@@ -4596,18 +4596,24 @@ function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $fil
  * @return string
  */
 function getCodeblock($number=0,$titlelink='') {
-	global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page;
 	$getcodeblock = '';
 	if (empty($titlelink)) {
+		if (in_context(ZP_ALBUM)) {
+			$getcodeblock = $_zp_current_album->getCodeblock();
+		}
+		if (in_context(ZP_IMAGE)) {
+			$getcodeblock = $_zp_current_image->getCodeblock();
+		}
 		if(is_News()) {
-			if(get_class($_zp_current_zenpage_news) == "ZenpageNews") {
-				$hint = $show = '';
-				if (checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
-					$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
-				} else {
-					$getcodeblock = '';
-				}
+			//if(get_class($_zp_current_zenpage_news) == "ZenpageNews") { // formerly to prevent calling on non news CombiNews items
+			$hint = $show = '';
+			if (checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
+				$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+			} else {
+				$getcodeblock = '';
 			}
+			//}
 		}
 		if(is_Pages()) {
 			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
