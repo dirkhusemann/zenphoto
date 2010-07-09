@@ -4605,26 +4605,29 @@ function getCodeblock($number=0,$titlelink='') {
 		if (in_context(ZP_IMAGE)) {
 			$getcodeblock = $_zp_current_image->getCodeblock();
 		}
-		if(is_News()) {
-			//if(get_class($_zp_current_zenpage_news) == "ZenpageNews") { // formerly to prevent calling on non news CombiNews items
-			$hint = $show = '';
-			if (checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
-				$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
-			} else {
-				$getcodeblock = '';
+		if(getOption('zp_plugin_zenpage')) {
+			if(is_News()) {
+				//if(get_class($_zp_current_zenpage_news) == "ZenpageNews") { // formerly to prevent calling on non news CombiNews items
+				$hint = $show = '';
+				if (checkNewsAccess($_zp_current_zenpage_news, $hint, $show)) {
+					$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+				} else {
+					$getcodeblock = '';
+				}
+				//}
 			}
-			//}
-		}
-		if(is_Pages()) {
-			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
+			if(is_Pages()) {
+				$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
+			}
 		}
 	}	else { // direct page request
-		$page = new ZenpagePage($titlelink);
-		$getcodeblock = $page->getCodeblock();
+		if(getOption('zp_plugin_zenpage')) {
+			$page = new ZenpagePage($titlelink);
+			$getcodeblock = $page->getCodeblock();
+		} 
 	}
 	if (empty($getcodeblock)) return '';
 	$codeblock = unserialize($getcodeblock);
 	return $codeblock[$number];
 }
-
 ?>
