@@ -912,7 +912,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
  ?>
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
-	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="password_enabled<?php echo $prefix; ?>" value="0" />
+	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="password_enabled<?php echo $suffix; ?>" value="0" />
 	<p class="buttons">
 		<?php
 		$parent = dirname($album->name);
@@ -971,10 +971,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<?php	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor'); ?>
 						</td>
 					</tr>
-					<tr class="<?php echo $prefix; ?>passwordextrashow">
+					<tr class="password<?php echo $suffix; ?>extrashow">
 						<td align="left" valign="top">
 							<p>
-								<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',true);">
+								<a href="javascript:toggle_passwords('<?php echo $suffix; ?>',true);">
 								<?php echo gettext("Album password:"); ?>
 								</a>
 							</p>
@@ -995,10 +995,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						?>
 						</td>
 					</tr>
-					<tr class="<?php echo $prefix; ?>passwordextrahide" style="display:none" >
+					<tr class="password<?php echo $suffix; ?>extrahide" style="display:none" >
 						<td align="left" valign="top">
 							<p>
-							<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',false);">
+							<a href="javascript:toggle_passwords('<?php echo $suffix; ?>',false);">
 								<?php echo gettext("Album guest user:"); ?>
 							</a>
 							</p>
@@ -1040,7 +1040,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							<script type="text/javascript">
 								// <!-- <![CDATA[
 								$(function() {
-									$("#datepicker_<?php echo $prefix; ?>").datepicker({
+									$("#datepicker<?php echo $suffix; ?>").datepicker({
 													showOn: 'button',
 													buttonImage: 'images/calendar.png',
 													buttonText: '<?php echo gettext('calendar'); ?>',
@@ -1049,7 +1049,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								});
 								// ]]> -->
 							</script>
-							<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" />
+							<input type="text" id="datepicker<?php echo $suffix; ?>" size="20" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" />
 						</td>
 					</tr>
 					<tr>
@@ -1083,16 +1083,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 					<tr>
 						<td align="left" valign="top"><?php echo gettext("Sort subalbums by:");?> </td>
 						<td>
-					<?php
-
-	// script to test for what is selected
-	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
-
-	?>
 						<table>
 							<tr>
 								<td>
-									<select id="albumsortselect<?php echo $prefix; ?>" name="<?php echo $prefix; ?>subalbumsortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>album_direction_div','<?php echo $javaprefix; ?>album_custom_div')">
+									<select id="albumsortselect<?php echo $prefix; ?>" name="<?php echo $prefix; ?>subalbumsortby" onchange="update_direction(this,'album_direction_div<? echo $suffix; ?>','album_custom_div<? echo $suffix; ?>')">
 									<?php
 									if (is_null($album->getParent())) {
 										$globalsort = gettext("*gallery album sort order");
@@ -1113,7 +1107,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		$dsp = 'block';
 	}
 	?>
-									<span id="<?php echo $javaprefix; ?>album_direction_div" style="display:<?php echo $dsp; ?>">
+									<span id="album_direction_div<? echo $suffix; ?>" style="display:<?php echo $dsp; ?>">
 										<label>
 											<?php echo gettext("Descending"); ?>
 											<input type="checkbox" name="<?php echo $prefix; ?>album_sortdirection" value="1" <?php if ($album->getSortDirection('album')) {	echo "CHECKED";	}; ?> />
@@ -1131,19 +1125,20 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							</tr>
 							<tr>
 								<td colspan="2">
+									<span id="album_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
+									<?php echo gettext('custom fields:') ?>
+									<input id="customalbumsort<? echo $suffix; ?>" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+									</span>
+								
 									<script type="text/javascript">
 										// <!-- <![CDATA[
 										$(function () {
-											$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
+											$('#customalbumsort<? echo $suffix; ?>').tagSuggest({
 												tags: [<?php echo $albumdbfields; ?>]
 											});
 										});
 										// ]]> -->
 									</script>
-									<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
-									<?php echo gettext('custom fields:') ?>
-									<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
-									</span>
 
 								</td>
 							</tr>
@@ -1154,14 +1149,10 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				<tr>
 					<td align="left" valign="top"><?php echo gettext("Sort images by:"); ?> </td>
 						<td>
-	<?php
-	// script to test for what is selected
-	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
-	?>
 							<table>
 								<tr>
 									<td>
-									<select id="imagesortselect<?php echo $prefix; ?>" name="<?php echo $prefix; ?>sortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>image_direction_div','<?php echo $javaprefix; ?>image_custom_div')">
+									<select id="imagesortselect<?php echo $prefix; ?>" name="<?php echo $prefix; ?>sortby" onchange="update_direction(this,'image_direction_div<? echo $suffix; ?>','image_custom_div<? echo $suffix; ?>')">
 									<?php
 									if (is_null($album->getParent())) {
 										$globalsort = gettext("*gallery image sort order");
@@ -1184,7 +1175,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								$dsp = 'block';
 							}
 							?>
-							<span id="<?php echo $javaprefix;?>image_direction_div" style="display:<?php echo $dsp; ?>">
+							<span id="image_direction_div<? echo $suffix; ?>" style="display:<?php echo $dsp; ?>">
 								<label>
 									<?php echo gettext("Descending"); ?>
 									<input type="checkbox" name="<?php echo $prefix; ?>image_sortdirection" value="1"
@@ -1203,19 +1194,21 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								</tr>
 								<tr>
 									<td align="left" colspan="2">
+									<span id="image_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
+									<?php echo gettext('custom fields:') ?>
+									<input id="customimagesort<? echo $suffix; ?>" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+									</span>
+								
 									<script type="text/javascript">
 										// <!-- <![CDATA[
 										$(function () {
-											$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
+											$('#customimagesort<? echo $suffix; ?>').tagSuggest({
 												tags: [<?php echo $imagedbfields; ?>]
 											});
 										});
 										// ]]> -->
 									</script>
-									<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
-									<?php echo gettext('custom fields:') ?>
-									<input id="<?php echo $javaprefix; ?>customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
-									</span>
+								
 									</td>
 								</tr>
 							</table>
