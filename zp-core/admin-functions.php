@@ -1127,16 +1127,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								<td colspan="2">
 									<span id="album_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customalbumsort<? echo $suffix; ?>" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+									<input id="customalbumsort<? echo $suffix; ?>" class="customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
 									</span>
 								
 									<script type="text/javascript">
 										// <!-- <![CDATA[
-										$(function () {
-											$('#customalbumsort<? echo $suffix; ?>').tagSuggest({
-												tags: [<?php echo $albumdbfields; ?>]
-											});
-										});
 										// ]]> -->
 									</script>
 
@@ -1196,16 +1191,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 									<td align="left" colspan="2">
 									<span id="image_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customimagesort<? echo $suffix; ?>" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+									<input id="customimagesort<? echo $suffix; ?>" class="customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
 									</span>
 								
 									<script type="text/javascript">
 										// <!-- <![CDATA[
-										$(function () {
-											$('#customimagesort<? echo $suffix; ?>').tagSuggest({
-												tags: [<?php echo $imagedbfields; ?>]
-											});
-										});
 										// ]]> -->
 									</script>
 								

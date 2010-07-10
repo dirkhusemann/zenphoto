@@ -430,7 +430,7 @@ $page = "edit";
 printAdminHeader();
 datepickerJS();
 codeblocktabsJS();
-if (!isset($_GET['album']) || $subtab=='subalbuminfo') {
+if ((!isset($_GET['massedit']) && !isset($_GET['album'])) || $subtab=='subalbuminfo') {
 	?>
 	<!--Nested Sortables-->
 	<script type="text/javascript" src="js/nestedsortables/interface-1.2.js"></script>
@@ -438,14 +438,57 @@ if (!isset($_GET['album']) || $subtab=='subalbuminfo') {
 	<!--Nested Sortables End-->
 	<?php
 }
-if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo')) {
+if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo') || isset($_GET['massedit'])) {
+	$result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
+	$dbfields = array();
+	while ($row = mysql_fetch_row($result)) {
+		$dbfields[] = "'".$row[0]."'";
+	}
+	sort($dbfields);
+	$albumdbfields = implode(',', $dbfields);
+	$result = mysql_query('SHOW COLUMNS FROM '.prefix('images'));
+	$dbfields = array();
+	while ($row = mysql_fetch_row($result)) {
+		$dbfields[] = "'".$row[0]."'";
+	}
+	sort($dbfields);
+	$imagedbfields = implode(',', $dbfields);
 	?>
 	<script type="text/javascript" src="js/tag.js"></script>
+	<script type="text/javascript">
+		//<!-- <![CDATA[
+		var albumdbfields = [<?php echo $albumdbfields; ?>];
+		$(function () {
+			$('.customalbumsort').tagSuggest({
+				tags: albumdbfields
+			});
+		});
+		var imagedbfields = [<?php echo $imagedbfields; ?>];
+		$(function () {
+			$('.customimagesort').tagSuggest({
+				tags: imagedbfields
+			});
+		});
+		// ]]> -->
+	</script>
 	<?php
 }
 ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
+	var albumdbfields = [<?php echo $albumdbfields; ?>];
+	$(function () {
+		$('.customalbumsort').tagSuggest({
+			tags: albumdbfields
+		});
+	});
+	var imagedbfields = [<?php echo $imagedbfields; ?>];
+	$(function () {
+		$('.customimagesort').tagSuggest({
+			tags: imagedbfields
+		});
+	});
+	
 	var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
 	var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
 	function newAlbum(folder,albumtab) {
@@ -466,20 +509,6 @@ if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo')) {
  
 <?php
 zp_apply_filter('texteditor_config', '','zenphoto');
-$result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
-$dbfields = array();
-while ($row = mysql_fetch_row($result)) {
-	$dbfields[] = "'".$row[0]."'";
-}
-sort($dbfields);
-$albumdbfields = implode(',', $dbfields);
-$result = mysql_query('SHOW COLUMNS FROM '.prefix('images'));
-$dbfields = array();
-while ($row = mysql_fetch_row($result)) {
-	$dbfields[] = "'".$row[0]."'";
-}
-sort($dbfields);
-$imagedbfields = implode(',', $dbfields);
 
 
 echo "\n</head>";
