@@ -503,7 +503,7 @@ if (function_exists('date_default_timezone_set')) { // insure a correct time zon
  * @param string $text to be translated
  */
 function getAllTranslations($text) {
-	$result = array();
+	$result = array('en_US'=>$text);
 	$languages = generateLanguageList();
 	foreach ($languages as $language) {
 		setupCurrentLocale($language);
@@ -513,7 +513,7 @@ function getAllTranslations($text) {
 		}
 	}
 	setupCurrentLocale();
-	if (empty($result)) {
+	if (count($result) == 1) {
 		return $text;
 	}
 	return serialize($result);

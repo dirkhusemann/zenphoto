@@ -322,7 +322,16 @@ class _Image extends PersistentObject {
 			/* iptc date */
 			$date = $this->get('IPTCDateCreated');
 			if (!empty($date)) {
+				if (strlen($date) > 8) {
+					$time = substr($date, 8);
+				} else {
+					/* got date from IPTC, now must get time */
+					$time = $this->get('IPTCTimeCreated');
+				}
 				$date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
+				if (!empty($time)) {
+					$date = $date.' '.substr($time, 0, 2).':'.substr($time, 2, 2).':'.substr($time, 4, 2);
+				}
 			}
 			/* EXIF date */
 			if (empty($date)) {

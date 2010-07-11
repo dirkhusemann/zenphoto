@@ -196,7 +196,7 @@ setOptionDefault('search_user', '');
 setOptionDefault('album_use_new_image_date', 0);
 setOptionDefault('thumb_select_images', 0);
 gettext($str = 'You can insert your Gallery description using on the Admin Options tab.');
-setOptionDefault('Gallery_description', serialize(getAllTranslations($str)));
+setOptionDefault('Gallery_description', getAllTranslations($str));
 setOptionDefault('multi_lingual', 0);
 setOptionDefault('login_user_field', 1);
 setOptionDefault('tagsort', 0);
