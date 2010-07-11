@@ -22,7 +22,8 @@ class zenpagecms {
 		setOptionDefault('zenpage_articles_per_page', '10');
 		setOptionDefault('zenpage_text_length', '500');
 		setOptionDefault('zenpage_textshorten_indicator', ' (...)');
-		setOptionDefault('zenpage_read_more', 'Read more');
+		gettext($str = 'Read more');
+		setOptionDefault('zenpage_read_more', getAllTranslations($str));
 		setOptionDefault('zenpage_rss_items', '10');
 		setOptionDefault('zenpage_rss_length', '100');
 		setOptionDefault('zenpage_admin_articles', '15');
@@ -30,7 +31,7 @@ class zenpagecms {
 		setOptionDefault('zenpage_pages_page', 'pages');
 		setOptionDefault('zenpage_indexhitcounter', false);
 		setOptionDefault('zenpage_combinews', false);
-		setOptionDefault('zenpage_combinews_readmore', 'Visit gallery page');
+		setOptionDefault('zenpage_combinews_readmore', gettext('Visit gallery page'));
 		setOptionDefault('zenpage_combinews_mode', 'latestimage-sizedimage');
 		setOptionDefault('zenpage_combinews_imagesize', '300');
 		setOptionDefault('zenpage_combinews_sortorder', 'mtime');
@@ -43,8 +44,10 @@ class zenpagecms {
 		setOptionDefault('combinews-thumbnail-cropy', '');
 		setOptionDefault('combinews-latestimagesbyalbum-imgdesc', false);
 		setOptionDefault('combinews-latestimagesbyalbum-imgtitle', false);
-		setOptionDefault('combinews-customtitle-singular', '%1$u new item in <em>%2$s</em>: %3$s');
-		setOptionDefault('combinews-customtitle-plural', '%1$u new items in <em>%2$s</em>: %3$s');
+		gettext($str = '%1$u new item in <em>%2$s</em>: %3$s');
+		setOptionDefault('combinews-customtitle-singular', getAllTranslations($str));
+		gettext($str = '%1$u new items in <em>%2$s</em>: %3$s');
+		setOptionDefault('combinews-customtitle-plural', getAllTranslations($str));
 		setOptionDefault('combinews-customtitle-imagetitles', '6');
 	}
 

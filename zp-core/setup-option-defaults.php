@@ -32,7 +32,8 @@ if ($_zp_authority->version != getOption('libauth_version')) {
 
 // old zp-config.php opitons. preserve them
 $conf = $_zp_conf_vars;
-setOptionDefault('gallery_title', "Gallery");
+gettext($str = "Gallery");
+setOptionDefault('gallery_title', getAllTranslations($str));
 setOptionDefault('website_title', "");
 setOptionDefault('website_url', "");
 setOptionDefault('time_offset', 0);
@@ -194,7 +195,8 @@ setOptionDefault('gallery_user', '');
 setOptionDefault('search_user', '');
 setOptionDefault('album_use_new_image_date', 0);
 setOptionDefault('thumb_select_images', 0);
-setOptionDefault('Gallery_description', 'You can insert your Gallery description using on the Admin Options tab.');
+gettext($str = 'You can insert your Gallery description using on the Admin Options tab.');
+setOptionDefault('Gallery_description', serialize(getAllTranslations($str)));
 setOptionDefault('multi_lingual', 0);
 setOptionDefault('login_user_field', 1);
 setOptionDefault('tagsort', 0);
@@ -218,9 +220,6 @@ setOptionDefault('EXIFFlash', 1);
 foreach ($_zp_exifvars as $key=>$item) {
 	setOptionDefault($key, 0);
 }
-setOptionDefault('user_registration_page', '');
-setOptionDefault('user_registration_text', gettext('Register'));
-setOptionDefault('user_registration_tip', gettext('Click here to register for this site.'));
 setOptionDefault('auto_rotate', 0);
 setOptionDefault('IPTC_encoding', 'ISO-8859-1');
 
@@ -345,7 +344,8 @@ if (file_exists(dirname(__FILE__).'/js/editor_config.js.php') && file_exists(SER
 
 setOptionDefault('AlbumThumbSelectField','ID');
 setOptionDefault('AlbumThumbSelectDirection','DESC');
-setOptionDefault('AlbumThumbSelecorText',gettext('most recent'));
+gettext($str = 'most recent');
+setOptionDefault('AlbumThumbSelecorText',getAllTranslations($str));
 
 setOptionDefault('site_email',"zenphoto@".$_SERVER['SERVER_NAME']);
 

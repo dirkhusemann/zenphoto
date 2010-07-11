@@ -255,7 +255,7 @@ function getMenuSetSelector($active) {
 	foreach ($result as $set) {
 		$menusets[$set['menuset']] = $set['menuset'];
 	}
-	natsort($menusets);
+	natcasesort($menusets);
 	
 	if($active) {
 		$selector = '<select name="menuset" id="menuset" size="1" onchange="window.location=\'?menuset=\'+encodeURIComponent($(\'#menuset\').val())">'."\n";

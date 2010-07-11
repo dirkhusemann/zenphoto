@@ -20,8 +20,10 @@ class pagedthumbsOptions {
 	function pagedthumbsOptions() {
 		setOptionDefault('pagedthumbs_imagesperpage', '10');
 		setOptionDefault('pagedthumbs_counter', '');
-		setOptionDefault('pagedthumbs_prevtext', '« prev thumbs');
-		setOptionDefault('pagedthumbs_nexttext', 'next thumbs »');
+		gettext($str = '« prev thumbs');
+		setOptionDefault('pagedthumbs_prevtext', getAllTranslations($str));
+		gettext($str = 'next thumbs »');
+		setOptionDefault('pagedthumbs_nexttext', getAllTranslations($str));
 		setOptionDefault('pagedthumbs_width', '50');
 		setOptionDefault('pagedthumbs_height', '50');
 		setOptionDefault('pagedthumbs_crop', '1');

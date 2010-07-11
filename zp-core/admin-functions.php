@@ -2112,17 +2112,20 @@ $_zp_current_locale = NULL;
  */
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $size=false, $id='') {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
+	$ulclass = 'language_string_list';
 	if ($textbox) {
 		if ($size === false) {
 			$size = TEXTAREA_COLUMNS;
 		} else if ($size === true) {
 			$size = TEXTAREA_COLUMNS_SHORT;
+			$ulclass = 'language_string_list_short';
 		}
 	} else {
 		if ($size === false) {
 			$size = TEXT_INPUT_SIZE;
 		} else if ($size === true) {
 			$size = TEXT_INPUT_SIZE_SHORT;
+			$ulclass = 'language_string_list_short';
 		}
 	}
 	if (!empty($edit)) $edit = ' class="'.$edit.'"';
@@ -2151,7 +2154,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		unset($emptylang['']);
 		natcasesort($emptylang);
 		if ($textbox) $class = 'box'; else $class = '';
-		echo '<ul'.$groupid.' class="'.($short ? 'language_string_list_short' : 'language_string_list').$class.'"'.">\n";
+		echo '<ul'.$groupid.' class="'.$ulclass.$class.'"'.">\n";
 		$empty = true;
 		foreach ($emptylang as $key=>$lang) {
 			if (isset($strings[$key])) {
@@ -2164,7 +2167,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 						<label for="<?php echo $name; ?>_'.$key.'"><?php echo $lang; ?></label>
 						<?php
 						if ($textbox) {
-							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.size.'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
+							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.$size.'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
 						} else {
 							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string,ENT_COMPAT,getOption("charset")).'" size="'.$size.'" />';
 						}

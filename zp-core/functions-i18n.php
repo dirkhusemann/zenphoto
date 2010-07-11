@@ -497,4 +497,25 @@ if (function_exists('date_default_timezone_set')) { // insure a correct time zon
 	}
 }
 
+/**
+ * returns a serialized "multilingual array" of translations
+ * Used for setting default options with multi-lingual strings.
+ * @param string $text to be translated
+ */
+function getAllTranslations($text) {
+	$result = array();
+	$languages = generateLanguageList();
+	foreach ($languages as $language) {
+		setupCurrentLocale($language);
+		$xlated = gettext($text);
+		if ($xlated != $text) {	// the string has a translation in this language
+			$result[$language] = $xlated;
+		}
+	}
+	setupCurrentLocale();
+	if (empty($result)) {
+		return $text;
+	}
+	return serialize($result);
+}
 ?>

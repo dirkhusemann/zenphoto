@@ -36,9 +36,12 @@ class register_user_options {
 	function register_user_options() {
 		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
-		setOptionDefault('register_user_text', gettext('You have received this email because you registered on the site. To complete your registration visit %s.'));
-		setOptionDefault('register_user_page_tip', gettext('Click here to register for this site.'));
-		setOptionDefault('register_user_page_link', gettext('Register'));
+		gettext($str = 'You have received this email because you registered on the site. To complete your registration visit %s.');
+		setOptionDefault('register_user_text', getAllTranslations($str));
+		gettext($str = 'Click here to register for this site.');
+		setOptionDefault('register_user_page_tip', getAllTranslations($str));
+		gettext($str = 'Register');
+		setOptionDefault('register_user_page_link', getAllTranslations($str));
 		setOptionDefault('register_user_captcha', 0);
 		setOptionDefault('register_user_email_is_id', 1);
 		setOptionDefault('register_user_page_page', 'register');

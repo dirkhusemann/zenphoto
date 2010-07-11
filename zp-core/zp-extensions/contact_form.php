@@ -28,10 +28,14 @@ class contactformOptions {
 	
 	function contactformOptions() {
 		global $_zp_authority;
-		setOptionDefault('contactform_introtext', '<p>Fields with <strong>*</strong> are required. HTML or any other code is not allowed. A copy of your e-mail will automatically be sent to the address you provided for your own records.</p>');
-		setOptionDefault('contactform_confirmtext', '<p>Please confirm that you really want to send this email. Thanks.</p>');
-		setOptionDefault('contactform_thankstext', '<p>Thanks for your message. A copy has been sent to your provided e-mail address for your own records.</p>');
-		setOptionDefault('contactform_newmessagelink', 'Send another message.');
+		gettext($str = '<p>Fields with <strong>*</strong> are required. HTML or any other code is not allowed. A copy of your e-mail will automatically be sent to the address you provided for your own records.</p>');
+		setOptionDefault('contactform_introtext', getAllTranslations($str));
+		gettext($str = '<p>Please confirm that you really want to send this email. Thanks.</p>');
+		setOptionDefault('contactform_confirmtext', getAllTranslations($str));
+		gettext($str = '<p>Thanks for your message. A copy has been sent to your provided e-mail address for your own records.</p>');
+		setOptionDefault('contactform_thankstext', getAllTranslations($str));
+		gettext($str = 'Send another message.');
+		setOptionDefault('contactform_newmessagelink', getAllTranslations($str));
 		setOptionDefault('contactform_title', "show");
 		setOptionDefault('contactform_name', "required");
 		setOptionDefault('contactform_company', "show");

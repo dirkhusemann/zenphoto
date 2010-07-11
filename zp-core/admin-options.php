@@ -341,9 +341,6 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['albums_per_page'])) setThemeOption('albums_per_page', sanitize($_POST['albums_per_page'],3), $table, $themename);
 				if (isset($_POST['images_per_page'])) setThemeOption('images_per_page', sanitize($_POST['images_per_page'],3), $table, $themename);
 				if (isset($_POST['custom_index_page'])) setThemeOption('custom_index_page', sanitize($_POST['custom_index_page'], 3), $table, $themename);
-				if (isset($_POST['user_registration_page'])) setThemeOption('user_registration_page', sanitize($_POST['user_registration_page'], 3), $table, $themename);
-				if (isset($_POST['user_registration_text'])) setThemeOption('user_registration_text', process_language_string_save('user_registration_text', 3), $table, $themename);
-				if (isset($_POST['user_registration_tip'])) setThemeOption('user_registration_tip', process_language_string_save('user_registration_tip', 3), $table, $themename);
 				$otg = getThemeOption('thumb_gray', $table, $themename);
 				setBoolThemeOption('thumb_gray', isset($_POST['thumb_gray']), $table, $themename);
 				if ($otg = getThemeOption('thumb_gray', $table, $themename)) $wmo = 99; // force cache clear
