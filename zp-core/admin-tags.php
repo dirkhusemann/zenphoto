@@ -37,7 +37,7 @@ printLogoAndLinks();
 			if (isset($_GET['newtags'])) {
 				foreach ($_POST as $value) {
 					if (!empty($value)) {
-						$value = zp_escape_string(sanitize($value, 3));
+						$value = zp_escape_string(htmlspecialchars_decode(sanitize($value, 3),ENT_COMPAT));
 						$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
 						if (!is_array($result)) { // it really is a new tag
 							query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . $value . '")');

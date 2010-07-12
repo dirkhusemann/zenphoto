@@ -402,6 +402,7 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 	}
 	sort($dbfields);
 	?>
+	<script type="text/javascript" src="js/encoder.js"></script>
 	<script type="text/javascript" src="js/tag.js"></script>
 	<script type="text/javascript">
 		// <!-- <![CDATA[

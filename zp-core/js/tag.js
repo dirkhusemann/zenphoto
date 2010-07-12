@@ -166,9 +166,14 @@
                         break;
                     }
                 }
+                
+                if (tag.match('/&|!| |\|\']/')) {
+                	tag = '"'+tag+'"';
+                }
+                tag = Encoder.htmlDecode(tag);             
 
                 if (index == workingTags.length - 1) tag = tag + settings.separator;
-
+                
                 workingTags[i] = tag;
 
                 tagsElm.val(workingTags.join(settings.separator));

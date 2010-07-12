@@ -13,6 +13,7 @@ $plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---tag_suggest.php.html";
 
 // register the scripts needed
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/js/encoder.js"></script>');
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/js/tag.js"></script>');
 $css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem(getCurrentTheme()) . '/tag.css';
 if (file_exists($css)) {
