@@ -167,8 +167,12 @@
                     }
                 }
                 
-                if (tag.match('/&|!| |\|\']/')) {
-                	tag = '"'+tag+'"';
+                if (tag.match('/&|!|,|(|)|\"|`| |\||\'/')) {
+                	if (tag.indexOf('"')>=0) {
+                		tag = '\''+tag+'\'';
+                	} else {
+                 		tag = '"'+tag+'"';
+                	}
                 }
                 tag = Encoder.htmlDecode(tag);             
 
