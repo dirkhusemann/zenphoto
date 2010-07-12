@@ -2342,9 +2342,12 @@ function isolate($target, $str) {
 	$i = strpos($str, $target);
 	if ($i === false) return false;
 	$str = substr($str, $i);
-	//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
 	$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
-	$str = substr($str, 0, $j+1);
+	$k = strpos($str, "\n", $j+1);
+	if ($k === false) {
+		$k = $j;	//	best guess.
+	}
+	$str = substr($str, 0, $k);
 	return $str;
 }
 

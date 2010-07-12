@@ -16,7 +16,7 @@
  */
 
 $plugin_is_filter = 5;
-$plugin_description = gettext("Allows setting language locale through the URI.").'mod_rewrite='.getOption('mod_rewrite').'<p class="notebox">'.gettext('<strong>Note:</strong> This plugin is not activated for <em>back-end</em> (administrative) URLs. However, once activated, the language is remembered, even for the <em>back-end</em>.').'</p>';
+$plugin_description = gettext("Allows setting language locale through the URI.").'<p class="notebox">'.gettext('<strong>Note:</strong> This plugin is not activated for <em>back&#8209;end</em> (administrative) URLs. However, once activated, the language is remembered, even for the <em>back&#8209;end</em>.').'</p>';
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---seo_locale.php.html";
 $plugin_disable = (!getOption('mod_rewrite'))?gettext('<em>mod_rewrite</em> must be enabled for this plugin to function.'):false;

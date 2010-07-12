@@ -14,7 +14,7 @@
  * @package plugins
  */
 
-$plugin_description = gettext("Prints an e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. Name, e-mail address, subject and message (and if enabled CAPTCHA) are required fields. You need to enter a custom mail address that should be used for the messages. Supports Zenphoto's CAPTCHA and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
+$plugin_description = gettext("Prints an e-mail contact so that visitors may e-mail the site administrator.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.3.1'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---contact_form.php.html";

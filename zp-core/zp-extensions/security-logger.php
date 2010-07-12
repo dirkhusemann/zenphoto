@@ -10,6 +10,7 @@
 $plugin_is_filter = 5;
 $plugin_description = sprintf(gettext("Logs all attempts to login to or illegally access the admin pages. Log is kept in <em>security_log.txt</em> in the %s folder."),DATA_FOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--security-logger.php.html";
 $plugin_version = '1.3.1'; 
 $option_interface = new security_logger();
 

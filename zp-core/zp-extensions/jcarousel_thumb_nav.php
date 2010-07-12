@@ -9,7 +9,7 @@
  * @package plugins
  */
 
-$plugin_description = gettext("jQuery jCarousel thumb nav plugin with dynamic loading of thumbs on request via JavaScript. Place printjCarousel() on your theme's image.php where you want it to appear. Supports theme based css files (place jcarousel.css and needed images in your theme's folder).");
+$plugin_description = gettext("jQuery jCarousel thumb nav plugin with dynamic loading of thumbs on request via JavaScript.");
 $plugin_author = "Malte Müller (acrylian) based on a jCarousel example";
 $plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---jcarousel.php.html";
