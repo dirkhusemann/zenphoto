@@ -946,7 +946,7 @@ if (!$setup_checked) {
 		}						
 		$msg = sprintf(gettext('The filesystem character set is defined as %s.'),FILESYSTEM_CHARSET);
 		checkMark(-2, $msg, $msg,
-								'<p>'.gettext('If your server filesystem character set different from this value accented characaters in file and folder names will cause problems.').'</p>'.
+								'<p>'.gettext('If your server filesystem character set different from this value file and folder names with characters with diacritical marks will cause problems.').'</p>'.
 								$filesetopt);
 		
 	}

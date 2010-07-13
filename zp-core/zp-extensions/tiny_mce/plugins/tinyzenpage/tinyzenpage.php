@@ -158,7 +158,7 @@ require_once("js/dialog.php");
 				echo "</ul>";
 				
 				echo "<p style='margin-left: 8px'>";
-				echo gettext("Also tinyZenpage attaches a default CSS class to the image (if image is chosen) to be styled with your theme's css. If you choose left or right align '_left' or '_right' is appendend:");
+				echo gettext("Also tinyZenpage attaches a default CSS class to the image (if image is chosen) to be styled with your theme's css. If you choose left or right align '_left' or '_right' is appended:");
 				echo "</p>";
 				echo "<ul style='margin-left: 8px'>";
 				echo "<li>".gettext("Default thumbnail: <em>zenpage_thumb</em> /<em>zenpage_thumb_left</em> /<em>zenpage_thumb_right</em>")."</li>";

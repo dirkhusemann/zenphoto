@@ -255,7 +255,7 @@ if(isset($_GET['bulk'])) {
 			$message = gettext('Selected items marked as spam');
 			break;
 		case 'approve':
-			$message = gettext('Selected items appoved');
+			$message = gettext('Selected items approved');
 			break;
 	}
 	?>
