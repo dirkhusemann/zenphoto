@@ -19,19 +19,20 @@ zp_register_filter('edit_admin_custom_data', 'user_groups_edit_admin');
  * Saves admin custom data
  * Called when an admin is saved
  *
- * @param string $discard always empty
+ * @param string $updated true if there has been an update to the user
  * @param object $userobj admin user object
  * @param string $i prefix for the admin
  * @return string
  */
-function user_groups_save_admin($discard, $userobj, $i) {
+function user_groups_save_admin($updated, $userobj, $i) {
 	global $_zp_authority;
 	$administrators = $_zp_authority->getAdministrators();
 	if (isset($_POST[$i.'group'])) {
 		$groupname = sanitize($_POST[$i.'group']);
+		$oldgroup = $userobj->getGroup();
 		if (empty($groupname)) {
-			$oldgroup = $userobj->getGroup();
 			if (!empty($oldgroup)) {
+				$updated = $groupname != $oldgroup;
 				$group = $_zp_authority->newAdministrator($oldgroup, 0);
 				$userobj->setRights($group->getRights());
 				$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
@@ -39,11 +40,13 @@ function user_groups_save_admin($discard, $userobj, $i) {
 		} else {
 			$group = $_zp_authority->newAdministrator($groupname, 0);
 			$userobj->setRights($group->getRights());
-				$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
+			$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
 			if ($group->getName() == 'template') $groupname = '';
+			$updated = true;
 		}
 		$userobj->setGroup($groupname);
 	}
+	return $updated;
 }
 
 /**

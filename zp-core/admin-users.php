@@ -24,6 +24,7 @@ if (isset($_GET['action'])) {
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
 		$adminobj = new Zenphoto_Administrator(sanitize($_GET['adminuser']),1);
+		zp_apply_filter('save_user', '', $adminobj, 'delete');
 		$adminobj->delete();
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
 		exit();
@@ -36,6 +37,9 @@ if (isset($_GET['action'])) {
 			$nouser = true;
 			$newuser = false;
 			for ($i = 0; $i < $_POST['totaladmins']; $i++) {
+				$updated = false;
+				$error = false;
+				$userobj = NULL;
 				$pass = trim($_POST[$i.'-adminpass']);
 				$user = trim(sanitize($_POST[$i.'-adminuser'],0));
 				if (empty($user) && !empty($pass)) {
@@ -51,19 +55,50 @@ if (isset($_GET['action'])) {
 							$objects = processManagedObjects($i);
 						} else {
 							$rights = NULL;
-							$objects = NULL;
+							$objects = array();
 						}
 						$userobj = $_zp_authority->newAdministrator($user);
-						$userobj->setName($admin_n);
-						$userobj->setEmail($admin_e);
-						$userobj->setRights($rights);
-						$userobj->setObjects($objects);
+						if ($admin_n != $userobj->getName()) {
+							$updated = true;
+							$userobj->setName($admin_n);
+						}
+						if ($admin_e != $userobj->getEmail()) {
+							$updated = true;
+							$userobj->setEmail($admin_e);
+						}
+						if ($rights != $userobj->getRights()) {
+							$updated = true;
+							$userobj->setRights($rights);
+						}
+						$objects_match = true;
+						$oldobjects = populateManagedObjectsList('', $userobj->getID());
+						if (!is_array($oldobjects)) $oldobjects = array();
+						foreach ($objects as $object) {
+							$key = false;
+							foreach($oldobjects as $objinx=>$oldobject) {
+								if ($object['type']==$oldobject['type'] && $object['data']==$oldobject['data']) {
+									$key = $objinx;
+									break;
+								}
+							}
+							if ($key === false) {
+								$objects_match = false;
+								break;
+							} else {
+								unset ($oldobjects[$key]);
+							}
+						}
+						if (!$objects_match || count($oldobjects) > 0) {
+							$updated = true;
+							$userobj->setObjects($objects);
+						}
 						if (empty($pass)) {
 							$msg = '';
 						} else {
 							$msg = $userobj->setPass($pass);
+							$updated = true;
 						}
-						zp_apply_filter('save_admin_custom_data', '', $userobj, $i);
+						$updated = zp_apply_filter('save_admin_custom_data', $updated, $userobj, $i);
 						$userobj->save();
 						if (empty($msg)) {
 							if (isset($_POST[$i.'-newuser'])) {
@@ -74,9 +109,22 @@ if (isset($_GET['action'])) {
 							}
 						} else {
 							$notify = '?mismatch=format&error='.urlencode($msg);
+							$error = true;
 						}
 					} else {
 						$notify = '?mismatch=password';
+						$error = true;
+					}
+					if (isset($_POST[$i.'-newuser']) || $updated || $error) {
+						if ($newuser) {
+							$what = 'new';
+						} else {
+							$what = 'update';
+						}
+						if (is_null($userobj)) {
+							$userobj = $_zp_authority->newAdministrator($user);	
+						}
+						zp_apply_filter('save_user', $error, $userobj, $what);
 					}
 				}
 			}

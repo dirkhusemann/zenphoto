@@ -18,6 +18,7 @@ if (getOption('logger_log_admin')) zp_register_filter('admin_login_attempt', 'se
 if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 'security_logger_guestLoginLogger');
 zp_register_filter('admin_allow_access', 'security_logger_adminGate');
 zp_register_filter('admin_managed_albums_access', 'security_logger_adminAlbumGate');
+zp_register_filter('save_user', 'security_logger_UserSave');
 
 /**
  * Option handler class
@@ -73,14 +74,18 @@ function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, 
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
-		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'authority'."\t\n"));
+		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'authority'."\tadditional information\n"));
 	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
 	$message .= $type."\t";
 	$message .= $user."\t";
 	if ($success) {
-		$message .= "**********\t";
+		if (empty($pass)) {
+			$message .= "\t";
+		} else {
+			$message .= "**********\t";
+		}
 		$message .= $name."\tSuccess\t";
 	} else {
 		$message .= $pass."\t";
@@ -191,5 +196,25 @@ function security_logger_adminAlbumGate($allow, $page) {
 	security_logger_loginLogger(false, $user, '', $name, getUserIP(), gettext('Blocked album'), '', $page);
 	return $allow;
 }
+
+function security_logger_UserSave($discard, $userobj, $class) {
+	global $_zp_current_admin_obj;
+	$user = $_zp_current_admin_obj->getUser();
+	$name = $_zp_current_admin_obj->getName();
+	switch ($class) {
+		case 'new':
+			$what = gettext('Request add user');
+			break;
+		case 'update':
+			$what = gettext('Request update user');
+			break;
+		case 'delete':
+			$what = gettext('Request delete user');
+			break;
+	}
+	security_logger_loginLogger(true, $user, '', $name, getUserIP(), $what, 'zp_admin_auth', $userobj->getUser());
+	return $discard;
+}
+
 
 ?>

@@ -151,13 +151,18 @@ function comment_form_edit_comment($discard, $raw) {
  * Saves admin custom data
  * Called when an admin is saved
  *
- * @param string $discard always empty
+ * @param string $updated true if data has changed
  * @param object $userobj admin user object
  * @param string $i prefix for the admin
  * @return string
  */
-function comment_form_save_admin($discard, $userobj, $i) {
+function comment_form_save_admin($updated, $userobj, $i) {
+	$olddata = $userobj->getCustomData();
 	$userobj->setCustomData(serialize(getUserInfo($i)));
+	if ($olddata != $userobj->getCustomData()) {
+		return true;
+	}
+	return $updated;
 }
 
 /**
