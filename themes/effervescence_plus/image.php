@@ -13,7 +13,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
-	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php')?>
+	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php');?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		// <!-- <![CDATA[

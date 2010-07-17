@@ -7,7 +7,7 @@
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php')?>
+	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php');?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		// <!-- <![CDATA[

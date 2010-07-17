@@ -19,6 +19,8 @@ if (getOption('logger_log_guests')) zp_register_filter('guest_login_attempt', 's
 zp_register_filter('admin_allow_access', 'security_logger_adminGate');
 zp_register_filter('admin_managed_albums_access', 'security_logger_adminAlbumGate');
 zp_register_filter('save_user', 'security_logger_UserSave');
+zp_register_filter('admin_XSRF_access', 'security_logger_admin_XSRF_access');
+zp_register_filter('admin_log_actions', 'security_logger_log_action');
 
 /**
  * Option handler class
@@ -62,34 +64,28 @@ class security_logger {
  *
  * @param int $success
  * @param string $user
- * @param string $pass
  * @param string $name
  * @param string $ip
  * @param string $type
  * @param string $authority kind of login
  * @param string $addl more info
  */
-function security_logger_loginLogger($success, $user, $pass, $name, $ip, $type, $authority, $addl=NULL) {
+function security_logger_loginLogger($success, $user, $name, $ip, $type, $authority, $addl=NULL) {
 	$file = dirname(dirname(dirname(__FILE__))).'/'.DATA_FOLDER . '/security_log.txt';
 	$preexists = file_exists($file) && filesize($file) > 0;
 	$f = fopen($file, 'a');
 	if (!$preexists) { // add a header
-		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'password'."\t".'user name'."\t".'outcome'."\t".'authority'."\tadditional information\n"));
+		fwrite($f, gettext('date'."\t".'requestor\'s IP'."\t".'type'."\t".'user ID'."\t".'user name'."\t".'outcome'."\t".'authority'."\tadditional information\n"));
 	}
 	$message = date('Y-m-d H:i:s')."\t";
 	$message .= $ip."\t";
 	$message .= $type."\t";
 	$message .= $user."\t";
+	$message .= $name."\t";
 	if ($success) {
-		if (empty($pass)) {
-			$message .= "\t";
-		} else {
-			$message .= "**********\t";
-		}
-		$message .= $name."\tSuccess\t";
+		$message .= gettext("Success")."\t";
 	} else {
-		$message .= $pass."\t";
-		$message .= "\tFailed\t";
+		$message .= gettext("Failed")."\t";
 	}
 	if ($success) {
 		$message .= substr($authority, 0, strrpos($authority,'_auth'));
@@ -125,6 +121,7 @@ function security_logger_adminLoginLogger($success, $user, $pass) {
 	}
 	if ($success) {
 		$admins = $_zp_authority->getAdministrators();
+		$pass = '';	// mask it from display
 		foreach ($admins as $admin) {
 			if ($admin['user'] == $user) {
 				$name = $admin['name'];
@@ -134,7 +131,7 @@ function security_logger_adminLoginLogger($success, $user, $pass) {
 	} else {
 		$name = '';
 	}
-	security_logger_loginLogger($success, $user, $pass, $name, getUserIP(), gettext('Back-end'), 'zp_admin_auth');
+	security_logger_loginLogger($success, $user, $name, getUserIP(), gettext('Back-end'), 'zp_admin_auth',$pass);
 	return $success;
 }
 
@@ -148,7 +145,7 @@ function security_logger_adminLoginLogger($success, $user, $pass) {
  * @param string $athority what kind of login
  * @return bool
  */
-function security_logger_guestLoginLogger($success, $user, $pass, $athority) {
+function security_logger_guestLoginLogger($success, $user, $athority) {
 	switch (getOption('logger_log_type')) {
 		case 'all': 
 			break;
@@ -159,7 +156,7 @@ function security_logger_guestLoginLogger($success, $user, $pass, $athority) {
 			if ($success) return true;
 			break;
 	}
-	security_logger_loginLogger($success, $user, $pass, '', getUserIP(), gettext('Front-end'), $athority);
+	security_logger_loginLogger($success, $user, '', getUserIP(), gettext('Front-end'), $athority);
 	return $success;
 }
 
@@ -176,7 +173,7 @@ function security_logger_adminGate($allow, $page) {
 	} else {
 		$user = $name = '';
 	}
-	security_logger_loginLogger(false, $user, '', $name, getUserIP(), gettext('Blocked access'), '', $page);
+	security_logger_loginLogger(false, $user, gettext('n/a'), $name, getUserIP(), gettext('Blocked access'), '', $page);
 	return $allow;
 }
 
@@ -193,10 +190,16 @@ function security_logger_adminAlbumGate($allow, $page) {
 	} else {
 		$user = $name = '';
 	}
-	security_logger_loginLogger(false, $user, '', $name, getUserIP(), gettext('Blocked album'), '', $page);
+	security_logger_loginLogger(false, $user, $name, getUserIP(), gettext('Blocked album'), '', $page);
 	return $allow;
 }
 
+/**
+ * logs attempts to save on the user tab
+ * @param string $discard
+ * @param object $userobj user object upon which the save was targeted
+ * @param string $class what the action was.
+ */
 function security_logger_UserSave($discard, $userobj, $class) {
 	global $_zp_current_admin_obj;
 	$user = $_zp_current_admin_obj->getUser();
@@ -212,9 +215,58 @@ function security_logger_UserSave($discard, $userobj, $class) {
 			$what = gettext('Request delete user');
 			break;
 	}
-	security_logger_loginLogger(true, $user, '', $name, getUserIP(), $what, 'zp_admin_auth', $userobj->getUser());
+	security_logger_loginLogger(true, $user, $name, getUserIP(), $what, 'zp_admin_auth', $userobj->getUser());
 	return $discard;
 }
 
+/**
+ * Loggs Cross Site Request Forgeries
+ * 
+ * @param bool $discard
+ * @param string $token
+ * @return bool
+ */
+function security_logger_admin_XSRF_access($discard, $token) {
+	global $_zp_current_admin_obj;
+	if (zp_loggedin()) {
+		$user = $_zp_current_admin_obj->getUser();
+		$name = $_zp_current_admin_obj->getName();
+	} else {
+		$user = $name = '';
+	}
+	security_logger_loginLogger(false, $user, $name, getUserIP(), gettext('XSRF access blocked'), '', $token);
+	return false;
+}
+
+/**
+ * logs security log actions
+ * @param bool $allow
+ * @param string $log
+ * @param string $action
+ */
+function security_logger_log_action($allow, $log, $action) {
+	global $_zp_current_admin_obj;
+	if (zp_loggedin()) {
+		$user = $_zp_current_admin_obj->getUser();
+		$name = $_zp_current_admin_obj->getName();
+	} else {
+		$user = $name = '';
+	}
+	switch ($action) {
+		case 'clear_log':
+			$act = gettext('Log reset');
+			break;
+		case 'delete_log':
+			$act = gettext('Log deleted');
+			break;
+		case 'download_log':
+			$act = gettext('Log downloaded');
+			break;
+		default:
+			$act = $action;
+	}
+	security_logger_loginLogger(true, $user, $name, getUserIP(), $act, 'zp_admin_auth', basename($log));
+	return $allow;
+}
 
 ?>

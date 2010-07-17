@@ -2307,7 +2307,14 @@ if (file_exists(CONFIGFILE)) {
 					echo "<p>".gettext("You need to <a href=\"admin-users.php\">set your admin user and password</a>")."</p>";
 				}
 			} else {
-				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>")."</p>";
+				?>
+				<p>
+					<?php echo gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"); ?>
+				</p>
+				<p class="notebox">
+					<?php echo gettext('<strong>NOTE:</strong> We strongly recommend you remove the <em>setup*.php</em> scripts from your zp-core folder at this time. You can always re-upload them should you find you need them again in the future.')?>
+				</p>
+				<?php
 			}
 		}
 

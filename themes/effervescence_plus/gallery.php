@@ -87,7 +87,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	
 	<br style="clear:all" />	
 
-	<?php printFooter()?>
+	<?php printFooter();?>
 
 </body>
 </html>
