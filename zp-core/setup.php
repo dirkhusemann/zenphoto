@@ -2309,11 +2309,11 @@ if (file_exists(CONFIGFILE)) {
 				}
 			} else {
 				if (isset($_GET['delete_files'])) {
-					$rslt = @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_permissions_changer.php');
-					$rslt = $rslt && @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_set-mod_rewrite.php');
-					$rslt = $rslt &&unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-option-defaults.php');
-					$rslt = $rslt &&unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-primitive.php');
-					$rslt = $rslt &&unlink(SERVERPATH.'/'.ZENFOLDER.'/setup.php');
+					$rslt = zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_permissions_changer.php'),'delete','setup_permissions_changer.php');
+					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_set-mod_rewrite.php'),'delete','setup_set-mod_rewrite.php');
+					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-option-defaults.php'),'delete','setup-option-defaults.php');
+					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-primitive.php'),'delete','setup-primitive.php');
+					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup.php'),'delete','setup.php');
 					if (!$rslt) {
 						?>
 						<p class="errorbox">

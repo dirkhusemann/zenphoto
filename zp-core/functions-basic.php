@@ -36,10 +36,6 @@ define('ZP_ZENPAGE_NEWS_DATE', 1024);
 define('ZP_ZENPAGE_PAGE', 2048);
 define('ZP_ZENPAGE_SINGLE', 4096);
 
-if (DEBUG_LOGIN || DEBUG_IMAGE || DEBUG_404 || DEBUG_EXIF) {
-	debugLog("Zenphoto v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']');
-}
-
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 	error_reporting(0);
 	$_zp_server_timezone = date_default_timezone_get();
@@ -840,13 +836,21 @@ function getAlbumFolder($root=SERVERPATH) {
  * @param string $message the debug information
  * @param bool $reset set to true to reset the log to zero before writing the message
  */
-function debugLog($message, $reset=false, $date=true) {
-	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-	$f = fopen(dirname(dirname(__FILE__)) . '/' . DATA_FOLDER . '/debug_log.txt', $mode);
-	if ($date) {
-		$date = '{'.gmdate('D, d M Y H:i:s').' GMT} '."\n";
+function debugLog($message, $reset=false) {
+	global $_zp_debug_written;
+	$path = dirname(dirname(__FILE__)) . '/' . DATA_FOLDER . '/debug_log.txt';
+	if ($reset || @filesize($path) == 0) {
+		$f = fopen($path, 'w');
+		fwrite($f, '{'.gmdate('D, d M Y H:i:s')." GMT} Zenphoto v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE."]\n");
+		$date = '';
+	} else {
+		$f = fopen($path, 'a');
+		if ((time()-$_zp_debug_written)>5) {
+			$date = '{'.gmdate('D, d M Y H:i:s').' GMT} '."\n";
+		}
 	}
 	fwrite($f, $date."  ".$message . "\n");
+	$_zp_debug_written = time();
 	fclose($f);
 }
 
@@ -856,21 +860,19 @@ function debugLog($message, $reset=false, $date=true) {
  * @param string $name the name (or message) to display for the array
  * @param array $source
  */
-function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
+function debugLogArray($name, $source, $indent=0, $trail='') {
 	if (is_array($source)) {
 		$msg = str_repeat(' ', $indent)."$name => ( ";
 		$c = 1;
 		if (count($source) > 0) {
 			foreach ($source as $key => $val) {
 				if (strlen($msg) > 72) {
-					debugLog($msg,false,$date);
-					$date = false;
+					debugLog($msg);
 					$msg = str_repeat(' ', $indent);
 				}
 				if (is_array($val)) {
 					if (!empty($msg)) {
-						debugLog($msg,false,$date);
-						$date = false;
+						debugLog($msg);
 					}
 					$c++;
 					if ($c<count($source)){
@@ -878,8 +880,7 @@ function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 					} else {
 						$t = ',';
 					}
-					debugLogArray($key, $val, $indent+5, $t, $date);
-					$date = false;
+					debugLogArray($key, $val, $indent+5, $t);
 					$msg = '';
 				} else {
 					if (is_null($val)) {
@@ -894,9 +895,9 @@ function debugLogArray($name, $source, $indent=0, $trail='',$date=true) {
 		} else {
 			$msg .= ")";
 		}
-		debugLog($msg,false,$date);
+		debugLog($msg);
 	} else {
-		debugLog($name.' parameter is not an array.', $date);
+		debugLog($name.' parameter is not an array.');
 	}
 }
 
@@ -917,10 +918,10 @@ function debugLogBacktrace($message) {
 		$caller = (isset($b['class']) ? $b['class'] : '')	. (isset($b['type']) ? $b['type'] : '')	. $b['function'];
 		if (!empty($line)) { // skip first output to match up functions with line where they are used.
 			$msg = $prefix . ' from ';
-			debugLog($msg.$caller.' ('.$line.')',false,false);
+			debugLog($msg.$caller.' ('.$line.')');
 			$prefix .= '  ';
 		} else {
-			debugLog($caller.' called',false,false);
+			debugLog($caller.' called');
 		}
 		$date = false;
 		if (isset($b['file']) && isset($b['line'])) {
@@ -930,7 +931,7 @@ function debugLogBacktrace($message) {
 		}
 	}
 	if (!empty($line)) {
-		debugLog($prefix.' from '.$line,false,false);
+		debugLog($prefix.' from '.$line);
 	}
 }
 
@@ -946,7 +947,7 @@ function debugLogVar($message, $var) {
 	$str = ob_get_contents();
 	ob_end_clean();
 	debugLog($message);
-	debugLog($str,false,false);
+	debugLog($str);
 }
 
 

@@ -21,6 +21,7 @@ zp_register_filter('admin_managed_albums_access', 'security_logger_adminAlbumGat
 zp_register_filter('save_user', 'security_logger_UserSave');
 zp_register_filter('admin_XSRF_access', 'security_logger_admin_XSRF_access');
 zp_register_filter('admin_log_actions', 'security_logger_log_action');
+zp_register_filter('log_setup','security_logger_log_setup');
 
 /**
  * Option handler class
@@ -267,6 +268,31 @@ function security_logger_log_action($allow, $log, $action) {
 	}
 	security_logger_loginLogger(true, $user, $name, getUserIP(), $act, 'zp_admin_auth', basename($log));
 	return $allow;
+}
+
+/**
+ * Logs the removal of the setup files
+ * @param bool $success
+ * @param string $action
+ * @param string $file
+ */
+function security_logger_log_setup($success, $action, $txt) {
+	global $_zp_current_admin_obj;
+	$user = $_zp_current_admin_obj->getUser();
+	$name = $_zp_current_admin_obj->getName();
+	switch ($action) {
+		case 'install':
+			$act = gettext('Installed');
+			$txt = gettext('version').' '.ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE."]";
+			break;
+		case 'delete':
+			$act = gettext('Removed setup file');
+			break;
+		default:
+			$act = $action;
+	}
+	security_logger_loginLogger($success, $user, $name, getUserIP(), $act, 'zp_admin_auth', $txt);
+	return $success;
 }
 
 ?>
