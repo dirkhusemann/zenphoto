@@ -18,17 +18,8 @@ if (!isset($_GET['theme'])) {
 	exit();
 }
 
-$gallery = new Gallery();
-
-printAdminHeader();
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
-echo "\n" . '<div id="main">';
-printTabs('themes');
-echo "\n" . '<div id="content">';
-
 // First, set up a few vars:
+$gallery = new Gallery();
 $message = $file_to_edit = $file_content = null;
 $themes = $gallery->getThemes();
 $theme = sanitize($_GET['theme']);
@@ -43,10 +34,22 @@ foreach ($themefiles as $file) {
 		unset($themefiles[$file]); // $themefile will eventually have all editable files and nothing else
 	}
 }
-
 if (isset($_GET['file']))
 	$file_to_edit = str_replace ('\\', '/', realpath (SERVERPATH . '/themes/'.internalToFilesystem($theme) . '/'. $_GET['file'])) ;
 	// realpath() to take care of ../../file.php schemes, str_replace() to sanitize Win32 filenames
+
+if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit ) {
+	XSRFdefender('edit_theme');
+}
+
+printAdminHeader();
+echo "\n</head>";
+echo "\n<body>";
+printLogoAndLinks();
+echo "\n" . '<div id="main">';
+printTabs('themes');
+echo "\n" . '<div id="content">';
+
 
 // If we're attempting to edit a file from a bundled theme, this is an illegal attempt
 if (!themeIsEditable($theme, $themes))
@@ -60,6 +63,7 @@ if ( $file_to_edit ) {
 
 // Handle POST that updates a file
 if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit ) {
+	XSRFdefender('edit_theme');
 	$file_content = sanitize($_POST['newcontent'],0);
 	$theme = urlencode($theme);
 	if (is_writeable($file_to_edit)) {
@@ -128,6 +132,7 @@ if ( $file_to_edit ) {
 		<div id="editor">
 			<h2 class="h2_bordered"><?php echo sprintf(gettext('File <tt>%s</tt> from theme %s'), $_GET['file'], $themes[$theme]['name']); ?></h2>
 			<form method="post" action="">
+			<?php XSRFToken('edit_theme');?>
 			<p><textarea cols="70" rows="25" name="newcontent" id="newcontent"><?php echo $file_content ?></textarea></p>
 			<input type="hidden" name="action" value="edit_file"/>
 			<p class="buttons">

@@ -83,32 +83,34 @@ function zenJavascript() {
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/zenphoto.js"></script>
 	<?php
-	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
-		if (in_context(ZP_ALBUM)) {
-			$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
-		} else {
-			$grant = $rights & ADMIN_RIGHTS;
-		}
-		if ($grant) {
-			?>
-			<script type="text/javascript">
-				// <!-- <![CDATA[
-				var zpstrings = {
-					/* Used in jquery.editinplace.js */
-					'Save' : "<?php echo gettext('Save'); ?>",
-					'Cancel' : "<?php echo gettext('Cancel'); ?>",
-					'Saving' : "<?php echo gettext('Saving'); ?>",
-					'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
-				};
-				var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
-				var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
-				var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
-				var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
-				var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
-				// ]]> -->
-			</script>
-			<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
-			<?php
+	if (getOption('edit_in_place')) {
+		if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
+			if (in_context(ZP_ALBUM)) {
+				$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
+			} else {
+				$grant = $rights & ADMIN_RIGHTS;
+			}
+			if ($grant) {
+				?>
+				<script type="text/javascript">
+					// <!-- <![CDATA[
+					var zpstrings = {
+						/* Used in jquery.editinplace.js */
+						'Save' : "<?php echo gettext('Save'); ?>",
+						'Cancel' : "<?php echo gettext('Cancel'); ?>",
+						'Saving' : "<?php echo gettext('Saving'); ?>",
+						'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
+					};
+					var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
+					var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
+					var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
+					var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+					var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+					// ]]> -->
+				</script>
+				<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
+				<?php
+			}
 		}
 	}
 	if (is_array($_zp_plugin_scripts)) {

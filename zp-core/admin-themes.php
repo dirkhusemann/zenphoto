@@ -18,6 +18,7 @@ $_GET['page'] = 'themes';
 /* handle posts */
 $message = null; // will hold error/success message displayed in a fading box
 if (isset($_GET['action'])) {
+	XSRFdefender('theme');
 	switch ($_GET['action']) {
 		case 'settheme':
 			if (isset($_GET['theme'])) {
@@ -68,7 +69,7 @@ printAdminHeader();
 				if (targetname) {
 					var targetdir = prompt('<?php echo gettext('New directory name? (e.g. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
 					if (targetdir) {
-						launchScript('',['action=copytheme','source='+encodeURIComponent(source),'target='+encodeURIComponent(targetdir),'name='+encodeURIComponent(targetname)]);
+						launchScript('',['action=copytheme&amp;XSRFToken=<?php echo getXSRFToken('theme')?>','source='+encodeURIComponent(source),'target='+encodeURIComponent(targetdir),'name='+encodeURIComponent(targetname)]);
 						return false;
 					}
 				}
@@ -227,7 +228,7 @@ foreach($themes as $theme => $themeinfo) {
 					?>
 					<li>
 					<p class="buttons">
-					<a href="?action=settheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
+					<a href="?action=settheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>&amp;XSRFToken=<?php echo getXSRFToken('theme')?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
 					<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?></a>
 					</p>
 					<br />
@@ -251,7 +252,7 @@ foreach($themes as $theme => $themeinfo) {
 					?>
 					<li>
 					<p class="buttons">
-					<a href="?action=deletetheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Delete this theme"); ?>">
+					<a href="?action=deletetheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>&amp;XSRFToken=<?php echo getXSRFToken('theme')?>" title="<?php echo gettext("Delete this theme"); ?>">
 					<img src="images/edit-delete.png" alt="" /><?php echo gettext("Delete"); ?></a>
 					</p>
 					</li>
@@ -262,7 +263,7 @@ foreach($themes as $theme => $themeinfo) {
 				?>
 				<li class="zp_copy_theme">
 				<p class="buttons">
-				<a href="?" title="<?php echo $theme; ?>">
+				<a href="?XSRFToken=<?php echo getXSRFToken('theme')?>" title="<?php echo $theme; ?>">
 				<img src="images/page_white_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
 				</p>
 				</li>

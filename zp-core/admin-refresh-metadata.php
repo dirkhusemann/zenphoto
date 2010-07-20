@@ -14,6 +14,8 @@ require_once(dirname(__FILE__).'/template-functions.php');
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
+XSRFdefender('refresh');
+
 $gallery = new Gallery();
 $imageid = '';
 if (isset($_GET['refresh'])) {
@@ -69,7 +71,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 		<?php
 	} else {
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
-		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret; 
+		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret.'&XSRFToken='.getXSRFToken('refresh'); 
 		?>
 		<meta http-equiv="refresh" content="1; url=<?php echo $redirecturl; ?>" />
 		<?php
@@ -103,7 +105,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 		$album = '&amp;album='.$folder;
 	}
 	if (!empty($ret)) $ret = '&amp;return='.$ret;
-	$starturl = '?'.$type.'refresh=start'.$album.$ret;
+	$starturl = '?'.$type.'refresh=start&XSRFToken='.getXSRFToken('refresh').$album.$ret;
 	?>
 	<meta http-equiv="refresh" content="1; url=<?php  echo$starturl; ?>" />
 	<?php
@@ -151,7 +153,11 @@ if (isset($_GET['refresh']) && db_connect()) {
 			echo "<p>".sprintf(gettext("We're all set to refresh the metadata for <em>%s</em>"),$r)."</p>";
 		}
 		echo '<p>'.gettext('This process should start automatically. If not press: ').'</p>';
-		echo "<p><a href=\"$starturl\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		?>
+		<p>
+		<a href="<?php echo $starturl.'&amp;XSRFToken='.getXSRFToken('refresh'); ?>" title="<?php echo gettext("Refresh image metadata."); ?>" style="font-size: 15pt; font-weight: bold;"><?php echo gettext("Go!"); ?></a>
+		</p>
+		<?php
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";

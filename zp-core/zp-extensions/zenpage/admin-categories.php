@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * zenpage admin-categories.php
  *
@@ -6,24 +6,49 @@
  * @package plugins
  * @subpackage zenpage
  */
-define("OFFSET_PATH",4); 
+define("OFFSET_PATH",4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once("zenpage-admin-functions.php");
 
 admin_securityChecks(ZENPAGE_NEWS_RIGHTS, currentRelativeURL(__FILE__));
 
+$reports = array();
+if(isset($_POST['processcheckeditems'])) {
+	XSRFdefender('checkeditems');
+	processZenpageBulkActions('newscategories',$reports);
+}
+if(isset($_GET['delete'])) {
+	XSRFdefender('delete_category');
+	deleteCategory($reports);
+}
+if(isset($_GET['hitcounter'])) {
+	XSRFdefender('hitcounter');
+	resetPageOrArticleHitcounter('cat');
+}
+if(isset($_GET['save'])) {
+	XSRFdefender('save_categories');
+	addCategory($reports);
+}
+if(isset($_GET['id'])){
+	$result = getCategory($_GET['id']);
+} else if(isset($_GET['update'])) {
+	XSRFdefender('update_categories');
+	$result = updateCategory($reports);
+}
+
+
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header('Content-Type: text/html; charset=' . getOption('charset'));
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-   <html xmlns="http://www.w3.org/1999/xhtml">
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><?php echo gettext('zenphoto administration'); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<?php zenpageJSCSS(false); ?>  
+<?php zenpageJSCSS(false); ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteCategory = "<?php echo gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!"); ?>";
@@ -37,13 +62,13 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 	<?php if(isset($_GET["edit"])) { // prevent showing the message when adding page or article ?>
 	$(document).ready(function() {
 		if(jQuery('#edittitlelink:checked').val() != 1) {
-			$('#catlink').attr("disabled", true); 
+			$('#catlink').attr("disabled", true);
 		}
 		$('#edittitlelink').change(function() {
-			if(jQuery('#edittitlelink:checked').val() == 1) {	
-				$('#catlink').removeAttr("disabled"); 
+			if(jQuery('#edittitlelink:checked').val() == 1) {
+				$('#catlink').removeAttr("disabled");
 			} else {
-				$('#catlink').attr("disabled", true); 
+				$('#catlink').attr("disabled", true);
 			}
 		});
 		$('form [name=checkeditems] #checkallaction').change(function(){
@@ -58,7 +83,7 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 </script>
 </head>
 <body>
-<?php 
+<?php
 printLogoAndLinks();
 ?>
 <div id="main">
@@ -70,31 +95,17 @@ printLogoAndLinks();
 		printSubtabs('articles');
 		?>
 		<div id="tab_articles" class="tabbox">
-			<?php	
-			if(isset($_POST['processcheckeditems'])) {
-				processZenpageBulkActions('newscategories');
-			}	
-			if(isset($_GET['delete'])) {
-			  deleteCategory();
+			<?php
+			foreach ($reports as $report) {
+				echo $report;
 			}
-			if(isset($_GET['hitcounter'])) {
-				resetPageOrArticleHitcounter('cat');
-			}
-			if(isset($_GET['save'])) {
-			  addCategory();
-			}
-			if(isset($_GET['id'])){
-			  $result = getCategory($_GET['id']);
-			} else if(isset($_GET['update'])) {
-			  $result = updateCategory();
-			}
-			?> 
+			?>
 			<h1>
-			<?php 
+			<?php
 			if(isset($_GET['edit'])) {
 				echo gettext('Edit Category:').'<em> '; checkForEmptyTitle(get_language_string($result['cat_name']),'category'); echo '</em>';
 			} else {
-				echo gettext('Categories'); 
+				echo gettext('Categories');
 			}
 			?>
 			<span class="zenpagestats"><?php printCategoriesStatistic();?></span></h1>
@@ -105,23 +116,27 @@ printLogoAndLinks();
 			<?php } ?>
 			</p>
 			<br clear="all" /><br clear="all" />
-			<div id="tips" style="display:none">	
-				<p><?php echo gettext("A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically if a new category is added. You can edit it later manually if necessary."); ?></p> 
-				<p><?php echo gettext("If you are editing a category check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting."); ?></p> 
-				<p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p> 
-				<p><?php echo gettext("Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."); ?></p> 
+			<div id="tips" style="display:none">
+				<p><?php echo gettext("A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically if a new category is added. You can edit it later manually if necessary."); ?></p>
+				<p><?php echo gettext("If you are editing a category check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting."); ?></p>
+				<p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p>
+				<p><?php echo gettext("Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."); ?></p>
 			</div>
 			<div style="padding:15px; margin-top: 10px">
 				<?php
 				if(isset($_GET['edit'])) {
 					$formname = 'update';
 					$formaction = 'admin-categories.php?edit&amp;update&amp;tab=categories';
+					$action = 'update_categories';
 				} else {
 					$formname = 'addcat';
 					$formaction = 'admin-categories.php?save&amp;tab=categories';
+					$action = 'save_categories';
 				}
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
+					<?php XSRFToken($action);?>
+					<input	type="hidden" name="action" id="action" value="<?php echo $action; ?>" />
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<input	type="hidden" name="olduser" id="olduser" value="<?php if (isset($result)) echo $result['user']; ?>" />
 					<?php
@@ -133,29 +148,29 @@ printLogoAndLinks();
 					}
 					?>
 					<table>
-			    	<tr> 
-				     <?php
-				     if(isset($_GET['edit'])) {
-				     	$cattitlemessage = gettext('Category Title:');
-				     } else {
-				     	$cattitlemessage =  gettext('New Category Title:');
-				     }
-				     	?>
-				      <td class="topalign-padding"><?php echo $cattitlemessage; ?></td>
-				      <td><?php if(isset($_GET['edit'])) { print_language_string_list_zenpage($result['cat_name'],'category',false) ; } else { print_language_string_list_zenpage('','category',false) ;} ?>
-				      	<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo 'checked="checked"'; } ?> /> <?php echo gettext('Enable permaTitleLink'); ?>
-				      </td>
-				    </tr>
+						<tr>
+						 <?php
+						 if(isset($_GET['edit'])) {
+							$cattitlemessage = gettext('Category Title:');
+						 } else {
+							$cattitlemessage =  gettext('New Category Title:');
+						 }
+							?>
+							<td class="topalign-padding"><?php echo $cattitlemessage; ?></td>
+							<td><?php if(isset($_GET['edit'])) { print_language_string_list_zenpage($result['cat_name'],'category',false) ; } else { print_language_string_list_zenpage('','category',false) ;} ?>
+								<input name="permalink" type="checkbox" id="permalink" value="1" <?php if(isset($_GET['edit'])) { checkIfChecked($result['permalink']); } else { echo 'checked="checked"'; } ?> /> <?php echo gettext('Enable permaTitleLink'); ?>
+							</td>
+						</tr>
 						<?php
 						if(isset($_GET['edit'])) {
 							?>
-					    <tr> 
-					      <td class="topalign-padding"><?php echo gettext('Category TitleLink:'); ?></td>
-					      <td><input name="catlink" type="text" size="85" id="catlink" value="<?php echo $result['cat_link']; ?>" />
-					      <input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext('Edit TitleLink'); ?>
-					      </td>
-					    </tr>
-					    <?php
+							<tr>
+								<td class="topalign-padding"><?php echo gettext('Category TitleLink:'); ?></td>
+								<td><input name="catlink" type="text" size="85" id="catlink" value="<?php echo $result['cat_link']; ?>" />
+								<input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext('Edit TitleLink'); ?>
+								</td>
+							</tr>
+							<?php
 						} else {
 							$result['user'] = $result['password'] = $result['password_hint'] = '';
 						}
@@ -177,8 +192,8 @@ printLogoAndLinks();
 									$x = '          ';
 									?>
 									<img src="../../images/lock.png" alt="" />
-									<?php 
-								} 
+									<?php
+								}
 								?>
 							</td>
 						</tr>
@@ -214,24 +229,24 @@ printLogoAndLinks();
 						</tr>
 						<tr class="passwordextrahide" style="display:none">
 							<td colspan="2">
-								<p class="notebox"><?php echo gettext('<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected.')?></p>
+								<p class="notebox"><?php echo gettext('<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected.');?></p>
 							</td>
 						</tr>
-				    <tr>
-				      <td colspan="3">
-					    	<?php 
-					    	if(isset($_GET['edit'])) { 
-					     		$submittext =  gettext('Update Category');
-					    	} else {
-					     		$submittext =  gettext('Save New Category');
-					    	}
-					     	?>
-				      	<p class="buttons">
-					      	<button type="submit" title="<?php echo $submittext; ?>">
-					      		<img src="../../images/pass.png" alt="" />
-					      		<strong><?php echo $submittext; ?></strong>
-					      	</button>
-				      	</p>
+						<tr>
+							<td colspan="3">
+								<?php
+								if(isset($_GET['edit'])) {
+									$submittext =  gettext('Update Category');
+								} else {
+									$submittext =  gettext('Save New Category');
+								}
+								?>
+								<p class="buttons">
+									<button type="submit" title="<?php echo $submittext; ?>">
+										<img src="../../images/pass.png" alt="" />
+										<strong><?php echo $submittext; ?></strong>
+									</button>
+								</p>
 								<p class="buttons">
 									<button type="reset" title="<?php echo gettext('Reset'); ?>">
 										<img src="../../images/reset.png" alt="" />
@@ -239,33 +254,38 @@ printLogoAndLinks();
 									</button>
 								</p>
 								<br clear="all" /><br />
-							</td>	
-			    	</tr>
-			 		</table>
+							</td>
+						</tr>
+					</table>
 				</form>
 				<hr />
 			<form action="admin-categories.php?page=news&amp;tab=categories" method="post" id="checkeditems" name="checkeditems" onsubmit="return confirmAction();">
+				<?php XSRFToken('checkeditems');?>
+				<input	type="hidden" name="action" id="action" value="checkeditems" />
 			<input name="processcheckeditems" type="hidden" value="apply" />
-			<p class="buttons"><button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
+			<p class="buttons">
+				<button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button>
+			</p>
 			<br clear="all" /><br />
 				<table class="bordered">
-				 <tr> 
-				  <th colspan="6"><strong><?php echo gettext('Edit this Category'); ?></strong>
-				  	<?php
-				  	$checkarray = array(
-				  	gettext('*Bulk actions*') => 'noaction',
-				  	gettext('Delete') => 'deleteall',
-				  	gettext('Reset hitcounter') => 'resethitcounter',
-				  	);
-				  	?> <span style="float: right"> 
-				  	  	<select name="checkallaction" id="checkallaction" size="1">
-				  			<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
-								</select>
+				 <tr>
+					<th colspan="6"><strong><?php echo gettext('Edit this Category'); ?></strong>
+						<?php
+						$checkarray = array(
+						gettext('*Bulk actions*') => 'noaction',
+						gettext('Delete') => 'deleteall',
+						gettext('Reset hitcounter') => 'resethitcounter',
+						);
+						?>
+						<span style="float: right">
+							<select name="checkallaction" id="checkallaction" size="1">
+							<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+							</select>
 						</span>
-				  
-				  </th>
-				  </tr>
-				  <tr class="newstr">
+
+					</th>
+					</tr>
+					<tr class="newstr">
 						<td class="subhead" colspan="6">
 							<label style="float: right"><?php echo gettext("Check All"); ?> <input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
 							</label>
@@ -274,8 +294,8 @@ printLogoAndLinks();
 					<?php printCategoryList(); ?>
 					</table>
 				<p class="buttons"><button type="submit" title="<?php echo gettext('Apply'); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext('Apply'); ?></strong></button></p>
-					
-			</form>	
+
+			</form>
 			</div> <!-- box -->
 			<ul class="iconlegend">
 				<li><img src="../../images/lock.png" alt="" /><?php echo gettext("Has Password"); ?></li>

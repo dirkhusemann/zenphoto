@@ -25,6 +25,17 @@ if (isset($_GET['action']) && $_GET['action']=='clear_rating') {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
 		exit();
 	}
+
+	require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+	if (session_id() == '') {
+		// force session cookie to be secure when in https
+		if(secureServer()) {
+			$CookieInfo=session_get_cookie_params();
+			session_set_cookie_params($CookieInfo['lifetime'],$CookieInfo['path'], $CookieInfo['domain'],TRUE);
+		}
+		session_start();
+	}
+	XSRFdefender('clear_rating');
 	query('UPDATE '.prefix('images').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
 	query('UPDATE '.prefix('albums').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
 	query('UPDATE '.prefix('zenpage_news').' SET total_value=0, total_votes=0, rating=0, used_ips="" ');
@@ -323,7 +334,9 @@ function rating_purgebutton($buttons) {
 								'title'=>gettext('Sets all ratings to unrated.'),
 								'alt'=>'',
 								'hidden'=> '<input type="hidden" name="action" value="clear_rating" />',
-								'rights'=> ADMIN_RIGHTS
+								'rights'=> ADMIN_RIGHTS,
+								'XSRFTag' => 'clear_rating'
+	
 								);
 	return $buttons;
 }

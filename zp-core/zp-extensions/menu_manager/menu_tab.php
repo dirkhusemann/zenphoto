@@ -9,6 +9,50 @@ require_once(dirname(dirname(dirname(__FILE__))).'/'.PLUGIN_FOLDER.'/menu_manage
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 $page = 'edit';
+
+$menuset = checkChosenMenuset('');
+if (empty($menuset)) {	//	setup default menuset
+	$result = query_full_array("SELECT DISTINCT menuset FROM ".prefix('menu'));
+	if (is_array($result)) {	// default to the first one
+		$set = array_shift($result);
+		$menuset = $set['menuset'];
+	} else {
+		$menuset = 'default';
+	}
+	$_GET['menuset'] = $menuset;
+}
+
+$reports = array();
+if(isset($_POST['update'])) {
+	XSRFdefender('update_menu');
+	processMenuBulkActions($reports);
+	updateItemsSortorder($reports);
+}
+if (isset($_GET['delete'])) {
+	XSRFdefender('delete_menu');
+	$sql = 'SELECT `sort_order` FROM '.prefix('menu').' WHERE `id`='.sanitize_numeric($_GET['id']);
+	$result = query_single_row($sql);
+	if (empty($result)) {
+		$reports[] = "<p class='errorbox' >".gettext('Menu item deleted failed')."</p>";
+	} else {
+		$sql = 'DELETE FROM '.prefix('menu').' WHERE `sort_order` LIKE "'.$result['sort_order'].'%"';
+		query($sql);
+		$reports[] =  "<p class='messagebox' id='fade-message'>".gettext('Menu item deleted')."</p>";
+	}
+}
+if (isset($_GET['deletemenuset'])) {
+	XSRFdefender('delete_menu');
+	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
+	query($sql);
+	$_menu_manager_items = array();
+	$delmsg =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset']))."</p>";
+}
+// publish or un-publish page by click
+if(isset($_GET['publish'])) {
+	XSRFdefender('update_menu');
+	publishItem($_GET['id'],$_GET['show'],$menuset);
+}
+
 printAdminHeader();
 ?>
 <!--Nested Sortables-->
@@ -25,44 +69,10 @@ printTabs("menu");
 ?>
 <div id="content">
 <?php
-$menuset = checkChosenMenuset('');
-if (empty($menuset)) {	//	setup default menuset
-	$result = query_full_array("SELECT DISTINCT menuset FROM ".prefix('menu'));
-	if (is_array($result)) {	// default to the first one
-		$set = array_shift($result);
-		$menuset = $set['menuset'];
-	} else {
-		$menuset = 'default';
-	}
-	$_GET['menuset'] = $menuset;
+foreach ($reports as $report) {
+	echo $report;
 }
 
-if(isset($_POST['update'])) {
-	processMenuBulkActions();
-	updateItemsSortorder();
-}
-if (isset($_GET['delete'])) {
-	$sql = 'SELECT `sort_order` FROM '.prefix('menu').' WHERE `id`='.sanitize_numeric($_GET['id']);
-	$result = query_single_row($sql);
-	if (empty($result)) {
-		echo "<p class='errorbox' >".gettext('Menu item deleted failed')."</p>";
-	} else {
-		$sql = 'DELETE FROM '.prefix('menu').' WHERE `sort_order` LIKE "'.$result['sort_order'].'%"';
-		query($sql);
-		echo "<p class='messagebox' id='fade-message'>".gettext('Menu item deleted')."</p>";
-	}
-}
-if (isset($_GET['deletemenuset'])) {
-	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
-	query($sql);
-	$_menu_manager_items = array();
-	echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset']))."</p>";
-}
-
-// publish or un-publish page by click
-if(isset($_GET['publish'])) {
-	publishItem($_GET['id'],$_GET['show']);
-}
 $sql = 'SELECT COUNT(DISTINCT `menuset`) FROM '.prefix('menu');
 $result = query($sql);
 $count = mysql_result($result, 0);
@@ -77,7 +87,7 @@ $count = mysql_result($result, 0);
 	};
 	function deleteMenuSet() {
 		if (confirm('<?php printf(gettext('Ok to delete menu set %s? This cannot be undone!'),htmlspecialchars($menuset)); ?>')) {
-			window.location = '?deletemenuset=<?php echo htmlspecialchars($menuset); ?>';
+			window.location = '?deletemenuset=<?php echo htmlspecialchars($menuset); ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('delete_menu')?>';
 		}
 	};
 	function deleteMenuItem(location,warn) {
@@ -97,7 +107,7 @@ $count = mysql_result($result, 0);
 <h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset)); echo "</small>"; ?></h1>
 
 <form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update" onsubmit="return confirmAction();">
-
+	<?php XSRFToken('update_menu'); ?>
 <p>
 <?php echo gettext("Drag the items into the order, including sub levels, you wish them displayed. This lets you create arbitrary menus and place them on your theme pages. Use printCustomMenu() to place them on your pages."); ?>
 </p>
@@ -183,7 +193,7 @@ if ($count > 0) {
 			noNestingClass: "no-nesting",
 			opacity: 0.4,
 			helperclass: 'helper',
-			onChange: function(serialized) {
+			onchange: function(serialized) {
 				$('#left-to-right-ser')
 				.html("<input name='order' size='100' maxlength='1000' type='hidden' value="+ serialized[0].hash +">");
 			},

@@ -22,6 +22,7 @@ foreach ($ordered as $key=>$user) $adminordered[] = $admins[$key];
 						
 if (isset($_GET['action'])) {
 	$action = $_GET['action'];
+	XSRFdefender($action);
 	$themeswitch = false;
 	if ($action == 'deletegroup') {
 		$groupname = trim(sanitize($_GET['group'],0));
@@ -155,6 +156,7 @@ echo '</head>'."\n";
 							?>
 						</p>
 						<form action="?action=savegroups&amp;tab=groups" method="post" autocomplete="off" onsubmit="return checkNewgroup()" >
+							<?php XSRFToken('savegroups');?>
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
@@ -331,6 +333,7 @@ echo '</head>'."\n";
 							?>
 						</p>
 						<form action="?action=saveauserassignments" method="post" autocomplete="off" >
+							<?php XSRFToken('saveauserassignments');?>
 							<p class="buttons">
 							<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>

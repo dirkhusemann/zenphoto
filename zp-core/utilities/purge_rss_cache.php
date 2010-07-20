@@ -6,4 +6,5 @@ $button_title = gettext("Purge RSS cache");
 $button_alt = gettext("Purge RSS cache");
 $button_hidden = '<input type="hidden" name="action" value="clear_rss_cache" />';
 $button_rights = ADMIN_RIGHTS;
+$button_XSRFTag = 'clear_cache';
 ?>

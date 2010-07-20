@@ -136,25 +136,4 @@ if (zp_loggedin(ADMIN_RIGHTS)) {
 	unset($filelist);
 }
 
-/**
- * Standard admin pages checks
- * @param bit $rights
- * @param string $return--where to go after login
- */
-function admin_securityChecks($rights, $return) {
-	if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-		exit();
-	}
-
-	if (!is_null(getOption('admin_reset_date'))) {
-		if (!zp_loggedin($rights)) { // prevent nefarious access to this page.
-			if (!zp_apply_filter('admin_allow_access',false, $return)) {
-				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
-				exit();
-			}
-		}
-	}
-	
-}
 ?>

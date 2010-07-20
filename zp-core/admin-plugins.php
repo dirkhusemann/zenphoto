@@ -18,6 +18,7 @@ $_GET['page'] = 'plugins';
 /* handle posts */
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'saveplugins') {
+		XSRFdefender('saveplugins');
 		$filelist = getPluginFiles('*.php');
 		foreach ($filelist as $extension=>$path) {
 			$extension = filesystemToInternal($extension);
@@ -55,19 +56,21 @@ if ($saved) {
 $paths = getPluginFiles('*.php');
 $filelist = array_keys($paths);
 natcasesort($filelist);
-
-echo "<h1>Plugins</h1>\n";
-echo '<p>';
+?>
+<h1><?php echo gettext('Plugins'); ?></h1>
+<p>
+<?php
 echo gettext("Plugins provide optional functionality for Zenphoto.").' ';
 echo gettext("They may be provided as part of the Zenphoto distribution or as offerings from third parties.").' ';
 echo sprintf(gettext("Third party plugins are placed in the <code>%s</code> folder and are automatically discovered."),USER_PLUGIN_FOLDER).' ';
 echo gettext("If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
-echo "</p>\n";
-echo "<p class='notebox'>".gettext("<strong>Note:</strong> Not all themes are setup with support for all plugins! You may need to add the plugin theme functions of some of them yourself.");
-echo "</p>\n";
-echo '<form action="?action=saveplugins" method="post">'."\n";
-echo '<input type="hidden" name="saveplugins" value="yes" />'."\n";
 ?>
+</p>
+<p class='notebox'><?php echo gettext("<strong>Note:</strong> Not all themes are setup with support for all plugins! You may need to add the plugin theme functions of some of them yourself."); ?>
+</p>
+<form action="?action=saveplugins" method="post">
+	<?php XSRFToken('saveplugins');?>
+	<input type="hidden" name="saveplugins" value="yes" />
 <p class="buttons">
 <button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 <button type="reset" value="<?php echo gettext('Reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>

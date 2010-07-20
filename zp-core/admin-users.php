@@ -23,12 +23,14 @@ if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
+		XSRFdefender('deleteadmin');
 		$adminobj = new Zenphoto_Administrator(sanitize($_GET['adminuser']),1);
 		zp_apply_filter('save_user', '', $adminobj, 'delete');
 		$adminobj->delete();
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
 		exit();
 	} else if ($action == 'saveoptions') {
+		XSRFdefender('saveadmin');
 		$notify = '';
 		$returntab = '';
 
@@ -265,6 +267,7 @@ printSubtabs($_current_tab, 'users');
 	
 ?> 
 <form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" autocomplete="off" onsubmit="return checkNewuser();" >
+	<?php XSRFToken('saveadmin');?>
 <input type="hidden" name="saveadminoptions" value="yes" />
 <?php			
 if (empty($alterrights)) {
@@ -431,7 +434,7 @@ if (empty($alterrights)) {
 									$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
 								}
 							?>
-							<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo addslashes($user['user']); ?>'; }"
+							<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo addslashes($user['user']); ?>&amp;XSRFToken=<?php echo getXSRFToken('deleteadmin')?>'; }"
 								title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
 								src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
 							<?php
@@ -444,7 +447,7 @@ if (empty($alterrights)) {
 						?>
 						<td colspan="2" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
 							<span class="notebox">
-								<?php echo gettext('<strong>Note:</strong> You must have ADMIN rights to alter anything but your personal information.')?>
+								<?php echo gettext('<strong>Note:</strong> You must have ADMIN rights to alter anything but your personal information.');?>
 							</span>
 						</td>
 						<?php

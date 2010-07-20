@@ -25,8 +25,10 @@ if (!empty($admin)) {   // transfer the old credentials and then remove them
 	query($sql);
 }
 
-if ($_zp_authority->version != getOption('libauth_version')) {
-	$_zp_authority->migrateAuth(getOption('libauth_version'));
+if ($_zp_authority->version != ($oldv = getOption('libauth_version'))) {
+	if (!empty($oldv)) {
+		$_zp_authority->migrateAuth(getOption('libauth_version'));
+	}
 	setOption('libauth_version',$_zp_authority->version);
 }
 

@@ -5,4 +5,5 @@ $button_icon = 'images/refresh.png';
 $button_title = gettext("Forces a refresh of the metadata for all images and albums.");
 $button_alt = gettext("Forces a refresh of the metadata for all images and albums.");
 $button_rights = ADMIN_RIGHTS;
+$button_XSRFTag = 'refresh';
 ?>

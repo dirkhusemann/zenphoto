@@ -79,7 +79,7 @@ class hitcounter_options {
 				}
 				// ]]> -->
 				</script>
-				<label><input id="hitcounter_reset_button" type="button" value="<?php echo gettext('Defaults')?>" onclick="hitcounter_defaults();" /></label>
+				<label><input id="hitcounter_reset_button" type="button" value="<?php echo gettext('Defaults');?>" onclick="hitcounter_defaults();" /></label>
 				<?php
 				break;
 			case 'hitcounter_ignoreIPList':
@@ -104,7 +104,7 @@ class hitcounter_options {
 				});
 				// ]]> -->
 				</script>
-				<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP')?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>
+				<label><input id="hitcounter_ip_button" type="button" value="<?php echo gettext('Insert my IP');?>" onclick="hitcounter_insertIP();" disabled="disabled" /></label>
 				<?php
 				break;
 		}

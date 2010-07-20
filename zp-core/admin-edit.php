@@ -49,6 +49,7 @@ if (isset($_GET['action'])) {
 		/** reorder the tag list ******************************************************/
 		/******************************************************************************/
 		case 'savealbumorder':
+			XSRFdefender('savealbumorder');
 			setOption('gallery_sorttype','manual');
 			setOption('gallery_sortdirection',0);
 			$notify = postAlbumSort(NULL);
@@ -60,6 +61,7 @@ if (isset($_GET['action'])) {
 			exit();
 			break;
 		case 'savesubalbumorder':
+			XSRFdefender('savealbumorder');
 			$album = new Album($gallery, $folder);
 			$album->setSubalbumSortType('manual');
 			$album->setSortDirection('album', 0);
@@ -87,6 +89,7 @@ if (isset($_GET['action'])) {
 		/** clear the cache ***********************************************************/
 		/******************************************************************************/
 		case "clear_cache":
+			XSRFdefender('clear_cache');
 			$gallery->clearCache(SERVERCACHE . '/' . sanitize_path($_POST['album']));
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&cleared&album='.$_POST['album']);
 			exit();
@@ -95,6 +98,7 @@ if (isset($_GET['action'])) {
 		/** Publish album  ************************************************************/
 		/******************************************************************************/
 		case "publish":
+			XSRFdefender('albumedit');
 			$album = new Album($gallery, $folder);
 			$album->setShow($_GET['value']);
 			$album->save();
@@ -113,6 +117,7 @@ if (isset($_GET['action'])) {
 		/** Reset hitcounters ***********************************************************/
 		/********************************************************************************/
 		case "reset_hitcounters":
+			XSRFdefender('hitcounter');
 			$id = sanitize_numeric($_REQUEST['albumid']);
 			$where = ' WHERE `id`='.$id;
 			$imgwhere = ' WHERE `albumid`='.$id;
@@ -138,6 +143,7 @@ if (isset($_GET['action'])) {
 		//** DELETEIMAGE **************************************************************/
 		/******************************************************************************/
 		case 'deleteimage':
+			XSRFdefender('deletealbum');
 			$albumname = sanitize_path($_REQUEST['album']);
 			$imagename = sanitize_path($_REQUEST['image']);
 			$album = new Album($gallery, $albumname);
@@ -156,7 +162,8 @@ if (isset($_GET['action'])) {
 		/******************************************************************************/
 		case "save":
 			$returntab = '';
-
+			XSRFdefender('albumedit');
+			
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if (isset($_POST['album'])) {
 				$folder = sanitize_path($_POST['album']);
@@ -356,6 +363,7 @@ if (isset($_GET['action'])) {
 		/** DELETION ******************************************************************/
 		/*****************************************************************************/
 		case "deletealbum":
+			XSRFdefender('deletealbum');
 			if ($folder) {
 				$album = new Album($gallery, $folder);
 				if ($album->deleteAlbum()) {
@@ -374,6 +382,7 @@ if (isset($_GET['action'])) {
 			exit();
 			break;
 		case 'newalbum':
+			XSRFdefender('albumnew');
 			$name = sanitize($_GET['name']);
 			$soename = seoFriendly($name);
 			if ($folder != '/' && $folder != '.') {
@@ -684,6 +693,7 @@ $alb = removeParentAlbumNames($album);
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
 			<form name="albumedit1" autocomplete="off" action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post">
+				<?php XSRFToken('albumupdate');?>
 				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 				<input type="hidden"	name="savealbuminfo" value="1" />
 				<?php printAlbumEditForm(0, $album, true); ?>
@@ -819,7 +829,7 @@ $alb = removeParentAlbumNames($album);
 							noNestingClass: "no-nesting",
 							opacity: 0.4,
 							helperclass: 'helper',
-							onChange: function(serialized) {
+							onchange: function(serialized) {
 								$('#left-to-right-ser')
 								.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
 							},
@@ -857,6 +867,7 @@ $alb = removeParentAlbumNames($album);
 		if ($allimagecount) {
 			?>
 		<form name="albumedit2"	action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post" autocomplete="off">
+			<?php XSRFToken('albumedit'); ?>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
@@ -1167,9 +1178,9 @@ $alb = removeParentAlbumNames($album);
 							</select>
 							<span id="WMUSE_<?php echo $currentimage; ?>" style="display:<?php if ($current == '') echo 'none'; else echo 'inline';?>">
 								<?php $wmuse = $image->getWMUse(); ?>
-								<label><input type="checkbox" value="1" id="wm_image-<?php echo $currentimage; ?>" name="wm_image-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_IMAGE) echo 'checked="checeked"';?> /><?php echo gettext('image')?></label>
-								<label><input type="checkbox" value="1" id="wm_thumb-<?php echo $currentimage; ?>" name="wm_thumb-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_THUMB) echo 'checked="checeked"';?> /><?php echo gettext('thumb')?></label>
-								<label><input type="checkbox" value="1" id="wm_full-<?php echo $currentimage; ?>"name="wm_full-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_FULL) echo 'checked="checeked"';?> /><?php echo gettext('full image')?></label>
+								<label><input type="checkbox" value="1" id="wm_image-<?php echo $currentimage; ?>" name="wm_image-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_IMAGE) echo 'checked="checeked"';?> /><?php echo gettext('image');?></label>
+								<label><input type="checkbox" value="1" id="wm_thumb-<?php echo $currentimage; ?>" name="wm_thumb-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_THUMB) echo 'checked="checeked"';?> /><?php echo gettext('thumb');?></label>
+								<label><input type="checkbox" value="1" id="wm_full-<?php echo $currentimage; ?>"name="wm_full-<?php echo $currentimage; ?>" <?php if ($wmuse & WATERMARK_FULL) echo 'checked="checeked"';?> /><?php echo gettext('full image');?></label>
 							</span>
 						</td>
 					</tr>
@@ -1404,6 +1415,7 @@ if (isset($_GET['saved'])) {
 <div class="tabbox">
 
 <form name="albumedit" autocomplete="off"	action="?page=edit&amp;action=save<?php echo $albumdir ?>" method="POST">
+	<?php XSRFToken('albumupdate');?>
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
 	$currentalbum = 1;
@@ -1516,6 +1528,7 @@ if (isset($_GET['bulkmessage'])) {
 	printEditDropdown('');
 	?>
 <form action="?page=edit&amp;action=savealbumorder" method="post" name="sortableListForm" id="sortableListForm" onsubmit="return confirmAction();">
+	<?php XSRFToken('savealbumorder');?>
 	<p class="buttons">
 		<?php
 		if ($gallery_nesting>1 || zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
@@ -1587,7 +1600,7 @@ if (isset($_GET['bulkmessage'])) {
 				noNestingClass: "no-nesting",
 				opacity: 0.4,
 				helperclass: 'helper',
-				onChange: function(serialized) {
+				onchange: function(serialized) {
 					$('#left-to-right-ser')
 					.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
 				},

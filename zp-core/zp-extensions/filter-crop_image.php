@@ -13,7 +13,9 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.3.1'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-crop_image.php.html";
 
-if (!isset($_REQUEST['performcrop'])) {
+if (isset($_REQUEST['performcrop'])) {
+	XSRFdefender('crop');
+} else {
 	zp_register_filter('admin_toolbox_image', 'toolbox_crop_image');
 	zp_register_filter('edit_image_utilities', 'edit_crop_image', 1); // we want this one to come right after the crop thumbnail button
 	return;
@@ -199,14 +201,14 @@ printAdminHeader();
 	//<!-- <![CDATA[
 	jQuery(window).load(function(){
 		jQuery('#cropbox').Jcrop({
-			onChange: showCoords,
+			onchange: showCoords,
 			bgOpacity:   .4,
 			bgColor:     'black',
 			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ]					
 			});
 	});
 
-	// Our simple event handler, called from onChange and onSelect
+	// Our simple event handler, called from onchange and onSelect
 	// event handlers, as per the Jcrop invocation above
 	function showCoords(c) {
 		jQuery('#x').val(c.x);
@@ -241,6 +243,7 @@ printAdminHeader();
 						
 						<!-- This is the form that our event handler fills -->
 						<form name="crop" id="crop" action="?crop" onsubmit="return checkCoords();">
+							<?php XSRFToken('crop');?>
 							<input type="hidden" size="4" id="x" name="x" value="<?php echo $iX ?>" />
 							<input type="hidden" size="4" id="y" name="y" value="<?php echo $iY ?>" />
 							<input type="hidden" size="4" id="x2" name="x2" value="<?php echo $iX+$iW ?>" />

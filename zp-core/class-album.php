@@ -1430,5 +1430,13 @@ class Album extends PersistentObject {
 		return $this->get("codeblock");
 	}
 	
+	function getWatermark() {
+		return $this->get('watermark');
+	}
+	
+	function setWatermark($wm) {
+		$this->set('watermark',$wm);
+	}
+	
 }
 ?>

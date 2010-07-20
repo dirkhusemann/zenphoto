@@ -27,6 +27,7 @@ if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	$themeswitch = false;
 	if ($action == 'saveoptions') {
+		XSRFdefender('saveoptions');
 		$table = NULL;
 
 		$woh = getOption('watermark_h_offset');
@@ -37,10 +38,10 @@ if (isset($_GET['action'])) {
 		$notify = '';
 		$returntab = '';
 		$themeoptions = false;
-		
+
 		/*** General options ***/
 		if (isset($_POST['savegeneraloptions'])) {
-			
+
 			if (isset($_POST['allowed_tags_reset'])) {
 				setOption('allowed_tags', getOption('allowed_tags_default'));
 			} else {
@@ -86,15 +87,16 @@ if (isset($_GET['action'])) {
 			if ($f == 'custom') $f = sanitize($_POST['date_format'],3);
 			setOption('date_format', $f);
 			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
+			setBoolOption('edit_in_place',sanitize_numeric($_POST['edit_in_place']));
 			setOption('captcha', sanitize($_POST['captcha']));
 			$msg = zp_apply_filter('save_admin_general_data', '');
-			
+
 			$returntab = "&tab=general";
 		}
-			
+
 		/*** Gallery options ***/
 		if (isset($_POST['savegalleryoptions'])) {
-			
+
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
@@ -199,7 +201,7 @@ if (isset($_GET['action'])) {
 			setBoolOption('search_no_news', isset($_POST['search_no_news']));
 			$returntab = "&tab=search";
 		}
-		
+
 		/*** RSS options ***/
 		if (isset($_POST['saverssoptions'])) {
 			setOption('feed_items', sanitize($_POST['feed_items'],3));
@@ -218,7 +220,7 @@ if (isset($_GET['action'])) {
 			setBoolOption('RSS_article_comments', isset($_POST['RSS_article_comments']));
 			$returntab = "&tab=rss";
 		}
-		
+
 		/*** Image options ***/
 		if (isset($_POST['saveimageoptions'])) {
 			setOption('image_quality', sanitize($_POST['image_quality'],3));
@@ -231,19 +233,19 @@ if (isset($_GET['action'])) {
 			$num = str_replace(',', '.', sanitize($_POST['sharpen_radius']));
 			if (is_numeric($num)) setOption('sharpen_radius', $num);
 			setOption('sharpen_threshold', sanitize_numeric($_POST['sharpen_threshold']));
-			
+
 			$old = getOption('fullimage_watermark');
 			if (isset($_POST['fullimage_watermark'])) {
 				$new = sanitize($_POST['fullimage_watermark'], 3);
 				setOption('fullimage_watermark', $new);
 				$wmchange = $wmchange || $old != $new;
 			}
-			
+
 			setOption('watermark_scale', sanitize($_POST['watermark_scale'],3));
 			setBoolOption('watermark_allow_upscale', isset($_POST['watermark_allow_upscale']));
 			setOption('watermark_h_offset', sanitize($_POST['watermark_h_offset'],3));
 			setOption('watermark_w_offset', sanitize($_POST['watermark_w_offset'],3));
-			
+
 			$imageplugins = array_unique($_zp_extra_filetypes);
 			$imageplugins[] = 'Image';
 			foreach ($imageplugins as $plugin) {
@@ -255,11 +257,11 @@ if (isset($_GET['action'])) {
 					$wmchange = $wmchange || $old != $new;
 				}
 			}
-			
+
 			setOption('full_image_quality', sanitize($_POST['full_image_quality'],3));
 			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
 			setOption('protect_full_image', sanitize($_POST['protect_full_image'],3));
-			
+
 			$olduser = getOption('protected_image_user');
 			$newuser = sanitize($_POST['protected_image_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
@@ -285,7 +287,7 @@ if (isset($_GET['action'])) {
 				}
 			}
 			setOption('protected_image_hint', process_language_string_save('protected_image_hint', 3));
-			
+
 			setBoolOption('hotlink_protection', isset($_POST['hotlink_protection']));
 			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
 			$st = sanitize($_POST['image_sorttype'],3);
@@ -363,7 +365,7 @@ if (isset($_GET['action'])) {
 		if (!$themeswitch) { // was really a save.
 			$returntab = processCustomOptionSave($returntab);
 		}
-		
+
 		if (($woh != getOption('watermark_h_offset')) ||
 					($wow != getOption('watermark_w_offset'))  ||
 					($ws != getOption('watermark_scale')) ||
@@ -380,7 +382,7 @@ if (isset($_GET['action'])) {
 }
 printAdminHeader();
 //TODO
-zp_apply_filter('texteditor_config', '','zenphoto'); 
+zp_apply_filter('texteditor_config', '','zenphoto');
 ?>
 <script type="text/javascript" src="js/farbtastic.js"></script>
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
@@ -452,6 +454,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
+			<?php XSRFToken('saveoptions');?>
 			<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
 				<tr>
@@ -544,7 +547,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<td>
 						<p>
 							<?php
-							echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and you'll get nice cruft-free URLs."); 
+							echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and you'll get nice cruft-free URLs.");
 							if (is_null($mod_rewrite)) echo ' '.gettext('If the checkbox is disabled, setup did not detect a working Apache <em>mod rewrite</em> facility and proper <em>.htaccess</em> file.');
 							?>
 						</p>
@@ -559,7 +562,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</select>
 					<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
 					<?php echo gettext('Multi-lingual'); ?>
-					<p class="notebox"><?php echo gettext('Please check the <a href="http://www.zenphoto.org/trac/report/9?asc=0&sort=version">translation tickets</a> for new and updated language translations.')?></p>
+					<p class="notebox"><?php echo gettext('Please check the <a href="http://www.zenphoto.org/trac/report/9?asc=0&sort=version">translation tickets</a> for new and updated language translations.');?></p>
 					</td>
 					<td>
 						<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>
@@ -656,6 +659,19 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					?>
 					</td>
 				</tr>
+				<tr>
+					<td><?php echo gettext('Inline editing'); ?></td>
+					<td>
+						<label>
+							<input type="radio" name = "edit_in_place" value=0<?php if (!getOption('edit_in_place')) echo ' checked="checked"'; ?>><?php echo gettext('Disabled'); ?></input>
+							<input type="radio" name = "edit_in_place" value=1<?php if (getOption('edit_in_place')) echo ' checked="checked"'; ?>><?php echo gettext('Enabled'); ?></input>
+						</label>
+					</td>
+					<td>
+						<p><?php echo gettext('Check to allow editing of Gallery data on the front-end pages. (Sometimes known as <em>Ajax</em> editing.)'); ?></p>
+						<p class="notebox"><?php echo gettext('<strong>NOTE:</strong> enabling this feature is not recommended as it is suseptible to Cross Site Request Forgeries.')?></p>
+					</td>
+				</tr>
 				<?php
 				if (method_exists($_zp_authority,'lib_auth_options')) {
 					customOptions($_zp_authority, "");
@@ -690,7 +706,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></p>
 						<p><?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?></p>
 					</td>
-				</tr>			
+				</tr>
 				<tr>
 					<td width="175"><?php echo gettext("Site email:"); ?></td>
 					<td width="350">
@@ -717,6 +733,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
+			<?php XSRFToken('saveoptions');?>
 			<input	type="hidden" name="savegalleryoptions" value="yes" />
 			<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 			<table class="bordered">
@@ -761,8 +778,8 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 						$x = '          ';
 						?>
 						<img src="images/lock.png" />
-						<?php 
-					} 
+						<?php
+					}
 					?>
 					</td>
 					<td style="background-color: #ECF1F2;">
@@ -850,9 +867,9 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 						$sort[gettext('Custom')] = 'custom';
 /*
  * not recommended--screws with peoples minds during pagination!
-					
+
 						$sort[gettext('Random')] = 'random';
-*/						
+*/
 						$cvt = $cv = strtolower(getOption('gallery_sorttype'));
 						ksort($sort);
 						$flip = array_flip($sort);
@@ -949,7 +966,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 									<?php echo gettext("enable gallery sessions"); ?>
 								</label>
 							</span>
-						</p>					
+						</p>
 					</td>
 					<td>
 						<p><?php  echo gettext("<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>" ); ?></p>
@@ -997,6 +1014,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_search" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
+			<?php XSRFToken('saveoptions');?>
 			<input	type="hidden" name="savesearchoptions" value="yes" />
 			<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 			<table class="bordered">
@@ -1027,8 +1045,8 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 							$x = '          ';
 							?>
 							<img src="images/lock.png" />
-							<?php 
-						} 
+							<?php
+						}
 						?>
 					</td>
 					<td style="background-color: #ECF1F2;">
@@ -1065,7 +1083,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 				</tr>
 				<tr>
 					<td><?php echo gettext("Search behavior settings:"); ?></td>
-					<?php 
+					<?php
 					$exact = ' <input type="radio" id="partia_tagsl" name="tag_match" value="1" ';
 					$partial = ' <input type="radio" id="exact_tags" name="tag_match" value="0" ';
 					if (getOption('exact_tag_match')) {
@@ -1149,6 +1167,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_rss" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
+		<?php XSRFToken('saveoptions');?>
 		<input	type="hidden" name="saverssoptions" value="yes" />
 	<table class="bordered">
 		<tr>
@@ -1162,7 +1181,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 		<tr>
 			<td width="175"><?php echo gettext("RSS feeds enabled:"); ?></td>
 			<td>
- 				<label class="checkboxlabel">
+				<label class="checkboxlabel">
 						<input type="checkbox" name="RSS_album_image" value=<?php if (getOption('RSS_album_image')) echo '"1" checked="checked"'; else echo '"0"'; ?> /> <?php echo gettext('Gallery'); ?>
 				</label>
 				<label class="checkboxlabel">
@@ -1177,7 +1196,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 				</span>
 			</td>
 			<td>
-			<p>	
+			<p>
 			<?php
 			echo gettext('Check each RSS feed you wish to activate.');
 			?>
@@ -1201,7 +1220,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td><?php echo gettext("Size of RSS feed images:"); ?></td>
 			<td>
 			<input type="text" size="15" id="feed_imagesize" name="feed_imagesize"
-				value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br /> 
+				value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br />
 				<input type="text" size="15" id="feed_imagesize_albums" name="feed_imagesize_albums"
 				value="<?php echo htmlspecialchars(getOption('feed_imagesize_albums'));?>" /> <label for="feed_imagesize_albums"><?php echo gettext("Albums RSS"); ?></label>
 				</td>
@@ -1210,7 +1229,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 		<tr>
 			<td><?php echo gettext("RSS feed sort order:"); ?></td>
 			<td>
-			<?php 
+			<?php
 			$feedsortorder = array(gettext('latest by id')=>'latest',
 						gettext('latest by date')=>'latest-date',
 						gettext('latest by mtime')=>'latest-mtime'
@@ -1218,10 +1237,10 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			$feedsortorder_albums = array(gettext('latest by id')=>'latest',
 						gettext('latest updated')=>'latestupdated'
 						);
-			?>		
+			?>
 			<select id="feed_sortorder" name="feed_sortorder">
 			<?php generateListFromArray(array(getOption("feed_sortorder")), $feedsortorder, false, true); ?>
-			</select> <label for="feed_sortorder"><?php echo gettext("Images RSS"); ?></label><br /><br /> 
+			</select> <label for="feed_sortorder"><?php echo gettext("Images RSS"); ?></label><br /><br />
 			<select id="feed_sortorder_albums" name="feed_sortorder_albums">
 			<?php generateListFromArray(array(getOption("feed_sortorder_albums")), $feedsortorder_albums, false, true); ?>
 			</select> <label for="feed_sortorder_albums"><?php echo gettext("Albums RSS"); ?></label>
@@ -1244,7 +1263,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td>
 				<label><input type="checkbox" name="feed_cache" value="1" <?php echo checked('1', getOption('feed_cache')); ?> /> <?php echo gettext("Enabled"); ?></label><br /><br />
 				<input type="text" size="15" id="feed_cache_expire" name="feed_cache_expire"
-				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'));?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br /> 
+				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'));?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br />
 				</td>
 			<td><?php echo gettext("Check if you want to enable static RSS feed caching. The cached file will be placed within the <em>cache_html</em> folder.<br /> Cache expire default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec)."); ?></td>
 		</tr>
@@ -1278,7 +1297,8 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 		?>
 	<div id="tab_image" class="tabbox">
 	<form action="?action=saveoptions" method="post" autocomplete="off">
-	<input type="hidden" name="saveimageoptions" value="yes" /> 
+		<?php XSRFToken('saveoptions');?>
+	<input type="hidden" name="saveimageoptions" value="yes" />
 	<p align="center">
 	<?php echo gettext('See also the <a href="?tab=theme">Theme Options</a> tab for theme specific image options.'); ?>
 	</p>
@@ -1292,9 +1312,9 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 				</p>
 			</td>
 		</tr>
-		<?php 
+		<?php
 		foreach ($_zp_graphics_optionhandlers as $handler) {
-			customOptions($handler, ''); 
+			customOptions($handler, '');
 		}
 		?>
 		<tr>
@@ -1307,7 +1327,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 /*
  * not recommended--screws with peoples minds during pagination!
 				$sort[gettext('Random')] = 'random';
-*/				
+*/
 				$flip = array_flip($sort);
 				if (isset($flip[$cv])) {
 					$dspc = 'none';
@@ -1559,7 +1579,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<p><?php echo gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></p>
 					<p><?php printf(gettext('Images are in png-24 format and are located in the <code>/%s/watermarks/</code> folder.'), USER_PLUGIN_FOLDER); ?></p>
 				</td>
-													           
+
 			</tr>
 			<tr>
 				<td><?php echo gettext("Full image protection:"); ?></td>
@@ -1603,30 +1623,11 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 									$x = '          ';
 									?>
 									<img src="images/lock.png" />
-									<?php 
-								} 
+									<?php
+								}
 								?>
 							</td>
 						</tr>
-						<tr class="passwordextrashow">
-							<td style="margin:0; padding:0">
-							</td>
-							<td style="margin:0; padding:0">
-								<!-- password AND repeat -->
-								<br />
-								<br />
-							</td>
-						</tr>
-						<tr class="passwordextrashow">
-							<td style="margin:0; padding:0">
-							</td>
-							<td style="margin:0; padding:0">
-								<!-- hint -->
-								<br />
-								<br />
-							</td>
-						</tr>
-						
 						<tr class="passwordextrahide" style="display:none">
 							<td style="margin:0; padding:0">
 								<a href="javascript:toggle_passwords('',false);">
@@ -1681,7 +1682,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 				<?php
 				$exifstuff = sortMultiArray($_zp_exifvars,2,false);
 				foreach ($exifstuff as $key=>$item) {
-					echo '<li><label><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
+					echo '<li><label><input id="'.$key.'" name="'.$key.'" type="checkbox"';
 					if ($item[3]) {
 						echo ' checked="checked" ';
 					}
@@ -1726,6 +1727,7 @@ if ($subtab == 'comments' && zp_loggedin(OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_comments" class="tabbox">
 	<form action="?action=saveoptions" method="post" autocomplete="off">
+		<?php XSRFToken('saveoptions');?>
 	<input 	type="hidden" name="savecommentoptions" value="yes" />
 	<table class="bordered">
 		<tr>
@@ -1879,11 +1881,12 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 	}
 	?>
 	<form action="?action=saveoptions" method="post" autocomplete="off">
+		<?php XSRFToken('saveoptions');?>
 		<input type="hidden" name="savethemeoptions" value="yes" />
 		<input type="hidden" name="optiontheme" value="<?php echo $optiontheme; ?>" />
 		<input type="hidden" name="old_themealbum" value="<?php echo urlencode($alb); ?>" />
 		<table class='bordered'>
-		
+
 		<?php
 		if (count($themelist) == 0) {
 			?>
@@ -1893,7 +1896,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 			<h2><?php echo gettext("There are no themes for which you have rights to administer.");?></h2>
 			</div>
 			</th>
-			
+
 			<?php
 		} else {
 			/* handle theme options */
@@ -1974,7 +1977,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 				</td>
 				<td>
 					<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
-					<br />					
+					<br />
 					<p class='notebox'><?php echo gettext('<strong>Note:</strong> changing crop height or width will invalidate existing crops.'); ?></p>
 				</td>
 			</tr>
@@ -2009,12 +2012,12 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 							</td>
 							<td style="margin:0; padding:0">
 								<label>
-									<input type="radio" id="image_use_side1" name="image_use_side" 
+									<input type="radio" id="image_use_side1" name="image_use_side"
 											value="height" <?php if ($side=='height') echo ' checked="checked"'; ?> />
 										<?php echo gettext('height') ?>
 								</label>
 								<label>
-									<input type="radio" id="image_use_side2" name="image_use_side" 
+									<input type="radio" id="image_use_side2" name="image_use_side"
 												value="width" <?php if ($side=='width') echo ' checked="checked"'; ?> />
 									<?php echo gettext('width') ?>
 								</label>
@@ -2023,12 +2026,12 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 						<tr>
 							<td style="margin:0; padding:0">
 								<label>
-									<input type="radio" id="image_use_side3" name="image_use_side" 
+									<input type="radio" id="image_use_side3" name="image_use_side"
 											value="shortest" <?php if ($side=='shortest') echo ' checked="checked"'; ?> />
 									<?php echo gettext('shortest side') ?>
 								</label>
 								<label>
-									<input type="radio" id="image_use_side4" name="image_use_side" 
+									<input type="radio" id="image_use_side4" name="image_use_side"
 											value="longest" <?php if ($side=='longest') echo ' checked="checked"'; ?> />
 									<?php echo gettext('longest side') ?>
 								</label>
@@ -2083,7 +2086,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 					customOptions($optionHandler, '', $album, false, $supportedOptions, $themename);
 				}
 			}
-		
+
 			?>
 			<tr>
 			<td colspan="3">
@@ -2109,6 +2112,7 @@ if ($subtab == 'plugin' && zp_loggedin(ADMIN_RIGHTS)) {
 	?>
 	<div id="tab_plugin" class="tabbox">
 		<form action="?action=saveoptions" method="post" autocomplete="off">
+			<?php XSRFToken('saveoptions');?>
 			<input type="hidden" name="savepluginoptions" value="yes" />
 			<table class="bordered">
 				<tr>
@@ -2195,7 +2199,7 @@ if ($subtab == 'plugin' && zp_loggedin(ADMIN_RIGHTS)) {
 						?>
 					</td>
 				</tr>
-				<?php 
+				<?php
 				} else {
 				?>
 				<tr>

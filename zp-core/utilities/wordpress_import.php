@@ -24,6 +24,10 @@ $button_rights = ADMIN_RIGHTS;
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
+if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass']) || isset($_POST['dbhost'])) {
+	XSRFdefender('wordpress');
+}
+
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
@@ -101,6 +105,7 @@ die();
 <?php if(!isset($_POST['dbname']) && !isset($_POST['dbuser']) && !isset($_POST['dbpass']) && !isset($_POST['dbhost'])) { ?>
 <h2><?php echo gettext('Please enter your Wordpress database details:'); ?></h2>
 <form action="" method="post" name="wordpress">
+	<?php XSRFToken('wordpress');?>
 	<input type="text" value="wordpress" id="dbname" name="dbname" /> <label for="dbname"><?php echo gettext("Database name"); ?></label><br />
 	<input type="text" value="root" id="dbuser" name="dbuser" /> <label for="dbuser"><?php echo gettext("Database user"); ?></label><br />
 	<input type="text" value="root" id="dbpass" name="dbpass" /> <label for="dbpass"><?php echo gettext("Database password"); ?></label><br />

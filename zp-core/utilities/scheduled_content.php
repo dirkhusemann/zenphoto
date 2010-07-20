@@ -119,20 +119,11 @@ function unpublishSubalbums($album) {
 	}
 }
 
-echo '</head>';
-?>
-
-<body>
-<?php printLogoAndLinks(); ?>
-<div id="main">
-<?php printTabs('content'); ?>
-<div id="content">
-<h1><?php echo (gettext('Manage content publication')); ?></h1>
-<?php
 $publish_albums_list = array();
 $publish_images_list = array();
 if (db_connect()) {
 	if (isset($_POST['set_defaults'])) {
+		XSRFdefender('schedule_content');
 		if (isset($_POST['album_default'])) {
 			$albpublish = 1;
 		} else {
@@ -148,6 +139,7 @@ if (db_connect()) {
 		$sql = "ALTER TABLE ".prefix('images').' CHANGE `show` `show` INT( 1 ) NOT NULL DEFAULT "'.$imgpublish.'"';
 		query($sql);
 	} else if (isset($_POST['publish_albums'])) {
+		XSRFdefender('schedule_content');
 		$sql = '';
 		unset($_POST['publish_albums']);
 		foreach ($_POST as $key=>$albumid) {
@@ -162,6 +154,7 @@ if (db_connect()) {
 			query($sql);
 		}
 	} else if (isset($_POST['publish_images'])) {
+		XSRFdefender('schedule_content');
 		unset($_POST['publish_images']);
 		$sql = '';
 		foreach ($_POST as $action) {
@@ -186,7 +179,17 @@ if (db_connect()) {
 			query($sql);
 		}
 	}
+
+	echo '</head>';
 	?>
+	
+	<body>
+	<?php printLogoAndLinks(); ?>
+	<div id="main">
+	<?php printTabs('content'); ?>
+	<div id="content">
+	<h1><?php echo (gettext('Manage content publication')); ?></h1>
+
 	<h3><?php gettext("database connected"); ?></h3>
 	<br />
 	<?php
@@ -272,11 +275,12 @@ if (db_connect()) {
 	?>
 <?php if (zp_loggedin(ADMIN_RIGHTS)) { ?>
 <form name="set_publication" action="" method="post">
-<input type="hidden" name="set_defaults" value="true" />
-		<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Publish albums by default"); ?>
-		<br />
-		<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Make images visible by default"); ?>
-		<br />
+	<?php XSRFToken('schedule_content');?>
+	<input type="hidden" name="set_defaults" value="true" />
+	<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Publish albums by default"); ?>
+	<br />
+	<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Make images visible by default"); ?>
+	<br />
 <div class="buttons pad_button" id="setdefaults">
 <button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">
 	<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Set defaults"); ?>
@@ -290,6 +294,7 @@ if (db_connect()) {
 if (count($publish_albums_list) > 0) {
 ?>
 	<form name="publish" action="" method="post"><?php echo gettext('Un-published albums:'); ?>
+	<?php XSRFToken('schedule_content');?>
 	<input type="hidden" name="publish_albums" value="true" />
 	<ul class="schedulealbumchecklist">
 	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, 'sched_', false, true, true); ?>
@@ -329,6 +334,7 @@ if (count($publish_albums_list) > 0) {
 	// ]]> -->
 </script>
 <form name="review" action="" method="post">
+	<?php XSRFToken('schedule_content');?>
 <?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" id="publish_date" name="publish_date" value="'.$requestdate.'" />'); ?>
 <input type="hidden" name="review" value="true" />
 
@@ -360,6 +366,7 @@ if (count($publish_images_list) > 0) {
 		// ]]> -->
 	</script>
 	<form name="publish" action="" method="post"><?php echo gettext('Not visible images:'); ?>
+	<?php XSRFToken('schedule_content');?>
 	<input type="hidden" name="publish_images" value="true" />
 	<ul class="scheduleimagechecklist">
 	<?php
@@ -399,7 +406,7 @@ if (count($publish_images_list) > 0) {
 						</td>
 						<td>
 							<?php $image = newImage($album,$display); ?>
-							<img src="<?php echo $image->getThumb()?>" alt="<?php echo $image->filename; ?>"/>
+							<img src="<?php echo $image->getThumb();?>" alt="<?php echo $image->filename; ?>"/>
 						</td>
 						<td>
 							<?php printf(gettext('<strong>%s</strong>'),$key); ?><br />

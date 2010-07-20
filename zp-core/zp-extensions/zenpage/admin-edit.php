@@ -17,6 +17,46 @@ if(is_AdminEditPage('newsarticle')) {
 }
 admin_securityChecks($rights, currentRelativeURL(__FILE__));
 
+$result = '';
+$saveitem = '';
+$reports = array();
+if(is_AdminEditPage('page')) {
+	if(isset($_GET['titlelink'])) {
+		$result = new ZenpagePage(urldecode($_GET['titlelink']));
+	} else if(isset($_GET['update'])) {
+		XSRFdefender('update');
+		$result = updatePage($reports);
+	}
+	if(isset($_GET['save'])) {
+		XSRFdefender('save');
+		$result = addPage($reports);
+	}
+	if(isset($_GET['del'])) {
+		XSRFdefender('delete');
+		$msg = deletePage();
+		if (!empty($msg)) {
+			$reports[] = $msg;
+		}
+	}
+} else {
+	if(isset($_GET['titlelink'])) {
+		$result = new ZenpageNews(urldecode($_GET['titlelink']));
+	} else if(isset($_GET['update'])) {
+		XSRFdefender('update');
+		$result = updateArticle($reports);
+	}
+	if(isset($_GET['save'])) {
+		XSRFdefender('save');
+		$result = addArticle($reports);
+	}
+	if(isset($_GET['del'])) {
+		XSRFdefender('delete');
+		$msg = deleteArticle();
+		if (!empty($msg)) {
+			$reports[] = $msg;
+		}
+	}
+}
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header('Content-Type: text/html; charset=' . getOption('charset'));
 
@@ -74,8 +114,6 @@ codeblocktabsJS();
 </head>
 <body>
 <?php
-	$result = '';
-	$saveitem = '';
 	printLogoAndLinks();
 	echo '<div id="main">';
 	if(is_AdminEditPage('newsarticle')) {
@@ -99,16 +137,8 @@ codeblocktabsJS();
 		?>
 		<div id="tab_articles" class="tabbox">
 		<?php
-		if(isset($_GET['titlelink'])) {
-			$result = new ZenpageNews(urldecode($_GET['titlelink']));
-		} else if(isset($_GET['update'])) {
-			$result = updateArticle();
-		}
-		if(isset($_GET['save'])) {
-			$result = addArticle();
-		}
-		if(isset($_GET['del'])) {
-			deleteArticle();
+		foreach ($reports as $report) {
+			echo $report;
 		}
 		$admintype = 'newsarticle';
 		$additem = gettext('Add Article');
@@ -120,16 +150,8 @@ codeblocktabsJS();
 	}
 
 	if(is_AdminEditPage('page')) {
-		if(isset($_GET['titlelink'])) {
-			$result = new ZenpagePage(urldecode($_GET['titlelink']));
-		} else if(isset($_GET['update'])) {
-			$result = updatePage();
-		}
-		if(isset($_GET['save'])) {
-			$result = addPage();
-		}
-		if(isset($_GET['del'])) {
-			deletePage();
+		foreach ($reports as $report) {
+			echo $report;
 		}
 		$admintype = 'page';
 		$additem = gettext('Add Page');
@@ -194,11 +216,11 @@ if(is_AdminEditPage("newsarticle")) {
 <?php
 if(is_AdminEditPage("newsarticle")) {
 	?>
-	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
+	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('add')?>" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
 	<?php
 } else if(is_AdminEditPage("page")) {
 	?>
-	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
+	<strong><a href="admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;add&amp;XSRFToken=<?php echo getXSRFToken('add')?>" title="<?php echo $additem; ?>"><img src="images/add.png" alt="" /> <?php echo $additem; ?></a></strong>
 	<?php
 }
 ?>
@@ -240,6 +262,7 @@ if(is_object($result)) {
 <?php } ?>
 <?php if(is_object($result)) { ?>
 <form method="post" action="admin-edit.php?<?php echo $admintype; ?>&amp;update<?php echo $page; ?>" name="update">
+	<?php XSRFToken('update');?>
 <input type="hidden" name="id" value="<?php printIfObject($result,"id");?>" />
 <input type="hidden" name="titlelink-old" id="titlelink-old" value="<?php printIfObject($result,"titlelink"); ?>" />
 <input type="hidden" name="lastchange" id="lastchange" value="<?php echo date('Y-m-d H:i:s'); ?>" />
@@ -247,6 +270,7 @@ if(is_object($result)) {
 <input type="hidden" name="hitcounter" id="hitcounter" value="<?php printIfObject($result,"hitcounter"); ?>" />
 <?php } else { ?>
 	<form method="post" name="addnews" action="admin-edit.php?<?php echo $admintype; ?>&amp;save">
+		<?php XSRFToken('save');?>
 <?php } ?>
 	<table>
 		<tr>
@@ -353,7 +377,7 @@ if(is_object($result)) {
 				<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
 				<br style="clear:both" />
 				<?php if(is_object($result)) { ?>
-				<p class="buttons"><a class="submitbutton" href="javascript:confirmDelete('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?>
+				<p class="buttons"><a class="submitbutton" href="javascript:confirmDelete('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?>&amp;XSRFToken=<?php echo getXSRFToken('delete')?>
 				<?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>',<?php echo $deletemessage; ?>)" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
 				<br style="clear:both" />
 				<?php } ?>

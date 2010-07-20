@@ -1219,7 +1219,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								$selected = '';;
 							}
 							?>
-							<option value="" style="background-color:LightGray" <?php echo $selected; ?> ><?php echo gettext('*gallery theme')?></option>
+							<option value="" style="background-color:LightGray" <?php echo $selected; ?> ><?php echo gettext('*gallery theme');?></option>
 							<?php
 							foreach ($themes as $theme=>$themeinfo) {
 								if ($oldtheme == $theme) {
@@ -1639,52 +1639,56 @@ function printAlbumButtons($album) {
 	if ($imagcount = $album->getNumImages() > 0) {
 		?>
 		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
-		<input type="hidden" name="action" value="clear_cache" />
-		<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
-		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_hitcounter_album" title="<?php echo gettext("Clears the album's cached images.");?>">
-			<img src="images/edit-delete.png" style="border: 0px;" alt="delete" />
-			<?php echo gettext("Clear album cache"); ?>
-		</button>
-		</div>
+			<?php XSRFToken('clear_cache');?>
+			<input type="hidden" name="action" value="clear_cache" />
+			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
+			<div class="buttons">
+			<button type="submit" class="tooltip" id="edit_hitcounter_album" title="<?php echo gettext("Clears the album's cached images.");?>">
+				<img src="images/edit-delete.png" style="border: 0px;" alt="delete" />
+				<?php echo gettext("Clear album cache"); ?>
+			</button>
+			</div>
 		</form>
 
 		<?php
 		if (file_exists(SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/cache_images.php')) {
 		?>
 			<form name="cache_images" action="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER; ?>/cache_images.php" method="post">
-			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
-			<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
-			<div class="buttons">
-			<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>">
-			<img src="images/cache1.png" style="border: 0px;" alt="cache" />
-			<?php echo gettext("Pre-Cache Images"); ?></button>
-			</div>
+				<?php XSRFToken('cache_images');?>
+				<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
+				<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
+				<div class="buttons">
+				<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>">
+				<img src="images/cache1.png" style="border: 0px;" alt="cache" />
+				<?php echo gettext("Pre-Cache Images"); ?></button>
+				</div>
 			</form>
 		<?php
 		}
 		?>
 		<form name="reset_hitcounters" action="?action=reset_hitcounters" method="post">
-		<input type="hidden" name="action" value="reset_hitcounters" />
-		<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>" />
-		<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
-		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_hitcounter_all" title="<?php echo gettext("Resets all hitcounters in the album."); ?>">
-		<img src="images/reset1.png" style="border: 0px;" alt="reset" /> <?php echo gettext("Reset hitcounters"); ?>
-		</button>
-		</div>
+			<?php XSRFToken('hitcounters');?>
+			<input type="hidden" name="action" value="reset_hitcounters" />
+			<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>" />
+			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
+			<div class="buttons">
+			<button type="submit" class="tooltip" id="edit_hitcounter_all" title="<?php echo gettext("Resets all hitcounters in the album."); ?>">
+			<img src="images/reset1.png" style="border: 0px;" alt="reset" /> <?php echo gettext("Reset hitcounters"); ?>
+			</button>
+			</div>
 		</form>
 	<?php
 	}
 	if ($imagcount || (!$album->isDynamic() && $album->getNumAlbums()>0)) {
 	?>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album=<?php echo urlencode($album->name); ?>" method="post">
-		<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name);?>" />
-		<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
-		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>">
-		<img src="images/refresh.png" style="border: 0px;" alt="refresh" /> <?php echo gettext("Refresh Metadata"); ?></button>
-		</div>
+			<?php XSRFToken('refresh_metadata');?>
+			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name);?>" />
+			<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
+			<div class="buttons">
+			<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>">
+			<img src="images/refresh.png" style="border: 0px;" alt="refresh" /> <?php echo gettext("Refresh Metadata"); ?></button>
+			</div>
 		</form>
 	<?php
 	}
@@ -1761,20 +1765,20 @@ function printAlbumEditRow($album) {
 	<?php
 	if ($album->getShow()) {
 		?>
-		<a class="publish" href="?action=publish&amp;value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Un-publish the album %s'), $album->name); ?>">
-		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('Published'); ?>" /></a>
+		<a class="publish" href="?action=publish&amp;value=0&amp;album=<?php echo urlencode($album->name); ?>&amp;XSRFToken=<?php echo getXSRFToken('albumedit')?>" title="<?php echo sprintf(gettext('Un-publish the album %s'), $album->name); ?>">
+		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('albumedit'); ?>" /></a>
 
 	 <?php
 	} else {
 		?>
-		<a class="publish" href="?action=publish&amp;value=1&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>">
+		<a class="publish" href="?action=publish&amp;value=1&amp;album=<?php echo urlencode($album->name); ?>&amp;XSRFToken=<?php echo getXSRFToken('albumedit')?>" title="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>">
 		<img src="images/action.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>" /></a>
 	 <?php
 	}
 	?>
 	</td>
 	<td class="icons">
-		<a href="?commentson=<?php echo $album->getCommentsAllowed(); ?>&amp;id=<?php echo $album->getAlbumID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
+		<a href="?commentson=<?php echo $album->getCommentsAllowed(); ?>&amp;id=<?php echo $album->getAlbumID(); ?>&amp;XSRFToken=<?php echo getXSRFToken('albumedit')?>" title="<?php echo gettext("Enable or disable comments"); ?>">
 		<?php echo checkIfCommentsAllowed($album->getCommentsAllowed()); ?></a>
 	</td>
 	<td class="icons">
@@ -1793,7 +1797,7 @@ function printAlbumEditRow($album) {
 				<?php
 			} else {
 				?>
-				<a class="cache" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER; ?>/cache_images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?> " title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
+				<a class="cache" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER; ?>/cache_images.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>&amp;XSRFToken=<?php echo getXSRFToken('cache_images')?>" title="<?php echo sprintf(gettext('Pre-cache images in %s'), $album->name); ?>">
 				<img src="images/cache1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Cache the album %s'), $album->name); ?>" /></a>
 				<?php
 				}
@@ -1810,7 +1814,7 @@ function printAlbumEditRow($album) {
 			<?php
 		} else {
 			?>
-			<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
+			<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;return=*<?php echo urlencode(dirname($album->name)); ?>&amp;XSRFToken=<?php echo getXSRFToken('refresh')?>" title="<?php echo sprintf(gettext('Refresh metadata for the album %s'), $album->name); ?>">
 			<img src="images/refresh1.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Refresh metadata in the album %s'), $album->name); ?>" /></a>
 			<?php
 			}
@@ -1824,14 +1828,14 @@ function printAlbumEditRow($album) {
 			<?php
 		} else {
 			?>
-			<a class="reset" href="?action=reset_hitcounters&amp;albumid=<?php echo $album->getAlbumID(); ?>&amp;album=<?php echo urlencode($album->name);?>&amp;subalbum=true" title="<?php echo sprintf(gettext('Reset hitcounters for album %s'), $album->name); ?>">
+			<a class="reset" href="?action=reset_hitcounters&amp;albumid=<?php echo $album->getAlbumID(); ?>&amp;album=<?php echo urlencode($album->name);?>&amp;subalbum=true&amp;XSRFToken=<?php echo getXSRFToken('hitcounter')?>" title="<?php echo sprintf(gettext('Reset hitcounters for album %s'), $album->name); ?>">
 			<img src="images/reset.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Reset hitcounters for the album %s'), $album->name); ?>" /></a>
 			<?php
 			}
 		?>
 	</td>
 	<td class="icons">
-		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>');" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
+		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>&amp;XSRFToken=<?php echo getXSRFToken('deletealbum')?>');" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
 	</td>
 	<td class="icons">
@@ -1944,7 +1948,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$old = $album->get('watermark');
 	if (isset($_POST['album_watermark'])) {
 		$new = sanitize($_POST['album_watermark'], 3);
-		$album->set('watermark', $new);
+		$album->setWatermark($new);
 		if ($new != $old) $gallery->clearCache(SERVERCACHE . '/' . $album->name);
 	}
 	$codeblock1 = sanitize($_POST[$prefix.'codeblock1'], 0);
@@ -3361,5 +3365,65 @@ function codeblocktabsJS() {
 <?php
 }
 
+/**
+ * Standard admin pages checks
+ * @param bit $rights
+ * @param string $return--where to go after login
+ */
+function admin_securityChecks($rights, $return) {
+	global $_zp_current_admin_obj, $_zp_loggedin;
+	if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+		exit();
+	}
+
+	if (!is_null(getOption('admin_reset_date'))) {
+		if (!zp_loggedin($rights)) { // prevent nefarious access to this page.
+			if (!zp_apply_filter('admin_allow_access',false, $return)) {
+				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
+				exit();
+			}
+		}
+	}
+}
+
+/**
+ * returns an XSRF token
+ * @param striong $action
+ */
+function getXSRFToken($action) {
+	global $_zp_current_admin_obj;
+	return md5($action.prefix(getUserIP()).serialize($_zp_current_admin_obj).session_id());
+}
+
+/**
+ * Emits a "hidden" input for the XSRF token
+ * @param string $action
+ */
+function XSRFToken($action) {
+	?>
+	<input type="hidden" name="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
+	<?php 
+}
+
+/**
+ * Checks for Cross Site Request Forgeries
+ * @param string $action
+ */
+function XSRFdefender($action) {
+	$token = getXSRFToken($action);
+	if (!isset($_REQUEST['XSRFToken']) || $_REQUEST['XSRFToken'] != $token) {
+		zp_apply_filter('admin_XSRF_access',false, $action);
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&error&msg='.sprintf(gettext('"%s" Cross Site Request Forgery blocked.'),$action));
+		exit();
+	}
+	unset($_REQUEST['XSRFToken']);
+	if (isset($_POST['XSRFToken'])) {
+		unset($_POST['XSRFToken']);
+	}
+	if (isset($_GET['XSRFToken'])) {
+		unset($_GET['XSRFToken']);
+	}
+}
 
 ?>

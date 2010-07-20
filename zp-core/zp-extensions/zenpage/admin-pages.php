@@ -13,6 +13,39 @@ require_once("zenpage-admin-functions.php");
 
 admin_securityChecks(ZENPAGE_PAGES_RIGHTS, currentRelativeURL(__FILE__));
 
+$reports = array();
+// update page sort order
+if(isset($_POST['update'])) {
+	XSRFdefender('update');	
+	processZenpageBulkActions('pages', $reports);
+	updatePageSortorder($reports);
+}
+// remove the page from the database
+if(isset($_GET['del'])) {
+	XSRFdefender('delete');
+	$msg = deletePage();
+	if (!empty($msg)) {
+		$reports[] = $msg;
+	}
+}
+// publish or un-publish page by click
+if(isset($_GET['publish'])) {
+	XSRFdefender('update');
+	publishPageOrArticle('page',$_GET['id']);
+}
+if(isset($_GET['skipscheduling'])) {
+	XSRFdefender('update');
+	skipScheduledPublishing('page',$_GET['id']);
+}
+if(isset($_GET['commentson'])) {
+	XSRFdefender('update');
+	enableComments('page');
+}
+if(isset($_GET['hitcounter'])) {
+	XSRFdefender('hitcounter');
+	resetPageOrArticleHitcounter('page');
+}
+
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header('Content-Type: text/html; charset=' . getOption('charset'));
 
@@ -45,31 +78,13 @@ header('Content-Type: text/html; charset=' . getOption('charset'));
 	echo '<div id="main">';
 	printTabs('pages');
 	echo '<div id="content">';
-// update page sort order
-if(isset($_POST['update'])) {
-	processZenpageBulkActions('pages');
-	updatePageSortorder();
-}
-// remove the page from the database
-if(isset($_GET['del'])) {
-	deletePage();
-}
-// publish or un-publish page by click
-if(isset($_GET['publish'])) {
-	publishPageOrArticle('page',$_GET['id']);
-}
-if(isset($_GET['skipscheduling'])) {
-	skipScheduledPublishing('page',$_GET['id']);
-}
-if(isset($_GET['commentson'])) {
-	enableComments('page');
-}
-if(isset($_GET['hitcounter'])) {
-	resetPageOrArticleHitcounter('page');
-}
-?>
+	foreach ($reports as $report) {
+		echo $report;
+	}
+	?>
 <h1><?php echo gettext('Pages'); ?><span class="zenpagestats"><?php printPagesStatistic();?></span></h1>
 <form action="admin-pages.php" method="post" name="update" onsubmit="return confirmAction();">
+	<?php XSRFToken('update');?>
 
 <div>
 <p><?php echo gettext("Select a page to edit or drag the pages into the order, including subpage levels, you wish them displayed."); ?></p>
@@ -83,7 +98,7 @@ if(isset($_GET['hitcounter'])) {
 	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
 		?>
 		<strong>
-			<a href="admin-edit.php?page&amp;add" title="<?php echo gettext('Add Page'); ?>">
+			<a href="admin-edit.php?page&amp;add&amp;XSRFToken=<?php echo getXSRFToken('add')?>" title="<?php echo gettext('Add Page'); ?>">
 			<img src="images/add.png" alt="" /> <?php echo gettext('Add Page'); ?></a>
 		</strong>
 		<?php
@@ -156,7 +171,7 @@ if(isset($_GET['hitcounter'])) {
 			noNestingClass: "no-nesting",
 			opacity: 0.4,
 			helperclass: 'helper',
-			onChange: function(serialized) {
+			onchange: function(serialized) {
 				$('#left-to-right-ser')
 				.html("<input name='order' type='hidden' value="+ serialized[0].hash +" />");
 			},

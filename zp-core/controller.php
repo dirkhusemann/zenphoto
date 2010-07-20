@@ -54,8 +54,9 @@ if (getOption('zp_plugin_comment_form') &&
 /*** Server-side AJAX Handling ***********
  ******************************************/
 if (zp_loggedin()) {
-	if ( !empty($_POST["eip_context"] ) &&  !empty($_POST["eip_field"] ) )
+	if ( !empty($_POST["eip_context"] ) &&  !empty($_POST["eip_field"] ) ) {
 		editInPlace_handle_request($_POST["eip_context"], $_POST["eip_field"], $_POST["new_value"], $_POST["orig_value"]);
+	}
 }
 
 

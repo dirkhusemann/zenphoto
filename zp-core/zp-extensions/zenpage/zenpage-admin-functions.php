@@ -98,7 +98,7 @@ function processPasswordSave($page) {
  *
  * @return object
  */
-function addPage() {
+function addPage(&$reports) {
 	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
 	$titlelink = seoFriendly(get_language_string($title));
@@ -141,15 +141,15 @@ function addPage() {
 	$msg = zp_apply_filter('new_page', '', $page);
 	$page->save();
 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else if ($notice == 'user') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Page user').'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Page user').'</p>';
 	} else if ($notice == 'pass') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink).'</p>';
+		$reports[] =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink).'</p>';
 	}
-	echo $msg;
+	$reports[] =  $msg;
 	return $page;
 }
 
@@ -160,7 +160,7 @@ function addPage() {
  *
  * @return object
  */
-function updatePage() {
+function updatePage(&$reports) {
 	$title = process_language_string_save("title",2);
 	$author = sanitize($_POST['author']);
 	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
@@ -219,17 +219,17 @@ function updatePage() {
 	$page->save();
 
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
+		$reports[] = "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
 	} else 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else if ($notice == 'user') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Page user').'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Page user').'</p>';
 	} else if ($notice == 'pass') {
 		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink).'</p>';
+		$reports[] =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink).'</p>';
 	}
-	echo $msg;
+	$reports[] =  $msg;
 	return $page;
 }
 
@@ -258,7 +258,8 @@ function deletePage($id=NULL,$sortorder=NULL) {
 	}
 	query("DELETE FROM ".prefix('zenpage_pages')." WHERE id = ".$id." OR `sort_order` like '".$sortorder."-%'"); // Delete the actual page
 	//query("DELETE FROM ".prefix('zenpage_pages')." WHERE OR `sort_order` like '".$sortorder."%'"); // delete subpages if there are some
-	if(is_null($id)) echo"<p class='messagebox' id='fade-message'>".gettext("Page successfully deleted!")."</p>";
+	if(is_null($id)) return "<p class='messagebox' id='fade-message'>".gettext("Page successfully deleted!")."</p>";
+	return '';
 }
 
 
@@ -266,7 +267,7 @@ function deletePage($id=NULL,$sortorder=NULL) {
  * Updates the sortorder of the pages list in the database
  *
  */
-function updatePageSortorder() {
+function updatePageSortorder(&$reports) {
 	if(!empty($_POST['order'])) { // if someone didn't sort anything there are no values!
 		parse_str($_POST['order'],$orderarray);
 		$order = array();
@@ -281,7 +282,7 @@ function updatePageSortorder() {
 			query($sql);
 		}
 	}
-	echo "<br clear=\"all\"><p class='messagebox' id='fade-message'>".gettext("Sort order saved.")."</p>";
+	$reports[] = "<br clear=\"all\"><p class='messagebox' id='fade-message'>".gettext("Sort order saved.")."</p>";
 }
 
 
@@ -329,7 +330,7 @@ function printPagesListTable($page, $flag) {
 		<?php printPublishIconLink($page,"page"); ?>
 	</td>
 	<td class="icons">
-		<a href="?commentson=<?php echo $page->getCommentsAllowed(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
+		<a href="?commentson=<?php echo $page->getCommentsAllowed(); ?>&amp;id=<?php echo $page->getID(); ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('update')?>" title="<?php echo gettext("Enable or disable comments"); ?>">
 		<?php echo checkIfCommentsAllowed($page->getCommentsAllowed(),true); ?></a>
 	</td>
 	<?php } else { ?>
@@ -349,11 +350,11 @@ function printPagesListTable($page, $flag) {
 
 	<?php if(checkIfLockedPage($page)) { ?>
 	<td class="icons">
-		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Reset hitcounter"); ?>">
+		<a href="?hitcounter=1&amp;id=<?php echo $page->getID(); ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('hitcounter')?>" title="<?php echo gettext("Reset hitcounter"); ?>">
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
-		<a href="javascript:confirmDelete('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>',deletePage)" title="<?php echo gettext("Delete page"); ?>">
+		<a href="javascript:confirmDelete('admin-pages.php?del=<?php echo $page->getID(); ?>&amp;sortorder=<?php echo $page->getSortorder(); ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('delete')?>',deletePage)" title="<?php echo gettext("Delete page"); ?>">
 		<img src="../../images/fail.png" alt="delete" /></a>
 	</td>
 	<td class="icons">
@@ -448,7 +449,7 @@ function printPagesList($pages) {
  *
  * @return object
  */
-function addArticle() {
+function addArticle(&$reports) {
 	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
 	$titlelink = seoFriendly(get_language_string($title));
@@ -497,11 +498,11 @@ function addArticle() {
 		}
 	}
 	if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink).'</p>';
+		$reports[] =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink).'</p>';
 	}
-	echo $msg;
+	$reports[] =  $msg;
 	return $article;
 }
 
@@ -511,7 +512,7 @@ function addArticle() {
  *
  * @return object
  */
-function updateArticle() {
+function updateArticle(&$reports) {
 	$date = date('Y-m-d_H-i-s');
 	$title = process_language_string_save("title",2);
 	$author = sanitize($_POST['author']);
@@ -587,13 +588,13 @@ function updateArticle() {
 		}
 	}
 	if (!$rslt) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink).'</p>';
 	} else if(empty($title)) {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink)).'</p>';
 	} else {
-		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink).'</p>';
+		$reports[] =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink).'</p>';
 	}
-	echo $msg;
+	$reports[] =  $msg;
 	return $article;
 }
 
@@ -611,7 +612,8 @@ function deleteArticle($id=NULL) {
 	query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_news' AND `objectid`=" . $id);
 	query("DELETE FROM ".prefix('zenpage_news')." WHERE id = $id");  // remove the article
 	query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE news_id = $id"); // delete the category association
-	if(is_null($id)) echo "<p class='messagebox' id='fade-message'>".gettext("Article successfully deleted!")."</p>";
+	if(is_null($id)) return "<p class='messagebox' id='fade-message'>".gettext("Article successfully deleted!")."</p>";
+	return '';
 }
 
 
@@ -963,7 +965,7 @@ function processCategoryPasswordSave() {
  * Adds a category to the database
  *
  */
-function addCategory() {
+function addCategory(&$reports) {
 	$catname = process_language_string_save("category",2); // so that no \ are shown in the 'Category x added' message
 	$catlink = seoFriendly(get_language_string($catname));
 	$result = processCategoryPasswordSave();
@@ -974,20 +976,20 @@ function addCategory() {
 		$notice = false;
 	}
 	if(empty($catlink) OR empty($catname)) {
-		echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
+		$reports[] =  "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
 	} else if ($notice == 'user') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Category user').'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Category user').'</p>';
 	} else if ($notice == 'pass') {
-		echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
+		$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 	} else {
 		$sql = "INSERT INTO ".prefix('zenpage_news_categories')." (cat_name, cat_link, permalink, user, password, password_hint) VALUES ('".
 				zp_escape_string($catname)."', '".zp_escape_string(seoFriendly($catlink))."','".getcheckboxState('permalink')."', '".
 				zp_escape_string($result['user'])."','".zp_escape_string($result['password'])."','".zp_escape_string($result['password_hint']).
 				"')";
 		if (query($sql, true)) {
-			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
+			$reports[] =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($catlink))."</p>";
+			$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($catlink))."</p>";
 		}
 	}
 }
@@ -997,7 +999,7 @@ function addCategory() {
  * Updates a category
  *
  */
-function updateCategory() {
+function updateCategory(&$reports) {
 	global $_zp_current_zenpage_news;
 	$result['id'] = sanitize_numeric($_POST['id']);
 	$result['cat_name'] = process_language_string_save("category",2);
@@ -1027,16 +1029,16 @@ function updateCategory() {
 				$passwordpart." WHERE id = ".$result['id'];
 	if(query($sql,true)) {
 		if(empty($result['cat_name']) OR empty($result['cat_link'])) {
-			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
+			$reports[] =  "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your category a <strong>title or titlelink</strong>!")."</p>";
 		} else if ($notice == 'user') {
-			echo "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Category user').'</p>';
+			$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('You must supply a password for the Protected Category user').'</p>';
 		} else if ($notice == 'pass') {
-			echo "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
+			$reports[] =  "<p class='errorbox' id='fade-message'>".gettext('Your passwords were empty or did not match').'</p>';
 		} else {
-			echo "<p class='messagebox' id='fade-message'>".gettext("Category updated!")."</p>";
+			$reports[] =  "<p class='messagebox' id='fade-message'>".gettext("Category updated!")."</p>";
 		}
 	} else {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($result['cat_link']))."</p>";
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($result['cat_link']))."</p>";
 	}
 	$result = getCategory($result['id']);
 	return $result;
@@ -1047,7 +1049,7 @@ function updateCategory() {
  * Delets a category from the database
  *
  */
-function deleteCategory() {
+function deleteCategory(&$reports) {
 	global $_zp_current_zenpage_news;
 	if(isset($_GET['delete'])) {
 		// check if the category is in use, don't delete
@@ -1057,7 +1059,7 @@ function deleteCategory() {
 			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = '{$delete}'");
 		}
 		query("DELETE FROM ".prefix('zenpage_news_categories')." WHERE id = '{$delete}'");
-		echo "<p class='messagebox' id='fade-message'>".gettext("Category successfully deleted!")."</p>";
+		$reports[] =  "<p class='messagebox' id='fade-message'>".gettext("Category successfully deleted!")."</p>";
 	}
 }
 
@@ -1084,12 +1086,12 @@ function printCategoryList() {
 	?>
 	</td>
 	<td class="icons">
-		<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>&amp;tab=categories" title="<?php echo gettext("Reset hitcounter"); ?>">
+		<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>&amp;tab=categories&amp;XSRFToken=<?php echo getXSRFToken('hitcounter')?>" title="<?php echo gettext("Reset hitcounter"); ?>">
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" />
 		</a>
 	</td>
 	<td class="icons">
-	<a href="javascript:confirmDelete('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories',deleteCategory)" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
+	<a href="javascript:confirmDelete('admin-categories.php?delete=<?php echo $cat['id']; ?>&amp;cat_link=<?php echo js_encode($cat['cat_link']); ?>&amp;tab=categories&amp;XSRFToken=<?php echo getXSRFToken('delete_category')?>',deleteCategory)" title="<?php echo gettext("Delete Category"); ?>"><img src="../../images/fail.png" alt="<?php echo gettext("Delete"); ?>" title="<?php echo gettext("Delete Category"); ?>" /></a>
 	</td>
 		<td class="icons">
 			<input type="checkbox" name="ids[]" value="<?php echo $cat['id']; ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
@@ -1430,13 +1432,13 @@ function printPublishIconLink($object,$type) {
 		if ($object->getShow()) {
 			$title = gettext("Publish immediately (skip scheduling)");
 			?>
-			<a href="?skipscheduling=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
+			<a href="?skipscheduling=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>&amp;XSRFToken=<?php echo getXSRFToken('update')?>" title="<?php echo $title; ?>">
 			<img src="images/clock.png" alt="<?php gettext("Scheduled for published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		} else {
 			$title = gettext("Enable scheduled publishing");
 			?>
-			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
+			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>&amp;XSRFToken=<?php echo getXSRFToken('update')?>" title="<?php echo $title; ?>">
 			<img src="../../images/action.png" alt="<?php echo gettext("Un-published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		}
@@ -1444,7 +1446,7 @@ function printPublishIconLink($object,$type) {
 		if ($object->getShow()) {
 			$title = gettext("Un-publish");
 			?>
-			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
+			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>&amp;XSRFToken=<?php echo getXSRFToken('update')?>" title="<?php echo $title; ?>">
 			<img src="../../images/pass.png" alt="<?php echo gettext("Published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		} else {
@@ -1452,12 +1454,12 @@ function printPublishIconLink($object,$type) {
 			if(empty($dt)) {
 				$title = gettext("Publish");
 				?>
-				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
+				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>&amp;XSRFToken=<?php echo getXSRFToken('update')?>">
 				<?php
 			} else {
 				$title = gettext("Publish (override expiration)");
 				?>
-				<a href="?publish=2&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
+				<a href="?publish=2&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>&amp;XSRFToken=<?php echo getXSRFToken('update')?>">
 				<?php
 			}
 			?>
@@ -1649,7 +1651,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
  * Processes the check box bulk actions
  *
  */
-function processZenpageBulkActions($type) {
+function processZenpageBulkActions($type,&$reports) {
 	if (isset($_POST['ids'])) {
 		//echo "action for checked items:". $_POST['checkallaction'];
 		$action = sanitize($_POST['checkallaction']);
@@ -1718,7 +1720,7 @@ function processZenpageBulkActions($type) {
 				if(($type != 'news' || $type != 'pages') && $action != 'deleteall') {
 					query($sql);
 				} 
-				if(!is_null($message)) echo"<p class='messagebox fade-message'>".$message."</p>";
+				if(!is_null($message)) $reports[] = "<p class='messagebox fade-message'>".$message."</p>";
 			}
 		}
 	}

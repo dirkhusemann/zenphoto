@@ -20,6 +20,9 @@ $button_rights = MANAGE_ALL_ALBUM_RIGHTS;
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
+if (isset($_REQUEST['thumbtype']) || isset($_REQUEST['thumbselector'])) {
+	XSRFdefender('reset_thumbs');
+}
 
 $buffer = '';
 $gallery = new Gallery();
@@ -72,6 +75,7 @@ if (isset($_REQUEST['thumbtype']) && db_connect()) {
 if (db_connect()) {
 	?>
 	<form name="set_random" action="">
+		<?php XSRFToken('reset_thumbs')?>
 		<input type="hidden" name="thumbtype" value="" />
 		<div class="buttons pad_button" id="set_random">
 		<button class="tooltip" type="submit" title="<?php echo gettext("Sets all album thumbs to random."); ?>">
@@ -87,6 +91,7 @@ if (db_connect()) {
 		<tr>
 			<td>
 				<form name="set_first" action="">
+					<?php XSRFToken('reset_thumbs')?>
 					<input type="hidden" name="thumbtype" value="1" />
 					<div class="buttons pad_button" id="set_first">
 					<button class="tooltip" type="submit" title="<?php printf(gettext("Set all album thumbs to use the %s image."),$current); ?>">
@@ -98,6 +103,7 @@ if (db_connect()) {
 			<td>
 				<?php echo gettext('Change button to') ?>
 				<form name="setselector" action="">
+					<?php XSRFToken('reset_thumbs')?>
 					<select id="thumbselector" name="thumbselector" onchange="this.form.submit()">
 					<?php
 					$selections = array();

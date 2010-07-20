@@ -366,10 +366,10 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL, $addheader=t
 						function toggleComments(hide) {
 							if (hide) {
 								$('div.comment').hide();
-								$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(false);"><?php echo gettext('show comments')?></button>');
+								$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(false);"><?php echo gettext('show comments');?></button>');
 							} else {
 								$('div.comment').show();
-								$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(true);"><?php echo gettext('hide comments')?></button>');
+								$('#comment_toggle').html('<button type="button" onclick="javascript:toggleComments(true);"><?php echo gettext('hide comments');?></button>');
 							}
 						}
 						$(document).ready(function() {

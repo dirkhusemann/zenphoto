@@ -8,6 +8,25 @@ require_once(dirname(__FILE__).'/menu_manager-admin-functions.php');
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 $page = 'edit';
+
+$result = "";
+$reports = array();
+if(isset($_GET['id'])) {
+	$result = getItem(sanitize($_GET['id']));
+}
+if(isset($_GET['save'])) {
+	XSRFdefender('update');
+	if ($_POST['update']) {
+		$result = updateItem($report);
+	} else {
+		$result = addItem($reports);
+	}
+}
+if(isset($_GET['del'])) {
+	XSRFdefender('delete_menu');
+	deleteItem($reports);
+}
+ 
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
 <link rel="stylesheet" href="../zenpage/zenpage.css" type="text/css" />
@@ -24,21 +43,9 @@ printTabs("menu");
 ?>
 <div id="content">
 <?php
-$result = "";
-if(isset($_GET['id'])) {
-	$result = getItem(sanitize($_GET['id']));
+foreach ($reports as $report) {
+	echo $report;
 }
-if(isset($_GET['save'])) {
-	if ($_POST['update']) {
-		$result = updateItem();
-	} else {
-		$result = addItem();
-	}
-}
-if(isset($_GET['del'])) {
-	deleteItem();
-}
- 
 ?>
 <script type="text/javascript">
 // <!-- <![CDATA[
@@ -183,6 +190,7 @@ function handleSelectorChange(type) {
 			$('#typeselector').change(function() {
 					$('input').val(''); // reset all input values so we do not carry them over from one type to another
 					$('#link').val('');
+					$('#XSRFToken').val('<?php echo getXSRFToken('update'); ?>');
 					handleSelectorChange($(this).val());
 				});
 			});
@@ -246,6 +254,7 @@ if (isset($_GET['add'])) {
 }
 ?>
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
+		<?php XSRFToken('update'); ?>
 		<input type="hidden" name="update" id="update" value="<?php echo $action; ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
 		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link); ?>" />

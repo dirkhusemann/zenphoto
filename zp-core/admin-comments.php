@@ -26,6 +26,7 @@ if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
 
 	case "spam":
+		XSRFdefender('comment_update');
 		$comment = new Comment(sanitize_numeric($_GET['id']));
 		zp_apply_filter('comment_disapprove', $comment);
 		$comment->setInModeration(1);
@@ -34,6 +35,7 @@ if (isset($_GET['action'])) {
 		exit();
 
 	case "notspam":
+		XSRFdefender('comment_update');
 		$comment = new Comment(sanitize_numeric($_GET['id']));
 		zp_apply_filter('comment_approve', $comment);
 		$comment->setInModeration(0);
@@ -42,6 +44,7 @@ if (isset($_GET['action'])) {
 		exit();
 
 	case 'deletecomments':
+		XSRFdefender('deletecomment');
 		if (isset($_POST['ids'])) {
 			$action = processCommentBulkActions();
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?bulk=".$action);
@@ -51,7 +54,8 @@ if (isset($_GET['action'])) {
 			exit();
 		}
  case 'deletecomment':
- 		$id = $_GET['id'];
+		XSRFdefender('deletecomment');
+ 	$id = $_GET['id'];
  		$sql = "DELETE FROM ".prefix('comments')." WHERE id =".$id;
  		query($sql);
  		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=1");
@@ -62,6 +66,7 @@ if (isset($_GET['action'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
 		}
+		XSRFdefender('savecomment');
 		$id = sanitize_numeric($_POST['id']);
 		$name = zp_escape_string(sanitize($_POST['name'], 3));
 		$email = zp_escape_string(sanitize($_POST['email'], 3));
@@ -114,8 +119,9 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	extract($commentarr);
 	?>
 
-<form action="?action=savecomment" method="post"><input
-	type="hidden" name="id" value="<?php echo $id; ?>" />
+<form action="?action=savecomment" method="post">
+<?php XSRFToken('savecomment');?>
+<input	type="hidden" name="id" value="<?php echo $id; ?>" />
 <table style="float:left;margin-right:2em;">
 
 	<tr>
@@ -185,14 +191,14 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 
 ?>
-<p><?php echo $status_moderation; ?>. <div class="buttons"><a href="<?php echo $url_moderation; ?>" title="<?php echo $title_moderation; ?>" ><img src="<?php echo $linkimage; ?>" alt="" /><?php echo $link_moderation; ?></a></div></p>
+<p><?php echo $status_moderation; ?>. <div class="buttons"><a href="<?php echo $url_moderation; ?>&amp;XSRFToken=<?php echo getXSRFToken('comment_update')?>" title="<?php echo $title_moderation; ?>" ><img src="<?php echo $linkimage; ?>" alt="" /><?php echo $link_moderation; ?></a></div></p>
 <br clear="all" />
 <hr />
 <p><?php echo $status_private; ?></p>
 <p><?php echo $status_anon; ?></p>
 <hr />
 <p class="buttons">
-<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>'; }"
+<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('deletecomment')?>'; }"
 		title="<?php echo gettext('Delete'); ?>" ><img src="images/fail.png" alt="" />
 		<?php echo gettext('Delete'); ?></a></p>
 		<br style="clear:both" />
@@ -279,6 +285,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 	<?php } ?>
 
 <form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirmAction();">
+	<?php XSRFToken('deletecomment');?>
 <input type="hidden" name="subpage" value="<?php echo $pagenum ?>" />
 <p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 <p class="buttons">
@@ -419,20 +426,25 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 		</td>
 		<td align="center"><?php
 		if ($inmoderation) {
-			echo "<a href=\"?action=notspam&amp;id=" . $id . "\" title=\"".gettext('Approve this message (not SPAM)')."\">";
-			echo '<img src="images/warn.png" style="border: 0px;" alt="'. gettext("Approve this message (not SPAM").'" /></a>';
+			?>
+			<a href="?action=notspam&amp;id=<?php echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('comment_update')?>" title="<?php echo gettext('Approve this message (not SPAM)'); ?>">
+				<img src="images/warn.png" style="border: 0px;" alt="<?php echo gettext("Approve this message (not SPAM"); ?>" /></a>
+			<?php 
 		} else {
-			echo "<a href=\"?action=spam&amp;id=" . $id . "\" title=\"".gettext('Mark this message as SPAM')."\">";
-			echo '<img src="images/pass.png" style="border: 0px;" alt="'. gettext("Mark this message as SPAM").'" /></a>';
+			?>
+			<a href="?action=spam&amp;id=<?php  echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('comment_update')?>" title="<?php  echo gettext('Mark this message as SPAM'); ?>">
+				<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext("Mark this message as SPAM"); ?>" /></a>
+			<?php
 		}
 		?></td>
 		<td class="icons"><a href="?page=editcomment&amp;id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>">
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
-		<td class="icons"><a
-			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply:').' '.$email; ?>">
-		<img src="images/icon_mail.gif" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a></td>
 		<td class="icons">
-			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>'; }"
+		<a href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply:').' '.$email; ?>">
+		<img src="images/icon_mail.gif" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a>
+		</td>
+		<td class="icons">
+			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('deletecomment')?>'; }"
 			title="<?php echo gettext('Delete this comment.'); ?>" > <img
 			src="images/fail.png" style="border: 0px;" alt="<?php echo gettext('Delete'); ?>" /></a></td>
 		<td class="icons"><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"

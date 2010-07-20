@@ -53,6 +53,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				/** clear the cache ***********************************************************/
 				/******************************************************************************/
 				case "clear_cache":
+					XSRFdefender('clear_cache');
 					$gallery->clearCache();
 					$class = 'messagebox';
 					$msg = gettext('Image cache cleared.');
@@ -61,6 +62,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					/** clear the RSScache ***********************************************************/
 					/******************************************************************************/
 				case "clear_rss_cache":
+					XSRFdefender('clear_cache');
 					clearRSScache();
 					$class = 'messagebox';
 					$msg = gettext('RSS cache cleared.');
@@ -69,6 +71,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					/** Reset hitcounters ***********************************************************/
 					/********************************************************************************/
 				case "reset_hitcounters":
+					XSRFdefender('hitcounter');
 					query('UPDATE ' . prefix('albums') . ' SET `hitcounter`= 0');
 					query('UPDATE ' . prefix('images') . ' SET `hitcounter`= 0');
 					query('UPDATE ' . prefix('zenpage_news') . ' SET `hitcounter`= 0');
@@ -415,6 +418,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		$button_action = UTILITIES_FOLDER.'/'.$utility;
 		$button_rights = false;
 		$button_enable = true;
+		$button_XSRFTag = '';
 	
 		$utilityStream = file_get_contents($utility);
 		eval(isolate('$button_text', $utilityStream));
@@ -425,8 +429,10 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		eval(isolate('$button_hidden', $utilityStream));
 		eval(isolate('$button_action', $utilityStream));
 		eval(isolate('$button_enable', $utilityStream));
-	
+		eval(isolate('$button_XSRFTag', $utilityStream));
+		
 		$buttonlist[] = array(
+								'XSRFTag'=>$button_XSRFTag,
 								'enable'=>$button_enable,
 								'button_text'=>$button_text,
 								'formname'=>$utility,
@@ -439,7 +445,6 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		);
 	
 	}
-	
 	$buttonlist = zp_apply_filter('admin_utilities_buttons', $buttonlist);
 	$buttonlist = sortMultiArray($buttonlist, 'button_text', false);
 	$count = 0;
@@ -460,6 +465,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 			$button_icon = $button['icon'];
 			?>
 			<form name="<?php echo $button['formname']; ?>"	action="<?php echo $button['action']; ?>">
+				<?php if (isset($button['XSRFTag'])) XSRFToken($button['XSRFTag']); ?>
 				<?php echo $button['hidden']; ?>
 				<div class="buttons">
 				<button class="tooltip" type="submit"	title="<?php echo $button['title']; ?>" <?php if (!$button['enable']) echo 'disabled="disabled"'; ?>>

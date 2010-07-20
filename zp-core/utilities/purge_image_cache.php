@@ -6,4 +6,5 @@ $button_title = gettext("Clears the image cache. Images will be re-cached as the
 $button_alt = gettext("Purge Image cache");
 $button_hidden =  '<input type="hidden" name="action" value="clear_cache" />';
 $button_rights =  ADMIN_RIGHTS;
+$button_XSRFTag = 'clear_cache';
 ?>

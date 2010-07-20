@@ -25,6 +25,7 @@ $gallery = new Gallery();
 /* handle posts */
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'upload') {
+		XSRFdefender('upload');
 		// Check for files.
 		$error = false;
 		$files_empty = true;
@@ -257,6 +258,7 @@ if (ini_get('safe_mode')) { ?>
 
 <form name="uploaderform" id="uploaderform" enctype="multipart/form-data" action="?action=upload&amp;uploadtype=http" method="post"
 												onsubmit="return validateFolder(document.uploaderform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
+	<?php XSRFToken('upload');?>
 	<input type="hidden" name="processed" value="1" />
 	<input type="hidden" name="existingfolder" value="false" />
 
@@ -410,7 +412,10 @@ if (ini_get('safe_mode')) { ?>
 								'uploader': 'admin-uploadify/uploadify.swf',
 								'cancelImg': 'images/fail.png',
 								'script': 'admin-uploadify/uploader.php',
-								'scriptData': {	'auth': '<?php echo md5(serialize($curadmin)); ?>' },
+								'scriptData': {
+															'auth': '<?php echo md5(serialize($curadmin)); ?>',
+															'XSRFToken': '<?php echo getXSRFToken('upload')?>'
+															},
 								'folder': '/',
 								'multi': true,
 								<?php

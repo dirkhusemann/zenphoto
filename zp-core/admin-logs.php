@@ -13,31 +13,41 @@ admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 if (isset($_GET['action'])) {
 	$action = sanitize($_GET['action'],3);
 	$file = SERVERPATH.'/'.DATA_FOLDER . '/'.sanitize($_POST['filename'],3);
-	switch ($action) {
-		case 'clear':
-			$f = fopen($file, 'w');
-			fclose($f);
-			chmod($file, 0600);
-			break;
-		case 'delete':
-			@unlink($file);
-			unset($_GET['tab']); // it is gone, after all
-			break;
-		case 'download':
-			include_once(SERVERPATH.'/'.ZENFOLDER . '/archive.php');
-			$subtab = sanitize($_GET['tab'],3);
-			$dest = SERVERPATH.'/'.DATA_FOLDER . '/'.$subtab. ".zip";
-			$rp = dirname($file);
-			$z = new zip_file($dest);
-			$z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
-			$z->add_files(array(basename($file)));
-			$z->create_archive();
-			header('Content-Type: application/zip');
-			header('Content-Disposition: attachment; filename="' . $subtab . '.zip"');
-			header("Content-Length: " . filesize($dest));
-			printLargeFileContents($dest);
-			unlink($dest);
-			break;
+	XSRFdefender($action);
+	if (zp_apply_filter('admin_log_actions', true, $file, $action)) {
+		switch ($action) {
+			case 'clear_log':
+				$f = fopen($file, 'w');
+				ftruncate($f,0);
+				fclose($f);
+				clearstatcache();
+				if (basename($file) == 'security_log.txt') {
+					zp_apply_filter('admin_log_actions', true, $file, $action);	// have to record the fact
+				}
+				break;
+			case 'delete_log':
+				@unlink($file);
+				unset($_GET['tab']); // it is gone, after all
+				if (basename($file) == 'security_log.txt') {
+					zp_apply_filter('admin_log_actions', true, $file, $action);	// have to record the fact
+				}
+				break;
+			case 'download_log':
+				include_once(SERVERPATH.'/'.ZENFOLDER . '/archive.php');
+				$subtab = sanitize($_GET['tab'],3);
+				$dest = SERVERPATH.'/'.DATA_FOLDER . '/'.$subtab. ".zip";
+				$rp = dirname($file);
+				$z = new zip_file($dest);
+				$z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
+				$z->add_files(array(basename($file)));
+				$z->create_archive();
+				header('Content-Type: application/zip');
+				header('Content-Disposition: attachment; filename="' . $subtab . '.zip"');
+				header("Content-Length: " . filesize($dest));
+				printLargeFileContents($dest);
+				unlink($dest);
+				break;
+		}
 	}
 }
 // Print our header
@@ -84,7 +94,8 @@ echo "\n</head>";
 			<!-- A log -->
 			<div id="theme-editor" class="tabbox">
 			
-				<form name="delete_log" action="?action=delete&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+				<form name="delete_log" action="?action=delete_log&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+					<?php XSRFToken('delete_log');?>
 					<input type="hidden" name="action" value="delete" />
 					<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 					<div class="buttons">
@@ -96,7 +107,8 @@ echo "\n</head>";
 				<?php
 				if (!empty($logtext)) {
 					?>
-					<form name="clear_log" action="?action=clear&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+					<form name="clear_log" action="?action=clear_log&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+						<?php XSRFToken('clear_log');?>
 						<input type="hidden" name="action" value="clear" />
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">
@@ -106,7 +118,8 @@ echo "\n</head>";
 						</div>
 					</form>
 					
-					<form name="download_log" action="?action=download&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+					<form name="download_log" action="?action=download_log&amp;page=logs&amp;tab=<?php echo $subtab; ?>" method="post" style="float: left">
+						<?php XSRFToken('download_log');?>
 						<input type="hidden" name="action" value="download" />
 						<input type="hidden" name="filename" value="<?php echo $subtab; ?>.txt" />
 						<div class="buttons">

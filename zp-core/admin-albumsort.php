@@ -12,6 +12,33 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+
+if (isset($_GET['album'])) {
+	$folder = sanitize($_GET['album']);
+	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+		if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
+			exit();
+		}
+	}
+	$album = new Album($gallery, $folder);
+	if (isset($_GET['saved'])) {
+		XSRFdefender('save_sort');
+		parse_str($_POST['sortableList'],$inputArray);
+		if (isset($inputArray['id'])) {
+			$orderArray = $inputArray['id'];
+			foreach($orderArray as $key=>$id) {
+				$sql = 'UPDATE '.prefix('images').' SET `sort_order`="'.sprintf('%03u',$key).'" WHERE `id`='.$id;
+				query($sql);
+			}
+
+		}
+		
+		$album->setSortType("manual");
+		$album->setSortDirection('image', 0);
+		$album->save();
+	}
+}
 	
 // Print the admin header
 printAdminHeader();
@@ -39,26 +66,6 @@ $gallery = new Gallery();
 if (!isset($_GET['album'])) {
 	die(gettext("No album provided to sort."));
 } else {
-	$folder = sanitize($_GET['album']);
-	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
-		die(gettext("You do not have rights to sort this album"));
-	}
-	$album = new Album($gallery, $folder);
-	if (isset($_GET['saved'])) {
-		parse_str($_POST['sortableList'],$inputArray);
-		if (isset($inputArray['id'])) {
-			$orderArray = $inputArray['id'];
-			foreach($orderArray as $key=>$id) {
-				$sql = 'UPDATE '.prefix('images').' SET `sort_order`="'.sprintf('%03u',$key).'" WHERE `id`='.$id;
-				query($sql);
-			}
-
-		}
-		
-		$album->setSortType("manual");
-		$album->setSortDirection('image', 0);
-		$album->save();
-	}
 
 	// Layout the page
 	printLogoAndLinks();
@@ -98,6 +105,7 @@ if (!isset($_GET['album'])) {
 		
 		<div class="tabbox">
 			<form action="?page=edit&amp;album=<?php echo $album->getFolder(); ?>&amp;saved&amp;tab=sort" method="post" name="sortableListForm" id="sortableListForm">
+				<?php XSRFToken('save_sort');?>
 				<script language="javascript" type="text/javascript">
 					// <!-- <![CDATA[
 					function postSort(form) {

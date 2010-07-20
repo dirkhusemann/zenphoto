@@ -122,6 +122,7 @@ if ($iY) {
 }
 
 if (isset($_REQUEST['crop'])) {
+	XSRFdefender('thumb_crop');
 	$cw = $_REQUEST['w'];
 	$ch = $_REQUEST['h'];
 	$cx = $_REQUEST['x'];
@@ -164,9 +165,9 @@ printAdminHeader();
 	//<!-- <![CDATA[
 	jQuery(window).load(function(){
 		jQuery('#cropbox').Jcrop({
-			onChange: showPreview,
+			onchange: showPreview,
 			onSelect: showPreview,
-			onChange: showCoords,
+			onchange: showCoords,
 			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 			bgOpacity:   .4,
 			bgColor:     'black',
@@ -174,7 +175,7 @@ printAdminHeader();
 			});
 	});
 
-	// Our simple event handler, called from onChange and onSelect
+	// Our simple event handler, called from onchange and onSelect
 	// event handlers, as per the Jcrop invocation above
 	function showPreview(coords)
 	{
@@ -188,7 +189,7 @@ printAdminHeader();
 			marginTop: '-' + Math.round(ry * coords.y) + 'px'
 		});
 	}
-	// Our simple event handler, called from onChange and onSelect
+	// Our simple event handler, called from onchange and onSelect
 	// event handlers, as per the Jcrop invocation above
 	function showCoords(c) {
 		jQuery('#x').val(c.x);
@@ -227,6 +228,7 @@ printAdminHeader();
 						
 						<!-- This is the form that our event handler fills -->
 						<form name="crop" id="crop" action="?crop" onsubmit="return checkCoords();">
+							<?php XSRFToken('thumb_crop');?>
 							<input type="hidden" size="4" id="x" name="x" value="<?php echo $iX ?>" />
 							<input type="hidden" size="4" id="y" name="y" value="<?php echo $iY ?>" />
 							<input type="hidden" size="4" id="x2" name="x2" value="<?php echo $iX+$iW ?>" />

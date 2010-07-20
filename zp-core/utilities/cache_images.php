@@ -16,8 +16,11 @@ $button_text = gettext('Pre-Cache Images');
 $button_hint = gettext('Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the pre-cache image link for each album to avoid swamping your browser.');
 $button_icon = 'images/cache1.png';
 $button_rights = ADMIN_RIGHTS;
+$button_XSRFTag = 'cache_images';
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+
+XSRFdefender('cache_images');
 
 function loadAlbum($album) {
 	global $gallery, $_zp_current_album, $_zp_current_image;

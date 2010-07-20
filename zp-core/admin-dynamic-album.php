@@ -31,6 +31,7 @@ function getSubalbumImages($folder) {
 
 $search = new SearchEngine(true);
 if (isset($_POST['savealbum'])) {
+	XSRFdefender('savealbum');
 	$albumname = sanitize($_POST['album']);
 	if (!isMyAlbum($albumname, ALBUM_RIGHTS)) {
 		if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
@@ -105,6 +106,7 @@ while ($old != $albumname) {
 }
 ?>
 <form action="?savealbum" method="post">
+	<?php XSRFToken('savealbum');?>
 <input type="hidden" name="savealbum" value="yes" />
 <table>
 	<tr>

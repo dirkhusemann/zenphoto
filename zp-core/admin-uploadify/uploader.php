@@ -1,17 +1,15 @@
 <?php
 define('OFFSET_PATH', 3);
-require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
-if (!zp_loggedin()) {
-	if (isset($_POST['auth'])) {
-		$auth = $_POST['auth'];
-		$admins = $_zp_authority->getAdministrators();
-		foreach ($admins as $admin) {
-			if (md5(serialize($admin)) == $auth && $admin['rights'] & UPLOAD_RIGHTS) {
-				$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
-				break;
-			}
+$_zp_loggedin = NULL;
+if (isset($_POST['auth'])) {
+	$auth = $_POST['auth'];
+	$admins = $_zp_authority->getAdministrators();
+	foreach ($admins as $admin) {
+		if (md5(serialize($admin)) == $auth && $admin['rights'] & UPLOAD_RIGHTS) {
+			$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
+			break;
 		}
 	}
 }
@@ -41,7 +39,7 @@ if (!empty($_FILES)) {
 		if (!empty($folder)) {
 			if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
 				if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
-					header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
+					header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
 					exit();
 				}
 			}

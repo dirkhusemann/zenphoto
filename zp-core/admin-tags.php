@@ -19,6 +19,72 @@ if (isset($_REQUEST['tagsort'])) {
 } else {
 	$tagsort = getOption('tagsort');
 }
+if (count($_POST) > 0) {
+	if (isset($_GET['newtags'])) {
+		XSRFdefender('new_tags');	
+		foreach ($_POST as $value) {
+			if (!empty($value)) {
+				$value = zp_escape_string(htmlspecialchars_decode(sanitize($value, 3),ENT_COMPAT));
+				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
+				if (!is_array($result)) { // it really is a new tag
+					query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . $value . '")');
+				}
+			}
+		}
+	} // newtags
+	if (isset($_GET['delete'])) {
+		XSRFdefender('tag_delete');
+		$kill = array();
+		foreach ($_POST as $key => $value) {
+			$key = str_replace('tags_','',postIndexDecode($key));
+			$kill[] = $_zp_UTF8->strtolower($key);
+		}
+		if (count($kill) > 0) {
+			$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
+			foreach ($kill as $tag) {
+				$sql .= "`name`='".(zp_escape_string($tag))."' OR ";
+			}
+			$sql = substr($sql, 0, strlen($sql)-4);
+			$dbtags = query_full_array($sql);
+			if (is_array($dbtags) && count($dbtags) > 0) {
+				$sqltags = "DELETE FROM ".prefix('tags')." WHERE ";
+				$sqlobjects = "DELETE FROM ".prefix('obj_to_tag')." WHERE ";
+				foreach ($dbtags as $tag) {
+					$sqltags .= "`id`='".$tag['id']."' OR ";
+					$sqlobjects .= "`tagid`='".$tag['id']."' OR ";
+				}
+				$sqltags = substr($sqltags, 0, strlen($sqltags)-4);
+				query($sqltags);
+				$sqlobjects = substr($sqlobjects, 0, strlen($sqlobjects)-4);
+				query($sqlobjects);
+			}
+		}
+	} // delete
+	if (isset($_GET['rename'])) {
+		XSRFdefender('tag_rename');
+		unset($_POST['XSRFToken']);
+		foreach($_POST as $key=>$newName) {
+			if (!empty($newName)) {
+				$newName = sanitize($newName, 3);
+				$key = postIndexDecode($key);
+				$key = substr($key, 2); // strip off the 'R_'
+				$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.zp_escape_string($newName).'"');
+				$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.zp_escape_string($key).'"');
+				if (is_array($newtag)) { // there is an existing tag of the same name
+					$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
+				} else {
+					$existing = false;
+				}
+				if ($existing) {
+					query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
+					query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
+				} else {
+					query('UPDATE '.prefix('tags').' SET `name`="'.zp_escape_string($newName).'" WHERE `id`='.$oldtag['id']);
+				}
+			}
+		}
+	} // rename
+}
 
 printAdminHeader();
 ?>
@@ -33,68 +99,6 @@ printLogoAndLinks();
 	?>
 	<div id="content">
 		<?php
-		if (count($_POST) > 0) {
-			if (isset($_GET['newtags'])) {
-				foreach ($_POST as $value) {
-					if (!empty($value)) {
-						$value = zp_escape_string(htmlspecialchars_decode(sanitize($value, 3),ENT_COMPAT));
-						$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
-						if (!is_array($result)) { // it really is a new tag
-							query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . $value . '")');
-						}
-					}
-				}
-			} // newtags
-			if (isset($_GET['delete'])) {
-				$kill = array();
-				foreach ($_POST as $key => $value) {
-					$key = str_replace('tags_','',postIndexDecode($key));
-					$kill[] = $_zp_UTF8->strtolower($key);
-				}
-				if (count($kill) > 0) {
-					$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
-					foreach ($kill as $tag) {
-						$sql .= "`name`='".(zp_escape_string($tag))."' OR ";
-					}
-					$sql = substr($sql, 0, strlen($sql)-4);
-					$dbtags = query_full_array($sql);
-					if (is_array($dbtags)) {
-						$sqltags = "DELETE FROM ".prefix('tags')." WHERE ";
-						$sqlobjects = "DELETE FROM ".prefix('obj_to_tag')." WHERE ";
-						foreach ($dbtags as $tag) {
-							$sqltags .= "`id`='".$tag['id']."' OR ";
-							$sqlobjects .= "`tagid`='".$tag['id']."' OR ";
-						}
-						$sqltags = substr($sqltags, 0, strlen($sqltags)-4);
-						query($sqltags);
-						$sqlobjects = substr($sqlobjects, 0, strlen($sqlobjects)-4);
-						query($sqlobjects);
-					}
-				}
-			} // delete
-			if (isset($_GET['rename'])) {
-				foreach($_POST as $key=>$newName) {
-					if (!empty($newName)) {
-						$newName = sanitize($newName, 3);
-						$key = postIndexDecode($key);
-						$key = substr($key, 2); // strip off the 'R_'
-						$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.zp_escape_string($newName).'"');
-						$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.zp_escape_string($key).'"');
-						if (is_array($newtag)) { // there is an existing tag of the same name
-							$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
-						} else {
-							$existing = false;
-						}
-						if ($existing) {
-							query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
-							query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
-						} else {
-							query('UPDATE '.prefix('tags').' SET `name`="'.zp_escape_string($newName).'" WHERE `id`='.$oldtag['id']);
-						}
-					}
-				}
-			} // rename
-		}
 		
 		echo "<h1>".gettext("Tag Management")."</h1>";
 		if ($tagsort == 1) {
@@ -126,6 +130,7 @@ printLogoAndLinks();
 			<td valign='top'>
 				<h2 class="h2_bordered_edit"><?php echo gettext("Delete tags from the gallery"); ?></h2>
 				<form name="tag_delete" action="?delete=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
+					<?php XSRFToken('tag_delete');?>
 					<div class="box-tags-unpadded">
 						<?php
 						tagSelector(NULL, 'tags_', true, $tagsort);
@@ -139,7 +144,7 @@ printLogoAndLinks();
 					</p>
 					<label id="autocheck">
 						<input type="checkbox" name="checkAllAuto" id="checkAllAuto" />
-						<span id="autotext"><?php echo gettext('all')?></span>
+						<span id="autotext"><?php echo gettext('all');?></span>
 					</label>
 					<script type="text/javascript">
 						// <!-- <![CDATA[
@@ -169,6 +174,7 @@ printLogoAndLinks();
 			<td valign='top'>
 				<h2 class="h2_bordered_edit"><?php echo gettext("Rename tags"); ?></h2>
 				<form name="tag_rename" action="?rename=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
+					<?php XSRFToken('tag_rename');?>
 					<div class="box-tags-unpadded">
 						<ul class="tagrenamelist">
 							<?php
@@ -204,6 +210,7 @@ printLogoAndLinks();
 			<td valign='top'>
 				<h2 class="h2_bordered_edit"><?php echo gettext("New tags"); ?></h2>
 				<form name="new_tags" action="?newtags=true&amp;tagsort=<?php echo $tagsort; ?>" method="post">
+					<?php XSRFToken('new_tags');?>
 					<div class="box-tags-unpadded">
 						<ul class="tagnewlist">
 							<?php

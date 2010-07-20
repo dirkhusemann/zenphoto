@@ -25,6 +25,10 @@ $button_rights = ADMIN_RIGHTS;
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
+if(isset($_GET['sendmail'])) {
+	XSRFdefender('mailing_list');
+}
+
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 $admins = $_zp_authority->getAdministrators();
@@ -89,6 +93,7 @@ if(isset($_GET['sendmail'])) {
 ?>
 <h2><?php echo gettext('Please enter the message you want to send.'); ?></h2>
 <form id="massmail" action="?sendmail" method="post" accept-charset="UTF-8">
+	<?php XSRFToken('mailing_list');?>
 	<table>
 		<tr>
 				<td valign="top">

@@ -26,6 +26,10 @@ $button_rights = ADMIN_RIGHTS;
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
+if (isset($_REQUEST['backup']) || isset($_REQUEST['restore'])) {
+	XSRFDefender('backup');
+}
+
 $buffer = '';
 
 function fillbuffer($handle) {
@@ -394,6 +398,7 @@ if (db_connect()) {
 	<br />
 	<br />
 	<form name="backup_gallery" action="">
+		<?php XSRFToken('backup');?>
 	<input type="hidden" name="backup" value="true" />
 	<div class="buttons pad_button" id="dbbackup">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
@@ -420,7 +425,9 @@ if (db_connect()) {
 		echo gettext('You have not yet created a backup set.');
 	} else {
 	?>
-		<form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
+		<form name="restore_gallery" action="">
+		<?php XSRFToken('backup');?>
+		<?php echo gettext('Select the database restore file:'); ?>
 		<br />
 		<select id="backupfile" name="backupfile">
 		<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>

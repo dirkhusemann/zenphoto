@@ -2119,185 +2119,186 @@ if (file_exists(CONFIGFILE)) {
 	 ***************************************************************************************/
 
 	$createTables = true;
-	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
-		if ($taskDisplay[substr($task,0,8)] == 'create') {
-			echo "<h3>".gettext("About to create tables")."...</h3>";
-		} else {
-			echo "<h3>".gettext("About to update tables")."...</h3>";
-		}
-		setupLog(gettext("Begin table creation"));
-		foreach($db_schema as $sql) {
-			$result = mysql_query($sql);
-			if (!$result) {
-				$createTables = false;
-				setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
-				echo '<div class="error">';
-				echo sprintf(gettext('Table creation failure: %s'),mysql_error());
-				echo '</div>';
+	if (isset($_GET['create']) || isset($_GET['update']) || isset($_GET['delete_files']) && db_connect()) {
+		if (!isset($_GET['delete_files'])) {
+			if ($taskDisplay[substr($task,0,8)] == 'create') {
+				echo "<h3>".gettext("About to create tables")."...</h3>";
 			} else {
-				setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
+				echo "<h3>".gettext("About to update tables")."...</h3>";
 			}
-		}
-		// always run the update queries to insure the tables are up to current level
-		setupLog(gettext("Begin table updates"));
-		foreach($sql_statements as $sql) {
-			$result = mysql_query($sql);
-			if (!$result) {
-				setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
-			} else {
-				setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
+			setupLog(gettext("Begin table creation"));
+			foreach($db_schema as $sql) {
+				$result = mysql_query($sql);
+				if (!$result) {
+					$createTables = false;
+					setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
+					echo '<div class="error">';
+					echo sprintf(gettext('Table creation failure: %s'),mysql_error());
+					echo '</div>';
+				} else {
+					setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
+				}
 			}
-		}
-
-		// set defaults on any options that need it
-		setupLog(gettext("Done with database creation and update"));
-
-		$prevRel = getOption('zenphoto_release');
-
-		setupLog(sprintf(gettext("Previous Release was %s"),$prevRel));
-
-		$_zp_gallery = new Gallery();
-		require(dirname(__FILE__).'/setup-option-defaults.php');
-
-		// 1.1.6 special cleanup section for plugins
-		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
-		foreach ($badplugs as $plug) {
-			$path = SERVERPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER.'/' . $plug;
-			@unlink($path);
-		}
-
-		if ($prevRel < 1690) {  // cleanup root album DB records
-			$_zp_gallery->garbageCollect(true, true);
-		}
-
-		// 1.1.7 conversion to the theme option tables
-		$albums = $_zp_gallery->getAlbums();
-		foreach ($albums as $albumname) {
-			$album = new Album($_zp_gallery, $albumname);
-			$theme = $album->getAlbumTheme();
-			if (!empty($theme)) {
-				$tbl = prefix(getOptionTableName($album->name));
-				$sql = "SELECT `name`,`value` FROM " . $tbl;
-				$result = query_full_array($sql, true);
+			// always run the update queries to insure the tables are up to current level
+			setupLog(gettext("Begin table updates"));
+			foreach($sql_statements as $sql) {
+				$result = mysql_query($sql);
+				if (!$result) {
+					setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
+				} else {
+					setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
+				}
+			}
+	
+			// set defaults on any options that need it
+			setupLog(gettext("Done with database creation and update"));
+	
+			$prevRel = getOption('zenphoto_release');
+	
+			setupLog(sprintf(gettext("Previous Release was %s"),$prevRel));
+	
+			$_zp_gallery = new Gallery();
+			require(dirname(__FILE__).'/setup-option-defaults.php');
+	
+			// 1.1.6 special cleanup section for plugins
+			$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
+			foreach ($badplugs as $plug) {
+				$path = SERVERPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER.'/' . $plug;
+				@unlink($path);
+			}
+	
+			if ($prevRel < 1690) {  // cleanup root album DB records
+				$_zp_gallery->garbageCollect(true, true);
+			}
+	
+			// 1.1.7 conversion to the theme option tables
+			$albums = $_zp_gallery->getAlbums();
+			foreach ($albums as $albumname) {
+				$album = new Album($_zp_gallery, $albumname);
+				$theme = $album->getAlbumTheme();
+				if (!empty($theme)) {
+					$tbl = prefix(getOptionTableName($album->name));
+					$sql = "SELECT `name`,`value` FROM " . $tbl;
+					$result = query_full_array($sql, true);
+					if (is_array($result)) {
+						foreach ($result as $row) {
+							setThemeOption($row['name'], $row['value'], $album);
+						}
+					}
+					query('DROP TABLE '.$tbl, true);
+				}
+			}
+	
+			// 1.2 force up-convert to tag tables
+			$convert = false;
+			$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
+			if (is_array($result)) {
+				foreach ($result as $row) {
+					if ($row['Field'] == 'tags') {
+						$convert = true;
+						break;
+					}
+				}
+			}
+			if ($convert) {
+				// convert the tags to a table
+				$result = query_full_array("SELECT `tags` FROM ". prefix('images'));
+				$alltags = '';
+				foreach($result as $row){
+					$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
+				}
+				$result = query_full_array("SELECT `tags` FROM ". prefix('albums'));
+				foreach($result as $row){
+					$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
+				}
+				$alltags = explode(",",$alltags);
+				$taglist = array();
+				$seen = array();
+				foreach ($alltags as $tag) {
+					$clean = trim($tag);
+					if (!empty($clean)) {
+						$tagLC = $_zp_UTF8->strtolower($clean);
+						if (!in_array($tagLC, $seen)) {
+							$seen[] = $tagLC;
+							$taglist[] = $clean;
+						}
+					}
+				}
+				$alltags = array_merge($taglist);
+				foreach ($alltags as $tag) {
+					query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')", true);
+				}
+				$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
+				$result = query_full_array($sql);
 				if (is_array($result)) {
 					foreach ($result as $row) {
-						setThemeOption($row['name'], $row['value'], $album);
+						if (!empty($row['tags'])) {
+							$tags = explode(",", $row['tags']);
+							storeTags($tags, $row['id'], 'albums');
+						}
 					}
 				}
-				query('DROP TABLE '.$tbl, true);
-			}
-		}
-
-		// 1.2 force up-convert to tag tables
-		$convert = false;
-		$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
-		if (is_array($result)) {
-			foreach ($result as $row) {
-				if ($row['Field'] == 'tags') {
-					$convert = true;
-					break;
-				}
-			}
-		}
-		if ($convert) {
-			// convert the tags to a table
-			$result = query_full_array("SELECT `tags` FROM ". prefix('images'));
-			$alltags = '';
-			foreach($result as $row){
-				$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-			}
-			$result = query_full_array("SELECT `tags` FROM ". prefix('albums'));
-			foreach($result as $row){
-				$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-			}
-			$alltags = explode(",",$alltags);
-			$taglist = array();
-			$seen = array();
-			foreach ($alltags as $tag) {
-				$clean = trim($tag);
-				if (!empty($clean)) {
-					$tagLC = $_zp_UTF8->strtolower($clean);
-					if (!in_array($tagLC, $seen)) {
-						$seen[] = $tagLC;
-						$taglist[] = $clean;
+				$sql = "SELECT `id`, `tags` FROM ".prefix('images');
+				$result = query_full_array($sql);
+				if (is_array($result)) {
+					foreach ($result as $row) {
+						if (!empty($row['tags'])) {
+							$tags = explode(",", $row['tags']);
+							storeTags($tags, $row['id'], 'images');
+						}
 					}
 				}
+				query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
+				query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
 			}
-			$alltags = array_merge($taglist);
-			foreach ($alltags as $tag) {
-				query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')", true);
-			}
-			$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
+	
+			// update zenpage codeblocks--remove the base64 encoding
+			$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_news').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
 			$result = query_full_array($sql);
 			if (is_array($result)) {
 				foreach ($result as $row) {
-					if (!empty($row['tags'])) {
-						$tags = explode(",", $row['tags']);
-						storeTags($tags, $row['id'], 'albums');
-					}
+					$codeblock = base64_decode($row['codeblock']);
+					$sql = 'UPDATE '.prefix('zenpage_news').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
+					query($sql);
 				}
 			}
-			$sql = "SELECT `id`, `tags` FROM ".prefix('images');
+			$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_pages').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
 			$result = query_full_array($sql);
 			if (is_array($result)) {
 				foreach ($result as $row) {
-					if (!empty($row['tags'])) {
-						$tags = explode(",", $row['tags']);
-						storeTags($tags, $row['id'], 'images');
-					}
+					$codeblock = base64_decode($row['codeblock']);
+					$sql = 'UPDATE '.prefix('zenpage_pages').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
+					query($sql);
 				}
 			}
-			query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
-			query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
-		}
-
-		// update zenpage codeblocks--remove the base64 encoding
-		$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_news').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
-		$result = query_full_array($sql);
-		if (is_array($result)) {
-			foreach ($result as $row) {
-				$codeblock = base64_decode($row['codeblock']);
-				$sql = 'UPDATE '.prefix('zenpage_news').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
-				query($sql);
+			// cache file names changed in Changeset 4455
+			if ($prevRel < 4455) {
+				$gallery = new Gallery();
+				$gallery->clearCache();
 			}
-		}
-		$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_pages').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
-		$result = query_full_array($sql);
-		if (is_array($result)) {
-			foreach ($result as $row) {
-				$codeblock = base64_decode($row['codeblock']);
-				$sql = 'UPDATE '.prefix('zenpage_pages').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
-				query($sql);
-			}
-		}
-		// cache file names changed in Changeset 4455
-		if ($prevRel < 4455) {
-			$gallery = new Gallery();
-			$gallery->clearCache();
-		}
-
-		echo "<h3>";
-		if ($taskDisplay[substr($task,0,8)] == 'create') {
-			if ($createTables) {
-				echo gettext('Done with table create!');
+	
+			echo "<h3>";
+			if ($taskDisplay[substr($task,0,8)] == 'create') {
+				if ($createTables) {
+					echo gettext('Done with table create!');
+				} else {
+					echo gettext('Done with table create with errors!');
+				}
 			} else {
-				echo gettext('Done with table create with errors!');
+				if ($createTables) {
+					echo gettext('Done with table update');
+				} else {
+					echo gettext('Done with table update with errors');
+				}
 			}
-		} else {
-			if ($createTables) {
-				echo gettext('Done with table update');
-			} else {
-				echo gettext('Done with table update with errors');
+			echo "</h3>";
+	
+			// fixes 1.2 move/copy albums with wrong ids
+			$albums = $_zp_gallery->getAlbums();
+			foreach ($albums as $album) {
+				checkAlbumParentid($album, NULL);
 			}
 		}
-		echo "</h3>";
-
-		// fixes 1.2 move/copy albums with wrong ids
-		$albums = $_zp_gallery->getAlbums();
-		foreach ($albums as $album) {
-			checkAlbumParentid($album, NULL);
-		}
-
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
@@ -2307,12 +2308,34 @@ if (file_exists(CONFIGFILE)) {
 					echo "<p>".gettext("You need to <a href=\"admin-users.php\">set your admin user and password</a>")."</p>";
 				}
 			} else {
+				if (isset($_GET['delete_files'])) {
+					$rslt = @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_permissions_changer.php');
+					$rslt = $rslt && @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_set-mod_rewrite.php');
+					$rslt = $rslt &&unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-option-defaults.php');
+					$rslt = $rslt &&unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-primitive.php');
+					$rslt = $rslt &&unlink(SERVERPATH.'/'.ZENFOLDER.'/setup.php');
+					if (!$rslt) {
+						?>
+						<p class="errorbox">
+							<?php echo gettext('Deleting files failed!'); ?>
+						</p>
+						<?php
+					}
+				} else {
+					?>
+					<p class="notebox">
+						<?php echo gettext('<strong>NOTE:</strong> We strongly recommend you remove the <em>setup*.php</em> scripts from your zp-core folder at this time. You can always re-upload them should you find you need them again in the future.')?>
+						<br /><br />
+						<span class="buttons">
+							<a href="?checked&amp;delete_files"><?php echo gettext('Delete setup files'); ?></a>
+						</span>
+						<br clear="all" />
+					</p>
+					<?php
+				}
 				?>
 				<p>
 					<?php echo gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"); ?>
-				</p>
-				<p class="notebox">
-					<?php echo gettext('<strong>NOTE:</strong> We strongly recommend you remove the <em>setup*.php</em> scripts from your zp-core folder at this time. You can always re-upload them should you find you need them again in the future.')?>
 				</p>
 				<?php
 			}
