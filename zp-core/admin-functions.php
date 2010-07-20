@@ -3341,7 +3341,7 @@ function getLocaleForTinyMCEandAFM() {
 }
 
 /**
- * Codeblock tabs javascript code
+ * Codeblock tabs JavaScript code
  *
  */
 function codeblocktabsJS() {

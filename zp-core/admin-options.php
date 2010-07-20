@@ -669,7 +669,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</td>
 					<td>
 						<p><?php echo gettext('Check to allow editing of Gallery data on the front-end pages. (Sometimes known as <em>Ajax</em> editing.)'); ?></p>
-						<p class="notebox"><?php echo gettext('<strong>NOTE:</strong> enabling this feature is not recommended as it is suseptible to Cross Site Request Forgeries.')?></p>
+						<p class="notebox"><?php echo gettext('<strong>NOTE:</strong> enabling this feature is not recommended as it is susceptible to Cross Site Request Forgeries.')?></p>
 					</td>
 				</tr>
 				<?php

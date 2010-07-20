@@ -248,7 +248,7 @@ if(is_object($result)) {
 <p><?php echo gettext("<em>Scheduled publishing:</em> To automatically publish a page/news article in the future set it to 'published' and enter a future date in the date field manually. Note this works on server time!"); ?></p>
 <p><?php echo gettext("<em>Expiration date:</em> Enter a future date in the date field manually to set a date the page or article will be set un-published automatically. After the page/article has been expired it can only be published again if the expiration date is deleted. Note this works on server time!"); ?></p>
 <p><?php echo gettext("<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"); ?></p>
-<p><?php echo gettext("<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or javascript code."); ?>
+<p><?php echo gettext("<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or JavaScript code."); ?>
 <?php echo gettext("You also can use the codeblock fields as custom fields."); ?>
 <?php echo gettext("Note that your theme must be setup to use the codeblock functions. Note also that codeblock fields are not multi-lingual."); ?>
 </p>

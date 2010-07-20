@@ -109,7 +109,7 @@ if ( $file_to_edit ) {
 				echo gettext('Theme template files (.php)');
 				break;
 			case 'js':
-				echo gettext('Javascript files (.js)');
+				echo gettext('JavaScript files (.js)');
 				break;
 			case 'css':
 				echo gettext('Style sheets (.css)');
