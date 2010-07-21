@@ -849,7 +849,7 @@ function debugLog($message, $reset=false) {
 			$date = '{'.gmdate('D, d M Y H:i:s').' GMT} '."\n";
 		}
 	}
-	fwrite($f, $date."  ".$message . "\n");
+	fwrite($f, "  ".$message . "\n");
 	$_zp_debug_written = time();
 	fclose($f);
 }

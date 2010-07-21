@@ -10,13 +10,11 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
+admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+
 $gallery = new Gallery();
 $_GET['page'] = 'users'; // must be a user with no options rights
 $_current_tab = sanitize($_GET['page'],3);
-
-$_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
-
-admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 /* handle posts */
 if (isset($_GET['action'])) {
@@ -30,7 +28,7 @@ if (isset($_GET['action'])) {
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-users.php?page=users&deleted");
 		exit();
 	} else if ($action == 'saveoptions') {
-		XSRFdefender('saveadmin');
+		if (!$_zp_null_account) XSRFdefender('saveadmin');
 		$notify = '';
 		$returntab = '';
 
@@ -102,10 +100,14 @@ if (isset($_GET['action'])) {
 						}
 						$updated = zp_apply_filter('save_admin_custom_data', $updated, $userobj, $i);
 						$userobj->save();
-						if (empty($msg)) {
 							if (isset($_POST[$i.'-newuser'])) {
 								$newuser = $user;
+								$what = 'new';
+							} else {
+								$what = 'update';
 							}
+						zp_apply_filter('save_user', $msg, $userobj, $what);
+						if (empty($msg)) {
 							if ($i == 0) {
 								setOption('admin_reset_date', '1');
 							}
@@ -116,17 +118,6 @@ if (isset($_GET['action'])) {
 					} else {
 						$notify = '?mismatch=password';
 						$error = true;
-					}
-					if (isset($_POST[$i.'-newuser']) || $updated || $error) {
-						if ($newuser) {
-							$what = 'new';
-						} else {
-							$what = 'update';
-						}
-						if (is_null($userobj)) {
-							$userobj = $_zp_authority->newAdministrator($user);	
-						}
-						zp_apply_filter('save_user', $error, $userobj, $what);
 					}
 				}
 			}

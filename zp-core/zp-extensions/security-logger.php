@@ -3,15 +3,15 @@
  * Places security information in a security log
  * The logged data includes the ip address of the site attempting the login, the type of login, the user/user name,
  * and the success/failure. On failure, the password used in the attempt is also shown.
- * 
+ *
  * @author Stephen Billard (sbillard)
  * @package plugins
  */
-$plugin_is_filter = 5;
+$plugin_is_filter = 9;
 $plugin_description = sprintf(gettext("Logs all attempts to login to or illegally access the admin pages. Log is kept in <em>security_log.txt</em> in the %s folder."),DATA_FOLDER);
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--security-logger.php.html";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $option_interface = new security_logger();
 
 if (getOption('logger_log_admin')) zp_register_filter('admin_login_attempt', 'security_logger_adminLoginLogger');
@@ -100,6 +100,20 @@ function security_logger_loginLogger($success, $user, $name, $ip, $type, $author
 }
 
 /**
+ * rturns the user id and name of the logged in user
+ */
+function security_logger_populate_user() {
+	global $_zp_current_admin_obj;
+	if (is_object($_zp_current_admin_obj)) {
+		$user = $_zp_current_admin_obj->getUser();
+		$name = $_zp_current_admin_obj->getName();
+	} else {
+		$user= $name = '';
+	}
+	return array($user,$name);
+}
+
+/**
  * Logs an attempt to log onto the back-end or as an admin user
  * Returns the rights to grant
  *
@@ -111,7 +125,7 @@ function security_logger_loginLogger($success, $user, $name, $ip, $type, $author
 function security_logger_adminLoginLogger($success, $user, $pass) {
 	global $_zp_authority;
 	switch (getOption('logger_log_type')) {
-		case 'all': 
+		case 'all':
 			break;
 		case 'success':
 			if (!$success) return false;
@@ -148,7 +162,7 @@ function security_logger_adminLoginLogger($success, $user, $pass) {
  */
 function security_logger_guestLoginLogger($success, $user, $athority) {
 	switch (getOption('logger_log_type')) {
-		case 'all': 
+		case 'all':
 			break;
 		case 'success':
 			if (!$success) return false;
@@ -167,13 +181,7 @@ function security_logger_guestLoginLogger($success, $user, $athority) {
  * @param string $page the "return" link
  */
 function security_logger_adminGate($allow, $page) {
-	global $_zp_current_admin_obj;
-	if (zp_loggedin()) {
-		$user = $_zp_current_admin_obj->getUser();
-		$name = $_zp_current_admin_obj->getName();
-	} else {
-		$user = $name = '';
-	}
+	list($user,$name) = security_logger_populate_user();
 	security_logger_loginLogger(false, $user, gettext('n/a'), $name, getUserIP(), gettext('Blocked access'), '', $page);
 	return $allow;
 }
@@ -184,13 +192,7 @@ function security_logger_adminGate($allow, $page) {
  * @param string $page the "return" link
  */
 function security_logger_adminAlbumGate($allow, $page) {
-	global $_zp_current_admin_obj;
-	if (zp_loggedin()) {
-		$user = $_zp_current_admin_obj->getUser();
-		$name = $_zp_current_admin_obj->getName();
-	} else {
-		$user = $name = '';
-	}
+	list($user,$name) = security_logger_populate_user();
 	security_logger_loginLogger(false, $user, $name, getUserIP(), gettext('Blocked album'), '', $page);
 	return $allow;
 }
@@ -202,9 +204,7 @@ function security_logger_adminAlbumGate($allow, $page) {
  * @param string $class what the action was.
  */
 function security_logger_UserSave($discard, $userobj, $class) {
-	global $_zp_current_admin_obj;
-	$user = $_zp_current_admin_obj->getUser();
-	$name = $_zp_current_admin_obj->getName();
+	list($user,$name) = security_logger_populate_user();
 	switch ($class) {
 		case 'new':
 			$what = gettext('Request add user');
@@ -222,19 +222,13 @@ function security_logger_UserSave($discard, $userobj, $class) {
 
 /**
  * Loggs Cross Site Request Forgeries
- * 
+ *
  * @param bool $discard
  * @param string $token
  * @return bool
  */
 function security_logger_admin_XSRF_access($discard, $token) {
-	global $_zp_current_admin_obj;
-	if (zp_loggedin()) {
-		$user = $_zp_current_admin_obj->getUser();
-		$name = $_zp_current_admin_obj->getName();
-	} else {
-		$user = $name = '';
-	}
+	list($user,$name) = security_logger_populate_user();
 	security_logger_loginLogger(false, $user, $name, getUserIP(), gettext('XSRF access blocked'), '', $token);
 	return false;
 }
@@ -246,13 +240,7 @@ function security_logger_admin_XSRF_access($discard, $token) {
  * @param string $action
  */
 function security_logger_log_action($allow, $log, $action) {
-	global $_zp_current_admin_obj;
-	if (zp_loggedin()) {
-		$user = $_zp_current_admin_obj->getUser();
-		$name = $_zp_current_admin_obj->getName();
-	} else {
-		$user = $name = '';
-	}
+	list($user,$name) = security_logger_populate_user();
 	switch ($action) {
 		case 'clear_log':
 			$act = gettext('Log reset');
@@ -271,15 +259,13 @@ function security_logger_log_action($allow, $log, $action) {
 }
 
 /**
- * Logs the removal of the setup files
+ * Logs setup actions
  * @param bool $success
  * @param string $action
  * @param string $file
  */
 function security_logger_log_setup($success, $action, $txt) {
-	global $_zp_current_admin_obj;
-	$user = $_zp_current_admin_obj->getUser();
-	$name = $_zp_current_admin_obj->getName();
+	list($user,$name) = security_logger_populate_user();
 	switch ($action) {
 		case 'install':
 			$act = gettext('Installed');

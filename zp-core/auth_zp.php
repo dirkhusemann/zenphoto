@@ -29,7 +29,7 @@ if (defined('ZENPAGE_RIGHTS')) {
 }
 
 // If the auth variable gets set somehow before this, get rid of it.
-$_zp_loggedin = false;
+$_zp_loggedin = $_zp_null_account = false;
 $_zp_reset_admin = NULL;
 if (isset($_GET['ticket'])) { // password reset query
 	$_zp_ticket = $_GET['ticket'];
@@ -46,6 +46,7 @@ if (isset($_GET['ticket'])) { // password reset query
 				if (time() <= ($_zp_request_date + (3 * 24 * 60 * 60))) { // you have one week to use the request
 					setOption('admin_reset_date', NULL);
 					$_zp_reset_admin = $tuser;
+					$_zp_null_account = true;
 				}
 			}
 			break;
@@ -63,6 +64,7 @@ if (zp_getCookie('zenphoto_ssl') && !secureServer()) {
 
 if (!isset($_POST['login'])) {
 	$_zp_loggedin = $_zp_authority->checkAuthorization(zp_getCookie('zenphoto_auth'));
+	$_zp_null_account = $_zp_loggedin == ADMIN_RIGHTS;
 	if (!$_zp_loggedin) {
 		// Clear the cookie
 		zp_setcookie("zenphoto_auth", "", time()-368000);

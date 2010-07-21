@@ -249,7 +249,9 @@ if (file_exists(CONFIGFILE)) {
 	}
 }
 
-if (!function_exists('setOption')) { // setup a primitive environment
+if (function_exists('setOption')) {
+	setOptionDefault('zp_plugin_security-logger', 9);
+} else {	 // setup a primitive environment
 	$environ = false;
 	require_once(dirname(__FILE__).'/setup-primitive.php');
 	require_once(dirname(__FILE__).'/functions-i18n.php');
@@ -2300,6 +2302,26 @@ if (file_exists(CONFIGFILE)) {
 			}
 		}
 		if ($createTables) {
+			if (isset($_GET['delete_files'])) {
+				$rslt = zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_permissions_changer.php'),'delete','setup_permissions_changer.php');
+				$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_set-mod_rewrite.php'),'delete','setup_set-mod_rewrite.php');
+				$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-option-defaults.php'),'delete','setup-option-defaults.php');
+				$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-primitive.php'),'delete','setup-primitive.php');
+				$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup.php'),'delete','setup.php');
+				if (!$rslt) {
+					?>
+					<p class="errorbox"><?php echo gettext('Deleting files failed!'); ?></p>
+					<?php
+				}
+			} else {
+				?>
+					<p class="notebox"><?php echo gettext('<strong>NOTE:</strong> We strongly recommend you remove the <em>setup*.php</em> scripts from your zp-core folder at this time. You can always re-upload them should you find you need them again in the future.')?>
+					<br />
+					<br />
+					<span class="buttons"><a href="?checked&amp;delete_files"><?php echo gettext('Delete setup files'); ?></a></span> <br clear="all" />
+				</p>
+				<?php
+			}
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
@@ -2308,39 +2330,11 @@ if (file_exists(CONFIGFILE)) {
 					echo "<p>".gettext("You need to <a href=\"admin-users.php\">set your admin user and password</a>")."</p>";
 				}
 			} else {
-				if (isset($_GET['delete_files'])) {
-					$rslt = zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_permissions_changer.php'),'delete','setup_permissions_changer.php');
-					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup_set-mod_rewrite.php'),'delete','setup_set-mod_rewrite.php');
-					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-option-defaults.php'),'delete','setup-option-defaults.php');
-					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup-primitive.php'),'delete','setup-primitive.php');
-					$rslt = $rslt && zp_apply_filter('log_setup', @unlink(SERVERPATH.'/'.ZENFOLDER.'/setup.php'),'delete','setup.php');
-					if (!$rslt) {
-						?>
-						<p class="errorbox">
-							<?php echo gettext('Deleting files failed!'); ?>
-						</p>
-						<?php
-					}
-				} else {
-					?>
-					<p class="notebox">
-						<?php echo gettext('<strong>NOTE:</strong> We strongly recommend you remove the <em>setup*.php</em> scripts from your zp-core folder at this time. You can always re-upload them should you find you need them again in the future.')?>
-						<br /><br />
-						<span class="buttons">
-							<a href="?checked&amp;delete_files"><?php echo gettext('Delete setup files'); ?></a>
-						</span>
-						<br clear="all" />
-					</p>
-					<?php
-				}
 				?>
-				<p>
-					<?php echo gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"); ?>
-				</p>
+				<p><?php echo gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"); ?></p>
 				<?php
 			}
 		}
-
 	} else if (db_connect()) {
 		if (!empty($dbmsg)) {
 			?>

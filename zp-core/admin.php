@@ -132,7 +132,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	
 }
 
-if (empty($msg) && zp_loggedin() && !zp_loggedin(OVERVIEW_RIGHTS)) {	// admin access without overview rights, redirect to first tab
+if ($_zp_null_account || empty($msg) && zp_loggedin() && !zp_loggedin(OVERVIEW_RIGHTS)) {	// admin access without overview rights, redirect to first tab
 	$tab = array_shift($zenphoto_tabs);
 	$link = $tab['link'];
 	header('location:'.$link);
