@@ -443,18 +443,7 @@ if(is_object($result)) {
 				<?php } ?>
 				<?php echo zp_apply_filter('general_zenpage_utilities', '', $result); ?>
 				</div>
-
 				<?php
-				if (is_object($result)) {
-					?>
-					<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Tags"); ?></h2>
-					<div id="zenpagetags">
-						<?php	tagSelector($result, 'tags_', false, getTagOrder());	?>
-				</div>
-				<br />
-				<?php
-				}
-
 				if (is_AdminEditPage("newsarticle")) {
 					?>
 					<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>
@@ -465,10 +454,20 @@ if(is_object($result)) {
 							printCategorySelection("","all");
 						}
 						?>
+						</div>
+						<br />
 						<?php
 				}
 				?>
-
+				<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Tags"); ?></h2>
+					<div id="zenpagetags">
+				<?php
+				if (is_object($result)) {
+					tagSelector($result, 'tags_', false, getTagOrder());
+				} else {
+					tagSelector(NULL, 'tags_', false, false);
+				}
+				?>
 		</td>
 	 </tr>
 		<tr>
