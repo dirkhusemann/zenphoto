@@ -143,7 +143,7 @@ if (isset($_GET['action'])) {
 		//** DELETEIMAGE **************************************************************/
 		/******************************************************************************/
 		case 'deleteimage':
-			XSRFdefender('deletealbum');
+			XSRFdefender('delete');
 			$albumname = sanitize_path($_REQUEST['album']);
 			$imagename = sanitize_path($_REQUEST['image']);
 			$album = new Album($gallery, $albumname);
@@ -363,7 +363,7 @@ if (isset($_GET['action'])) {
 		/** DELETION ******************************************************************/
 		/*****************************************************************************/
 		case "deletealbum":
-			XSRFdefender('deletealbum');
+			XSRFdefender('delete');
 			if ($folder) {
 				$album = new Album($gallery, $folder);
 				if ($album->deleteAlbum()) {
@@ -382,7 +382,7 @@ if (isset($_GET['action'])) {
 			exit();
 			break;
 		case 'newalbum':
-			XSRFdefender('albumnew');
+			XSRFdefender('newalbum');
 			$name = sanitize($_GET['name']);
 			$soename = seoFriendly($name);
 			if ($folder != '/' && $folder != '.') {

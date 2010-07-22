@@ -476,6 +476,7 @@ class Zenphoto_Administrator extends PersistentObject {
 	 * This is a simple class so that we have a convienient "handle" for manipulating Administrators.
 	 *
 	 */
+	var $objects = array();
 
 	/**
 	 * Constructor for an Administrator
@@ -525,10 +526,10 @@ class Zenphoto_Administrator extends PersistentObject {
 	}
 
 	function setObjects($objects) {
-		$this->set('objects', $objects);
+		$this->objects = $objects;
 	}
 	function getObjects() {
-		return $this->get('objects');
+		return $this->objects;
 	}
 
 	function setCustomData($custom_data) {

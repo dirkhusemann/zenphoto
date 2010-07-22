@@ -57,7 +57,16 @@ if (isset($_GET['action'])) {
 							$rights = NULL;
 							$objects = array();
 						}
-						$userobj = $_zp_authority->newAdministrator($user);
+						if (isset($_POST[$i.'-newuser'])) {
+							$newuser = $user;
+							$what = 'new';
+							$userobj = $_zp_authority->newAdministrator('');
+							$userobj->transient = false;
+							$userobj->setUser($user);
+						} else {
+							$what = 'update';
+							$userobj = $_zp_authority->newAdministrator($user);
+						}
 						if ($admin_n != $userobj->getName()) {
 							$updated = true;
 							$userobj->setName($admin_n);
@@ -92,12 +101,6 @@ if (isset($_GET['action'])) {
 							$updated = true;
 							$userobj->setObjects($objects);
 						}
-						if (isset($_POST[$i.'-newuser'])) {
-							$newuser = $user;
-							$what = 'new';
-						} else {
-							$what = 'update';
-						}
 						if (empty($pass)) {
 							if ($newuser) {
 								$msg = gettext('Password may not be empty!');
@@ -109,9 +112,9 @@ if (isset($_GET['action'])) {
 							$updated = true;
 						}
 						$updated = zp_apply_filter('save_admin_custom_data', $updated, $userobj, $i);
-						$userobj->save();
 						$msg = zp_apply_filter('save_user', $msg, $userobj, $what);
 						if (empty($msg)) {
+							$userobj->save();
 							if ($i == 0) {
 								setOption('admin_reset_date', '1');
 							}

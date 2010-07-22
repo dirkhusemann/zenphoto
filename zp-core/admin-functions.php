@@ -2721,6 +2721,9 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
  * @return array
  */
 function populateManagedObjectsList($type,$id) {
+	if (empty($id)) {
+		return array();
+	}
 	$cv = array();
 	if (empty($type) || $type=='album') {
 		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".

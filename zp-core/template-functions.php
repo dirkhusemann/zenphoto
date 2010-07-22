@@ -137,7 +137,7 @@ function printAdminToolbox($id='admin') {
 			function newAlbum(folder,albumtab) {
 				var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 				if (album) {
-					launchScript('<?php echo $zf; ?>/admin-edit.php',['action=newalbum','album='+encodeURIComponent(folder),'name='+encodeURIComponent(album),'albumtab='+albumtab]);
+					launchScript('<?php echo $zf; ?>/admin-edit.php',['action=newalbum','album='+encodeURIComponent(folder),'name='+encodeURIComponent(album),'albumtab='+albumtab,'XSRFToken'='<?php echo getXSRFToken('newalbum'); ?>']);
 				}
 			}
 			// ]]> -->
@@ -186,11 +186,13 @@ function printAdminToolbox($id='admin') {
 			}
 			if (zp_loggedin(UPLOAD_RIGHTS)) {
 				// admin has upload rights, provide an upload link for a new album
-				?>
-				<li>
-					<a href="javascript:newAlbum('',true);" ><?php echo gettext("New Album"); ?></a>
-				</li>
-				<?php
+				if (getOption('album_session')) { // XSRF defense requires sessions
+					?>
+					<li>
+						<a href="javascript:newAlbum('',true);" ><?php echo gettext("New Album"); ?></a>
+					</li>
+					<?php
+				}
 			}
 			zp_apply_filter('admin_toolbox_gallery');
 		} else if ($_zp_gallery_page === 'album.php') {
@@ -217,12 +219,14 @@ function printAdminToolbox($id='admin') {
 					}
 				}
 				// and a delete link
-				?>
-				<li>
-					<a href="javascript:confirmDeleteAlbum('<?php echo $zf; ?>/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($albumname)) ?>');"
-							title="<?php echo gettext('Delete the album'); ?>"><?php echo gettext('Delete album'); ?></a>
-				</li>
-				<?php 
+				if (getOption('album_session')) { // XSRF defense requires sessions
+					?>
+					<li>
+						<a href="javascript:confirmDeleteAlbum('<?php echo $zf; ?>/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($albumname)) ?>&amp;XSRFToken=<?php echo getXSRFToken('delete'); ?>');"
+								title="<?php echo gettext('Delete the album'); ?>"><?php echo gettext('Delete album'); ?></a>
+					</li>
+					<?php 
+				}
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
@@ -230,10 +234,14 @@ function printAdminToolbox($id='admin') {
 				<li>
 					<?php echo printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL); ?>
 				</li>
-				<li>
-					<a href="javascript:newAlbum('<?php echo pathurlencode($albumname); ?>',true);" ><?php echo gettext("New Album Here"); ?></a>
-				</li>
 				<?php
+				if (getOption('album_session')) { // XSRF defense requires sessions
+					?>
+					<li>
+						<a href="javascript:newAlbum('<?php echo pathurlencode($albumname); ?>',true);" ><?php echo gettext("New Album Here"); ?></a>
+					</li>
+					<?php
+				}
 			}
 			// set the return to this album/page
 			zp_apply_filter('admin_toolbox_album', $albumname);
@@ -246,11 +254,16 @@ function printAdminToolbox($id='admin') {
 				$imagename = $_zp_current_image->filename;
 				if (isMyAlbum($albumname, ALBUM_RIGHTS)) {
 					// if admin has edit rights on this album, provide a delete link for the image.
-					echo "<li><a href=\"javascript:confirmDelete('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
-					urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "',deleteImage);\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
-					echo "</li>\n";
-
-					echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode($albumname).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo#IT" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
+					if (getOption('album_session')) { // XSRF defense requires sessions
+						?>
+						<li><a href="javascript:confirmDelete('<?php echo $zf; ?>/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=<?php  echo urlencode(urlencode($albumname)); ?>&amp;image=<?php  echo urlencode($imagename); ?>&amp;XSRFToken=<?php echo getXSRFToken('delete'); ?>',deleteImage);"
+								title="<?php echo gettext("Delete the image"); ?>"><?php  echo gettext("Delete image"); ?></a></li>
+						<?php
+					}
+					?>
+					<li><a href="<?php  echo $zf; ?>/admin-edit.php?page=edit&amp;album=<?php  echo urlencode($albumname); ?>&amp;image=<?php  echo urlencode($imagename); ?>&amp;tab=imageinfo#IT"
+								title="<?php  echo gettext('Edit this image'); ?>"><?php  echo gettext('Edit image'); ?></a></li>
+					<?php
 				}
 				// set return to this image page
 				zp_apply_filter('admin_toolbox_image', $albumname, $imagename);
@@ -284,9 +297,11 @@ function printAdminToolbox($id='admin') {
 					if (is_NewsArticle()) {
 						// page is a NewsArticle--provide zenpage edit, delete, and Add links
 						echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Article")."</a></li>";
-						?>
-						<li><a href="javascript:confirmDelete('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>',deleteArticle)" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
-						<?php
+						if (getOption('album_session')) { // XSRF defense requires sessions
+							?>
+							<li><a href="javascript:confirmDelete('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/admin-news-articles.php?del=<?php echo getNewsID(); ?>&amp;XSRFToken=<?php echo getXSRFToken('delete'); ?>',deleteArticle)" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
+							<?php
+						}
 						echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
 						zp_apply_filter('admin_toolbox_news', $titlelink);
 					}
@@ -296,9 +311,11 @@ function printAdminToolbox($id='admin') {
 					if (is_Pages()) {
 						// page is zenpage page--provide edit, delete, and add links
 						echo "<li><a href=\"".$zf.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Page")."</a></li>";
-						?>
-						<li><a href="javascript:confirmDelete('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>',deletePage)" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
-						<?php
+						if (getOption('album_session')) { // XSRF defense requires sessions
+							?>
+							<li><a href="javascript:confirmDelete('<?php echo $zf.'/'.PLUGIN_FOLDER; ?>/zenpage/page-admin.php?del=<?php echo getPageID(); ?>&amp;XSRFToken=<?php echo getXSRFToken('delete'); ?>',deletePage)" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
+							<?php
+						}
 						echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.'/'.PLUGIN_FOLDER."/zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
 						zp_apply_filter('admin_toolbox_page', $titlelink);
 					}

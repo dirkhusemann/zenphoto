@@ -217,7 +217,7 @@ foreach($themes as $theme => $themeinfo) {
 				?>
 				<li>
 				<p class="buttons">
-				<a href="?action=settheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
+				<a href="?action=settheme&amp;themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>&amp;XSRFToken=<?php echo getXSRFToken('theme')?>" title="<?php echo gettext("Set this as your theme"); ?>">
 				<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?></a>
 				</p>
 				<br />
