@@ -41,12 +41,12 @@ if (in_context(ZP_ALBUM)) {
 if (in_context(ZP_IMAGE)) {
 	 $__redirect .= "&image=" . $_zp_current_image->filename;
 }
-if (isset($_GET['p'])) { $__redirect .= "&p=" . $_GET['p']; }
-if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . $_GET['searchfields']; }
-if (isset($_GET['words'])) { $__redirect .= "&words=" . $_GET['words']; }
-if (isset($_GET['date'])) { $__redirect .= "&date=" . $_GET['date']; }
-if (isset($_GET['title'])) { $__redirect .= "&title=" . $_GET['title']; }
-if (isset($_GET['page'])) { $__redirect .= "&page=" . $_GET['page']; }
+if (isset($_GET['p'])) { $__redirect .= "&p=" . sanitize($_GET['p']); }
+if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . sanitize($_GET['searchfields']); }
+if (isset($_GET['words'])) { $__redirect .= "&words=" . sanitize($_GET['words']); }
+if (isset($_GET['date'])) { $__redirect .= "&date=" . sanitize($_GET['date']); }
+if (isset($_GET['title'])) { $__redirect .= "&title=" . sanitize($_GET['title']); }
+if (isset($_GET['page'])) { $__redirect .= "&page=" . sanitize($_GET['page']); }
 
 if (in_context(ZP_INDEX)) {
 	$cookies = array();

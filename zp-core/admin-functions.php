@@ -205,7 +205,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		<h2><?php echo gettext("Login"); ?>&nbsp;</h2>
 		</td>
 		<td><input class="textfield" name="user" type="text" size="20"
-			value="<?php echo $requestor; ?>" /></td>
+			value="<?php echo htmlspecialchars($requestor); ?>" /></td>
 	</tr>
 	<tr>
 		<td align="left">
@@ -1835,7 +1835,7 @@ function printAlbumEditRow($album) {
 		?>
 	</td>
 	<td class="icons">
-		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>&amp;XSRFToken=<?php echo getXSRFToken('deletealbum')?>');" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
+		<a class="delete" href="javascript:confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($album->name)); ?>&amp;XSRFToken=<?php echo getXSRFToken('delete')?>');" title="<?php echo sprintf(gettext("Delete the album %s"), js_encode($album->name)); ?>">
 		<img src="images/fail.png" style="border: 0px;" alt="<?php echo sprintf(gettext('Delete the album %s'), js_encode($album->name)); ?>" /></a>
 	</td>
 	<td class="icons">
@@ -3388,25 +3388,6 @@ function admin_securityChecks($rights, $return) {
 			}
 		}
 	}
-}
-
-/**
- * returns an XSRF token
- * @param striong $action
- */
-function getXSRFToken($action) {
-	global $_zp_current_admin_obj;
-	return md5($action.prefix(getUserIP()).serialize($_zp_current_admin_obj).session_id());
-}
-
-/**
- * Emits a "hidden" input for the XSRF token
- * @param string $action
- */
-function XSRFToken($action) {
-	?>
-	<input type="hidden" name="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
-	<?php 
 }
 
 /**

@@ -2048,6 +2048,12 @@ function is_connected($host = 'www.zenphoto.org') {
 	return false;
 }
 
+/**
+ * produce debugging information on 404 errors
+ * @param string $album
+ * @param string $image
+ * @param string $theme
+ */
 function debug404($album, $image, $theme) {
 	if (DEBUG_404) {
 		$ignore = array('/favicon.ico');
@@ -2061,6 +2067,25 @@ function debug404($album, $image, $theme) {
 		debugLogArray('$_REQUEST', $_REQUEST, 0, '');
 		debugLog('');
 	}
+}
+
+/**
+ * returns an XSRF token
+ * @param striong $action
+ */
+function getXSRFToken($action) {
+	global $_zp_current_admin_obj;
+	return md5($action.prefix(getUserIP()).serialize($_zp_current_admin_obj).session_id());
+}
+
+/**
+ * Emits a "hidden" input for the XSRF token
+ * @param string $action
+ */
+function XSRFToken($action) {
+	?>
+	<input type="hidden" name="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
+	<?php 
 }
 
 //load PHP specific functions

@@ -122,7 +122,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	} else {
 		if (isset($_GET['from'])) {
 			$class = 'errorbox';
-			$msg = sprintf(gettext('You do not have proper rights to access %s.'),urldecode(sanitize($_GET['from'])));
+			$msg = sprintf(gettext('You do not have proper rights to access %s.'),htmlspecialchars(sanitize($_GET['from'])));
 		}
 	}
 

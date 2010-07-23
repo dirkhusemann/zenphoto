@@ -942,12 +942,21 @@ class Album extends PersistentObject {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
 				$rename = @rename($this->localpath, $dest);
-				@rename(substr($this->localpath,0,-1).'.xmp', $dest.'.xmp');  // move the sidecar
+				$success = true;
+				$filestomove = safe_glob(substr($this->localpath,0,-1).'.*');
+				foreach ($filestomove as $file) {
+					if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
+						$success = $success && @rename($file, dirname($dest).'/'.basename($file));
+					}
+				}
 				// Then: rename the cache folder
 				$cacherename = @rename(SERVERCACHE . '/' . $oldfolder, SERVERCACHE . '/' . $newfolder);
-				// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
-				// Get the subalbums.
 				$oldf = zp_escape_string($oldfolder);
+				// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
+				$sql = "UPDATE " . prefix('albums') . " SET folder='" . zp_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
+				$success = $success && query($sql);
+				if (!$success) return 1;
+				// Get the subalbums.
 				$sql = "SELECT id, folder FROM " . prefix('albums') . " WHERE folder LIKE '$oldf/%'";
 				$result = query_full_array($sql);
 				foreach ($result as $subrow) {
@@ -1078,10 +1087,21 @@ class Album extends PersistentObject {
 		} else {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
-				$num = dircopy($this->localpath, $dest);
-				@copy(substr($this->localpath,0,-1).'.xmp',$dest.'.xmp'); // copy the sidecar
-				// Get the subalbums.
+				$success = true;
+				$filestocopy = safe_glob(substr($this->localpath,0,-1).'.*');
+				foreach ($filestocopy as $file) {
+					if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
+						$success = $success && @copy($file, dirname($dest).'/'.basename($file));
+					}
+				}
 				$oldf = zp_escape_string($oldfolder);
+				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
+				$subrow = query_single_row($sql);
+				$success = $success && $this->replicateDBRow($subrow, $oldfolder, $newfolder, true);
+				if (!$success) return 1;
+				$num = dircopy($this->localpath, $dest);
+				
+				// Get the subalbums.
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf/%'";
 				$result = query_full_array($sql);
 				$allsuccess = true;

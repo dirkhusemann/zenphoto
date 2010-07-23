@@ -32,8 +32,8 @@ if (defined('ZENPAGE_RIGHTS')) {
 $_zp_loggedin = $_zp_null_account = false;
 $_zp_reset_admin = NULL;
 if (isset($_GET['ticket'])) { // password reset query
-	$_zp_ticket = $_GET['ticket'];
-	$post_user = $_GET['user'];
+	$_zp_ticket = sanitize($_GET['ticket']);
+	$post_user = sanitize($_GET['user']);
 	$admins = $_zp_authority->getAdministrators();
 	foreach ($admins as $tuser) {
 		if ($tuser['user'] == $post_user && !empty($tuser['email'])) {
@@ -73,8 +73,8 @@ if (!isset($_POST['login'])) {
 } else {
 	// Handle the login form.
 	if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
-		$post_user = $_POST['user'];
-		$post_pass = $_POST['pass'];
+		$post_user = sanitize($_POST['user']);
+		$post_pass = sanitize($_POST['pass'],0);
 		$redirect = sanitize_path($_POST['redirect']);
 		$_zp_loggedin = $_zp_authority->checkLogon($post_user, $post_pass, true);
 		$_zp_loggedin = zp_apply_filter('admin_login_attempt', $_zp_loggedin, $post_user, $post_pass);
@@ -168,14 +168,14 @@ if (isset($_REQUEST['logout'])) {
 	zp_setcookie("zenphoto_auth", "*", time()-368000);
 	zp_setcookie("zenphoto_ssl", "", time()-368000);
 	$redirect = '';
-	if (isset($_GET['p'])) { $redirect .= "&p=" . $_GET['p']; }
-	if (isset($_GET['searchfields'])) { $redirect .= "&searchfields=" . $_GET['searchfields']; }
-	if (isset($_GET['words'])) { $redirect .= "&words=" . $_GET['words']; }
-	if (isset($_GET['date'])) { $redirect .= "&date=" . $_GET['date']; }
-	if (isset($_GET['album'])) { $redirect .= "&album=" . $_GET['album']; }
-	if (isset($_GET['image'])) { $redirect .= "&image=" . $_GET['image']; }
-	if (isset($_GET['title'])) { $redirect .= "&title=" . $_GET['title']; }
-	if (isset($_GET['page'])) { $redirect .= "&page=" . $_GET['page']; }
+	if (isset($_GET['p'])) { $redirect .= "&p=" . sanitize($_GET['p']); }
+	if (isset($_GET['searchfields'])) { $redirect .= "&searchfields=" . sanitize($_GET['searchfields']); }
+	if (isset($_GET['words'])) { $redirect .= "&words=" . sanitize($_GET['words']); }
+	if (isset($_GET['date'])) { $redirect .= "&date=" . sanitize($_GET['date']); }
+	if (isset($_GET['album'])) { $redirect .= "&album=" . sanitize($_GET['album']); }
+	if (isset($_GET['image'])) { $redirect .= "&image=" . sanitize($_GET['image']); }
+	if (isset($_GET['title'])) { $redirect .= "&title=" . sanitize($_GET['title']); }
+	if (isset($_GET['page'])) { $redirect .= "&page=" . sanitize($_GET['page']); }
 	if (!empty($redirect)) $redirect = '?'.substr($redirect, 1);
 	if ($_GET['logout']) {
 		$rd_protocol = 'https';

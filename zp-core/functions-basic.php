@@ -1108,7 +1108,7 @@ function getAlbumInherited($folder, $field, &$id) {
 	$like = ' LIKE "'.$album.'"';
 	while (count($folders) > 0) {
 		$album .= '/'.array_shift($folders);
-		$like .= ' OR `folder` LIKE "'.$album.'"';
+		$like .= ' OR `folder` LIKE "'.zp_escape_string($album).'"';
 	}
 	$sql = 'SELECT `id`, `'.$field.'` FROM '.prefix('albums').' WHERE `folder`'.$like;
 	$result = query_full_array($sql);

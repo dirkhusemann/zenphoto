@@ -693,7 +693,7 @@ $alb = removeParentAlbumNames($album);
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
 			<form name="albumedit1" autocomplete="off" action="?page=edit&amp;action=save<?php echo "&amp;album=" . urlencode($album->name); ?>"	method="post">
-				<?php XSRFToken('albumupdate');?>
+				<?php XSRFToken('albumedit');?>
 				<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 				<input type="hidden"	name="savealbuminfo" value="1" />
 				<?php printAlbumEditForm(0, $album, true); ?>
@@ -714,6 +714,7 @@ $alb = removeParentAlbumNames($album);
 		<div id="tab_subalbuminfo" class="tabbox">
 		<?php printEditDropdown('subalbuminfo'); ?>
 		<form action="?page=edit&amp;album=<?php echo urlencode($album->name); ?>&amp;action=savesubalbumorder&amp;tab=subalbuminfo" method="post" name="sortableListForm" id="sortableListForm" onsubmit="return confirmAction();">
+			<?php XSRFToken('savealbumorder'); ?>
 			<p>
 			<?php
 				$sorttype = strtolower($album->getAlbumSortType());
@@ -1415,7 +1416,7 @@ if (isset($_GET['saved'])) {
 <div class="tabbox">
 
 <form name="albumedit" autocomplete="off"	action="?page=edit&amp;action=save<?php echo $albumdir ?>" method="POST">
-	<?php XSRFToken('albumupdate');?>
+	<?php XSRFToken('albumedit');?>
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 	<?php
 	$currentalbum = 1;
