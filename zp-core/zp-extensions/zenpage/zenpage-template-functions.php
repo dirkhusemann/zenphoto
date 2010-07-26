@@ -484,14 +484,14 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 					$articlecontent = '<a href="'.htmlspecialchars($_zp_current_zenpage_news->getImageLink()).'" title="'.html_encode($_zp_current_zenpage_news->getTitle()).'"><img src="'.htmlspecialchars($_zp_current_zenpage_news->getCustomImage(NULL, $width, $height, $cropwidth, $cropheight, $cropx, $cropy)).'" alt="'.html_encode($_zp_current_zenpage_news->getTitle()).'" /></a><br />';
 					break;
 			}
-			$articlecontent .= '<p>'.getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator).'</p>';
+			$articlecontent .= getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator);
 			break;
 		case 'video':
 			$articlecontent = getNewsVideoContent($_zp_current_zenpage_news,$shorten);
 			break;
 		case 'album':
 			$_zp_page = 1;
-			$albumdesc = '<p>'.getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator).'</p>';
+			$albumdesc = getNewsContentShorten($_zp_current_zenpage_news->getDesc(),$shorten,$shortenindicator);
 			$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
 			switch($mode) {
 				case 'latestalbums-sizedimage':
@@ -517,7 +517,7 @@ function getNewsContent($shorten=false, $shortenindicator='') {
 						$imageobj = newImage($_zp_current_zenpage_news,$image['filename']);
 						if(getOption('combinews-latestimagesbyalbum-imgdesc')) {
 							$imagedesc = $imageobj->getDesc();
-							$imagedesc = '<p>'.getNewsContentShorten($imagedesc,$shorten,$shortenindicator).'</p>';
+							$imagedesc = getNewsContentShorten($imagedesc,$shorten,$shortenindicator);
 						} else {
 							$imagedesc = '';
 						}
