@@ -8,7 +8,7 @@
  * @package admin
  */
 
-define('OFFSET_PATH', 3);
+if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
 define('HEADER', '__HEADER__');
 define('RECORD_SEPARATOR', ':****:');
 define('TABLE_SEPARATOR', '::');

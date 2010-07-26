@@ -235,6 +235,7 @@ function printRating($vote=3, $object=NULL, $text=true) {
 			  ?>
 			  <span id="submit_button<?php echo $unique; ?>">
 			  	<input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onclick="javascript:
+			  		// <!-- <![CDATA[
 						var dataString = $(this.form).serialize();
 						if (dataString || recast) {
 							<?php
@@ -254,14 +255,15 @@ function printRating($vote=3, $object=NULL, $text=true) {
 							$.ajax({   
 								type: 'POST',   
 								url: '<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4); ?>/update.php',   
-								data: dataString+'&amp;id=<?php echo $id; ?>&amp;table=<?php echo $table; ?>'
+								data: dataString+'&id=<?php echo $id; ?>&table=<?php echo $table; ?>'
 							});
 							recast = <?php printf('%u',$recast); ?>;
 							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');
 						} else {
 							$('#vote<?php echo $unique; ?>').html('<?php echo gettext('nothing to submit'); ?>');
 						}
-			  		"/>
+					// ]]> -->	
+			  	"/>
 			  </span>
 			  <?php
 		  }

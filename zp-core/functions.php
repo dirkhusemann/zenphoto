@@ -997,7 +997,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		} else {
 			zp_setCookie('zenphoto_last_album', '', time()-368000);
 		}
-		/*	
+		/*
 		while all this should work, currently there is no "memory" of zenpage search strings.
 		maybe that should change, but not just now as it is pretty complex to figure out when
 		to clear the cookie.
@@ -2085,7 +2085,7 @@ function getXSRFToken($action) {
 function XSRFToken($action) {
 	?>
 	<input type="hidden" name="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
-	<?php 
+	<?php
 }
 
 //load PHP specific functions

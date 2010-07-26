@@ -182,7 +182,7 @@ function security_logger_guestLoginLogger($success, $user, $athority) {
  */
 function security_logger_adminGate($allow, $page) {
 	list($user,$name) = security_logger_populate_user();
-	security_logger_loginLogger(false, $user, gettext('n/a'), $name, getUserIP(), gettext('Blocked access'), '', $page);
+	security_logger_loginLogger(false, $user, $name, getUserIP(), gettext('Blocked access'), '', $page);
 	return $allow;
 }
 

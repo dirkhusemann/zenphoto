@@ -249,6 +249,7 @@ zp-core/class-search.php
 zp-core/class-transientimage.php
 zp-core/classes.php
 zp-core/controller.php
+zp-core/cron_runner.php
 zp-core/example_robots.txt
 zp-core/exif
 zp-core/exif/exif.php

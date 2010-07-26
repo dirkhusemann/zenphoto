@@ -413,7 +413,7 @@ if (ini_get('safe_mode')) { ?>
 								'cancelImg': 'images/fail.png',
 								'script': 'admin-uploadify/uploader.php',
 								'scriptData': {
-															'auth': '<?php echo md5(serialize($curadmin)); ?>',
+															'auth': '<?php echo md5('admin-uploadify/uploader.php'.serialize($curadmin)); ?>',
 															'XSRFToken': '<?php echo getXSRFToken('upload')?>'
 															},
 								'folder': '/',

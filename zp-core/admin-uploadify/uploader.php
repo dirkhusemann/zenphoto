@@ -7,7 +7,7 @@ if (isset($_POST['auth'])) {
 	$auth = $_POST['auth'];
 	$admins = $_zp_authority->getAdministrators();
 	foreach ($admins as $admin) {
-		if (md5(serialize($admin)) == $auth && $admin['rights'] & UPLOAD_RIGHTS) {
+		if (md5('admin-uploadify/uploader.php'.serialize($admin)) == $auth && $admin['rights'] & UPLOAD_RIGHTS) {
 			$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
 			break;
 		}

@@ -1328,6 +1328,7 @@ function zenpageJSCSS($sortable) {
 		// ]]> -->
 	</script>
 <?php
+	zp_apply_filter('output_started',false);
 }
 
 

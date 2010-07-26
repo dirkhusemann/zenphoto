@@ -118,6 +118,7 @@ function zenJavascript() {
 			echo $script."\n";
 		}
 	}
+	zp_apply_filter('output_started',false);
 }
 
 /**
