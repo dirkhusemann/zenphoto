@@ -46,11 +46,9 @@ if(is_NewsArticle()) {
   <?php if (function_exists('printRating')) { printRating(); } ?>
 <?php 
 // COMMENTS TEST
-if (function_exists('printCommentForm')) { ?>
-	<div id="comments">
-		<?php printCommentForm(); ?>
-	</div>
-	<?php  } // comments allowed - end
+if (function_exists('printCommentForm')) {
+		printCommentForm(); 
+ } // comments allowed - end
 } else {
 printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 echo "<hr />";	

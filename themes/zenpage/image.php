@@ -105,11 +105,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
 </div>
-		<?php if (function_exists('printCommentForm')) { ?>
-			<div id="comments">
-			<?php printCommentForm(); ?>
-			</div>
-		<?php } ?>
+		<?php if (function_exists('printCommentForm')) { 
+				printCommentForm();
+		 } ?>
 
 </div><!-- content-left -->
 

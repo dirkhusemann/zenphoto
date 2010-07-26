@@ -40,11 +40,9 @@ if (function_exists('printRating')) { printRating(); }
 ?>
 
 <?php 
-if (function_exists('printCommentForm')) { ?>
-	<div id="comments">
-	<?php printCommentForm(); ?>
-	</div>
-	<?php } ?>
+if (function_exists('printCommentForm')) { 
+	printCommentForm(); 
+} ?>
 	</div><!-- content left-->
 		
 		
