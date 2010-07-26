@@ -255,7 +255,7 @@ if (isset($_GET['add'])) {
 ?>
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
 		<?php XSRFToken('update'); ?>
-		<input type="hidden" name="update" id="update" value="<?php echo $action; ?>" />
+		<input type="hidden" name="update" id="update" value="<?php echo htmlspecialchars($action,ENT_QUOTES); ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
 		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link,ENT_QUOTES); ?>" />
 		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />

@@ -19,12 +19,12 @@
 						<?php 
 						if ($disabled['name']) {
 							?>
-							<input tabindex="1" id="name" name="name" class="text" type="hidden" value="<?php echo $stored['name'];?>" />
-							<?php echo $stored['name'];?>
+							<input tabindex="1" id="name" name="name" class="text" type="hidden" value="<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>" />
+							<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>
 							<?php
 						} else {
 							?>
-							<input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored['name'];?>" />
+							<input tabindex="1" id="name" name="name" class="text" value="<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>" />
 							<?php
 						}
 						?>
@@ -39,12 +39,12 @@
 						<?php 
 						if ($disabled['email']) {
 							?>
-							<input tabindex="2" id="email" name="email" class="text" type="hidden" value="<?php echo $stored['email'];?>" />
-							<?php echo $stored['email'];?>
+							<input tabindex="2" id="email" name="email" class="text" type="hidden" value="<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>" />
+							<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>
 							<?php
 						} else {
 							?>
-							<input tabindex="2" id="email" name="email" class="text" value="<?php echo $stored['email'];?>" />
+							<input tabindex="2" id="email" name="email" class="text" value="<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>" />
 							<?php
 						}
 						?>
@@ -57,12 +57,12 @@
 						<?php 
 						if ($disabled['website']) {
 							?>
-							<input tabindex="3" name="website" id="website" class="text" type="hidden" value="<?php echo $stored['website'];?>" />
-							<?php echo $stored['website'];?>
+							<input tabindex="3" name="website" id="website" class="text" type="hidden" value="<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>" />
+							<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>
 							<?php
 						} else {
 							?>
-							<input tabindex="3" name="website" id="website" class="text" value="<?php echo $stored['website'];?>" />
+							<input tabindex="3" name="website" id="website" class="text" value="<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>" />
 							<?php
 						}
 						?>
@@ -86,12 +86,12 @@
 						<?php 
 						if ($disabled['street']) {
 							?>
-							<input name="0-comment_form_street" id="comment_form_street" class="text" type="hidden" size="22" value="<?php echo $address['street']; ?>" />
-							<?php echo $address['street']; ?>
+							<input name="0-comment_form_street" id="comment_form_street" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['street'],ENT_QUOTES); ?>" />
+							<?php echo htmlspecialchars($address['street'],ENT_QUOTES); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_street" id="comment_form_street" class="text" size="22" value="<?php echo $address['street']; ?>" />
+							<input name="0-comment_form_street" id="comment_form_street" class="text" size="22" value="<?php echo htmlspecialchars($address['street'],ENT_QUOTES); ?>" />
 							<?php
 						}
 						?>
@@ -103,12 +103,12 @@
 						<?php 
 						if ($disabled['city']) {
 							?>
-							<input name="0-comment_form_city" id="comment_form_city" class="text" type="hidden" size="22" value="<?php echo $address['city']; ?>" />
-							<?php echo $address['city']; ?>
+							<input name="0-comment_form_city" id="comment_form_city" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['city'],ENT_QUOTES); ?>" />
+							<?php echo htmlspecialchars($address['city'],ENT_QUOTES); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_city" id="comment_form_city" class="text" size="22" value="<?php echo $address['city']; ?>" />
+							<input name="0-comment_form_city" id="comment_form_city" class="text" size="22" value="<?php echo htmlspecialchars($address['city'],ENT_QUOTES); ?>" />
 							<?php
 						}
 						?>
@@ -120,12 +120,12 @@
 						<?php 
 						if ($disabled['state']) {
 							?>
-							<input name="0-comment_form_state" id="comment_form_state" class="text" type="hidden" size="22" value="<?php echo $address['state']; ?>" />
-							<?php echo $address['state']; ?>
+							<input name="0-comment_form_state" id="comment_form_state" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['state'],ENT_QUOTES); ?>" />
+							<?php echo htmlspecialchars($address['state'],ENT_QUOTES); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_state" id="comment_form_state" class="text" size="22" value="<?php echo $address['state']; ?>" />
+							<input name="0-comment_form_state" id="comment_form_state" class="text" size="22" value="<?php echo htmlspecialchars($address['state'],ENT_QUOTES); ?>" />
 							<?php
 						}
 						?>
@@ -137,12 +137,12 @@
 						<?php 
 						if ($disabled['country']) {
 							?>
-							<input name="comment_form_country" id="comment_form_country" class="text" type="hidden" size="22" value="<?php echo $address['country']; ?>" />
-							<?php echo $address['country']; ?>
+							<input name="comment_form_country" id="comment_form_country" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['country'],ENT_QUOTES); ?>" />
+							<?php echo htmlspecialchars($address['country'],ENT_QUOTES); ?>
 							<?php
 						} else {
 							?>
-							<input name="comment_form_country" id="comment_form_country" class="text" size="22" value="<?php echo $address['country']; ?>" />
+							<input name="comment_form_country" id="comment_form_country" class="text" size="22" value="<?php echo htmlspecialchars($address['country'],ENT_QUOTES); ?>" />
 							<?php
 						}
 						?>
@@ -154,12 +154,12 @@
 						<?php 
 						if ($disabled['postal']) {
 							?>
-							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" type="hidden" value="<?php echo $address['postal']; ?>" />
-							<?php echo $address['postal']; ?>
+							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" type="hidden" value="<?php echo htmlspecialchars($address['postal'],ENT_QUOTES); ?>" />
+							<?php echo htmlspecialchars($address['postal'],ENT_QUOTES); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" value="<?php echo $address['postal']; ?>" />
+							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" value="<?php echo htmlspecialchars($address['postal'],ENT_QUOTES); ?>" />
 							<?php
 						}
 						?>

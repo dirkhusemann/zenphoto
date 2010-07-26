@@ -22,14 +22,14 @@
 										?>
 										<div class="disabled_input" style="background-color:LightGray;color:black;">
 											<?php
-											echo $stored['name'];
+											echo htmlspecialchars($stored['name'],ENT_QUOTES);
 											?>
-											<input type="hidden" id="name" name="name" value="<?php echo $stored['name'];?>" />
+											<input type="hidden" id="name" name="name" value="<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>" />
 										</div>
 										<?php
 									} else {
 										?>
-										<input type="text" id="name" name="name" size="22" value="<?php echo $stored['name'];?>" class="inputbox" />
+										<input type="text" id="name" name="name" size="22" value="<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>" class="inputbox" />
 										<?php										
 									}
 									?>
@@ -45,14 +45,14 @@
 										?>
 										<div class="disabled_input" style="background-color:LightGray;color:black;">
 											<?php
-											echo $stored['email'];
+											echo htmlspecialchars($stored['email'],ENT_QUOTES);
 											?>
-											<input type="hidden" id="email" name="email" value="<?php echo $stored['email'];?>" />
+											<input type="hidden" id="email" name="email" value="<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>" />
 										</div>
 										<?php
 									} else {
 										?>
-										<input type="text" id="email" name="email" size="22" value="<?php echo $stored['email'];?>" class="inputbox" />
+										<input type="text" id="email" name="email" size="22" value="<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>" class="inputbox" />
 										<?php								
 									}
 									?>
@@ -68,14 +68,14 @@
 										?>
 										<div class="disabled_input" style="background-color:LightGray;color:black;">
 											<?php
-											echo $stored['website'];
+											echo htmlspecialchars($stored['website'],ENT_QUOTES);
 											?>
-											<input type="hidden" id="website" name="website" value="<?php echo $stored['website'];?>" />
+											<input type="hidden" id="website" name="website" value="<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>" />
 										</div>
 										<?php		
 									} else {	
 										?>							
-										<input type="text" id="website" name="website" size="22" value="<?php echo $stored['website'];?>" class="inputbox" />
+										<input type="text" id="website" name="website" size="22" value="<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>" class="inputbox" />
 										<?php
 									}
 									?>
@@ -94,14 +94,14 @@
 												?>
 												<div class="disabled_input" style="background-color:LightGray;color:black;">
 													<?php
-													echo $stored['street'];
+													echo htmlspecialchars($stored['street'],ENT_QUOTES);
 													?>
-														<input type="hidden" id="comment_form_street-0" name="0-comment_form_street" value="<?php echo $stored['street'];?>" />
+														<input type="hidden" id="comment_form_street-0" name="0-comment_form_street" value="<?php echo htmlspecialchars($stored['street'],ENT_QUOTES);?>" />
 												</div>
 												<?php
 											} else {
 												?>
-												<input type="text" name="0-comment_form_street" id="comment_form_street" class="inputbox" size="22" value="<?php echo $stored['street']; ?>" />
+												<input type="text" name="0-comment_form_street" id="comment_form_street" class="inputbox" size="22" value="<?php echo htmlspecialchars($stored['street'],ENT_QUOTES); ?>" />
 												<?php									
 											}
 										?>
@@ -117,14 +117,14 @@
 											?>
 											<div class="disabled_input"  style="background-color:LightGray;color:black;">
 												<?php
-												echo $stored['city'];
+												echo htmlspecialchars($stored['city'],ENT_QUOTES);
 												?>
-												<input type="hidden" id="comment_form_city-0" name="0-comment_form_city" value="<?php echo $stored;?>" />
+												<input type="hidden" id="comment_form_city-0" name="0-comment_form_city" value="<?php echo htmlspecialchars($stored['city'],ENT_QUOTES);?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="0-comment_form_city" id="comment_form_city" class="inputbox" size="22" value="<?php echo $stored['city']; ?>" />
+											<input type="text" name="0-comment_form_city" id="comment_form_city" class="inputbox" size="22" value="<?php echo htmlspecialchars($stored['city'],ENT_QUOTES); ?>" />
 											<?php								
 										}
 										?>
@@ -138,14 +138,14 @@
 											?>
 											<div class="disabled_input" style="background-color:LightGray;color:black;">
 												<?php
-												echo $stored['state'];
+												echo htmlspecialchars($stored['state'],ENT_QUOTES);
 												?>
-												<input type="hidden" name="0-comment_form_state" id="comment_form_state-0" value="<?php echo $stored['state'];?>" />
+												<input type="hidden" name="0-comment_form_state" id="comment_form_state-0" value="<?php echo htmlspecialchars($stored['state'],ENT_QUOTES);?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="0-comment_form_state" id="comment_form_state-0" class="inputbox" size="22" value="<?php echo $stored['state']; ?>" />
+											<input type="text" name="0-comment_form_state" id="comment_form_state-0" class="inputbox" size="22" value="<?php echo htmlspecialchars($stored['state'],ENT_QUOTES); ?>" />
 											<?php									
 										}
 										?>
@@ -159,14 +159,14 @@
 											?>
 											<div class="disabled_input"  style="background-color:LightGray;color:black;">
 												<?php
-												echo $stored['country'];
+												echo htmlspecialchars($stored['country'],ENT_QUOTES);
 												?>
-												<input type="hidden" id="comment_form_country" name="0-comment_form_country" value="<?php echo $stored['country'];?>" />
+												<input type="hidden" id="comment_form_country" name="0-comment_form_country" value="<?php echo htmlspecialchars($stored['country'],ENT_QUOTES);?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" name="comment_form_country" id="comment_form_country-0" class="inputbox" size="22" value="<?php echo $stored['country']; ?>" />
+											<input type="text" name="comment_form_country" id="comment_form_country-0" class="inputbox" size="22" value="<?php echo htmlspecialchars($stored['country'],ENT_QUOTES); ?>" />
 											<?php									
 										}
 										?>
@@ -180,14 +180,14 @@
 											?>
 											<div class="disabled_input"  style="background-color:LightGray;color:black;">
 												<?php
-												echo $stored['postal'];
+												echo htmlspecialchars($stored['postal'],ENT_QUOTES);
 												?>
-												<input type="hidden" name="0-comment_form_postal" value="<?php echo $stored['postal'];?>" />
+												<input type="hidden" name="0-comment_form_postal" value="<?php echo htmlspecialchars($stored['postal'],ENT_QUOTES);?>" />
 											</div>
 											<?php
 										} else {
 											?>
-											<input type="text" id="comment_form_country-0" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="22" value="<?php echo $stored['postal']; ?>" />
+											<input type="text" id="comment_form_country-0" name="0-comment_form_postal" id="comment_form_postal" class="inputbox" size="22" value="<?php echo htmlspecialchars($stored['postal'],ENT_QUOTES); ?>" />
 											<?php									
 										}
 										?>

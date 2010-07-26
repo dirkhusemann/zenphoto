@@ -571,6 +571,7 @@ zp-core/watermarks/watermark-video.png
 zp-core/watermarks/watermark.png
 zp-core/zp-config.php.source
 zp-core/zp-extensions
+zp-core/zp-extensions/auto_backup.php
 zp-core/zp-extensions/captcha
 zp-core/zp-extensions/captcha/zenphoto.php
 zp-core/zp-extensions/class-textobject

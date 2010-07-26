@@ -227,10 +227,10 @@ function printContactForm() {
 					?>
 					<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
 						<input type="hidden" id="confirm" name="confirm" value="confirm" />
-						<input type="hidden" id="name" name="name"	value="<?php echo $name; ?>" />
-						<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
-						<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
-						<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
+						<input type="hidden" id="name" name="name"	value="<?php echo htmlspecialchars($name,ENT_QUOTES); ?>" />
+						<input type="hidden" id="subject" name="subject"	value="<?php echo htmlspecialchars($subject,ENT_QUOTES); ?>" />
+						<input type="hidden" id="message"	name="message" value="<?php echo htmlspecialchars($message,ENT_QUOTES); ?>" />
+						<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo htmlspecialchars($mailaddress,ENT_QUOTES); ?>" />
 						<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
 					</form>
 					<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">

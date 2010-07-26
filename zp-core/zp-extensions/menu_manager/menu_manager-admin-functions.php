@@ -112,7 +112,7 @@ function printItemsListTable($item, $flag) {
 			<img src="../../images/fail.png" alt="<?php echo gettext('delete'); ?>" title="<?php echo gettext('delete'); ?>" /></a>		
 		</td>
 		<td class="icons">
-		<input type="checkbox" name="ids[]" value="<?php echo $item['id']; ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+		<input type="checkbox" name="ids[]" value="<?php echo htmlspecialchars($item['id'],ENT_QUOTES); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
 	</td>
 	</tr>
 </table>

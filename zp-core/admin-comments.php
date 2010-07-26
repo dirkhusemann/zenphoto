@@ -126,30 +126,30 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 	<tr>
 		<td width="100"><?php echo gettext("Author:"); ?></td>
-		<td><input type="text" size="40" name="name" value="<?php echo $name; ?>" /></td>
+		<td><input type="text" size="40" name="name" value="<?php echo htmlspecialchars($name,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Web Site:"); ?></td>
-		<td><input type="text" size="40" name="website" value="<?php echo $website; ?>" /></td>
+		<td><input type="text" size="40" name="website" value="<?php echo htmlspecialchars($website,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("E-Mail:"); ?></td>
-		<td><input type="text" size="40" name="email" value="<?php echo $email; ?>" /></td>
+		<td><input type="text" size="40" name="email" value="<?php echo htmlspecialchars($email,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Date/Time:"); ?></td>
-		<td><input type="text" size="18" name="date" value="<?php echo $date; ?>" /></td>
+		<td><input type="text" size="18" name="date" value="<?php echo htmlspecialchars($date,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("IP:"); ?></td>
-		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo $IP; ?>" /></td>
+		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo htmlspecialchars($IP,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<?php
 	echo zp_apply_filter('edit_comment_custom_data', '', $custom_data);
 	?>
 	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
-		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
+		<td><textarea rows="8" cols="60" name="comment" /><?php echo htmlspecialchars($comment,ENT_QUOTES); ?></textarea></td>
 	</tr>
 	<tr>
 		<td></td>

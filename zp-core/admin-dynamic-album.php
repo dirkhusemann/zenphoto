@@ -112,7 +112,7 @@ while ($old != $albumname) {
 	<tr>
 		<td><?php echo gettext("Album name:"); ?></td>
 		<td><input type="text" size="40" name="album"
-			value="<?php echo $albumname ?>" /></td>
+			value="<?php echo htmlspecialchars($albumname,ENT_QUOTES) ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Create in:"); ?></td>
@@ -178,7 +178,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<tr>
 		<td><?php echo gettext("Search criteria:"); ?></td>
 		<td><input type="text" size="60" name="words"
-			value="<?php echo $words ?>" /></td>
+			value="<?php echo htmlspecialchars($words,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search fields:"); ?></td>

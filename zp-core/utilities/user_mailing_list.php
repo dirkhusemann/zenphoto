@@ -112,7 +112,7 @@ if(isset($_GET['sendmail'])) {
 						?>
 						<li>
 							<label for="admin_<?php echo $admin['id']; ?>">
-								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo $admin['email']; ?>" checked="checked"  <?php echo $disabled; ?>/>
+								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo htmlspecialchars($admin['email'],ENT_QUOTES); ?>" checked="checked"  <?php echo $disabled; ?>/>
 								<?php
 								echo $admin['user']." (";
 								if (!empty($admin['name'])) {

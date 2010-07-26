@@ -48,7 +48,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							$searchfields = $search->getSearchFields(true);
 							$page = $search->page;
 							$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
-							echo '<a href='.htmlspecialchars($returnpath).'><em>'.gettext('Search').'</em></a> | ';
+							echo '<a href='.htmlspecialchars($returnpath,ENT_QUOTES).'><em>'.gettext('Search').'</em></a> | ';
 						} else {
 							printParentBreadcrumb();
 							printAlbumBreadcrumb("", " | ");

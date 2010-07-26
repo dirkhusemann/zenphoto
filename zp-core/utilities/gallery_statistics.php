@@ -642,8 +642,8 @@ if(isset($_GET['type'])) {
 		<input type ="text" size="10" id="from_number" name="from_number" value="<?php echo $from_number_display; ?>" /> 
 		<label for="to_number"><?php echo gettext("to "); ?></label>
 		<input type ="text" size="10" id="to_number" name="to_number" value="<?php echo $to_number_display; ?>" /> 
-		<input type="hidden" name="stats"	value="<?php echo sanitize($_GET['stats']); ?>" /> 
-		<input type="hidden" name="type"value="<?php echo sanitize($_GET['type']); ?>" /> 
+		<input type="hidden" name="stats"	value="<?php echo htmlspecialchars(sanitize($_GET['stats']),ENT_QUOTES); ?>" /> 
+		<input type="hidden" name="type"value="<?php echo htmlspecialchars(sanitize($_GET['type']),ENT_QUOTES); ?>" /> 
 		<input type="submit" value="<?php echo gettext("Show"); ?>" />
 		</form>
 		<br />

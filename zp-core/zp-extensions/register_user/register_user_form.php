@@ -11,11 +11,11 @@
 		<table class="register_user">
 		<tr>
 			<td><?php echo gettext("Name:"); ?></td>
-			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo $admin_n; ?>" size="22" /></td>
+			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo htmlspecialchars($admin_n,ENT_QUOTES); ?>" size="22" /></td>
 		</tr>
 		<tr>
 			<td><?php if (getOption('register_user_email_is_id')) echo gettext("Email:"); else echo gettext("User ID:"); ?></td>
-			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo $user; ?>" size="22" /></td>
+			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo htmlspecialchars($user,ENT_QUOTES); ?>" size="22" /></td>
 		</tr>
 		<tr>
 			<td valign="top"><?php echo gettext("Password:"); ?></td>
@@ -35,7 +35,7 @@
 					?>
 					<br />
 					<?php
-					echo  $msg;
+					echo  htmlspecialchars($msg,ENT_QUOTES);
 				}
 				?>
 			</td>
@@ -45,7 +45,7 @@
 			?>
 			<tr>
 				<td><?php echo gettext("Email:"); ?></td>
-				<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" size="22" /></td>
+				<td><input type="text" id="admin_email" name="admin_email" value="<?php echo htmlspecialchars($admin_e,ENT_QUOTES); ?>" size="22" /></td>
 			</tr>
 			<?php
 		}

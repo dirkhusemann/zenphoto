@@ -75,7 +75,7 @@ class zp_PHPMailer {
 	function handleOption($option, $currentValue) {
 		if($option=="PHPMailer_password") {
 			?>
-			<input type="password" size="40" name="<?php echo $option; ?>" style="width: 338px" value="<?php echo $currentValue; ?>">
+			<input type="password" size="40" name="<?php echo $option; ?>" style="width: 338px" value="<?php echo htmlspecialchars($currentValue,ENT_QUOTES); ?>">
 			<?php
 		}
 	}
