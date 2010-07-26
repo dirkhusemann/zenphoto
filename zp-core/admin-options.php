@@ -507,7 +507,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						?>
 						<td><?php echo gettext("Time offset (hours):"); ?></td>
 						<td>
-							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset);?>" />
+							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset,ENT_QUOTES);?>" />
 						</td>
 						<td>
 						<p><?php echo gettext("If you're in a different time zone from your server, set the offset in hours of your time zone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
@@ -629,7 +629,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
 						<br />
 						<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="date_format"
-						value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
+						value="<?php echo htmlspecialchars(getOption('date_format'),ENT_QUOTES);?>" />
 						</div>
 						</td>
 					<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><span style="white-space:nowrap"><code>strftime()</code></span></a> format string in the text box.'); ?></td>
@@ -695,7 +695,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 				<tr>
 					<td><?php echo gettext("Allowed tags:"); ?></td>
 					<td>
-						<p><textarea name="allowed_tags" style="width: 340px" rows="10" cols="35"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea></p>
+						<p><textarea name="allowed_tags" style="width: 340px" rows="10" cols="35"><?php echo htmlspecialchars(getOption('allowed_tags'),ENT_QUOTES); ?></textarea></p>
 						<p>
 							<label>
 								<input type="checkbox" name="allowed_tags_reset" value="1" />
@@ -857,7 +857,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 				<tr>
 					<td><?php echo gettext("Website url:"); ?></td>
 					<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="website_url"
-						value="<?php echo htmlspecialchars(getOption('website_url'));?>" /></td>
+						value="<?php echo htmlspecialchars(getOption('website_url'),ENT_QUOTES);?>" /></td>
 					<td><?php echo gettext("This is used to link back to your main site, but your theme must support it."); ?></td>
 				</tr>
 				<tr>
@@ -1069,7 +1069,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext("Search password hint:"); ?></p>
 					</td>
 					<td>
-						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" /></p>
+						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user'),ENT_QUOTES); ?>" /></p>
 						<p>
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass" value="<?php echo $x; ?>" />
 							<br />
@@ -1213,8 +1213,8 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 		<tr>
 			<td width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
 			<td width="350">
-			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
-			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo htmlspecialchars(getOption('feed_items_albums'));?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
+			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo htmlspecialchars(getOption('feed_items'),ENT_QUOTES);?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
+			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo htmlspecialchars(getOption('feed_items_albums'),ENT_QUOTES);?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
 			</td>
 			<td><?php echo gettext("The number of new items you want to appear in your site's RSS feed. The images and comments RSS share the value."); ?></td>
 		</tr>
@@ -1222,9 +1222,9 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td><?php echo gettext("Size of RSS feed images:"); ?></td>
 			<td>
 			<input type="text" size="15" id="feed_imagesize" name="feed_imagesize"
-				value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br />
+				value="<?php echo htmlspecialchars(getOption('feed_imagesize'),ENT_QUOTES);?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br />
 				<input type="text" size="15" id="feed_imagesize_albums" name="feed_imagesize_albums"
-				value="<?php echo htmlspecialchars(getOption('feed_imagesize_albums'));?>" /> <label for="feed_imagesize_albums"><?php echo gettext("Albums RSS"); ?></label>
+				value="<?php echo htmlspecialchars(getOption('feed_imagesize_albums'),ENT_QUOTES);?>" /> <label for="feed_imagesize_albums"><?php echo gettext("Albums RSS"); ?></label>
 				</td>
 			<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 		</tr>
@@ -1265,7 +1265,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td>
 				<label><input type="checkbox" name="feed_cache" value="1" <?php echo checked('1', getOption('feed_cache')); ?> /> <?php echo gettext("Enabled"); ?></label><br /><br />
 				<input type="text" size="15" id="feed_cache_expire" name="feed_cache_expire"
-				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'));?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br />
+				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'),ENT_QUOTES);?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br />
 				</td>
 			<td><?php echo gettext("Check if you want to enable static RSS feed caching. The cached file will be placed within the <em>cache_html</em> folder.<br /> Cache expire default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec)."); ?></td>
 		</tr>
@@ -1560,7 +1560,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<br />
 					<?php echo gettext('cover').' '; ?>
 					<input type="text" size="2" name="watermark_scale"
-							value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
+							value="<?php echo htmlspecialchars(getOption('watermark_scale'),ENT_QUOTES);?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
 					<span style="white-space:nowrap">
 						<label>
 							<input type="checkbox" name="watermark_allow_upscale" value="1"
@@ -1571,9 +1571,9 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<br />
 					<?php echo gettext("offset h"); ?>
 					<input type="text" size="2" name="watermark_h_offset"
-							value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
+							value="<?php echo htmlspecialchars(getOption('watermark_h_offset'),ENT_QUOTES);?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
 					<input type="text" size="2" name="watermark_w_offset"
-						value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
+						value="<?php echo htmlspecialchars(getOption('watermark_w_offset'),ENT_QUOTES);?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 				</td>
 				<td>
 					<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the image."); ?></p>
@@ -1636,7 +1636,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 									<?php echo gettext("user:"); ?>
 								</a>
 							</td>
-							<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
+							<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user'),ENT_QUOTES); ?>" />		</td>
 						</tr>
 						<tr class="passwordextrahide" style="display:none">
 							<td style="margin:0; padding:0">

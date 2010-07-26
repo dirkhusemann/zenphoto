@@ -1291,7 +1291,7 @@ function generateListFromArray($currentValue, $list, $descending, $localize) {
 		}
 	}
 	foreach($list as $key=>$item) {
-		echo '<option value="' . htmlentities($item,ENT_COMPAT,getOption("charset")) . '"';
+		echo '<option value="' . htmlentities($item,ENT_QUOTES,getOption("charset")) . '"';
 		if (in_array($item, $currentValue)) {
 			echo ' selected="selected"';
 		}
@@ -1330,7 +1330,7 @@ function generateListFromFiles($currentValue, $root, $suffix, $descending=false)
  * @param string $id optional id
  */
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-	echo "<a href=\"" . htmlspecialchars($url) . "\"" .
+	echo "<a href=\"" . htmlspecialchars($url,ENT_QUOTES) . "\"" .
 	(($title) ? " title=\"" . html_encode($title) . "\"" : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . ">" .
@@ -2086,6 +2086,39 @@ function XSRFToken($action) {
 	?>
 	<input type="hidden" name="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
 	<?php
+}
+
+/**
+ * Starts a sechedule script run
+ * @param string $script The script file to load
+ * @param array $params "POST" parameters
+ */
+function cron_starter($script, $params) {
+	global $_zp_authority;
+	$admins = $_zp_authority->getAdministrators();
+	$admin = array_shift($admins);
+	while (!$admin['valid']) {
+		$admin = array_shift($admins);
+	}
+	$auth = md5($script.serialize($admin));
+	$paramlist = 'link='.$script;
+	foreach ($params as $key=>$value) {
+		$paramlist .= '&'.$key.'='.$value;
+	}
+	$paramlist .= '&auth='.$auth;
+	
+	?>
+	<script type="text/javascript">
+	// <!-- <![CDATA[
+	$.ajax({   
+		type: 'POST',   
+		data: '<?php echo $paramlist; ?>',
+		url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/cron_runner.php'
+	});
+	// ]]> -->
+	</script>
+	<?php
+	
 }
 
 //load PHP specific functions

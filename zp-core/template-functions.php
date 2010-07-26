@@ -992,7 +992,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->getSearchFields(true);
-		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list));
+		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list),ENT_QUOTES);
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\" title=\"Return to search\">";
@@ -3553,7 +3553,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 				}
 				if (++$x == $ct) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($latag, '', 'tags', 0, 0, $albumlist))."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($latag, '', 'tags', 0, 0, $albumlist),ENT_QUOTES)."\" title=\"".html_encode($atag)."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.$atag.$links2.$separator."</li>\n";
@@ -3636,7 +3636,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 					$quote = '';
 				}
 				echo "\t<li><a href=\"".
-					htmlspecialchars(getSearchURL($quote.$key.$quote, '', 'tags', 0, 0, $albumlist))."\"$size rel=\"nofollow\">".
+					htmlspecialchars(getSearchURL($quote.$key.$quote, '', 'tags', 0, 0, $albumlist),ENT_QUOTES)."\"$size rel=\"nofollow\">".
 					$key.$counter."</a></li>\n";
 			}
 		}
@@ -3725,7 +3725,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
 		} else {
 			$albumlist = NULL;
 		}
-		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), '', 0, $albumlist))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
+		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), '', 0, $albumlist),ENT_QUOTES)."\" rel=\"nofollow\">$month ($val)</a></li>\n";
 	}
 	echo "</ul>\n</li>\n</ul>\n";
 }
@@ -3772,7 +3772,7 @@ function printCustomPageURL($linktext, $page, $q='', $prev='', $next='', $class=
 	if (!is_null($class)) {
 		$class = 'class="' . $class . '"';
 	}
-	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))."\" $class title=\"".html_encode($linktext)."\">".htmlspecialchars($linktext)."</a>".$next;
+	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))."\" $class title=\"".html_encode($linktext)."\">".htmlspecialchars($linktext,ENT_QUOTES)."</a>".$next;
 }
 
 /**

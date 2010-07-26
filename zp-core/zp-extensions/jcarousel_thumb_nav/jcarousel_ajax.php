@@ -25,7 +25,7 @@ echo '<data>' . "\n";
 foreach ($items as $item) {
     echo '  <item>' . "\n";
     foreach ($item as $key => $val) {
-    	echo '    <' . $key  . '>' . htmlspecialchars($val) . '</' . $key  . '>' . "\n";
+    	echo '    <' . $key  . '>' . htmlspecialchars($val,ENT_QUOTES) . '</' . $key  . '>' . "\n";
     }
     echo '  </item>' . "\n";
 }

@@ -206,7 +206,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		<h2><?php echo gettext("Login"); ?>&nbsp;</h2>
 		</td>
 		<td><input class="textfield" name="user" type="text" size="20"
-			value="<?php echo htmlspecialchars($requestor); ?>" /></td>
+			value="<?php echo htmlspecialchars($requestor,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td align="left">
@@ -548,11 +548,11 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 							} else {
 								if ($type == OPTION_TYPE_TEXTAREA) {
 									?>
-									<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" cols="<?php echo TEXTAREA_COLUMNS; ?>"	style="width: 320px" rows="6"><?php  echo htmlentities($v,ENT_COMPAT,getOption("charset")); ?></textarea>							
+									<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" cols="<?php echo TEXTAREA_COLUMNS; ?>"	style="width: 320px" rows="6"><?php  echo htmlentities($v,ENT_QUOTES,getOption("charset")); ?></textarea>							
 									<?php
 								} else {
 									?>
-									<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo htmlentities($v,ENT_COMPAT,getOption("charset")); ?>" />
+									<input type="text" size="40" id="<?php echo $key; ?>" name="<?php echo $key; ?>" style="width: 338px" value="<?php echo htmlentities($v,ENT_QUOTES,getOption("charset")); ?>" />
 									<?php
 								}
 							}
@@ -1416,13 +1416,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							}
 							?>
 				<div id="first">
-					<textarea name="<?php echo $prefix; ?>codeblock1" id="codeblock1<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_COMPAT); ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock1" id="codeblock1<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES); ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="<?php echo $prefix; ?>codeblock2" id="codeblock2<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_COMPAT); ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock2" id="codeblock2<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES); ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="<?php echo $prefix; ?>codeblock3" id="codeblock3<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_COMPAT); ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock3" id="codeblock3<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES); ?></textarea>
 				</div>
 			</div>
 		</td>
@@ -1587,7 +1587,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				<td>
 					<table class="noinput">
 						<tr>
-							<td><?php echo htmlspecialchars(urldecode($album->getSearchParams(true))); ?></td>
+							<td><?php echo htmlspecialchars(urldecode($album->getSearchParams(true)),ENT_QUOTES); ?></td>
 						</tr>
 					</table>
 				</td>
@@ -2172,9 +2172,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 						<label for="<?php echo $name; ?>_'.$key.'"><?php echo $lang; ?></label>
 						<?php
 						if ($textbox) {
-							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.$size.'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
+							echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.$size.'"	style="width: 320px" rows="6">'.htmlentities($string,ENT_QUOTES,getOption("charset")).'</textarea>';
 						} else {
-							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string,ENT_COMPAT,getOption("charset")).'" size="'.$size.'" />';
+							echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlentities($string,ENT_QUOTES,getOption("charset")).'" size="'.$size.'" />';
 						}
 						?>
 					</li>
@@ -2207,9 +2207,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.$size.'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'</textarea>';
+			echo '<textarea'.$groupid.' name="'.$name.'_'.$locale.'"'.$edit.' cols="'.$size.'"	rows="6">'.htmlentities($dbstring,ENT_QUOTES,getOption('charset')).'</textarea>';
 		} else {
-			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring,ENT_COMPAT,getOption('charset')).'" size="'.$size.'" />';
+			echo '<input'.$groupid.' name="'.$name.'_'.$locale.'" type="text" value="'.htmlentities($dbstring,ENT_QUOTES,getOption('charset')).'" size="'.$size.'" />';
 		}
 	}
 }
@@ -2516,11 +2516,11 @@ $theme_description["author"] = "%s";
 $theme_description["version"] = "%s";
 $theme_description["date"] = "%s";
 $theme_description["desc"] = "%s";
-?'.'>' , htmlentities($theme_description['name'],ENT_COMPAT,getOption("charset")),
-		htmlentities($theme_description['author'],ENT_COMPAT,getOption("charset")),
-		htmlentities($theme_description['version'],ENT_COMPAT,getOption("charset")),
-		htmlentities($theme_description['date'],ENT_COMPAT,getOption("charset")),
-		htmlentities($theme_description['desc'],ENT_COMPAT,getOption("charset")));
+?'.'>' , htmlentities($theme_description['name'],ENT_QUOTES,getOption("charset")),
+		htmlentities($theme_description['author'],ENT_QUOTES,getOption("charset")),
+		htmlentities($theme_description['version'],ENT_QUOTES,getOption("charset")),
+		htmlentities($theme_description['date'],ENT_QUOTES,getOption("charset")),
+		htmlentities($theme_description['desc'],ENT_QUOTES,getOption("charset")));
 
 	$f = fopen($target.'/theme_description.php', 'w');
 	if ($f !== FALSE) {

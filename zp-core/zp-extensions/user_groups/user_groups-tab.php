@@ -199,7 +199,7 @@ echo '</head>'."\n";
 											<br /><br />
 											<?php echo gettext('description:'); ?>
 											<br />
-											<textarea name="<?php echo $id; ?>-desc" cols="40" rows="4"><?php echo htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")); ?></textarea>
+											<textarea name="<?php echo $id; ?>-desc" cols="40" rows="4"><?php echo htmlentities($user['custom_data'],ENT_QUOTES,getOption("charset")); ?></textarea>
 											<?php
 											if (empty($groupname) && !empty($groups)) {
 												?>
@@ -210,7 +210,7 @@ echo '</head>'."\n";
 													<option title=""></option>
 													<?php
 													foreach ($groups as $user) {
-														$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
+														$hint = '<em>'.htmlentities($user['custom_data'],ENT_QUOTES,getOption("charset")).'</em>';
 														if ($groupname == $user['user']) {
 															$selected = ' selected="selected"';
 															} else {
@@ -358,7 +358,7 @@ echo '</head>'."\n";
 													<?php
 													$selected_hint = gettext('no group affiliation');
 													foreach ($groups as $user) {
-														$hint = '<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
+														$hint = '<em>'.htmlentities($user['custom_data'],ENT_QUOTES,getOption("charset")).'</em>';
 														if ($group == $user['user']) {
 															$selected = ' selected="selected"';
 															$selected_hint = $hint;

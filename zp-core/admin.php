@@ -122,7 +122,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	} else {
 		if (isset($_GET['from'])) {
 			$class = 'errorbox';
-			$msg = sprintf(gettext('You do not have proper rights to access %s.'),htmlspecialchars(sanitize($_GET['from'])));
+			$msg = sprintf(gettext('You do not have proper rights to access %s.'),htmlspecialchars(sanitize($_GET['from']),ENT_QUOTES));
 		}
 	}
 
@@ -475,7 +475,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 					<img src="<?php echo $button_icon; ?>" alt="<?php echo $button['alt']; ?>" />
 					<?php
 				}
-				echo htmlspecialchars($button['button_text']);
+				echo htmlspecialchars($button['button_text'],ENT_QUOTES);
 				?>
 				</button>
 				</div>

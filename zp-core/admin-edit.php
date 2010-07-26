@@ -1283,13 +1283,13 @@ $alb = removeParentAlbumNames($album);
 									}
 									?>
 									<div id="first-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock1-<?php echo $currentimage;?>" id="codeblock1-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_COMPAT); ?></textarea>
+										<textarea name="codeblock1-<?php echo $currentimage;?>" id="codeblock1-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES); ?></textarea>
 									</div>
 									<div id="second-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock2-<?php echo $currentimage;?>" id="codeblock2-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_COMPAT); ?></textarea>
+										<textarea name="codeblock2-<?php echo $currentimage;?>" id="codeblock2-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES); ?></textarea>
 									</div>
 									<div id="third-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock3-<?php echo $currentimage;?>" id="codeblock3-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_COMPAT); ?></textarea>
+										<textarea name="codeblock3-<?php echo $currentimage;?>" id="codeblock3-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES); ?></textarea>
 									</div>
 								</div>
 							</td>

@@ -510,13 +510,13 @@ if(is_object($result)) {
 							}
 							?>
 				<div id="first">
-					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_COMPAT); ?></textarea>
+					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES); ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_COMPAT); ?></textarea>
+					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES); ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_COMPAT); ?></textarea>
+					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES); ?></textarea>
 				</div>
 			</div>
 		</td>

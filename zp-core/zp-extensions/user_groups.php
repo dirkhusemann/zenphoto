@@ -191,7 +191,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 			} else {
 				$type = '';
 			}
-			$hint = $type.'<em>'.htmlentities($user['custom_data'],ENT_COMPAT,getOption("charset")).'</em>';
+			$hint = $type.'<em>'.htmlentities($user['custom_data'],ENT_QUOTES,getOption("charset")).'</em>';
 			if ($group == $user['user']) {
 				$selected = ' selected="selected"';
 				$selected_hint = $hint;

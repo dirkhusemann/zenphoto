@@ -105,7 +105,7 @@ foreach($latest as $item) {
 		case 'albums':
 			break;
 	}
-	$categories = htmlspecialchars($categories);			
+	$categories = htmlspecialchars($categories,ENT_QUOTES);			
 ?>
 <item>
 	<title><?php echo $title." (".$categories.")"; ?></title>

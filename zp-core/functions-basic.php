@@ -154,7 +154,7 @@ $_zp_options = NULL;
  * @return string
  */
 if (!function_exists("htmlspecialchars_decode")) {
-	function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
+	function htmlspecialchars_decode($string, $quote_style = ENT_QUOTES) {
 		$translation_table = get_html_translation_table(HTML_SPECIALCHARS, $quote_style);
 		$translation_table["'"] = '&#039;';
 		return (strtr($string, array_flip($translation_table)));

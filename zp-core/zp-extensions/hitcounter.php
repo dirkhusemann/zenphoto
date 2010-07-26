@@ -85,7 +85,7 @@ class hitcounter_options {
 			case 'hitcounter_ignoreIPList':
 				?>
 				<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX; ?>'text-hitcounter_ignoreIPList" value="0" />
-				<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue); ?>" />
+				<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue,ENT_QUOTES); ?>" />
 				<script language="javascript" type="text/javascript">
 				// <!-- <![CDATA[
 				function hitcounter_insertIP() {

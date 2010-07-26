@@ -84,7 +84,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit 
 // Get file contents
 if ( $file_to_edit ) {
 	$file_content = @file_get_contents ($file_to_edit);
-	$file_content = htmlspecialchars($file_content);
+	$file_content = htmlspecialchars($file_content,ENT_QUOTES);
 }
 
 ?>

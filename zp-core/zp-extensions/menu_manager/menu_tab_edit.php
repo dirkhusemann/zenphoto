@@ -257,12 +257,12 @@ if (isset($_GET['add'])) {
 		<?php XSRFToken('update'); ?>
 		<input type="hidden" name="update" id="update" value="<?php echo $action; ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
-		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link); ?>" />
+		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link,ENT_QUOTES); ?>" />
 		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />
 		<table style="width: 80%">
 		<?php
 		if(is_array($result)) {
-			$selector = htmlspecialchars($menuset);
+			$selector = htmlspecialchars($menuset,ENT_QUOTES);
 		} else {
 			$result = array('id'=>NULL, 'title'=>'', 'link'=>'', 'show'=>1,'type'=>NULL);
 			$selector = getMenuSetSelector(false);
@@ -292,7 +292,7 @@ if (isset($_GET['add'])) {
 				<td><span id="link_label"></span></td>
 				<td>
 					<?php printCustomPageSelector($result['link']); ?>
-					<input name="link" type="text" size="100" id="link" value="<?php echo htmlspecialchars($result['link']); ?>" />
+					<input name="link" type="text" size="100" id="link" value="<?php echo htmlspecialchars($result['link'],ENT_QUOTES); ?>" />
 				</td>
 			</tr>
 			<tr id="visible_row">

@@ -211,7 +211,7 @@ function getRSSNewsCatOptions($arrayfield) {
 	if(!empty($arrayfield)) {
 		if(isset($_GET['category'])) {
 			$catlink = sanitize($_GET['category']);
-			$cattitle = htmlspecialchars(getCategoryTitle($catlink));
+			$cattitle = htmlspecialchars(getCategoryTitle($catlink),ENT_QUOTES);
 			$option = "category";
 		} else {
 			$catlink = "";

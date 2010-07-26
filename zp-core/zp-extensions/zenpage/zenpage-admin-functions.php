@@ -1607,7 +1607,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					if ($textbox) {
 						echo $lang;
-						echo '<textarea id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" class="mceEditor" cols="60"	'.$rows.' style="width:575px;">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$key.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
+						echo '<textarea id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" class="mceEditor" cols="60"	'.$rows.' style="width:575px;">'.htmlentities($string,ENT_QUOTES,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$key.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
 					} else {
 						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="96" style="width:400px;"/>'.$lang;
 					}
@@ -1640,7 +1640,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea id="'.$name.'_'.$locale.'" name="'.$name.'" class="mceEditor" cols="60"	'.$rows.' style="width:600px;">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$locale.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
+			echo '<textarea id="'.$name.'_'.$locale.'" name="'.$name.'" class="mceEditor" cols="60"	'.$rows.' style="width:600px;">'.htmlentities($dbstring,ENT_QUOTES,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$locale.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
 		} else {
 			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="96" style="width:600px;"/>';
 		}

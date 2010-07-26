@@ -55,7 +55,11 @@ $adminrequest = isset($_GET['admin']);
 // This validates the input as well.
 $args = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 if (isset($_GET['s'])) { //0
-	$args[0] = min(abs($_GET['s']), MAX_SIZE);
+	if (is_numeric($_GET['s'])) {
+		$args[0] = min(abs($_GET['s']), MAX_SIZE);
+	} else {
+		$args[0] = sanitize($_GET['s']);
+	}
 }
 if (isset($_GET['w'])) {  //1
 	$args[1] = min(abs($_GET['w']), MAX_SIZE);

@@ -191,7 +191,7 @@ function printItemEditLink($item) {
 	if (is_null($array['title'])) {
 		$title = '<span class="notebox">'.gettext('The target for this menu element no longer exists').'</span>';
 	} else {
-		$title = htmlspecialchars($array['title']);
+		$title = htmlspecialchars($array['title'],ENT_QUOTES);
 	}				
 	switch($item['type']) {
 		case "album":
@@ -205,7 +205,7 @@ function printItemEditLink($item) {
 			$link = '<a href="../zenpage/admin-categories.php?edit&amp;id='.$catid.'&amp;tab=categories">'.$title.'</a>';
 			break;
 		default:
-			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset()).'">'.$title.'</a>';
+			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset(),ENT_QUOTES).'">'.$title.'</a>';
 			break;		
 	}
 	echo $link;
@@ -268,7 +268,7 @@ function getMenuSetSelector($active) {
   	} else {
   		$selected = '';
   	}
- 		$selector .= '<option '.$selected.' value="'.htmlspecialchars($set).'">'.htmlspecialchars($set)."</option>\n";
+ 		$selector .= '<option '.$selected.' value="'.htmlspecialchars($set,ENT_QUOTES).'">'.htmlspecialchars($set,ENT_QUOTES)."</option>\n";
   }
   $selector .= "</select>\n";
   return $selector;
