@@ -504,7 +504,7 @@ function isProtectedPage($pageobj=NULL) {
 							WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 					case 'mtime':
-						$imagequery = "(SELECT albums.folder, images.filename, DATE_FORMAT(images.`mtime`,'%Y-%m-%d'), @type2, @type3 as sticky FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
+						$imagequery = "(SELECT albums.folder, images.filename, FROM_UNIXTIME(images.mtime), @type2, @type3 as sticky FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
 							WHERE albums.id = images.albumid ".$imagesshow.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 				}
@@ -528,8 +528,8 @@ function isProtectedPage($pageobj=NULL) {
 							".$show.$albumWhere." ORDER BY ".$sortorder.")";
 						break;
 					case 'mtime':
-						$albumquery = "(SELECT albums.folder, albums.title, DATE_FORMAT(albums.`mtime`,'%Y-%m-%d'), @type2, @type3 as sticky FROM ".prefix('albums')." AS albums
-							".$show.$albumWhere." ORDER BY ".$sortorder.")";
+						$albumquery = "(SELECT albums.folder, albums.title, FROM_UNIXTIME(albums.mtime), @type2, @type3 as sticky FROM ".prefix('albums')." AS albums
+							".$show.$albumWhere." ORDER BY albums.".$sortorder.")";
 						break;
 				}
 				$result = query_full_array("
