@@ -1,6 +1,11 @@
 <?php
 /**
  * Automatically backup the Zenphoto database on a regular period
+ * NOTE: The WEB site must be visited for this plugin to be able to check if it is time
+ * to run. Inacative sites may not get backed up as frequently as the interval specifies.
+ * Of course, if the site is inactive, there probably is little need to do the backup
+ * in the first place.
+ * 
  * Backups are run under the master administrator authority.
  *
  * @author Stephen Billard (sbillard)
@@ -16,7 +21,7 @@ $option_interface = new auto_backup();
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
-if (getOption('last_backup_run')+getOption('backup_interval')*5184000 < time()) {
+if (getOption('last_backup_run')+getOption('backup_interval')*5184000 < time()) {	// register if it is time for a backup
 	zp_register_filter('output_started','auto_backup_timer_handler');
 }
 
@@ -28,7 +33,6 @@ class auto_backup {
 	/**
 	 * class instantiation function
 	 *
-	 * @return security_logger
 	 */
 	function auto_backup() {
 		setOptionDefault('backup_interval', 7);
@@ -54,7 +58,11 @@ class auto_backup {
 
 }
 
-function auto_backup_timer_handler() {
+/**
+ * Handles the periodic start of the backup/restore utility to backup the database
+ * @param string $side set to either "front-end" or "back-end", but we do not care.
+ */
+function auto_backup_timer_handler($side) {
 	setOption('last_backup_run',time());
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . BACKUPFOLDER);
@@ -75,6 +83,7 @@ function auto_backup_timer_handler() {
 	cron_starter(	SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/backup_restore.php',
 								array('backup'=>1, 'backup_compression'=>sprintf('%u',getOption('backup_compression')),'XSRFTag'=>'backup')
 							);
+	return $side;
 }
 
 ?>

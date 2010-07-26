@@ -1293,33 +1293,11 @@ function printCategoriesStatistic() {
  * @param bool $sortable set to true for tabs with sorts.
  *
  */
-function zenpageJSCSS($sortable) {
+function zenpageJSCSS() {
 	?>
-	<link rel="stylesheet" href="../../admin.css" type="text/css" />
 	<link rel="stylesheet" href="zenpage.css" type="text/css" />
-	<script type="text/javascript" src="../../js/admin.js"></script>
-	<script type="text/javascript" src="../../js/jquery.js"></script>
-	<script src="../../js/jqueryui/jquery_ui_zenphoto.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="../../js/jqueryui/jquery_ui_zenphoto.css" type="text/css" />
-	<?php
-	?>
-	<script type="text/javascript" src="../../js/zenphoto.js"></script>
-	<?php
-	if ($sortable) {
-		?>
-		<!--Nested Sortables-->
-		<script type="text/javascript" src="../../js/nestedsortables/interface-1.2.js"></script>
-		<script type="text/javascript" src="../../js/nestedsortables/inestedsortable.js"></script>
-		<!--Nested Sortables End-->
-		<?php
-	}
-	?>
 	<script type="text/javascript">
 		// <!-- <![CDATA[
-		jQuery(function( $ ){
-			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
-			$(".fade-message").fadeTo(5000, 1).fadeOut(1000);
-		});
 		$(document).ready(function(){
 			$("#tip a").click(function() {
 				$("#tips").toggle("slow");
@@ -1328,7 +1306,6 @@ function zenpageJSCSS($sortable) {
 		// ]]> -->
 	</script>
 <?php
-	zp_apply_filter('output_started',false);
 }
 
 

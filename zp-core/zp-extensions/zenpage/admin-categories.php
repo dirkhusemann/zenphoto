@@ -37,18 +37,9 @@ if(isset($_GET['id'])){
 	$result = updateCategory($reports);
 }
 
-
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
-header('Content-Type: text/html; charset=' . getOption('charset'));
-
+printAdminHeader();
+zenpageJSCSS();
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title><?php echo gettext('zenphoto administration'); ?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<?php zenpageJSCSS(false); ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteCategory = "<?php echo gettext("Are you sure you want to delete this category? THIS CANNOT BE UNDONE!"); ?>";

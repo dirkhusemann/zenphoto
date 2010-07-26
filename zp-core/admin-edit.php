@@ -440,12 +440,7 @@ printAdminHeader();
 datepickerJS();
 codeblocktabsJS();
 if ((!isset($_GET['massedit']) && !isset($_GET['album'])) || $subtab=='subalbuminfo') {
-	?>
-	<!--Nested Sortables-->
-	<script type="text/javascript" src="js/nestedsortables/interface-1.2.js"></script>
-	<script type="text/javascript" src="js/nestedsortables/inestedsortable.js"></script>
-	<!--Nested Sortables End-->
-	<?php
+	printSortableHead();
 }
 if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo') || isset($_GET['massedit'])) {
 	$result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));

@@ -106,9 +106,17 @@ function printAdminHeader() {
 		// ]]> -->
 	</script>
 	<?php
-	zp_apply_filter('output_started',false);
+	zp_apply_filter('output_started','back-end');
 }
 
+function printSortableHead() {
+	?>
+	<!--Nested Sortables-->
+	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/js/nestedsortables/interface-1.2.js"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/js/nestedsortables/inestedsortable.js"></script>
+	<!--Nested Sortables End-->
+	<?php
+}
 /**
  * Print the thumbnail for a particular Image.
  *
