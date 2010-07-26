@@ -149,7 +149,7 @@ if (isset($_REQUEST['crop'])) {
 	$imageobj->set('thumbW', $cw);
 	$imageobj->set('thumbH', $ch);
 	$imageobj->save();
-
+	
 	$return = '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&saved&subpage='.sanitize($_REQUEST['subpage']).'&tagsort='.sanitize($_REQUEST['tagsort']).'&tab=imageinfo';
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . $return);
 	exit();
@@ -167,7 +167,6 @@ printAdminHeader();
 		jQuery('#cropbox').Jcrop({
 			onchange: showPreview,
 			onSelect: showPreview,
-			onchange: showCoords,
 			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 			bgOpacity:   .4,
 			bgColor:     'black',
@@ -188,17 +187,13 @@ printAdminHeader();
 			marginLeft: '-' + Math.round(rx * coords.x) + 'px',
 			marginTop: '-' + Math.round(ry * coords.y) + 'px'
 		});
+		jQuery('#x').val(coords.x);
+		jQuery('#y').val(coords.y);
+		jQuery('#x2').val(coords.x2);
+		jQuery('#y2').val(coords.y2);
+		jQuery('#w').val(coords.w);
+		jQuery('#h').val(coords.h);		
 	}
-	// Our simple event handler, called from onchange and onSelect
-	// event handlers, as per the Jcrop invocation above
-	function showCoords(c) {
-		jQuery('#x').val(c.x);
-		jQuery('#y').val(c.y);
-		jQuery('#x2').val(c.x2);
-		jQuery('#y2').val(c.y2);
-		jQuery('#w').val(c.w);
-		jQuery('#h').val(c.h);
-	};
 	function checkCoords() {
 		return true;
 	};
