@@ -28,21 +28,24 @@ class jcarouselOptions {
 		setOptionDefault('jcarousel_croph', '50');
 		setOptionDefault('jcarousel_cropw', '50');
 		setOptionDefault('jcarousel_fullimagelink', '');
+		setOptionDefault('jcarousel_vertical', 0);
 	}
 
 	function getOptionsSupported() {
 		return array(	gettext('Thumbs number') => array('key' => 'jcarousel_scroll', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("The number of thumbs to scroll by. Note that the CSS might need to be adjusted.")),
 		gettext('width') => array('key' => 'jcarousel_width', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => ""),
+										'desc' => "Width of the carousel. Note that the CSS might need to be adjusted."),
 		gettext('height') => array('key' => 'jcarousel_height', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => ""),
+										'desc' => "Height of the carousel. Note that the CSS might need to be adjusted."),
 		gettext('Crop width') => array('key' => 'jcarousel_cropw', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => ""),
 		gettext('Crop height') => array('key' => 'jcarousel_croph', 'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => ""),
 		gettext('Full image link') => array('key' => 'jcarousel_fullimagelink', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext("If checked the thumbs link to the full image instead of the image page."))
+										'desc' => gettext("If checked the thumbs link to the full image instead of the image page.")),
+		gettext('Vertical') => array('key' => 'jcarousel_vertical', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext("If checked the carousel will flow vertically instead of the default horizontal. Changing this may require theme changes!"))
 		);
 	}
 
@@ -73,8 +76,9 @@ if (isset($_zp_current_album) && is_object($_zp_current_album) && is_object($_zp
  * @param int $croph Crop heigth Set to NULL if you want to use the backend plugin options.
  * @param bool $crop TRUE for cropped thumbs, FALSE for un-cropped thumbs. $width and $height then will be used as maxspace. Set to NULL if you want to use the backend plugin options.
  * @param bool $fullimagelink Set to TRUE if you want the thumb link to link to the full image instead of the image page. Set to NULL if you want to use the backend plugin options.
+ * @param bool $vertical Set to TRUE if you want the thumbs vertical orientated instead of horizontal (false). Set to NULL if you want to use the backend plugin options.
  */
-function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$fullimagelink=NULL) {
+function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$fullimagelink=NULL,$vertical=NULL) {
 global $_zp_current_album, $_zp_current_image, $_zp_current_search;
 $items = "";
 if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_current_album->getNumImages() >= 2) {
@@ -107,6 +111,16 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 		$fullimagelink = getOption('jcarousel_fullimagelink');
 	} else {
 		$fullimagelink = sanitize($fullimagelink);
+	}
+	if(is_null($vertical)) {
+		$vertical = getOption('jcarousel_vertical');
+	} else {
+		$vertical = sanitize($vertical);
+	}
+	if($vertical) {
+		$vertical = 'true';
+	} else {
+		$vertical = 'false';
 	}
 	if(in_context(ZP_SEARCH_LINKED)) {
 			if($_zp_current_search->getNumImages() === 0) {
@@ -180,6 +194,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 		
 		jQuery(document).ready(function() {
 				jQuery("#mycarousel").jcarousel({
+						vertical: <?php echo $vertical; ?>,
 						size: mycarousel_itemList.length,
 						start: <?php echo $imgnumber; ?>,
 						scroll: <?php echo $thumbscroll; ?>,
