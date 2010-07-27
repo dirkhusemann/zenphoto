@@ -82,37 +82,40 @@ function zenJavascript() {
 	?>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/zenphoto.js"></script>
-	<?php
-	if (getOption('edit_in_place')) {
-		if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
-			if (in_context(ZP_ALBUM)) {
-				$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
-			} else {
-				$grant = $rights & ADMIN_RIGHTS;
-			}
-			if ($grant) {
-				?>
-				<script type="text/javascript">
-					// <!-- <![CDATA[
-					var zpstrings = {
-						/* Used in jquery.editinplace.js */
-						'Save' : "<?php echo gettext('Save'); ?>",
-						'Cancel' : "<?php echo gettext('Cancel'); ?>",
-						'Saving' : "<?php echo gettext('Saving'); ?>",
-						'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
-					};
-					var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
-					var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
-					var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
-					var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
-					var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
-					// ]]> -->
-				</script>
-				<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
-				<?php
+	<script type="text/javascript">
+		// <!-- <![CDATA[
+		var deleteAlbum1 = "<?php echo gettext("Are you sure you want to delete this entire album?"); ?>";
+		var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
+		var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
+		var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
+		var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+		<?php
+		if (getOption('edit_in_place')) {
+			if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
+				if (in_context(ZP_ALBUM)) {
+					$grant = isMyAlbum($_zp_current_album->name, ALBUM_RIGHTS);
+				} else {
+					$grant = $rights & ADMIN_RIGHTS;
+				}
+				if ($grant) {
+					?>
+						var zpstrings = {
+							/* Used in jquery.editinplace.js */
+							'Save' : "<?php echo gettext('Save'); ?>",
+							'Cancel' : "<?php echo gettext('Cancel'); ?>",
+							'Saving' : "<?php echo gettext('Saving'); ?>",
+							'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
+						};
+					<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
+					<?php
+				}
 			}
 		}
-	}
+		?>
+		// ]]> -->
+	</script>
+	<?php
+
 	if (is_array($_zp_plugin_scripts)) {
 		foreach ($_zp_plugin_scripts as $script) {
 			echo $script."\n";
@@ -138,7 +141,7 @@ function printAdminToolbox($id='admin') {
 			function newAlbum(folder,albumtab) {
 				var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 				if (album) {
-					launchScript('<?php echo $zf; ?>/admin-edit.php',['action=newalbum','album='+encodeURIComponent(folder),'name='+encodeURIComponent(album),'albumtab='+albumtab,'XSRFToken'='<?php echo getXSRFToken('newalbum'); ?>']);
+					launchScript('<?php echo $zf; ?>/admin-edit.php',['action=newalbum','album='+encodeURIComponent(folder),'name='+encodeURIComponent(album),'albumtab='+albumtab,'XSRFToken=<?php echo getXSRFToken('newalbum'); ?>']);
 				}
 			}
 			// ]]> -->
@@ -1229,7 +1232,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		}
 	}
 	if (!empty($text)) echo $label;
-	if ( $editable && zp_loggedin() ) {
+	if ($editable && getOption('edit_in_place') && zp_loggedin()) {
 		// Increment a variable to make sure all elements will have a distinct HTML id
 		static $id = 1;
 		$id++;

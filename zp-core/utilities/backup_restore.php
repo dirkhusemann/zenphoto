@@ -204,7 +204,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		<?php
 	}
 } else if (isset($_REQUEST['restore']) && db_connect()) {
-	$oldzenpage = getOption('zp_plugin_zenpage');
+	$oldlibauth = $_zp_authority->version;
 	$success = 1;
 	if (isset($_REQUEST['backupfile'])) {
 		$file_version = 0;
@@ -387,6 +387,9 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		<?php
 	}
 	setOption('zenphoto_release', ZENPHOTO_RELEASE); // be sure it is correct
+	if ($oldlibauth != $_zp_authority->version) {
+		$_zp_authority->migrateAuth($oldlibauth);
+	}
 }
 if (db_connect()) {
 	$compression_level = getOption('backup_compression');
@@ -450,11 +453,6 @@ if (db_connect()) {
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
 }
 
-if (isset($oldzenpage) && !$oldzenpage && getOption('zp_plugin_zenpage', true)) { // restore set zenpage option
-	echo	'<div class="errorbox">';
-	printf(gettext('The restore enabled the Zenpage plugin. You should run <a href="%1$s/%2$s/setup.php">setup</a> to create Zenpage database tables. If tables are created, you will need repeat thus restore operation.'),WEBPATH, ZENFOLDER);
-	echo	'</div>';
-}
 echo	'<p>';
 echo gettext('The backup facility creates database snapshots in the <code>backup</code> folder of your installation. These backups are named in according to the date and time the backup was taken. '.
 							'The compression level goes from 0 (no compression) to 9 (maximum compression). Higher compression requires more processing and may not result in much space savings.');

@@ -81,7 +81,7 @@ function auto_backup_timer_handler($side) {
 	}
 
 	cron_starter(	SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/backup_restore.php',
-								array('backup'=>1, 'backup_compression'=>sprintf('%u',getOption('backup_compression')),'XSRFTag'=>'backup')
+								array('backup'=>1, 'compress'=>sprintf('%u',getOption('backup_compression')),'XSRFTag'=>'backup')
 							);
 	return $side;
 }

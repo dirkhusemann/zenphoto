@@ -1,6 +1,6 @@
-<form id="passwordform" name="password" action="<?php echo htmlspecialchard($_password_redirect,ENT_QUOTES); ?>" method="post">
+<form id="passwordform" name="password" action="<?php echo htmlspecialchars($_password_redirect,ENT_QUOTES); ?>" method="post">
 	<input type="hidden" name="password" value="1" />
-	<input type="hidden" name="redirect" value="<?php echo htmlspecialchard($_password_redirect,ENT_QUOTES); ?>" />
+	<input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_password_redirect,ENT_QUOTES); ?>" />
 
 	<table class="password">
 	<?php 
