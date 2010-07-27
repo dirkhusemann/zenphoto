@@ -482,6 +482,18 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 			// <!-- <![CDATA[
 			flowplayer('slideshow','<?php echo FULLWEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER;?>/flowplayer3/flowplayer-3.2.0.swf', {
 			
+			clip: {
+					onLastSecond: function() {
+					this.getScreen().animate({opacity: 0}, <?php echo getOption('slideshow_speed')/2; ?>);			
+					},
+					onFinish: function(){
+					this.getScreen().animate({opacity: 1}, 1000);
+					}, 
+					onStart: function() {
+					this.getScreen().animate({opacity: 1}, <?php echo getOption('slideshow_speed')/2; ?>);		
+					}
+       			},
+ 			
 			playlist: [
 			<?php 
 			echo "\n";
@@ -504,7 +516,7 @@ function printSlideShow($heading = true, $speedctl = false, $albumobj = "", $ima
 					if (($ext == "flv") || ($ext == "mp3") || ($ext == "mp4")) {
 						$duration = "";
 					} else {
-						$duration = ", duration: ".getOption("slideshow_speed")/10;
+						$duration = ", duration: ".getOption("slideshow_timeout")/1000;
 					}
 					if($count > 0) { echo ",\n"; }
 					echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."'".$duration.", scaling: 'fit', autoBuffering: true }";
