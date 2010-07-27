@@ -2092,33 +2092,42 @@ function XSRFToken($action) {
  * Starts a sechedule script run
  * @param string $script The script file to load
  * @param array $params "POST" parameters
+ * @param bool $inline set to true to run the task "in-line". Set false run asynchronously
  */
-function cron_starter($script, $params) {
-	global $_zp_authority;
+function cron_starter($script, $params, $inline=false) {
+	global $_zp_authority, $_zp_loggedin, $_zp_current_admin_obj;
 	$admins = $_zp_authority->getAdministrators();
 	$admin = array_shift($admins);
 	while (!$admin['valid']) {
 		$admin = array_shift($admins);
 	}
-	$auth = md5($script.serialize($admin));
-	$paramlist = 'link='.$script;
-	foreach ($params as $key=>$value) {
-		$paramlist .= '&'.$key.'='.$value;
+	
+	if ($inline) {
+		$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
+		$_zp_current_admin_obj = $_zp_authority->newAdministrator($admin['user']);
+		foreach ($params as $key=>$value) {
+			$_POST[$key] = $_GET[$key] = $_REQUEST[$key] = $value;
+		}
+		require_once($script);
+	} else {
+		$auth = md5($script.serialize($admin));
+		$paramlist = 'link='.$script;
+		foreach ($params as $key=>$value) {
+			$paramlist .= '&'.$key.'='.$value;
+		}
+		$paramlist .= '&auth='.$auth;
+		?>
+		<script type="text/javascript">
+		// <!-- <![CDATA[
+		$.ajax({   
+			type: 'POST',   
+			data: '<?php echo $paramlist; ?>',
+			url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/cron_runner.php'
+		});
+		// ]]> -->
+		</script>
+		<?php
 	}
-	$paramlist .= '&auth='.$auth;
-	
-	?>
-	<script type="text/javascript">
-	// <!-- <![CDATA[
-	$.ajax({   
-		type: 'POST',   
-		data: '<?php echo $paramlist; ?>',
-		url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/cron_runner.php'
-	});
-	// ]]> -->
-	</script>
-	<?php
-	
 }
 
 //load PHP specific functions

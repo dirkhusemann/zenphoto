@@ -55,7 +55,6 @@ class auto_backup {
 
 	function handleOption($option, $currentValue) {
 	}
-
 }
 
 /**
