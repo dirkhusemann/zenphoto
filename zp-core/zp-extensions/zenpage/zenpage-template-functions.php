@@ -901,7 +901,12 @@ function inNewsCategory($catlink) {
 function getNewsDate() {
 	global $_zp_current_zenpage_news;
 	if(!is_null($_zp_current_zenpage_news)) {
-		$d = $_zp_current_zenpage_news->getDateTime();
+		if(is_GalleryNewsType() && getOption("zenpage_combinews_sortorder") == 'mtime') {
+			$d = $_zp_current_zenpage_news->get('mtime');
+			$d = date('Y-m-d H:i:s',$d);
+		} else {
+			$d = $_zp_current_zenpage_news->getDateTime();
+		}
 		return zpFormattedDate(getOption("date_format"), strtotime($d));
 	}
 	return false;
