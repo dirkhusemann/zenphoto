@@ -30,6 +30,7 @@ if (isset($_REQUEST['backup']) || isset($_REQUEST['restore'])) {
 	XSRFDefender('backup');
 }
 
+global $_zp_conf_vars, $handle, $buffer, $counter, $file_version, $compression_handler; // so this script can run from a function
 $buffer = '';
 
 function fillbuffer($handle) {

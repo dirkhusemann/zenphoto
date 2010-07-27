@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * Zenphoto cron task handler
  */
 
@@ -9,7 +9,7 @@ define('OFFSET_PATH', 1);
 require_once('admin-functions.php');
 require_once('admin-globals.php');
 
-$_zp_current_admin_obj = $_zp_loggedin = NULL;
+$_zp_current_admin_obj = $_zp_loggedin = $_zp_null_account = NULL;
 $link = sanitize($_POST['link']);
 if (isset($_POST['auth'])) {
 	$auth = $_POST['auth'];
@@ -30,8 +30,8 @@ if (isset($_POST['XSRFTag'])) {
 	$_REQUEST['XSRFToken'] = $_POST['XSRFToken'] = $_GET['XSRFToken'] = getXSRFToken(sanitize($_POST['XSRFTag']));
 } else {
 	unset($_POST['XSRFToken']);
-	unset($_GET['XSRFToken']); 
-	unset($_REQUEST['XSRFToken']); 
+	unset($_GET['XSRFToken']);
+	unset($_REQUEST['XSRFToken']);
 }
 require_once($link);
 

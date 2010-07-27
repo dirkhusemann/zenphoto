@@ -2095,7 +2095,7 @@ function XSRFToken($action) {
  * @param bool $inline set to true to run the task "in-line". Set false run asynchronously
  */
 function cron_starter($script, $params, $inline=false) {
-	global $_zp_authority, $_zp_loggedin, $_zp_current_admin_obj;
+	global $_zp_authority, $_zp_loggedin, $_zp_current_admin_obj, $_zp_null_account;
 	$admins = $_zp_authority->getAdministrators();
 	$admin = array_shift($admins);
 	while (!$admin['valid']) {
@@ -2103,9 +2103,14 @@ function cron_starter($script, $params, $inline=false) {
 	}
 	
 	if ($inline) {
+		$_zp_null_account = NULL;
 		$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
 		$_zp_current_admin_obj = $_zp_authority->newAdministrator($admin['user']);
 		foreach ($params as $key=>$value) {
+			if ($key=='XSRFTag') {
+				$key = 'XSRFToken';
+				$value = getXSRFToken($value);
+			}
 			$_POST[$key] = $_GET[$key] = $_REQUEST[$key] = $value;
 		}
 		require_once($script);
