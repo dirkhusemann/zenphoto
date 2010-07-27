@@ -6,6 +6,7 @@
  */
 
 // force UTF-8 Ø
+global $_zp_gallery;
 
 require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/functions-image.php');

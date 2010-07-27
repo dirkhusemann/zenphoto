@@ -7,8 +7,6 @@
 // force UTF-8 Ø
 
 // functions-db.php - HEADERS NOT SENT YET!
-global $mysql_connection,$_zp_query_count;
-$mysql_connection = null;
 
 /**
  * Connect to the database server and select the database.

@@ -6,6 +6,7 @@
 
 // force UTF-8 Ø
 
+global $_zp_current_admin_obj, $_zp_loggedin, $_zp_null_account, $_zp_reset_admin, $_zp_authority;
 $_zp_current_admin_obj = null;
 if (file_exists(dirname(dirname(__FILE__)).'/'.USER_PLUGIN_FOLDER.'/alt/lib-auth.php')) { // load a custom authroization package if it is present
 	require_once(dirname(dirname(__FILE__)).'/'.USER_PLUGIN_FOLDER.'/lib-auth.php');
@@ -30,7 +31,6 @@ if (defined('ZENPAGE_RIGHTS')) {
 
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = $_zp_null_account = false;
-$_zp_reset_admin = NULL;
 if (isset($_GET['ticket'])) { // password reset query
 	$_zp_ticket = sanitize($_GET['ticket']);
 	$post_user = sanitize($_GET['user']);

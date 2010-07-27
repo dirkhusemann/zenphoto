@@ -20,6 +20,7 @@
  
 // force UTF-8 Ø
 
+global $_zp_filters;
 $_zp_filters = array();
 /* This global var will collect filters with the following structure:
  * $_zp_filter['hook']['array of priorities']['serialized function names']['array of ['array (functions, accepted_args)]']

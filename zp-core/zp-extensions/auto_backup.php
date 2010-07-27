@@ -15,7 +15,7 @@ $plugin_is_filter = 2;
 $plugin_description = gettext("Periodically backup the Zenphoto database.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/".PLUGIN_FOLDER."--auto_backup.php.html";
-$plugin_version = '1.3.2';
+$plugin_version = '1.3.1';
 
 $option_interface = new auto_backup();
 

@@ -15,6 +15,7 @@ if (getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-class-news.php');
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-class-page.php');
 }
+global $class_optionInterface;
 			
 // load the class & filter plugins
 if (DEBUG_PLUGINS) debugLog('Loading the "class" plugins.');

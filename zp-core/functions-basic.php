@@ -14,6 +14,8 @@ if(!function_exists("gettext")) {
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
+global $_zp_conf_vars;
+
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', !defined('RELEASE')); // set to true to supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
@@ -121,6 +123,7 @@ switch (OFFSET_PATH) {
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
+unset($const_webpath);
 if (!defined('SERVERPATH')) define('SERVERPATH', str_replace("\\", '/', dirname(dirname(__FILE__))));
 $protocol = getOption('server_protocol');
 switch ($protocol) {
@@ -141,10 +144,6 @@ define('SERVERCACHE', SERVERPATH . '/'.CACHEFOLDER);
 
 // Set the version number.
 $_zp_conf_vars['version'] = ZENPHOTO_VERSION;
-
-// the options array
-$_zp_options = NULL;
-
 
 /**
  * Decodes HTML Special Characters.  Function for backwards compatability with PHP 4.1.
@@ -790,7 +789,6 @@ function size_readable($size, $unit = null, $retstring = null)
  * @param string $root the base from whence the path dereives
  * @return sting
  */
-$_zp_album_folder = null;
 function getAlbumFolder($root=SERVERPATH) {
 	$root = str_replace('\\', '/', $root);
 	global $_zp_album_folder, $_zp_conf_vars;
