@@ -90,6 +90,8 @@ function zenJavascript() {
 		var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
 		var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
 		var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+		// ]]> -->
+		</script>
 		<?php
 		if (getOption('edit_in_place')) {
 			if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | ALBUM_RIGHTS)) {
@@ -100,6 +102,8 @@ function zenJavascript() {
 				}
 				if ($grant) {
 					?>
+					<script type="text/javascript">
+						// <!-- <![CDATA[
 						var zpstrings = {
 							/* Used in jquery.editinplace.js */
 							'Save' : "<?php echo gettext('Save'); ?>",
@@ -107,15 +111,13 @@ function zenJavascript() {
 							'Saving' : "<?php echo gettext('Saving'); ?>",
 							'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>"
 						};
+						// ]]> -->
+					</script>
 					<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.editinplace.js"></script>
 					<?php
 				}
 			}
 		}
-		?>
-		// ]]> -->
-	</script>
-	<?php
 
 	if (is_array($_zp_plugin_scripts)) {
 		foreach ($_zp_plugin_scripts as $script) {
