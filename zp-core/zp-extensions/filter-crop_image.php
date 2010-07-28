@@ -14,7 +14,11 @@ $plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-crop_image.php.html";
 
 if (isset($_REQUEST['performcrop'])) {
-	XSRFdefender('crop');
+	if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
+	require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+	require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
+	require_once(dirname(dirname(__FILE__)).'/functions-image.php');
+	admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 } else {
 	zp_register_filter('admin_toolbox_image', 'toolbox_crop_image');
 	zp_register_filter('edit_image_utilities', 'edit_crop_image', 1); // we want this one to come right after the crop thumbnail button
@@ -51,12 +55,6 @@ function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
 	return $output;
 }
 
-if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
-require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
-require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
-require_once(dirname(dirname(__FILE__)).'/functions-image.php');
-
-admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
@@ -132,6 +130,7 @@ $iX = round($sizedwidth*0.05);
 $iY = round($sizedheight*0.05);
 
 if (isset($_REQUEST['crop'])) {
+	XSRFdefender('crop');
 	$cw = $_REQUEST['w'];
 	$ch = $_REQUEST['h'];
 	$cx = $_REQUEST['x'];
