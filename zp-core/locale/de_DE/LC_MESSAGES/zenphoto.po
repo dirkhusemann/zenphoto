@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zenphoto 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-23 15:44+0100\n"
-"PO-Revision-Date: 2010-07-23 16:24+0100\n"
+"POT-Creation-Date: 2010-07-29 10:45+0100\n"
+"PO-Revision-Date: 2010-07-29 10:47+0100\n"
 "Last-Translator: Malte Müller (acrylian)\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -125,11 +125,11 @@ msgstr "<strong>Schlagwörter:</strong>"
 msgid "View Slideshow"
 msgstr "Diaschau ansehen"
 
-#: zTRANSLATE/themes/default/album.php:68
+#: zTRANSLATE/themes/default/album.php:64
 msgid "Album RSS"
 msgstr "Album RSS"
 
-#: zTRANSLATE/themes/default/album.php:68
+#: zTRANSLATE/themes/default/album.php:64
 #: zTRANSLATE/themes/default/archive.php:7
 #: zTRANSLATE/themes/default/archive.php:22
 #: zTRANSLATE/themes/default/image.php:94
@@ -1087,7 +1087,7 @@ msgstr "Betrieben mit <a href=\"http://www.zenphoto.org\" title=\"Eine einfacher
 
 #: zTRANSLATE/themes/zenpage/gallery.php:58
 #: zTRANSLATE/themes/zenpage/news.php:42
-#: zTRANSLATE/themes/zenpage/news.php:61
+#: zTRANSLATE/themes/zenpage/news.php:59
 msgid "Comments:"
 msgstr "Kommentare:"
 
@@ -1161,7 +1161,7 @@ msgid "No unpublished pages available"
 msgstr "Keine unveröffentlichten Seiten verfügbar"
 
 #: zTRANSLATE/themes/zenpage/themeoptions.php:59
-#: zTRANSLATE/zp-core/admin-edit.php:1100
+#: zTRANSLATE/zp-core/admin-edit.php:1095
 msgid "none"
 msgstr "kein"
 
@@ -1179,7 +1179,7 @@ msgid "No album provided to sort."
 msgstr "Kein Album zum Sortieren ausgewählt."
 
 #: zTRANSLATE/zp-core/admin-albumsort.php:87
-#: zTRANSLATE/zp-core/admin-edit.php:588
+#: zTRANSLATE/zp-core/admin-edit.php:583
 #, php-format
 msgid "Edit Album: <em>%1$s%2$s</em>"
 msgstr "Album <em>%1$s%2$s</em> bearbeiten"
@@ -1190,24 +1190,24 @@ msgstr "Bildreihenfolge gesichert"
 
 #: zTRANSLATE/zp-core/admin-albumsort.php:119
 #: zTRANSLATE/zp-core/admin-albumsort.php:145
-#: zTRANSLATE/zp-core/admin-edit.php:747
-#: zTRANSLATE/zp-core/admin-edit.php:811
-#: zTRANSLATE/zp-core/admin-edit.php:915
-#: zTRANSLATE/zp-core/admin-edit.php:1322
-#: zTRANSLATE/zp-core/admin-functions.php:925
-#: zTRANSLATE/zp-core/admin-functions.php:1602
+#: zTRANSLATE/zp-core/admin-edit.php:742
+#: zTRANSLATE/zp-core/admin-edit.php:806
+#: zTRANSLATE/zp-core/admin-edit.php:910
+#: zTRANSLATE/zp-core/admin-edit.php:1317
+#: zTRANSLATE/zp-core/admin-functions.php:934
+#: zTRANSLATE/zp-core/admin-functions.php:1611
 msgid "Back to the album list"
 msgstr "Zurück zur Albumübersicht"
 
 #: zTRANSLATE/zp-core/admin-albumsort.php:119
 #: zTRANSLATE/zp-core/admin-albumsort.php:147
-#: zTRANSLATE/zp-core/admin-edit.php:749
-#: zTRANSLATE/zp-core/admin-edit.php:813
-#: zTRANSLATE/zp-core/admin-edit.php:917
-#: zTRANSLATE/zp-core/admin-edit.php:1324
-#: zTRANSLATE/zp-core/admin-edit.php:1415
-#: zTRANSLATE/zp-core/admin-functions.php:927
-#: zTRANSLATE/zp-core/admin-functions.php:1604
+#: zTRANSLATE/zp-core/admin-edit.php:744
+#: zTRANSLATE/zp-core/admin-edit.php:808
+#: zTRANSLATE/zp-core/admin-edit.php:912
+#: zTRANSLATE/zp-core/admin-edit.php:1319
+#: zTRANSLATE/zp-core/admin-edit.php:1410
+#: zTRANSLATE/zp-core/admin-functions.php:936
+#: zTRANSLATE/zp-core/admin-functions.php:1613
 msgid "Back"
 msgstr "Zurück"
 
@@ -1220,14 +1220,14 @@ msgstr "Sortierung sichern"
 #: zTRANSLATE/zp-core/admin-albumsort.php:151
 #: zTRANSLATE/zp-core/admin-comments.php:206
 #: zTRANSLATE/zp-core/admin-comments.php:208
-#: zTRANSLATE/zp-core/admin-edit.php:919
-#: zTRANSLATE/zp-core/admin-edit.php:921
-#: zTRANSLATE/zp-core/admin-edit.php:1326
-#: zTRANSLATE/zp-core/admin-edit.php:1328
-#: zTRANSLATE/zp-core/admin-functions.php:929
-#: zTRANSLATE/zp-core/admin-functions.php:931
-#: zTRANSLATE/zp-core/admin-functions.php:1606
-#: zTRANSLATE/zp-core/admin-functions.php:1608
+#: zTRANSLATE/zp-core/admin-edit.php:914
+#: zTRANSLATE/zp-core/admin-edit.php:916
+#: zTRANSLATE/zp-core/admin-edit.php:1321
+#: zTRANSLATE/zp-core/admin-edit.php:1323
+#: zTRANSLATE/zp-core/admin-functions.php:938
+#: zTRANSLATE/zp-core/admin-functions.php:940
+#: zTRANSLATE/zp-core/admin-functions.php:1615
+#: zTRANSLATE/zp-core/admin-functions.php:1617
 msgid "Save"
 msgstr "Sichern"
 
@@ -1235,10 +1235,10 @@ msgstr "Sichern"
 #: zTRANSLATE/zp-core/admin-albumsort.php:126
 #: zTRANSLATE/zp-core/admin-albumsort.php:153
 #: zTRANSLATE/zp-core/admin-albumsort.php:155
-#: zTRANSLATE/zp-core/admin-functions.php:947
-#: zTRANSLATE/zp-core/admin-functions.php:949
-#: zTRANSLATE/zp-core/admin-functions.php:1624
-#: zTRANSLATE/zp-core/admin-functions.php:1626
+#: zTRANSLATE/zp-core/admin-functions.php:956
+#: zTRANSLATE/zp-core/admin-functions.php:958
+#: zTRANSLATE/zp-core/admin-functions.php:1633
+#: zTRANSLATE/zp-core/admin-functions.php:1635
 msgid "View Album"
 msgstr "Album ansehen"
 
@@ -1247,7 +1247,7 @@ msgid "Set the image order by dragging them to the positions you desire."
 msgstr "Bilder durch Verschieben sortieren."
 
 #: zTRANSLATE/zp-core/admin-comments.php:97
-#: zTRANSLATE/zp-core/admin-edit.php:499
+#: zTRANSLATE/zp-core/admin-edit.php:494
 msgid "Are you sure you want to delete the checked items?"
 msgstr "Sind Sie sicher, dass Sie die ausgewählten Einträge löschen wollen?"
 
@@ -1334,26 +1334,26 @@ msgstr "Sind Sie sicher, dass Sie diesen Kommentar löschen wollen?"
 #: zTRANSLATE/zp-core/admin-comments.php:305
 #: zTRANSLATE/zp-core/admin-comments.php:449
 #: zTRANSLATE/zp-core/admin-comments.php:465
-#: zTRANSLATE/zp-core/admin-edit.php:767
-#: zTRANSLATE/zp-core/admin-edit.php:806
-#: zTRANSLATE/zp-core/admin-edit.php:1554
-#: zTRANSLATE/zp-core/admin-edit.php:1592
+#: zTRANSLATE/zp-core/admin-edit.php:762
+#: zTRANSLATE/zp-core/admin-edit.php:801
+#: zTRANSLATE/zp-core/admin-edit.php:1549
+#: zTRANSLATE/zp-core/admin-edit.php:1587
 msgid "Delete"
 msgstr "Löschen"
 
 #: zTRANSLATE/zp-core/admin-comments.php:213
 #: zTRANSLATE/zp-core/admin-comments.php:215
+#: zTRANSLATE/zp-core/admin-edit.php:1066
 #: zTRANSLATE/zp-core/admin-edit.php:1071
 #: zTRANSLATE/zp-core/admin-edit.php:1076
-#: zTRANSLATE/zp-core/admin-edit.php:1081
-#: zTRANSLATE/zp-core/admin-functions.php:1537
-#: zTRANSLATE/zp-core/admin-functions.php:1545
+#: zTRANSLATE/zp-core/admin-functions.php:1546
+#: zTRANSLATE/zp-core/admin-functions.php:1554
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: zTRANSLATE/zp-core/admin-comments.php:258
-#: zTRANSLATE/zp-core/admin-edit.php:665
-#: zTRANSLATE/zp-core/admin-edit.php:1472
+#: zTRANSLATE/zp-core/admin-edit.php:660
+#: zTRANSLATE/zp-core/admin-edit.php:1467
 msgid "Selected items deleted"
 msgstr "Ausgewählte Einträge gelöscht"
 
@@ -1379,12 +1379,12 @@ msgstr "Sie können Kommentare zu Ihren Bildern bearbeiten oder löschen."
 
 #: zTRANSLATE/zp-core/admin-comments.php:290
 #: zTRANSLATE/zp-core/admin-comments.php:458
-#: zTRANSLATE/zp-core/admin-edit.php:751
-#: zTRANSLATE/zp-core/admin-edit.php:753
-#: zTRANSLATE/zp-core/admin-edit.php:815
-#: zTRANSLATE/zp-core/admin-edit.php:817
-#: zTRANSLATE/zp-core/admin-edit.php:1537
-#: zTRANSLATE/zp-core/admin-edit.php:1622
+#: zTRANSLATE/zp-core/admin-edit.php:746
+#: zTRANSLATE/zp-core/admin-edit.php:748
+#: zTRANSLATE/zp-core/admin-edit.php:810
+#: zTRANSLATE/zp-core/admin-edit.php:812
+#: zTRANSLATE/zp-core/admin-edit.php:1532
+#: zTRANSLATE/zp-core/admin-edit.php:1617
 msgid "Apply"
 msgstr "Anwenden"
 
@@ -1401,8 +1401,8 @@ msgid "Edit this comment"
 msgstr "Kommentar bearbeiten"
 
 #: zTRANSLATE/zp-core/admin-comments.php:304
-#: zTRANSLATE/zp-core/admin-edit.php:766
-#: zTRANSLATE/zp-core/admin-edit.php:1553
+#: zTRANSLATE/zp-core/admin-edit.php:761
+#: zTRANSLATE/zp-core/admin-edit.php:1548
 msgid "*Bulk actions*"
 msgstr "*Massenaktionen*"
 
@@ -1411,8 +1411,8 @@ msgid "Mark as spam"
 msgstr "Als SPAM markieren"
 
 #: zTRANSLATE/zp-core/admin-comments.php:320
-#: zTRANSLATE/zp-core/admin-edit.php:784
-#: zTRANSLATE/zp-core/admin-edit.php:1571
+#: zTRANSLATE/zp-core/admin-edit.php:779
+#: zTRANSLATE/zp-core/admin-edit.php:1566
 msgid "Check All"
 msgstr "Alle auswählen"
 
@@ -1500,12 +1500,12 @@ msgid "Create in:"
 msgstr "Erstellt in:"
 
 #: zTRANSLATE/zp-core/admin-dynamic-album.php:144
-#: zTRANSLATE/zp-core/admin-functions.php:1261
+#: zTRANSLATE/zp-core/admin-functions.php:1270
 msgid "Thumbnail:"
 msgstr "Thumbnail:"
 
 #: zTRANSLATE/zp-core/admin-dynamic-album.php:155
-#: zTRANSLATE/zp-core/admin-functions.php:1281
+#: zTRANSLATE/zp-core/admin-functions.php:1290
 msgid "randomly selected"
 msgstr "zufällig ausgewählt"
 
@@ -1529,524 +1529,524 @@ msgstr "Das Album konnte nicht im Ordner 'albums' erstellt werden. Dies ist gew�
 msgid "or use your FTP program to give everyone write permissions to those folders."
 msgstr "oder benutzen Sie Ihr FTP-Programm, um allgemeine Zugriffe auf diese Ordner zu erlauben."
 
-#: zTRANSLATE/zp-core/admin-edit.php:489
+#: zTRANSLATE/zp-core/admin-edit.php:484
 msgid "Are you sure you want to delete this entire album?"
 msgstr "Sind Sie sicher, dass Sie das ganze Album löschen wollen?"
 
-#: zTRANSLATE/zp-core/admin-edit.php:490
+#: zTRANSLATE/zp-core/admin-edit.php:485
 msgid "Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie wirklich sicher, dass Sie dieses Album löschen wollen? ES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zTRANSLATE/zp-core/admin-edit.php:492
+#: zTRANSLATE/zp-core/admin-edit.php:487
 msgid "New album name?"
 msgstr "Neuer Albumname?"
 
-#: zTRANSLATE/zp-core/admin-edit.php:492
+#: zTRANSLATE/zp-core/admin-edit.php:487
 msgid "new album"
 msgstr "Neues Album"
 
-#: zTRANSLATE/zp-core/admin-edit.php:577
+#: zTRANSLATE/zp-core/admin-edit.php:572
 msgid "Hitcounters have been reset"
 msgstr "Die Besucherzähler wurden zurückgesetzt"
 
-#: zTRANSLATE/zp-core/admin-edit.php:597
+#: zTRANSLATE/zp-core/admin-edit.php:592
 msgid "You must supply a  password."
 msgstr "Es muss ein Passwort eingegeben werden"
 
-#: zTRANSLATE/zp-core/admin-edit.php:599
+#: zTRANSLATE/zp-core/admin-edit.php:594
 msgid "Your passwords did not match."
 msgstr "Ihr Passwort stimmt nicht überein."
 
-#: zTRANSLATE/zp-core/admin-edit.php:612
+#: zTRANSLATE/zp-core/admin-edit.php:607
 msgid "Image already exists."
 msgstr "Das Bild existiert bereits."
 
-#: zTRANSLATE/zp-core/admin-edit.php:615
+#: zTRANSLATE/zp-core/admin-edit.php:610
 msgid "Album already exists."
 msgstr "Das Album existiert bereits."
 
-#: zTRANSLATE/zp-core/admin-edit.php:618
+#: zTRANSLATE/zp-core/admin-edit.php:613
 msgid "Cannot move, copy, or rename to a subalbum of this album."
 msgstr "Bewegen, Kopieren oder Umbenennen nicht möglich."
 
-#: zTRANSLATE/zp-core/admin-edit.php:621
+#: zTRANSLATE/zp-core/admin-edit.php:616
 msgid "Cannot move, copy, or rename to a dynamic album."
 msgstr "Bewegen, Kopieren oder Umbenennen in ein dynamisches Album nicht möglich."
 
-#: zTRANSLATE/zp-core/admin-edit.php:624
+#: zTRANSLATE/zp-core/admin-edit.php:619
 msgid "Cannot rename an image to a different suffix"
 msgstr "Das Suffix eines Bildes kann nicht umbenannt werden."
 
-#: zTRANSLATE/zp-core/admin-edit.php:627
+#: zTRANSLATE/zp-core/admin-edit.php:622
 msgid "There was an error with a move, copy, or rename operation."
 msgstr "Es ist ein Fehler beim Verschieben, Kopieren oder Umbenennen aufgetreten."
 
-#: zTRANSLATE/zp-core/admin-edit.php:640
+#: zTRANSLATE/zp-core/admin-edit.php:635
 msgid "Changes saved"
 msgstr "Änderungen gesichert"
 
-#: zTRANSLATE/zp-core/admin-edit.php:648
+#: zTRANSLATE/zp-core/admin-edit.php:643
 msgid "Images uploaded"
 msgstr "Hochgeladene Bilder"
 
-#: zTRANSLATE/zp-core/admin-edit.php:653
+#: zTRANSLATE/zp-core/admin-edit.php:648
 msgid "Album cache purged"
 msgstr "Albumcache gelöscht"
 
-#: zTRANSLATE/zp-core/admin-edit.php:658
-#: zTRANSLATE/zp-core/admin-edit.php:1462
+#: zTRANSLATE/zp-core/admin-edit.php:653
+#: zTRANSLATE/zp-core/admin-edit.php:1457
 #, php-format
 msgid "<em>%s</em> already exists."
 msgstr "<em>%s</em> existiert bereits."
 
-#: zTRANSLATE/zp-core/admin-edit.php:668
-#: zTRANSLATE/zp-core/admin-edit.php:1475
+#: zTRANSLATE/zp-core/admin-edit.php:663
+#: zTRANSLATE/zp-core/admin-edit.php:1470
 msgid "Selected items published"
 msgstr "Ausgewählte Einträge veröffentlicht"
 
-#: zTRANSLATE/zp-core/admin-edit.php:671
-#: zTRANSLATE/zp-core/admin-edit.php:1478
+#: zTRANSLATE/zp-core/admin-edit.php:666
+#: zTRANSLATE/zp-core/admin-edit.php:1473
 msgid "Selected items unpublished"
 msgstr "Ausgewählte Einträge nicht veröffentlicht"
 
-#: zTRANSLATE/zp-core/admin-edit.php:674
-#: zTRANSLATE/zp-core/admin-edit.php:1481
+#: zTRANSLATE/zp-core/admin-edit.php:669
+#: zTRANSLATE/zp-core/admin-edit.php:1476
 msgid "Comments enabled for selected items"
 msgstr "Kommentare für die ausgewählten Einträge aktiviert"
 
-#: zTRANSLATE/zp-core/admin-edit.php:677
-#: zTRANSLATE/zp-core/admin-edit.php:1484
+#: zTRANSLATE/zp-core/admin-edit.php:672
+#: zTRANSLATE/zp-core/admin-edit.php:1479
 msgid "Comments disabled for selected items"
 msgstr "Kommentare sind für die ausgewählten Einträge deaktiviert"
 
-#: zTRANSLATE/zp-core/admin-edit.php:680
-#: zTRANSLATE/zp-core/admin-edit.php:1487
+#: zTRANSLATE/zp-core/admin-edit.php:675
+#: zTRANSLATE/zp-core/admin-edit.php:1482
 msgid "Hitcounter for selected items"
 msgstr "Besucherzähler für ausgewählte Einträge"
 
-#: zTRANSLATE/zp-core/admin-edit.php:723
-#: zTRANSLATE/zp-core/admin-edit.php:1500
+#: zTRANSLATE/zp-core/admin-edit.php:718
+#: zTRANSLATE/zp-core/admin-edit.php:1495
 msgid " descending"
 msgstr " Absteigend"
 
-#: zTRANSLATE/zp-core/admin-edit.php:732
+#: zTRANSLATE/zp-core/admin-edit.php:727
 #, php-format
 msgid "Current sort: <em>%1$s%2$s</em>. "
 msgstr "Aktuelle Sortierung: <em>%1$s%2$s</em>. "
 
-#: zTRANSLATE/zp-core/admin-edit.php:736
-#: zTRANSLATE/zp-core/admin-edit.php:1514
+#: zTRANSLATE/zp-core/admin-edit.php:731
+#: zTRANSLATE/zp-core/admin-edit.php:1509
 msgid "Drag the albums into the order you wish them displayed."
 msgstr "Verschieben Sie die Alben in die gewünschte Reihenfolge."
 
-#: zTRANSLATE/zp-core/admin-edit.php:739
-#: zTRANSLATE/zp-core/admin-edit.php:1517
+#: zTRANSLATE/zp-core/admin-edit.php:734
+#: zTRANSLATE/zp-core/admin-edit.php:1512
 msgid "<strong>Note:</strong> Dragging an album under a different parent will move the album. You cannot move albums under a <em>dynamic</em> album."
 msgstr "<strong>ANMERKUNG:</strong> Das Verschieben eines Albums unter ein anderes übergeordnetes wird das Album auch auf dem Dateisystem verschieben. Sie können keine Alben zu Unteralben eines <em>dynamischen</em> Albums machen."
 
-#: zTRANSLATE/zp-core/admin-edit.php:743
+#: zTRANSLATE/zp-core/admin-edit.php:738
 #, php-format
 msgid "Select an album to edit its description and data, or <a href=\"?page=edit&amp;album=%s&amp;massedit\">mass-edit</a> all first level subalbums."
 msgstr "Wählen Sie ein Album, um seine Beschreibung und Daten zu bearbeiten oder <a href=\"?page=edit&amp;album=%s&amp;massedit\">Massenbearbeiten</a> Sie alle Alben der ersten Ebene."
 
-#: zTRANSLATE/zp-core/admin-edit.php:755
-#: zTRANSLATE/zp-core/admin-edit.php:757
-#: zTRANSLATE/zp-core/admin-edit.php:819
-#: zTRANSLATE/zp-core/admin-edit.php:821
-#: zTRANSLATE/zp-core/admin-functions.php:940
-#: zTRANSLATE/zp-core/admin-functions.php:942
-#: zTRANSLATE/zp-core/admin-functions.php:1617
-#: zTRANSLATE/zp-core/admin-functions.php:1619
+#: zTRANSLATE/zp-core/admin-edit.php:750
+#: zTRANSLATE/zp-core/admin-edit.php:752
+#: zTRANSLATE/zp-core/admin-edit.php:814
+#: zTRANSLATE/zp-core/admin-edit.php:816
+#: zTRANSLATE/zp-core/admin-functions.php:949
+#: zTRANSLATE/zp-core/admin-functions.php:951
+#: zTRANSLATE/zp-core/admin-functions.php:1626
+#: zTRANSLATE/zp-core/admin-functions.php:1628
 msgid "New subalbum"
 msgstr "Neues Unteralbum"
 
-#: zTRANSLATE/zp-core/admin-edit.php:763
-#: zTRANSLATE/zp-core/admin-edit.php:1550
+#: zTRANSLATE/zp-core/admin-edit.php:758
+#: zTRANSLATE/zp-core/admin-edit.php:1545
 msgid "Edit this album"
 msgstr "Dieses Album bearbeiten"
 
-#: zTRANSLATE/zp-core/admin-edit.php:768
-#: zTRANSLATE/zp-core/admin-edit.php:1555
+#: zTRANSLATE/zp-core/admin-edit.php:763
+#: zTRANSLATE/zp-core/admin-edit.php:1550
 msgid "Set to published"
 msgstr "Auf veröffentlicht setzen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:769
-#: zTRANSLATE/zp-core/admin-edit.php:1556
+#: zTRANSLATE/zp-core/admin-edit.php:764
+#: zTRANSLATE/zp-core/admin-edit.php:1551
 msgid "Set to unpublished"
 msgstr "Auf unveröffentlicht setzen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:770
-#: zTRANSLATE/zp-core/admin-edit.php:1557
+#: zTRANSLATE/zp-core/admin-edit.php:765
+#: zTRANSLATE/zp-core/admin-edit.php:1552
 msgid "Disable comments"
 msgstr "Kommentare abschalten"
 
-#: zTRANSLATE/zp-core/admin-edit.php:771
-#: zTRANSLATE/zp-core/admin-edit.php:1558
+#: zTRANSLATE/zp-core/admin-edit.php:766
+#: zTRANSLATE/zp-core/admin-edit.php:1553
 msgid "Enable comments"
 msgstr "Kommentare einschalten"
 
-#: zTRANSLATE/zp-core/admin-edit.php:772
-#: zTRANSLATE/zp-core/admin-edit.php:1559
+#: zTRANSLATE/zp-core/admin-edit.php:767
+#: zTRANSLATE/zp-core/admin-edit.php:1554
 msgid "Reset hitcounter"
 msgstr "Besucherzähler zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:799
-#: zTRANSLATE/zp-core/admin-edit.php:1585
+#: zTRANSLATE/zp-core/admin-edit.php:794
+#: zTRANSLATE/zp-core/admin-edit.php:1580
 msgid "Has Password"
 msgstr "hat Passwort"
 
-#: zTRANSLATE/zp-core/admin-edit.php:800
-#: zTRANSLATE/zp-core/admin-edit.php:1586
+#: zTRANSLATE/zp-core/admin-edit.php:795
+#: zTRANSLATE/zp-core/admin-edit.php:1581
 msgid "Published/Un-published"
 msgstr "Veröffentlicht/Unveröffentlicht"
 
-#: zTRANSLATE/zp-core/admin-edit.php:801
-#: zTRANSLATE/zp-core/admin-edit.php:1587
+#: zTRANSLATE/zp-core/admin-edit.php:796
+#: zTRANSLATE/zp-core/admin-edit.php:1582
 msgid "Comments on/off"
 msgstr "Kommentare an/aus"
 
-#: zTRANSLATE/zp-core/admin-edit.php:802
-#: zTRANSLATE/zp-core/admin-edit.php:1588
+#: zTRANSLATE/zp-core/admin-edit.php:797
+#: zTRANSLATE/zp-core/admin-edit.php:1583
 msgid "View the album"
 msgstr "Album ansehen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:803
-#: zTRANSLATE/zp-core/admin-edit.php:1589
+#: zTRANSLATE/zp-core/admin-edit.php:798
+#: zTRANSLATE/zp-core/admin-edit.php:1584
 msgid "Cache the album"
 msgstr "Album cachen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:804
-#: zTRANSLATE/zp-core/admin-edit.php:1590
+#: zTRANSLATE/zp-core/admin-edit.php:799
+#: zTRANSLATE/zp-core/admin-edit.php:1585
 msgid "Refresh metadata"
 msgstr "Metadaten aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-edit.php:805
-#: zTRANSLATE/zp-core/admin-edit.php:1591
-#: zTRANSLATE/zp-core/admin-functions.php:1676
+#: zTRANSLATE/zp-core/admin-edit.php:800
+#: zTRANSLATE/zp-core/admin-edit.php:1586
+#: zTRANSLATE/zp-core/admin-functions.php:1685
 msgid "Reset hitcounters"
 msgstr "Besucherzähler-Reset"
 
-#: zTRANSLATE/zp-core/admin-edit.php:881
+#: zTRANSLATE/zp-core/admin-edit.php:876
 msgid "Click on the image to change the thumbnail cropping."
 msgstr "Klicken Sie auf das Bild, um den Thumbnailbeschnitt zu verändern."
 
-#: zTRANSLATE/zp-core/admin-edit.php:883
+#: zTRANSLATE/zp-core/admin-edit.php:878
 msgid "expand all fields"
 msgstr "Alle Felder aufklappen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:884
+#: zTRANSLATE/zp-core/admin-edit.php:879
 msgid "collapse all fields"
 msgstr "Alle Felder zusammenklappen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:890
+#: zTRANSLATE/zp-core/admin-edit.php:885
 #, php-format
 msgid "%s (descending)"
 msgstr "%s (absteigend)"
 
-#: zTRANSLATE/zp-core/admin-edit.php:892
-#: zTRANSLATE/zp-core/admin-functions.php:1075
+#: zTRANSLATE/zp-core/admin-edit.php:887
+#: zTRANSLATE/zp-core/admin-functions.php:1084
 msgid "Manual"
 msgstr "Manuell"
 
-#: zTRANSLATE/zp-core/admin-edit.php:895
+#: zTRANSLATE/zp-core/admin-edit.php:890
 msgid "Display images by:"
 msgstr "Bilder anzeigen sortiert nach: "
 
-#: zTRANSLATE/zp-core/admin-edit.php:923
-#: zTRANSLATE/zp-core/admin-edit.php:925
-#: zTRANSLATE/zp-core/admin-edit.php:1007
-#: zTRANSLATE/zp-core/admin-edit.php:1017
-#: zTRANSLATE/zp-core/admin-edit.php:1330
-#: zTRANSLATE/zp-core/admin-edit.php:1332
-#: zTRANSLATE/zp-core/admin-functions.php:231
-#: zTRANSLATE/zp-core/admin-functions.php:933
-#: zTRANSLATE/zp-core/admin-functions.php:935
-#: zTRANSLATE/zp-core/admin-functions.php:1472
-#: zTRANSLATE/zp-core/admin-functions.php:1610
-#: zTRANSLATE/zp-core/admin-functions.php:1612
+#: zTRANSLATE/zp-core/admin-edit.php:918
+#: zTRANSLATE/zp-core/admin-edit.php:920
+#: zTRANSLATE/zp-core/admin-edit.php:1002
+#: zTRANSLATE/zp-core/admin-edit.php:1012
+#: zTRANSLATE/zp-core/admin-edit.php:1325
+#: zTRANSLATE/zp-core/admin-edit.php:1327
+#: zTRANSLATE/zp-core/admin-functions.php:240
+#: zTRANSLATE/zp-core/admin-functions.php:942
+#: zTRANSLATE/zp-core/admin-functions.php:944
+#: zTRANSLATE/zp-core/admin-functions.php:1481
+#: zTRANSLATE/zp-core/admin-functions.php:1619
+#: zTRANSLATE/zp-core/admin-functions.php:1621
 msgid "Reset"
 msgstr "Zurücksetzen"
 
+#: zTRANSLATE/zp-core/admin-edit.php:957
+#: zTRANSLATE/zp-core/admin-edit.php:961
 #: zTRANSLATE/zp-core/admin-edit.php:962
-#: zTRANSLATE/zp-core/admin-edit.php:966
-#: zTRANSLATE/zp-core/admin-edit.php:967
-#: zTRANSLATE/zp-core/admin-edit.php:1121
+#: zTRANSLATE/zp-core/admin-edit.php:1116
 #, php-format
 msgid "crop %s"
 msgstr "Beschnitt %s"
 
-#: zTRANSLATE/zp-core/admin-edit.php:971
+#: zTRANSLATE/zp-core/admin-edit.php:966
 msgid "Zoom"
 msgstr "Zoom"
 
-#: zTRANSLATE/zp-core/admin-edit.php:973
+#: zTRANSLATE/zp-core/admin-edit.php:968
 msgid "View image on website"
 msgstr "Bild auf Website ansehen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:973
+#: zTRANSLATE/zp-core/admin-edit.php:968
 msgid "View"
 msgstr "Ansehen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:974
+#: zTRANSLATE/zp-core/admin-edit.php:969
 msgid "<strong>Filename:</strong>"
 msgstr "<strong>Dateiname:</strong>"
 
-#: zTRANSLATE/zp-core/admin-edit.php:975
+#: zTRANSLATE/zp-core/admin-edit.php:970
 msgid "<strong>Image id:</strong>"
 msgstr "<strong>Bild-Id:</strong>"
 
-#: zTRANSLATE/zp-core/admin-edit.php:976
+#: zTRANSLATE/zp-core/admin-edit.php:971
 msgid "<strong>Dimensions:</strong>"
 msgstr "<strong>Abmessungen:</strong>"
 
-#: zTRANSLATE/zp-core/admin-edit.php:976
+#: zTRANSLATE/zp-core/admin-edit.php:971
 msgid "px"
 msgstr "px"
 
-#: zTRANSLATE/zp-core/admin-edit.php:977
+#: zTRANSLATE/zp-core/admin-edit.php:972
 msgid "<strong>Size:</strong>"
 msgstr "<strong>Größe:</strong>"
 
-#: zTRANSLATE/zp-core/admin-edit.php:981
+#: zTRANSLATE/zp-core/admin-edit.php:976
 msgid "Select as album thumbnail."
 msgstr "Als Albumthumbnail auswählen."
 
-#: zTRANSLATE/zp-core/admin-edit.php:985
+#: zTRANSLATE/zp-core/admin-edit.php:980
 msgid "Title:"
 msgstr "Titel:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:989
-#: zTRANSLATE/zp-core/admin-functions.php:1443
+#: zTRANSLATE/zp-core/admin-edit.php:984
+#: zTRANSLATE/zp-core/admin-functions.php:1452
 msgid "General"
 msgstr "Allgemein"
 
-#: zTRANSLATE/zp-core/admin-edit.php:994
-#: zTRANSLATE/zp-core/admin-functions.php:1448
+#: zTRANSLATE/zp-core/admin-edit.php:989
+#: zTRANSLATE/zp-core/admin-functions.php:1457
 msgid "Allow Comments"
 msgstr "Kommentare erlauben"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1000
+#: zTRANSLATE/zp-core/admin-edit.php:995
 msgid "Visible"
 msgstr "Sichtbar"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1007
+#: zTRANSLATE/zp-core/admin-edit.php:1002
 #, php-format
 msgid "Hit counter: <strong>%u</strong>"
 msgstr "Besucherzähler: <strong>%u</strong>"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1014
-#: zTRANSLATE/zp-core/admin-functions.php:1468
+#: zTRANSLATE/zp-core/admin-edit.php:1009
+#: zTRANSLATE/zp-core/admin-functions.php:1477
 #, php-format
 msgid "Rating: <strong>%u</strong>"
 msgstr "Bewertung: <strong>%u</strong>"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1021
-#: zTRANSLATE/zp-core/admin-functions.php:1476
+#: zTRANSLATE/zp-core/admin-edit.php:1016
+#: zTRANSLATE/zp-core/admin-functions.php:1485
 msgid "Rating: Unrated"
 msgstr "Bewertung: Keine"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1027
-#: zTRANSLATE/zp-core/admin-functions.php:1482
+#: zTRANSLATE/zp-core/admin-edit.php:1022
+#: zTRANSLATE/zp-core/admin-functions.php:1491
 msgid "Utilities"
 msgstr "Werkzeuge"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1032
-#: zTRANSLATE/zp-core/admin-functions.php:1488
+#: zTRANSLATE/zp-core/admin-edit.php:1027
+#: zTRANSLATE/zp-core/admin-functions.php:1497
 msgid "Move"
 msgstr "Verschieben"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1036
-#: zTRANSLATE/zp-core/admin-functions.php:1494
+#: zTRANSLATE/zp-core/admin-edit.php:1031
+#: zTRANSLATE/zp-core/admin-functions.php:1503
 msgid "Copy"
 msgstr "Kopieren"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1040
+#: zTRANSLATE/zp-core/admin-edit.php:1035
 msgid "Rename File"
 msgstr "Datei umbenennen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1045
+#: zTRANSLATE/zp-core/admin-edit.php:1040
 msgid "Are you sure you want to select this image for deletion?"
 msgstr "Sind Sie sicher, dass Sie dieses Bild zum Löschen markieren wollen?"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1045
+#: zTRANSLATE/zp-core/admin-edit.php:1040
 msgid "Delete image"
 msgstr "Bild löschen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1048
-#: zTRANSLATE/zp-core/admin-edit.php:1074
+#: zTRANSLATE/zp-core/admin-edit.php:1043
+#: zTRANSLATE/zp-core/admin-edit.php:1069
 msgid "to"
 msgstr "nach"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1080
+#: zTRANSLATE/zp-core/admin-edit.php:1075
 msgid "Image will be deleted when changes are saved."
 msgstr "Das Bild wird gelöscht, wenn die Änderungen gesichert werden."
 
-#: zTRANSLATE/zp-core/admin-edit.php:1090
+#: zTRANSLATE/zp-core/admin-edit.php:1085
 msgid "Rotation:"
 msgstr "Rotieren: "
 
-#: zTRANSLATE/zp-core/admin-edit.php:1104
+#: zTRANSLATE/zp-core/admin-edit.php:1099
 msgid "90 degrees"
 msgstr "90 Grad"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1108
+#: zTRANSLATE/zp-core/admin-edit.php:1103
 msgid "180 degrees"
 msgstr "180 Grad"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1112
+#: zTRANSLATE/zp-core/admin-edit.php:1107
 msgid "270 degrees"
 msgstr "270 Grad"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1122
+#: zTRANSLATE/zp-core/admin-edit.php:1117
 msgid "Crop thumbnail"
 msgstr "Thumbnail beschneiden"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1132
-#: zTRANSLATE/zp-core/admin-functions.php:1561
+#: zTRANSLATE/zp-core/admin-edit.php:1127
+#: zTRANSLATE/zp-core/admin-functions.php:1570
 msgid "Tags"
 msgstr "Schlagwörter"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1141
+#: zTRANSLATE/zp-core/admin-edit.php:1136
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1155
-#: zTRANSLATE/zp-core/admin-functions.php:1046
+#: zTRANSLATE/zp-core/admin-edit.php:1150
+#: zTRANSLATE/zp-core/admin-functions.php:1055
 msgid "calendar"
 msgstr "Kalender"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1170
+#: zTRANSLATE/zp-core/admin-edit.php:1165
 msgid "Image watermark:"
 msgstr "Bildwasserzeichen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1173
-#: zTRANSLATE/zp-core/admin-functions.php:1247
+#: zTRANSLATE/zp-core/admin-edit.php:1168
+#: zTRANSLATE/zp-core/admin-functions.php:1256
 msgid "*no watermark"
 msgstr "*Kein Wasserzeichen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1174
-#: zTRANSLATE/zp-core/admin-functions.php:1248
+#: zTRANSLATE/zp-core/admin-edit.php:1169
+#: zTRANSLATE/zp-core/admin-functions.php:1257
 msgid "*default"
 msgstr "*Voreinstellung"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1183
+#: zTRANSLATE/zp-core/admin-edit.php:1178
 msgid "thumb"
 msgstr "Thumbnail"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1184
+#: zTRANSLATE/zp-core/admin-edit.php:1179
 msgid "full image"
 msgstr "Vollbild"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1193
-#: zTRANSLATE/zp-core/admin-functions.php:1066
+#: zTRANSLATE/zp-core/admin-edit.php:1188
+#: zTRANSLATE/zp-core/admin-functions.php:1075
 msgid "Custom data:"
 msgstr "Sonderfeld:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1203
-#: zTRANSLATE/zp-core/admin-functions.php:1056
+#: zTRANSLATE/zp-core/admin-edit.php:1198
+#: zTRANSLATE/zp-core/admin-functions.php:1065
 msgid "Location:"
 msgstr "Ort:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1209
+#: zTRANSLATE/zp-core/admin-edit.php:1204
 msgid "City:"
 msgstr "Stadt:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1215
+#: zTRANSLATE/zp-core/admin-edit.php:1210
 msgid "State:"
 msgstr "Land:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1221
+#: zTRANSLATE/zp-core/admin-edit.php:1216
 msgid "Country:"
 msgstr "Staat:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1227
+#: zTRANSLATE/zp-core/admin-edit.php:1222
 msgid "Credit:"
 msgstr "Credit:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1233
+#: zTRANSLATE/zp-core/admin-edit.php:1228
 msgid "Copyright:"
 msgstr "Copyright:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1241
+#: zTRANSLATE/zp-core/admin-edit.php:1236
 msgid "Metadata:"
 msgstr "Metadaten:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1258
+#: zTRANSLATE/zp-core/admin-edit.php:1253
 msgid "None selected for display"
 msgstr "Nichts zum Anzeigen ausgewählt"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1266
-#: zTRANSLATE/zp-core/admin-functions.php:1398
+#: zTRANSLATE/zp-core/admin-edit.php:1261
+#: zTRANSLATE/zp-core/admin-functions.php:1407
 msgid "Codeblocks:"
 msgstr "Codeblöcke:"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1271
-#: zTRANSLATE/zp-core/admin-functions.php:1403
+#: zTRANSLATE/zp-core/admin-edit.php:1266
+#: zTRANSLATE/zp-core/admin-functions.php:1412
 msgid "Codeblock 1"
 msgstr "Codeblock 1"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1272
-#: zTRANSLATE/zp-core/admin-functions.php:1404
+#: zTRANSLATE/zp-core/admin-edit.php:1267
+#: zTRANSLATE/zp-core/admin-functions.php:1413
 msgid "Codeblock 2"
 msgstr "Codeblock 2"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1273
-#: zTRANSLATE/zp-core/admin-functions.php:1405
+#: zTRANSLATE/zp-core/admin-edit.php:1268
+#: zTRANSLATE/zp-core/admin-functions.php:1414
 msgid "Codeblock 3"
 msgstr "Codeblock 3"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1303
+#: zTRANSLATE/zp-core/admin-edit.php:1298
 msgid "show more fields"
 msgstr "Mehr Felder zeigen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1305
+#: zTRANSLATE/zp-core/admin-edit.php:1300
 msgid "show fewer fields"
 msgstr "Weniger Felder zeigen"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1384
+#: zTRANSLATE/zp-core/admin-edit.php:1379
 msgid "Your passwords did not match"
 msgstr "Ihre Passwörter stimmen nicht überein."
 
-#: zTRANSLATE/zp-core/admin-edit.php:1388
+#: zTRANSLATE/zp-core/admin-edit.php:1383
 msgid "Save Successful"
 msgstr "Erfolgreich gesichert"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1413
+#: zTRANSLATE/zp-core/admin-edit.php:1408
 msgid "Edit All Albums in"
 msgstr "Alle Alben bearbeiten in"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1415
+#: zTRANSLATE/zp-core/admin-edit.php:1410
 msgid "Back to the list of albums (go up a level)"
 msgstr "Zurück zur Albumliste (eine Ebene zurück)"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1447
+#: zTRANSLATE/zp-core/admin-edit.php:1442
 msgid "Edit Gallery"
 msgstr "Galerie bearbeiten"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1452
+#: zTRANSLATE/zp-core/admin-edit.php:1447
 msgid "Hitcounters have been reset."
 msgstr "Die Besucherzähler wurden zurückgesetzt."
 
-#: zTRANSLATE/zp-core/admin-edit.php:1457
+#: zTRANSLATE/zp-core/admin-edit.php:1452
 msgid "Cache has been purged."
 msgstr "Der Cache wurde gelöscht."
 
-#: zTRANSLATE/zp-core/admin-edit.php:1511
+#: zTRANSLATE/zp-core/admin-edit.php:1506
 #, php-format
 msgid "Current sort: <em>%1$s%2$s</em>."
 msgstr "Aktuelle Sortierung: <em>%1$s%2$s</em>. "
 
-#: zTRANSLATE/zp-core/admin-edit.php:1524
+#: zTRANSLATE/zp-core/admin-edit.php:1519
 msgid "Select an album to edit its description and data, or <a href=\"?page=edit&amp;massedit\">mass-edit</a> all gallery level albums."
 msgstr "Wählen Sie ein Album, um seine Beschreibung und Daten zu bearbeiten oder <a href=\"?page=edit&amp;massedit\">Massenbearbeiten</a> Sie alle Alben auf Galerieebene."
 
-#: zTRANSLATE/zp-core/admin-edit.php:1542
-#: zTRANSLATE/zp-core/admin-edit.php:1627
-#: zTRANSLATE/zp-core/admin-edit.php:1641
+#: zTRANSLATE/zp-core/admin-edit.php:1537
+#: zTRANSLATE/zp-core/admin-edit.php:1622
+#: zTRANSLATE/zp-core/admin-edit.php:1636
 msgid "New album"
 msgstr "Neues Album"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1638
+#: zTRANSLATE/zp-core/admin-edit.php:1633
 msgid "There are no albums for you to edit."
 msgstr "Es gibt keine Alben, die Sie bearbeiten können."
 
@@ -2088,388 +2088,388 @@ msgstr "Serverdatum: %s"
 msgid "zenphoto administration"
 msgstr "Zenphoto-Verwaltung"
 
-#: zTRANSLATE/zp-core/admin-functions.php:177
+#: zTRANSLATE/zp-core/admin-functions.php:186
 msgid "There was an error logging in."
 msgstr "Es ist ein Fehler beim Anmelden aufgetreten."
 
-#: zTRANSLATE/zp-core/admin-functions.php:177
+#: zTRANSLATE/zp-core/admin-functions.php:186
 msgid "Check your username and password and try again."
 msgstr "Überprüfen Sie Ihren Benutzer und Ihr Passwort und versuchen Sie es erneut."
 
-#: zTRANSLATE/zp-core/admin-functions.php:183
+#: zTRANSLATE/zp-core/admin-functions.php:192
 msgid "A reset request has been sent."
 msgstr "Eine Reset-Anfrage wurde gesendet."
 
-#: zTRANSLATE/zp-core/admin-functions.php:222
+#: zTRANSLATE/zp-core/admin-functions.php:231
 msgid "*Enter CAPTCHA in place of <em>Password</em> to request a password reset."
 msgstr "*Geben Sie das CAPTCHA anstatt des <em>Passworts</em> ein, um einen Passwortreset anzufordern."
 
-#: zTRANSLATE/zp-core/admin-functions.php:230
+#: zTRANSLATE/zp-core/admin-functions.php:239
 msgid "Log in"
 msgstr "Anmelden"
 
-#: zTRANSLATE/zp-core/admin-functions.php:250
+#: zTRANSLATE/zp-core/admin-functions.php:259
 msgid "Zenphoto Administration"
 msgstr "Zenphoto-Verwaltung"
 
-#: zTRANSLATE/zp-core/admin-functions.php:256
+#: zTRANSLATE/zp-core/admin-functions.php:265
 #, php-format
 msgid "Logged in as %s"
 msgstr "Angemeldet als  %s"
 
-#: zTRANSLATE/zp-core/admin-functions.php:257
+#: zTRANSLATE/zp-core/admin-functions.php:266
 msgid "Log Out"
 msgstr "Abmelden"
 
-#: zTRANSLATE/zp-core/admin-functions.php:262
+#: zTRANSLATE/zp-core/admin-functions.php:271
 #, php-format
 msgid "View <em>%s</em>"
 msgstr "<em>%s</em> ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:264
+#: zTRANSLATE/zp-core/admin-functions.php:273
 msgid "View gallery index"
 msgstr "Galerie-Index ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:374
+#: zTRANSLATE/zp-core/admin-functions.php:383
 msgid "Images"
 msgstr "Bilder"
 
-#: zTRANSLATE/zp-core/admin-functions.php:375
+#: zTRANSLATE/zp-core/admin-functions.php:384
 msgid "Image order"
 msgstr "Bildreihenfolge"
 
-#: zTRANSLATE/zp-core/admin-functions.php:378
+#: zTRANSLATE/zp-core/admin-functions.php:387
 msgid "Subalbums"
 msgstr "Unteralben"
 
-#: zTRANSLATE/zp-core/admin-functions.php:422
+#: zTRANSLATE/zp-core/admin-functions.php:431
 #, php-format
 msgid "%s failed to delete."
 msgstr "%s konnte nicht gelöscht werden."
 
-#: zTRANSLATE/zp-core/admin-functions.php:425
+#: zTRANSLATE/zp-core/admin-functions.php:434
 #, php-format
 msgid "%s deleted successfully."
 msgstr "%s erfolgreich gelöscht."
 
-#: zTRANSLATE/zp-core/admin-functions.php:959
+#: zTRANSLATE/zp-core/admin-functions.php:968
 msgid "Album Title"
 msgstr "Albumtitle"
 
-#: zTRANSLATE/zp-core/admin-functions.php:968
+#: zTRANSLATE/zp-core/admin-functions.php:977
 msgid "Album Description:"
 msgstr "Albumbeschreibung:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:978
-#: zTRANSLATE/zp-core/admin-functions.php:1006
+#: zTRANSLATE/zp-core/admin-functions.php:987
+#: zTRANSLATE/zp-core/admin-functions.php:1015
 msgid "Album password:"
 msgstr "Albumpasswort:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1002
+#: zTRANSLATE/zp-core/admin-functions.php:1011
 msgid "Album guest user:"
 msgstr "Album-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1008
+#: zTRANSLATE/zp-core/admin-functions.php:1017
 msgid "repeat:"
 msgstr "Wiederholen:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1011
+#: zTRANSLATE/zp-core/admin-functions.php:1020
 msgid "Password hint:"
 msgstr "Passwort-Hinweis:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1077
+#: zTRANSLATE/zp-core/admin-functions.php:1086
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1084
+#: zTRANSLATE/zp-core/admin-functions.php:1093
 msgid "Sort subalbums by:"
 msgstr "Unteralbumsortierung: "
 
-#: zTRANSLATE/zp-core/admin-functions.php:1092
+#: zTRANSLATE/zp-core/admin-functions.php:1101
 msgid "*gallery album sort order"
 msgstr "*Galerie-Album-Sortierung"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1094
+#: zTRANSLATE/zp-core/admin-functions.php:1103
 msgid "*parent album subalbum sort order"
 msgstr "*Unteralbum-Sortierung des übergeordneten Albums"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1112
-#: zTRANSLATE/zp-core/admin-functions.php:1175
+#: zTRANSLATE/zp-core/admin-functions.php:1121
+#: zTRANSLATE/zp-core/admin-functions.php:1184
 msgid "Descending"
 msgstr "Absteigend"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1129
-#: zTRANSLATE/zp-core/admin-functions.php:1193
+#: zTRANSLATE/zp-core/admin-functions.php:1138
+#: zTRANSLATE/zp-core/admin-functions.php:1202
 msgid "custom fields:"
 msgstr "Benutzerdefinierte Felder:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1145
+#: zTRANSLATE/zp-core/admin-functions.php:1154
 msgid "Sort images by:"
 msgstr "Bildersortierung: "
 
-#: zTRANSLATE/zp-core/admin-functions.php:1153
+#: zTRANSLATE/zp-core/admin-functions.php:1162
 msgid "*gallery image sort order"
 msgstr "*Galerie-Standardbildsortierung"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1155
+#: zTRANSLATE/zp-core/admin-functions.php:1164
 msgid "*parent album image sort order"
 msgstr "*Bildsortierung des übergeordneten Albums"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1210
+#: zTRANSLATE/zp-core/admin-functions.php:1219
 msgid "Album theme:"
 msgstr "Albumtheme:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1222
+#: zTRANSLATE/zp-core/admin-functions.php:1231
 msgid "*gallery theme"
 msgstr "*Galerie-Theme"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1244
+#: zTRANSLATE/zp-core/admin-functions.php:1253
 msgid "Album watermark:"
 msgstr "Album-Wasserzeichen:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1432
+#: zTRANSLATE/zp-core/admin-functions.php:1441
 msgid "Publish"
 msgstr "Veröffentlichen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1438
+#: zTRANSLATE/zp-core/admin-functions.php:1447
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1458
+#: zTRANSLATE/zp-core/admin-functions.php:1467
 #, php-format
 msgid "Reset hitcounter (Hits: %u)"
 msgstr "Besucherzähler löschen (Besucher: %u)"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1500
+#: zTRANSLATE/zp-core/admin-functions.php:1509
 msgid "Rename Folder"
 msgstr "Ordner umbenennen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1504
-#: zTRANSLATE/zp-core/admin-functions.php:1541
+#: zTRANSLATE/zp-core/admin-functions.php:1513
+#: zTRANSLATE/zp-core/admin-functions.php:1550
 msgid "to:"
 msgstr "nach:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1585
+#: zTRANSLATE/zp-core/admin-functions.php:1594
 msgid "Dynamic album search:"
 msgstr "Suche in dynamischen Alben:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1646
+#: zTRANSLATE/zp-core/admin-functions.php:1655
 msgid "Clears the album's cached images."
 msgstr "Löscht die zwischengespeicherten Bilder des Albums."
 
-#: zTRANSLATE/zp-core/admin-functions.php:1648
+#: zTRANSLATE/zp-core/admin-functions.php:1657
 msgid "Clear album cache"
 msgstr "Löschte den Albumcache"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1661
+#: zTRANSLATE/zp-core/admin-functions.php:1670
 msgid "Cache newly uploaded images."
 msgstr "Neu hochgeladene Bilder cachen."
 
-#: zTRANSLATE/zp-core/admin-functions.php:1663
+#: zTRANSLATE/zp-core/admin-functions.php:1672
 msgid "Pre-Cache Images"
 msgstr "Bilder cachen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1675
+#: zTRANSLATE/zp-core/admin-functions.php:1684
 msgid "Resets all hitcounters in the album."
 msgstr "Besucherzähler dieses Albums zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1689
+#: zTRANSLATE/zp-core/admin-functions.php:1698
 msgid "Forces a refresh of the EXIF and IPTC data for all images in the album."
 msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder in diesem Album durch."
 
-#: zTRANSLATE/zp-core/admin-functions.php:1690
+#: zTRANSLATE/zp-core/admin-functions.php:1699
 msgid "Refresh Metadata"
 msgstr "Metadaten aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1722
-#: zTRANSLATE/zp-core/admin-functions.php:1726
+#: zTRANSLATE/zp-core/admin-functions.php:1731
+#: zTRANSLATE/zp-core/admin-functions.php:1735
 #, php-format
 msgid "Edit this album: %s"
 msgstr "Edit this album: %s"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1737
+#: zTRANSLATE/zp-core/admin-functions.php:1746
 msgid "no images"
 msgstr "Keine Bilder"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1740
 #: zTRANSLATE/zp-core/admin-functions.php:1749
+#: zTRANSLATE/zp-core/admin-functions.php:1758
 msgid "Subalbum List"
 msgstr "Subalbum-Übersicht"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1760
+#: zTRANSLATE/zp-core/admin-functions.php:1769
 msgid "Password protected"
 msgstr "Passwortgeschützt"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1768
+#: zTRANSLATE/zp-core/admin-functions.php:1777
 #, php-format
 msgid "Un-publish the album %s"
 msgstr "Das Album %s nicht veröffentlichen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1769
+#: zTRANSLATE/zp-core/admin-functions.php:1778
 msgid "albumedit"
 msgstr "Album bearbeiten"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1774
-#: zTRANSLATE/zp-core/admin-functions.php:1775
+#: zTRANSLATE/zp-core/admin-functions.php:1783
+#: zTRANSLATE/zp-core/admin-functions.php:1784
 #, php-format
 msgid "Publish the album %s"
 msgstr "Album %s veröffentlichen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1781
+#: zTRANSLATE/zp-core/admin-functions.php:1790
 msgid "Enable or disable comments"
 msgstr "Kommentare ein- oder abschalten"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1785
+#: zTRANSLATE/zp-core/admin-functions.php:1794
 msgid "View album"
 msgstr "Album ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1786
+#: zTRANSLATE/zp-core/admin-functions.php:1795
 #, php-format
 msgid "View album %s"
 msgstr "Album %s ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1796
-#: zTRANSLATE/zp-core/admin-functions.php:1813
-#: zTRANSLATE/zp-core/admin-functions.php:1827
+#: zTRANSLATE/zp-core/admin-functions.php:1805
+#: zTRANSLATE/zp-core/admin-functions.php:1822
+#: zTRANSLATE/zp-core/admin-functions.php:1836
 msgid "unavailable"
 msgstr "nicht verfügbar"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1800
+#: zTRANSLATE/zp-core/admin-functions.php:1809
 #, php-format
 msgid "Pre-cache images in %s"
 msgstr "Bilder in %s cachen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1801
+#: zTRANSLATE/zp-core/admin-functions.php:1810
 #, php-format
 msgid "Cache the album %s"
 msgstr "Album %s cachen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1817
+#: zTRANSLATE/zp-core/admin-functions.php:1826
 #, php-format
 msgid "Refresh metadata for the album %s"
 msgstr "Metadaten für das Album %s aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1818
+#: zTRANSLATE/zp-core/admin-functions.php:1827
 #, php-format
 msgid "Refresh metadata in the album %s"
 msgstr "Metadaten für das Album %s aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1831
+#: zTRANSLATE/zp-core/admin-functions.php:1840
 #, php-format
 msgid "Reset hitcounters for album %s"
 msgstr "Besucherzähler für das Album %s zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1832
+#: zTRANSLATE/zp-core/admin-functions.php:1841
 #, php-format
 msgid "Reset hitcounters for the album %s"
 msgstr "Besucherzähler für das Album %s zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1838
-#: zTRANSLATE/zp-core/admin-functions.php:1839
+#: zTRANSLATE/zp-core/admin-functions.php:1847
+#: zTRANSLATE/zp-core/admin-functions.php:1848
 #, php-format
 msgid "Delete the album %s"
 msgstr "Album %s löschen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2082
-#: zTRANSLATE/zp-core/admin-functions.php:2089
-#: zTRANSLATE/zp-core/admin-functions.php:2094
-#: zTRANSLATE/zp-core/admin-functions.php:2097
-#: zTRANSLATE/zp-core/admin-functions.php:2100
+#: zTRANSLATE/zp-core/admin-functions.php:2091
+#: zTRANSLATE/zp-core/admin-functions.php:2098
+#: zTRANSLATE/zp-core/admin-functions.php:2103
+#: zTRANSLATE/zp-core/admin-functions.php:2106
+#: zTRANSLATE/zp-core/admin-functions.php:2109
 #, php-format
 msgid "page %u"
 msgstr "Seite %u"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2082
-#: zTRANSLATE/zp-core/admin-functions.php:2084
+#: zTRANSLATE/zp-core/admin-functions.php:2091
+#: zTRANSLATE/zp-core/admin-functions.php:2093
 msgid "Previous page"
 msgstr "Vorherige Seite"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2437
-#: zTRANSLATE/zp-core/admin-functions.php:2442
-#: zTRANSLATE/zp-core/admin-functions.php:2447
-#: zTRANSLATE/zp-core/admin-functions.php:2452
+#: zTRANSLATE/zp-core/admin-functions.php:2446
+#: zTRANSLATE/zp-core/admin-functions.php:2451
+#: zTRANSLATE/zp-core/admin-functions.php:2456
+#: zTRANSLATE/zp-core/admin-functions.php:2461
 msgid "Cannot create new theme."
 msgstr "Es konnte kein neues Theme erstellt werden."
 
-#: zTRANSLATE/zp-core/admin-functions.php:2437
+#: zTRANSLATE/zp-core/admin-functions.php:2446
 #, php-format
 msgid "Directory \"%s\" already exists!"
 msgstr "Das Verzeichnis \"%s\" existiert bereits!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2442
+#: zTRANSLATE/zp-core/admin-functions.php:2451
 #, php-format
 msgid "Cannot find theme directory \"%s\" to copy!"
 msgstr "Themeverzeichnis \"%s\" konnten nicht zum Kopieren gefunden werden!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2447
+#: zTRANSLATE/zp-core/admin-functions.php:2456
 msgid "The <tt>/themes</tt> directory is not writable!"
 msgstr "Das <tt>/themes</tt>-Verzeichnis ist nicht beschreibbar!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2452
+#: zTRANSLATE/zp-core/admin-functions.php:2461
 msgid "Could not create directory for the new theme"
 msgstr "Die Verzeichnis für das neue Theme konnte nicht erstellt werden."
 
-#: zTRANSLATE/zp-core/admin-functions.php:2494
+#: zTRANSLATE/zp-core/admin-functions.php:2503
 #, php-format
 msgid "An error occurred while copying files. Please delete manually the new theme directory '%s' and retry or copy files manually."
 msgstr "Es ist ein Fehler beim Kopieren von Dateien aufgetreten. Bitte löschen Sie das Themeverzeichnis  '%s' manuell und versuchen die Dateien manuell zu kopieren."
 
-#: zTRANSLATE/zp-core/admin-functions.php:2502
+#: zTRANSLATE/zp-core/admin-functions.php:2511
 #, php-format
 msgid "Your theme, based on theme %s"
 msgstr "Ihr Theme, basierend auf Theme %s"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2504
+#: zTRANSLATE/zp-core/admin-functions.php:2513
 msgid "Your theme"
 msgstr "Aktives Design"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2528
+#: zTRANSLATE/zp-core/admin-functions.php:2537
 msgid "New custom theme created successfully!"
 msgstr "Neues benutzerdefiniertes Theme erfolgreich erstellt!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2530
+#: zTRANSLATE/zp-core/admin-functions.php:2539
 msgid "New custom theme created, but its description could not be updated"
 msgstr "Ein neues benutzerdefiniertes Theme wurde erstellt, aber seine Beschreibung konnte nicht aktualisiert werden"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2674
+#: zTRANSLATE/zp-core/admin-functions.php:2683
 msgid "Rights"
 msgstr "Rechte"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2790
+#: zTRANSLATE/zp-core/admin-functions.php:2799
 msgid "Managed albums:"
 msgstr "Verwaltete Alben:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2796
+#: zTRANSLATE/zp-core/admin-functions.php:2805
 msgid "Managed news categories:"
 msgstr "Verwaltete Neuigkeitenkategorien:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2802
+#: zTRANSLATE/zp-core/admin-functions.php:2811
 msgid "Managed pages:"
 msgstr "Verwaltete Seiten:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3148
+#: zTRANSLATE/zp-core/admin-functions.php:3157
 #, php-format
 msgid "Show %u album level"
 msgid_plural "Show %u album levels"
 msgstr[0] "%u Albumebene anzeigen"
 msgstr[1] "%u Albumebenen anzeigen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3151
+#: zTRANSLATE/zp-core/admin-functions.php:3160
 #, php-format
 msgid "%u image per page"
 msgid_plural "%u images per page"
 msgstr[0] "%u Bild pro Seite"
 msgstr[1] "%u Bilder pro Seite"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3215
+#: zTRANSLATE/zp-core/admin-functions.php:3224
 msgid "Comments on"
 msgstr "Kommentare erlauben"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3217
+#: zTRANSLATE/zp-core/admin-functions.php:3226
 msgid "Comments off"
 msgstr "Kommentare aus"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3401
+#: zTRANSLATE/zp-core/admin-functions.php:3410
 #, php-format
 msgid "\"%s\" Cross Site Request Forgery blocked."
 msgstr "\"%s\" Cross Site Request Forgery blockiert."
@@ -2598,7 +2598,7 @@ msgid "Download %s ZIP file"
 msgstr "ZIP-Datei %s herunterladen"
 
 #: zTRANSLATE/zp-core/admin-logs.php:127
-#: zTRANSLATE/zp-core/admin-options.php:1591
+#: zTRANSLATE/zp-core/admin-options.php:1593
 msgid "Download"
 msgstr "Runterladen"
 
@@ -2627,21 +2627,21 @@ msgid "See the troubleshooting guide on zenphoto.org for details."
 msgstr "Bitte lesen Sie den Troubleshooting guide auf zenphoto.org für mehr Information."
 
 #: zTRANSLATE/zp-core/admin-options.php:463
-#: zTRANSLATE/zp-core/admin-options.php:721
-#: zTRANSLATE/zp-core/admin-options.php:743
-#: zTRANSLATE/zp-core/admin-options.php:1002
-#: zTRANSLATE/zp-core/admin-options.php:1024
-#: zTRANSLATE/zp-core/admin-options.php:1155
-#: zTRANSLATE/zp-core/admin-options.php:1176
-#: zTRANSLATE/zp-core/admin-options.php:1273
-#: zTRANSLATE/zp-core/admin-options.php:1310
-#: zTRANSLATE/zp-core/admin-options.php:1716
-#: zTRANSLATE/zp-core/admin-options.php:1736
-#: zTRANSLATE/zp-core/admin-options.php:1823
-#: zTRANSLATE/zp-core/admin-options.php:1933
-#: zTRANSLATE/zp-core/admin-options.php:2094
-#: zTRANSLATE/zp-core/admin-options.php:2121
-#: zTRANSLATE/zp-core/admin-options.php:2208
+#: zTRANSLATE/zp-core/admin-options.php:723
+#: zTRANSLATE/zp-core/admin-options.php:745
+#: zTRANSLATE/zp-core/admin-options.php:1004
+#: zTRANSLATE/zp-core/admin-options.php:1026
+#: zTRANSLATE/zp-core/admin-options.php:1157
+#: zTRANSLATE/zp-core/admin-options.php:1178
+#: zTRANSLATE/zp-core/admin-options.php:1275
+#: zTRANSLATE/zp-core/admin-options.php:1312
+#: zTRANSLATE/zp-core/admin-options.php:1718
+#: zTRANSLATE/zp-core/admin-options.php:1738
+#: zTRANSLATE/zp-core/admin-options.php:1825
+#: zTRANSLATE/zp-core/admin-options.php:1935
+#: zTRANSLATE/zp-core/admin-options.php:2096
+#: zTRANSLATE/zp-core/admin-options.php:2123
+#: zTRANSLATE/zp-core/admin-options.php:2210
 #: zTRANSLATE/zp-core/admin-plugins.php:75
 #: zTRANSLATE/zp-core/admin-plugins.php:221
 #: zTRANSLATE/zp-core/admin-users.php:278
@@ -2649,21 +2649,21 @@ msgid "save"
 msgstr "Sichern"
 
 #: zTRANSLATE/zp-core/admin-options.php:464
-#: zTRANSLATE/zp-core/admin-options.php:722
-#: zTRANSLATE/zp-core/admin-options.php:744
-#: zTRANSLATE/zp-core/admin-options.php:1003
-#: zTRANSLATE/zp-core/admin-options.php:1025
-#: zTRANSLATE/zp-core/admin-options.php:1156
-#: zTRANSLATE/zp-core/admin-options.php:1177
-#: zTRANSLATE/zp-core/admin-options.php:1274
-#: zTRANSLATE/zp-core/admin-options.php:1311
-#: zTRANSLATE/zp-core/admin-options.php:1717
-#: zTRANSLATE/zp-core/admin-options.php:1737
-#: zTRANSLATE/zp-core/admin-options.php:1824
-#: zTRANSLATE/zp-core/admin-options.php:1934
-#: zTRANSLATE/zp-core/admin-options.php:2095
-#: zTRANSLATE/zp-core/admin-options.php:2122
-#: zTRANSLATE/zp-core/admin-options.php:2209
+#: zTRANSLATE/zp-core/admin-options.php:724
+#: zTRANSLATE/zp-core/admin-options.php:746
+#: zTRANSLATE/zp-core/admin-options.php:1005
+#: zTRANSLATE/zp-core/admin-options.php:1027
+#: zTRANSLATE/zp-core/admin-options.php:1158
+#: zTRANSLATE/zp-core/admin-options.php:1179
+#: zTRANSLATE/zp-core/admin-options.php:1276
+#: zTRANSLATE/zp-core/admin-options.php:1313
+#: zTRANSLATE/zp-core/admin-options.php:1719
+#: zTRANSLATE/zp-core/admin-options.php:1739
+#: zTRANSLATE/zp-core/admin-options.php:1826
+#: zTRANSLATE/zp-core/admin-options.php:1936
+#: zTRANSLATE/zp-core/admin-options.php:2097
+#: zTRANSLATE/zp-core/admin-options.php:2124
+#: zTRANSLATE/zp-core/admin-options.php:2211
 #: zTRANSLATE/zp-core/admin-users.php:279
 msgid "reset"
 msgstr "Zurücksetzen"
@@ -2952,829 +2952,829 @@ msgstr "On-the-fly-Bearbeiten"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: zTRANSLATE/zp-core/admin-options.php:667
-#: zTRANSLATE/zp-core/admin-options.php:1264
-#: zTRANSLATE/zp-core/admin-options.php:1674
+#: zTRANSLATE/zp-core/admin-options.php:669
+#: zTRANSLATE/zp-core/admin-options.php:1266
+#: zTRANSLATE/zp-core/admin-options.php:1676
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: zTRANSLATE/zp-core/admin-options.php:671
+#: zTRANSLATE/zp-core/admin-options.php:673
 msgid "Check to allow editing of Gallery data on the front-end pages. (Sometimes known as <em>Ajax</em> editing.)"
 msgstr "Auswählen, um das Bearbeiten von Galeriedaten auf der Website zu erlauben. (Manchmal auch <em>Ajax</em>-Bearbeiten genannt.)"
 
-#: zTRANSLATE/zp-core/admin-options.php:672
+#: zTRANSLATE/zp-core/admin-options.php:674
 msgid "<strong>NOTE:</strong> enabling this feature is not recommended as it is susceptible to Cross Site Request Forgeries."
 msgstr "<strong>ANMERKUNG:</strong> Das Aktivieren dieser Funkion ist nicht empfohlen, aufgrund der Gefahr von <a href=\"http://de.wikipedia.org/wiki/Cross-Site_Request_Forgery\">Cross Site Request Forgeries</a> "
 
-#: zTRANSLATE/zp-core/admin-options.php:681
+#: zTRANSLATE/zp-core/admin-options.php:683
 msgid "CAPTCHA generator:"
 msgstr "CAPTCHA-Generator:"
 
-#: zTRANSLATE/zp-core/admin-options.php:690
+#: zTRANSLATE/zp-core/admin-options.php:692
 msgid "Select the <em>CAPTCHA</em> generator to be used by Zenphoto."
 msgstr "Wählen Sie den <em>CAPTCHA</em>-Generator, den Zenphoto verwenden soll."
 
-#: zTRANSLATE/zp-core/admin-options.php:694
+#: zTRANSLATE/zp-core/admin-options.php:696
 msgid "Allowed tags:"
 msgstr "Erlaubte HTML-Befehle:"
 
-#: zTRANSLATE/zp-core/admin-options.php:700
+#: zTRANSLATE/zp-core/admin-options.php:702
 msgid "restore default allowed tags"
 msgstr "Wiederherstellen der standardmäpig erlaubten Befehle"
 
-#: zTRANSLATE/zp-core/admin-options.php:705
+#: zTRANSLATE/zp-core/admin-options.php:707
 msgid "Tags and attributes allowed in comments, descriptions, and other fields."
 msgstr "Die Steuerbefehle und Attribute, die in Kommentaren, Beschreibungen und anderen Feldern erlaubt sind."
 
-#: zTRANSLATE/zp-core/admin-options.php:706
+#: zTRANSLATE/zp-core/admin-options.php:708
 msgid "Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
 msgstr "Folgen Sie dem Schema <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
 
-#: zTRANSLATE/zp-core/admin-options.php:707
+#: zTRANSLATE/zp-core/admin-options.php:709
 msgid "Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values."
 msgstr "Wählen Sie <em>Erlaubte Standardbefehle wiederherstellen</em>, um die erlaubten Befehle auf Zenphotos Standardeinstellung zurückzusetzen."
 
-#: zTRANSLATE/zp-core/admin-options.php:711
+#: zTRANSLATE/zp-core/admin-options.php:713
 msgid "Site email:"
 msgstr "Website-E-Mail:"
 
-#: zTRANSLATE/zp-core/admin-options.php:715
+#: zTRANSLATE/zp-core/admin-options.php:717
 msgid "This email address will be used as the <em>From</em> address for all mails sent by Zenphoto."
 msgstr "Diese E-Mail-Adresse wird als die Absenderadresse (\"From\") für alle von Zenphoto versendeten E-Mails verwendet."
 
-#: zTRANSLATE/zp-core/admin-options.php:749
+#: zTRANSLATE/zp-core/admin-options.php:751
 msgid "Gallery title:"
 msgstr "Galeriename:"
 
-#: zTRANSLATE/zp-core/admin-options.php:753
+#: zTRANSLATE/zp-core/admin-options.php:755
 msgid "What you want to call your Zenphoto site."
 msgstr "Der gewünschte Name Ihrer Zenphoto-Site."
 
-#: zTRANSLATE/zp-core/admin-options.php:756
+#: zTRANSLATE/zp-core/admin-options.php:758
 msgid "Gallery description:"
 msgstr "Galerie-Beschreibung:"
 
-#: zTRANSLATE/zp-core/admin-options.php:760
+#: zTRANSLATE/zp-core/admin-options.php:762
 msgid "A brief description of your gallery. Some themes may display this text."
 msgstr "Platz für eine kurze Beschreibung Ihrer Galerie. Einige Themes werden diesen Text möglicherweise anzeigen."
 
-#: zTRANSLATE/zp-core/admin-options.php:766
-#: zTRANSLATE/zp-core/admin-options.php:797
+#: zTRANSLATE/zp-core/admin-options.php:768
+#: zTRANSLATE/zp-core/admin-options.php:799
 msgid "Gallery password:"
 msgstr "Galeriepasswort:"
 
-#: zTRANSLATE/zp-core/admin-options.php:786
+#: zTRANSLATE/zp-core/admin-options.php:788
 msgid "Master password for the gallery. Click on <em>Gallery password</em> to change."
 msgstr "Hauptpasswort für die Galerie. Klicken Sie zum Ändern auf <em>Galerie-Passwort</em>."
 
-#: zTRANSLATE/zp-core/admin-options.php:793
+#: zTRANSLATE/zp-core/admin-options.php:795
 msgid "Gallery guest user:"
 msgstr "Galerie-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/admin-options.php:798
-#: zTRANSLATE/zp-core/admin-options.php:1065
-#: zTRANSLATE/zp-core/admin-options.php:1649
+#: zTRANSLATE/zp-core/admin-options.php:800
+#: zTRANSLATE/zp-core/admin-options.php:1067
+#: zTRANSLATE/zp-core/admin-options.php:1651
 #: zTRANSLATE/zp-core/admin-users.php:459
 msgid "(repeat)"
 msgstr "(wiederholen)"
 
-#: zTRANSLATE/zp-core/admin-options.php:800
+#: zTRANSLATE/zp-core/admin-options.php:802
 msgid "Gallery password hint:"
 msgstr "Galeriepasswort-Hinweis:"
 
-#: zTRANSLATE/zp-core/admin-options.php:812
+#: zTRANSLATE/zp-core/admin-options.php:814
 msgid "User ID for the gallery guest user"
 msgstr "Benutzer-ID für den Galerie-Gastbenutzer"
 
-#: zTRANSLATE/zp-core/admin-options.php:813
+#: zTRANSLATE/zp-core/admin-options.php:815
 msgid "Master password for the gallery. If this is set, visitors must know this password to view the gallery."
 msgstr "Hauptpasswort für die Galerie. Wenn es vergeben ist, müssen Besucher das Passwort kennen, um die Galerie ansehen zu können."
 
-#: zTRANSLATE/zp-core/admin-options.php:814
-#: zTRANSLATE/zp-core/admin-options.php:1081
+#: zTRANSLATE/zp-core/admin-options.php:816
+#: zTRANSLATE/zp-core/admin-options.php:1083
 msgid "A reminder hint for the password."
 msgstr "Eine Erinnungsstütze für das Passwort."
 
-#: zTRANSLATE/zp-core/admin-options.php:818
+#: zTRANSLATE/zp-core/admin-options.php:820
 msgid "Unprotected pages:"
 msgstr "Ungesicherte Seiten:"
 
-#: zTRANSLATE/zp-core/admin-options.php:846
+#: zTRANSLATE/zp-core/admin-options.php:848
 msgid "Place a checkmark on any pages which should not be protected by the gallery password."
 msgstr "Wählen Sie die Seiten, die nicht vom Galeriepasswort betroffen sein sollen."
 
-#: zTRANSLATE/zp-core/admin-options.php:849
+#: zTRANSLATE/zp-core/admin-options.php:851
 msgid "Website title:"
 msgstr "Website-Name:"
 
-#: zTRANSLATE/zp-core/admin-options.php:853
+#: zTRANSLATE/zp-core/admin-options.php:855
 msgid "Your web site title."
 msgstr "Der Name Ihrer Website."
 
-#: zTRANSLATE/zp-core/admin-options.php:856
+#: zTRANSLATE/zp-core/admin-options.php:858
 msgid "Website url:"
 msgstr "Website-Adresse:"
 
-#: zTRANSLATE/zp-core/admin-options.php:859
+#: zTRANSLATE/zp-core/admin-options.php:861
 msgid "This is used to link back to your main site, but your theme must support it."
 msgstr "Dies wird verwendet, um zu Ihrer Hauptseite zurückzuverweisen, aber Ihr Theme muss dies unterstützen."
 
-#: zTRANSLATE/zp-core/admin-options.php:862
+#: zTRANSLATE/zp-core/admin-options.php:864
 msgid "Sort gallery by:"
 msgstr "Galeriesortierung: "
 
-#: zTRANSLATE/zp-core/admin-options.php:918
+#: zTRANSLATE/zp-core/admin-options.php:920
 msgid "Sort order for the albums on the index of the gallery. Custom sort values must be database field names. You can have multiple fields separated by commas. This option is also the default sort for albums and subalbums."
 msgstr "Sortierreihenfolge für die Alben auf dem Index der Galerie. Benutzerdefinierte Sortierungen müssen Datenbankfeldnamen sein. Sie können mehrere Felder durch Kommata trennen. Diese Option ist ebenfalls die voreingestellte Sortierung für Alben und Unteralben."
 
-#: zTRANSLATE/zp-core/admin-options.php:923
+#: zTRANSLATE/zp-core/admin-options.php:925
 msgid "Gallery behavior:"
 msgstr "Galerie-Verhalten:"
 
-#: zTRANSLATE/zp-core/admin-options.php:930
+#: zTRANSLATE/zp-core/admin-options.php:932
 msgid "use latest image date as album date"
 msgstr "Datum des neustes Bildes als Albumdatum verwenden"
 
-#: zTRANSLATE/zp-core/admin-options.php:939
+#: zTRANSLATE/zp-core/admin-options.php:941
 msgid "enable user name login field"
 msgstr "Benutzername-Loginfeld aktivieren"
 
-#: zTRANSLATE/zp-core/admin-options.php:948
+#: zTRANSLATE/zp-core/admin-options.php:950
 msgid "visual thumb selection"
 msgstr "Grafische Thumbnailauswahl"
 
-#: zTRANSLATE/zp-core/admin-options.php:957
+#: zTRANSLATE/zp-core/admin-options.php:959
 msgid "enable persistent archives"
 msgstr "Beständige Archive aktivieren"
 
-#: zTRANSLATE/zp-core/admin-options.php:966
+#: zTRANSLATE/zp-core/admin-options.php:968
 msgid "enable gallery sessions"
 msgstr "Galeriesessions aktivieren"
 
-#: zTRANSLATE/zp-core/admin-options.php:972
+#: zTRANSLATE/zp-core/admin-options.php:974
 msgid "<a href=\"javascript:toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>"
 msgstr "<a href=\"javascript:toggle('albumdate');\" >Details</a> uzr<em>Verwendung des Datums des neusten Bilds als Albumdatum</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:974
+#: zTRANSLATE/zp-core/admin-options.php:976
 msgid "If you wish your album date to reflect the date of the latest image uploaded set this option. Otherwise the date will be set initially to the date the album was created."
 msgstr "Setzen Sie diese Einstellung, wenn Sie möchten, dass das Albumdatum dem Datum des letzten in dieses hochgeladenen Bildes entspricht. Andernfalls zeigt es das Erstellungsdatum des Albums."
 
-#: zTRANSLATE/zp-core/admin-options.php:977
+#: zTRANSLATE/zp-core/admin-options.php:979
 msgid "<a href=\"javascript:toggle('username');\" >Details</a> for <em>enable user name login field</em>"
 msgstr "<a href=\"javascript:toggle('username');\" >Details</a> zum <em>Aktivieren des Benutzername-Login-Feldes</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:979
+#: zTRANSLATE/zp-core/admin-options.php:981
 msgid "This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."
 msgstr "Diese Einstellung platziert ein Feld im Galerie-Loginformular (search, album) zum Eingeben des Benutzernamens. Dies ist notwendig, wenn Sie Gastbenutzernamen vergeben haben. Es ist desweiteren hilfreich, um Benutzern (Admins) auf diesen Seiten das Einloggen direkt zu ermöglichen."
 
-#: zTRANSLATE/zp-core/admin-options.php:982
+#: zTRANSLATE/zp-core/admin-options.php:984
 msgid "<a href=\"javascript:toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>"
 msgstr "<a href=\"javascript:toggle('visualthumb');\" >Details</a> zur <em>visuellen Thumbnailauswahl</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:984
+#: zTRANSLATE/zp-core/admin-options.php:986
 msgid "Setting this option places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "
 msgstr "Diese Einstellung zeigt Thumbnails in der Album-Thumbnail-Auswahlliste (dem Ausklappmenü auf der Bearbeiten-Seite jedes Albums). In Firefox werden die Thumbnails angezeigt, in IE und Safari jedoch nur die Dateinamen (obwohl die Bilder geladen werden). Bei Alben mit sehr vielen Bildern kann dies die Ladezeit der Beabeiten-Seite sehr verlangsamen und ist zudem auch überflüssig, wenn der Browser sie ohnehin nicht darstellt. Deaktivieren Sie diese Eistellungen und die Bilder werden nicht geladen."
 
-#: zTRANSLATE/zp-core/admin-options.php:987
+#: zTRANSLATE/zp-core/admin-options.php:989
 msgid "<a href=\"javascript:toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>"
 msgstr "<a href=\"javascript:toggle('persistentarchive');\" >Details</a> zur <em>Aktivierung beständiger Archive</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:989
+#: zTRANSLATE/zp-core/admin-options.php:991
 msgid "Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked that .zip file will be regenerated each time."
 msgstr "Wählen Sie die Checkbox aus, um ZIP-Archive wiederzuverwenden, wenn Sie die optionale Themefunktion <em>printAlbumZip()</em> verwenden, um Besuchern, die Möglichkeit zu geben, Bilder eines Albums als zip-Datei herunterzuladen. Andernfalls würde die ZIP-Datei jedesmal erneut erstellt werden."
 
-#: zTRANSLATE/zp-core/admin-options.php:990
+#: zTRANSLATE/zp-core/admin-options.php:992
 msgid "<strong>Note: </strong>Setting this option may impact password protected albums!"
 msgstr "<strong>Anmerkung: </strong>Diese Einstellung kann Auswirkungen auf passwort-geschützte Alben haben!"
 
-#: zTRANSLATE/zp-core/admin-options.php:993
+#: zTRANSLATE/zp-core/admin-options.php:995
 msgid "<a href=\"javascript:toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>"
 msgstr "<a href=\"javascript:toggle('gallerysessions');\" >Details</a> zur <em>Aktivierung von Galeriesessions</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:995
+#: zTRANSLATE/zp-core/admin-options.php:997
 msgid "Check this option if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
 msgstr "Aktivieren Sie dies, falls Probleme mit den Albumpasswort-Cookies auftreten. Diese Einstellung zwingt Zenphoto Sessions anstatt Cookies zu verwenden."
 
-#: zTRANSLATE/zp-core/admin-options.php:1033
-#: zTRANSLATE/zp-core/admin-options.php:1064
+#: zTRANSLATE/zp-core/admin-options.php:1035
+#: zTRANSLATE/zp-core/admin-options.php:1066
 msgid "Search password:"
 msgstr "Suchpasswort:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1053
+#: zTRANSLATE/zp-core/admin-options.php:1055
 msgid "Password for the search guest user. click on <em>Search password</em> to change."
 msgstr "Passwort für den Such-Gastbenutzer. Klicken Sie zum Ändern auf <em>Suchpasswort</em>."
 
-#: zTRANSLATE/zp-core/admin-options.php:1060
+#: zTRANSLATE/zp-core/admin-options.php:1062
 msgid "Search guest user:"
 msgstr "Such-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1067
+#: zTRANSLATE/zp-core/admin-options.php:1069
 msgid "Search password hint:"
 msgstr "Suchpasswort-Hinweis:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1079
+#: zTRANSLATE/zp-core/admin-options.php:1081
 msgid "User ID for the search guest user"
 msgstr "Benutzer-ID für den Such-Gastbenutzer"
 
-#: zTRANSLATE/zp-core/admin-options.php:1080
+#: zTRANSLATE/zp-core/admin-options.php:1082
 msgid "Password for the search guest user. If this is set, visitors must know this password to view search results."
 msgstr "Passwort für den Such-Gastbenutzer. Wenn es gesetzt ist, müssen Besucher das Passwort kennen, um die Suche verwenden zu können."
 
-#: zTRANSLATE/zp-core/admin-options.php:1085
+#: zTRANSLATE/zp-core/admin-options.php:1087
 msgid "Search behavior settings:"
 msgstr "Suchverhalteneinstellungen:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1094
+#: zTRANSLATE/zp-core/admin-options.php:1096
 msgid "exact"
 msgstr "exakt"
 
-#: zTRANSLATE/zp-core/admin-options.php:1095
+#: zTRANSLATE/zp-core/admin-options.php:1097
 msgid "partial"
 msgstr "teilweise"
 
-#: zTRANSLATE/zp-core/admin-options.php:1103
+#: zTRANSLATE/zp-core/admin-options.php:1105
 msgid "Fields list:"
 msgstr "Feldliste:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1111
+#: zTRANSLATE/zp-core/admin-options.php:1113
 msgid "<em>space</em>"
 msgstr "<em>Leerzeichen</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1111
+#: zTRANSLATE/zp-core/admin-options.php:1113
 msgid "<em>OR</em>"
 msgstr "<em>OR</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1111
+#: zTRANSLATE/zp-core/admin-options.php:1113
 msgid "<em>AND</em>"
 msgstr "<em>AND</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1116
+#: zTRANSLATE/zp-core/admin-options.php:1118
 msgid "Do not return <em>album</em> matches"
 msgstr "Keine <em>Album</em>-Treffer ausgeben"
 
-#: zTRANSLATE/zp-core/admin-options.php:1122
+#: zTRANSLATE/zp-core/admin-options.php:1124
 msgid "Do not return <em>image</em> matches"
 msgstr "Keine <em>Bild</em>-Treffer ausgeben"
 
-#: zTRANSLATE/zp-core/admin-options.php:1131
+#: zTRANSLATE/zp-core/admin-options.php:1133
 msgid "Do not return <em>news</em> matches"
 msgstr "Keine <em>Alben</em>-Treffer ausgeben"
 
-#: zTRANSLATE/zp-core/admin-options.php:1137
+#: zTRANSLATE/zp-core/admin-options.php:1139
 msgid "Do not return <em>page</em> matches"
 msgstr "Keine <em>Seiten</em>-Treffer ausgeben"
 
-#: zTRANSLATE/zp-core/admin-options.php:1145
+#: zTRANSLATE/zp-core/admin-options.php:1147
 msgid "Search behavior settings."
 msgstr "Suchverhalteneinstellungen."
 
-#: zTRANSLATE/zp-core/admin-options.php:1146
+#: zTRANSLATE/zp-core/admin-options.php:1148
 msgid "<em>Field list</em> is the set of fields on which searches may be performed."
 msgstr "<em>Feldliste</em> ist die Liste der Felder, in denen gesucht werden soll."
 
-#: zTRANSLATE/zp-core/admin-options.php:1147
+#: zTRANSLATE/zp-core/admin-options.php:1149
 msgid "Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned."
 msgstr "Die Suche führt mit Ausnahme von <em>Schlagwörtern</em> Teiltreffer aus. Dies bedeuted, dass ein Ergebnis zurückgegeben wird, wenn das durchsuchte Feld irgendwo das Suchkriterium erfüllt. Wenn <em>exakt</em> für <em>Schlagwörter</em> ausgewählt ist, muss das Suchkriterium exakt mit dem Schlagwort übereinstimmen, um als Treffer gewertet zu werden. "
 
-#: zTRANSLATE/zp-core/admin-options.php:1148
+#: zTRANSLATE/zp-core/admin-options.php:1150
 msgid "Setting <code>Treat spaces as</code> to <em>OR</em> will cause search to trigger on any of the words in a string separated by spaces. Setting it to <em>AND</em> will cause the search to trigger only when all strings are present. Leaving the option unchecked will treat the whole string as a search target."
 msgstr "Wenn Sie <code>Leerzeichen als <em>OR</em> behandeln</code> aktivieren, wird die Suche alle Wörter in einer Suche, die mit einem Leerzeichen getrennt sind, als eigene Suchbegriffe verstehen. Anderfalls werden wird die gesamte Sucheingabe als ein  Suchbegriff gewertet. "
 
-#: zTRANSLATE/zp-core/admin-options.php:1149
+#: zTRANSLATE/zp-core/admin-options.php:1151
 msgid "Setting <code>Do not return <em>{item}</em> matches</code> will cause search to ignore <em>{items}</em> when looking for matches."
 msgstr "Wenn Sie <code>Keine <em>{Eintrag}</em>-Treffer ausgeben</code> auswählen, wird die Suche diese ignorieren, wenn nach Ergebnissen gesucht wird."
 
-#: zTRANSLATE/zp-core/admin-options.php:1182
+#: zTRANSLATE/zp-core/admin-options.php:1184
 msgid "RSS feeds enabled:"
 msgstr "RSS-Feeds aktiviert:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1194
+#: zTRANSLATE/zp-core/admin-options.php:1196
 msgid "News/Page comments"
 msgstr "Arikel-/Seitenkommentare"
 
-#: zTRANSLATE/zp-core/admin-options.php:1201
+#: zTRANSLATE/zp-core/admin-options.php:1203
 msgid "Check each RSS feed you wish to activate."
 msgstr "Wählen Sie die RSS-Feeds, die Sie aktivieren möchten. "
 
-#: zTRANSLATE/zp-core/admin-options.php:1206
+#: zTRANSLATE/zp-core/admin-options.php:1208
 msgid "<strong>Note:</strong> Theme support is required to display RSS links."
 msgstr "<strong>Anmerkung:</strong> Ihr Theme muß über die Anzeige von RSS verfügen."
 
-#: zTRANSLATE/zp-core/admin-options.php:1212
+#: zTRANSLATE/zp-core/admin-options.php:1214
 msgid "Number of RSS feed items:"
 msgstr "Anzahl der RSS-Einträge:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1214
-#: zTRANSLATE/zp-core/admin-options.php:1223
-#: zTRANSLATE/zp-core/admin-options.php:1243
+#: zTRANSLATE/zp-core/admin-options.php:1216
+#: zTRANSLATE/zp-core/admin-options.php:1225
+#: zTRANSLATE/zp-core/admin-options.php:1245
 msgid "Images RSS"
 msgstr "Bilder-RSS"
 
-#: zTRANSLATE/zp-core/admin-options.php:1215
-#: zTRANSLATE/zp-core/admin-options.php:1225
-#: zTRANSLATE/zp-core/admin-options.php:1246
+#: zTRANSLATE/zp-core/admin-options.php:1217
+#: zTRANSLATE/zp-core/admin-options.php:1227
+#: zTRANSLATE/zp-core/admin-options.php:1248
 msgid "Albums RSS"
 msgstr "Alben-RSS"
 
-#: zTRANSLATE/zp-core/admin-options.php:1217
+#: zTRANSLATE/zp-core/admin-options.php:1219
 msgid "The number of new items you want to appear in your site's RSS feed. The images and comments RSS share the value."
 msgstr "Die Anzahl an neuen Artikeln, die im RSS-Newsfeed erscheinen soll. Der Bilder- und der Kommentar-RSS verwenden diesen Wert."
 
-#: zTRANSLATE/zp-core/admin-options.php:1220
+#: zTRANSLATE/zp-core/admin-options.php:1222
 msgid "Size of RSS feed images:"
 msgstr "Größe der Bilder im RSS-Feed:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1227
+#: zTRANSLATE/zp-core/admin-options.php:1229
 msgid "The size you want your images to have in your site's RSS feed."
 msgstr "Die Größe, in der die Bilder im RSS-Newsfeed erscheinen sollen."
 
-#: zTRANSLATE/zp-core/admin-options.php:1230
+#: zTRANSLATE/zp-core/admin-options.php:1232
 msgid "RSS feed sort order:"
 msgstr "RSS-Sortierung:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1233
-#: zTRANSLATE/zp-core/admin-options.php:1237
+#: zTRANSLATE/zp-core/admin-options.php:1235
+#: zTRANSLATE/zp-core/admin-options.php:1239
 msgid "latest by id"
 msgstr "Neuste nach ID"
 
-#: zTRANSLATE/zp-core/admin-options.php:1234
+#: zTRANSLATE/zp-core/admin-options.php:1236
 msgid "latest by date"
 msgstr "Neuste nach Datum"
 
-#: zTRANSLATE/zp-core/admin-options.php:1235
+#: zTRANSLATE/zp-core/admin-options.php:1237
 msgid "latest by mtime"
 msgstr "Neuste nach mtime"
 
-#: zTRANSLATE/zp-core/admin-options.php:1238
+#: zTRANSLATE/zp-core/admin-options.php:1240
 msgid "latest updated"
 msgstr "die zuletzt geänderten"
 
-#: zTRANSLATE/zp-core/admin-options.php:1248
+#: zTRANSLATE/zp-core/admin-options.php:1250
 msgid "a) Images RSS: Choose between <em>latest by id</em> for the latest uploaded, <em>latest by date</em> for the latest uploaded fetched by date, or <em>latest by mtime</em> for the latest uploaded fetched by the file's last change timestamp.<br />b) Albums RSS: Choose between <em>latest by id</em> for the latest uploaded and <em>latest updated</em>"
 msgstr "a) Bilder-RSS: Wählen Sie zwischen <em>Neuste ID</em> für die zuletzt hochgeladenen, <em>Neuste Datum</em> für die neusten hochgeladen nach Datum sortiert oder <em>Neuste mtime</em> für die neusten hochgeladenen sortiert nach dem Zeitstempel der letzten Änderung der Datei. <br />b)Alben-RSS: Wählen Sie zwischen <em>Neuste ID</em> für die zuletzt hochgeladenen und <em>neusten ergänzten</em>."
 
-#: zTRANSLATE/zp-core/admin-options.php:1251
+#: zTRANSLATE/zp-core/admin-options.php:1253
 msgid "RSS enclosure:"
 msgstr "RSS enclosure:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1254
+#: zTRANSLATE/zp-core/admin-options.php:1256
 msgid "Check if you want to enable the <em>RSS enclosure</em> feature which provides a direct download for full images, movies etc. from within certain RSS reader clients <em>(only Images RSS)</em>."
 msgstr "Wählen Sie dies aus, wenn Sie die <em>RSS enclosure</em>-Funktion aktivieren möchten, welche innnerhalb einiger RSS-Reader einen direkten Download von Vollbilder, Filmen etc. erlaubt <em>(nur Bilder-RSS)</em>."
 
-#: zTRANSLATE/zp-core/admin-options.php:1257
+#: zTRANSLATE/zp-core/admin-options.php:1259
 msgid "Media RSS:"
 msgstr "Media RSS:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1259
+#: zTRANSLATE/zp-core/admin-options.php:1261
 msgid "Check if <em>media RSS</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."
 msgstr "Wählen Sie dies, wenn Sie <em>media RSS</em>-Unterstützung aktivieren möchten. Dies wird von einigen Programm und Webdiensten unterstützt <em>(nur Bilder-RSS)</em>."
 
-#: zTRANSLATE/zp-core/admin-options.php:1262
+#: zTRANSLATE/zp-core/admin-options.php:1264
 msgid "RSS cache"
 msgstr "RSS-Cachen"
 
-#: zTRANSLATE/zp-core/admin-options.php:1266
+#: zTRANSLATE/zp-core/admin-options.php:1268
 msgid "RSS cache expire"
 msgstr "RSS-Cache-Auslaufdatum"
 
-#: zTRANSLATE/zp-core/admin-options.php:1268
+#: zTRANSLATE/zp-core/admin-options.php:1270
 msgid "Check if you want to enable static RSS feed caching. The cached file will be placed within the <em>cache_html</em> folder.<br /> Cache expire default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec)."
 msgstr "Auswählen, um RSS-Feed-Caching zu aktivieren. Die zwischengespeicherten Dateien werden innerhalb des <em>cache_html</em>-Ordners platziert.<br /> Die Ungültigkeitszeit ist auf  86400 sek (1 Tag = 24 Std, * 60 min * 60 sek) eingestellt."
 
-#: zTRANSLATE/zp-core/admin-options.php:1289
+#: zTRANSLATE/zp-core/admin-options.php:1291
 #: zTRANSLATE/zp-core/admin-users.php:235
 #, php-format
 msgid "Your %s passwords were empty or did not match"
 msgstr "Ihre %s Passwörter waren leer oder stimmten nicht überein"
 
-#: zTRANSLATE/zp-core/admin-options.php:1292
+#: zTRANSLATE/zp-core/admin-options.php:1294
 msgid "You must supply a password for the Protected image user"
 msgstr "Es muss ein Passwort für den Gastsuchbenutzer eingegeben werden"
 
-#: zTRANSLATE/zp-core/admin-options.php:1303
+#: zTRANSLATE/zp-core/admin-options.php:1305
 msgid "See also the <a href=\"?tab=theme\">Theme Options</a> tab for theme specific image options."
 msgstr "Bitten beachten Sie auch auf <a href=\"?tab=theme\">Theme Options</a> die spezifischen Theme-Bildeinstellungen."
 
-#: zTRANSLATE/zp-core/admin-options.php:1373
+#: zTRANSLATE/zp-core/admin-options.php:1375
 msgid "Default sort order for images."
 msgstr "Standardbildsortierung."
 
-#: zTRANSLATE/zp-core/admin-options.php:1374
+#: zTRANSLATE/zp-core/admin-options.php:1376
 msgid "Custom sort values must be database field names. You can have multiple fields separated by commas."
 msgstr "Benutzerdefinierte Sortierungen müssen Datenbankfeldnamen sein. Sie können mehrere Felder durch Kommata trennen. "
 
-#: zTRANSLATE/zp-core/admin-options.php:1378
+#: zTRANSLATE/zp-core/admin-options.php:1380
 msgid "Image quality:"
 msgstr "Bildqualität:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1380
+#: zTRANSLATE/zp-core/admin-options.php:1382
 msgid "Normal Image"
 msgstr "Normales Bild"
 
-#: zTRANSLATE/zp-core/admin-options.php:1399
+#: zTRANSLATE/zp-core/admin-options.php:1401
 msgid "<em>full</em> Image"
 msgstr "<em>Voll</em>bild"
 
-#: zTRANSLATE/zp-core/admin-options.php:1418
+#: zTRANSLATE/zp-core/admin-options.php:1420
 msgid "Thumbnail"
 msgstr "Thumbnail"
 
-#: zTRANSLATE/zp-core/admin-options.php:1439
+#: zTRANSLATE/zp-core/admin-options.php:1441
 msgid "Compression quality for images and thumbnails generated by Zenphoto."
 msgstr "JPEG-Komprimierungsqualität für alle Bilder und Thumbnails, die Zenphoto erstellt."
 
-#: zTRANSLATE/zp-core/admin-options.php:1440
+#: zTRANSLATE/zp-core/admin-options.php:1442
 msgid "Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "
 msgstr "Die Qualität reicht von 0 (schlechteste Qualität, kleinste Dateie) bis 100 (beste Qualität, größte Datei). "
 
-#: zTRANSLATE/zp-core/admin-options.php:1444
+#: zTRANSLATE/zp-core/admin-options.php:1446
 msgid "Interlace:"
 msgstr "Interlace:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1446
+#: zTRANSLATE/zp-core/admin-options.php:1448
 msgid "If checked, resized images will be created <em>interlaced</em> (if the format permits)."
 msgstr "Wenn ausgewählt, werden die bearbeiteten Bilder <em>interlaced</em> erstellt (wenn das Format es erlaubt)."
 
-#: zTRANSLATE/zp-core/admin-options.php:1449
+#: zTRANSLATE/zp-core/admin-options.php:1451
 msgid "Auto rotate images:"
 msgstr "Automatisches Bilddrehen:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1454
+#: zTRANSLATE/zp-core/admin-options.php:1456
 msgid "Automatically rotate images based on the EXIF orientation setting."
 msgstr "Automatisches Drehen eines Bildes basierend auf den EXIF-Orientierungsinformationen."
 
-#: zTRANSLATE/zp-core/admin-options.php:1456
+#: zTRANSLATE/zp-core/admin-options.php:1458
 msgid "Image rotation requires the <em>imagerotate</em> function found in the bundled GD library of PHP version 4.3 or greater."
 msgstr "Bilddrehen erfordert die Funktion <em>imagerotate</em>, die in der GD Libary, die mit PHP 4.3 oder neuer gekoppelt ist, enthalten ist."
 
-#: zTRANSLATE/zp-core/admin-options.php:1461
+#: zTRANSLATE/zp-core/admin-options.php:1463
 msgid "Allow upscale:"
 msgstr "Hochrechnen erlauben:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1463
+#: zTRANSLATE/zp-core/admin-options.php:1465
 msgid "Allow images to be scaled up to the requested size. This could result in loss of quality, so it's off by default."
 msgstr "Erlaubt, dass kleinere Bilder auf die eingestellte Größe hochgerechnet werden. Dies kann zu einem Qualitätsverlust führen und ist daher standardmäßig deaktiviert."
 
-#: zTRANSLATE/zp-core/admin-options.php:1466
+#: zTRANSLATE/zp-core/admin-options.php:1468
 msgid "Sharpen:"
 msgstr "Scharfzeichnen:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1474
+#: zTRANSLATE/zp-core/admin-options.php:1476
 msgid "Thumbs"
 msgstr "Thumbnails"
 
-#: zTRANSLATE/zp-core/admin-options.php:1477
+#: zTRANSLATE/zp-core/admin-options.php:1479
 msgid "Amount"
 msgstr "Schärfegrad"
 
-#: zTRANSLATE/zp-core/admin-options.php:1499
+#: zTRANSLATE/zp-core/admin-options.php:1501
 msgid "Radius"
 msgstr "Radius"
 
-#: zTRANSLATE/zp-core/admin-options.php:1503
+#: zTRANSLATE/zp-core/admin-options.php:1505
 msgid "Threshold"
 msgstr "Schwelle"
 
-#: zTRANSLATE/zp-core/admin-options.php:1509
+#: zTRANSLATE/zp-core/admin-options.php:1511
 msgid "Add an unsharp mask to images and/or thumbnails."
 msgstr "Zeichnet Bilder und/oder Thumbnails scharf. "
 
-#: zTRANSLATE/zp-core/admin-options.php:1509
+#: zTRANSLATE/zp-core/admin-options.php:1511
 msgid "<strong>Warning</strong>: can overload slow servers."
 msgstr "<strong>Warnung</strong>: Kann langsame Server überlasten."
 
-#: zTRANSLATE/zp-core/admin-options.php:1510
+#: zTRANSLATE/zp-core/admin-options.php:1512
 msgid "<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening)."
 msgstr "<em>Stärkegrad</em>: Der Stärkegrad des Scharfzeichnens. Ganze Zahlenwerte zwischen 0 (wenig schärfen) und 100 (maximal schärfen)."
 
-#: zTRANSLATE/zp-core/admin-options.php:1511
+#: zTRANSLATE/zp-core/admin-options.php:1513
 msgid "<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details."
 msgstr "<em>Radius</em>: Der Pixelradius für das Scharfzeichnen. Ein kleinerer Radius schärft kleinere Details, ein größerer mehr Details."
 
-#: zTRANSLATE/zp-core/admin-options.php:1512
+#: zTRANSLATE/zp-core/admin-options.php:1514
 msgid "<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges."
 msgstr "<em>Schwellenwert</em>: Der Farbunterschiedschwellenwertrequired für das Scharfzeichen. Ein niedriger Wert schärft alle Ränder inkl. matter Ränder, während ein hoher Wert deutlichere Ränder schärft."
 
-#: zTRANSLATE/zp-core/admin-options.php:1516
+#: zTRANSLATE/zp-core/admin-options.php:1518
 msgid "Watermarks:"
 msgstr "Wasserzeichen:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1526
-#: zTRANSLATE/zp-core/admin-options.php:1546
-#: zTRANSLATE/zp-core/admin-options.php:2053
+#: zTRANSLATE/zp-core/admin-options.php:1528
+#: zTRANSLATE/zp-core/admin-options.php:1548
+#: zTRANSLATE/zp-core/admin-options.php:2055
 msgid "*none"
 msgstr "*keins"
 
-#: zTRANSLATE/zp-core/admin-options.php:1543
+#: zTRANSLATE/zp-core/admin-options.php:1545
 msgid "thumbnails"
 msgstr "Thumbnails"
 
-#: zTRANSLATE/zp-core/admin-options.php:1559
+#: zTRANSLATE/zp-core/admin-options.php:1561
 msgid "cover"
 msgstr "Ausbreitung"
 
-#: zTRANSLATE/zp-core/admin-options.php:1561
+#: zTRANSLATE/zp-core/admin-options.php:1563
 #, no-php-format
 msgid "% of image"
 msgstr "% des Bildes"
 
-#: zTRANSLATE/zp-core/admin-options.php:1566
+#: zTRANSLATE/zp-core/admin-options.php:1568
 msgid "allow upscale"
 msgstr "Hochrechnen erlauben"
 
-#: zTRANSLATE/zp-core/admin-options.php:1570
+#: zTRANSLATE/zp-core/admin-options.php:1572
 msgid "offset h"
 msgstr "Position h"
 
-#: zTRANSLATE/zp-core/admin-options.php:1572
+#: zTRANSLATE/zp-core/admin-options.php:1574
 #, no-php-format
 msgid "% w, "
 msgstr "% w "
 
-#: zTRANSLATE/zp-core/admin-options.php:1574
+#: zTRANSLATE/zp-core/admin-options.php:1576
 #, no-php-format
 msgid "%"
 msgstr "%"
 
-#: zTRANSLATE/zp-core/admin-options.php:1577
+#: zTRANSLATE/zp-core/admin-options.php:1579
 msgid "The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the image."
 msgstr "Das Wasserzeichen wird skaliert, dass es die Fläche des Bildes zum angegebenen Prozentwert bedeckt und dabei relativ zur oberen linken Ecke des Bildes positioniert wird."
 
-#: zTRANSLATE/zp-core/admin-options.php:1578
+#: zTRANSLATE/zp-core/admin-options.php:1580
 msgid "It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."
 msgstr "Es wird von dort, ausgehend von der unteren rechten Ecke, durch die <em>Positions</em>-Prozentangaben durch den Höhe- und Breiteunterschied zwischen Bild und Wasserzeichen positioniert."
 
-#: zTRANSLATE/zp-core/admin-options.php:1579
+#: zTRANSLATE/zp-core/admin-options.php:1581
 msgid "If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."
 msgstr "Wenn <em>Hochrechnen erlaubt</em> nicht aktiviert ist, wird das Wasserzeichen nicht über seine reale Größe hinaus vergrößert."
 
-#: zTRANSLATE/zp-core/admin-options.php:1580
+#: zTRANSLATE/zp-core/admin-options.php:1582
 #, php-format
 msgid "Images are in png-24 format and are located in the <code>/%s/watermarks/</code> folder."
 msgstr "Bilder müssen im PNG-24-Format sein und sich im Ordner <code>%s/watermarks/</code> befinden."
 
-#: zTRANSLATE/zp-core/admin-options.php:1585
+#: zTRANSLATE/zp-core/admin-options.php:1587
 msgid "Full image protection:"
 msgstr "Originalbildschutz:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1591
+#: zTRANSLATE/zp-core/admin-options.php:1593
 msgid "Unprotected"
 msgstr "Ungesichert"
 
-#: zTRANSLATE/zp-core/admin-options.php:1591
+#: zTRANSLATE/zp-core/admin-options.php:1593
 msgid "Protected view"
 msgstr "Geschützte Anzeige"
 
-#: zTRANSLATE/zp-core/admin-options.php:1591
+#: zTRANSLATE/zp-core/admin-options.php:1593
 msgid "No access"
 msgstr "Kein Zugriff"
 
-#: zTRANSLATE/zp-core/admin-options.php:1598
+#: zTRANSLATE/zp-core/admin-options.php:1600
 msgid "Disable hotlinking"
 msgstr "Hotlinking verhindern"
 
-#: zTRANSLATE/zp-core/admin-options.php:1603
+#: zTRANSLATE/zp-core/admin-options.php:1605
 msgid "cache the full image"
 msgstr "Originalbild zwischenspeichern"
 
-#: zTRANSLATE/zp-core/admin-options.php:1612
-#: zTRANSLATE/zp-core/admin-options.php:1641
+#: zTRANSLATE/zp-core/admin-options.php:1614
+#: zTRANSLATE/zp-core/admin-options.php:1643
 msgid "password:"
 msgstr "Passwort:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1634
+#: zTRANSLATE/zp-core/admin-options.php:1636
 msgid "user:"
 msgstr "Benutzer:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1656
+#: zTRANSLATE/zp-core/admin-options.php:1658
 msgid "hint:"
 msgstr "Hinweis:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1664
+#: zTRANSLATE/zp-core/admin-options.php:1666
 msgid "Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."
 msgstr "Wählen Sie die Schutzstufe für die Originalbilder. <em>Download</em> setzt einen Downloaddialog in Gang anstatt das Bild anzuzeigen. <em>Kein&nbsp;Zugriff</em> verhindert, dass ein Link zum Originalbild gezeigt wird. <em>Geschütze&nbsp;Ansicht</em> löst eine Verarbeitung des Originalbildes aus bevor es angezeigt wird, zum Beispiel um ein Wasserzeichen hinzuzufügen oder um Passworte zu überprüfen. <em>Ungeschützt</em> erlaubt das direkte Anzeigen des Originalbildes."
 
-#: zTRANSLATE/zp-core/admin-options.php:1665
+#: zTRANSLATE/zp-core/admin-options.php:1667
 msgid "Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."
 msgstr "Das Abschalten von Hotlinking verhindert, dass andere Websites auf das Originalbild direkt zugreifen können. In diesem Fall werden externe Links auf die Bildseite umgeleitet. Wenn Sie Probleme mit der Anzeige der Originalbilder haben, probieren Sie, ob das Abschalten dieser Einstellung hilft. Hotlinking wird nicht verhindert, wenn der <em>Originalbildschutz</em> auf <em>ungeschützt</em> eingestellt ist."
 
-#: zTRANSLATE/zp-core/admin-options.php:1666
+#: zTRANSLATE/zp-core/admin-options.php:1668
 msgid "If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."
 msgstr "Wenn <em>Originalbild cachen</em> ausgewählt ist, wird das Originalbild in den Cache zwischengespeichert und von dort nach dem ersten Zugriff geladen. <em>Originalbildschutz</em> muß auf <em>Geschütze&nbsp;Ansicht</em> gestellt sein, damit das Bild zwischengespeichert werden kann. Jedenfalls, einmal im Cache werden keine weiteren Schutzmechanismen mehr auf das Bild angewendet.."
 
-#: zTRANSLATE/zp-core/admin-options.php:1667
+#: zTRANSLATE/zp-core/admin-options.php:1669
 msgid "The <em>user</em>, <em>password</em>, and <em>hint</em> apply to the <em>Download</em> and <em>Protected view</em> level of protection. If there is a password set, the viewer must supply this password to access the image."
 msgstr "<em>Benutzer</em>, <em>Passwort</em>, and <em>Hinweis</em> gelten für die Sicherheitsstufen <em>Download</em> und <em>Gesicherte Anzeige</em>. Wenn ein Passwort vergeben ist, muß der Betrachter dieses eingeben, um das Bild ansehen zu können."
 
-#: zTRANSLATE/zp-core/admin-options.php:1671
+#: zTRANSLATE/zp-core/admin-options.php:1673
 msgid "Use lock image"
 msgstr "Schlossbild verwenden"
 
-#: zTRANSLATE/zp-core/admin-options.php:1676
+#: zTRANSLATE/zp-core/admin-options.php:1678
 msgid "Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."
 msgstr "Ersetzt das Albumthumbnail bei passwortgeschützen Alben durch ein <em>Schlossbild</em>, wenn der Benutzer das Passwort nicht kennt. Wenn Ihr Theme über ein Bild namens <code>images/err-passwordprotected.gif</code> verfügt, wird dieses angezeigt. Anderfalls wird Zenphotos Standardschlossbild angezeigt."
 
-#: zTRANSLATE/zp-core/admin-options.php:1679
+#: zTRANSLATE/zp-core/admin-options.php:1681
 msgid "EXIF display"
 msgstr "EXIF-Anzeige"
 
-#: zTRANSLATE/zp-core/admin-options.php:1694
+#: zTRANSLATE/zp-core/admin-options.php:1696
 msgid "Check those EXIF fields you wish displayed in image EXIF information."
 msgstr "Wählen Sie die EXIF-Felder aus, die Sie in der Bild-EXIF-Information angezeigen möchten."
 
-#: zTRANSLATE/zp-core/admin-options.php:1702
+#: zTRANSLATE/zp-core/admin-options.php:1704
 msgid "IPTC encoding:"
 msgstr "IPTC-Kodierung:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1708
+#: zTRANSLATE/zp-core/admin-options.php:1710
 msgid "The default character encoding of image IPTC metadata."
 msgstr "Die Standardzeichenkodierung der Bild-IPTC-Metadaten."
 
-#: zTRANSLATE/zp-core/admin-options.php:1742
+#: zTRANSLATE/zp-core/admin-options.php:1744
 msgid "Enable comment notification:"
 msgstr "Kommentarbenachrichtigung aktivieren:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1745
+#: zTRANSLATE/zp-core/admin-options.php:1747
 msgid "Email the Admin when new comments are posted"
 msgstr "Verschicke eine E-Mail, wenn neue Kommentare vorhanden sind."
 
-#: zTRANSLATE/zp-core/admin-options.php:1749
+#: zTRANSLATE/zp-core/admin-options.php:1751
 msgid "Spam filter:"
 msgstr "Spamfilter:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1757
+#: zTRANSLATE/zp-core/admin-options.php:1759
 msgid "The SPAM filter plug-in you wish to use to check comments for SPAM"
 msgstr "Das Spamfilter-Plugin, das zum Überprüfen der Kommentare verwendet werden soll."
 
-#: zTRANSLATE/zp-core/admin-options.php:1769
+#: zTRANSLATE/zp-core/admin-options.php:1771
 msgid "Required fields:"
 msgstr "Pflichtfelder:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1778
+#: zTRANSLATE/zp-core/admin-options.php:1780
 msgid "Name"
 msgstr "Name"
 
-#: zTRANSLATE/zp-core/admin-options.php:1789
+#: zTRANSLATE/zp-core/admin-options.php:1791
 msgid "Email"
 msgstr "E-Mail"
 
-#: zTRANSLATE/zp-core/admin-options.php:1800
+#: zTRANSLATE/zp-core/admin-options.php:1802
 msgid "Website"
 msgstr "Website"
 
-#: zTRANSLATE/zp-core/admin-options.php:1811
+#: zTRANSLATE/zp-core/admin-options.php:1813
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-#: zTRANSLATE/zp-core/admin-options.php:1818
+#: zTRANSLATE/zp-core/admin-options.php:1820
 msgid "Comment posting will be rejected if any of the checked fields is not valid."
 msgstr "Kommentare werden abgewiesen, wenn eines der ausgewählten Felder nicht gültig ist."
 
-#: zTRANSLATE/zp-core/admin-options.php:1896
+#: zTRANSLATE/zp-core/admin-options.php:1898
 #: zTRANSLATE/zp-core/admin-themes.php:152
 msgid "There are no themes for which you have rights to administer."
 msgstr "Sie haben keine Rechte, Themes zu verwalten."
 
-#: zTRANSLATE/zp-core/admin-options.php:1911
+#: zTRANSLATE/zp-core/admin-options.php:1913
 #, php-format
 msgid "Options for <code><strong>%1$s</strong></code>: <em>%2$s</em>"
 msgstr "Einstellungen für <code><strong>%1$s</strong></code>: <em>%2$s</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1913
+#: zTRANSLATE/zp-core/admin-options.php:1915
 #, php-format
 msgid "Options for <em>%s</em>"
 msgstr "Einstellungen für <em>%s</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1921
+#: zTRANSLATE/zp-core/admin-options.php:1923
 msgid "Show theme for:"
 msgstr "Theme anzeigen für:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1940
+#: zTRANSLATE/zp-core/admin-options.php:1942
 msgid "<strong>Standard options</strong>"
 msgstr "<strong>Standardeinstellungen</strong>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1942
+#: zTRANSLATE/zp-core/admin-options.php:1944
 msgid "<em>These image and album presentation options provided by the Zenphoto core for all themes.</em>"
 msgstr "<em>Diese Bild- und Albumpräsentations-Einstellung sind Standard und werden von Zenphoto für all Themes bereitgestellt.</em>"
 
-#: zTRANSLATE/zp-core/admin-options.php:1942
+#: zTRANSLATE/zp-core/admin-options.php:1944
 msgid "<strong>Note:</strong> These are <em>recommendations</em> as themes may choose to override them for design reasons"
 msgstr "<strong>Anmerkung</strong>Dies sind <em>Empfehlungen</em>, die einige Themes aus Designgründen übergehen können."
 
-#: zTRANSLATE/zp-core/admin-options.php:1945
+#: zTRANSLATE/zp-core/admin-options.php:1947
 msgid "Albums per page:"
 msgstr "Alben pro Seite:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1948
+#: zTRANSLATE/zp-core/admin-options.php:1950
 msgid "Recommended number of albums on a page. You might need to adjust this for a better page layout."
 msgstr "Empfohlene Anzahl Alben pro Seite. Möglicherweise muss der Wert für ein besseres Aussehen Ihres Layouts angepasst werden."
 
-#: zTRANSLATE/zp-core/admin-options.php:1951
+#: zTRANSLATE/zp-core/admin-options.php:1953
 msgid "Thumbnails per page:"
 msgstr "Thumbnails pro Seite:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1954
+#: zTRANSLATE/zp-core/admin-options.php:1956
 msgid "Recommended number of thumbnails on an album page."
 msgstr "Empfohlene Anzahl an Thumbnails pro Seite."
 
-#: zTRANSLATE/zp-core/admin-options.php:1954
+#: zTRANSLATE/zp-core/admin-options.php:1956
 msgid "<strong>Note:</strong> You might need to adjust this for a better page layout."
 msgstr "<strong>Anmerkung:</strong> Möglicherweise muss der Wert für ein besseres Aussehen Ihres Layouts angepasst werden."
 
-#: zTRANSLATE/zp-core/admin-options.php:1957
+#: zTRANSLATE/zp-core/admin-options.php:1959
 msgid "Thumb size:"
 msgstr "Thumbnailgrösse:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1960
+#: zTRANSLATE/zp-core/admin-options.php:1962
 msgid "Default thumbnail size and scale."
 msgstr "Standardgrösse der Thumbnails."
 
-#: zTRANSLATE/zp-core/admin-options.php:1963
+#: zTRANSLATE/zp-core/admin-options.php:1965
 msgid "Crop thumbnails:"
 msgstr "Thumbnails beschneiden:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1968
+#: zTRANSLATE/zp-core/admin-options.php:1970
 msgid "Crop width"
 msgstr "Beschnittbreite"
 
-#: zTRANSLATE/zp-core/admin-options.php:1973
+#: zTRANSLATE/zp-core/admin-options.php:1975
 msgid "Crop height"
 msgstr "Beschnitthöhe"
 
-#: zTRANSLATE/zp-core/admin-options.php:1979
+#: zTRANSLATE/zp-core/admin-options.php:1981
 msgid "If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."
 msgstr "Wenn ausgewählt, wird das Thumbnail auf die  <em>Breite</em> und <em>Höhe</em> wie angegeben beschnitten."
 
-#: zTRANSLATE/zp-core/admin-options.php:1981
+#: zTRANSLATE/zp-core/admin-options.php:1983
 msgid "<strong>Note:</strong> changing crop height or width will invalidate existing crops."
 msgstr "<strong>Anmerkung</strong>: Eine Änderung der Beschnitthöhe oder -breite macht bestehenden Beschnitte ungültig."
 
-#: zTRANSLATE/zp-core/admin-options.php:1985
+#: zTRANSLATE/zp-core/admin-options.php:1987
 msgid "Gray scale conversion:"
 msgstr "Graustufen-Umwandlung:"
 
-#: zTRANSLATE/zp-core/admin-options.php:1996
+#: zTRANSLATE/zp-core/admin-options.php:1998
 msgid "thumbnail"
 msgstr "Thumbnail"
 
-#: zTRANSLATE/zp-core/admin-options.php:2002
+#: zTRANSLATE/zp-core/admin-options.php:2004
 msgid "If checked, images/thumbnails will be created in gray scale."
 msgstr "Wenn dies ausgewählt ist, werden alle Bilder/Thumbnails als Graustufen erstellt."
 
-#: zTRANSLATE/zp-core/admin-options.php:2005
+#: zTRANSLATE/zp-core/admin-options.php:2007
 msgid "Image size:"
 msgstr "Bildgröße:"
 
-#: zTRANSLATE/zp-core/admin-options.php:2017
+#: zTRANSLATE/zp-core/admin-options.php:2019
 msgid "height"
 msgstr "Höhe"
 
-#: zTRANSLATE/zp-core/admin-options.php:2022
+#: zTRANSLATE/zp-core/admin-options.php:2024
 msgid "width"
 msgstr "Breite"
 
-#: zTRANSLATE/zp-core/admin-options.php:2031
+#: zTRANSLATE/zp-core/admin-options.php:2033
 msgid "shortest side"
 msgstr "Kürzeste Seite"
 
-#: zTRANSLATE/zp-core/admin-options.php:2036
+#: zTRANSLATE/zp-core/admin-options.php:2038
 msgid "longest side"
 msgstr "Längste Seite"
 
-#: zTRANSLATE/zp-core/admin-options.php:2043
+#: zTRANSLATE/zp-core/admin-options.php:2045
 msgid "Default image display size."
 msgstr "Standardbildgröße"
 
-#: zTRANSLATE/zp-core/admin-options.php:2045
+#: zTRANSLATE/zp-core/admin-options.php:2047
 msgid "The image will be sized so that the <em>height</em>, <em>width</em>, <em>shortest side</em>, or the <em>longest side</em> will be equal to <em>image size</em>."
 msgstr "Das Bild wird so in der Größe verändert, dass die <em>Höhe</em>, <em>Breite</em> oder die <em>kürzeste  Seite</em> oder der <em>längsten Seite</em> der <em>Bildgröße</em> entspricht."
 
-#: zTRANSLATE/zp-core/admin-options.php:2050
+#: zTRANSLATE/zp-core/admin-options.php:2052
 msgid "Gallery index page link:"
 msgstr "Galerie-Indexseitenlink:"
 
-#: zTRANSLATE/zp-core/admin-options.php:2069
+#: zTRANSLATE/zp-core/admin-options.php:2071
 msgid "If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This frees up the <code>index.php</code> script so that you can create a customized <em>Home</em> page script. This option applies only to the main theme for the <em>Gallery</em>."
 msgstr "Wenn diese Einstellung nicht leer ist, zeigt die Galerie Index URL, die normalerweise zur <code>index.php</code>-Seite des Themes zeigt, auf dieses Skript.  Diese Einstellung hat nur Auswirkung auf das Hauptheme für die <em>Galerie</em>."
 
-#: zTRANSLATE/zp-core/admin-options.php:2081
+#: zTRANSLATE/zp-core/admin-options.php:2083
 msgid "<strong>Custom theme options</strong>"
 msgstr "<strong>Spezielle Theme-Einstellungen</strong>"
 
-#: zTRANSLATE/zp-core/admin-options.php:2083
+#: zTRANSLATE/zp-core/admin-options.php:2085
 #, php-format
 msgid "The following are options specifically implemented by %s."
 msgstr "Die folgenden Einstellungen sind nur speziell für  %s."
 
-#: zTRANSLATE/zp-core/admin-options.php:2129
+#: zTRANSLATE/zp-core/admin-options.php:2131
 msgid "Expand plugin options"
 msgstr "Einstellungen aufklappen"
 
-#: zTRANSLATE/zp-core/admin-options.php:2131
+#: zTRANSLATE/zp-core/admin-options.php:2133
 msgid "Collapse all plugin options"
 msgstr "Einstellungen zusammenklappen"
 
-#: zTRANSLATE/zp-core/admin-options.php:2198
+#: zTRANSLATE/zp-core/admin-options.php:2200
 msgid "There are no plugin options to administer."
 msgstr "Es sind keine Plugin-Einstellungen vorhanden."
 
@@ -4156,31 +4156,31 @@ msgstr "Theme löschen"
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:214
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:209
 msgid "Custom thumbnail cropping"
 msgstr "Benutzerdefinierter Thumbnailbeschnitt"
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:215
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:210
 msgid "You can change the portion of your image which is shown in thumbnails by cropping it here."
 msgstr "Sie können hier den Ausschnitt Ihres Bilds auswählen, dass beim Beschnitt als Thumbnail angezeigt wird."
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:219
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:214
 msgid "current thumbnail"
 msgstr "Aktuelles Thumbnail"
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:248
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:243
 msgid "Reset to the default cropping"
 msgstr "Standardbeschnittwerte wiederherstellen"
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:251
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:246
 msgid "Save the cropping"
 msgstr "Beschnitt sichern"
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:263
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:258
 msgid "Thumbnail cropping is disabled. Enable this option for the theme if you wish cropped thumbnails."
 msgstr "Thumbnailbeschnitt ist deaktiviert. Aktivieren Sie diese Option, wenn Sie beschnittene Thumbnails verwenden möchten."
 
-#: zTRANSLATE/zp-core/admin-thumbcrop.php:274
+#: zTRANSLATE/zp-core/admin-thumbcrop.php:269
 msgid "thumbnail preview"
 msgstr "Thumbnailvorschau"
 
@@ -4891,16 +4891,16 @@ msgstr "Zu wenige Werte! Bild nicht gefunden."
 msgid "Method Not Allowed"
 msgstr "Methode nicht erlaubt"
 
-#: zTRANSLATE/zp-core/functions-basic.php:61
+#: zTRANSLATE/zp-core/functions-basic.php:63
 #, php-format
 msgid "<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"
 msgstr "<strong>Zenphoto Fehler:</strong> zp-config.php wurde nicht gefunden. Vielleicht müssen Sie  <a href=\"%s/setup.php\">setup</a> ausführen (oder Ihre alte zp-config.php übertragen)"
 
-#: zTRANSLATE/zp-core/functions-basic.php:327
+#: zTRANSLATE/zp-core/functions-basic.php:326
 msgid "ERROR: Assertion failed in"
 msgstr "Fehler: Erklärung scheiterte in"
 
-#: zTRANSLATE/zp-core/functions-basic.php:681
+#: zTRANSLATE/zp-core/functions-basic.php:680
 msgid "<strong>Backtrace:</strong>"
 msgstr "<strong>Zurückverfolgung:</strong>"
 
@@ -4916,25 +4916,25 @@ msgstr "Fehler: fehlerhafter Ajax POST"
 msgid "Could not save!"
 msgstr "Es konnte nicht gespeichert werden!"
 
-#: zTRANSLATE/zp-core/functions-db.php:22
+#: zTRANSLATE/zp-core/functions-db.php:20
 msgid "MySQL Error: The PHP MySQL extensions have not been installed. Please ask your administrator to add MySQL support to your PHP installation."
 msgstr "MySQL-Fehler: Die PHP-MySQL-Erweiterungen sind nicht installiert. Bitte fragen Sie Ihren Webhoster, diese zu installieren."
 
-#: zTRANSLATE/zp-core/functions-db.php:26
+#: zTRANSLATE/zp-core/functions-db.php:24
 msgid "The <code>$_zp_conf_vars</code> variable is not an array. Zenphoto has not been instantiated correctly."
 msgstr "Die Variable <code>$_zp_conf_vars</code> ist kein Array. Zenphoto ist nicht korrekt installiert."
 
-#: zTRANSLATE/zp-core/functions-db.php:31
+#: zTRANSLATE/zp-core/functions-db.php:29
 #, php-format
 msgid "MySQL Error: Zenphoto received the error <em>%s</em> when connecting to the database server."
 msgstr "MySQL-Fehler: Zenphoto erhielt den Fehler <em>%s</em> als es eine Verbindung zum Datenbank-Server herzustellen versuchte."
 
-#: zTRANSLATE/zp-core/functions-db.php:36
+#: zTRANSLATE/zp-core/functions-db.php:34
 #, php-format
 msgid "MySQL Error: The database is connected, but MySQL returned the error <em>%1$s</em> when Zenphoto tried to select the database %2$s."
 msgstr "MySQL-Fehler: Die Datenbankverbindung steht, aber MySQL gab den Fehler <em>%1$s</em> zurück als Zenphoto eine Verbindung mit der Datenbank %2$s aufbauen wollte."
 
-#: zTRANSLATE/zp-core/functions-db.php:71
+#: zTRANSLATE/zp-core/functions-db.php:69
 #, php-format
 msgid "MySQL Query ( <em>%1$s</em> ) failed. MySQL returned the error <em>%2$s</em>"
 msgstr "MySQL-Abfrage ( <em>%1$s</em> ) fehlgeschlagen. MySQL gab den Fehler <em> %2$s</em> zurück"
@@ -5508,259 +5508,259 @@ msgstr "Unbekannter Fehler! Bitte benachrichtigen Sie die Entwickler auf  <a hre
 msgid "Latest Albums"
 msgstr "Neuste Alben"
 
-#: zTRANSLATE/zp-core/functions.php:63
+#: zTRANSLATE/zp-core/functions.php:66
 msgid "Camera Maker"
 msgstr "Kamerahersteller"
 
-#: zTRANSLATE/zp-core/functions.php:64
+#: zTRANSLATE/zp-core/functions.php:67
 msgid "Camera Model"
 msgstr "Kameramodell"
 
-#: zTRANSLATE/zp-core/functions.php:65
+#: zTRANSLATE/zp-core/functions.php:68
 msgid "Image Title"
 msgstr "Bildtitel"
 
-#: zTRANSLATE/zp-core/functions.php:66
+#: zTRANSLATE/zp-core/functions.php:69
 msgid "Object name"
 msgstr "Objektname"
 
-#: zTRANSLATE/zp-core/functions.php:67
+#: zTRANSLATE/zp-core/functions.php:70
 msgid "Image headline"
 msgstr "Bildüberschrift"
 
-#: zTRANSLATE/zp-core/functions.php:68
+#: zTRANSLATE/zp-core/functions.php:71
 msgid "Image caption"
 msgstr "Bildtitel"
 
-#: zTRANSLATE/zp-core/functions.php:69
+#: zTRANSLATE/zp-core/functions.php:72
 msgid "Image caption writer"
 msgstr "Bildtitelautor"
 
-#: zTRANSLATE/zp-core/functions.php:70
+#: zTRANSLATE/zp-core/functions.php:73
 msgid "Time Taken"
 msgstr "Uhrzeit"
 
-#: zTRANSLATE/zp-core/functions.php:71
+#: zTRANSLATE/zp-core/functions.php:74
 msgid "Original Time Taken"
 msgstr "Originaldatum des Fotos"
 
-#: zTRANSLATE/zp-core/functions.php:72
+#: zTRANSLATE/zp-core/functions.php:75
 msgid "Time Digitized"
 msgstr "Digitalisierungsdatum"
 
-#: zTRANSLATE/zp-core/functions.php:73
+#: zTRANSLATE/zp-core/functions.php:76
 msgid "Date created"
 msgstr "Erstellungsdatum"
 
-#: zTRANSLATE/zp-core/functions.php:74
+#: zTRANSLATE/zp-core/functions.php:77
 msgid "Time created"
 msgstr "Erstellungsdatum"
 
-#: zTRANSLATE/zp-core/functions.php:75
+#: zTRANSLATE/zp-core/functions.php:78
 msgid "Digital Creation Date"
 msgstr "Digitalerstellungsdatum"
 
-#: zTRANSLATE/zp-core/functions.php:76
+#: zTRANSLATE/zp-core/functions.php:79
 msgid "Digital Creation Time"
 msgstr "Digitalerstellungsdatum"
 
-#: zTRANSLATE/zp-core/functions.php:77
+#: zTRANSLATE/zp-core/functions.php:80
 msgid "Artist"
 msgstr "Künstler"
 
-#: zTRANSLATE/zp-core/functions.php:78
+#: zTRANSLATE/zp-core/functions.php:81
 msgid "Image Credit"
 msgstr "Bildcredit"
 
-#: zTRANSLATE/zp-core/functions.php:79
+#: zTRANSLATE/zp-core/functions.php:82
 msgid "ByLine"
 msgstr "ByLine"
 
-#: zTRANSLATE/zp-core/functions.php:80
+#: zTRANSLATE/zp-core/functions.php:83
 msgid "ByLine Title"
 msgstr "ByLine Titel"
 
-#: zTRANSLATE/zp-core/functions.php:81
+#: zTRANSLATE/zp-core/functions.php:84
 msgid "Image source"
 msgstr "Bildquelle"
 
-#: zTRANSLATE/zp-core/functions.php:83
+#: zTRANSLATE/zp-core/functions.php:86
 msgid "Copyright Holder"
 msgstr "Copyrightinhaber"
 
-#: zTRANSLATE/zp-core/functions.php:84
+#: zTRANSLATE/zp-core/functions.php:87
 msgid "Copyright Notice"
 msgstr "Copyrightinhaber"
 
-#: zTRANSLATE/zp-core/functions.php:85
+#: zTRANSLATE/zp-core/functions.php:88
 msgid "Shutter Speed"
 msgstr "Verschlussgeschwindigkeit"
 
-#: zTRANSLATE/zp-core/functions.php:86
+#: zTRANSLATE/zp-core/functions.php:89
 msgid "Aperture"
 msgstr "Blende"
 
-#: zTRANSLATE/zp-core/functions.php:87
+#: zTRANSLATE/zp-core/functions.php:90
 msgid "ISO Sensitivity"
 msgstr "ISO-Empfindlichkeit"
 
-#: zTRANSLATE/zp-core/functions.php:88
+#: zTRANSLATE/zp-core/functions.php:91
 msgid "Exposure Compensation"
 msgstr "Belichtungskorrektur"
 
-#: zTRANSLATE/zp-core/functions.php:89
+#: zTRANSLATE/zp-core/functions.php:92
 msgid "Metering Mode"
 msgstr "Messeinstellung"
 
-#: zTRANSLATE/zp-core/functions.php:90
+#: zTRANSLATE/zp-core/functions.php:93
 msgid "Flash Fired"
 msgstr "Blitz verwendet"
 
-#: zTRANSLATE/zp-core/functions.php:91
+#: zTRANSLATE/zp-core/functions.php:94
 msgid "Original Width"
 msgstr "Originalbreite"
 
-#: zTRANSLATE/zp-core/functions.php:92
+#: zTRANSLATE/zp-core/functions.php:95
 msgid "Original Height"
 msgstr "Originalhöhe"
 
-#: zTRANSLATE/zp-core/functions.php:93
+#: zTRANSLATE/zp-core/functions.php:96
 msgid "Orientation"
 msgstr "Ausrichtung"
 
-#: zTRANSLATE/zp-core/functions.php:94
+#: zTRANSLATE/zp-core/functions.php:97
 msgid "Contrast Setting"
 msgstr "Kontrastseinstellung"
 
-#: zTRANSLATE/zp-core/functions.php:95
+#: zTRANSLATE/zp-core/functions.php:98
 msgid "Sharpness Setting"
 msgstr "Schärfeeinstellung"
 
-#: zTRANSLATE/zp-core/functions.php:96
+#: zTRANSLATE/zp-core/functions.php:99
 msgid "Saturation Setting"
 msgstr "Sättigungseinstellung"
 
-#: zTRANSLATE/zp-core/functions.php:97
+#: zTRANSLATE/zp-core/functions.php:100
 msgid "White Balance"
 msgstr "Weißbalance"
 
-#: zTRANSLATE/zp-core/functions.php:98
+#: zTRANSLATE/zp-core/functions.php:101
 msgid "Subject Distance"
 msgstr "Motiventfernung"
 
-#: zTRANSLATE/zp-core/functions.php:99
+#: zTRANSLATE/zp-core/functions.php:102
 msgid "Focal Length"
 msgstr "Brennweite"
 
-#: zTRANSLATE/zp-core/functions.php:100
+#: zTRANSLATE/zp-core/functions.php:103
 msgid "Lens Type"
 msgstr "Linsentyp"
 
-#: zTRANSLATE/zp-core/functions.php:101
+#: zTRANSLATE/zp-core/functions.php:104
 msgid "Lens Info"
 msgstr "Linseninfo"
 
-#: zTRANSLATE/zp-core/functions.php:102
+#: zTRANSLATE/zp-core/functions.php:105
 msgid "Focal Length Equivalent in 35mm Film"
 msgstr "Brennweiteequivalent 35mm Film."
 
-#: zTRANSLATE/zp-core/functions.php:104
+#: zTRANSLATE/zp-core/functions.php:107
 msgid "Sublocation"
 msgstr "Unterort"
 
-#: zTRANSLATE/zp-core/functions.php:105
+#: zTRANSLATE/zp-core/functions.php:108
 msgid "Province/State"
 msgstr "Provinz/Staat"
 
-#: zTRANSLATE/zp-core/functions.php:106
+#: zTRANSLATE/zp-core/functions.php:109
 msgid "Country/Primary Location Code"
 msgstr "Land/Hauptortsbestimmungscode"
 
-#: zTRANSLATE/zp-core/functions.php:107
+#: zTRANSLATE/zp-core/functions.php:110
 msgid "Country/Primary Location Name"
 msgstr "Land/Hauptortsbestimmungsname"
 
-#: zTRANSLATE/zp-core/functions.php:108
+#: zTRANSLATE/zp-core/functions.php:111
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: zTRANSLATE/zp-core/functions.php:109
+#: zTRANSLATE/zp-core/functions.php:112
 msgid "Latitude Reference"
 msgstr "Breitengradreferenz"
 
-#: zTRANSLATE/zp-core/functions.php:110
+#: zTRANSLATE/zp-core/functions.php:113
 msgid "Longitude"
 msgstr "Längengrad"
 
-#: zTRANSLATE/zp-core/functions.php:111
+#: zTRANSLATE/zp-core/functions.php:114
 msgid "Longitude Reference"
 msgstr "Längengradreferenz"
 
-#: zTRANSLATE/zp-core/functions.php:112
+#: zTRANSLATE/zp-core/functions.php:115
 msgid "Altitude"
 msgstr "Höhenlage"
 
-#: zTRANSLATE/zp-core/functions.php:113
+#: zTRANSLATE/zp-core/functions.php:116
 msgid "Altitude Reference"
 msgstr "Höhenlagereferenz"
 
-#: zTRANSLATE/zp-core/functions.php:114
+#: zTRANSLATE/zp-core/functions.php:117
 msgid "Originating Program "
 msgstr "Originalprogramm"
 
-#: zTRANSLATE/zp-core/functions.php:115
+#: zTRANSLATE/zp-core/functions.php:118
 msgid "Program version"
 msgstr "Programmversion"
 
-#: zTRANSLATE/zp-core/functions.php:428
+#: zTRANSLATE/zp-core/functions.php:422
 msgid "Mail send failed. There is no mail handler configured."
 msgstr "Mailversand gescheitert. Es ist keine Mailfunktionalität konfiguriert."
 
-#: zTRANSLATE/zp-core/functions.php:431
+#: zTRANSLATE/zp-core/functions.php:425
 msgid "Mail send failed. The \"to\" list is empty."
 msgstr "Mailversand gescheitert. Die \"to\"-Liste ist leer."
 
-#: zTRANSLATE/zp-core/functions.php:838
+#: zTRANSLATE/zp-core/functions.php:832
 #, php-format
 msgid "A comment has been placed in moderation on your album \"%1$s\"."
 msgstr "Ihr Kommentar wurde im Album \"%1$s\" zur Moderation vorgemerkt."
 
-#: zTRANSLATE/zp-core/functions.php:840
+#: zTRANSLATE/zp-core/functions.php:834
 #, php-format
 msgid "A comment has been posted on your album \"%1$s\"."
 msgstr "Es wurde ein Kommentar zu Ihrem Album \"%1$s\" abgegeben."
 
-#: zTRANSLATE/zp-core/functions.php:846
+#: zTRANSLATE/zp-core/functions.php:840
 #, php-format
 msgid "A comment has been placed in moderation on your article \"%1$s\"."
 msgstr "Ihr Kommentar zur Ihrem Artikel \"%1$s\" wurde zur Moderation vorgemerkt."
 
-#: zTRANSLATE/zp-core/functions.php:848
+#: zTRANSLATE/zp-core/functions.php:842
 #, php-format
 msgid "A comment has been posted on your article \"%1$s\"."
 msgstr "Ihr Kommentar wurde zum Artikel \"%1$s\" abgegeben."
 
-#: zTRANSLATE/zp-core/functions.php:854
+#: zTRANSLATE/zp-core/functions.php:848
 #, php-format
 msgid "A comment has been placed in moderation on your page \"%1$s\"."
 msgstr "Ihr Kommentar zur Seite \"%1$s\" wurde zur Moderation vorgemerkt."
 
-#: zTRANSLATE/zp-core/functions.php:856
+#: zTRANSLATE/zp-core/functions.php:850
 #, php-format
 msgid "A comment has been posted on your page \"%1$s\"."
 msgstr "Ihr Kommentar wurde zur Seite \"%1$s\" abgegeben."
 
-#: zTRANSLATE/zp-core/functions.php:864
+#: zTRANSLATE/zp-core/functions.php:858
 #, php-format
 msgid "A comment has been placed in moderation on your image \"%1$s\" in the album \"%2$s\"."
 msgstr "Ein Kommentar zu Ihrem Bild \"%1$s\" im Album \"%2$s\" wartet auf Moderation."
 
-#: zTRANSLATE/zp-core/functions.php:866
+#: zTRANSLATE/zp-core/functions.php:860
 #, php-format
 msgid "A comment has been posted on your image \"%1$s\" in the album \"%2$s\"."
 msgstr "Es wurde ein Kommentar zu Ihrem Bild \"%1$s\" im Album \"%2$s\" abgegeben."
 
-#: zTRANSLATE/zp-core/functions.php:872
+#: zTRANSLATE/zp-core/functions.php:866
 #, php-format
 msgid ""
 "Author: %1$s\n"
@@ -5777,7 +5777,7 @@ msgstr ""
 "\n"
 "%4$s"
 
-#: zTRANSLATE/zp-core/functions.php:873
+#: zTRANSLATE/zp-core/functions.php:867
 #, php-format
 msgid ""
 "You can view all comments about this item here:\n"
@@ -5786,7 +5786,7 @@ msgstr ""
 "Sie können alle Kommentare dazu hier ansehen:\n"
 "%1$s"
 
-#: zTRANSLATE/zp-core/functions.php:874
+#: zTRANSLATE/zp-core/functions.php:868
 #, php-format
 msgid ""
 "You can edit the comment here:\n"
@@ -5795,55 +5795,55 @@ msgstr ""
 "Sie können den Kommentare hier bearbeiten:\n"
 "%1$s"
 
-#: zTRANSLATE/zp-core/functions.php:898
+#: zTRANSLATE/zp-core/functions.php:892
 msgid "Comment posted"
 msgstr "Kommentar gesendet"
 
-#: zTRANSLATE/zp-core/functions.php:1088
+#: zTRANSLATE/zp-core/functions.php:1082
 #, php-format
 msgid "Zenphoto found no theme scripts. Please check the <em>%s</em> folder of your installation."
 msgstr "Zenphoto hat keine Themedateien gefunden. Bitte überprüfen Sie den <em>%s</em>Ordner Ihrer Installation."
 
-#: zTRANSLATE/zp-core/functions.php:1427
+#: zTRANSLATE/zp-core/functions.php:1416
 msgid "Unknown name"
 msgstr "Unbekannter Name"
 
-#: zTRANSLATE/zp-core/functions.php:1427
+#: zTRANSLATE/zp-core/functions.php:1416
 msgid "Unknown author"
 msgstr "Unbekannter Autor"
 
-#: zTRANSLATE/zp-core/functions.php:1427
-#: zTRANSLATE/zp-core/functions.php:1435
+#: zTRANSLATE/zp-core/functions.php:1416
+#: zTRANSLATE/zp-core/functions.php:1424
 msgid "<strong>Theme description error!</strong>"
 msgstr "<strong>Theme-Beschreibungsfehler!</strong>"
 
-#: zTRANSLATE/zp-core/functions.php:1427
+#: zTRANSLATE/zp-core/functions.php:1416
 msgid "Unknown date"
 msgstr "Unbekanntes Datum"
 
-#: zTRANSLATE/zp-core/functions.php:1460
+#: zTRANSLATE/zp-core/functions.php:1449
 #, php-format
 msgid "Page error: %2$s (%1$s)"
 msgstr "Seitenfehler: %2$s (%1$s)"
 
-#: zTRANSLATE/zp-core/functions.php:2064
+#: zTRANSLATE/zp-core/functions.php:2053
 #, php-format
 msgid "Zenphoto processed a 404 error on %s. See the debug log for details."
 msgstr "Zenphoto gibt einen 404-Fehler auf %s aus. Sehen Sie in das Debuglog. "
 
-#: zTRANSLATE/zp-core/i.php:128
+#: zTRANSLATE/zp-core/i.php:132
 msgid "The cache directory does not exist. Please create it and set the permissions to 0777."
 msgstr "Das Cache-Verzeichnis existiert nicht. Bitte erstellen Sie es und setzen Sie die Zugriffsrechte auf 0777."
 
-#: zTRANSLATE/zp-core/i.php:133
+#: zTRANSLATE/zp-core/i.php:137
 msgid "The cache directory is not writable! Attempts to chmod didn't work."
 msgstr "Das Cache-Verzeichnis ist nicht beschreibbar. Versuche, die Zugriffsrechte zu ändern, schlugen fehl."
 
-#: zTRANSLATE/zp-core/i.php:164
+#: zTRANSLATE/zp-core/i.php:168
 msgid "Image not found; file does not exist."
 msgstr "Bild nicht gefunden; die Datei existiert nicht."
 
-#: zTRANSLATE/zp-core/i.php:195
+#: zTRANSLATE/zp-core/i.php:199
 msgid "Image processing resulted in a fatal error."
 msgstr "Bei der Bildverarbeitung trat ein Fehler auf."
 
@@ -7032,270 +7032,270 @@ msgstr "Die Zenphoto-Einstellung \"mod_rewrite\" ist \"ausgeschaltet\"."
 msgid "Notice: \"Module mod_rewrite\" is working."
 msgstr "Hinweis: \"Module mod_rewrite\" arbeitet."
 
-#: zTRANSLATE/zp-core/template-functions.php:101
-msgid "Saving"
-msgstr "Sichern"
-
-#: zTRANSLATE/zp-core/template-functions.php:102
-msgid "Click to edit..."
-msgstr "Zum Bearbeiten klicken..."
-
-#: zTRANSLATE/zp-core/template-functions.php:106
+#: zTRANSLATE/zp-core/template-functions.php:90
 msgid "Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie dieses Bild löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zTRANSLATE/zp-core/template-functions.php:107
+#: zTRANSLATE/zp-core/template-functions.php:91
 msgid "Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie diesen Artikel löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zTRANSLATE/zp-core/template-functions.php:108
+#: zTRANSLATE/zp-core/template-functions.php:92
 msgid "Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie diese Seite löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zTRANSLATE/zp-core/template-functions.php:146
+#: zTRANSLATE/zp-core/template-functions.php:111
+msgid "Saving"
+msgstr "Sichern"
+
+#: zTRANSLATE/zp-core/template-functions.php:112
+msgid "Click to edit..."
+msgstr "Zum Bearbeiten klicken..."
+
+#: zTRANSLATE/zp-core/template-functions.php:153
 msgid "Admin Toolbox"
 msgstr "Verwaltung"
 
-#: zTRANSLATE/zp-core/template-functions.php:183
+#: zTRANSLATE/zp-core/template-functions.php:190
 msgid "Sort Gallery"
 msgstr "Galerie sortieren"
 
-#: zTRANSLATE/zp-core/template-functions.php:192
+#: zTRANSLATE/zp-core/template-functions.php:199
 msgid "New Album"
 msgstr "Neues Album"
 
-#: zTRANSLATE/zp-core/template-functions.php:204
+#: zTRANSLATE/zp-core/template-functions.php:211
 msgid "Edit album"
 msgstr "Album bearbeiten"
 
-#: zTRANSLATE/zp-core/template-functions.php:209
+#: zTRANSLATE/zp-core/template-functions.php:216
 msgid "Sort subalbums"
 msgstr "Unteralbum sortieren"
 
-#: zTRANSLATE/zp-core/template-functions.php:216
+#: zTRANSLATE/zp-core/template-functions.php:223
 msgid "Sort album images"
 msgstr "Bilder sortieren"
 
-#: zTRANSLATE/zp-core/template-functions.php:226
+#: zTRANSLATE/zp-core/template-functions.php:233
 msgid "Delete the album"
 msgstr "Album löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:226
+#: zTRANSLATE/zp-core/template-functions.php:233
 msgid "Delete album"
 msgstr "Album löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:235
+#: zTRANSLATE/zp-core/template-functions.php:242
 msgid "Upload Here"
 msgstr "Hier hochladen"
 
-#: zTRANSLATE/zp-core/template-functions.php:241
+#: zTRANSLATE/zp-core/template-functions.php:248
 msgid "New Album Here"
 msgstr "Neues Album"
 
-#: zTRANSLATE/zp-core/template-functions.php:260
+#: zTRANSLATE/zp-core/template-functions.php:267
 msgid "Delete the image"
 msgstr "Bild löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:265
+#: zTRANSLATE/zp-core/template-functions.php:272
 msgid "Edit this image"
 msgstr "Dieses Bild bearbeiten"
 
-#: zTRANSLATE/zp-core/template-functions.php:265
+#: zTRANSLATE/zp-core/template-functions.php:272
 msgid "Edit image"
 msgstr "Bild bearbeiten"
 
-#: zTRANSLATE/zp-core/template-functions.php:276
+#: zTRANSLATE/zp-core/template-functions.php:283
 msgid "Create an album from the search"
 msgstr "Erstelle Album aus der Suche"
 
-#: zTRANSLATE/zp-core/template-functions.php:276
+#: zTRANSLATE/zp-core/template-functions.php:283
 msgid "Create Album"
 msgstr "Album erstellen"
 
-#: zTRANSLATE/zp-core/template-functions.php:299
+#: zTRANSLATE/zp-core/template-functions.php:306
 msgid "Edit Article"
 msgstr "Artikel bearbeiten"
 
-#: zTRANSLATE/zp-core/template-functions.php:302
+#: zTRANSLATE/zp-core/template-functions.php:309
 msgid "Delete article"
 msgstr "Artikel löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:302
+#: zTRANSLATE/zp-core/template-functions.php:309
 msgid "Delete Article"
 msgstr "Artikel löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:305
+#: zTRANSLATE/zp-core/template-functions.php:312
 msgid "Add Article"
 msgstr "Artikel hinzufügen"
 
-#: zTRANSLATE/zp-core/template-functions.php:313
+#: zTRANSLATE/zp-core/template-functions.php:320
 msgid "Edit Page"
 msgstr "Seite bearbeiten"
 
-#: zTRANSLATE/zp-core/template-functions.php:316
+#: zTRANSLATE/zp-core/template-functions.php:323
 msgid "Delete page"
 msgstr "Seite löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:316
+#: zTRANSLATE/zp-core/template-functions.php:323
 msgid "Delete Page"
 msgstr "Seite löschen"
 
-#: zTRANSLATE/zp-core/template-functions.php:319
+#: zTRANSLATE/zp-core/template-functions.php:326
 msgid "Add Page"
 msgstr "Seite hinzufügen"
 
-#: zTRANSLATE/zp-core/template-functions.php:327
+#: zTRANSLATE/zp-core/template-functions.php:334
 msgid "Logout"
 msgstr "Abmelden"
 
-#: zTRANSLATE/zp-core/template-functions.php:722
-#: zTRANSLATE/zp-core/template-functions.php:771
+#: zTRANSLATE/zp-core/template-functions.php:729
+#: zTRANSLATE/zp-core/template-functions.php:778
 msgid "Previous Page"
 msgstr "Vorherige Seite"
 
-#: zTRANSLATE/zp-core/template-functions.php:724
-#: zTRANSLATE/zp-core/template-functions.php:806
+#: zTRANSLATE/zp-core/template-functions.php:731
+#: zTRANSLATE/zp-core/template-functions.php:813
 msgid "Next Page"
 msgstr "Nächste Seite"
 
-#: zTRANSLATE/zp-core/template-functions.php:776
+#: zTRANSLATE/zp-core/template-functions.php:783
 msgid "Page 1"
 msgstr "Seite 1"
 
-#: zTRANSLATE/zp-core/template-functions.php:780
-#: zTRANSLATE/zp-core/template-functions.php:796
+#: zTRANSLATE/zp-core/template-functions.php:787
+#: zTRANSLATE/zp-core/template-functions.php:803
 #, php-format
 msgid "Page %u"
 msgid_plural "Page %u"
 msgstr[0] "Seite %u"
 msgstr[1] "Seite %u"
 
-#: zTRANSLATE/zp-core/template-functions.php:787
+#: zTRANSLATE/zp-core/template-functions.php:794
 #, php-format
 msgid "Page %1$u (Current Page)"
 msgid_plural "Page %1$u (Current Page)"
 msgstr[0] "Seite %1$u (Aktuelle Seite)"
 msgstr[1] "Seite %1$u (Aktuelle Seite)"
 
-#: zTRANSLATE/zp-core/template-functions.php:789
+#: zTRANSLATE/zp-core/template-functions.php:796
 #, php-format
 msgid "Page %1$u"
 msgid_plural "Page %1$u"
 msgstr[0] "Seite %1$u"
 msgstr[1] "Seite %1$u"
 
-#: zTRANSLATE/zp-core/template-functions.php:801
+#: zTRANSLATE/zp-core/template-functions.php:808
 #, php-format
 msgid "Page {%u}"
 msgid_plural "Page {%u}"
 msgstr[0] "Seite {%u}"
 msgstr[1] "Seite {%u}"
 
-#: zTRANSLATE/zp-core/template-functions.php:876
-#: zTRANSLATE/zp-core/template-functions.php:1855
+#: zTRANSLATE/zp-core/template-functions.php:883
+#: zTRANSLATE/zp-core/template-functions.php:1862
 msgid "(No title...)"
 msgstr "(Kein Titel...)"
 
-#: zTRANSLATE/zp-core/template-functions.php:947
+#: zTRANSLATE/zp-core/template-functions.php:954
 msgid "Album Thumbnails"
 msgstr "Albumthumbnails"
 
-#: zTRANSLATE/zp-core/template-functions.php:1104
-#: zTRANSLATE/zp-core/template-functions.php:1939
+#: zTRANSLATE/zp-core/template-functions.php:1111
+#: zTRANSLATE/zp-core/template-functions.php:1946
 msgid "(No date...)"
 msgstr "(Kein Datum...)"
 
-#: zTRANSLATE/zp-core/template-functions.php:1130
+#: zTRANSLATE/zp-core/template-functions.php:1137
 msgid "(No Location...)"
 msgstr "(Kein Ort)"
 
-#: zTRANSLATE/zp-core/template-functions.php:1165
-#: zTRANSLATE/zp-core/template-functions.php:2023
+#: zTRANSLATE/zp-core/template-functions.php:1172
+#: zTRANSLATE/zp-core/template-functions.php:2030
 msgid "(No description...)"
 msgstr "(Keine Beschreibung...)"
 
-#: zTRANSLATE/zp-core/template-functions.php:1189
-#: zTRANSLATE/zp-core/template-functions.php:1211
+#: zTRANSLATE/zp-core/template-functions.php:1196
+#: zTRANSLATE/zp-core/template-functions.php:1218
 msgid "printEditable() incomplete function call."
 msgstr "printEditable() unvollständiger Funktionsaufruf."
 
-#: zTRANSLATE/zp-core/template-functions.php:1224
+#: zTRANSLATE/zp-core/template-functions.php:1231
 msgid "(...)"
 msgstr "(...)"
 
-#: zTRANSLATE/zp-core/template-functions.php:1267
-#: zTRANSLATE/zp-core/template-functions.php:1307
-#: zTRANSLATE/zp-core/template-functions.php:2086
+#: zTRANSLATE/zp-core/template-functions.php:1274
+#: zTRANSLATE/zp-core/template-functions.php:1314
+#: zTRANSLATE/zp-core/template-functions.php:2093
 msgid "(No data...)"
 msgstr "(Keine Daten...)"
 
-#: zTRANSLATE/zp-core/template-functions.php:2335
+#: zTRANSLATE/zp-core/template-functions.php:2342
 msgid "(No data)"
 msgstr "(Keine Daten)"
 
-#: zTRANSLATE/zp-core/template-functions.php:2988
+#: zTRANSLATE/zp-core/template-functions.php:2995
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: zTRANSLATE/zp-core/template-functions.php:3112
+#: zTRANSLATE/zp-core/template-functions.php:3119
 msgid "Download Zip of the Album"
 msgstr "Zip-Archiv dieses Albums runterladen"
 
-#: zTRANSLATE/zp-core/template-functions.php:3112
+#: zTRANSLATE/zp-core/template-functions.php:3119
 msgid "Download a zip file of this album"
 msgstr "zip-Datei dieses Albums herunterladen"
 
-#: zTRANSLATE/zp-core/template-functions.php:3454
+#: zTRANSLATE/zp-core/template-functions.php:3461
 #, php-format
 msgid "View image: %s"
 msgstr "Bild %s ansehen"
 
-#: zTRANSLATE/zp-core/template-functions.php:3509
+#: zTRANSLATE/zp-core/template-functions.php:3516
 msgid "(No tags...)"
 msgstr "(Keine Schlagworte...)"
 
-#: zTRANSLATE/zp-core/template-functions.php:3835
+#: zTRANSLATE/zp-core/template-functions.php:3842
 msgid "Latest images RSS"
 msgstr "Neuste Bilder RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:3840
+#: zTRANSLATE/zp-core/template-functions.php:3847
 msgid "Latest images of this album RSS"
 msgstr "Neuste Bilder dieses Albums RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:3845
+#: zTRANSLATE/zp-core/template-functions.php:3852
 msgid "Latest images of this album and its subalbums RSS"
 msgstr "Neuste Bilder dieses Albums und seiner Unteralben RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:3850
+#: zTRANSLATE/zp-core/template-functions.php:3857
 msgid "Latest comments RSS"
 msgstr "Neuste Kommentare RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:3855
+#: zTRANSLATE/zp-core/template-functions.php:3862
 msgid "Latest comments RSS for this image"
 msgstr "Neuste Kommentare zu diesem Bild RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:3860
+#: zTRANSLATE/zp-core/template-functions.php:3867
 msgid "Latest comments RSS for this album"
 msgstr "Neuste Kommentare zu diesem Album RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:3865
-#: zTRANSLATE/zp-core/template-functions.php:3870
+#: zTRANSLATE/zp-core/template-functions.php:3872
+#: zTRANSLATE/zp-core/template-functions.php:3877
 msgid "Latest albums RSS"
 msgstr "Neuste Alben RSS "
 
-#: zTRANSLATE/zp-core/template-functions.php:4084
+#: zTRANSLATE/zp-core/template-functions.php:4091
 msgid "select search fields"
 msgstr "Wählen Sie die Suchfelder"
 
-#: zTRANSLATE/zp-core/template-functions.php:4148
+#: zTRANSLATE/zp-core/template-functions.php:4155
 msgid "no date"
 msgstr "kein Datum"
 
-#: zTRANSLATE/zp-core/template-functions.php:4443
+#: zTRANSLATE/zp-core/template-functions.php:4450
 msgid "Check your user and password and try again."
 msgstr "Überprüfen Sie Ihr Benutzer-Passwort und versuchen Sie es erneut."
 
-#: zTRANSLATE/zp-core/template-functions.php:4450
+#: zTRANSLATE/zp-core/template-functions.php:4457
 msgid "The page you are trying to view is password protected."
 msgstr "Die Seite, die Sie sehen möchten, ist passwortgeschützt."
 
@@ -8344,123 +8344,118 @@ msgstr "Backup/Wiederherstellen"
 msgid "Backup and restore your gallery database."
 msgstr "Backup und Wiederherstellung Ihrer Datenbank."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:114
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:115
 msgid "Backup and Restore your Database"
 msgstr "Backup und Wiederherstellung Ihrer Datenbank."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:140
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:141
 #, php-format
 msgid "Failed to open %s for writing."
 msgstr "%s konnte nicht zum Schreiben geöffnet werden."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:145
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:166
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:146
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:167
 msgid "failed writing to backup!"
 msgstr "konnte nicht als Backup gespeichert werden!"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:181
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:182
 msgid "MySQL SHOW TABLES failed!"
 msgstr "MySQL SHOW TABLES fehlgeschlagen!"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:190
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:191
 #, php-format
 msgid "backup completed using <em>%1$s(%2$s)</em> compression"
 msgstr "Backup komplett mit <em>%1$s(%2$s)</em> Komprimierung"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:192
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:193
 msgid "backup completed"
 msgstr "Backup komplett"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:201
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:202
 msgid "backup failed"
 msgstr "Backup fehlgeschlagen"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:314
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:315
 msgid "Restore encountered exceptions"
 msgstr "Bei der Wiederherstellung sind Probleme augetreten."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:320
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:321
 msgid "The following tables were not restored because the table no longer exists:"
 msgstr "Die folgenden Tabellen wurden nicht wiederhergestellt, da die Tabellen nicht mehr existieren:"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:338
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:339
 msgid "The following fields were not restored because the field no longer exists:"
 msgstr "Die folgenden Felder wurden nicht wiederhergestellt, da die Felder nicht mehr existieren:"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:358
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:359
 msgid "Restore failed"
 msgstr "Wiederherstellung fehlgeschlagen"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:362
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:363
 msgid "No backup set found."
 msgstr "Keine Backupdatei gefunden."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:366
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:367
 #, php-format
 msgid "MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s"
 msgstr "MySQL-Abfrage ( <em>%1$s</em> ) fehlgeschlagen. Fehler: %2$s"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:379
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:380
 msgid "Restore completed"
 msgstr "Wiederherstellung komplett"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:381
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:382
 #, php-format
 msgid "Restore completed using %s compression"
 msgstr "Wiederherstellung mit  %s-Komprimierung komplett "
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:395
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:399
 #, php-format
 msgid "Your database is <strong>%s</strong>"
 msgstr "Ihre Datenbank ist <strong>%s</strong>"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:396
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:400
 #, php-format
 msgid "Tables are prefixed by <strong>%s</strong>"
 msgstr "Ihre Tabellen haben das Prefix <strong>%s</strong>"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:404
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:408
 msgid "Backup the tables in your database."
 msgstr "Backup der Tabellen Ihrer Datenbank."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:405
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:409
 msgid "Backup the Database"
 msgstr "Datenbank-Backup"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:425
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:429
 msgid "You have not yet created a backup set."
 msgstr "Sie haben bisher noch kein Backup erstellt."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:430
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:434
 msgid "Select the database restore file:"
 msgstr "Wählen Sie die Datenbank-Wiederherstellungsdatei aus:"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:437
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:441
 msgid "Restore the tables in your database from a previous backup."
 msgstr "Wiederherstellung der Tabellen Ihrer Datenbank von einen vorigen Backup."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:438
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:442
 msgid "Restore the Database"
 msgstr "Datenbank wiederherstellen"
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:455
-#, php-format
-msgid "The restore enabled the Zenpage plugin. You should run <a href=\"%1$s/%2$s/setup.php\">setup</a> to create Zenpage database tables. If tables are created, you will need repeat thus restore operation."
-msgstr "Die Wiederherstellung hat das Zenpage-Plugin aktiviert. Sie sollten <a href=\"%1$s/%2$s/setup.php\">setup</a> ausführen, um die Zenpage-Datenbanktabellen zuerstellen. Wenn diese erstellt sind, müssen Sie die Wiederherstellungsoperation wiederholen."
-
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:459
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:458
 msgid "The backup facility creates database snapshots in the <code>backup</code> folder of your installation. These backups are named in according to the date and time the backup was taken. The compression level goes from 0 (no compression) to 9 (maximum compression). Higher compression requires more processing and may not result in much space savings."
 msgstr "Die Backup-Funktion erstellt Datenbank-Schnappschüße im <code>backup</code>-Ordner Ihrer Installation. Dies Sicherungskopien sind entsprechend ihres Erstellungsdatums benannt. Der Komprimierungsgrade geht von 0 (Keine Komprimierung) bis 9 (Maximale Komprimierung). Höhere Komprimierung erfordert mehr Prozessorleistung und resultiert möglicherweise nicht in wirklicher Platzersparniss."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:462
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:461
 msgid "You restore your database by selecting a backup and pressing the <em>Restore the Database</em> button."
 msgstr "Stellen Sie Ihre Datenbank wieder her, indem Sie ein Backup auswählen und auf <em>Datenbank wiederherstellen</em> klicken."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:463
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:462
 msgid "<strong>Note:</strong> Each database table is emptied before the restore is attempted. After a successful restore the database will be in the same state as when the backup was created."
 msgstr "<strong>Anmerkung</strong>: Jede Datenbank wird geleert bevor eine Wiederherstellung versucht wird. Nach einer erfolgreichen Wiederherstellung wird die Datenbank den selben Zustand wie zum Zeitpunkt der Backuperstellung haben."
 
-#: zTRANSLATE/zp-core/utilities/backup_restore.php:465
+#: zTRANSLATE/zp-core/utilities/backup_restore.php:464
 msgid "Ideally a restore should be done only on the same version of Zenphoto on which the backup was created. If you are intending to upgrade, first do the restore on the version of Zenphoto you were running, then install the new Zenphoto. If this is not possible the restore can still be done, but if the database fields have changed between versions, data from changed fields will not be restored."
 msgstr "Eine Wiederherstellung sollte idealerweise mit der selben Version von Zenphoto ausgeführt werden, mit der das Backup erstellt wurde. Wenn Sie vorhaben eine Aktualisierung von Zenphoto auszuführen, stellen Sie zunächst die Zenphoto-Version wieder her, die Sie derzeit haben, und installieren dann die neue Version. Wenn dies nicht möglich sein sollte, kann die Wiederherstellung dennoch ausgeführt werden, wenn sich jedoch Datenbankfelder zwischen den Versionen geändert haben sollten, wird der Inhalt der geänderten Felder nicht wiederhergestellt."
 
@@ -9108,6 +9103,26 @@ msgstr "Keine Artikel oder Seiten zum Importieren vorhanden."
 msgid "New import"
 msgstr "Neuer Import"
 
+#: zTRANSLATE/zp-core/zp-extensions/auto_backup.php:15
+msgid "Periodically backup the Zenphoto database."
+msgstr "Die Zenphoto-Datenbank regelmäßig sichern"
+
+#: zTRANSLATE/zp-core/zp-extensions/auto_backup.php:49
+msgid "Run interval"
+msgstr "Intervall"
+
+#: zTRANSLATE/zp-core/zp-extensions/auto_backup.php:50
+msgid "The run interval (in days) for auto backup."
+msgstr "Das Intervall (in Tagen), wenn das Backup automatisch ausgeführt werden soll."
+
+#: zTRANSLATE/zp-core/zp-extensions/auto_backup.php:51
+msgid "Backups to keep"
+msgstr "Backups aufbewahren"
+
+#: zTRANSLATE/zp-core/zp-extensions/auto_backup.php:52
+msgid "Auto backup will keep only this many backup sets. Older sets will be removed."
+msgstr "Das Automatikbackup wird nur diese Anzahl an Backups aufbewahren. Ältere Backups werden entfernt."
+
 #: zTRANSLATE/zp-core/zp-extensions/class-textobject.php:58
 msgid "Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file."
 msgstr "Stellt Funktionalität bereit, um Text anzuzeigen wenn Zenphoto normalerweise Bilder anzeigen würde. Die Dokumentation ist in der Skriptdatei selbst enthalten."
@@ -9621,16 +9636,16 @@ msgstr "Aktivieren Sie  <strong>dynamic-locale</strong> um den Besucher Ihrer Se
 msgid "An image crop tool. Places an image crop button in the image utilities box of the images tab."
 msgstr "Ein Bildbeschneidungswerkzeug. Platziert einen Bildbeschneidungs-Buton innerhalb des Werkzeugabschnittes des Bildreiters. "
 
-#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:31
-#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:47
+#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:35
+#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:51
 msgid "Crop image"
 msgstr "Bild beschneiden"
 
-#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:233
+#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:232
 msgid "Image cropping"
 msgstr "Bildbeschnitt"
 
-#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:234
+#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:233
 msgid "You can crop your image by dragging the crop handles on the image.<br /><br /><strong>Note:</strong> If you save these changes they are permanent!"
 msgstr "Sie können Bilder beschneiden, indem Sie den Rahmen verschieben.<br /><br /><strong>ANMERKUNG:</strong> Diese Änderungen sind permanet, wenn Sie sie abspeichern!"
 
@@ -9659,12 +9674,10 @@ msgid "Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more in
 msgstr "Bitte besuchen Sie <a href='http://flowplayer.org'>flowplayer.org</a> für mehr Information über den Player und seine Lizenz."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:17
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:21
 msgid "Flash players do not support <em>External Albums</em>."
 msgstr "Die Flash Player unterstützen keine <em>externen Alben</em>"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:63
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:57
 msgid "flow player width"
 msgstr "Flow Player Breite"
 
@@ -9673,7 +9686,6 @@ msgid "Player width (ignored for <em>mp3</em> files.)"
 msgstr "Player-Breite (wird für <em>mp3s</em> ignoriert)"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:65
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:59
 msgid "flow player height"
 msgstr "Flow Player Höhe"
 
@@ -9746,12 +9758,10 @@ msgid "Color of the border of the player controls"
 msgstr "Die Farbe, die der Rahmen der Steuerung haben soll."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:79
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:61
 msgid "Autoplay"
 msgstr "Autostart"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:80
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:62
 msgid "Should the video start automatically. Yes if selected. (NOTE: Probably because of a flowplayer bug mp3s are always autoplayed.)"
 msgstr "Auswählen, wenn das Abspielen automatisch starten soll. (ANMERUNG: Wahrscheinlich durch einen Flowplayer-Fehler werden MP3s immer automatisch abgespielt.)"
 
@@ -9764,17 +9774,14 @@ msgid "Changes the color of the Flowplayer's background canvas. By default the c
 msgstr "Ändert die Farbe von Flowplayers Hintergrund. Standardmäßig dies ist schwarz. Sie können den Wert -1 setzen und der Hintergrund wird nicht angezeigt (nur der Film wird sichtbar sein)."
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:83
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:63
 msgid "Controls autohide"
 msgstr "Steuerung automatisch ausblenden"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:84
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:64
 msgid "never"
 msgstr "niemals"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:84
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:64
 msgid "always"
 msgstr "immer"
 
@@ -9783,7 +9790,6 @@ msgid "fullscreen"
 msgstr "Vollbild"
 
 #: zTRANSLATE/zp-core/zp-extensions/flowplayer3.php:85
-#: zTRANSLATE/zp-core/zp-extensions/flowplayer3_playlist.php:65
 msgid "Specifies whether the controlbar should be hidden when the user is not actively using the player."
 msgstr "Auswählen, wenn die Steuerung automatisch ausgeblendet werden soll, wenn sie nicht aktiv verwendet wird."
 
@@ -10213,21 +10219,37 @@ msgstr "<strong>Anmerkung:</strong> Sie können maximal %s Bilder pro Album hoch
 msgid "jQuery jCarousel thumb nav plugin with dynamic loading of thumbs on request via JavaScript."
 msgstr "jQuery jCarousel thumb nav Plugin mit dynamischen Nachladen von Thumbnails via JavaScript."
 
-#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:34
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:35
 msgid "Thumbs number"
 msgstr "Thumbnailnummer"
 
-#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:35
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:36
 msgid "The number of thumbs to scroll by. Note that the CSS might need to be adjusted."
 msgstr "Die Anzahl Thumbnails zum Scrollen. Bedenken Sie, dass das CSS ggf. angepaßt werden muß."
 
-#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:44
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:38
+msgid "Width of the carousel. Note that the CSS might need to be adjusted."
+msgstr "Breite des Carousels. Bedenken Sie, dass das CSS ggf. angepaßt werden muß."
+
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:40
+msgid "Height of the carousel. Note that the CSS might need to be adjusted."
+msgstr "Höhe des Carousels. Bedenken Sie, dass das CSS ggf. angepaßt werden muß."
+
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:45
 msgid "Full image link"
 msgstr "Vollbildlink"
 
-#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:45
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:46
 msgid "If checked the thumbs link to the full image instead of the image page."
 msgstr "Wenn ausgewählt, verlinken die Thumbnails auf das Vollbild anstatt auf die Bildseite."
+
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:47
+msgid "Vertical"
+msgstr "Vertikal"
+
+#: zTRANSLATE/zp-core/zp-extensions/jcarousel_thumb_nav.php:48
+msgid "If checked the carousel will flow vertically instead of the default horizontal. Changing this may require theme changes!"
+msgstr "Wenn ausgewählt, wird das Carousel vertikal anstatt standardmäßig horinzontal verlaufen. Dies benötigt möglicherweise Änderungen Ihres Themes."
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager.php:16
 msgid "A menu creation facility. The <em>Menu</em> tab admin interface lets you create arbitrary menu trees."
@@ -10660,23 +10682,23 @@ msgstr "5 Sterne"
 msgid "Submit &raquo;"
 msgstr "Abschicken &raquo;"
 
-#: zTRANSLATE/zp-core/zp-extensions/rating.php:260
+#: zTRANSLATE/zp-core/zp-extensions/rating.php:261
 msgid "Vote Submitted"
 msgstr "Bewertung abgeschickt"
 
-#: zTRANSLATE/zp-core/zp-extensions/rating.php:262
+#: zTRANSLATE/zp-core/zp-extensions/rating.php:263
 msgid "nothing to submit"
 msgstr "Nichts zum Abschicken"
 
-#: zTRANSLATE/zp-core/zp-extensions/rating.php:302
+#: zTRANSLATE/zp-core/zp-extensions/rating.php:304
 msgid "Vote Status:"
 msgstr "Bewertungsstatus:"
 
-#: zTRANSLATE/zp-core/zp-extensions/rating.php:330
+#: zTRANSLATE/zp-core/zp-extensions/rating.php:332
 msgid "Reset all ratings"
 msgstr "Alle Bewertungen zurücksetzen"
 
-#: zTRANSLATE/zp-core/zp-extensions/rating.php:334
+#: zTRANSLATE/zp-core/zp-extensions/rating.php:336
 msgid "Sets all ratings to unrated."
 msgstr "Setzt alle Bewertungen auf unbewertet."
 
@@ -10889,10 +10911,6 @@ msgid "Front-end"
 msgstr "Frontend"
 
 #: zTRANSLATE/zp-core/zp-extensions/security-logger.php:185
-msgid "n/a"
-msgstr "keine Angabe"
-
-#: zTRANSLATE/zp-core/zp-extensions/security-logger.php:185
 msgid "Blocked access"
 msgstr "Blockierter Zugriff"
 
@@ -11046,11 +11064,13 @@ msgstr "Datum der letzten Änderung - Alben"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:134
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:138
+#: zTRANSLATE/zp-core/zp-extensions/zenpage.php:83
 msgid "date"
 msgstr "Datum:"
 
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:135
 #: zTRANSLATE/zp-core/zp-extensions/sitemap-extended.php:139
+#: zTRANSLATE/zp-core/zp-extensions/zenpage.php:83
 msgid "mtime"
 msgstr "Filemtime"
 
@@ -11214,7 +11234,7 @@ msgstr ":"
 msgid "back"
 msgstr "Zurück"
 
-#: zTRANSLATE/zp-core/zp-extensions/slideshow.php:530
+#: zTRANSLATE/zp-core/zp-extensions/slideshow.php:542
 msgid "Click on the right in the player control bar to view full size."
 msgstr "Klicken Sie rechts in der Player-Kontrollleiste, um den Vollbildmodus zu aktivieren."
 
@@ -12000,54 +12020,54 @@ msgstr "Menüeintrag gelöscht"
 msgid "Menu set '%s' deleted"
 msgstr "Menüset '%s' gelöscht"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:83
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:80
 msgid "Menuset id"
 msgstr "Menüset-DI"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:89
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:86
 #, php-format
 msgid "Ok to delete menu set %s? This cannot be undone!"
 msgstr "Wollen Sie das Menüset %s löschen? Dies kann nicht rückgängig gemacht werden!"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:107
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:104
 msgid "Menu Manager"
 msgstr "Menü-Manager"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:107
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:104
 #, php-format
 msgid " (Menu set: %s)"
 msgstr " (Menüsset: %s)"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:112
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:109
 msgid "Drag the items into the order, including sub levels, you wish them displayed. This lets you create arbitrary menus and place them on your theme pages. Use printCustomMenu() to place them on your pages."
 msgstr "Verschieben Sie die Einträge in die gewünschte Reihenfolge inklusive Untereinträgen. Dies ermöglicht es, benutzerdefinierte Menüs zu erstellen und diese auf Ihren Themeseiten auszugeben. Platzieren Sie dazu printCustomMenu()."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:115
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:112
 msgid "<strong>IMPORTANT:</strong> This menu's order is completely independent from any order of albums or pages set on the other admin pages. It is recommend to uses is with customized themes only that do not use the standard Zenphoto display structure. Standard Zenphoto functions like the breadcrumb functions or the next_album() loop for example will NOT take care of this menu's structure!"
 msgstr "<strong>WICHTIG:</strong> Die Reihenfolge dieses Menüs ist vollständig unabhängig von irgendeiner Reihenfolge der Alben oder Seiten, die auf anderen Verwaltungsseiten eingestellt ist. Es wird empfohlen, dies vorallem mit benutzerdefinierten Themes zu verwenden, die nicht die Themestandardstruktur aufweisen. Standard-Zenphoto -Funktionen wie die breadcrumb-Funktionen oder die next_album()-Schleife berücksichtigen die Struktur dieses Menüs NICHT!"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:119
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:116
 msgid "Add Menu Items"
 msgstr "Menüeinträge hinzufügen"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:120
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:117
 msgid "Add Menu set"
 msgstr "Menüset hinzufügen"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:127
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:124
 msgid "Edit the menu"
 msgstr "Menü bearbeiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:145
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:142
 #, php-format
 msgid "Delete menu set '%s'"
 msgstr "Menüset '%s' löschen"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:182
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:179
 msgid "Menu target is password protected"
 msgstr "Menü-Ziel ist passwortgeschützt"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:183
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab.php:180
 msgid "Show/hide"
 msgstr "Zeigen/Verstecken"
 
@@ -12505,298 +12525,299 @@ msgstr "Die Gruppe \"%s\" existiert bereits."
 msgid "Assign users to groups."
 msgstr "Benutzer Gruppen zuweisen."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:54
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:45
 msgid "Are you sure you want to delete this category? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie diese Kategorie löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:77
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:68
 msgid "Are you sure you want to delete all selected items? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie alle ausgewählten Einträge löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:106
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:97
 msgid "Edit Category:"
 msgstr "Kategorie bearbeiten:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:113
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:227
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:240
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:104
 msgid "Usage tips"
 msgstr "Bedienungshinweise"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:115
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:106
 msgid "Add New Category"
 msgstr "Neue Kategorie hinzufügen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:120
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:111
 msgid "A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically if a new category is added. You can edit it later manually if necessary."
 msgstr "Ein suchmaschinenfreundlicher <em>Titellink</em> (auch \"slug\" genannt) ohne Sonderzeichen für die Verwendung in URLs wird automatisch aus dem Titel der aktuell eingestellten Sprache erstellt. Sie können diesen später manuell bearbeiten falls nötig."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:121
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:112
 msgid "If you are editing a category check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting."
 msgstr "Wählen Sie <em>Titellink bearbeiten</em>, wenn Sie anpassen möchten, wie der Titel in URLs erscheint.  Andernfalls wird er jedesmal automatisch jeder Änderung am Titel angepaßt. Wenn Sie dies verhindern möchten, wählen Sie <em>PermaTitellink aktivieren</em> und der Titellink bleibt immer derselbe (empfohlen, wenn Sie Zenphoto im mehrsprachigen Modus verwenden). <strong>Anmerkung: </strong> <em>Titellink bearbeiten</em> übergeht die <em>PermaTitellink aktivieren</em>-Einstellung."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:122
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:243
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:113
 msgid "<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."
 msgstr "<strong>Wichtig:</strong> Wenn Sie Zenphoto im mehrsprachigen Modus verwenden, wird der Titellink vom Titel der aktuell eingestellten Sprache erstellt."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:123
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:256
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:114
 msgid "Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."
 msgstr "Tipp: Wenn Sie mehr Platz für Ihren Text benötigen, verwenden Sie TinyMCEs Vollbildmodus (Klicken Sie auf das blaue Quadrat oben recht in der Editorkontrollleiste)."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:154
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:145
 msgid "Category Title:"
 msgstr "Kategorie-Titel:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:156
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:147
 msgid "New Category Title:"
 msgstr "Neuer Kategorietitel:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:161
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:152
 msgid "Enable permaTitleLink"
 msgstr "PermaTitellink aktivieren"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:168
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:159
 msgid "Category TitleLink:"
 msgstr "Kategorie-Titellink bearbeiten:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:170
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:288
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:161
 msgid "Edit TitleLink"
 msgstr "Titellink bearbeiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:181
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:212
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:172
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:203
 msgid "Category password:"
 msgstr "Kategorie-Passwort:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:203
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:194
 msgid "Category guest user:"
 msgstr "Kategorie-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:224
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:215
 msgid "Category password hint:"
 msgstr "Kategoriepasswort-Hinweis:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:232
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:223
 msgid "<strong>Note:</strong> Articles assigned to multiple categories will take the protection of the least strict category. So if the article belongs to any unprotected category it will be unprotected."
 msgstr "<strong>Anmerkung:</strong> Artikel, die mehreren Kategorien zugewiesen sind, werden den Passwortschutz der am wenigsten strikten Kategorie übernehmen. Wenn also ein Artikel zu irgendeiner ungeschützen Kategorie gehört, ist er ungeschützt."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:239
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:230
 msgid "Update Category"
 msgstr "Kategorie aktualisieren"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:241
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:232
 msgid "Save New Category"
 msgstr "Neue Kategorie speichern"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:272
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:263
 msgid "Edit this Category"
 msgstr "Diese Kategorie bearbeiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:303
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-categories.php:294
 msgid "Delete category"
 msgstr "Kategorie löschen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:83
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:89
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:74
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:80
 msgid "Future publishing date:"
 msgstr "Zukünftiges Veröffentlichungsdatum:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:97
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:88
 msgid "This is not a future date!"
 msgstr "Dies ist kein zukünftiges Datum!"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:145
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:136
 msgid "Update Article"
 msgstr "Artikel aktualisieren"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:146
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:137
 msgid "Save Article"
 msgstr "Artikel sichern"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:158
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:149
 msgid "Update Page"
 msgstr "Seite aktualisieren"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:159
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:150
 msgid "Save Page"
 msgstr "Seite sichern"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:168
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:159
 msgid "Edit Article:"
 msgstr "Artikel bearbeiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:172
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:163
 msgid "(Article scheduled for publishing)"
 msgstr "(Artikel wird zeitgesteuert veröffentlicht)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:174
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:165
 msgid "<strong>Note:</strong> Scheduled publishing is not active unless the article is also set to <em>published</em>"
 msgstr "<strong>Anmerkung:</strong> Zeitgesteuertes Veröffentlichen ist nicht aktiviert, bevor der Artikel nicht auf <em>veröffentlicht</em> gesetzt ist."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:178
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:169
 msgid "<strong>Note:</strong> This article is password protected because it is assigned to a password protected category only."
 msgstr "<strong>Anmerkung:</strong> Dieser Artikel ist passwortgeschützt, da er einer passwortgeschützen Kategorie zugewiesen ist."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:183
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:174
 msgid "Edit Page:"
 msgstr "Seite bearbeiten:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:187
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:178
 msgid "(Page scheduled for publishing)"
 msgstr "(Seite wird zeitgesteuert veröffentlicht)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:189
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:180
 msgid "Note: Scheduled publishing is not active unless the page is also set to <em>published</em>"
 msgstr "Anmerkung: Zeitgesteuertes Veröffentlichen ist nicht aktiviert, bevor die Seite nicht auf  <em>veröffentlicht</em> gesetzt ist."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:193
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:184
 msgid "<strong>Note:</strong> This page is either password protected itself or subpage of a passport protected page."
 msgstr "<strong>Anmerkung:</strong> Diese Seite ist entweder selbst passwortgeschützt oder die Unterseite einer geschützten Seite."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:241
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:232
 msgid "Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode)."
 msgstr "Wählen Sie <em>Titellink bearbeiten</em>, wenn Sie anpassen möchten, wie der Titel in URLs erscheint.  Andernfalls wird er jedesmal automatisch jeder Änderung am Titel angepaßt. Wenn Sie dies verhindern möchten, wählen Sie <em>PermaTitellink aktivieren</em> und der Titellink bleibt immer derselbe (empfohlen, wenn Sie Zenphoto im mehrsprachigen Modus verwenden). <strong>Anmerkung: </strong> <em>Titellink bearbeiten</em> übergeht die <em>PermaTitellink aktivieren</em>-Einstellung."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:242
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:233
 msgid "<strong>Note:</strong> Edit titlelink overrides the permalink setting."
 msgstr "<strong>Anmerkung:</strong> Titellinkbearbeitung übergeht die PermaTitelink-Einstellung."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:244
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:235
 msgid "If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"
 msgstr "Wenn Sie einen Artikel sperren, kann nur der sperrende Autor/Benutzer oder jeder Benutzer mit vollen Administratonsrechten diesen Artikel später bearbeiten."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:246
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:237
 msgid "<em>Custom article shortening:</em> You can set a custom article shorten length for the news loop excerpts by using the standard TinyMCE <em>page break</em> plugin button. This will override the general shorten length set on the plugin option then."
 msgstr "<em>Benutzerdefinierte Artikelkürzungen:</em> Sie können benutzerdefinierte Artikelkürzungen für die Haupt-Neuigkeitenseiten mit dem TinyMCE <em>Seitenumbruch</em>-Plugin-Schalter erstellen. Dies wird die Kürzungslänge der allgemeinen Plugineinstellung übergehen."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:248
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:239
 msgid "<em>Scheduled publishing:</em> To automatically publish a page/news article in the future set it to 'published' and enter a future date in the date field manually. Note this works on server time!"
 msgstr "<em>Zeitgesteuertes Veröffentlichen:</em> Um eine Seite/einen Artikel zeitgesteuert zu veröffentlichen, setzen Sie ihn auf 'veröffentlicht' und geben ein zukünftiges Datum ein. Achtung, dies arbeitet nach Serverzeit!"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:249
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:240
 msgid "<em>Expiration date:</em> Enter a future date in the date field manually to set a date the page or article will be set un-published automatically. After the page/article has been expired it can only be published again if the expiration date is deleted. Note this works on server time!"
 msgstr "<em>Ungültigkeitsdatum:</em> Geben Sie ein zukünftiges Datum in diesem Datumsfeld ein und die Seite/der Artikel werden automatisch an diesem auf unveröffentlicht gesetzt. Nachdem eine Seite oder ein Artikel ungültig wurden, können sie nur wieder durch das Löschen des Ungültigkeitsdatums erneut veröffentlicht werden."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:250
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:241
 msgid "<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"
 msgstr "<em>ExtraInhalt:</em>Hier können Sie Extrainhalt für diese Seite eingeben, der zum Beispiel in der Seitenleiste angezeigt werden könnte."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:251
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:242
 msgid "<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or JavaScript code."
 msgstr "<em>Codeblöcke:</em>Verwenden Sie die Codeblock-Felder, wenn Sie PHP-Code (z.B. Zenphoto-Funktionen) oder JavaScript-Code eingeben müssen."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:252
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:243
 msgid "You also can use the codeblock fields as custom fields."
 msgstr "Sie können die Codeblock-Felder auch als benutzerdefinierte Felder verwenden."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:253
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:244
 msgid "Note that your theme must be setup to use the codeblock functions. Note also that codeblock fields are not multi-lingual."
 msgstr "Bedenken Sie, dass Ihr Theme über die Codeblock-Funktionen verfügen muss. Außerdem sind die Codeblock-Felder nicht multilingual."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:255
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:246
 msgid "<strong>Important:</strong> If setting a password for a page its subpages inherit the protection."
 msgstr "<strong>Wichtig:</strong> Wenn Sie ein Passwort vergeben, erben Unterseiten dieses."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:293
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:284
 msgid "Enable permaTitlelink"
 msgstr "PermaTitellink aktivieren"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:307
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:298
 msgid "Position:"
 msgstr "Position:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:309
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:300
 msgid "normal"
 msgstr "Normal"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:311
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:302
 msgid "Stick to top"
 msgstr "Ganz oben behalten"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:319
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:310
 msgid "Locked for changes"
 msgstr "Für Änderungen gesperrt"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:333
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:354
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:324
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:345
 msgid "Page password:"
 msgstr "Seitenpasswort:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:351
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:342
 msgid "Page guest user:"
 msgstr "Seiten-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:361
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:352
 msgid "Page password hint:"
 msgstr "Seitenpasswort-Hinweis:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:422
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:413
 msgid "Expiration date:"
 msgstr "Ungültigkeitsdarum: "
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:426
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:417
 #, php-format
 msgid "Last change:<br />%1$s<br />by %2$s"
 msgstr "Letzte Änderung: <br /> %1$s von %2$s"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:441
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:432
 #, php-format
 msgid "Reset hitcounter (Hits: %1$s)"
 msgstr "Besucherzähler löschen (Besucher: %1$s)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:474
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:465
 msgid "TitleLink:"
 msgstr "Titellink:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:479
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:470
 msgid "A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically. You can edit it manually later after saving if necessary."
 msgstr "Ein suchmaschinenfreundlicher <em>Titellink</em> (auch \"slug\" genannt) ohne Sonderzeichen für die Verwendung in URLs wird automatisch aus dem Titel der aktuell eingestellten Sprache erstellt. Sie können diesen später manuell bearbeiten falls nötig."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:485
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:476
 msgid "Content:"
 msgstr "Inhalt:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:489
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:480
 msgid "ExtraContent:"
 msgstr "Extrainhalt:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:93
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:82
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1228
 msgid "Articles"
 msgstr "Artikel"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:144
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:133
 msgid "Edit this article"
 msgstr "Diesen Artikel bearbeiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:216
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:219
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:246
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:249
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:252
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:205
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:208
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:235
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:238
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:241
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:338
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:341
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:365
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:368
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:371
 msgid "locked"
 msgstr "gesperrt"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:224
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:225
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:213
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-news-articles.php:214
 msgid "View article"
 msgstr "Artikel ansehen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:90
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:82
 msgid "Select a page to edit or drag the pages into the order, including subpage levels, you wish them displayed."
 msgstr "Wählen Sie eine Seite zum Bearbeiten oder verschieben Sie die Seiten in die gewünschte Reihenfolge, inklusive Unterebenen."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:91
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:83
 msgid "<strong>Note:</strong> Subpages of password protected pages inherit the protection."
 msgstr "<strong>Anmerkung:</strong> Unterseiten erben Passwortschutz von ihren übergeordneten Seiten."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:112
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:104
 msgid "Edit this page"
 msgstr "Diese Seite bearbeiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:149
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-pages.php:141
 msgid "The sort position of the indicated pages cannot be recorded because the nesting is too deep. Please move them to a higher level and save your order."
 msgstr "Die Sortierungsposition der angezeigten Seiten konnte nicht gespeichert werden, da die Verschachtelung zu tief ist. Bitte bewegen Sie sie auf eine höhere Ebene und speichern Sie die Reihenfolge."
 
@@ -12895,8 +12916,8 @@ msgid "All articles"
 msgstr "Alle Artikel"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:905
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1442
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1466
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1420
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1444
 msgid "Un-published"
 msgstr "Unveröffentlicht"
 
@@ -12986,43 +13007,43 @@ msgid_plural "(<strong>%1$u</strong> categories)"
 msgstr[0] "(<strong>%1$u</strong> Kategorie)"
 msgstr[1] "(<strong>%1$u</strong> Kategorien)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1336
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1314
 msgid "Published/Not published/Scheduled for publishing"
 msgstr "Veröffentlicht/unveröffentlicht/Zeitgesteuerte Veröffentlichung"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1391
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1369
 #, php-format
 msgid "Expired: %s"
 msgstr "Ungültig am: %s"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1393
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1371
 #, php-format
 msgid "Expires: %s"
 msgstr "Wird ungültig am: %s"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1433
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1411
 msgid "Publish immediately (skip scheduling)"
 msgstr "Sofort veröffentlichen (Zeitsteuerung abbrechen)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1436
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1414
 msgid "Scheduled for published"
 msgstr "Zeitgesteuerte Veröffentlichung"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1439
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1417
 msgid "Enable scheduled publishing"
 msgstr "Zeitgesteuerte Veröffentlichung aktivieren"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1447
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1425
 msgid "Un-publish"
 msgstr "auf unveröffentlicht stellen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1460
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1438
 msgid "Publish (override expiration)"
 msgstr "Veröffentlichen (Ungültigkeitsdatum übergehen)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1609
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1626
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1642
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1587
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1604
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-admin-functions.php:1620
 msgid "Toggle Editor"
 msgstr "Editor ausblenden"
 
@@ -13038,61 +13059,61 @@ msgstr "<em>Dieser Eintrag gehört zu einem geschützten Album.</em>"
 msgid "No flash player installed."
 msgstr "Kein Flashplayer installiert."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:1425
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:1430
 msgid "Prev page"
 msgstr "Vorherige Seite"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2272
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2277
 msgid "This page is password protected"
 msgstr "Diese Seite ist passwortgeschützt"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2650
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2655
 msgid "News RSS"
 msgstr "Neues RSS"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2655
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2660
 msgid "News Category RSS"
 msgstr "Kategorie RR"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2660
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2665
 msgid "News and Gallery RSS"
 msgstr "Neues und Galerie RSS"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2665
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2670
 msgid "Zenpage Comments RSS"
 msgstr "Zenpagekommentar RSS"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2670
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2675
 msgid "News article comments RSS"
 msgstr "Artikel RSS"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2675
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2680
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2685
 msgid "Page Comments RSS"
 msgstr "Seitenkommentar RSS"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2765
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2770
 #, php-format
 msgid "View the %s album"
 msgstr "Album %s ansehen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2767
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2772
 #, php-format
 msgid "View the photo album %s"
 msgstr "Album %s ansehen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2774
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2775
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2779
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2780
 #, php-format
 msgid "View %s"
 msgstr "%s ansehen"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2782
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2787
 #, php-format
 msgid "<code>zenpageAlbumImage()</code> did not find the image %1$s:%2$s"
 msgstr "<code>zenpageAlbumImage()</code> konnte das Bild %1$s:%2$s nicht finden"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2792
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/zenpage-template-functions.php:2797
 #, php-format
 msgid "<code>zenpageAlbumImage()</code> did not find the album %1$s"
 msgstr "<code>zenpageAlbumImage()</code> konnte das Album %1$s nicht finden"
@@ -13101,6 +13122,19 @@ msgstr "<code>zenpageAlbumImage()</code> konnte das Album %1$s nicht finden"
 #, php-format
 msgid "Failed to retrieve link <em>%s</em>"
 msgstr "Der Link <em>%s</em> konnte nicht abgerufen werden"
+
+#~ msgid ""
+#~ "The restore enabled the Zenpage plugin. You should run <a href=\"%1$s/%2"
+#~ "$s/setup.php\">setup</a> to create Zenpage database tables. If tables are "
+#~ "created, you will need repeat thus restore operation."
+#~ msgstr ""
+#~ "Die Wiederherstellung hat das Zenpage-Plugin aktiviert. Sie sollten <a "
+#~ "href=\"%1$s/%2$s/setup.php\">setup</a> ausführen, um die Zenpage-"
+#~ "Datenbanktabellen zuerstellen. Wenn diese erstellt sind, müssen Sie die "
+#~ "Wiederherstellungsoperation wiederholen."
+
+#~ msgid "n/a"
+#~ msgstr "keine Angabe"
 
 #~ msgid "You do not have rights to sort this album"
 #~ msgstr "Sie haben keine Sortierrechte für dieses Album."
