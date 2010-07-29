@@ -660,7 +660,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</td>
 				</tr>
 				<tr>
-					<td><?php echo gettext('Inline editing'); ?></td>
+					<td><?php echo gettext('Front-end editing'); ?></td>
 					<td>
 						<label>
 							<input type="radio" name = "edit_in_place" value=0<?php if (!getOption('edit_in_place')) echo ' checked="checked"'; ?>><?php echo gettext('Disabled'); ?></input>

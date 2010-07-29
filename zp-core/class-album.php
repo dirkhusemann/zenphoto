@@ -36,7 +36,9 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
-			debugLogBacktrace('Bad gallery in instantiation of album '.$folder8);
+			$msg = sprintf(gettext('ZBad gallery in instantiation of album %s.'),$folder8);
+			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
+			debugLogBacktrace($msg);
 			$gallery = new Gallery();
 		}
 		$folder8 = sanitize_path($folder8);
@@ -49,6 +51,9 @@ class Album extends PersistentObject {
 		}
 		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
 			$this->exists = false;
+			$msg = sprintf(gettext('Zenphoto encountered an album name spoof attempt: %s.'),$folder8);
+			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
+			debugLogBacktrace($msg);
 			return;
 		}
 		if ($dynamic = hasDynamicAlbumSuffix($folder8)) {
@@ -60,6 +65,9 @@ class Album extends PersistentObject {
 		$valid = file_exists($localpath) && ($dynamic || is_dir($localpath));
 		if(!$valid || strpos($localpath, '..') !== false) {
 			$this->exists = false;
+			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
+			$msg = sprintf(gettext('class-album detected an invalid folder name: %s.'),$localpath);
+			debugLogBacktrace($msg);
 			return;
 		}
 		$this->localpath = $localpath;
