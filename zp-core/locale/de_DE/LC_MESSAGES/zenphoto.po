@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zenphoto 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-29 10:45+0100\n"
-"PO-Revision-Date: 2010-07-29 10:47+0100\n"
+"POT-Creation-Date: 2010-07-30 14:03+0100\n"
+"PO-Revision-Date: 2010-07-30 14:03+0100\n"
 "Last-Translator: Malte Müller (acrylian)\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -2945,8 +2945,8 @@ msgid "Character sets <span style=\"color:gray\">shown in gray</span> have no ch
 msgstr "Zeichensätze, die in <span style=\"color:gray\">Grau angezeigt </span>, werden, haben keine Umwandlungsunterstützung. "
 
 #: zTRANSLATE/zp-core/admin-options.php:663
-msgid "Inline editing"
-msgstr "On-the-fly-Bearbeiten"
+msgid "Front-end editing"
+msgstr "Frontend-Bearbeiten"
 
 #: zTRANSLATE/zp-core/admin-options.php:666
 msgid "Disabled"
@@ -4809,12 +4809,27 @@ msgstr "Wenn Sie Ihr Passwort nicht zurücksetzen wollen, ignorieren Sie einfach
 msgid "The Zenphoto information you requested"
 msgstr "Die Zenphoto-Information, die Sie angefordert haben"
 
-#: zTRANSLATE/zp-core/class-album.php:1254
+#: zTRANSLATE/zp-core/class-album.php:39
+#, php-format
+msgid "Bad gallery in instantiation of album %s."
+msgstr "Ungültige Galerie beim Erstellen des Albums %s."
+
+#: zTRANSLATE/zp-core/class-album.php:54
+#, php-format
+msgid "Zenphoto encountered an album name spoof attempt: %s."
+msgstr "Zenphoto hat einen Albumnamenbetrugsversuch festgestellt: %s."
+
+#: zTRANSLATE/zp-core/class-album.php:67
+#, php-format
+msgid "class-album detected an invalid folder name: %s."
+msgstr "class-album hat einen ungültigen Ordnernamen gefunden: %s."
+
+#: zTRANSLATE/zp-core/class-album.php:1261
 #, php-format
 msgid "Error: The album named %s cannot be found."
 msgstr "Fehler: Das Album %s wurde nicht gefunden."
 
-#: zTRANSLATE/zp-core/class-album.php:1256
+#: zTRANSLATE/zp-core/class-album.php:1263
 #, php-format
 msgid "Error: The album %s is not readable."
 msgstr "Fehler: Das Album %s ist nicht lesbar."
@@ -13122,6 +13137,9 @@ msgstr "<code>zenpageAlbumImage()</code> konnte das Album %1$s nicht finden"
 #, php-format
 msgid "Failed to retrieve link <em>%s</em>"
 msgstr "Der Link <em>%s</em> konnte nicht abgerufen werden"
+
+#~ msgid "Inline editing"
+#~ msgstr "On-the-fly-Bearbeiten"
 
 #~ msgid ""
 #~ "The restore enabled the Zenpage plugin. You should run <a href=\"%1$s/%2"
