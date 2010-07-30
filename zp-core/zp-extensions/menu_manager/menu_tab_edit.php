@@ -15,7 +15,7 @@ if(isset($_GET['id'])) {
 	$result = getItem(sanitize($_GET['id']));
 }
 if(isset($_GET['save'])) {
-	XSRFdefender('update');
+	XSRFdefender('update_menu');
 	if ($_POST['update']) {
 		$result = updateItem($report);
 	} else {
@@ -55,6 +55,7 @@ function handleSelectorChange(type) {
 	$('#type').val(type);
 	$('#link_label').html('<?php echo js_encode(gettext('URL')); ?>');
 	$('#titlelabel').html('<?php echo js_encode(gettext('Title')); ?>');
+	$('#XSRFToken').val('<?php echo getXSRFToken('update_menu'); ?>');
 	switch(type) {
 		case 'all_items':
 			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
@@ -190,7 +191,6 @@ function handleSelectorChange(type) {
 			$('#typeselector').change(function() {
 					$('input').val(''); // reset all input values so we do not carry them over from one type to another
 					$('#link').val('');
-					$('#XSRFToken').val('<?php echo getXSRFToken('update'); ?>');
 					handleSelectorChange($(this).val());
 				});
 			});
@@ -254,7 +254,7 @@ if (isset($_GET['add'])) {
 }
 ?>
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
-		<?php XSRFToken('update'); ?>
+		<?php XSRFToken('update_menu'); ?>
 		<input type="hidden" name="update" id="update" value="<?php echo htmlspecialchars($action,ENT_QUOTES); ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
 		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link,ENT_QUOTES); ?>" />

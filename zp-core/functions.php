@@ -2073,7 +2073,7 @@ function getXSRFToken($action) {
  */
 function XSRFToken($action) {
 	?>
-	<input type="hidden" name="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
+	<input type="hidden" name="XSRFToken" id="XSRFToken" value="<?php echo getXSRFToken($action); ?>" />
 	<?php
 }
 

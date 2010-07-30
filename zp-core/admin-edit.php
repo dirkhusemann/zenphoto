@@ -486,7 +486,7 @@ if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo') || isset($
 	function newAlbum(folder,albumtab) {
 		var album = prompt('<?php echo gettext('New album name?'); ?>', '<?php echo gettext('new album'); ?>');
 		if (album) {
-			launchScript('',['action=newalbum','album='+folder,'name='+encodeURIComponent(album),'albumtab='+albumtab]);
+			launchScript('',['action=newalbum','album='+folder,'name='+encodeURIComponent(album),'albumtab='+albumtab,'XSRFToken=<?php echo getXSRFToken('newalbum'); ?>']);
 		}
 	}
 	function confirmAction() {
