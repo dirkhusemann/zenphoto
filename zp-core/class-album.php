@@ -36,7 +36,7 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
-			$msg = sprintf(gettext('ZBad gallery in instantiation of album %s.'),$folder8);
+			$msg = sprintf(gettext('Bad gallery in instantiation of album %s.'),$folder8);
 			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
 			debugLogBacktrace($msg);
 			$gallery = new Gallery();
@@ -62,11 +62,10 @@ class Album extends PersistentObject {
 		}
 
 		// Must be a valid (local) folder:
-		$valid = file_exists($localpath) && ($dynamic || is_dir($localpath));
-		if(!$valid || strpos($localpath, '..') !== false) {
+		if(!file_exists($localpath) && ($dynamic || is_dir($localpath))) {
 			$this->exists = false;
+			$msg = sprintf(gettext('class-album detected an invalid folder name: %s.'),$folder8);
 			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
-			$msg = sprintf(gettext('class-album detected an invalid folder name: %s.'),$localpath);
 			debugLogBacktrace($msg);
 			return;
 		}
