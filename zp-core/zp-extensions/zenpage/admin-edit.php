@@ -326,18 +326,17 @@ if(is_object($result)) {
 					<?php
 					if (empty($x)) {
 						?>
-						<img src="../../images/lock_open.png" alt="" />
+						<img src="../../images/lock_open.png" alt="" class="icon-postion-top8" />
 						<?php
 					} else {
 						$x = '          ';
 						?>
-						<img src="../../images/lock.png" alt="" />
+						<img src="../../images/lock.png" alt="" class="icon-postion-top8" />
 						<?php 
 					} 
 					?>
 				</p>
-				<?php } ?>
-				<p class="passwordextrahide" style="display:none">
+				<div class="passwordextrahide" style="display:none">
 					<a href="javascript:toggle_passwords('',false);">
 					<?php echo gettext("Page guest user:"); ?>
 					</a>
@@ -352,9 +351,9 @@ if(is_object($result)) {
 					<?php echo gettext("Page password hint:"); ?>
 					<br />
 					<?php print_language_string_list($hint, 'page_hint', false, NULL, '', 27); ?>
-				</p>
-				<?php
-
+				</div>
+				<?php 
+				}
 				if(is_AdminEditPage("newsarticle")) {
 					echo zp_apply_filter('publish_article_utilities', '');
 				} else {
