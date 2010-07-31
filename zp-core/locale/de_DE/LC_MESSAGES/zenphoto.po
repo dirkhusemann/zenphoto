@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zenphoto 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-30 14:03+0100\n"
-"PO-Revision-Date: 2010-07-30 14:03+0100\n"
+"POT-Creation-Date: 2010-07-31 19:28+0100\n"
+"PO-Revision-Date: 2010-07-31 19:29+0100\n"
 "Last-Translator: Malte Müller (acrylian)\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -8965,16 +8965,16 @@ msgid "Database host"
 msgstr "Datenbankserver"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:83
-msgid "An importer for <strong>Wordpress 2.9.x</strong> to the Zenpage CMS plugin that imports the following:"
-msgstr "Ein Importer für <strong>Wordpress 2.9.x</strong> zum Zenpage CMS Plugin, der folgendes importiert:"
+msgid "An importer for <strong>Wordpress 2.9.x/3.x</strong> to the Zenpage CMS plugin that imports the following:"
+msgstr "Ein Importer für <strong>Wordpress 2.9.x/3.x</strong> zum Zenpage CMS Plugin, der folgendes importiert:"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:85
-msgid "<strong>Posts => Zenpage articles</strong>"
-msgstr "<strong>Posts => Zenpage Artikel</strong>"
+msgid "<strong>Posts (post_status published and draft only) => Zenpage articles</strong>"
+msgstr "<strong>Posts (nur post_status published und draft) => Zenpage Artikel</strong>"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:86
-msgid "<strong>Pages => Zenpage pages</strong>"
-msgstr "<strong>Seiten => Zenpage Seiten</strong>"
+msgid "<strong>Pages (post_status published and draft only) => Zenpage pages</strong>"
+msgstr "<strong>Seiten (nur post_status published und draft) => Zenpage Seiten</strong>"
 
 #: zTRANSLATE/zp-core/utilities/wordpress_import.php:87
 msgid "<strong>Post categories => Zenpage categories including assignment to their article</strong>"
@@ -12087,126 +12087,126 @@ msgid "Show/hide"
 msgstr "Zeigen/Verstecken"
 
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:56
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:141
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:142
 msgid "URL"
 msgstr "URL"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:61
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:62
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:230
 msgid "All menu items"
 msgstr "Alle Menüeinträge"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:62
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:63
 msgid "This adds menu items for all Zenphoto objects. (It creates a \"default\" menuset.)"
 msgstr "Dies fügt Menüeinträge für alle Zenphoto-Elemente ein. (Es erstellt ein \"default\"-Menüset.)"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:67
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:68
 msgid "This is the normal Zenphoto gallery Index page."
 msgstr "Dies ist die normale Zenphoto-Galerieindex-Seite"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:75
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:76
 msgid "This adds menu items for all Zenphoto albums."
 msgstr "Dies fügt Menüeinträge für alle Zenphoto-Alben ein."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:80
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:81
 msgid "Creates a link to a Zenphoto Album."
 msgstr "Erstellt einen Link zu einem Album."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:90
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:91
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:237
 msgid "All Zenpage pages"
 msgstr "Alle Zenpage Seiten"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:91
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:92
 msgid "This adds menu items for all Zenpage pages."
 msgstr "Dies fügt Menüeinträge für alle Zenpage Seiten hinzu."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:95
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:96
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:238
 msgid "Zenpage page"
 msgstr "Zenpage Seite"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:96
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:97
 msgid "Creates a link to a Zenpage Page."
 msgstr "Erstellt einen Link zu einer Zenpage Seite."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:99
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:100
 msgid "Page"
 msgstr "Seite"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:106
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:107
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:239
 msgid "Zenpage news index"
 msgstr "Zenpage Artikelindex"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:107
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:108
 msgid "Creates a link to the Zenpage News Index."
 msgstr "Erstellt einen Link zum Zenpage-Neuigkeitenindex."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:114
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:115
 msgid "All Zenpage categories"
 msgstr "Alle zenpage Kategorien"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:115
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:116
 msgid "This adds menu items for all Zenpage categories."
 msgstr "Dies fügt Menüeinträge für Zenpage Kategorien hinzu."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:119
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:120
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:241
 msgid "Zenpage news category"
 msgstr "Zenpage Kategorie"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:120
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:121
 msgid "Creates a link to a Zenpage News article category."
 msgstr "Erstellt einen Link zu einer Zenpage Kategorie."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:131
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:132
 msgid "Custom page"
 msgstr "Benutzerdefinierte Seite"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:132
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:133
 msgid "Creates a link to a custom theme page as described in the theming tutorial."
 msgstr "Erstellt einen Link zu einer benutzerdefinierten Seite wie im Theming Tutorial beschrieben."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:133
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:134
 msgid "Script page"
 msgstr "Skriptseite"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:138
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:139
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:246
 msgid "Custom link"
 msgstr "Benutzerdefinierter Link"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:139
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:140
 msgid "Creates a link outside the Zenphoto structure. Use of a full URL is recommended (e.g. http://www.domain.com)."
 msgstr "Erstellt einen Link zu einem Ziel außerhalb von Zenphoto. Die Verwendung der vollen URL (z.B. http://www.domain.com) wird empfohlen."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:146
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:147
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:247
 msgid "Label"
 msgstr "Beschriftung"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:147
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:148
 msgid "Creates a <em>label</em> to use in menu structures)."
 msgstr "Erstellt eine <em>Beschriftung</em> zur Verwendung innerhalb der Menüstruktur)."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:152
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:154
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:153
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:155
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:248
 msgid "Function"
 msgstr "Funktion"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:153
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:154
 msgid "Executes the PHP function provided."
 msgstr "Führt die eingegebene PHP-Funktion aus."
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:161
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:163
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:162
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:164
 #: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:249
 msgid "HTML"
 msgstr "HTML"
 
-#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:162
+#: zTRANSLATE/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:163
 msgid "Inserts custom HTML."
 msgstr "Fügt benutzerdefiniertes HTML ein."
 
@@ -12751,45 +12751,45 @@ msgid "Locked for changes"
 msgstr "Für Änderungen gesperrt"
 
 #: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:324
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:345
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:344
 msgid "Page password:"
 msgstr "Seitenpasswort:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:342
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:341
 msgid "Page guest user:"
 msgstr "Seiten-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:352
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:351
 msgid "Page password hint:"
 msgstr "Seitenpasswort-Hinweis:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:413
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:412
 msgid "Expiration date:"
 msgstr "Ungültigkeitsdarum: "
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:417
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:416
 #, php-format
 msgid "Last change:<br />%1$s<br />by %2$s"
 msgstr "Letzte Änderung: <br /> %1$s von %2$s"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:432
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:431
 #, php-format
 msgid "Reset hitcounter (Hits: %1$s)"
 msgstr "Besucherzähler löschen (Besucher: %1$s)"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:465
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:464
 msgid "TitleLink:"
 msgstr "Titellink:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:470
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:469
 msgid "A search engine friendly <em>titlelink</em> (aka slug) without special characters to be used in URLs is generated from the title of the currently chosen language automatically. You can edit it manually later after saving if necessary."
 msgstr "Ein suchmaschinenfreundlicher <em>Titellink</em> (auch \"slug\" genannt) ohne Sonderzeichen für die Verwendung in URLs wird automatisch aus dem Titel der aktuell eingestellten Sprache erstellt. Sie können diesen später manuell bearbeiten falls nötig."
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:476
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:475
 msgid "Content:"
 msgstr "Inhalt:"
 
-#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:480
+#: zTRANSLATE/zp-core/zp-extensions/zenpage/admin-edit.php:479
 msgid "ExtraContent:"
 msgstr "Extrainhalt:"
 
