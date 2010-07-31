@@ -82,8 +82,8 @@ printAdminHeader();
 <h1><?php echo (gettext('Wordpress Importer')); ?></h1>
 <p><?php echo gettext("An importer for <strong>Wordpress 2.9.x/3.x</strong> to the Zenpage CMS plugin that imports the following:"); ?></p>
 <ul>
-	<li><?php echo gettext("<strong>Published posts => Zenpage articles</strong>"); ?></li>
-	<li><?php echo gettext("<strong>Published pages => Zenpage pages</strong>"); ?></li>
+	<li><?php echo gettext("<strong>Posts (post_status published and draft only) => Zenpage articles</strong>"); ?></li>
+	<li><?php echo gettext("<strong>Pages (post_status published and draft only) => Zenpage pages</strong>"); ?></li>
 	<li><?php echo gettext("<strong>Post categories => Zenpage categories including assignment to their article</strong>"); ?></li>
 	<li><?php echo gettext("<strong>Post tags => Zenphoto tags including assignment to their article</strong>"); ?></li>
 	<li><?php echo gettext("<strong>Post and page comments => Zenphoto comments including assignment to their article</strong>"); ?></li>
@@ -208,7 +208,7 @@ if(isset($_POST['dbname']) || isset($_POST['dbuser']) || isset($_POST['dbpass'])
 	post_status as `show`,
 	post_type as type
 	FROM ".wp_prefix('posts',$wp_prefix)." 
-	WHERE (post_type = 'post' OR post_type = 'page') AND post_status = 'publish'
+	WHERE (post_type = 'post' OR post_type = 'page') AND (post_status = 'publish' OR post_status = 'draft')
 	ORDER BY post_date DESC
 ");
 	if($posts) {
