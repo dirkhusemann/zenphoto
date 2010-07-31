@@ -582,7 +582,7 @@ function getNewsContentShorten($articlecontent,$shorten,$shortenindicator='',$re
 		$shortenindicator = getOption('zenpage_textshorten_indicator');
 	}
 	if(!empty($readmoreurl)) {
-		$readmorelink = '<a href="'.$readmoreurl.'" title="'.gettext('Read more').'">'.getOption('zenpage_read_more').'</a>';
+		$readmorelink = '<a href="'.$readmoreurl.'" title="'.gettext('Read more').'">'.get_language_string(getOption('zenpage_read_more')).'</a>';
 	}
 	if(!empty($shorten) && strlen($articlecontent) > $shorten) {
 		return shortenContent($articlecontent,$shorten,$shortenindicator).$readmorelink;
@@ -2254,7 +2254,7 @@ function printPageLinkURL($titlelink) {
 function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicator='') {
 	global  $_zp_current_zenpage_page;
 	if(empty($readmore)) {
-		$readmore = getOption("zenpage_read_more");
+		$readmore = get_language_string(getOption("zenpage_read_more"));
 	}
 	if((zp_loggedin(ZENPAGE_PAGES_RIGHTS))) {
 		$published = FALSE;
