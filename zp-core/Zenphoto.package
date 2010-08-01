@@ -292,6 +292,7 @@ zp-core/images/admin-navtabback.jpg
 zp-core/images/arrow_in.png
 zp-core/images/arrow_left_blue_round.png
 zp-core/images/arrow_out.png
+zp-core/images/arrow_up.png
 zp-core/images/bar_graph.png
 zp-core/images/burst.png
 zp-core/images/burst1.png
@@ -631,7 +632,9 @@ zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel.js
 zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_ajax.php
 zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_loading.gif
 zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_next.png
+zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_next_vertical.png
 zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_prev.png
+zp-core/zp-extensions/jcarousel_thumb_nav/jcarousel_prev_vertical.png
 zp-core/zp-extensions/jcarousel_thumb_nav/jquery.jcarousel.css
 zp-core/zp-extensions/jcarousel_thumb_nav/jquery.jcarousel.pack.js
 zp-core/zp-extensions/jcarousel_thumb_nav.php

@@ -231,7 +231,7 @@ echo '</head>'."\n";
 											<input type="hidden" name="<?php echo $id ?>-confirmed" value="1" />
 											<?php				
 											printAdminRightsTable($id, '', '', $rights);
-											printManagedObjects('albums',$albumlist, '', $groupid, $id);
+											printManagedObjects('albums',$albumlist, '', $groupid, $id, $rights);
 											if (getOption('zp_plugin_zenpage')) {
 												$pagelist = array();
 												$pages = getPages(false);
@@ -240,13 +240,13 @@ echo '</head>'."\n";
 														$pagelist[get_language_string($page['title'])] = $page['titlelink'];
 													}
 												}
-												printManagedObjects('pages',$pagelist, '', $groupid, $id);
+												printManagedObjects('pages',$pagelist, '', $groupid, $id, $rights);
 												$newslist = array();
 												$categories = getAllCategories();
 												foreach ($categories as $category) {
 													$newslist[get_language_string($category['cat_name'])] = $category['cat_link'];
 												}
-												printManagedObjects('news',$newslist, '', $groupid, $id);
+												printManagedObjects('news',$newslist, '', $groupid, $id, $rights);
 											}
 											?>
 										</td>

@@ -2811,21 +2811,28 @@ function populateManagedObjectsList($type,$id,$rights=false) {
  * @param string $alterrights are the items changable
  * @param int $adminid ID of the admin
  * @param int $prefix the admin row
+ * @param bit $rights the priviledges of the user
  */
-function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) {
+function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, $rights) {
+	$ledgend = '';
 	switch ($type) {
 		case 'albums':
 			$full = populateManagedObjectsList('album',$adminid, true);
 			$cv = $extra = array();
-			foreach ($full as $item) {
-				$cv[$item['name']] = $item['data'];
-/*				
-				$extra[$item['data']] = array(
-																	array('name'=>'rights','value'=>0,'display'=>'','checked'=>1),
-																	array('name'=>'edit','value'=>MANAGED_OBJECT_RIGHTS_EDIT,'display'=>gettext('edit'),'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_EDIT),
-																	array('name'=>'upload','value'=>MANAGED_OBJECT_RIGHTS_UPLOAD,'display'=>gettext('upload'),'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_UPLOAD)
-																);
-*/																														
+			if (($rights & (UPLOAD_RIGHTS | ALBUM_RIGHTS)) && !($rights & ADMIN_RIGHTS)) {
+				$icon_edit = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/pencil.png" />';
+				$icon_upload = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/arrow_up.png" />';
+				$ledgend = $icon_edit.' '.gettext('edit').' '.$icon_upload.' '.gettext('upload');
+				foreach ($full as $item) {
+					$cv[$item['name']] = $item['data'];
+					$extra[$item['data']][] = array('name'=>'rights','value'=>0,'display'=>'','checked'=>1);
+					if ($rights & ALBUM_RIGHTS) {
+						$extra[$item['data']][] = array('name'=>'edit','value'=>MANAGED_OBJECT_RIGHTS_EDIT,'display'=>$icon_edit,'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_EDIT);
+					}
+					if ($rights & UPLOAD_RIGHTS) {
+						$extra[$item['data']][] = array('name'=>'upload','value'=>MANAGED_OBJECT_RIGHTS_UPLOAD,'display'=>$icon_upload,'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_UPLOAD);
+					}
+				}
 			}
 			$rest = array_diff($albumlist, $cv);
 			$text = gettext("Managed albums:");
@@ -2858,6 +2865,7 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 				generateUnorderedListFromArray(array(), $rest, $prefix, $alterrights, true, true);
 				?>
 			</ul>
+			<?php echo $ledgend; ?>
 		</div>
 	</div>
 	<?php

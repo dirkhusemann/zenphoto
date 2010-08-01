@@ -480,7 +480,7 @@ if (empty($alterrights)) {
 					if ($current && $ismaster) {
 						echo '<p>'.gettext("The <em>master</em> account has full rights to all albums.").'</p>';
 					} else {
-						printManagedObjects('albums',$albumlist, $album_alter_rights, $user['id'], $id);
+						printManagedObjects('albums',$albumlist, $album_alter_rights, $user['id'], $id, $userobj->getRights());
 						if (getOption('zp_plugin_zenpage')) {
 							$pagelist = array();
 							$pages = getPages(false);
@@ -489,13 +489,13 @@ if (empty($alterrights)) {
 									$pagelist[get_language_string($page['title'])] = $page['titlelink'];
 								}
 							}
-							printManagedObjects('pages',$pagelist, $album_alter_rights, $user['id'], $id);
+							printManagedObjects('pages',$pagelist, $album_alter_rights, $user['id'], $id, $userobj->getRights());
 							$newslist = array();
 							$categories = getAllCategories();
 							foreach ($categories as $category) {
 								$newslist[get_language_string($category['cat_name'])] = $category['cat_link'];
 							}
-							printManagedObjects('news',$newslist, $album_alter_rights, $user['id'], $id);
+							printManagedObjects('news',$newslist, $album_alter_rights, $user['id'], $id, $userobj->getRights());
 						}
 					}
 						if (!$ismaster) {
