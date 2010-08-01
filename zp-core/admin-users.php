@@ -10,7 +10,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+admin_securityChecks(NO_RIGHTS, currentRelativeURL(__FILE__));
 
 $gallery = new Gallery();
 $_GET['page'] = 'users'; // must be a user with no options rights
@@ -54,8 +54,7 @@ if (isset($_GET['action'])) {
 						if (isset($_POST['alter_enabled'])) {
 							$objects = processManagedObjects($i);
 						} else {
-							$rights = NULL;
-							$objects = array();
+							$objects = $rights = NULL;
 						}
 						if (isset($_POST[$i.'-newuser'])) {
 							$newuser = $user;
@@ -79,25 +78,7 @@ if (isset($_GET['action'])) {
 							$updated = true;
 							$userobj->setRights($rights);
 						}
-						$objects_match = true;
-						$oldobjects = populateManagedObjectsList('', $userobj->getID());
-						if (!is_array($oldobjects)) $oldobjects = array();
-						foreach ($objects as $object) {
-							$key = false;
-							foreach($oldobjects as $objinx=>$oldobject) {
-								if ($object['type']==$oldobject['type'] && $object['data']==$oldobject['data']) {
-									$key = $objinx;
-									break;
-								}
-							}
-							if ($key === false) {
-								$objects_match = false;
-								break;
-							} else {
-								unset ($oldobjects[$key]);
-							}
-						}
-						if (!$objects_match || count($oldobjects) > 0) {
+						if (is_array($objects)) {
 							$updated = true;
 							$userobj->setObjects($objects);
 						}

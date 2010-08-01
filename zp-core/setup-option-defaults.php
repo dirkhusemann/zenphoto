@@ -291,7 +291,7 @@ if (!in_array('bozos',$groupsdefined)) {
 if (!in_array('album managers',$groupsdefined)) {
 	$groupobj = $_zp_authority->newAdministrator('album managers');
 	$groupobj->setName('template');
-	$groupobj->setRights(NULL, NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS);
+	$groupobj->setRights(NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS);
 	$groupobj->setCustomData(gettext('Managers of one or more albums'));
 	$groupobj->setValid(0);
 	$groupobj->save();	

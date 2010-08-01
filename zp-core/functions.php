@@ -899,7 +899,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 
 /**
  * Populates and returns the $_zp_admin_album_list array
- *
  * @return array
  */
 function getManagedAlbumList() {
@@ -907,16 +906,20 @@ function getManagedAlbumList() {
 	$_zp_admin_album_list = array();
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		$sql = "SELECT `folder` FROM ".prefix('albums').' WHERE `parentid` IS NULL';
+		$albums = query_full_array($sql);
+		foreach($albums as $album) {
+			$_zp_admin_album_list[$album['folder']] = 32767;
+		}
 	} else {
-		$sql = 'SELECT '.prefix('albums').'.`folder` FROM '.prefix('albums').', '.
+		$sql = 'SELECT '.prefix('albums').'.`folder`,'.prefix('admin_to_object').'.`edit` FROM '.prefix('albums').', '.
 						prefix('admin_to_object').' WHERE '.prefix('admin_to_object').'.adminid='.
 						$_zp_current_admin_obj->getID().' AND '.prefix('albums').'.id='.prefix('admin_to_object').'.objectid AND `type`="album"';
+		$albums = query_full_array($sql);
+		foreach($albums as $album) {
+			$_zp_admin_album_list[$album['folder']] = $album['edit'];
+		}
 	}
-	$albums = query_full_array($sql);
-	foreach($albums as $album) {
-		$_zp_admin_album_list[] = $album['folder'];
-	}
-	return $_zp_admin_album_list;
+	return array_keys($_zp_admin_album_list);
 }
 
 /**
@@ -1524,7 +1527,7 @@ function zp_getCookie($name) {
 		}
 		debugLog("zp_getCookie($name)::".'album_session='.getOption('album_session')."; SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
 	}
-	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) {
+	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name]) && !getOption('album_session')) {
 		return $_COOKIE[$name];
 	}
 	if (isset($_SESSION[$name])) {

@@ -18,6 +18,8 @@ if (file_exists(dirname(dirname(__FILE__)).'/'.USER_PLUGIN_FOLDER.'/alt/lib-auth
 foreach ($_zp_authority->getRights() as $key=>$right) {
 	define($key,$right['value']);
 }
+define('MANAGED_OBJECT_RIGHTS_EDIT', 1);
+define('MANAGED_OBJECT_RIGHTS_UPLOAD', 2);
 define ('LIST_ALBUM_RIGHTS', NO_RIGHTS);
 define ('LIST_PAGE_RIGHTS', NO_RIGHTS);
 define ('LIST_NEWS_RIGHTS', NO_RIGHTS);

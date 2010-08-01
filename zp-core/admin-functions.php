@@ -9,9 +9,6 @@
 
 require_once(dirname(__FILE__).'/functions.php');
 
-$_zp_admin_ordered_taglist = NULL;
-$_zp_admin_LC_taglist = NULL;
-$_zp_admin_album_list = null;
 define('TEXTAREA_COLUMNS', 50);
 define('TEXT_INPUT_SIZE', 48);
 define('TEXTAREA_COLUMNS_SHORT', 32);
@@ -803,8 +800,11 @@ function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
  * @param array $list the elements of the select list
  * @param string $prefix prefix of the input item
  * @param string $alterrights are the items changable.
+ * @param bool $sort true for sorted list
+ * @param bool $localize true if the list local key is text for the item
  */
-function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights, $sort, $localize) {
+function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights, $sort, $localize, $extra=NULL) {
+	if (is_null($extra)) $extra = array();
 	if ($sort) {
 		if ($localize) {
 			$list = array_flip($list);
@@ -824,14 +824,34 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 		}
 		?>
 		<li>
-		<span style="white-space:nowrap">
+		<span style="display:inline;white-space:nowrap">
 			<label>
 				<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
 					<?php if (isset($cv[$item])) {echo ' checked="checked"';	} ?> value="<?php echo $item; ?>"
 					<?php echo $alterrights; ?> />
 				<?php echo $display; ?>
 			</label>
-		</span>
+			<?php
+			if (array_key_exists($key, $extra)) {
+				foreach ($extra[$key] as $box) {
+					if ($box['display']) {
+						?>
+						<label>
+							<input type="checkbox" id="<?php echo $listitem.'_'.$box['name']; ?>" name="<?php echo $listitem.'_'.$box['name']; ?>"
+									 value="<?php echo $box['value']; ?>" <?php if ($box['checked']) {echo ' checked="checked"';	} ?>
+									 <?php echo $alterrights; ?> \> <?php echo $box['display'];?>
+						</label>
+						<?php
+					} else {
+						?>
+						<input type="hidden" id="<?php echo $listitem.'_'.$box['name']; ?>" name="<?php echo $listitem.'_'.$box['name']; ?>"
+									 value="<?php echo $box['value']; ?>" />
+						<?php
+					}
+				}
+			}
+			?>
+			</span>
 		</li>
 		<?php
 		}
@@ -2727,15 +2747,16 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
  *
  * @param string $type which kind of object
  * @param int $id admin ID
+ * @param bool $rights set true for album sub-rights
  * @return array
  */
-function populateManagedObjectsList($type,$id) {
+function populateManagedObjectsList($type,$id,$rights=false) {
 	if (empty($id)) {
 		return array();
 	}
 	$cv = array();
 	if (empty($type) || $type=='album') {
-		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+		$sql = "SELECT ".prefix('albums').".`folder`,".prefix('admin_to_object').".`edit` FROM ".prefix('albums').", ".
 						prefix('admin_to_object')." WHERE ".prefix('admin_to_object').".adminid=".$id.
 						" AND ".prefix('albums').".id=".prefix('admin_to_object').".objectid AND ".prefix('admin_to_object').".type='album'";
 		$currentvalues = query_full_array($sql);
@@ -2746,10 +2767,10 @@ function populateManagedObjectsList($type,$id) {
 			} else {
 				$name = $folder;
 			}
-			if ($type) {
+			if ($type && !$rights) {
 				$cv[$name] = $folder;
 			} else {
-				$cv[] = array('data'=>$folder,'type'=>'album');
+				$cv[] = array('data'=>$folder,'type'=>'album','name'=>$name,'rights'=>$albumitem['edit']);
 			}
 		}
 	}
@@ -2794,7 +2815,18 @@ function populateManagedObjectsList($type,$id) {
 function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) {
 	switch ($type) {
 		case 'albums':
-			$cv = populateManagedObjectsList('album',$adminid);
+			$full = populateManagedObjectsList('album',$adminid, true);
+			$cv = $extra = array();
+			foreach ($full as $item) {
+				$cv[$item['name']] = $item['data'];
+/*				
+				$extra[$item['data']] = array(
+																	array('name'=>'rights','value'=>0,'display'=>'','checked'=>1),
+																	array('name'=>'edit','value'=>MANAGED_OBJECT_RIGHTS_EDIT,'display'=>gettext('edit'),'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_EDIT),
+																	array('name'=>'upload','value'=>MANAGED_OBJECT_RIGHTS_UPLOAD,'display'=>gettext('upload'),'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_UPLOAD)
+																);
+*/																															
+			}
 			$rest = array_diff($albumlist, $cv);
 			$text = gettext("Managed albums:");
 			$prefix = 'managed_albums_'.$prefix.'_';
@@ -2804,12 +2836,14 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 			$rest = array_diff($albumlist, $cv);
 			$text = gettext("Managed news categories:");
 			$prefix = 'managed_news_'.$prefix.'_';
+			$extra = array();
 			break;
 		case 'pages':
 			$cv = populateManagedObjectsList('pages',$adminid);
 			$rest = array_diff($albumlist, $cv);
 			$text = gettext("Managed pages:");
 			$prefix = 'managed_pages_'.$prefix.'_';
+			$extra = array();
 			break;
 	}
 	?>
@@ -2820,7 +2854,7 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 		<div id="<?php echo $prefix ?>" style="display:none" >
 			<ul class="albumchecklist">
 				<?php
-				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true);
+				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true, $extra);
 				generateUnorderedListFromArray(array(), $rest, $prefix, $alterrights, true, true);
 				?>
 			</ul>
@@ -2855,7 +2889,7 @@ function processRights($i) {
 
 function processManagedObjects($i) {
 	$objects = array();
-	$managedalbums = array();
+	$albums = array();
 	$pages = array();
 	$news = array();
 	$l_a = strlen($prefix_a = 'managed_albums_'.$i.'_');
@@ -2865,8 +2899,18 @@ function processManagedObjects($i) {
 	foreach ($_POST as $key => $value) {
 		$key = postIndexDecode($key);
 		if (substr($key, 0, $l_a) == $prefix_a) {
-			if ($value) {
-				$managedalbums[] = substr($key, $l_a);
+			$key = substr($key, $l_a);
+			if (strpos($key, '_rights')) {
+				$key = substr($key, 0, -7);
+				$albums[$key]['edit'] = 0;
+			} else if (strpos($key, '_edit')) {
+				$key = substr($key, 0, -5);
+				$albums[$key]['edit'] = $albums[$key]['edit'] | MANAGED_OBJECT_RIGHTS_EDIT;
+			} else if (strpos($key, '_upload')) {
+				$key = substr($key, 0, -7);
+				$albums[$key]['edit'] = $albums[$key]['edit'] | MANAGED_OBJECT_RIGHTS_UPLOAD;
+			} else if ($value) {
+				$albums[$key] = array('data'=>$key, 'type'=>'album');;
 			}
 		}
 		if (substr($key, 0, $l_p) == $prefix_p) {
@@ -2879,15 +2923,6 @@ function processManagedObjects($i) {
 				$news[] = array('data'=>substr($key, $l_n),'type'=>'news');
 			}
 		}
-	}
-	if (count($managedalbums > 0)) {
-		$albuml = array_unique($managedalbums);
-		$albums = array();
-		foreach ($albuml as $album) {
-			$albums[] = array('data'=>$album, 'type'=>'album');
-		}
-	} else {
-		$albums = NULL;
 	}
 	$objects = array_merge($albums,$pages,$news);
 	return $objects;

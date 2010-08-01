@@ -2098,6 +2098,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news ADD COLUMN `sticky` int(1) default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `codeblock` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `codeblock` TEXT";
+	$sql_statements[] = "ALTER TABLE $tbl_admin_to_object ADD COLUMN `edit` int default 32767";
 	
 
 	// do this last incase there are any field changes of like names!

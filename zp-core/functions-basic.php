@@ -1201,24 +1201,31 @@ function isMyAlbum($albumfolder, $action) {
 		return false;
 	}
 	if (zp_loggedin($action)) {
-		if (is_null($_zp_admin_album_list)) {
-			getManagedAlbumList();
-		}
+		getManagedAlbumList();
 		if (count($_zp_admin_album_list) == 0) {
 			return false;
 		}
 		$desired_folders = explode('/', $albumfolder);
-		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
+		foreach ($_zp_admin_album_list as $adminalbum=>$rights) { // see if it is one of the managed folders or a subfolder there of
 			$admin_folders = explode('/', $adminalbum);
 			$found = true;
-			foreach ($admin_folders as $level=>$folder) {
+			$level = 0;
+			foreach ($admin_folders as $folder) {
 				if ($level >= count($desired_folders) || $folder != $desired_folders[$level]) {
 					$found = false;
 					break;
 				}
+				$level++;
 			}
 			if ($found) {
-				return true;
+				if ($action == LIST_ALBUM_RIGHTS) {
+					return true;
+				} else {
+					$albumrights = 0;
+					if ($rights & MANAGED_OBJECT_RIGHTS_EDIT) $albumrights = $albumrights | ALBUM_RIGHTS;
+					if ($rights & MANAGED_OBJECT_RIGHTS_UPLOAD) $albumrights = $albumrights | UPLOAD_RIGHTS;
+					return $action & $albumrights;
+				}
 			}
 		}
 	}

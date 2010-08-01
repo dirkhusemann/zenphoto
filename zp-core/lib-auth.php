@@ -577,11 +577,16 @@ class Zenphoto_Administrator extends PersistentObject {
 			$sql = "DELETE FROM ".prefix('admin_to_object').' WHERE `adminid`='.$id;
 			$result = query($sql);
 			foreach ($objects as $object) {
+				if (array_key_exists('edit',$object)) {
+					$edit = $object['edit'];
+				} else {
+					$edit = 32767;
+				}
 				switch ($object['type']) {
 					case 'album':
 						$album = new Album($gallery, $object['data']);
 						$albumid = $album->getAlbumID();
-						$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $albumid, 'album')";
+						$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type, edit) VALUES ($id, $albumid, 'album', $edit)";
 						$result = query($sql);
 						break;
 					case 'pages':
@@ -589,7 +594,7 @@ class Zenphoto_Administrator extends PersistentObject {
 						$result = query_single_row($sql);
 						if (is_array($result)) {
 							$objectid = $result['id'];
-							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'pages')";
+							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type, edit) VALUES ($id, $objectid, 'pages', $edit)";
 							$result = query($sql);
 						}
 						break;
@@ -598,7 +603,7 @@ class Zenphoto_Administrator extends PersistentObject {
 						$result = query_single_row($sql);
 						if (is_array($result)) {
 							$objectid = $result['id'];
-							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type) VALUES ($id, $objectid, 'news')";
+							$sql = "INSERT INTO ".prefix('admin_to_object')." (adminid, objectid, type, edit) VALUES ($id, $objectid, 'news', $edit)";
 							$result = query($sql);
 						}
 						break;
