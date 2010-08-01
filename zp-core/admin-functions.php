@@ -825,7 +825,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 		?>
 		<li>
 		<span style="display:inline;white-space:nowrap">
-			<label>
+			<label class="displayinline">
 				<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
 					<?php if (isset($cv[$item])) {echo ' checked="checked"';	} ?> value="<?php echo $item; ?>"
 					<?php echo $alterrights; ?> />
@@ -836,7 +836,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 				foreach ($extra[$key] as $box) {
 					if ($box['display']) {
 						?>
-						<label>
+						<label class="displayinline">
 							<input type="checkbox" id="<?php echo $listitem.'_'.$box['name']; ?>" name="<?php echo $listitem.'_'.$box['name']; ?>"
 									 value="<?php echo $box['value']; ?>" <?php if ($box['checked']) {echo ' checked="checked"';	} ?>
 									 <?php echo $alterrights; ?> \> <?php echo $box['display'];?>
@@ -2825,7 +2825,7 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 																	array('name'=>'edit','value'=>MANAGED_OBJECT_RIGHTS_EDIT,'display'=>gettext('edit'),'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_EDIT),
 																	array('name'=>'upload','value'=>MANAGED_OBJECT_RIGHTS_UPLOAD,'display'=>gettext('upload'),'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_UPLOAD)
 																);
-*/																															
+*/																														
 			}
 			$rest = array_diff($albumlist, $cv);
 			$text = gettext("Managed albums:");
@@ -2851,7 +2851,7 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix) 
 	<a href="javascript:toggle('<?php echo $prefix ?>');"><?php echo $text; ?></a>
 	</h2>
 	<div class="box-albums-unpadded">
-		<div id="<?php echo $prefix ?>" style="display:none" >
+		<div id="<?php echo $prefix ?>" style="display:none;">
 			<ul class="albumchecklist">
 				<?php
 				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true, $extra);

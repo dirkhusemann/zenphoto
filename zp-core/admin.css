@@ -1848,3 +1848,8 @@ div.tabs>div h2 {
 	width: 98%;
 	height: 150px;
 }
+
+/* Extras */
+.displayinline {
+	display: inline !important;
+}
