@@ -326,12 +326,12 @@ if(is_object($result)) {
 					<?php
 					if (empty($x)) {
 						?>
-						<img src="../../images/lock_open.png" alt="" class="icon-postion-top8" />
+						<img src="../../images/lock_open.png" alt="" class="icon-postiion-top8" />
 						<?php
 					} else {
 						$x = '          ';
 						?>
-						<img src="../../images/lock.png" alt="" class="icon-postion-top8" />
+						<img src="../../images/lock.png" alt="" class="icon-position-top8" />
 						<?php 
 					} 
 					?>

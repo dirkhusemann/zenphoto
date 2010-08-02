@@ -2820,8 +2820,8 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, 
 			$full = populateManagedObjectsList('album',$adminid, true);
 			$cv = $extra = array();
 			if (($rights & (UPLOAD_RIGHTS | ALBUM_RIGHTS)) && !($rights & ADMIN_RIGHTS)) {
-				$icon_edit = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/pencil.png" />';
-				$icon_upload = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/arrow_up.png" />';
+				$icon_edit = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/pencil.png" class="icon-position-top3" />';
+				$icon_upload = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/arrow_up.png" class="icon-position-top3" />';
 				$ledgend = $icon_edit.' '.gettext('edit').' '.$icon_upload.' '.gettext('upload');
 				foreach ($full as $item) {
 					$cv[$item['name']] = $item['data'];
@@ -2854,10 +2854,11 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, 
 			break;
 	}
 	?>
+
+	<div class="box-albums-unpadded">
 	<h2 class="h2_bordered_albums">
 	<a href="javascript:toggle('<?php echo $prefix ?>');"><?php echo $text; ?></a>
 	</h2>
-	<div class="box-albums-unpadded">
 		<div id="<?php echo $prefix ?>" style="display:none;">
 			<ul class="albumchecklist">
 				<?php

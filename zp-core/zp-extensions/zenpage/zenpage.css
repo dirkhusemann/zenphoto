@@ -409,9 +409,3 @@ ul.language_string_list {
 	color: red;
 	font-weight: normal;
 }
-
-/* icon inline positioning - primarily for the lock icon on page passwords */
-.icon-postion-top8 {
-position: relative;
-top: 8px;
-}

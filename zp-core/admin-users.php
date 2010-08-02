@@ -434,12 +434,12 @@ if (empty($alterrights)) {
 					?>
 				</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-				<td width="20%" <?php if (!empty($background)) echo " style=\"$background\""; ?>>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?>
+				<td width="20%" <?php if (!empty($background)) echo " style=\"$background\""; ?> valign="top">
+					<?php echo gettext("Password:"); ?>
 					<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+					<?php echo gettext("(repeat)"); ?>
 				</td>
-				<td  width="320" <?php if (!empty($background)) echo " style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
+				<td  width="320" valign="top" <?php if (!empty($background)) echo " style=\"$background\""; ?>><?php $x = $userobj->getPass(); if (!empty($x)) { $x = '          '; } ?>
 					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 						value="<?php echo $x; ?>" />
 					<br />
@@ -457,18 +457,19 @@ if (empty($alterrights)) {
 				</td>
 			</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-				<td width="20%" <?php if (!empty($background)) echo " style=\"$background\""; ?> valign="top">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
+				<td width="20%"  valign="top" <?php if (!empty($background)) echo " style=\"$background\""; ?>>
+					<?php echo gettext("Full name:"); ?> <br />
 					<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
+					<?php echo gettext("email:"); ?>
 				</td>
-				<td  width="320" <?php if (!empty($background)) echo " style=\"$background\""; ?>  valign="top">
+				<td  width="320"  valign="top" <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
 						value="<?php echo $userobj->getName();?>" />
 					<br />
 					<br />
-					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
+					<input type="text"  valign="top" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
 						value="<?php echo $userobj->getEmail();?>" />
+						
 				</td>
 				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					<?php
@@ -515,7 +516,8 @@ if (empty($alterrights)) {
 						?>
 				</td>
 			</tr>
-			<?php echo $custom_row; ?>
+			<?php echo $custom_row; ?>	
+			
 		
 		</table> <!-- end individual admin table -->
 		</td>
