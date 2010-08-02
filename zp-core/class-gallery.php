@@ -683,7 +683,9 @@ class Gallery {
 		}
 		foreach ($albums as $folder) {	// these albums are not in the database
 			$albumobj = new Album($this,$folder);
-			$results[$folder] = $albumobj->data;
+			if ($albumobj->exists) {	// fail to instantiate?
+				$results[$folder] = $albumobj->data;
+			}
 		}
 		//	now put the results in the right order
 		$sortkey = str_replace('`','',$sortkey);

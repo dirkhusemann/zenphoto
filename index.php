@@ -103,7 +103,7 @@ if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($_zp_obj)
 	}
 
 	// re-initialize video dimensions if needed
-	if (isImageVideo() & !is_null($_zp_flash_player)) $_zp_current_image->updateDimensions();
+	if (isImageVideo() & isset($_zp_flash_player)) $_zp_current_image->updateDimensions();
 
 	// Display the page itself
 	if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }

@@ -17,9 +17,10 @@ define('WATERMARK_FULL', 4);
  *
  * @param object $album the owner album
  * @param string $filename the filename
+ * @param bool $quiet set true to supress error messages (used by loadimage)
  * @return object
  */
-function newImage(&$album, $filename) {
+function newImage(&$album, $filename, $quiet=false) {
 	global $_zp_extra_filetypes;
 	if (is_array($filename)) {
 		$xalbum = new Album(new Gallery(),$filename['folder']);
@@ -28,7 +29,9 @@ function newImage(&$album, $filename) {
 		$xalbum = $album;
 	}
 	if (!is_object($xalbum) || strtoLower(get_class($xalbum)) != 'album' || !$xalbum->exists) {
-		debugLogBacktrace("Bad album object parameter to newImage($filename)");			
+		$msg = sprintf(gettext('Bad album object parameter to newImage(%s)'),$filename);
+		trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
+		debugLogBacktrace($msg);			
 		return NULL;
 	}
 	if ($ext = is_valid_other_type($filename)) {
@@ -39,7 +42,11 @@ function newImage(&$album, $filename) {
 			return New _Image($xalbum, $filename);
 		}
 	}
-	debugLogBacktrace("Bad filename suffix in newImage($filename)");			
+	if (!$quiet) {
+		$msg = sprintf(gettext('Bad filename suffix in newImage(%s)'),$filename);
+		trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
+		debugLogBacktrace($msg);			
+	}
 	return NULL;
 }
 

@@ -19,6 +19,7 @@ $plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flas
 if ($plugin_disable) {
 	setOption('zp_plugin_flowplayer3',0);
 } else {
+	global $_zp_flash_player;
 	$option_interface = new flowplayer3();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
 	// register the scripts needed
