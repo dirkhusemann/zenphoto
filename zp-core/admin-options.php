@@ -381,7 +381,7 @@ if (isset($_GET['action'])) {
 
 }
 printAdminHeader();
-//TODO
+
 zp_apply_filter('texteditor_config', '','zenphoto');
 ?>
 <script type="text/javascript" src="js/farbtastic.js"></script>

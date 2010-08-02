@@ -580,6 +580,21 @@ if (!$setup_checked) {
 	 *****************************************************************************/
 
 	global $_zp_conf_vars;
+	
+	function getResidentZPFiles($folder) {
+		global $_zp_resident_files;
+		$dir = opendir($folder);
+		while(($file = readdir($dir)) !== false) {
+			if (is_dir($folder.'/'.$file)) {
+				if ($file != '.' && $file !='..') {
+					getResidentZPFiles($folder.'/'.$file);
+				}
+			} else {
+				$_zp_resident_files[]=$folder.'/'.$file;
+			}
+		}
+		closedir($dir);
+	}
 
 	function checkMark($check, $text, $text2, $msg) {
 		global $warn, $moreid;
@@ -1241,6 +1256,10 @@ if ($debug) {
 		}
 	}
 
+	$base = dirname(dirname(__FILE__)).'/';
+	getResidentZPFiles(SERVERPATH.'/'.ZENFOLDER);
+	$res = array_search($base.ZENFOLDER.'/Zenphoto.package',$_zp_resident_files);
+	unset($_zp_resident_files[$res]);
 	$permissions = 1;
 	$cum_mean = filemtime(SERVERPATH.'/'.ZENFOLDER.'/version.php');
 	$hours = 3600;
@@ -1249,7 +1268,6 @@ if ($debug) {
 
 	$package = file_get_contents(SERVERPATH.'/'.ZENFOLDER.'/Zenphoto.package');
 	$installed_files = explode("\n", trim($package));
-	$base = dirname(dirname(__FILE__)).'/';
 	$folders = array();
 	$zenphoto_themes = array();
 	foreach ($installed_files as $key=>$value) {
@@ -1257,11 +1275,16 @@ if ($debug) {
 		$value = trim($component_data[0]);
 		$component = $base.$value;
 		if (file_exists($component)) {
+			$res = array_search($component,$_zp_resident_files);
+			if ($res !== false) {
+				unset($_zp_resident_files[$res]);
+			}
 			if (is_dir($component)) {
 				$folders[$component] = $component;
 				unset($installed_files[$key]);
 				if (dirname($value) == THEMEFOLDER) {
 					$zenphoto_themes[] = basename($value);
+					getResidentZPFiles($base.$value);
 				}
 			} else {
 				if (zp_loggedin(ADMIN_RIGHTS)) {
@@ -1341,8 +1364,19 @@ if ($debug) {
 		}
 		$msg2 = '';
 	}
-
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
+		
+	$filelist = '';
+	foreach ($_zp_resident_files as $extra) {
+		$filelist .= str_replace($base,'',$extra).'<br />';
+	}
+//TODO enable
+/*
+	if (!empty($filelist)) {
+		checkMark(-1, '', gettext('Zenphoto core folders [Some unknown files were found]'), gettext('You should remove the following files: ').'<br /><code>'.substr($filelist,0,-6).'</code>');
+	}
+*/
+		
 	if (zp_loggedin(ADMIN_RIGHTS)) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	$msg = gettext("<em>.htaccess</em> file");
 	$Apache = stristr($_SERVER['SERVER_SOFTWARE'], "apache");

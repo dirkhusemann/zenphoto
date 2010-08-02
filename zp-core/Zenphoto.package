@@ -791,6 +791,7 @@ zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_save_as_form.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_save_name.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_save_text.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/ajax_text_editor.php
+zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/debug.html
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/inc
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/inc/class.auth.php
 zp-core/zp-extensions/tiny_mce/plugins/ajaxfilemanager/inc/class.file.php
@@ -1186,8 +1187,10 @@ zp-core/zp-extensions/tiny_mce/plugins/paste/pasteword.htm
 zp-core/zp-extensions/tiny_mce/plugins/preview
 zp-core/zp-extensions/tiny_mce/plugins/preview/editor_plugin.js
 zp-core/zp-extensions/tiny_mce/plugins/preview/editor_plugin_src.js
+zp-core/zp-extensions/tiny_mce/plugins/preview/example.html
 zp-core/zp-extensions/tiny_mce/plugins/preview/jscripts
 zp-core/zp-extensions/tiny_mce/plugins/preview/jscripts/embed.js
+zp-core/zp-extensions/tiny_mce/plugins/preview/preview.html
 zp-core/zp-extensions/tiny_mce/plugins/print
 zp-core/zp-extensions/tiny_mce/plugins/print/editor_plugin.js
 zp-core/zp-extensions/tiny_mce/plugins/print/editor_plugin_src.js
