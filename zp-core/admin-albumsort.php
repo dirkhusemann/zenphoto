@@ -13,6 +13,9 @@ require_once(dirname(__FILE__).'/admin-globals.php');
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
+// Create our gallery
+$gallery = new Gallery();
+
 if (isset($_GET['album'])) {
 	$folder = sanitize($_GET['album']);
 	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
@@ -60,8 +63,6 @@ echo "\n</head>";
 
 <?php
 
-// Create our gallery
-$gallery = new Gallery();
 // Create our album
 if (!isset($_GET['album'])) {
 	die(gettext("No album provided to sort."));
