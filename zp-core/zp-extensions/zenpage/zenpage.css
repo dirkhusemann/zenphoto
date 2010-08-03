@@ -227,6 +227,10 @@ IMG {
 	background-color: white;
 	padding: 0;
 	margin: 0px 0 0 0;
+	-moz-border-radius: 0px 0px 5px 5px;
+	-khtml-border-radius: 0px 0px 5px 5px;
+	-webkit-border-radius: 0px 0px 5px 5px;
+	border-radius: 0px 0px 5px 5px;
 }
 
 .zenpagechecklist ul,
@@ -359,6 +363,10 @@ ul.language_string_list {
 	background-image: url(../../images/admin-headlineback.jpg);
 	background-repeat: repeat-x;
 	margin-bottom: 0;
+	-moz-border-radius: 5px 5px 0px 0px;
+	-khtml-border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 05px 0px 0px;
 }
 	
 .box-edit-zenpage {
@@ -369,6 +377,10 @@ ul.language_string_list {
 	border-bottom-width: 5px;
 	width: 16em;
 	line-height: 1.5em;
+	-moz-border-radius: 0px 0px 5px 5px;
+	-khtml-border-radius: 0px 0px 5px 5px;
+	-webkit-border-radius: 0px 0px 5px 5px;
+	border-radius: 0px 0px 5px 5px;
 }
 
 /* check box label and p styling - edit page */

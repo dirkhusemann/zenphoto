@@ -260,7 +260,7 @@ printLogoAndLinks();
 			<br clear="all" /><br />
 				<table class="bordered">
 				 <tr>
-					<th colspan="6"><strong><?php echo gettext('Edit this Category'); ?></strong>
+					<th colspan="6"><?php echo gettext('Edit this Category'); ?>
 						<?php
 						$checkarray = array(
 						gettext('*Bulk actions*') => 'noaction',

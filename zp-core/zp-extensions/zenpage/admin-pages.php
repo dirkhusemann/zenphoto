@@ -101,7 +101,7 @@ zenpageJSCSS();
 <br clear="all" /><br clear="all" />
 <table class="bordered" style="margin-top: 10px">
  <tr>
-	<th><strong><?php echo gettext('Edit this page'); ?></strong>
+	<th><?php echo gettext('Edit this page'); ?>
 	<?php
 	  	$checkarray = array(
 			  	gettext('*Bulk actions*') => 'noaction',

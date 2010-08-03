@@ -130,7 +130,7 @@ printLogoAndLinks();
 
 				<table class="bordered">
 					<tr>
-						<th colspan="11"><strong><?php echo gettext('Edit this article'); ?></strong>
+						<th colspan="11"><?php echo gettext('Edit this article'); ?>
 						<?php
 						$checkarray = array(
 						gettext('*Bulk actions*') => 'noaction',
