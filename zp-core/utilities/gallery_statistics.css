@@ -1,5 +1,6 @@
-.statistic_headline {
+.bordered th {
 	font-weight: bold;
+	padding-bottom: 7px !important;
 }
 
 .bordered {
