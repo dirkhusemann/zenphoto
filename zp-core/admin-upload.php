@@ -391,7 +391,7 @@ if (ini_get('safe_mode')) { ?>
 				<br />
 			</div>
 
-			<input id="folderslot" type="hidden" name="folder" value="<?php echo $passedalbum; ?>" />
+			<input id="folderslot" type="hidden" name="folder" value="<?php echo htmlspecialchars($passedalbum,ENT_QUOTES); ?>" />
 		</div>
 
 		<hr />

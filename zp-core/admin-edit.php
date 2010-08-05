@@ -866,9 +866,9 @@ $alb = removeParentAlbumNames($album);
 			<?php XSRFToken('albumedit'); ?>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
-			<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
-			<input type="hidden" name="tagsort" value="<?php echo $tagsort ?>" />
-			<input type="hidden" name="oldalbumimagesort" value="<?php echo $oldalbumimagesort; ?>" />
+			<input type="hidden" name="subpage" value="<?php echo htmlspecialchars($pagenum,ENT_QUOTES); ?>" />
+			<input type="hidden" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
+			<input type="hidden" name="oldalbumimagesort" value="<?php echo htmlspecialchars($oldalbumimagesort,ENT_QUOTES); ?>" />
 
 		<?php	$totalpages = ceil(($allimagecount / $imagesTab_imageCount));	?>
 		<table class="bordered">

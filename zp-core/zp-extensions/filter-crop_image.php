@@ -249,12 +249,12 @@ printAdminHeader();
 							<input type="hidden" size="4" id="y2" name="y2" value="<?php echo $iY+$iH ?>" />
 							<input type="hidden" size="4" id="w" name="w" value="<?php echo $iW ?>" />
 							<input type="hidden" size="4" id="h" name="h" value="<?php echo $iH ?>"  />
-							<input type="hidden" id="a" name="a" value="<?php echo $albumname; ?>" />
-							<input type="hidden" id="i" name="i" value="<?php echo $imagename; ?>" />
-							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo $tagsort; ?>" />
-							<input type="hidden" id="subpage" name="subpage" value="<?php echo $subpage; ?>" />
+							<input type="hidden" id="a" name="a" value="<?php echo htmlspecialchars($albumname,ENT_QUOTES); ?>" />
+							<input type="hidden" id="i" name="i" value="<?php echo htmlspecialchars($imagename,ENT_QUOTES); ?>" />
+							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
+							<input type="hidden" id="subpage" name="subpage" value="<?php echo htmlspecialchars($subpage,ENT_QUOTES); ?>" />
 							<input type="hidden" id="crop" name="crop" value="crop" />
-							<input type="hidden" id="performcrop" name="performcrop" value="<?php echo $_REQUEST['performcrop'] ?>" />
+							<input type="hidden" id="performcrop" name="performcrop" value="<?php echo htmlspecialchars(sanitize($_REQUEST['performcrop']),ENT_QUOTES); ?>" />
 							<br />	
 							<p class="buttons">
 								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>">

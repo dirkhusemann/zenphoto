@@ -464,11 +464,11 @@ if (empty($alterrights)) {
 				</td>
 				<td  width="320"  valign="top" <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
-						value="<?php echo $userobj->getName();?>" />
+						value="<?php echo htmlspecialchars($userobj->getName(),ENT_QUOTES); ?>" />
 					<br />
 					<br />
 					<input type="text"  valign="top" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
-						value="<?php echo $userobj->getEmail();?>" />
+						value="<?php echo htmlspecialchars($userobj->getEmail(),ENT_QUOTES); ?>" />
 						
 				</td>
 				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>

@@ -123,7 +123,7 @@ function printSlideShowLink($linktext='', $linkstyle='') {
 		?>
 		<form name="slideshow_<?php echo $slideshow_instance; ?>" method="post"	action="<?php echo $slideshowlink; ?>">
 			<?php echo $slideshowhidden; ?>
-			<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
+			<input type="hidden" name="pagenr" value="<?php echo htmlspecialchars($pagenr,ENT_QUOTES);?>" />
 			<input type="hidden" name="albumid" value="<?php echo $albumnr;?>" />
 			<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
 			<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" /> 

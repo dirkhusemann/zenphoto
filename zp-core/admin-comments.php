@@ -286,7 +286,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 
 <form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirmAction();">
 	<?php XSRFToken('deletecomment');?>
-<input type="hidden" name="subpage" value="<?php echo $pagenum ?>" />
+<input type="hidden" name="subpage" value="<?php echo htmlspecialchars($pagenum,ENT_QUOTES) ?>" />
 <p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 <p class="buttons">
 <?php if(!$fulltext) { ?>

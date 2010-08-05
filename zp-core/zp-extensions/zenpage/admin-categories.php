@@ -127,7 +127,7 @@ printLogoAndLinks();
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
 					<?php XSRFToken($action);?>
-					<input	type="hidden" name="action" id="action" value="<?php echo $action; ?>" />
+					<input	type="hidden" name="action" id="action" value="<?php echo htmlspecialchars($action,ENT_QUOTES); ?>" />
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<input	type="hidden" name="olduser" id="olduser" value="<?php if (isset($result)) echo $result['user']; ?>" />
 					<?php

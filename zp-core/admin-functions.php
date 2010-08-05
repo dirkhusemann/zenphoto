@@ -940,7 +940,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	}
  ?>
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
-	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
+	<input type="hidden" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
 	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="password_enabled<?php echo $suffix; ?>" value="0" />
 	<p class="buttons">
 		<?php
@@ -1156,7 +1156,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								<td colspan="2">
 									<span id="album_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customalbumsort<? echo $suffix; ?>" class="customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+									<input id="customalbumsort<? echo $suffix; ?>" class="customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
 									</span>
 								
 									<script type="text/javascript">
@@ -1220,7 +1220,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 									<td align="left" colspan="2">
 									<span id="image_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customimagesort<? echo $suffix; ?>" class="customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+									<input id="customimagesort<? echo $suffix; ?>" class="customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
 									</span>
 								
 									<script type="text/javascript">

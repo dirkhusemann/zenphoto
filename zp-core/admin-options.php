@@ -909,7 +909,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 								<td colspan="2">
 									<span id="customTextBox2" class="customText" style="display:<?php echo $dspc; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+									<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
 									</span>
 								</td>
 							</tr>
@@ -1885,7 +1885,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 	<form action="?action=saveoptions" method="post" autocomplete="off">
 		<?php XSRFToken('saveoptions');?>
 		<input type="hidden" name="savethemeoptions" value="yes" />
-		<input type="hidden" name="optiontheme" value="<?php echo $optiontheme; ?>" />
+		<input type="hidden" name="optiontheme" value="<?php echo htmlspecialchars($optiontheme,ENT_QUOTES); ?>" />
 		<input type="hidden" name="old_themealbum" value="<?php echo urlencode($alb); ?>" />
 		<table class='bordered'>
 
