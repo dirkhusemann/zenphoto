@@ -181,9 +181,49 @@ function generateLanguageOptionList($HTTPAccept) {
 	}
 	$locales = $_zp_active_languages;
 	if ($HTTPAccept) {  // for admin only
+		foreach ($locales as $language=>$dirname) {
+			if ($dirname!='en_US') {
+				$version = '';
+				$po = file_get_contents(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname.'/LC_MESSAGES/zenphoto.po');
+				$i = strpos($po,'Project-Id-Version:');
+				if (!$outofdate = ($i === false)) {
+					$j = strpos($po, '\n', $i);
+					if (!$outofdate = ($j === false)) {
+						$pversion = strtolower(substr($po,$i,$j-$i));
+						$i = strpos($pversion, 'zenphoto');
+						if (!$outofdate = ($i === false)) {
+							$version = trim(substr($pversion,$i+8));
+							$outofdate = version_compare($version, ZENPHOTO_VERSION) < 0;
+						}
+					}
+				}
+				if ($outofdate) {
+					if (empty($version)) $version = '?';
+					unset($locales[$language]);
+					$locales[$language.' {v'.$version.'}'] = $dirname;
+				}
+			}
+		}
 		$locales[gettext("HTTP Accept Language")] = '';
 	}
-	generateListFromArray(array(getOption('locale', $HTTPAccept)), $locales, false, true);
+
+	$list = array_flip($locales);
+	natcasesort($list);
+	$list = array_flip($list);
+	$currentValue = getOption('locale', $HTTPAccept);
+	foreach($list as $key=>$item) {
+		if (strpos($key,'{v')===false) {
+			$background = '';
+		} else {
+			$background = 'style="background-color:#FFEFB7;" ';
+		}
+		echo '<option '.$background.'value="' . htmlentities($item,ENT_QUOTES,getOption("charset")) . '"';
+		if ($item==$currentValue) {
+			echo ' selected="selected"';
+		}
+		echo '>' . $key . "</option>"."\n";
+	}
+//	generateListFromArray(array(getOption('locale', $HTTPAccept)), $locales, false, true);
 }
 
 

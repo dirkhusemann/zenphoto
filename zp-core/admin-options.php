@@ -560,9 +560,12 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<td><select id="locale" name="locale">
 						<?php	generateLanguageOptionList(true);	?>
 					</select>
-					<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
-					<?php echo gettext('Multi-lingual'); ?>
+					<?php
+					 //todo: add note about versions
+					 ?>
 					<p class="notebox"><?php echo gettext('Please check the <a href="http://www.zenphoto.org/trac/report/9?asc=0&sort=version">translation tickets</a> for new and updated language translations.');?></p>
+					<label style="white-space:nowrap"><input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
+					<?php echo gettext('Multi-lingual'); ?></label>
 					</td>
 					<td>
 						<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>

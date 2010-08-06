@@ -178,7 +178,7 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['totalimages'])) {
 					$returntab = '&tagsort='.$tagsort.'&tab=imageinfo';
 					if (isset($_POST['thumb'])) {
-						$thumbnail = sanitize_numeric($_POST['thumb']);
+						$thumbnail = sanitize_numeric($_POST['thumb'])-1;
 					} else {
 						$thumbnail = -1;
 					}
@@ -972,7 +972,7 @@ $alb = removeParentAlbumNames($album);
 						<p><?php echo gettext("<strong>Size:</strong>"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 						<p>
 							<label>
-								<input type="radio" id="thumb-<?php echo $currentimage; ?>" name="thumb" value="<?php echo $currentimage ?>" />
+								<input type="radio" id="thumb-<?php echo $currentimage; ?>" name="thumb" value="<?php echo $currentimage+1; ?>" />
 								<?php echo ' '.gettext("Select as album thumbnail."); ?>
 							</label>
 						</p>
