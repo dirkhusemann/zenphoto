@@ -26,7 +26,7 @@ function zenphoto_sendmail($msg, $email_list, $subject, $message, $from_mail, $f
 		$result = $result && $_zp_UTF8->send_mail($to_mail, $subject, $message, $headers);
 	}
 	if (!$result) {
-		if (!empty($msg)) $msg .= '<br/>';
+		if (!empty($msg)) $msg .= '<br />';
 		$msg .= sprintf(gettext('<code>zenphoto_sendmail</code> failed to send <em>%s</em> to one or more recipients.'), $subject);
 	}
 	return $msg;

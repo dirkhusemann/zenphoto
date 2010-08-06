@@ -1546,7 +1546,7 @@ function is_AdminEditPage($page) {
 
 // test of the hack of shortschoolbus
 function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $locale=NULL) {
-	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
+	global $_zp_active_languages, $_zp_current_locale;
 	if (is_null($locale)) {
 		if (is_null($_zp_current_locale)) {
 			$_zp_current_locale = getUserLocale();

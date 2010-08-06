@@ -101,7 +101,6 @@ function writeHeader($type, $value) {
 }
 
 $gallery = new Gallery();
-$webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
 printAdminHeader();
 echo '</head>';
@@ -406,7 +405,7 @@ if (db_connect()) {
 	<input type="hidden" name="backup" value="true" />
 	<div class="buttons pad_button" id="dbbackup">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
-		<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
+		<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/burst1.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
 	</button>
 	<select name="compress">
 	<?php
@@ -439,7 +438,7 @@ if (db_connect()) {
 		<input type="hidden" name="restore" value="true" />
 		<div class="buttons pad_button" id="dbrestore">
 		<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
-			<img src="<?php echo $webpath; ?>images/redo.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
+			<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/redo.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
 		</button>
 		</div>
 		<br clear="all" />

@@ -287,7 +287,7 @@ function printTabs($currenttab) {
 	foreach ($zenphoto_tabs as $atab) {
 		$chars = $chars + $_zp_UTF8->strlen($atab['text']);
 	}
-	$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*6.5))/11);
+	$main_tab_space = round(max((count($zenphoto_tabs)*32+round($chars*6.5))/11,count($zenphoto_tabs)*6));
 	?>
 	<ul class="nav" id="jsddm" style="width: <?php echo $main_tab_space; ?>em">
 	<?php
@@ -2144,7 +2144,7 @@ $_zp_current_locale = NULL;
  * @param string $edit optional class
  */
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $size=false, $id='') {
-	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
+	global $_zp_active_languages, $_zp_current_locale;
 	$ulclass = 'language_string_list';
 	if ($textbox) {
 		if ($size === false) {

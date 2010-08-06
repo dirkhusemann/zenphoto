@@ -442,6 +442,7 @@ printSubtabs($_current_tab, 'general');
 
 if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 	if (isset($_GET['local_failed'])) {
+		if (!is_array($_zp_languages)) setupLanguageArray();
 		$locale = sanitize($_GET['local_failed']);
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".

@@ -146,6 +146,7 @@ function setupLanguageArray() {
  */
 function generateLanguageList() {
 	global $_zp_languages;
+	if (!is_array($_zp_languages)) setupLanguageArray();
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 	$locales = array();
 	if ($dir !== false) {
@@ -278,7 +279,6 @@ function setThemeDomain($themedomain) {
  * @return mixed
  */
 function setupCurrentLocale($override=NULL, $plugindomain='', $type='') {
-	global $_zp_languages;
 	$encoding = getOption('charset');
 	if (empty($encoding)) $encoding = 'UTF-8';
 	if(empty($plugindomain) && empty($type)) {
@@ -526,7 +526,6 @@ function timezoneDiff($server, $local) {
 	return 0;
 }
 
-setupLanguageArray();
 if (function_exists('date_default_timezone_set')) { // insure a correct time zone
 	$tz = getOption('time_zone');
 	if (!empty($tz)) {

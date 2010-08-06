@@ -31,6 +31,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."-
  */
 function printLanguageSelector($class='') {
 	global $_zp_languages;
+	if (!is_array($_zp_languages)) setupLanguageArray();
 	if (isset($_REQUEST['locale'])) {
 		$locale = sanitize($_REQUEST['locale'], 0);
 		if (getOption('locale') != $locale) {
