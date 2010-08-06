@@ -2063,7 +2063,7 @@ function getImageCustomData() {
 function printImageCustomData() {
 	$data = getImageCustomData();
 	$data = str_replace("\r\n", "\n", $data);
-	$data = str_replace("\n", "<br/ >", $data);
+	$data = str_replace("\n", "<br />", $data);
 	echo $data;
 }
 

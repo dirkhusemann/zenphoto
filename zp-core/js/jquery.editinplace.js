@@ -159,7 +159,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 						rows			: rows,
 						editfield_class	: opt.editfield_class,
 						value			: value
-					} ) + '<br/>';
+					} ) + '<br />';
 				} // textarea form
 				else if( opt.form_type == 'select' ) {
 					form += _template( opt.start_select_form, {
