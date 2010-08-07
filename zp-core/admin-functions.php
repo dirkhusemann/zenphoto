@@ -928,7 +928,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
  * @since 1.1.3
  */
 function printAlbumEditForm($index, $album, $collapse_tags) {
-	global $sortby, $gallery, $mcr_albumlist, $albumdbfields, $imagedbfields;
+	global $sortby, $gallery, $mcr_albumlist, $albumdbfields, $imagedbfields, $_thumb_field_text;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
 		if (isset($saved)) {
@@ -1306,10 +1306,11 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						?>
 						<select style="width:320px" <?php	if ($showThumb) {	?>class="thumbselect" onchange="updateThumbPreview(this)"	<?php	}	?> name="<?php echo $prefix; ?>thumb">
 							<option <?php if ($showThumb) {	?>class="thumboption" style="background-color:#B1F7B6"<?php		}
-								if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo getOption('AlbumThumbSelecorText'); ?>
+								if ($thumb === '1') {	?>selected="selected"<?php } ?>	value="1"><?php echo $_thumb_field_text[getOption('AlbumThumbSelectField')]; ?>
 							</option>
 							<option <?php if ($showThumb) { ?>class="thumboption" style="background-color:#B1F7B6" <?php } ?>
-								<?php if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?> value=""><?php echo gettext('randomly selected'); ?>
+								<?php	if (empty($thumb) && $thumb !== '1') { ?> selected="selected" <?php } ?>
+									value=""><?php echo gettext('randomly selected');?>
 							</option>
 							<?php
 							if ($album->isDynamic()) {

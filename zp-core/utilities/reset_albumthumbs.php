@@ -27,10 +27,10 @@ if (isset($_REQUEST['thumbtype']) || isset($_REQUEST['thumbselector'])) {
 $buffer = '';
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
-$selector = array(array('field'=>'ID', 'direction'=>'DESC', 'desc'=>gettext('most recent')),
-									array('field'=>'mtime', 'direction'=>'', 'desc'=>gettext('oldest')),
-									array('field'=>'title', 'direction'=>'', 'desc'=>gettext('first alphabetically')),
-									array('field'=>'hitcounter', 'direction'=>'DESC', 'desc'=>gettext('most viewed'))
+$selector = array(array('field'=>'ID', 'direction'=>'DESC', 'desc'=>$_thumb_field_text['ID']),
+									array('field'=>'mtime', 'direction'=>'', 'desc'=>$_thumb_field_text['mtime']),
+									array('field'=>'title', 'direction'=>'', 'desc'=>$_thumb_field_text['title']),
+									array('field'=>'hitcounter', 'direction'=>'DESC', 'desc'=>$_thumb_field_text['hitcounter'])
 									);
 
 printAdminHeader();
@@ -70,7 +70,6 @@ if (isset($_REQUEST['thumbtype']) && db_connect()) {
 	$current=$selector[$key]['desc'];
 	setOption('AlbumThumbSelectField',$selector[$key]['field']);
 	setOption('AlbumThumbSelectDirection',$selector[$key]['direction']);
-	setOption('AlbumThumbSelecorText',$current);	
 }
 if (db_connect()) {
 	?>

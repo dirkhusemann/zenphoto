@@ -21,6 +21,12 @@ $sortby = array(gettext('Filename') => 'filename',
 								gettext('ID') => 'id',
 								gettext('Filemtime') => 'mtime'
 								);
+								
+$_thumb_field_text =	array('ID'=>gettext('most recent'),
+														'mtime'=>gettext('oldest'),
+														'title'=>gettext('first alphabetically'),
+														'hitcounter'=>gettext('most viewed')
+											);								
 
 // setup sub-tab arrays for use in dropdown
 $zenphoto_tabs = array();
