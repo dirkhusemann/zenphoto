@@ -801,10 +801,12 @@ function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
  * @param string $prefix prefix of the input item
  * @param string $alterrights are the items changable.
  * @param bool $sort true for sorted list
+ * @param string $class optional class for items
  * @param bool $localize true if the list local key is text for the item
  */
-function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights, $sort, $localize, $extra=NULL) {
+function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights, $sort, $localize, $class=NULL, $extra=NULL) {
 	if (is_null($extra)) $extra = array();
+	if (!empty($class)) $class = ' class="'.$class.'" ';
 	if ($sort) {
 		if ($localize) {
 			$list = array_flip($list);
@@ -826,7 +828,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 		<li>
 		<span style="display:inline;white-space:nowrap">
 			<label class="displayinline">
-				<input id="<?php echo $listitem; ?>" name="<?php echo $listitem; ?>" type="checkbox"
+				<input id="<?php echo $listitem; ?>"<?php echo $class;?> name="<?php echo $listitem; ?>" type="checkbox"
 					<?php if (isset($cv[$item])) {echo ' checked="checked"';	} ?> value="<?php echo $item; ?>"
 					<?php echo $alterrights; ?> />
 				<?php echo $display; ?>
@@ -2862,7 +2864,7 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, 
 		<div id="<?php echo $prefix ?>" style="display:none;">
 			<ul class="albumchecklist">
 				<?php
-				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true, $extra);
+				generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, true, NULL, $extra);
 				generateUnorderedListFromArray(array(), $rest, $prefix, $alterrights, true, true);
 				?>
 			</ul>
