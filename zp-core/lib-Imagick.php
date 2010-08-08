@@ -9,8 +9,8 @@
  *
  * @package core
  *
- * @todo Split the options array to support shared options with Gmagick
- *		Perhaps add option for user to choose Imagick::FILTER_*?
+ * @todo Perhaps add option for user to choose Imagick::FILTER_*?
+ *		Support interlaced image output
  */
 
 // force UTF-8 Ø
@@ -41,6 +41,7 @@ class lib_Imagick_Options {
 	 */
 	function getOptionsSupported() {
 		global $_zp_imagick_present;
+
 		if ($_zp_imagick_present) {
 			if (!sanitize_numeric(getOption('magick_font_size'))) {
 				setOption('magick_font_size', 18);
@@ -65,11 +66,13 @@ class lib_Imagick_Options {
 																		'desc' => gettext('The font size (in pixels) for CAPTCHAs. Default is <strong>18</strong>.'))
 			);
 		}
+
 		return array();
 	}
 
 	function canLoadMsg() {
 		global $_imagick_loaded, $_imagick_version_pass, $_imagick_required_version;
+
 		if ($_imagick_loaded) {
 			if (!$_imagick_version_pass) {
 				return sprintf(gettext('The <strong><em>Imagick</em></strong> library version must be <strong>%s</strong> or later.'), $_imagick_required_version);
@@ -77,6 +80,7 @@ class lib_Imagick_Options {
 		} else {
 			return gettext('The <strong><em>Imagick</em></strong> extension is not available.');
 		}
+
 		return '';
 	}
 }
@@ -140,6 +144,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageGet($imgfile) {
 		global $_lib_Imagick_info;
+
 		$ext = getSuffix($imgfile);
 		if (function_exists('memory_get_usage')) {
 			memory_get_usage(); // force PHP garbage collection if possible
@@ -147,6 +152,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 		if (in_array($ext, $_lib_Imagick_info)) {
 			return new Imagick($imgfile);
 		}
+
 		return false;
 	}
 
@@ -160,7 +166,9 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 * @return bool
 	 */
 	function zp_imageOutput($im, $type, $filename = NULL, $qual = 75) {
+		$im->setImageFormat($type);
 		$qual = max(min($qual, 100), 0);
+
 		switch ($type) {
 			case 'png':
 				$im->setCompression(Imagick::COMPRESSION_ZIP);
@@ -171,11 +179,12 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 				$im->setCompressionQuality($qual);
 				break;
 		}
-		$im->setImageFormat($type);
+
 		if ($filename == NULL) {
 			header('Content-Type: image/' . $type);
 			return print $im;
 		}
+
 		return $im->writeImage($filename);
 	}
 
@@ -190,6 +199,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 		$im = new Imagick();
 		$im->newImage($w, $h, 'none');
 		$im->setImageType(Imagick::IMGTYPE_TRUECOLOR);
+
 		return $im;
 	}
 
@@ -269,6 +279,10 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 * @return bool
 	 */
 	function zp_resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $suffix) {
+		foreach($src_image->getImageProfiles() as $name => $profile) {
+			$dst_image->profileImage($name, $profile);
+		}
+
 		$src_image->cropImage($src_w, $src_h, $src_x, $src_y);
 		$src_image->resizeImage($dst_w, $dst_h, Imagick::FILTER_LANCZOS, 1);
 		return $dst_image->compositeImage($src_image, Imagick::COMPOSITE_OVER, $dst_x, $dst_y);
@@ -308,9 +322,11 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageCanRotate() {
 		global $_imagick_can_rotate;
+
 		if (!isset($_imagick_can_rotate)) {
 			$_imagick_can_rotate = in_array('rotateimage', array_map('strtolower', get_class_methods('Imagick')));
 		}
+
 		return $_imagick_can_rotate;
 	}
 
@@ -335,9 +351,11 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageDims($filename) {
 		$ping = new Imagick();
+
 		if ($ping->pingImage($filename)) {
 			return array('width' => $ping->getImageWidth(), 'height' => $ping->getImageHeight());
 		}
+
 		return false;
 	}
 
@@ -350,6 +368,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageIPTC($filename) {
 		$ping = new Imagick();
+
 		if ($ping->pingImage($filename)) {
 			try {
 				return $ping->getImageProfile('exif');
@@ -359,6 +378,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -494,10 +514,12 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_getFonts() {
 		global $_imagick_fontlist;
+
 		if (!is_array($_imagick_fontlist)) {
 			$temp = new Imagick();
 			$_imagick_fontlist = $temp->queryFonts();
 			$temp->destroy();
+
 			$_imagick_fontlist = array('system' => '') + array_combine($_imagick_fontlist, $_imagick_fontlist);
 
 			$basefile = SERVERPATH . '/' . USER_PLUGIN_FOLDER . '/imagick_fonts/';
@@ -520,6 +542,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
  */
 			chdir(dirname(__FILE__));
 		}
+
 		return $_imagick_fontlist;
 	}
 
@@ -531,6 +554,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_imageLoadFont($font = NULL) {
 		$draw = new ImagickDraw();
+
 		if (!empty($font)) {
 			try {
 				$draw->setFont($font);
@@ -540,6 +564,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 				}
 			}
 		}
+
 		$draw->setFontSize(getOption('magick_font_size'));
 		return $draw;
 	}
@@ -554,6 +579,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 		$temp = new Imagick();
 		$metrics = $temp->queryFontMetrics($font, "The quick brown fox jumps over the lazy dog");
 		$temp->destroy();
+
 		return $metrics['characterWidth'];
 	}
 
@@ -567,6 +593,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 		$temp = new Imagick();
 		$metrics = $temp->queryFontMetrics($font, "The quick brown fox jumps over the lazy dog");
 		$temp->destroy();
+
 		return $metrics['characterHeight'];
 	}
 }
