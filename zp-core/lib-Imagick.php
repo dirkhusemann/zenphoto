@@ -11,6 +11,7 @@
  *
  * @todo Perhaps add option for user to choose Imagick::FILTER_*?
  *		Support interlaced image output
+ *		Find equivalents to Imagick::getImageProfiles, Imagick::getImageProperty, and Imagick::setImageProperty
  */
 
 // force UTF-8 Ø
@@ -105,6 +106,8 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 
 	$_use_imagick_deprecated = version_compare($_imagick_version, '2.3.0b1', '<') && version_compare($_imagemagick_version['versionString'], '6.3.8', '<');
 	$_use_merge_grayscale = version_compare($_imagemagick_version['versionNumber'], '6.3.1', '<');
+	$_use_corrected_colorspace = version_compare($_imagemagick_version['versionNumber'], '6.3.2', '>=');
+	$_use_preserved_profiles = version_compare($_imagemagick_version['versionNumber'], '6.3.6', '>=');
 
 	$format_blacklist = array(
 		// video formats
@@ -265,6 +268,8 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	/**
 	 * Resamples an image to a new copy
 	 *
+	 * @internal Imagick::getImageProfiles() requires Imagick compiled against ImageMagick 6.3.6+
+	 *
 	 * @param Imagick $dst_image
 	 * @param Imagick $src_image
 	 * @param int $dst_x
@@ -279,8 +284,12 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 * @return bool
 	 */
 	function zp_resampleImage($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $suffix) {
-		foreach($src_image->getImageProfiles() as $name => $profile) {
-			$dst_image->profileImage($name, $profile);
+		global $_use_preserved_profiles;
+
+		if ($_use_preserved_profiles) {
+			foreach($src_image->getImageProfiles() as $name => $profile) {
+				$dst_image->profileImage($name, $profile);
+			}
 		}
 
 		$src_image->cropImage($src_w, $src_h, $src_x, $src_y);
@@ -406,6 +415,8 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 * Does a copy merge of two image resources
 	 *
 	 * @internal Imagick::setImageOpacity() requires Imagick compiled against ImageMagick 6.3.1+
+	 * @internal Imagick::getImageProperty() requires Imagick compiled against ImageMagick 6.3.2+
+	 * @internal Imagick::setImageProperty() requires Imagick compiled against ImageMagick 6.3.2+
 	 *
 	 * @param Imagick $dst_im
 	 * @param Imagick $src_im
@@ -419,12 +430,17 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 * @return bool
 	 */
 	function zp_imageMerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
-		global $_use_merge_grayscale;
+		global $_use_merge_grayscale, $_use_corrected_colorspace;
 
 		$src_im->cropImage($w, $h, $src_x, $src_y);
 
 		if ($_use_merge_grayscale) {
 			$src_im->setImageType(Imagick::IMGTYPE_GRAYSCALE);
+
+			// assumes that exif:ColorSpace is not set to an undefined colorspace
+			if ($_use_corrected_colorspace && $dst_im->getImageProperty('exif:ColorSpace')) {
+				$dst_im->setImageProperty('exif:ColorSpace', Imagick::IMGTYPE_GRAYSCALE);
+			}
 		} else {
 			$src_im->setImageOpacity($pct / 100);
 		}
@@ -435,11 +451,20 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	/**
 	 * Creates a grayscale image
 	 *
+	 * @internal Imagick::getImageProperty() requires Imagick compiled against ImageMagick 6.3.2+
+	 * @internal Imagick::setImageProperty() requires Imagick compiled against ImageMagick 6.3.2+
+	 *
 	 * @param Imagick $image
 	 * @return Imagick
 	 */
 	function zp_imageGray($image) {
 		$image->setImageType(Imagick::IMGTYPE_GRAYSCALE);
+
+		// assumes that exif:ColorSpace is not set to an undefined colorspace
+		if ($_use_corrected_colorspace && $image->getImageProperty('exif:ColorSpace')) {
+			$image->setImageProperty('exif:ColorSpace', Imagick::IMGTYPE_GRAYSCALE);
+		}
+
 		return $image;
 	}
 
