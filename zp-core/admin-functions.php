@@ -287,7 +287,16 @@ function printTabs($currenttab) {
 	foreach ($zenphoto_tabs as $atab) {
 		$chars = $chars + $_zp_UTF8->strlen($atab['text']);
 	}
-	$main_tab_space = round(max((count($zenphoto_tabs)*32+round($chars*6.5))/11,count($zenphoto_tabs)*6));
+	switch (getOption('locale')) {
+		case 'zh_CN':
+		case 'zh_TW':
+		case 'ja_JP':
+			$main_tab_space = count($zenphoto_tabs)*3+$chars;
+			break;
+		default:
+			$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*6.5))/11.5);
+			break;
+	}
 	?>
 	<ul class="nav" id="jsddm" style="width: <?php echo $main_tab_space; ?>em">
 	<?php
