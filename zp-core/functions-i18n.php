@@ -190,12 +190,9 @@ function generateLanguageOptionList($HTTPAccept) {
 				if (!$outofdate = ($i === false)) {
 					$j = strpos($po, '\n', $i);
 					if (!$outofdate = ($j === false)) {
-						$pversion = strtolower(substr($po,$i,$j-$i));
-						$i = strpos($pversion, 'zenphoto');
-						if (!$outofdate = ($i === false)) {
-							$version = trim(substr($pversion,$i+8));
-							$outofdate = version_compare($version, ZENPHOTO_VERSION) < 0;
-						}
+						$pversion = strtolower(substr($po,$i+19,$j-$i-19));
+						$version = trim(str_replace('zenphoto','',$pversion));
+						$outofdate = version_compare($version, ZENPHOTO_VERSION) < 0;
 					}
 				}
 				if ($outofdate) {
