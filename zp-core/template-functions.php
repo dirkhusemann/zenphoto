@@ -4082,46 +4082,46 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 	?>
 	<div id="search"><!-- search form -->
 
-	<form method="post" action="<?php echo WEBPATH.$searchurl; ?>" id="search_form">
-	<?php echo $prevtext; ?>
-	<input type="text" name="words" value="<?php  echo $searchwords; ?>" id="search_input" size="10" />
-	<?php if(count($fields) > 1) { ?>
-		<a href="javascript:toggle('searchextrashow');"><img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" id="searchfields_icon" /></a>
-	<?php } ?>
-	<input type="<?php echo $type; ?>" <?php echo $buttontext; ?> class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
-	<input type="hidden" name="inalbums" value="<?php if (empty($album_list)) echo ''; else echo implode(',', $album_list); ?>" />
-	<br />
-	<?php
-	if (count($fields) > 1) {
-		natcasesort($fields);
-		$fields = array_flip($fields);
-		if (is_null($query_fields)) {
-			$query_fields = $engine->parseQueryFields();
-		} else{
-			if (!is_array($query_fields)) {
-				$query_fields = $engine->numericFields($query_fields);
+		<form method="post" action="<?php echo WEBPATH.$searchurl; ?>" id="search_form">
+			<?php echo $prevtext; ?>
+			<input type="text" name="words" value="<?php  echo $searchwords; ?>" id="search_input" size="10" />
+			<?php if(count($fields) > 1) { ?>
+				<a href="javascript:toggle('searchextrashow');"><img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" id="searchfields_icon" /></a>
+			<?php } ?>
+			<input type="<?php echo $type; ?>" <?php echo $buttontext; ?> class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
+			<input type="hidden" name="inalbums" value="<?php if (empty($album_list)) echo ''; else echo implode(',', $album_list); ?>" />
+			<br />
+			<?php
+			if (count($fields) > 1) {
+				natcasesort($fields);
+				$fields = array_flip($fields);
+				if (is_null($query_fields)) {
+					$query_fields = $engine->parseQueryFields();
+				} else{
+					if (!is_array($query_fields)) {
+						$query_fields = $engine->numericFields($query_fields);
+					}
+				}
+				if (count($query_fields)==0) {
+					$query_fields = array_flip($engine->allowedSearchFields());
+				}
+		
+				?>
+				<ul style="display:none;" id="searchextrashow">
+				<?php
+				foreach ($fields as $display=>$key) {
+					echo '<li><label><input id="SEARCH_'.$key.'" name="SEARCH_'.$key.'" type="checkbox"';
+					if (in_array($key,$query_fields)) {
+						echo ' checked="checked" ';
+					}
+					echo ' value="'.$key.'"  /> ' . $display . "</label></li>"."\n";
+				}
+				?>
+				</ul>
+				<?php
 			}
-		}
-		if (count($query_fields)==0) {
-			$query_fields = array_flip($engine->allowedSearchFields());
-		}
-
-		?>
-		<ul style="display:none;" id="searchextrashow">
-		<?php
-		foreach ($fields as $display=>$key) {
-			echo '<li><label><input id="SEARCH_'.$key.'" name="SEARCH_'.$key.'" type="checkbox"';
-			if (in_array($key,$query_fields)) {
-				echo ' checked="checked" ';
-			}
-			echo ' value="'.$key.'"  /> ' . $display . "</label></li>"."\n";
-		}
-		?>
-		</ul>
-		<?php
-	}
-	?>
-	</form>
+			?>
+		</form>
 	</div><!-- end of search form -->
 	<?php
 }

@@ -1071,10 +1071,10 @@ $alb = removeParentAlbumNames($album);
 						<br /><p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
+						<span style="line-height: 0em;"><br clear="all" /></span>
 						<div id="deletemsg<?php echo $currentimage; ?>"	style="padding-top: .5em; padding-left: .5em; color: red; display: none">
 						<?php echo gettext('Image will be deleted when changes are saved.'); ?>
-						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
-						</p>
+						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a></p>
 						</div>
 						<span style="line-height: 0em;"><br clear="all" /></span>
 

@@ -316,9 +316,24 @@ function getSubtabs($tab, $default) {
 	global $zenphoto_tabs;
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
 	if (!is_array($tabs)) return $default;
-	if (isset($_GET['tab'])) {
-		$current = sanitize($_GET['tab']);
-	} else {
+	$current = '';
+	if (isset($_GET['tab'])) {		
+		$test = sanitize($_GET['tab']);
+		foreach ($tabs as $link) {
+			$i = strrpos($link, 'tab=');
+			$amp = strrpos($link, '&');
+			if ($i!==false) {
+				if ($amp > $i) {
+					$link = substr($link, 0, $amp);
+				}
+				if ($test == substr($link, $i+4)) {
+					$current = $test;
+					break;
+				}
+			}
+		}
+	}
+	if (empty($current)) {
 		if (isset($zenphoto_tabs[$tab]['default'])) {
 			$current = $zenphoto_tabs[$tab]['default'];
 		} else if (empty($default)) {
