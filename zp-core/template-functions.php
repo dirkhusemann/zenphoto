@@ -237,13 +237,11 @@ function printAdminToolbox($id='admin') {
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
-				?>
-				<li>
-					<?php echo printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL); ?>
-				</li>
-				<?php
 				if (getOption('album_session')) { // XSRF defense requires sessions
 					?>
+					<li>
+						<?php echo printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL); ?>
+					</li>
 					<li>
 						<a href="javascript:newAlbum('<?php echo pathurlencode($albumname); ?>',true);" ><?php echo gettext("New Album Here"); ?></a>
 					</li>
