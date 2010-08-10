@@ -201,6 +201,7 @@ printAdminHeader();
 	jQuery(window).load(function(){
 		jQuery('#cropbox').Jcrop({
 			onchange: showCoords,
+			onSelect: showCoords,
 			bgOpacity:   .4,
 			bgColor:     'black',
 			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ]					
