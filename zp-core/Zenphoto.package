@@ -311,7 +311,6 @@ zp-core/images/err-cachewrite.gif
 zp-core/images/err-imagegeneral.gif
 zp-core/images/err-imagenotfound.gif
 zp-core/images/err-noflashplayer.gif
-zp-core/images/err-nogd.gif
 zp-core/images/err-passwordprotected.gif
 zp-core/images/fail.png
 zp-core/images/folder.png
@@ -489,6 +488,11 @@ zp-core/locale/es_ES/LC_MESSAGES
 zp-core/locale/es_ES/LC_MESSAGES/zenphoto.mo
 zp-core/locale/es_ES/LC_MESSAGES/zenphoto.po
 zp-core/locale/es_ES/select_files_button.png
+zp-core/locale/fr_FR
+zp-core/locale/fr_FR/LC_MESSAGES
+zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
+zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
+zp-core/locale/fr_FR/select_files_button.png
 zp-core/locale/gl_ES
 zp-core/locale/gl_ES/LC_MESSAGES
 zp-core/locale/gl_ES/LC_MESSAGES/zenphoto.mo
