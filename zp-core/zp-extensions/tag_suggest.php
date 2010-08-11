@@ -28,7 +28,7 @@ $list = '';
 foreach ($taglist AS $tag) {
 	if ($c>0) $list .= ',';
 	$c++;
-	$list .= '"'.addslashes($tag).'"';
+	$list .= '"'.addslashes(sanitize($tag,3)).'"';
 }
 $js = '<script type="text/javascript">'."\n// <!-- <![CDATA[\n".
 			'var _tagList = ['.$list."];\n".

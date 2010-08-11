@@ -318,7 +318,7 @@ class _Image extends PersistentObject {
 						$tags = array();
 						$result['tags'] = array();
 						foreach ($datum as $item) {
-							$tags[] = $this->prepIPTCString($item, $characterset);;
+							$tags[] = $this->prepIPTCString(sanitize($item,3), $characterset);;
 						}
 						$this->setTags($tags);
 					}

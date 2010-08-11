@@ -262,7 +262,7 @@ define('newuser',32);
 $groupsdefined = @unserialize(getOption('defined_groups'));
 if (!is_array($groupsdefined)) $groupsdefined = array();
 if (!in_array('administrators',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('administrators');
+	$groupobj = $_zp_authority->newAdministrator('administrators',0);
 	$groupobj->setName('group');
 	$groupobj->setRights(ALL_RIGHTS);
 	$groupobj->setCustomData(gettext('Users with full privileges'));
@@ -271,7 +271,7 @@ if (!in_array('administrators',$groupsdefined)) {
 	$groupsdefined[] = 'administrators';
 }
 if (!in_array('viewers',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('viewers');
+	$groupobj = $_zp_authority->newAdministrator('viewers',0);
 	$groupobj->setName('group');
 	$groupobj->setRights(NO_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS);
 	$groupobj->setCustomData(gettext('Users allowed only to view zenphoto objects'));
@@ -280,7 +280,7 @@ if (!in_array('viewers',$groupsdefined)) {
 	$groupsdefined[] = 'viewers';
 }
 if (!in_array('bozos',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('bozos');
+	$groupobj = $_zp_authority->newAdministrator('bozos,0');
 	$groupobj->setName('group');
 	$groupobj->setRights(0);
 	$groupobj->setCustomData(gettext('Banned users'));
@@ -289,7 +289,7 @@ if (!in_array('bozos',$groupsdefined)) {
 	$groupsdefined[] = 'bozos';
 }
 if (!in_array('album managers',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('album managers');
+	$groupobj = $_zp_authority->newAdministrator('album managers',0);
 	$groupobj->setName('template');
 	$groupobj->setRights(NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS);
 	$groupobj->setCustomData(gettext('Managers of one or more albums'));
@@ -298,7 +298,7 @@ if (!in_array('album managers',$groupsdefined)) {
 	$groupsdefined[] = 'album managers';
 }
 if (!in_array('default',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('default');
+	$groupobj = $_zp_authority->newAdministrator('default',0);
 	$groupobj->setName('template');
 	$groupobj->setRights(DEFAULT_RIGHTS);
 	$groupobj->setCustomData(gettext('Default user settings'));
@@ -307,7 +307,7 @@ if (!in_array('default',$groupsdefined)) {
 	$groupsdefined[] = 'default';
 }
 if (!in_array('newuser',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('newuser');
+	$groupobj = $_zp_authority->newAdministrator('newuser',0);
 	$groupobj->setName('template');
 	$groupobj->setRights(NO_RIGHTS);
 	$groupobj->setCustomData(gettext('Newly registered and verified users'));
@@ -373,5 +373,9 @@ if (getOption('search_space_is_OR')) {
 	setOption('search_space_is', '|');
 }
 query('DELETE FROM '.prefix('options').' WHERE `name`="search_space_is_OR"',true);
+
+if (!file_exists(SERVERPATH.'/'.WEBPATH.'/'.ZENFOLDER.'/favicon.ico')) {
+	@copy(SERVERPATH.'/'.ZENFOLDER.'/images/favicon.ico',SERVERPATH.'/favicon.ico');
+}
 
 ?>
