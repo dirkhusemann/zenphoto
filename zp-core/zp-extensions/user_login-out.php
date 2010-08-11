@@ -103,7 +103,7 @@ function printUserLogin_out($before='', $after='', $showLoginForm=false, $logout
 			<?php
 		}
 	} else {
-		echo $before.'<a href="/index.php?userlog=0'.htmlspecialchars($__redirect).'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
+		echo $before.'<a href="'.WEBPATH.'/index.php?userlog=0'.htmlspecialchars($__redirect).'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
 	}
 }
 
