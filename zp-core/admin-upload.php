@@ -28,12 +28,19 @@ if (isset($_GET['action'])) {
 		XSRFdefender('upload');
 		// Check for files.
 		$error = false;
-		$files_empty = true;
 		if (isset($_FILES['files'])) {
-			foreach($_FILES['files']['name'] as $name) {
-				if (!empty($name)) $files_empty = false;
+			foreach($_FILES['files']['name'] as $key=>$name) {
+				if (empty($name)) {	// purge empty slots
+					unset($_FILES['files']['name'][$key]);
+					unset($_FILES['files']['type'][$key]);
+					unset($_FILES['files']['tmp_name'][$key]);
+					unset($_FILES['files']['error'][$key]);
+					unset($_FILES['files']['size'][$key]);
+				}
 			}
 		}
+		$files_empty = count($_FILES['files']) == 0;
+			
 		$newAlbum = ((isset($_POST['existingfolder']) && $_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
 		// Make sure the folder exists. If not, create it.
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
@@ -69,10 +76,6 @@ if (isset($_GET['action'])) {
 				}
 
 				foreach ($_FILES['files']['error'] as $key => $error) {
-					if ($_FILES['files']['name'][$key] == "") {
-						$error = false;
-						continue;
-					}
 					if ($error == UPLOAD_ERR_OK) {
 						$tmp_name = $_FILES['files']['tmp_name'][$key];
 						$name = trim($_FILES['files']['name'][$key]);
