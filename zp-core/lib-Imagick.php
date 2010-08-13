@@ -201,7 +201,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	function zp_createImage($w, $h) {
 		$im = new Imagick();
 		$im->newImage($w, $h, 'none');
-		$im->setImageType(Imagick::IMGTYPE_TRUECOLOR);
+		$im->setImageType(Imagick::IMGTYPE_TRUECOLORMATTE);
 
 		return $im;
 	}
