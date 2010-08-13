@@ -25,105 +25,107 @@ $gallery = new Gallery();
 /* handle posts */
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'upload') {
-		XSRFdefender('upload');
-		// Check for files.
 		$error = false;
-		if (isset($_FILES['files'])) {
-			foreach($_FILES['files']['name'] as $key=>$name) {
-				if (empty($name)) {	// purge empty slots
-					unset($_FILES['files']['name'][$key]);
-					unset($_FILES['files']['type'][$key]);
-					unset($_FILES['files']['tmp_name'][$key]);
-					unset($_FILES['files']['error'][$key]);
-					unset($_FILES['files']['size'][$key]);
+		if (isset($_POST['processed'])) {	// sometimes things just go terribly wrong!
+			XSRFdefender('upload');
+			// Check for files.
+			if (isset($_FILES['files'])) {
+				foreach($_FILES['files']['name'] as $key=>$name) {
+					if (empty($name)) {	// purge empty slots
+						unset($_FILES['files']['name'][$key]);
+						unset($_FILES['files']['type'][$key]);
+						unset($_FILES['files']['tmp_name'][$key]);
+						unset($_FILES['files']['error'][$key]);
+						unset($_FILES['files']['size'][$key]);
+					}
 				}
 			}
-		}
-		$files_empty = count($_FILES['files']) == 0;
-			
-		$newAlbum = ((isset($_POST['existingfolder']) && $_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
-		// Make sure the folder exists. If not, create it.
-		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
-			$folder = trim(sanitize_path($_POST['folder']));
-			// see if he has rights to the album.
-			if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
-				if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
-					$error = UPLOAD_ERR_CANT_WRITE;
-				}
-			}
-			if (!$error) {
-
-				$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
-				if (!is_dir($uploaddir)) {
-					mkdir_recursive($uploaddir, CHMOD_VALUE);
-				}
-				@chmod($uploaddir, CHMOD_VALUE);
-
-				$album = new Album($gallery, $folder);
-				if ($album->exists) {
-					if (!isset($_POST['publishalbum'])) {
-						$album->setShow(false);
+			$files_empty = count($_FILES['files']) == 0;
+				
+			$newAlbum = ((isset($_POST['existingfolder']) && $_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
+			// Make sure the folder exists. If not, create it.
+			if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
+				$folder = trim(sanitize_path($_POST['folder']));
+				// see if he has rights to the album.
+				if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
+					if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+						$error = UPLOAD_ERR_CANT_WRITE;
 					}
-					$title = sanitize($_POST['albumtitle'], 2);
-					if (!empty($title) && $newAlbum) {
-						$album->setTitle($title);
-					}
-					$album->save();
-				} else {
-					$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
-					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
-					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
-
-				foreach ($_FILES['files']['error'] as $key => $error) {
-					if ($error == UPLOAD_ERR_OK) {
-						$tmp_name = $_FILES['files']['tmp_name'][$key];
-						$name = trim($_FILES['files']['name'][$key]);
-						$soename = seoFriendly($name);
-						$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tmp_name);
-						if (!$error) {
-							if (is_valid_image($name) || is_valid_other_type($name)) {
-								if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
-								$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
-								if (!$error) {
-									move_uploaded_file($tmp_name, $uploadfile);
-									@chmod($uploadfile, 0666 & CHMOD_VALUE);
-									$image = newImage($album, $soename);
-									if ($name != $soename) {
-										$image->setTitle($name);
-										$image->save();
-									}
-								}
-							} else if (is_zip($name)) {
-								unzip($tmp_name, $uploaddir);
-							} else {
-								$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
-								break;
-							}
+				if (!$error) {
+	
+					$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
+					if (!is_dir($uploaddir)) {
+						mkdir_recursive($uploaddir, CHMOD_VALUE);
+					}
+					@chmod($uploaddir, CHMOD_VALUE);
+	
+					$album = new Album($gallery, $folder);
+					if ($album->exists) {
+						if (!isset($_POST['publishalbum'])) {
+							$album->setShow(false);
 						}
+						$title = sanitize($_POST['albumtitle'], 2);
+						if (!empty($title) && $newAlbum) {
+							$album->setTitle($title);
+						}
+						$album->save();
 					} else {
-						break;
+						$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
+						zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
+						. gettext("or use your FTP program to give everyone write permissions to those folders."));
 					}
-				}
-				if ($error == UPLOAD_ERR_OK) {
-					if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
-					} else {
-						header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded=1');
+	
+					foreach ($_FILES['files']['error'] as $key => $error) {
+						if ($error == UPLOAD_ERR_OK) {
+							$tmp_name = $_FILES['files']['tmp_name'][$key];
+							$name = trim($_FILES['files']['name'][$key]);
+							$soename = seoFriendly($name);
+							$error = zp_apply_filter('check_upload_quota', UPLOAD_ERR_OK, $tmp_name);
+							if (!$error) {
+								if (is_valid_image($name) || is_valid_other_type($name)) {
+									if (strrpos($soename,'.')===0) $soename = md5($name).$soename; // soe stripped out all the name.
+									$uploadfile = $uploaddir . '/' . internalToFilesystem($soename);
+									if (!$error) {
+										move_uploaded_file($tmp_name, $uploadfile);
+										@chmod($uploadfile, 0666 & CHMOD_VALUE);
+										$image = newImage($album, $soename);
+										if ($name != $soename) {
+											$image->setTitle($name);
+											$image->save();
+										}
+									}
+								} else if (is_zip($name)) {
+									unzip($tmp_name, $uploaddir);
+								} else {
+									$error = UPLOAD_ERR_EXTENSION;	// invalid file uploaded
+									break;
+								}
+							}
+						} else {
+							break;
+						}
 					}
-					exit();
+					if ($error == UPLOAD_ERR_OK) {
+						if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
+						} else {
+							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded=1');
+						}
+						exit();
+					}
 				}
 			}
 		}
 		// Handle the error and return to the upload page.
 		$page = "upload";
 		$_GET['page'] = 'upload';
-		if ($files_empty && !isset($_POST['newalbum'])) {
+		if (!isset($_POST['processed'])) {
+			$errormsg = gettext("You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.");
+		} else if ($files_empty && !isset($_POST['newalbum'])) {
 			$errormsg = gettext("You must upload at least one file.");
 		} else if (empty($_POST['folder'])) {
 			$errormsg = gettext("You must enter a folder name for your new album.");
-		} else if (!isset($_POST['processed'])) {
-			$errormsg = gettext("You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.");
 		} else {
 			switch ($error) {
 				case UPLOAD_ERR_CANT_WRITE:
