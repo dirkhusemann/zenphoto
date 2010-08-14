@@ -294,7 +294,7 @@ function printTabs($currenttab) {
 			$main_tab_space = count($zenphoto_tabs)*3+$chars;
 			break;
 		default:
-			$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*6.5))/11.5);
+			$main_tab_space = round((count($zenphoto_tabs)*32+round($chars*7.5))/11.5);
 			break;
 	}
 	?>
@@ -2623,19 +2623,19 @@ function deleteThemeDirectory($source) {
 		$handle = opendir($source);
 		while (false !== ($filename = readdir($handle))) {
 			$fullname = $source . '/' . $filename;
-			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+			if (is_dir($fullname)) {
 				if (($filename != '.') && ($filename != '..')) {
 					$result = $result && deleteThemeDirectory($fullname);
 				}
 			} else {
-				if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
-					$result = $result && @unlink($fullname);
-				}
+				if (file_exists($fullname)) {
+					$result = $result && unlink($fullname);
+				} 
 			}
 
 		}
 		closedir($handle);
-		$result = $result && @rmdir($source);
+		$result = $result && rmdir($source);
 		return $result;
 	}
 	return false;
