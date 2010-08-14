@@ -69,7 +69,7 @@ printAdminHeader();
 				if (targetname) {
 					var targetdir = prompt('<?php echo gettext('New directory name? (e.g. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
 					if (targetdir) {
-						launchScript('',['action=copytheme&amp;XSRFToken=<?php echo getXSRFToken('theme')?>','source='+encodeURIComponent(source),'target='+encodeURIComponent(targetdir),'name='+encodeURIComponent(targetname)]);
+						launchScript('',['action=copytheme','XSRFToken=<?php echo getXSRFToken('theme')?>','source='+encodeURIComponent(source),'target='+encodeURIComponent(targetdir),'name='+encodeURIComponent(targetname)]);
 						return false;
 					}
 				}
