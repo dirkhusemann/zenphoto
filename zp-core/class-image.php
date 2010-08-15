@@ -123,8 +123,8 @@ class _Image extends PersistentObject {
 		$mtime = filemtime($this->localpath);
 		if ($new || ($mtime != $this->get('mtime'))) {
 			$this->set('mtime', $mtime);
-			$this->updateMetaData();			// extract info from image
 			$this->updateDimensions();		// deal with rotation issues
+			$this->updateMetaData();			// extract info from image
 			$this->save();
 			if ($new) zp_apply_filter('new_image', $this);
 		}
@@ -271,6 +271,8 @@ class _Image extends PersistentObject {
 		} else {
 			$localpath = $this->getThumbImageFile();
 		}
+		$xdate = $this->getDateTime();
+		
 		if (!empty($localpath)) { // there is some kind of image to get metadata from
 			$exifraw = read_exif_data_protected($localpath);
 			if (isset($exifraw['ValidEXIFData'])) {
@@ -351,6 +353,7 @@ class _Image extends PersistentObject {
 				$date = $this->get('EXIFDateTimeDigitized');
 			}
 			if (!empty($date)) {
+				$xdate = $date;
 				$this->setDateTime($date);
 			}
 
@@ -411,8 +414,7 @@ class _Image extends PersistentObject {
 		if (empty($x)) {
 			$this->set('title',$this->getDefaultTitle());
 		}
-		$x = $this->getDateTime();
-		if (empty($x)) {
+		if (empty($xdate)) {
 			$this->set('date', strftime('%Y-%m-%d %T', $this->get('mtime')));
 		}
 		$alb = $this->album;

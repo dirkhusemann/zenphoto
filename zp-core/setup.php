@@ -2121,7 +2121,6 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`, `theme`)";
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' DROP COLUMN `EXIFValid`';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `hasMetadata` int(1) default 0';
-	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `mtime`=0'; // force metadata refresh
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // empty dates should be NULL
 	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET `date`=NULL WHERE `date`="0000-00-00 00:00:00"'; // force metadata refresh
 	//v1.2.8
@@ -2219,10 +2218,6 @@ if (file_exists(CONFIGFILE)) {
 			foreach ($badplugs as $plug) {
 				$path = SERVERPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER.'/' . $plug;
 				@unlink($path);
-			}
-
-			if ($prevRel < 1690) {  // cleanup root album DB records
-				$_zp_gallery->garbageCollect(true, true);
 			}
 
 			// 1.1.7 conversion to the theme option tables
@@ -2324,11 +2319,6 @@ if (file_exists(CONFIGFILE)) {
 					$sql = 'UPDATE '.prefix('zenpage_pages').' SET `codeblock`="'.zp_escape_string($codeblock).'" WHERE `id`='.$row['id'];
 					query($sql);
 				}
-			}
-			// cache file names changed in Changeset 4455
-			if ($prevRel < 4455) {
-				$gallery = new Gallery();
-				$gallery->clearCache();
 			}
 
 			echo "<h3>";
