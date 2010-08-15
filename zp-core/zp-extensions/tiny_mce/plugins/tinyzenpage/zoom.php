@@ -10,6 +10,8 @@ $filelist = safe_glob('flowplayer-*.min.js');
 $player = array_shift($filelist);
 $filelist = safe_glob('flowplayer.playlist-*.min.js');
 $playlist = array_shift($filelist);
+$filelist = safe_glob('flowplayer-*.swf');
+$swf = array_shift($filelist);
 chdir($curdir);
 
 ?>
@@ -39,7 +41,7 @@ if(isImageVideo($imageobj)) {
 	echo '
 			<a href="'.$imageobj->getFullImage().'" id="player" style="display:block; width: 420px; height: 400px;"></a>
 			<script type="text/javascript">
-			flowplayer("player","../../..//flowplayer3/flowplayer-3.1.5.swf", {
+			flowplayer("player","../../../flowplayer3/'.$swf.'", {
 				clip: {
 					autoPlay: false,
 					autoBuffering: false,
