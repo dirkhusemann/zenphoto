@@ -580,7 +580,7 @@ if (!$setup_checked) {
 	 *****************************************************************************/
 
 	global $_zp_conf_vars;
-	
+
 	function getResidentZPFiles($folder) {
 		global $_zp_resident_files;
 		$dir = opendir($folder);
@@ -940,7 +940,7 @@ if (!$setup_checked) {
 		checkMark($severity, $msg, $msg,
 								'<p>'.gettext('If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission.').'</p>'.
 								$chmodselector);
-								
+
 		if (zp_loggedin(ADMIN_RIGHTS)) {
 			$selector =	'<select id="FILESYSTEM_CHARSET" name="FILESYSTEM_CHARSET" onchange="this.form.submit()">';
 			$totalsets = $_zp_UTF8->charsets;
@@ -960,12 +960,12 @@ if (!$setup_checked) {
 										'</form><br />';
 		} else {
 			$filesetopt = '<p>'.gettext('You must be logged in to change the filesystem character set.');
-		}						
+		}
 		$msg = sprintf(gettext('The filesystem character set is defined as %s.'),FILESYSTEM_CHARSET);
 		checkMark(-2, $msg, $msg,
 								'<p>'.gettext('If your server filesystem character set different from this value file and folder names with characters with diacritical marks will cause problems.').'</p>'.
 								$filesetopt);
-		
+
 	}
 	if ($sql) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
@@ -1280,6 +1280,20 @@ if ($debug) {
 				unset($_zp_resident_files[$res]);
 			}
 			if (is_dir($component)) {
+				if ($updatechmod && zp_loggedin(ADMIN_RIGHTS)) {
+					$perms = fileperms($component)&0777;
+					if ($perms > $chmod) {	// do not relax permissions
+						@chmod($component,$chmod);
+						clearstatcache();
+						if ($permissions==1 && ($perms = fileperms($component)&0777)!=$chmod) {
+							if (($perms&0754) == 0754) { // could not set them, but they will work.
+								$permissions = -1;
+							} else {
+								$permissions = 0;
+							}
+						}
+					}
+				}
 				$folders[$component] = $component;
 				unset($installed_files[$key]);
 				if (dirname($value) == THEMEFOLDER) {
@@ -1287,14 +1301,17 @@ if ($debug) {
 					getResidentZPFiles($base.$value);
 				}
 			} else {
-				if (zp_loggedin(ADMIN_RIGHTS)) {
-					@chmod($component,0666&$chmod);
-					clearstatcache();
-					if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
-						if (($perms&0644) == 0644) { // could not set them, but they will work.
-							$permissions = -1;
-						} else {
-							$permissions = 0;
+				if ($updatechmod && zp_loggedin(ADMIN_RIGHTS)) {
+					$perms = fileperms($component)&0777;
+					if ($perms > ($chmod&0666)) {	// do not relax permissions
+						@chmod($component,0666&$chmod);
+						clearstatcache();
+						if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
+							if (($perms&0644) == 0644) { // could not set them, but they will work.
+								$permissions = -1;
+							} else {
+								$permissions = 0;
+							}
 						}
 					}
 				}
@@ -1365,7 +1382,7 @@ if ($debug) {
 		$msg2 = '';
 	}
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
-		
+
 	$filelist = '';
 	foreach ($_zp_resident_files as $extra) {
 		$filelist .= str_replace($base,'',$extra).'<br />';
@@ -1376,7 +1393,7 @@ if ($debug) {
 		checkMark(-1, '', gettext('Zenphoto core folders [Some unknown files were found]'), gettext('You should remove the following files: ').'<br /><code>'.substr($filelist,0,-6).'</code>');
 	}
 */
-		
+
 	if (zp_loggedin(ADMIN_RIGHTS)) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	$msg = gettext("<em>.htaccess</em> file");
 	$Apache = stristr($_SERVER['SERVER_SOFTWARE'], "apache");
@@ -2121,19 +2138,19 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' ADD COLUMN `password` VARCHAR(64)';
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news_categories ADD COLUMN `password_hint` text;";
-	
+
 	//v1.3.1
 	$sql_statements[] = 'RENAME TABLE '.prefix('admintoalbum').' TO '.$tbl_admin_to_object;
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' ADD COLUMN `type` varchar(32) DEFAULT "album";';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' CHANGE `albumid` `objectid` int(11) UNSIGNED NOT NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `albums` `objects` varchar(64)';
-	
+
 	//v1.3.1
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news ADD COLUMN `sticky` int(1) default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `codeblock` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `codeblock` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_admin_to_object ADD COLUMN `edit` int default 32767";
-	
+
 
 	// do this last incase there are any field changes of like names!
 	foreach ($_zp_exifvars as $key=>$exifvar) {
@@ -2186,28 +2203,28 @@ if (file_exists(CONFIGFILE)) {
 					setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
 				}
 			}
-	
+
 			// set defaults on any options that need it
 			setupLog(gettext("Done with database creation and update"));
-	
+
 			$prevRel = getOption('zenphoto_release');
-	
+
 			setupLog(sprintf(gettext("Previous Release was %s"),$prevRel));
-	
+
 			$_zp_gallery = new Gallery();
 			require(dirname(__FILE__).'/setup-option-defaults.php');
-	
+
 			// 1.1.6 special cleanup section for plugins
 			$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
 			foreach ($badplugs as $plug) {
 				$path = SERVERPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER.'/' . $plug;
 				@unlink($path);
 			}
-	
+
 			if ($prevRel < 1690) {  // cleanup root album DB records
 				$_zp_gallery->garbageCollect(true, true);
 			}
-	
+
 			// 1.1.7 conversion to the theme option tables
 			$albums = $_zp_gallery->getAlbums();
 			foreach ($albums as $albumname) {
@@ -2225,7 +2242,7 @@ if (file_exists(CONFIGFILE)) {
 					query('DROP TABLE '.$tbl, true);
 				}
 			}
-	
+
 			// 1.2 force up-convert to tag tables
 			$convert = false;
 			$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
@@ -2288,7 +2305,7 @@ if (file_exists(CONFIGFILE)) {
 				query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
 				query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
 			}
-	
+
 			// update zenpage codeblocks--remove the base64 encoding
 			$sql = 'SELECT `id`, `codeblock` FROM '.prefix('zenpage_news').' WHERE `codeblock` NOT REGEXP "^a:[0-9]+:{"';
 			$result = query_full_array($sql);
@@ -2313,7 +2330,7 @@ if (file_exists(CONFIGFILE)) {
 				$gallery = new Gallery();
 				$gallery->clearCache();
 			}
-	
+
 			echo "<h3>";
 			if ($taskDisplay[substr($task,0,8)] == 'create') {
 				if ($createTables) {
@@ -2329,7 +2346,7 @@ if (file_exists(CONFIGFILE)) {
 				}
 			}
 			echo "</h3>";
-	
+
 			// fixes 1.2 move/copy albums with wrong ids
 			$albums = $_zp_gallery->getAlbums();
 			foreach ($albums as $album) {
