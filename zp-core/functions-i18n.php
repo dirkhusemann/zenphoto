@@ -182,6 +182,19 @@ function generateLanguageOptionList($HTTPAccept) {
 	}
 	$locales = $_zp_active_languages;
 	if ($HTTPAccept) {  // for admin only
+		$vers = explode('-',ZENPHOTO_VERSION);
+		// make cononical version ('build' is not counted)
+		if (count($vers) > 1) {
+			$dev = '-'.$vers[1];
+		} else {
+			$dev = '';
+		}
+		$vers = explode('.',$vers[0]);
+		if (count($vers)<=3) {
+			$zpversion = implode('.',$vers).$dev;
+		} else{
+			$zpversion = $vers[0].'.'.$vers[1].'.'.$vers[2].$dev ;
+		}
 		foreach ($locales as $language=>$dirname) {
 			if ($dirname!='en_US') {
 				$version = '';
@@ -192,7 +205,7 @@ function generateLanguageOptionList($HTTPAccept) {
 					if (!$outofdate = ($j === false)) {
 						$pversion = strtolower(substr($po,$i+19,$j-$i-19));
 						$version = trim(str_replace('zenphoto','',$pversion));
-						$outofdate = version_compare($version, ZENPHOTO_VERSION) < 0;
+						$outofdate = version_compare($version, $zpversion) < 0;
 					}
 				}
 				if ($outofdate) {

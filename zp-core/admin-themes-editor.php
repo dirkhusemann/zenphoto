@@ -38,28 +38,7 @@ if (isset($_GET['file']))
 	$file_to_edit = str_replace ('\\', '/', realpath (SERVERPATH . '/themes/'.internalToFilesystem($theme) . '/'. $_GET['file'])) ;
 	// realpath() to take care of ../../file.php schemes, str_replace() to sanitize Win32 filenames
 
-if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit ) {
-	XSRFdefender('edit_theme');
-}
 
-printAdminHeader();
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
-echo "\n" . '<div id="main">';
-printTabs('themes');
-echo "\n" . '<div id="content">';
-
-
-// If we're attempting to edit a file from a bundled theme, this is an illegal attempt
-if (!themeIsEditable($theme, $themes))
-	die(gettext('Cannot edit this file!'));
-
-// If we're attempting to edit a file that's not a text file or that does not belong to the theme directory, this is an illegal attempt
-if ( $file_to_edit ) {
-	if ( !in_array( $file_to_edit, $themefiles ) or !isTextFile( $file_to_edit ) or filesize( $file_to_edit ) == 0)
-		die(gettext('Cannot edit this file!'));
-}
 
 // Handle POST that updates a file
 if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit ) {
@@ -87,6 +66,24 @@ if ( $file_to_edit ) {
 	$file_content = htmlspecialchars($file_content,ENT_QUOTES);
 }
 
+printAdminHeader();
+echo "\n</head>";
+echo "\n<body>";
+printLogoAndLinks();
+echo "\n" . '<div id="main">';
+printTabs('themes');
+echo "\n" . '<div id="content">';
+
+
+// If we're attempting to edit a file from a bundled theme, this is an illegal attempt
+if (!themeIsEditable($theme, $themes))
+	die(gettext('Cannot edit this file!'));
+
+// If we're attempting to edit a file that's not a text file or that does not belong to the theme directory, this is an illegal attempt
+if ( $file_to_edit ) {
+	if ( !in_array( $file_to_edit, $themefiles ) or !isTextFile( $file_to_edit ) or filesize( $file_to_edit ) == 0)
+		die(gettext('Cannot edit this file!'));
+}
 ?>
 
 

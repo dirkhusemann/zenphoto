@@ -362,7 +362,7 @@ if (isset($_GET['themelist'])) {
 	setOption('Zenphoto_theme_list',$list);
 	$gallery = new Gallery();
 	$themes = array_diff($gallery->getThemes(), unserialize($list));
-	if (count($themes)>0) setOptionDefault('zp_plugin_deprecated-functions',1);
+	if (count($themes)>0) setOption('zp_plugin_deprecated-functions',1);
 }
 setOptionDefault('zp_plugin_zenphoto_news', (version_compare(PHP_VERSION, '5.0.0') == 1)?5:0);
 setOptionDefault('zp_plugin_hitcounter',1);
