@@ -67,7 +67,7 @@
 		 */
 		getInfo : function() {
 			return {
-				longname : 'tinyzenpage',
+				longname : 'tinyZenpage - Insert images, albums, Zenpage pages and articles',
 				author : 'Malte Mueller (acrylian)',
 				authorurl : 'http://wwww.maltem.de',
 				infourl : 'http://zenpage.maltem.de',
