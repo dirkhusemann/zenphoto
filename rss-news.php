@@ -101,7 +101,7 @@ foreach($latest as $item) {
 			if(isImagePhoto($obj)) {
 				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a>' . $content . ']]>';
 			} else {
-				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a>t'.$content.']]>';
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a>'.$content.']]>';
 			}
 			//$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
 			
