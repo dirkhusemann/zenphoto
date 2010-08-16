@@ -74,8 +74,10 @@ foreach($latest as $item) {
 			}
 			$thumb = "";
 			$filename = "";
-			$content = truncate_string(get_language_string($obj->get('content'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
-			$content = '<![CDATA[<p>'.$content.'</p>]]>';
+			if(getOption('zenpage_rss_length') != "") { // empty value means full content!
+				$content = shortenContent(get_language_string($obj->get('content'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
+			}
+			$content = '<![CDATA['.$content.']]>';
 			$type = "news";
 			$ext = "";
 			$album = "";
@@ -93,11 +95,13 @@ foreach($latest as $item) {
 			$fullimagelink = $host.WEBPATH."/albums/".$album."/".$filename;
 			$imagefile = "albums/".$album."/".$filename;
 			$mimetype = getMimeType($ext);
-			$content = truncate_string(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
+			if(getOption('zenpage_rss_length') != "") { // empty value means full content!
+				$content = shortenContent(get_language_string($obj->get('desc'),$locale),getOption('zenpage_rss_length'), $elipsis='...');
+			}
 			if(isImagePhoto($obj)) {
-				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a><p>' . $content . '</p>]]>';
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a>' . $content . ']]>';
 			} else {
-				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a><p>'.$content.'</p>]]>';
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a>t'.$content.']]>';
 			}
 			//$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
 			
