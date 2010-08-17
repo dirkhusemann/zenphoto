@@ -205,9 +205,6 @@ $oktocreate = false;
 $connectDBErr = '';
 if (file_exists(CONFIGFILE)) {
 	require(CONFIGFILE);
-	if (defined('CHMOD_VALUE')) {
-		$chmod = CHMOD_VALUE;
-	}
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
 			$collation = ' CHARACTER SET utf8 COLLATE utf8_unicode_ci';
@@ -248,6 +245,9 @@ if (file_exists(CONFIGFILE)) {
 		$connectDBErr = mysql_error();
 	}
 }
+if (defined('CHMOD_VALUE')) {
+	$chmod = CHMOD_VALUE;
+}
 
 if (function_exists('setOption')) {
 	setOptionDefault('zp_plugin_security-logger', 9);
@@ -256,6 +256,8 @@ if (function_exists('setOption')) {
 	require_once(dirname(__FILE__).'/setup-primitive.php');
 	require_once(dirname(__FILE__).'/functions-i18n.php');
 }
+$updatechmod = $updatechmod  && zp_loggedin(ADMIN_RIGHTS);
+
 if ($newconfig || isset($_GET['copyhtaccess'])) {
 	if ($newconfig && !file_exists(dirname(dirname(__FILE__)).'/.htaccess') || zp_loggedin(ADMIN_RIGHTS)) {
 		copy('htaccess', dirname(dirname(__FILE__)).'/.htaccess');
@@ -1280,17 +1282,14 @@ if ($debug) {
 				unset($_zp_resident_files[$res]);
 			}
 			if (is_dir($component)) {
-				if ($updatechmod && zp_loggedin(ADMIN_RIGHTS)) {
-					$perms = fileperms($component)&0777;
-					if ($perms > $chmod) {	// do not relax permissions
-						@chmod($component,$chmod);
-						clearstatcache();
-						if ($permissions==1 && ($perms = fileperms($component)&0777)!=$chmod) {
-							if (($perms&0754) == 0754) { // could not set them, but they will work.
-								$permissions = -1;
-							} else {
-								$permissions = 0;
-							}
+				if ($updatechmod) {
+					@chmod($component,$chmod);
+					clearstatcache();
+					if ($permissions==1 && ($perms = fileperms($component)&0777)!=$chmod) {
+						if (($perms&0754) == 0754) { // could not set them, but they will work.
+							$permissions = -1;
+						} else {
+							$permissions = 0;
 						}
 					}
 				}
@@ -1301,17 +1300,14 @@ if ($debug) {
 					getResidentZPFiles($base.$value);
 				}
 			} else {
-				if ($updatechmod && zp_loggedin(ADMIN_RIGHTS)) {
-					$perms = fileperms($component)&0777;
-					if ($perms > ($chmod&0666)) {	// do not relax permissions
-						@chmod($component,0666&$chmod);
-						clearstatcache();
-						if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
-							if (($perms&0644) == 0644) { // could not set them, but they will work.
-								$permissions = -1;
-							} else {
-								$permissions = 0;
-							}
+				if ($updatechmod) {
+					@chmod($component,0666&$chmod);
+					clearstatcache();
+					if ($permissions==1 && ($perms = fileperms($component)&0777)!=($chmod & 0666)) {
+						if (($perms&0644) == 0644) { // could not set them, but they will work.
+							$permissions = -1;
+						} else {
+							$permissions = 0;
 						}
 					}
 				}
