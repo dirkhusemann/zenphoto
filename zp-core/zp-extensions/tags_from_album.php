@@ -77,7 +77,7 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
 				$tagWhere .= '(o.objectid ='. $albumid['id']." AND o.tagid = t.id AND o.type = 'albums')";
 				if($count != count($albumids)) $tagWhere .= " OR ";
 			}
-			$tags = query_full_array("SELECT DISTINCT t.name, t.id, (SELECT DISTINCT COUNT(*) FROM ". prefix('obj_to_tag'). " WHERE tagid = t.id AND o.type = 'albums') AS count ". prefix('obj_to_tag'). " AS o,". prefix('tags'). "as t".$tagWhere." ORDER by t.name");
+			$tags = query_full_array("SELECT DISTINCT t.name, t.id, (SELECT DISTINCT COUNT(*) FROM ". prefix('obj_to_tag'). " WHERE tagid = t.id AND o.type = 'albums') AS count FROM ". prefix('obj_to_tag'). " AS o,". prefix('tags'). "as t".$tagWhere." ORDER by t.name");
 			break;
 	}
 	if (!is_array($tags)) {
