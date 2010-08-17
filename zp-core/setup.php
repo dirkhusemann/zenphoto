@@ -321,7 +321,15 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 <link rel="stylesheet" href="admin.css" type="text/css" />
 
 <script src="js/jquery.js" type="text/javascript"></script>
-<script src="js/zenphoto.js" type="text/javascript" ></script>
+<script type="text/javascript">
+function toggle_visibility(id) {
+	var e = document.getElementById(id);
+	if(e.style.display == 'block')
+		e.style.display = 'none';
+	else
+		e.style.display = 'block';
+}
+</script>
 
 <style type="text/css">
 body {
@@ -628,23 +636,29 @@ if (!$setup_checked) {
 			}
 			if (!empty($msg)) {
 				if ($check == 0) {
-					echo '<div class="error">';
-					echo '<h1>'.gettext('Error!').'</h1>';
-					echo $msg;
-					echo "</div>";
+					?>
+					<div class="error">
+					<h1><?php echo gettext('Error!'); ?></h1>
+					<?php  echo $msg; ?>
+					</div>
+					<?php
 				} else if ($check == -1) {
 					$moreid++;
-					echo "<div class='warning' id='more".$moreid."' style='display:block'>";
-					echo '<h1>'.gettext('Warning!').'</h1>';
-					echo $msg;
-					echo "</div>";
+					?>
+					<div class='warning' id='more".$moreid."'>
+					<h1><?php echo gettext('Warning!'); ?></h1>
+					<?php  echo $msg; ?>
+					</div>
+					<?php
 				} else {
 					$moreid++;
-					echo ' <a href="javascript:toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Notice!</strong> click for details').'</a>';
-					echo "<div class='notice' id='more".$moreid."' style='display:none'>";
-					echo '<h1>'.gettext('Notice!').'</h1>';
-					echo $msg;
-					echo "</div>";
+					?>
+					<a href="javascript:toggle_visibility('more<?php echo $moreid; ?>');"><?php echo gettext('<strong>Notice!</strong> click for details'); ?></a>
+					<div class="notice" id="more<?php echo $moreid; ?>" style="display:none">
+					<h1><?php echo gettext('Notice!'); ?></h1>
+					<?php  echo $msg; ?>
+					</div>
+					<?php
 				}
 				$dsp .= ' '.trim($msg);
 			}
@@ -2475,7 +2489,6 @@ if (file_exists(CONFIGFILE)) {
 ?>
 </div><!-- content -->
 </div><!-- main -->
-
 <?php
 if ($noxlate > 0) {
 	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/dynamic-locale.php');
