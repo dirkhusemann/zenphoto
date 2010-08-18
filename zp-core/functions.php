@@ -7,7 +7,7 @@
  */
 
 // force UTF-8 Ø
-				
+
 global $_zp_setupCurrentLocale_result, $_zp_current_context_stack, $_zp_HTML_cache;
 
 if(!function_exists("json_encode")) {
@@ -950,7 +950,7 @@ function getAllSubAlbumIDs($albumfolder='') {
  */
 function handleSearchParms($what, $album=NULL, $image=NULL) {
 	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list, $_zp_current_album,
-					$_zp_current_zenpage_news, $_zp_current_zenpage_page;;
+					$_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery;
 	$_zp_last_album = zp_getCookie('zenphoto_last_album');
 	if (is_null($album)) {
 		if (is_object($zp_request)) {
@@ -1872,13 +1872,13 @@ function zp_handle_password($authType=NULL, $check_auth=NULL, $check_user=NULL) 
  * @param string $key
  * @param string $value
  * @param object $album
+ * @param string $theme default theme
  * @param bool $default set to true for setting default theme options (does not set the option if it already exists)
  */
-function setThemeOption($key, $value, $album=NULL, $default=false) {
+function setThemeOption($key, $value, $album=NULL, $theme, $default=false) {
 	global $gallery;
 	if (is_null($album)) {
 		$id = 0;
-		$theme = $default;
 	} else {
 		$id = $album->id;
 		$theme = $album->getAlbumTheme();
@@ -1917,7 +1917,7 @@ function setThemeOptionDefault($key, $value) {
 	if (is_array($bt)) {
 		$b = array_shift($bt);
 		$theme = basename(dirname($b['file']));
-		setThemeOption($key, $value, NULL, $theme);
+		setThemeOption($key, $value, NULL, $theme, true);
 	} else {
 		setOptionDefault($key, $value); // can't determine the theme.
 	}
@@ -1930,15 +1930,15 @@ function setThemeOptionDefault($key, $value) {
  * @param string $key Option key
  * @param bool $bool value to be set
  * @param object $album album object
- * @param string $default theme name
+ * @param string $theme default theme name
  */
-function setBoolThemeOption($key, $bool, $album=NULL, $default=false) {
+function setBoolThemeOption($key, $bool, $album=NULL, $theme=false) {
 	if ($bool) {
 		$value = 1;
 	} else {
 		$value = 0;
 	}
-	setThemeOption($key, $value, $album, $default);
+	setThemeOption($key, $value, $album, $theme);
 }
 
 /**
@@ -1946,13 +1946,12 @@ function setBoolThemeOption($key, $bool, $album=NULL, $default=false) {
  *
  * @param string $option option key
  * @param object $album
- * @param string $default theme name
+ * @param string $theme default theme name
  * @return mixed
  */
-function getThemeOption($option, $album=NULL, $default=false) {
+function getThemeOption($option, $album=NULL, $theme=false) {
 	global $gallery;
 	if (is_null($album)) {
-		$theme = $default;
 		$id = 0;
 	} else {
 		$id = $album->id;
@@ -2093,7 +2092,7 @@ function cron_starter($script, $params, $inline=false) {
 	while (!$admin['valid']) {
 		$admin = array_shift($admins);
 	}
-	
+
 	if ($inline) {
 		$_zp_null_account = NULL;
 		$_zp_loggedin = $_zp_authority->checkAuthorization($admin['pass']);
@@ -2116,8 +2115,8 @@ function cron_starter($script, $params, $inline=false) {
 		?>
 		<script type="text/javascript">
 		// <!-- <![CDATA[
-		$.ajax({   
-			type: 'POST',   
+		$.ajax({
+			type: 'POST',
 			data: '<?php echo $paramlist; ?>',
 			url: '<?php echo WEBPATH.'/'.ZENFOLDER; ?>/cron_runner.php'
 		});
