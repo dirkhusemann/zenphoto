@@ -34,7 +34,8 @@
 			relative_urls : false,
 			document_base_url : "<?php echo WEBPATH."/"; ?>",
 			convert_urls : false,
-			entity_encoding: "raw"
+			entity_encoding: "raw",
+			extended_valid_elements : "iframe[src|width|height|class|id|type|frameborder]"
 		});
 
 		function ajaxfilemanager(field_name, url, type, win) {
