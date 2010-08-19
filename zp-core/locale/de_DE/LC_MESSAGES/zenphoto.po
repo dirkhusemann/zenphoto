@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zenphoto 1.3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-09 14:26+0100\n"
-"PO-Revision-Date: 2010-08-09 14:27+0100\n"
+"POT-Creation-Date: 2010-08-19 19:15+0100\n"
+"PO-Revision-Date: 2010-08-19 19:16+0100\n"
 "Last-Translator: Malte Müller (acrylian)\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -34,22 +34,22 @@ msgstr "(%s: 1 neues Bild)"
 msgid "(%1$s: %2$s new images)"
 msgstr "(%1$s: %2$s neue Bilder)"
 
-#: zTRANSLATE/rss.php:82
+#: zTRANSLATE/rss.php:81
 #, php-format
 msgid "Last update: %s"
 msgstr "Letzte Aktualisierung: %s"
 
-#: zTRANSLATE/rss.php:85
+#: zTRANSLATE/rss.php:84
 #, php-format
 msgid "(%s: 1 image)"
 msgstr "(%s: 1 Bild)"
 
-#: zTRANSLATE/rss.php:87
+#: zTRANSLATE/rss.php:86
 #, php-format
 msgid "(%1$s: %2$s images)"
 msgstr "(%1$s: %2$s Bilder)"
 
-#: zTRANSLATE/rss.php:91
+#: zTRANSLATE/rss.php:89
 #, php-format
 msgid "Date: %s"
 msgstr "Datum: %s"
@@ -1194,8 +1194,8 @@ msgstr "Bildreihenfolge gesichert"
 #: zTRANSLATE/zp-core/admin-edit.php:806
 #: zTRANSLATE/zp-core/admin-edit.php:910
 #: zTRANSLATE/zp-core/admin-edit.php:1317
-#: zTRANSLATE/zp-core/admin-functions.php:965
-#: zTRANSLATE/zp-core/admin-functions.php:1643
+#: zTRANSLATE/zp-core/admin-functions.php:980
+#: zTRANSLATE/zp-core/admin-functions.php:1658
 msgid "Back to the album list"
 msgstr "Zurück zur Albumübersicht"
 
@@ -1206,8 +1206,8 @@ msgstr "Zurück zur Albumübersicht"
 #: zTRANSLATE/zp-core/admin-edit.php:912
 #: zTRANSLATE/zp-core/admin-edit.php:1319
 #: zTRANSLATE/zp-core/admin-edit.php:1410
-#: zTRANSLATE/zp-core/admin-functions.php:967
-#: zTRANSLATE/zp-core/admin-functions.php:1645
+#: zTRANSLATE/zp-core/admin-functions.php:982
+#: zTRANSLATE/zp-core/admin-functions.php:1660
 msgid "Back"
 msgstr "Zurück"
 
@@ -1224,10 +1224,10 @@ msgstr "Sortierung sichern"
 #: zTRANSLATE/zp-core/admin-edit.php:916
 #: zTRANSLATE/zp-core/admin-edit.php:1321
 #: zTRANSLATE/zp-core/admin-edit.php:1323
-#: zTRANSLATE/zp-core/admin-functions.php:969
-#: zTRANSLATE/zp-core/admin-functions.php:971
-#: zTRANSLATE/zp-core/admin-functions.php:1647
-#: zTRANSLATE/zp-core/admin-functions.php:1649
+#: zTRANSLATE/zp-core/admin-functions.php:984
+#: zTRANSLATE/zp-core/admin-functions.php:986
+#: zTRANSLATE/zp-core/admin-functions.php:1662
+#: zTRANSLATE/zp-core/admin-functions.php:1664
 msgid "Save"
 msgstr "Sichern"
 
@@ -1235,10 +1235,10 @@ msgstr "Sichern"
 #: zTRANSLATE/zp-core/admin-albumsort.php:127
 #: zTRANSLATE/zp-core/admin-albumsort.php:154
 #: zTRANSLATE/zp-core/admin-albumsort.php:156
-#: zTRANSLATE/zp-core/admin-functions.php:987
-#: zTRANSLATE/zp-core/admin-functions.php:989
-#: zTRANSLATE/zp-core/admin-functions.php:1665
-#: zTRANSLATE/zp-core/admin-functions.php:1667
+#: zTRANSLATE/zp-core/admin-functions.php:1002
+#: zTRANSLATE/zp-core/admin-functions.php:1004
+#: zTRANSLATE/zp-core/admin-functions.php:1680
+#: zTRANSLATE/zp-core/admin-functions.php:1682
 msgid "View Album"
 msgstr "Album ansehen"
 
@@ -1345,9 +1345,9 @@ msgstr "Löschen"
 #: zTRANSLATE/zp-core/admin-comments.php:215
 #: zTRANSLATE/zp-core/admin-edit.php:1066
 #: zTRANSLATE/zp-core/admin-edit.php:1071
-#: zTRANSLATE/zp-core/admin-edit.php:1076
-#: zTRANSLATE/zp-core/admin-functions.php:1578
-#: zTRANSLATE/zp-core/admin-functions.php:1586
+#: zTRANSLATE/zp-core/admin-edit.php:1077
+#: zTRANSLATE/zp-core/admin-functions.php:1593
+#: zTRANSLATE/zp-core/admin-functions.php:1601
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -1500,12 +1500,12 @@ msgid "Create in:"
 msgstr "Erstellt in:"
 
 #: zTRANSLATE/zp-core/admin-dynamic-album.php:144
-#: zTRANSLATE/zp-core/admin-functions.php:1301
+#: zTRANSLATE/zp-core/admin-functions.php:1316
 msgid "Thumbnail:"
 msgstr "Thumbnail:"
 
 #: zTRANSLATE/zp-core/admin-dynamic-album.php:155
-#: zTRANSLATE/zp-core/admin-functions.php:1322
+#: zTRANSLATE/zp-core/admin-functions.php:1337
 msgid "randomly selected"
 msgstr "zufällig ausgewählt"
 
@@ -1653,10 +1653,10 @@ msgstr "Wählen Sie ein Album, um seine Beschreibung und Daten zu bearbeiten ode
 #: zTRANSLATE/zp-core/admin-edit.php:752
 #: zTRANSLATE/zp-core/admin-edit.php:814
 #: zTRANSLATE/zp-core/admin-edit.php:816
-#: zTRANSLATE/zp-core/admin-functions.php:980
-#: zTRANSLATE/zp-core/admin-functions.php:982
-#: zTRANSLATE/zp-core/admin-functions.php:1658
-#: zTRANSLATE/zp-core/admin-functions.php:1660
+#: zTRANSLATE/zp-core/admin-functions.php:995
+#: zTRANSLATE/zp-core/admin-functions.php:997
+#: zTRANSLATE/zp-core/admin-functions.php:1673
+#: zTRANSLATE/zp-core/admin-functions.php:1675
 msgid "New subalbum"
 msgstr "Neues Unteralbum"
 
@@ -1722,7 +1722,7 @@ msgstr "Metadaten aktualisieren"
 
 #: zTRANSLATE/zp-core/admin-edit.php:800
 #: zTRANSLATE/zp-core/admin-edit.php:1586
-#: zTRANSLATE/zp-core/admin-functions.php:1717
+#: zTRANSLATE/zp-core/admin-functions.php:1732
 msgid "Reset hitcounters"
 msgstr "Besucherzähler-Reset"
 
@@ -1744,7 +1744,7 @@ msgid "%s (descending)"
 msgstr "%s (absteigend)"
 
 #: zTRANSLATE/zp-core/admin-edit.php:887
-#: zTRANSLATE/zp-core/admin-functions.php:1115
+#: zTRANSLATE/zp-core/admin-functions.php:1130
 msgid "Manual"
 msgstr "Manuell"
 
@@ -1759,11 +1759,11 @@ msgstr "Bilder anzeigen sortiert nach: "
 #: zTRANSLATE/zp-core/admin-edit.php:1325
 #: zTRANSLATE/zp-core/admin-edit.php:1327
 #: zTRANSLATE/zp-core/admin-functions.php:237
-#: zTRANSLATE/zp-core/admin-functions.php:973
-#: zTRANSLATE/zp-core/admin-functions.php:975
-#: zTRANSLATE/zp-core/admin-functions.php:1513
-#: zTRANSLATE/zp-core/admin-functions.php:1651
-#: zTRANSLATE/zp-core/admin-functions.php:1653
+#: zTRANSLATE/zp-core/admin-functions.php:988
+#: zTRANSLATE/zp-core/admin-functions.php:990
+#: zTRANSLATE/zp-core/admin-functions.php:1528
+#: zTRANSLATE/zp-core/admin-functions.php:1666
+#: zTRANSLATE/zp-core/admin-functions.php:1668
 msgid "Reset"
 msgstr "Zurücksetzen"
 
@@ -1816,12 +1816,12 @@ msgid "Title:"
 msgstr "Titel:"
 
 #: zTRANSLATE/zp-core/admin-edit.php:984
-#: zTRANSLATE/zp-core/admin-functions.php:1484
+#: zTRANSLATE/zp-core/admin-functions.php:1499
 msgid "General"
 msgstr "Allgemein"
 
 #: zTRANSLATE/zp-core/admin-edit.php:989
-#: zTRANSLATE/zp-core/admin-functions.php:1489
+#: zTRANSLATE/zp-core/admin-functions.php:1504
 msgid "Allow Comments"
 msgstr "Kommentare erlauben"
 
@@ -1835,28 +1835,28 @@ msgid "Hit counter: <strong>%u</strong>"
 msgstr "Besucherzähler: <strong>%u</strong>"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1009
-#: zTRANSLATE/zp-core/admin-functions.php:1509
+#: zTRANSLATE/zp-core/admin-functions.php:1524
 #, php-format
 msgid "Rating: <strong>%u</strong>"
 msgstr "Bewertung: <strong>%u</strong>"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1016
-#: zTRANSLATE/zp-core/admin-functions.php:1517
+#: zTRANSLATE/zp-core/admin-functions.php:1532
 msgid "Rating: Unrated"
 msgstr "Bewertung: Keine"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1022
-#: zTRANSLATE/zp-core/admin-functions.php:1523
+#: zTRANSLATE/zp-core/admin-functions.php:1538
 msgid "Utilities"
 msgstr "Werkzeuge"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1027
-#: zTRANSLATE/zp-core/admin-functions.php:1529
+#: zTRANSLATE/zp-core/admin-functions.php:1544
 msgid "Move"
 msgstr "Verschieben"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1031
-#: zTRANSLATE/zp-core/admin-functions.php:1535
+#: zTRANSLATE/zp-core/admin-functions.php:1550
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -1877,7 +1877,7 @@ msgstr "Bild löschen"
 msgid "to"
 msgstr "nach"
 
-#: zTRANSLATE/zp-core/admin-edit.php:1075
+#: zTRANSLATE/zp-core/admin-edit.php:1076
 msgid "Image will be deleted when changes are saved."
 msgstr "Das Bild wird gelöscht, wenn die Änderungen gesichert werden."
 
@@ -1902,7 +1902,7 @@ msgid "Crop thumbnail"
 msgstr "Thumbnail beschneiden"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1127
-#: zTRANSLATE/zp-core/admin-functions.php:1602
+#: zTRANSLATE/zp-core/admin-functions.php:1617
 msgid "Tags"
 msgstr "Schlagwörter"
 
@@ -1911,7 +1911,7 @@ msgid "Description:"
 msgstr "Beschreibung:"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1150
-#: zTRANSLATE/zp-core/admin-functions.php:1086
+#: zTRANSLATE/zp-core/admin-functions.php:1101
 msgid "calendar"
 msgstr "Kalender"
 
@@ -1920,12 +1920,12 @@ msgid "Image watermark:"
 msgstr "Bildwasserzeichen"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1168
-#: zTRANSLATE/zp-core/admin-functions.php:1287
+#: zTRANSLATE/zp-core/admin-functions.php:1302
 msgid "*no watermark"
 msgstr "*Kein Wasserzeichen"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1169
-#: zTRANSLATE/zp-core/admin-functions.php:1288
+#: zTRANSLATE/zp-core/admin-functions.php:1303
 msgid "*default"
 msgstr "*Voreinstellung"
 
@@ -1938,12 +1938,12 @@ msgid "full image"
 msgstr "Vollbild"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1188
-#: zTRANSLATE/zp-core/admin-functions.php:1106
+#: zTRANSLATE/zp-core/admin-functions.php:1121
 msgid "Custom data:"
 msgstr "Sonderfeld:"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1198
-#: zTRANSLATE/zp-core/admin-functions.php:1096
+#: zTRANSLATE/zp-core/admin-functions.php:1111
 msgid "Location:"
 msgstr "Ort:"
 
@@ -1976,22 +1976,22 @@ msgid "None selected for display"
 msgstr "Nichts zum Anzeigen ausgewählt"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1261
-#: zTRANSLATE/zp-core/admin-functions.php:1439
+#: zTRANSLATE/zp-core/admin-functions.php:1454
 msgid "Codeblocks:"
 msgstr "Codeblöcke:"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1266
-#: zTRANSLATE/zp-core/admin-functions.php:1444
+#: zTRANSLATE/zp-core/admin-functions.php:1459
 msgid "Codeblock 1"
 msgstr "Codeblock 1"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1267
-#: zTRANSLATE/zp-core/admin-functions.php:1445
+#: zTRANSLATE/zp-core/admin-functions.php:1460
 msgid "Codeblock 2"
 msgstr "Codeblock 2"
 
 #: zTRANSLATE/zp-core/admin-edit.php:1268
-#: zTRANSLATE/zp-core/admin-functions.php:1446
+#: zTRANSLATE/zp-core/admin-functions.php:1461
 msgid "Codeblock 3"
 msgstr "Codeblock 3"
 
@@ -2130,355 +2130,355 @@ msgstr "<em>%s</em> ansehen"
 msgid "View gallery index"
 msgstr "Galerie-Index ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:389
+#: zTRANSLATE/zp-core/admin-functions.php:404
 msgid "Images"
 msgstr "Bilder"
 
-#: zTRANSLATE/zp-core/admin-functions.php:390
+#: zTRANSLATE/zp-core/admin-functions.php:405
 msgid "Image order"
 msgstr "Bildreihenfolge"
 
-#: zTRANSLATE/zp-core/admin-functions.php:393
+#: zTRANSLATE/zp-core/admin-functions.php:408
 msgid "Subalbums"
 msgstr "Unteralben"
 
-#: zTRANSLATE/zp-core/admin-functions.php:437
+#: zTRANSLATE/zp-core/admin-functions.php:452
 #, php-format
 msgid "%s failed to delete."
 msgstr "%s konnte nicht gelöscht werden."
 
-#: zTRANSLATE/zp-core/admin-functions.php:440
+#: zTRANSLATE/zp-core/admin-functions.php:455
 #, php-format
 msgid "%s deleted successfully."
 msgstr "%s erfolgreich gelöscht."
 
-#: zTRANSLATE/zp-core/admin-functions.php:999
+#: zTRANSLATE/zp-core/admin-functions.php:1014
 msgid "Album Title"
 msgstr "Albumtitle"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1008
+#: zTRANSLATE/zp-core/admin-functions.php:1023
 msgid "Album Description:"
 msgstr "Albumbeschreibung:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1018
-#: zTRANSLATE/zp-core/admin-functions.php:1046
+#: zTRANSLATE/zp-core/admin-functions.php:1033
+#: zTRANSLATE/zp-core/admin-functions.php:1061
 msgid "Album password:"
 msgstr "Albumpasswort:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1042
+#: zTRANSLATE/zp-core/admin-functions.php:1057
 msgid "Album guest user:"
 msgstr "Album-Gastbenutzer:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1048
+#: zTRANSLATE/zp-core/admin-functions.php:1063
 msgid "repeat:"
 msgstr "Wiederholen:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1051
+#: zTRANSLATE/zp-core/admin-functions.php:1066
 msgid "Password hint:"
 msgstr "Passwort-Hinweis:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1117
+#: zTRANSLATE/zp-core/admin-functions.php:1132
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1124
+#: zTRANSLATE/zp-core/admin-functions.php:1139
 msgid "Sort subalbums by:"
 msgstr "Unteralbumsortierung: "
 
-#: zTRANSLATE/zp-core/admin-functions.php:1132
+#: zTRANSLATE/zp-core/admin-functions.php:1147
 msgid "*gallery album sort order"
 msgstr "*Galerie-Album-Sortierung"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1134
+#: zTRANSLATE/zp-core/admin-functions.php:1149
 msgid "*parent album subalbum sort order"
 msgstr "*Unteralbum-Sortierung des übergeordneten Albums"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1152
-#: zTRANSLATE/zp-core/admin-functions.php:1215
+#: zTRANSLATE/zp-core/admin-functions.php:1167
+#: zTRANSLATE/zp-core/admin-functions.php:1230
 msgid "Descending"
 msgstr "Absteigend"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1169
-#: zTRANSLATE/zp-core/admin-functions.php:1233
+#: zTRANSLATE/zp-core/admin-functions.php:1184
+#: zTRANSLATE/zp-core/admin-functions.php:1248
 msgid "custom fields:"
 msgstr "Benutzerdefinierte Felder:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1185
+#: zTRANSLATE/zp-core/admin-functions.php:1200
 msgid "Sort images by:"
 msgstr "Bildersortierung: "
 
-#: zTRANSLATE/zp-core/admin-functions.php:1193
+#: zTRANSLATE/zp-core/admin-functions.php:1208
 msgid "*gallery image sort order"
 msgstr "*Galerie-Standardbildsortierung"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1195
+#: zTRANSLATE/zp-core/admin-functions.php:1210
 msgid "*parent album image sort order"
 msgstr "*Bildsortierung des übergeordneten Albums"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1250
+#: zTRANSLATE/zp-core/admin-functions.php:1265
 msgid "Album theme:"
 msgstr "Albumtheme:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1262
+#: zTRANSLATE/zp-core/admin-functions.php:1277
 msgid "*gallery theme"
 msgstr "*Galerie-Theme"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1284
+#: zTRANSLATE/zp-core/admin-functions.php:1299
 msgid "Album watermark:"
 msgstr "Album-Wasserzeichen:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1473
+#: zTRANSLATE/zp-core/admin-functions.php:1488
 msgid "Publish"
 msgstr "Veröffentlichen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1479
+#: zTRANSLATE/zp-core/admin-functions.php:1494
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1499
+#: zTRANSLATE/zp-core/admin-functions.php:1514
 #, php-format
 msgid "Reset hitcounter (Hits: %u)"
 msgstr "Besucherzähler löschen (Besucher: %u)"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1541
+#: zTRANSLATE/zp-core/admin-functions.php:1556
 msgid "Rename Folder"
 msgstr "Ordner umbenennen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1545
-#: zTRANSLATE/zp-core/admin-functions.php:1582
+#: zTRANSLATE/zp-core/admin-functions.php:1560
+#: zTRANSLATE/zp-core/admin-functions.php:1597
 msgid "to:"
 msgstr "nach:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1626
+#: zTRANSLATE/zp-core/admin-functions.php:1641
 msgid "Dynamic album search:"
 msgstr "Suche in dynamischen Alben:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1687
+#: zTRANSLATE/zp-core/admin-functions.php:1702
 msgid "Clears the album's cached images."
 msgstr "Löscht die zwischengespeicherten Bilder des Albums."
 
-#: zTRANSLATE/zp-core/admin-functions.php:1689
+#: zTRANSLATE/zp-core/admin-functions.php:1704
 msgid "Clear album cache"
 msgstr "Löschte den Albumcache"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1702
+#: zTRANSLATE/zp-core/admin-functions.php:1717
 msgid "Cache newly uploaded images."
 msgstr "Neu hochgeladene Bilder cachen."
 
-#: zTRANSLATE/zp-core/admin-functions.php:1704
+#: zTRANSLATE/zp-core/admin-functions.php:1719
 msgid "Pre-Cache Images"
 msgstr "Bilder cachen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1716
+#: zTRANSLATE/zp-core/admin-functions.php:1731
 msgid "Resets all hitcounters in the album."
 msgstr "Besucherzähler dieses Albums zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1730
+#: zTRANSLATE/zp-core/admin-functions.php:1745
 msgid "Forces a refresh of the EXIF and IPTC data for all images in the album."
 msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder in diesem Album durch."
 
-#: zTRANSLATE/zp-core/admin-functions.php:1731
+#: zTRANSLATE/zp-core/admin-functions.php:1746
 msgid "Refresh Metadata"
 msgstr "Metadaten aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1763
-#: zTRANSLATE/zp-core/admin-functions.php:1767
+#: zTRANSLATE/zp-core/admin-functions.php:1778
+#: zTRANSLATE/zp-core/admin-functions.php:1782
 #, php-format
 msgid "Edit this album: %s"
 msgstr "Edit this album: %s"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1778
+#: zTRANSLATE/zp-core/admin-functions.php:1793
 msgid "no images"
 msgstr "Keine Bilder"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1781
-#: zTRANSLATE/zp-core/admin-functions.php:1790
+#: zTRANSLATE/zp-core/admin-functions.php:1796
+#: zTRANSLATE/zp-core/admin-functions.php:1805
 msgid "Subalbum List"
 msgstr "Subalbum-Übersicht"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1801
+#: zTRANSLATE/zp-core/admin-functions.php:1816
 msgid "Password protected"
 msgstr "Passwortgeschützt"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1809
+#: zTRANSLATE/zp-core/admin-functions.php:1824
 #, php-format
 msgid "Un-publish the album %s"
 msgstr "Das Album %s nicht veröffentlichen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1810
+#: zTRANSLATE/zp-core/admin-functions.php:1825
 msgid "albumedit"
 msgstr "Album bearbeiten"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1815
-#: zTRANSLATE/zp-core/admin-functions.php:1816
+#: zTRANSLATE/zp-core/admin-functions.php:1830
+#: zTRANSLATE/zp-core/admin-functions.php:1831
 #, php-format
 msgid "Publish the album %s"
 msgstr "Album %s veröffentlichen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1822
+#: zTRANSLATE/zp-core/admin-functions.php:1837
 msgid "Enable or disable comments"
 msgstr "Kommentare ein- oder abschalten"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1826
+#: zTRANSLATE/zp-core/admin-functions.php:1841
 msgid "View album"
 msgstr "Album ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1827
+#: zTRANSLATE/zp-core/admin-functions.php:1842
 #, php-format
 msgid "View album %s"
 msgstr "Album %s ansehen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1837
-#: zTRANSLATE/zp-core/admin-functions.php:1854
-#: zTRANSLATE/zp-core/admin-functions.php:1868
+#: zTRANSLATE/zp-core/admin-functions.php:1852
+#: zTRANSLATE/zp-core/admin-functions.php:1869
+#: zTRANSLATE/zp-core/admin-functions.php:1883
 msgid "unavailable"
 msgstr "nicht verfügbar"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1841
+#: zTRANSLATE/zp-core/admin-functions.php:1856
 #, php-format
 msgid "Pre-cache images in %s"
 msgstr "Bilder in %s cachen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1842
+#: zTRANSLATE/zp-core/admin-functions.php:1857
 #, php-format
 msgid "Cache the album %s"
 msgstr "Album %s cachen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1858
+#: zTRANSLATE/zp-core/admin-functions.php:1873
 #, php-format
 msgid "Refresh metadata for the album %s"
 msgstr "Metadaten für das Album %s aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1859
+#: zTRANSLATE/zp-core/admin-functions.php:1874
 #, php-format
 msgid "Refresh metadata in the album %s"
 msgstr "Metadaten für das Album %s aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1872
+#: zTRANSLATE/zp-core/admin-functions.php:1887
 #, php-format
 msgid "Reset hitcounters for album %s"
 msgstr "Besucherzähler für das Album %s zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1873
+#: zTRANSLATE/zp-core/admin-functions.php:1888
 #, php-format
 msgid "Reset hitcounters for the album %s"
 msgstr "Besucherzähler für das Album %s zurücksetzen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:1879
-#: zTRANSLATE/zp-core/admin-functions.php:1880
+#: zTRANSLATE/zp-core/admin-functions.php:1894
+#: zTRANSLATE/zp-core/admin-functions.php:1895
 #, php-format
 msgid "Delete the album %s"
 msgstr "Album %s löschen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2123
-#: zTRANSLATE/zp-core/admin-functions.php:2130
-#: zTRANSLATE/zp-core/admin-functions.php:2135
 #: zTRANSLATE/zp-core/admin-functions.php:2138
-#: zTRANSLATE/zp-core/admin-functions.php:2141
+#: zTRANSLATE/zp-core/admin-functions.php:2145
+#: zTRANSLATE/zp-core/admin-functions.php:2150
+#: zTRANSLATE/zp-core/admin-functions.php:2153
+#: zTRANSLATE/zp-core/admin-functions.php:2156
 #, php-format
 msgid "page %u"
 msgstr "Seite %u"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2123
-#: zTRANSLATE/zp-core/admin-functions.php:2125
+#: zTRANSLATE/zp-core/admin-functions.php:2138
+#: zTRANSLATE/zp-core/admin-functions.php:2140
 msgid "Previous page"
 msgstr "Vorherige Seite"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2478
-#: zTRANSLATE/zp-core/admin-functions.php:2483
-#: zTRANSLATE/zp-core/admin-functions.php:2488
 #: zTRANSLATE/zp-core/admin-functions.php:2493
+#: zTRANSLATE/zp-core/admin-functions.php:2498
+#: zTRANSLATE/zp-core/admin-functions.php:2503
+#: zTRANSLATE/zp-core/admin-functions.php:2508
 msgid "Cannot create new theme."
 msgstr "Es konnte kein neues Theme erstellt werden."
 
-#: zTRANSLATE/zp-core/admin-functions.php:2478
+#: zTRANSLATE/zp-core/admin-functions.php:2493
 #, php-format
 msgid "Directory \"%s\" already exists!"
 msgstr "Das Verzeichnis \"%s\" existiert bereits!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2483
+#: zTRANSLATE/zp-core/admin-functions.php:2498
 #, php-format
 msgid "Cannot find theme directory \"%s\" to copy!"
 msgstr "Themeverzeichnis \"%s\" konnten nicht zum Kopieren gefunden werden!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2488
+#: zTRANSLATE/zp-core/admin-functions.php:2503
 msgid "The <tt>/themes</tt> directory is not writable!"
 msgstr "Das <tt>/themes</tt>-Verzeichnis ist nicht beschreibbar!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2493
+#: zTRANSLATE/zp-core/admin-functions.php:2508
 msgid "Could not create directory for the new theme"
 msgstr "Die Verzeichnis für das neue Theme konnte nicht erstellt werden."
 
-#: zTRANSLATE/zp-core/admin-functions.php:2535
+#: zTRANSLATE/zp-core/admin-functions.php:2550
 #, php-format
 msgid "An error occurred while copying files. Please delete manually the new theme directory '%s' and retry or copy files manually."
 msgstr "Es ist ein Fehler beim Kopieren von Dateien aufgetreten. Bitte löschen Sie das Themeverzeichnis  '%s' manuell und versuchen die Dateien manuell zu kopieren."
 
-#: zTRANSLATE/zp-core/admin-functions.php:2543
+#: zTRANSLATE/zp-core/admin-functions.php:2558
 #, php-format
 msgid "Your theme, based on theme %s"
 msgstr "Ihr Theme, basierend auf Theme %s"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2545
+#: zTRANSLATE/zp-core/admin-functions.php:2560
 msgid "Your theme"
 msgstr "Aktives Design"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2569
+#: zTRANSLATE/zp-core/admin-functions.php:2584
 msgid "New custom theme created successfully!"
 msgstr "Neues benutzerdefiniertes Theme erfolgreich erstellt!"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2571
+#: zTRANSLATE/zp-core/admin-functions.php:2586
 msgid "New custom theme created, but its description could not be updated"
 msgstr "Ein neues benutzerdefiniertes Theme wurde erstellt, aber seine Beschreibung konnte nicht aktualisiert werden"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2715
+#: zTRANSLATE/zp-core/admin-functions.php:2730
 msgid "Rights"
 msgstr "Rechte"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2837
+#: zTRANSLATE/zp-core/admin-functions.php:2852
 msgid "edit"
 msgstr "Bearbeiten"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2837
+#: zTRANSLATE/zp-core/admin-functions.php:2852
 #: zTRANSLATE/zp-core/admin-globals.php:39
 msgid "upload"
 msgstr "Hochladen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2850
+#: zTRANSLATE/zp-core/admin-functions.php:2865
 msgid "Managed albums:"
 msgstr "Verwaltete Alben:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2856
+#: zTRANSLATE/zp-core/admin-functions.php:2871
 msgid "Managed news categories:"
 msgstr "Verwaltete Neuigkeitenkategorien:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:2863
+#: zTRANSLATE/zp-core/admin-functions.php:2878
 msgid "Managed pages:"
 msgstr "Verwaltete Seiten:"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3213
+#: zTRANSLATE/zp-core/admin-functions.php:3228
 #, php-format
 msgid "Show %u album level"
 msgid_plural "Show %u album levels"
 msgstr[0] "%u Albumebene anzeigen"
 msgstr[1] "%u Albumebenen anzeigen"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3216
+#: zTRANSLATE/zp-core/admin-functions.php:3231
 #, php-format
 msgid "%u image per page"
 msgid_plural "%u images per page"
 msgstr[0] "%u Bild pro Seite"
 msgstr[1] "%u Bilder pro Seite"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3280
+#: zTRANSLATE/zp-core/admin-functions.php:3295
 msgid "Comments on"
 msgstr "Kommentare erlauben"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3282
+#: zTRANSLATE/zp-core/admin-functions.php:3297
 msgid "Comments off"
 msgstr "Kommentare aus"
 
-#: zTRANSLATE/zp-core/admin-functions.php:3466
+#: zTRANSLATE/zp-core/admin-functions.php:3481
 #, php-format
 msgid "\"%s\" Cross Site Request Forgery blocked."
 msgstr "\"%s\" Cross Site Request Forgery blockiert."
@@ -4023,54 +4023,54 @@ msgstr "Alle oben eingegebenen Schlagwörter hinzufügen."
 msgid "Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>Add tags</em> button"
 msgstr "Fügen Sie neue Schlagwörter hinzu, indem Sie sie in den Eingabefeldern der Liste <em>Neue Schlagwörter</em> eingeben. Danach klicken Sie einfach auf <em>Neue Schlagwörter speichern</em>."
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:56
-#: zTRANSLATE/zp-core/admin-themes-editor.php:61
-msgid "Cannot edit this file!"
-msgstr "Die Datei kann nicht bearbeitet werden!"
-
-#: zTRANSLATE/zp-core/admin-themes-editor.php:75
+#: zTRANSLATE/zp-core/admin-themes-editor.php:54
 msgid "File updated successfully"
 msgstr "Dateiaktualisierung erfolgreich"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:77
-#: zTRANSLATE/zp-core/admin-themes-editor.php:80
+#: zTRANSLATE/zp-core/admin-themes-editor.php:56
+#: zTRANSLATE/zp-core/admin-themes-editor.php:59
 msgid "Could not write file. Please check its write permissions"
 msgstr "Die Datei konnte nicht geschrieben werden. Bitte überprüfen Sie die Schreibrechte."
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:93
+#: zTRANSLATE/zp-core/admin-themes-editor.php:80
+#: zTRANSLATE/zp-core/admin-themes-editor.php:85
+msgid "Cannot edit this file!"
+msgstr "Die Datei kann nicht bearbeitet werden!"
+
+#: zTRANSLATE/zp-core/admin-themes-editor.php:90
 msgid "Theme File Editor"
 msgstr "Theme-Datei-Editor"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:109
+#: zTRANSLATE/zp-core/admin-themes-editor.php:106
 msgid "Theme template files (.php)"
 msgstr "Theme-Vorlagen-Dateien (.php)"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:112
+#: zTRANSLATE/zp-core/admin-themes-editor.php:109
 msgid "JavaScript files (.js)"
 msgstr "Javascript-Dateien (.js)"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:115
+#: zTRANSLATE/zp-core/admin-themes-editor.php:112
 msgid "Style sheets (.css)"
 msgstr "Style sheets (.css)"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:118
+#: zTRANSLATE/zp-core/admin-themes-editor.php:115
 msgid "Other text files"
 msgstr "Andere Textdateien"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:123
+#: zTRANSLATE/zp-core/admin-themes-editor.php:120
 msgid "Edit this file"
 msgstr "Diese Datei bearbeiten"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:133
+#: zTRANSLATE/zp-core/admin-themes-editor.php:130
 #, php-format
 msgid "File <tt>%s</tt> from theme %s"
 msgstr "Datei <tt>%s</tt> des Themes %s"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:139
+#: zTRANSLATE/zp-core/admin-themes-editor.php:136
 msgid "Update File"
 msgstr "Datei aktualisieren"
 
-#: zTRANSLATE/zp-core/admin-themes-editor.php:147
+#: zTRANSLATE/zp-core/admin-themes-editor.php:144
 msgid "Select a file to edit from the list on your right hand. Keep in mind that you can <strong>break everything</strong> if you are not careful when updating files."
 msgstr "Wählen Sie rechts eine Datei zum Bearbeiten aus. Denken Sie daran, dass Sie alles <strong>beschädigen können</strong>, wenn Sie beim Aktualisieren nicht sorgfältig vorgehen."
 
@@ -4205,185 +4205,185 @@ msgstr "Thumbnailbeschnitt ist deaktiviert. Aktivieren Sie diese Option, wenn Si
 msgid "thumbnail preview"
 msgstr "Thumbnailvorschau"
 
-#: zTRANSLATE/zp-core/admin-upload.php:119
-msgid "You must upload at least one file."
-msgstr "Sie müssen wenigstens eine Datei hochladen."
-
-#: zTRANSLATE/zp-core/admin-upload.php:121
-msgid "You must enter a folder name for your new album."
-msgstr "Sie müssen einen Ordnernamen für das neue Album eingeben."
-
-#: zTRANSLATE/zp-core/admin-upload.php:123
+#: zTRANSLATE/zp-core/admin-upload.php:124
 msgid "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file."
 msgstr "Sie haben wahrscheinlich die Uploadgrenze Ihres Servers überschritten. Versuchen Sie weniger Dateien auf einmal hochzuladen oder verwenden Sie ein zip-Archiv."
 
-#: zTRANSLATE/zp-core/admin-upload.php:127
+#: zTRANSLATE/zp-core/admin-upload.php:126
+msgid "You must upload at least one file."
+msgstr "Sie müssen wenigstens eine Datei hochladen."
+
+#: zTRANSLATE/zp-core/admin-upload.php:128
+msgid "You must enter a folder name for your new album."
+msgstr "Sie müssen einen Ordnernamen für das neue Album eingeben."
+
+#: zTRANSLATE/zp-core/admin-upload.php:132
 msgid "You have attempted to upload to an album for which you do not have upload rights"
 msgstr "Sie haben versucht, in ein Album hochzuladen, für das Sie keine Hochladerechte haben."
 
-#: zTRANSLATE/zp-core/admin-upload.php:130
+#: zTRANSLATE/zp-core/admin-upload.php:135
 msgid "You have attempted to upload one or more files which are not Zenphoto supported file types"
 msgstr "Sie haben versucht ein oder mehrere Dateien hochzuladen, die von Zenphoto nicht unterstützt werden."
 
-#: zTRANSLATE/zp-core/admin-upload.php:134
+#: zTRANSLATE/zp-core/admin-upload.php:139
 msgid "You have attempted to upload too large a file"
 msgstr "Sie haben versucht, ein zu großes Bild hochzuladen"
 
-#: zTRANSLATE/zp-core/admin-upload.php:137
+#: zTRANSLATE/zp-core/admin-upload.php:142
 msgid "You have exceeded your upload quota"
 msgstr "Sie haben Ihr Uploadkontingent überschritten"
 
-#: zTRANSLATE/zp-core/admin-upload.php:140
+#: zTRANSLATE/zp-core/admin-upload.php:145
 #, php-format
 msgid "The error %s was reported when submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!"
 msgstr "Der Fehler %s ist beim Übermitteln des Formulars aufgetreten. Wenn dies weiterhin passiert, überprüfen Sie Ihren Server und Ihre PHP-Konfiguration (stellen Sie sicher, dass Dateihochladen aktiviert ist und die upload_max_filesize hoch genug eingestellt ist). Wenn Sie glauben, dass dies ein Fehler ist, übermitteln Sie uns bitten einen Fehlerbericht. Danke!"
 
-#: zTRANSLATE/zp-core/admin-upload.php:153
+#: zTRANSLATE/zp-core/admin-upload.php:158
 #, php-format
 msgid "Do you want to replace the file %s?"
 msgstr "Sind Sie sicher, dass Sie die Datei %s löschen wollen?"
 
-#: zTRANSLATE/zp-core/admin-upload.php:154
+#: zTRANSLATE/zp-core/admin-upload.php:159
 #, php-format
 msgid "Upload queue is full. The upload limit is %u."
 msgstr "Die Upload-Warteschlange ist voll. Das Uploadlimit ist %u."
 
-#: zTRANSLATE/zp-core/admin-upload.php:197
+#: zTRANSLATE/zp-core/admin-upload.php:202
 msgid "Upload Photos"
 msgstr "Bilder hochladen"
 
-#: zTRANSLATE/zp-core/admin-upload.php:212
+#: zTRANSLATE/zp-core/admin-upload.php:217
 #, php-format
 msgid "This web-based upload accepts the file formats: %s, and %s."
 msgstr "Das webbasierten Hochladen akzeptiert die folgenden Formate: %s und %s."
 
-#: zTRANSLATE/zp-core/admin-upload.php:214
+#: zTRANSLATE/zp-core/admin-upload.php:219
 #, php-format
 msgid "This web-based upload accepts the file formats: %s and %s."
 msgstr "Das webbasierten Hochladen akzeptiert die folgenden Formate: %s und %s."
 
-#: zTRANSLATE/zp-core/admin-upload.php:220
+#: zTRANSLATE/zp-core/admin-upload.php:225
 msgid "<strong>Note: </strong>"
 msgstr "<strong>Anmerkung:</strong>"
 
-#: zTRANSLATE/zp-core/admin-upload.php:222
+#: zTRANSLATE/zp-core/admin-upload.php:227
 msgid "ZIP files must contain only Zenphoto supported <em>image</em> types."
 msgstr "ZIP-Dateien dürfen nur von Zenphoto unterstützte Bildformate enthalten."
 
-#: zTRANSLATE/zp-core/admin-upload.php:225
+#: zTRANSLATE/zp-core/admin-upload.php:230
 #, php-format
 msgid "The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."
 msgstr "Die maximale Größe für Dateien ist <strong>%sB</strong>. Dies ist von <code>upload_max_filesize</code> Ihre PHP-Konfiguration so vorgegeben.."
 
-#: zTRANSLATE/zp-core/admin-upload.php:232
+#: zTRANSLATE/zp-core/admin-upload.php:237
 msgid "Don't forget, you can also use <acronym title=\"File Transfer Protocol\">FTP</acronym> to upload folders of images into the albums directory!"
 msgstr "Vergessen Sie nicht, dass Sie ebenso  <acronym title=\"File Transfer Protocol\">FTP</acronym> verwenden können, um Ordner mit Bildern in Ihr albums-Verzeichnis hochzuladen!"
 
-#: zTRANSLATE/zp-core/admin-upload.php:237
+#: zTRANSLATE/zp-core/admin-upload.php:242
 msgid "Something went wrong..."
 msgstr "Irgendwas ist schief gegangen..."
 
-#: zTRANSLATE/zp-core/admin-upload.php:238
+#: zTRANSLATE/zp-core/admin-upload.php:243
 msgid "There was an error submitting the form. Please try again."
 msgstr "Es ist ein Fehler beim Übermitteln des Formulars aufgetreten. Bitte versuchen Sie es erneut."
 
-#: zTRANSLATE/zp-core/admin-upload.php:245
+#: zTRANSLATE/zp-core/admin-upload.php:250
 msgid "Upload complete"
 msgstr "Hochladen vollständig"
 
-#: zTRANSLATE/zp-core/admin-upload.php:246
+#: zTRANSLATE/zp-core/admin-upload.php:251
 msgid "Your files have been uploaded."
 msgstr "Ihren Dateien wurden hochgeladen."
 
-#: zTRANSLATE/zp-core/admin-upload.php:252
+#: zTRANSLATE/zp-core/admin-upload.php:257
 msgid "PHP Safe Mode Restrictions in effect!"
 msgstr "PHP Safe Mode-Einschränkungen sind aktiv."
 
-#: zTRANSLATE/zp-core/admin-upload.php:253
+#: zTRANSLATE/zp-core/admin-upload.php:258
 msgid "Zenphoto may be unable to perform uploads when PHP Safe Mode restrictions are in effect"
 msgstr "Zenphoto kann möglicherweise keine Bilder hochladen, solange PHP-Safe-Mode-Einschränkungen aktiv sind."
 
-#: zTRANSLATE/zp-core/admin-upload.php:260
-#: zTRANSLATE/zp-core/admin-upload.php:301
-#: zTRANSLATE/zp-core/admin-upload.php:370
-#: zTRANSLATE/zp-core/admin-upload.php:381
+#: zTRANSLATE/zp-core/admin-upload.php:265
+#: zTRANSLATE/zp-core/admin-upload.php:306
+#: zTRANSLATE/zp-core/admin-upload.php:375
 #: zTRANSLATE/zp-core/admin-upload.php:386
-#: zTRANSLATE/zp-core/admin-upload.php:546
+#: zTRANSLATE/zp-core/admin-upload.php:391
+#: zTRANSLATE/zp-core/admin-upload.php:551
 msgid "That name is already used."
 msgstr "Dieser Name wird bereits verwendet."
 
-#: zTRANSLATE/zp-core/admin-upload.php:260
-#: zTRANSLATE/zp-core/admin-upload.php:301
-#: zTRANSLATE/zp-core/admin-upload.php:370
-#: zTRANSLATE/zp-core/admin-upload.php:381
+#: zTRANSLATE/zp-core/admin-upload.php:265
+#: zTRANSLATE/zp-core/admin-upload.php:306
+#: zTRANSLATE/zp-core/admin-upload.php:375
 #: zTRANSLATE/zp-core/admin-upload.php:386
-#: zTRANSLATE/zp-core/admin-upload.php:546
+#: zTRANSLATE/zp-core/admin-upload.php:391
+#: zTRANSLATE/zp-core/admin-upload.php:551
 msgid "This upload has to have a folder. Type a title or folder name to continue..."
 msgstr "Diese Dateien benötigen einen Ordner. Bitte geben Sie einen Ordnernamen ein..."
 
-#: zTRANSLATE/zp-core/admin-upload.php:269
+#: zTRANSLATE/zp-core/admin-upload.php:274
 msgid "Upload to:"
 msgstr "Hochladen nach: "
 
-#: zTRANSLATE/zp-core/admin-upload.php:371
+#: zTRANSLATE/zp-core/admin-upload.php:376
 msgid "Make a new Album"
 msgstr "Neues Album erstellen"
 
-#: zTRANSLATE/zp-core/admin-upload.php:373
+#: zTRANSLATE/zp-core/admin-upload.php:378
 msgid "and"
 msgstr "und"
 
-#: zTRANSLATE/zp-core/admin-upload.php:376
+#: zTRANSLATE/zp-core/admin-upload.php:381
 msgid "Publish the album so everyone can see it."
 msgstr "Das Album für jeden sichtbar veröffentlichen."
 
-#: zTRANSLATE/zp-core/admin-upload.php:379
+#: zTRANSLATE/zp-core/admin-upload.php:384
 msgid "titled:"
 msgstr "benannt:"
 
-#: zTRANSLATE/zp-core/admin-upload.php:383
+#: zTRANSLATE/zp-core/admin-upload.php:388
 msgid "with the folder name:"
 msgstr "mit dem Ordnernamen:"
 
-#: zTRANSLATE/zp-core/admin-upload.php:389
+#: zTRANSLATE/zp-core/admin-upload.php:394
 msgid "Auto-generate"
 msgstr "Automatisch erstellen"
 
-#: zTRANSLATE/zp-core/admin-upload.php:480
+#: zTRANSLATE/zp-core/admin-upload.php:485
 msgid "Zenphoto supported file types | all files"
 msgstr "Unterstützte Dateiformate | Alle Dateien"
 
-#: zTRANSLATE/zp-core/admin-upload.php:492
+#: zTRANSLATE/zp-core/admin-upload.php:497
 msgid "There appears to be no <em>Flash</em> plugin installed in your browser."
 msgstr "Es scheint, dass kein <em>Flash</em>-Plugin für Ihren Browser installiert ist."
 
-#: zTRANSLATE/zp-core/admin-upload.php:496
-#: zTRANSLATE/zp-core/admin-upload.php:525
-#: zTRANSLATE/zp-core/admin-upload.php:527
+#: zTRANSLATE/zp-core/admin-upload.php:501
+#: zTRANSLATE/zp-core/admin-upload.php:530
+#: zTRANSLATE/zp-core/admin-upload.php:532
 msgid "Upload"
 msgstr "Hochladen"
 
-#: zTRANSLATE/zp-core/admin-upload.php:500
+#: zTRANSLATE/zp-core/admin-upload.php:505
 msgid "If your upload does not work try the <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=http');\" >http-browser single file upload</a> or use FTP instead."
 msgstr "Wenn Ihr Upload nicht funktioniert, versuchen Sie stattdessen den  <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=http');\" >http-browser-Einzeldatei-Upload</a> oder verwenden Sie FTP."
 
-#: zTRANSLATE/zp-core/admin-upload.php:520
+#: zTRANSLATE/zp-core/admin-upload.php:525
 msgid "Doesn't reload!"
 msgstr "Lädt nicht erneut."
 
-#: zTRANSLATE/zp-core/admin-upload.php:520
+#: zTRANSLATE/zp-core/admin-upload.php:525
 msgid "Add more upload boxes"
 msgstr "Mehr Felder zum Hochladen hinzufügen"
 
-#: zTRANSLATE/zp-core/admin-upload.php:521
+#: zTRANSLATE/zp-core/admin-upload.php:526
 msgid "(won't reload the page, but remember your upload limits!)"
 msgstr "(lädt die Seite nicht neu, aber erinnert Ihre Grenze beim Hochladen!)"
 
-#: zTRANSLATE/zp-core/admin-upload.php:532
+#: zTRANSLATE/zp-core/admin-upload.php:537
 msgid "Try the <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >multi file upload</a>"
 msgstr "Versuchen Sie den <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >Mehrfach-Datei-Upload</a>"
 
-#: zTRANSLATE/zp-core/admin-upload.php:537
+#: zTRANSLATE/zp-core/admin-upload.php:542
 msgid "There are no albums to which you can upload."
 msgstr "Es gibt keine Alben, in die Sie hochladen können."
 
@@ -5470,7 +5470,7 @@ msgstr "Vietnamesisch"
 msgid "Welsh"
 msgstr "Walisisch"
 
-#: zTRANSLATE/zp-core/functions-i18n.php:208
+#: zTRANSLATE/zp-core/functions-i18n.php:218
 msgid "HTTP Accept Language"
 msgstr "HTTP Accept Language"
 
@@ -5872,7 +5872,7 @@ msgstr "Unbekanntes Datum"
 msgid "Page error: %2$s (%1$s)"
 msgstr "Seitenfehler: %2$s (%1$s)"
 
-#: zTRANSLATE/zp-core/functions.php:2056
+#: zTRANSLATE/zp-core/functions.php:2055
 #, php-format
 msgid "Zenphoto processed a 404 error on %s. See the debug log for details."
 msgstr "Zenphoto gibt einen 404-Fehler auf %s aus. Sehen Sie in das Debuglog. "
@@ -6114,937 +6114,937 @@ msgstr "MySQL-POST-Behandlung"
 msgid "Updated zp-config.php"
 msgstr "zp-config.php-Datei aktualisiert"
 
-#: zTRANSLATE/zp-core/setup.php:266
+#: zTRANSLATE/zp-core/setup.php:268
 msgid "Completed system check"
 msgstr "Systemüberprüfung komplett"
 
-#: zTRANSLATE/zp-core/setup.php:273
+#: zTRANSLATE/zp-core/setup.php:275
 msgid "Setup cookie test successful"
 msgstr "Installations-Testcookie erfolgreich"
 
-#: zTRANSLATE/zp-core/setup.php:276
+#: zTRANSLATE/zp-core/setup.php:278
 msgid "Setup cookie test unsuccessful"
 msgstr "Setup Cookietest fehlgeschlagen"
 
-#: zTRANSLATE/zp-core/setup.php:280
+#: zTRANSLATE/zp-core/setup.php:282
 msgid "Post of MySQL credentials"
 msgstr "MySQL-Benutzerdaten"
 
-#: zTRANSLATE/zp-core/setup.php:285
+#: zTRANSLATE/zp-core/setup.php:287
 msgid "Full environment"
 msgstr "Volle Umgebung"
 
-#: zTRANSLATE/zp-core/setup.php:287
+#: zTRANSLATE/zp-core/setup.php:289
 msgid "Primitive environment"
 msgstr "Einfache Umgebung"
 
-#: zTRANSLATE/zp-core/setup.php:289
+#: zTRANSLATE/zp-core/setup.php:291
 #, php-format
 msgid "Query error: %s"
 msgstr "Abfragefehler:  %s"
 
-#: zTRANSLATE/zp-core/setup.php:302
+#: zTRANSLATE/zp-core/setup.php:304
 msgid "strict+"
 msgstr "sehr streng"
 
-#: zTRANSLATE/zp-core/setup.php:303
+#: zTRANSLATE/zp-core/setup.php:305
 msgid "strict"
 msgstr "streng"
 
-#: zTRANSLATE/zp-core/setup.php:304
+#: zTRANSLATE/zp-core/setup.php:306
 msgid "relaxed"
 msgstr "entspannt"
 
-#: zTRANSLATE/zp-core/setup.php:305
+#: zTRANSLATE/zp-core/setup.php:307
 msgid "loose"
 msgstr "locker"
 
-#: zTRANSLATE/zp-core/setup.php:308
+#: zTRANSLATE/zp-core/setup.php:310
 msgid "create"
 msgstr "erstellen"
 
-#: zTRANSLATE/zp-core/setup.php:308
+#: zTRANSLATE/zp-core/setup.php:310
 msgid "update"
 msgstr "aktualisieren"
 
-#: zTRANSLATE/zp-core/setup.php:318
+#: zTRANSLATE/zp-core/setup.php:320
 msgid "Zenphoto upgrade"
 msgstr "Zenphoto-Aktualisierung"
 
-#: zTRANSLATE/zp-core/setup.php:318
+#: zTRANSLATE/zp-core/setup.php:320
 msgid "Zenphoto setup"
 msgstr "Zenphoto-Installation"
 
-#: zTRANSLATE/zp-core/setup.php:554
+#: zTRANSLATE/zp-core/setup.php:564
 msgid "Zenphoto Setup"
 msgstr "Zenphoto-Installation"
 
-#: zTRANSLATE/zp-core/setup.php:555
+#: zTRANSLATE/zp-core/setup.php:565
 msgid "Upgrade"
 msgstr "Aktualisierung"
 
-#: zTRANSLATE/zp-core/setup.php:555
+#: zTRANSLATE/zp-core/setup.php:565
 msgid "Setup"
 msgstr "Installation"
 
-#: zTRANSLATE/zp-core/setup.php:567
+#: zTRANSLATE/zp-core/setup.php:577
 msgid "Zenphoto has detected that you're upgrading to a new version."
 msgstr "Zenphoto hat festgestellt, dass Sie auf eine neue Version aktualisieren."
 
-#: zTRANSLATE/zp-core/setup.php:569
+#: zTRANSLATE/zp-core/setup.php:579
 msgid "Welcome to Zenphoto! This page will set up Zenphoto on your web server."
 msgstr "Willkommen bei Zenphoto! Diese Seite wird Zenphoto auf Ihrem Webserver einrichten."
 
-#: zTRANSLATE/zp-core/setup.php:573
+#: zTRANSLATE/zp-core/setup.php:583
 msgid "Systems Check:"
 msgstr "Systemcheck:"
 
-#: zTRANSLATE/zp-core/setup.php:630
+#: zTRANSLATE/zp-core/setup.php:641
 msgid "Error!"
 msgstr "Fehler!"
 
-#: zTRANSLATE/zp-core/setup.php:636
+#: zTRANSLATE/zp-core/setup.php:649
 msgid "Warning!"
 msgstr "Warnung!"
 
-#: zTRANSLATE/zp-core/setup.php:641
+#: zTRANSLATE/zp-core/setup.php:656
 msgid "<strong>Notice!</strong> click for details"
 msgstr "<strong>Anmerkung!</strong> Für mehr Details klicken"
 
-#: zTRANSLATE/zp-core/setup.php:643
+#: zTRANSLATE/zp-core/setup.php:658
 msgid "Notice!"
 msgstr "Anmerkung!"
 
-#: zTRANSLATE/zp-core/setup.php:687
+#: zTRANSLATE/zp-core/setup.php:703
 #, php-format
 msgid "<em>%1$s</em> folder%2$s [subfolder creation failure]"
 msgstr "<em>%1$s</em> Ordner%2$s [Unterordnererstellung fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:687
+#: zTRANSLATE/zp-core/setup.php:703
 #, php-format
 msgid "Setup could not create the following subfolders:<br />%s"
 msgstr "Setup konnte die folgenden Unterordner nicht erstellen:<br />%s"
 
-#: zTRANSLATE/zp-core/setup.php:698
-#: zTRANSLATE/zp-core/setup.php:703
+#: zTRANSLATE/zp-core/setup.php:714
+#: zTRANSLATE/zp-core/setup.php:719
 msgid "unknown"
 msgstr "Unbekannt"
 
-#: zTRANSLATE/zp-core/setup.php:705
+#: zTRANSLATE/zp-core/setup.php:721
 #, php-format
 msgid "<em>%1$s</em> folder%2$s [permissions failure]"
 msgstr "<em>%1$s</em> Ordner%2$s [Dateizugriffsrechte fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:705
+#: zTRANSLATE/zp-core/setup.php:721
 #, php-format
 msgid "Setup could not change the folder permissions from <em>%1$s</em> (<code>0%2$o</code>) to <em>%3$s</em> (<code>0%4$o</code>). You will have to set the permissions manually. See the <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> for details on Zenphoto permissions requirements."
 msgstr "Setup konnte die  Dateizugriffsrechte  nicht von <em>%1$s</em> (<code>0%2$o</code>) auf <em>%3$s</em> (<code>0%4$o</code>) setzen. Sie müssen diese manuell einstellen. Bitte lesen Sie <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> zu Details über die erforderlichen Dateizugriffsrechte."
 
-#: zTRANSLATE/zp-core/setup.php:736
+#: zTRANSLATE/zp-core/setup.php:752
 #, php-format
 msgid "You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>."
 msgstr "Sie müssen den Ordner <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code> erstellen."
 
-#: zTRANSLATE/zp-core/setup.php:738
+#: zTRANSLATE/zp-core/setup.php:754
 #, php-format
 msgid "<em>%1$s</em> folder [<em>%2$s</em> does not exist]"
 msgstr "Ordner <em>%1$s</em> [<em>%2$s</em> existiert nicht]"
 
-#: zTRANSLATE/zp-core/setup.php:740
+#: zTRANSLATE/zp-core/setup.php:756
 #, php-format
 msgid "<em>%1$s</em> folder [<em>%2$s</em> does not exist and <strong>setup</strong> could not create it]"
 msgstr "Ordner <em>%1$s</em> [<em>%2$s</em> existiert nicht und <strong>setup</strong> konnte ihn nicht erstellen]"
 
-#: zTRANSLATE/zp-core/setup.php:743
+#: zTRANSLATE/zp-core/setup.php:759
 #, php-format
 msgid "Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)"
 msgstr "Ändern Sie die Zugriffsrechte des <code>%1$s</code>-Ordners auf schreibbar durch den Server (<code>chmod 777 %2$s</code>)"
 
-#: zTRANSLATE/zp-core/setup.php:744
+#: zTRANSLATE/zp-core/setup.php:760
 #, php-format
 msgid "<em>%1$s</em> folder [<em>%2$s</em> is not writeable and <strong>setup</strong> could not make it so]"
 msgstr "Ordner <em>%1$s</em> [<em>%2$s</em> ist nicht beschreibbar und <strong>setup</strong> konnte dies nicht ändern]"
 
-#: zTRANSLATE/zp-core/setup.php:746
+#: zTRANSLATE/zp-core/setup.php:762
 #, php-format
 msgid "<em>%1$s</em> folder%2$s"
 msgstr "<em>%1$s</em> Ordner %2$s"
 
-#: zTRANSLATE/zp-core/setup.php:813
-#: zTRANSLATE/zp-core/setup.php:816
+#: zTRANSLATE/zp-core/setup.php:829
+#: zTRANSLATE/zp-core/setup.php:832
 #, php-format
 msgid "PHP version %s"
 msgstr "PHP-Version %s"
 
-#: zTRANSLATE/zp-core/setup.php:813
+#: zTRANSLATE/zp-core/setup.php:829
 #, php-format
 msgid "Version %1$s or greater is strongly recommended."
 msgstr "Version %1$s oder neuer ist ausdrücklich empfohlen."
 
-#: zTRANSLATE/zp-core/setup.php:816
+#: zTRANSLATE/zp-core/setup.php:832
 #, php-format
 msgid "Version %1$s or greater is required. Use earlier versions at your own risk. Version %2$s or greater is strongly recommended."
 msgstr "Version %1$s oder neuer ist notwendig. Verwenden Sie ältere Version auf eigenes Risiko. Version %2$s oder neuer ist ausdrücklich empfohlen."
 
-#: zTRANSLATE/zp-core/setup.php:824
+#: zTRANSLATE/zp-core/setup.php:840
 msgid "PHP <code>Safe Mode</code>"
 msgstr "PHP <code>Safe Mode</code>"
 
-#: zTRANSLATE/zp-core/setup.php:824
+#: zTRANSLATE/zp-core/setup.php:840
 msgid "PHP <code>Safe Mode</code> [is set]"
 msgstr "PHP <code>Safe Mode</code> [ist aktiv]"
 
-#: zTRANSLATE/zp-core/setup.php:824
+#: zTRANSLATE/zp-core/setup.php:840
 msgid "Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."
 msgstr "Zenphotos Funktionalität ist eingeschränkt solange PHP Safe Mode-Einschränkungen aktiv sind."
 
-#: zTRANSLATE/zp-core/setup.php:831
+#: zTRANSLATE/zp-core/setup.php:847
 msgid "PHP <code>magic_quotes_gpc</code>"
 msgstr "PHP <code>magic_quotes_gpc</code>"
 
-#: zTRANSLATE/zp-core/setup.php:831
+#: zTRANSLATE/zp-core/setup.php:847
 msgid "PHP <code>magic_quotes_gpc</code> [is enabled]"
 msgstr "PHP <code>magic_quotes_gpc</code> [sind aktiviert]"
 
-#: zTRANSLATE/zp-core/setup.php:831
+#: zTRANSLATE/zp-core/setup.php:847
 msgid "You should consider disabling <code>magic_quotes_gpc</code>. For more information See <em>What is magic_quotes_gpc and why should it be disabled?</em> in the Zenphoto troubleshooting guide."
 msgstr "Sie sollten in Erwägung ziehen <code>magic_quotes_gpc</code> zu deaktivieren. Für mehr Information lesen Sie bitte <em>What is magic_quotes_gpc and why should it be disabled?</em> im Zenphoto troubleshooting guide."
 
-#: zTRANSLATE/zp-core/setup.php:842
+#: zTRANSLATE/zp-core/setup.php:858
 #, php-format
 msgid "Graphics support: <code>%s</code>"
 msgstr "Grafikunterstützung: <code>%s</code>"
 
-#: zTRANSLATE/zp-core/setup.php:842
+#: zTRANSLATE/zp-core/setup.php:858
 msgid "Graphics support [is not installed]"
 msgstr "Grafikunterstützung [ist nicht installiert]"
 
-#: zTRANSLATE/zp-core/setup.php:842
+#: zTRANSLATE/zp-core/setup.php:858
 msgid "You need to install a graphics support library such as the <em>GD library</em> in your PHP"
 msgstr "Sie müssen eine <em>Grafikerweitung</em> für PHP wie die GD-Bibliothek installieren"
 
-#: zTRANSLATE/zp-core/setup.php:851
+#: zTRANSLATE/zp-core/setup.php:867
 #, php-format
 msgid "Your PHP graphics library does not support %1$s or %2$s"
 msgstr "Ihre PHP-Grafiklibary unterstützt %1$s oder %2$s nicht"
 
-#: zTRANSLATE/zp-core/setup.php:853
+#: zTRANSLATE/zp-core/setup.php:869
 #, php-format
 msgid "Your PHP graphics library does not support %1$s"
 msgstr "Ihre PHP-Grafiklibary unterstützt %1$s nicht"
 
-#: zTRANSLATE/zp-core/setup.php:856
+#: zTRANSLATE/zp-core/setup.php:872
 msgid "To correct this you should install a graphics library with appropriate image support in your PHP"
 msgstr "Um dies zu beheben, sollten Sie GD-Grafikerweiterung mit entsprechender Bildunterstützung für PHP installieren"
 
-#: zTRANSLATE/zp-core/setup.php:858
+#: zTRANSLATE/zp-core/setup.php:874
 #, php-format
 msgid "Your PHP graphics library does not support %1$s, %2$s, or %3$s"
 msgstr "Ihre PHP-Grafiklibary unterstützt  %1$s, %2$s oder %3$s nicht"
 
-#: zTRANSLATE/zp-core/setup.php:861
+#: zTRANSLATE/zp-core/setup.php:877
 msgid "To correct this you need to install GD with appropriate image support in your PHP"
 msgstr "Um dies zu beheben, müssen Sie die GD-Erweiterung für PHP mit der entsprechenden Bildformatunterstützung installieren"
 
-#: zTRANSLATE/zp-core/setup.php:863
+#: zTRANSLATE/zp-core/setup.php:879
 msgid "PHP graphics image support"
 msgstr "PHP-GD-Bildbearbeitungs-Unterstützung"
 
-#: zTRANSLATE/zp-core/setup.php:864
+#: zTRANSLATE/zp-core/setup.php:880
 msgid "The unsupported image types will not be viewable in your albums."
 msgstr "Die nicht unterstützten Bildformate werden in Ihren Alben nicht zu sehen sein."
 
-#: zTRANSLATE/zp-core/setup.php:868
+#: zTRANSLATE/zp-core/setup.php:884
 msgid "Graphics Library rotation support [is not present]"
 msgstr "Grafikbibliothek Bildrotationunterstützung [ist nicht vorhanden]"
 
-#: zTRANSLATE/zp-core/setup.php:868
+#: zTRANSLATE/zp-core/setup.php:884
 msgid "The graphics support library does not provide support for image rotation."
 msgstr "Die Grafikunterstützung bietet keine Bildrotationsfunktionalität."
 
-#: zTRANSLATE/zp-core/setup.php:876
+#: zTRANSLATE/zp-core/setup.php:892
 msgid "Graphics support [configuration error]"
 msgstr "Grafikunterstützung [Konfigurationsfehler]"
 
-#: zTRANSLATE/zp-core/setup.php:876
+#: zTRANSLATE/zp-core/setup.php:892
 msgid "No Zenphoto image handling library was loaded. Be sure that your PHP has a graphics support."
 msgstr "Es wurde keine Zenphoto-Grafikbibliothek geladen. Überprüfen Sie, dass Ihr PHP über Grafikunterstützung verfügt."
 
-#: zTRANSLATE/zp-core/setup.php:879
+#: zTRANSLATE/zp-core/setup.php:895
 msgid "PHP <code>gettext()</code> support"
 msgstr "PHP <code>gettext()</code>-Unterstützung"
 
-#: zTRANSLATE/zp-core/setup.php:879
+#: zTRANSLATE/zp-core/setup.php:895
 msgid "PHP <code>gettext()</code> support [is not present]"
 msgstr "PHP <code>gettext()</code>-Unterstützung [ist nicht vorhanden]"
 
-#: zTRANSLATE/zp-core/setup.php:879
+#: zTRANSLATE/zp-core/setup.php:895
 msgid "Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"
 msgstr "Lokalisation von Zenphoto benötigt zur Zeit die Installation der PHP-<code>gettext()</code>-Erweiterung"
 
-#: zTRANSLATE/zp-core/setup.php:881
+#: zTRANSLATE/zp-core/setup.php:897
 msgid "PHP <code>setlocale()</code>"
 msgstr "PHP <code>setlocale()</code>"
 
-#: zTRANSLATE/zp-core/setup.php:881
+#: zTRANSLATE/zp-core/setup.php:897
 msgid "PHP <code>setlocale()</code> failed"
 msgstr "PHP <code>setlocale()</code> fehlgeschlagen"
 
-#: zTRANSLATE/zp-core/setup.php:881
+#: zTRANSLATE/zp-core/setup.php:897
 msgid "Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work."
 msgstr "Ihr Server verfügt nicht über Locale-Funktionalität oder die ausgewählte Locale existiert nicht. Übersetzung funktionieren daher möglicherweise nicht."
 
-#: zTRANSLATE/zp-core/setup.php:889
+#: zTRANSLATE/zp-core/setup.php:905
 msgid "Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly."
 msgstr "Es wird empfohlen, die <em>mbstring.internal_encoding</em> auf <strong>UTF-8</strong> in Ihrer <em>php.ini</em>-Datei zu setzen, um sicher zu stellen, dass akzentuierte und multi-byte Buchstaben wie erwartet funktionieren."
 
-#: zTRANSLATE/zp-core/setup.php:890
+#: zTRANSLATE/zp-core/setup.php:906
 msgid "PHP <code>mbstring</code> package"
 msgstr "PHP <code>mbstring</code>-Erweiterung"
 
-#: zTRANSLATE/zp-core/setup.php:890
+#: zTRANSLATE/zp-core/setup.php:906
 #, php-format
 msgid "PHP <code>mbstring</code> package [Your internal character set is <strong>%s</strong>]"
 msgstr "PHP <code>mbstring</code>-Erweiterung [Ihr interner Zeichensatz ist auf <strong>%s</strong> eingestellt]"
 
-#: zTRANSLATE/zp-core/setup.php:894
+#: zTRANSLATE/zp-core/setup.php:910
 msgid "You need to install the <code>mbstring</code> package or correct the issue with <code>iconv(()</code>"
 msgstr "Sie müssen die <code>mbstring</code>-Erweiterung installieren oder Angelegenheit mit  <code>iconv(()</code> beheben"
 
-#: zTRANSLATE/zp-core/setup.php:895
+#: zTRANSLATE/zp-core/setup.php:911
 msgid "PHP <code>mbstring</code> package [is not present and <code>iconv()</code> is not working]"
 msgstr "PHP <code>mbstring</code>-Erweiterung [ist nicht vorhanden und <code>iconv()</code> funktioniert nicht]"
 
-#: zTRANSLATE/zp-core/setup.php:897
+#: zTRANSLATE/zp-core/setup.php:913
 msgid "Strings generated internally by PHP may not display correctly. (e.g. dates)"
 msgstr "Zeichenketten, die intern von PHP generiert werden, können unter Umständen nicht korrekt dargestellt werden (z. B. Datumsangaben)."
 
-#: zTRANSLATE/zp-core/setup.php:898
+#: zTRANSLATE/zp-core/setup.php:914
 msgid "PHP <code>mbstring</code> package [is not present]"
 msgstr "PHP <code>mbstring</code>-Erweiterung [ist nicht vorhanden]"
 
-#: zTRANSLATE/zp-core/setup.php:903
+#: zTRANSLATE/zp-core/setup.php:919
 msgid "PHP <code>MySQL support</code>"
 msgstr "PHP <code>MySQL-Unterstützung</code>"
 
-#: zTRANSLATE/zp-core/setup.php:903
+#: zTRANSLATE/zp-core/setup.php:919
 msgid "PHP <code>MySQL support</code> [is not installed]"
 msgstr "PHP <code>MySQL-Unterstützung</code> [ist nicht installiert]"
 
-#: zTRANSLATE/zp-core/setup.php:903
+#: zTRANSLATE/zp-core/setup.php:919
 msgid "You need to install MySQL support in your PHP"
 msgstr "Sie müssen MySQL-Unterstützung für PHP installieren"
 
-#: zTRANSLATE/zp-core/setup.php:910
+#: zTRANSLATE/zp-core/setup.php:926
 msgid "<em>zp-config.php</em> file"
 msgstr "<em>zp-config.php</em>-Datei"
 
-#: zTRANSLATE/zp-core/setup.php:910
+#: zTRANSLATE/zp-core/setup.php:926
 msgid "<em>zp-config.php</em> file [does not exist]"
 msgstr "<em>zp-config.php</em>-Datei [existiert nicht]"
 
-#: zTRANSLATE/zp-core/setup.php:911
+#: zTRANSLATE/zp-core/setup.php:927
 #, php-format
 msgid "Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file's comments and rename it to <code>zp-config.php</code>. Place the file in the %s folder."
 msgstr "Das Installationsprogramm konnte diese Datei nicht erstellen. Sie müssen daher die Datei <code>zp-config.php.source</code> wie in den Dateikommentar angegeben editieren und es in <code>zp-config.php</code> umbenennen. Platzieren Sie die Datei dann im  %s-Ordner."
 
-#: zTRANSLATE/zp-core/setup.php:913
+#: zTRANSLATE/zp-core/setup.php:929
 #, php-format
 msgid "<br /><br />You can find the file in the \"%s\" directory."
 msgstr "<br /><br />Sie finden diese Datei innerhalb des \"%s\"-Verzeichnisses."
 
-#: zTRANSLATE/zp-core/setup.php:919
+#: zTRANSLATE/zp-core/setup.php:935
 #, php-format
 msgid "%1$s (0%2$o)"
 msgstr "%1$s (0%2$o)"
 
-#: zTRANSLATE/zp-core/setup.php:924
+#: zTRANSLATE/zp-core/setup.php:940
 #, php-format
 msgid "Change file/folder permissions mask: %s"
 msgstr "Ändern der Dateizugriffsrechte-Maske: %s"
 
-#: zTRANSLATE/zp-core/setup.php:927
+#: zTRANSLATE/zp-core/setup.php:943
 msgid "You must be logged in to change permissions."
 msgstr "Sie müssen angemeldet sein, um Dateiberechtigungen ändern zu können."
 
-#: zTRANSLATE/zp-core/setup.php:930
+#: zTRANSLATE/zp-core/setup.php:946
 #, php-format
 msgid "<em>%1$s</em> (<code>0%2$o</code>)"
 msgstr "<em>%1$s</em> (<code>0%2$o</code>)"
 
-#: zTRANSLATE/zp-core/setup.php:932
+#: zTRANSLATE/zp-core/setup.php:948
 #, php-format
 msgid "<em>unknown</em> (<code>%o</code>)"
 msgstr "<em>Unbekannt</em> (<code>%o</code>)"
 
-#: zTRANSLATE/zp-core/setup.php:939
+#: zTRANSLATE/zp-core/setup.php:955
 #, php-format
 msgid "File/Folder Permissions [are %s]"
 msgstr "Datei-/Ordnerberechtigungen [sind %s]"
 
-#: zTRANSLATE/zp-core/setup.php:941
+#: zTRANSLATE/zp-core/setup.php:957
 msgid "If file and folder permissions are not set to <em>strict</em> or tighter there could be a security risk. However, on some servers Zenphoto does not function correctly with tight file/folder permissions. If Zenphoto has permission errors, run setup again and select a more relaxed permission."
 msgstr "Es ist empfohlen, dass Sie <em>Strenge Rechte</em> aktivieren, da dies andernfalls ein Sicherheitsrisiko darstellen kann. Jedoch funktioniert Zenphoto auf einigen Servern leider nicht korrekt mit strenger Rechtevergabe. Wenn Sie diese Einstellung aktivieren und Fehler bezüglich Rechtevergabe erhalten, führen Sie das Installationsprogramm erneut aus und deaktivieren Sie die Einstellung. "
 
-#: zTRANSLATE/zp-core/setup.php:959
+#: zTRANSLATE/zp-core/setup.php:975
 #, php-format
 msgid "Change the filesystem character set define to %s"
 msgstr "Die Dateisystem-Zeichensatz-Definition auf %s ändern"
 
-#: zTRANSLATE/zp-core/setup.php:962
+#: zTRANSLATE/zp-core/setup.php:978
 msgid "You must be logged in to change the filesystem character set."
 msgstr "Sie müssen angemeldet sein, um Dateiberechtigungen ändern zu können."
 
-#: zTRANSLATE/zp-core/setup.php:964
+#: zTRANSLATE/zp-core/setup.php:980
 #, php-format
 msgid "The filesystem character set is defined as %s."
 msgstr "Der Dateisystem-Zeichensatz ist als %s definiert."
 
-#: zTRANSLATE/zp-core/setup.php:966
+#: zTRANSLATE/zp-core/setup.php:982
 msgid "If your server filesystem character set different from this value file and folder names with characters with diacritical marks will cause problems."
 msgstr "Wenn Ihr Server-Dateisystem-Zeichensatz nicht diesem entspricht, werden Datei -und Ordnernamen mit Zeichen, die diakritische Zeichen enthalten, Probleme verursachen."
 
-#: zTRANSLATE/zp-core/setup.php:991
-#: zTRANSLATE/zp-core/setup.php:1059
+#: zTRANSLATE/zp-core/setup.php:1007
+#: zTRANSLATE/zp-core/setup.php:1075
 msgid "MySQL setup in <em>zp-config.php</em>"
 msgstr "MySQL-Konfiguration in <em>zp-config.php</em>"
 
-#: zTRANSLATE/zp-core/setup.php:997
+#: zTRANSLATE/zp-core/setup.php:1013
 msgid "Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."
 msgstr "Tragen Sie die fehlende Information unten ein und <strong>setup</strong> wird versuchen, Ihre <code>zp-config.php</code>-Datei zu aktualisieren."
 
-#: zTRANSLATE/zp-core/setup.php:1008
+#: zTRANSLATE/zp-core/setup.php:1024
 msgid "MySQL admin user"
 msgstr "MySQL-Administrationsbenutzer"
 
-#: zTRANSLATE/zp-core/setup.php:1014
+#: zTRANSLATE/zp-core/setup.php:1030
 msgid "MySQL admin password"
 msgstr "MySQL-Administrationspasswort"
 
-#: zTRANSLATE/zp-core/setup.php:1020
+#: zTRANSLATE/zp-core/setup.php:1036
 msgid "MySQL host"
 msgstr "MySQL-Server"
 
-#: zTRANSLATE/zp-core/setup.php:1026
+#: zTRANSLATE/zp-core/setup.php:1042
 msgid "MySQL database"
 msgstr "MySQL-Datenbank"
 
-#: zTRANSLATE/zp-core/setup.php:1032
+#: zTRANSLATE/zp-core/setup.php:1048
 msgid "Database table prefix"
 msgstr "Datenbank-Vorsilbe"
 
-#: zTRANSLATE/zp-core/setup.php:1039
+#: zTRANSLATE/zp-core/setup.php:1055
 msgid "required"
 msgstr "erforderlich"
 
-#: zTRANSLATE/zp-core/setup.php:1057
+#: zTRANSLATE/zp-core/setup.php:1073
 msgid "You have not correctly set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file."
 msgstr "Sie haben keinen <strong>MySQL</strong>-<code>Benutzer</code>, <code>-Passwort</code> etc. in Ihrer<code>zp-config.php</code>-Datei eingetragen, so dass <strong>setup</strong> die Datei nicht aktualisieren kann."
 
-#: zTRANSLATE/zp-core/setup.php:1062
+#: zTRANSLATE/zp-core/setup.php:1078
 msgid "Connect to MySQL"
 msgstr "Verbinden mit MySQL"
 
-#: zTRANSLATE/zp-core/setup.php:1062
+#: zTRANSLATE/zp-core/setup.php:1078
 msgid "Connect to MySQL [<code>CONNECT</code> query failed]"
 msgstr "MySQL-Verbindung  [<code>CONNECT</code>-Abfrage fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:1066
+#: zTRANSLATE/zp-core/setup.php:1082
 msgid "Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again."
 msgstr "Überprüfen Sie <code>Benutzername</code>, <code>Passwort</code> und <code>Datenbankserver</code> und versuchen Sie es erneut."
 
-#: zTRANSLATE/zp-core/setup.php:1070
+#: zTRANSLATE/zp-core/setup.php:1086
 #, php-format
 msgid "MySQL version %s"
 msgstr "MySQL-Version %s"
 
-#: zTRANSLATE/zp-core/setup.php:1070
+#: zTRANSLATE/zp-core/setup.php:1086
 #, php-format
 msgid "Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is preferred."
 msgstr "Version %1$s oder neuer ist erforderlich. Nutzen Sie ältere Version auf eigene Verantwortung.<br />Version %2$s oder neuer bevorzugt."
 
-#: zTRANSLATE/zp-core/setup.php:1077
+#: zTRANSLATE/zp-core/setup.php:1093
 #, php-format
 msgid "Database <code>%s</code> created"
 msgstr "Datenbank <code>%s</code> erstellt"
 
-#: zTRANSLATE/zp-core/setup.php:1077
+#: zTRANSLATE/zp-core/setup.php:1093
 #, php-format
 msgid "Database <code>%s</code> not created [<code>CREATE DATABASE</code> query failed]"
 msgstr "Datenbank <code>%s</code> nicht erstellt [<code>CREATE DATABASE</code>-Abfrage fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:1080
+#: zTRANSLATE/zp-core/setup.php:1096
 msgid "Connect to the database [You have not provided a database name]"
 msgstr "Verbindung zur Datenbank [Sie haben keinen Datenbanknamen angegeben]"
 
-#: zTRANSLATE/zp-core/setup.php:1080
+#: zTRANSLATE/zp-core/setup.php:1096
 msgid "Provide the name of your database in the form above."
 msgstr "Geben Sie den Namen Ihrer Datenbank ein."
 
-#: zTRANSLATE/zp-core/setup.php:1083
+#: zTRANSLATE/zp-core/setup.php:1099
 msgid "Connect to the database [Database does not exist]"
 msgstr "Verbindung mit Datenbank [Datenbank existiert nicht]"
 
-#: zTRANSLATE/zp-core/setup.php:1083
+#: zTRANSLATE/zp-core/setup.php:1099
 #, php-format
 msgid "Click here to attempt to create <a href=\"?Create_Database\" >%s</a>."
 msgstr "Klicken Sie hier, um die Datenbank zu erstellen: <a href=\"?Create_Database\" >%s</a>. "
 
-#: zTRANSLATE/zp-core/setup.php:1088
+#: zTRANSLATE/zp-core/setup.php:1104
 msgid "Connect to the database"
 msgstr "Verbunden mit der Datenbank"
 
-#: zTRANSLATE/zp-core/setup.php:1089
+#: zTRANSLATE/zp-core/setup.php:1105
 #, php-format
 msgid "Could not access the <strong>MySQL</strong> database (<code>%s</code>)."
 msgstr "Zugriff auf die <strong>MySQL</strong>-Datenbank fehlgeschlagen (<code>%s</code>)."
 
-#: zTRANSLATE/zp-core/setup.php:1090
+#: zTRANSLATE/zp-core/setup.php:1106
 msgid "Check the <code>user</code>, <code>password</code>, <code>database name</code>, and <code>MySQL host</code>."
 msgstr "Überprüfen Sie <code>Benutzername</code>, <code>Passwort</code>, <code>Datenbankname</code> und <code>Datenbankserver</code>."
 
-#: zTRANSLATE/zp-core/setup.php:1091
+#: zTRANSLATE/zp-core/setup.php:1107
 #, php-format
 msgid "Make sure the database has been created and that <code>%s</code> has access to it."
 msgstr "Überprüfen Sie, ob die Datenbank erstellt wurden und das <code>%s</code> auch der Zugriff erlaubt ist."
 
-#: zTRANSLATE/zp-core/setup.php:1099
+#: zTRANSLATE/zp-core/setup.php:1115
 msgid "You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration."
 msgstr "Sie müssen möglicherweise den  <code>SQL-Modus</code> in Ihrer MySQL-Konfiguration auf <em>leer</em>"
 
-#: zTRANSLATE/zp-core/setup.php:1106
+#: zTRANSLATE/zp-core/setup.php:1122
 #, php-format
 msgid "MySQL <code>SQL mode</code> [<em>%s</em> overridden]"
 msgstr "MySQL <code>SQL-Modus</code> [<em>%s</em> übergangen]"
 
-#: zTRANSLATE/zp-core/setup.php:1106
+#: zTRANSLATE/zp-core/setup.php:1122
 msgid "Consider setting it <em>empty</em> in your MySQL configuration."
 msgstr "Ziehen Sie in Erwägung dies in Ihrer MySQL-Konfiguration auf <em>leer</em> zu stellen."
 
-#: zTRANSLATE/zp-core/setup.php:1113
+#: zTRANSLATE/zp-core/setup.php:1129
 msgid "MySQL <code>SQL mode</code>"
 msgstr "MySQL <code>SQL-Modus</code>"
 
-#: zTRANSLATE/zp-core/setup.php:1113
+#: zTRANSLATE/zp-core/setup.php:1129
 #, php-format
 msgid "MySQL <code>SQL mode</code> [is set to <em>%s</em>]"
 msgstr "MySQL <code>SQL-Modus</code> [ist auf <em>%s</em> gestellt]"
 
-#: zTRANSLATE/zp-core/setup.php:1113
+#: zTRANSLATE/zp-core/setup.php:1129
 msgid "Consider setting it <em>empty</em> if you get MySQL errors."
 msgstr "Ziehen Sie in Erwägung, dies auf <em>leer</em> zu stellen, wenn Sie MySQL-Fehlermeldungen bekommen."
 
-#: zTRANSLATE/zp-core/setup.php:1116
+#: zTRANSLATE/zp-core/setup.php:1132
 #, php-format
 msgid "MySQL <code>SQL mode</code> [query failed]"
 msgstr "MySQL <code>SQL-Modus</code> [Abfrage fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:1119
+#: zTRANSLATE/zp-core/setup.php:1135
 msgid "MySQL <code>SQL mode</code> [SET SESSION failed]"
 msgstr "MySQL <code>SQL-Modus</code> [SET SESSION fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:1137
+#: zTRANSLATE/zp-core/setup.php:1153
 msgid "Select"
 msgstr "Auswählen"
 
-#: zTRANSLATE/zp-core/setup.php:1137
+#: zTRANSLATE/zp-core/setup.php:1153
 msgid "Create"
 msgstr "Erzeugen"
 
-#: zTRANSLATE/zp-core/setup.php:1137
+#: zTRANSLATE/zp-core/setup.php:1153
 msgid "Drop"
 msgstr "Verwerfen"
 
-#: zTRANSLATE/zp-core/setup.php:1137
+#: zTRANSLATE/zp-core/setup.php:1153
 msgid "Insert"
 msgstr "Einfügen"
 
-#: zTRANSLATE/zp-core/setup.php:1138
+#: zTRANSLATE/zp-core/setup.php:1154
 msgid "Update"
 msgstr "Aktualisieren"
 
-#: zTRANSLATE/zp-core/setup.php:1138
+#: zTRANSLATE/zp-core/setup.php:1154
 msgid "Alter"
 msgstr "Ändern"
 
-#: zTRANSLATE/zp-core/setup.php:1148
+#: zTRANSLATE/zp-core/setup.php:1164
 msgid "Grants found:"
 msgstr "Grants gefunden:"
 
-#: zTRANSLATE/zp-core/setup.php:1176
+#: zTRANSLATE/zp-core/setup.php:1192
 msgid "The <em>SHOW GRANTS</em> query failed."
 msgstr "Die <code>SHOW GRANTS</code>-Abfrage ist fehlgeschlagen."
 
-#: zTRANSLATE/zp-core/setup.php:1178
+#: zTRANSLATE/zp-core/setup.php:1194
 msgid "MySQL <code>access rights</code>"
 msgstr "MySQL-<code>Zugriffsrechte</code>"
 
-#: zTRANSLATE/zp-core/setup.php:1178
+#: zTRANSLATE/zp-core/setup.php:1194
 #, php-format
 msgid "MySQL <code>access rights</code> [%s]"
 msgstr "MySQL-<code>Zugriffsrechte</code> [%s]"
 
-#: zTRANSLATE/zp-core/setup.php:1179
+#: zTRANSLATE/zp-core/setup.php:1195
 #, php-format
 msgid "Your MySQL user must have %s rights."
 msgstr "Ihr MySQL-Benutzer muß über %s Rechte verfügen."
 
-#: zTRANSLATE/zp-core/setup.php:1191
+#: zTRANSLATE/zp-core/setup.php:1207
 msgid "MySQL <em>show tables</em> [found no tables]"
 msgstr "MySQL <em>show tables</em> [keine Tabellen gefunden]"
 
-#: zTRANSLATE/zp-core/setup.php:1194
+#: zTRANSLATE/zp-core/setup.php:1210
 #, php-format
 msgid "MySQL <em>show tables</em> found: %s"
 msgstr "MySQL-<em>show tables</em> fand: %s"
 
-#: zTRANSLATE/zp-core/setup.php:1199
+#: zTRANSLATE/zp-core/setup.php:1215
 msgid "MySQL <em>show tables</em> [Failed]"
 msgstr "MySQL-<em>show tables</em> [fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:1199
+#: zTRANSLATE/zp-core/setup.php:1215
 #, php-format
 msgid "MySQL did not return a list of the database tables for <code>%s</code>."
 msgstr "MySQL hat für <code>%s</code> keine Liste der Datenbanktabellen zurückgegeben."
 
-#: zTRANSLATE/zp-core/setup.php:1200
+#: zTRANSLATE/zp-core/setup.php:1216
 msgid "<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."
 msgstr "<strong>Setup</strong> wird versuchen, die Tabellen zu erstellen. Es werden keine bereits existierenden Tabellen überschrieben."
 
-#: zTRANSLATE/zp-core/setup.php:1240
+#: zTRANSLATE/zp-core/setup.php:1256
 msgid "MySQL <code>field collations</code> [Image table]"
 msgstr "MySQL-<code>Feldkollationen</code> [Bildtabelle]"
 
-#: zTRANSLATE/zp-core/setup.php:1243
+#: zTRANSLATE/zp-core/setup.php:1259
 msgid "MySQL <code>field collations</code> [Album table]"
 msgstr "MySQL-<code>Feldkollationen</code> [Albumtabelle]"
 
-#: zTRANSLATE/zp-core/setup.php:1246
+#: zTRANSLATE/zp-core/setup.php:1262
 msgid "MySQL <code>field collations</code> [Image and Album tables]"
 msgstr "MySQL <code>Feldkollationen</code> [Bild- und Albumtabellen]"
 
-#: zTRANSLATE/zp-core/setup.php:1249
+#: zTRANSLATE/zp-core/setup.php:1265
 msgid "MySQL <code>field collations</code> [SHOW COLUMNS query failed]"
 msgstr "MySQL <code>Feldkollationen</code> [SHOW COLUMNS-Abfrage fehlgeschlagen]"
 
-#: zTRANSLATE/zp-core/setup.php:1252
+#: zTRANSLATE/zp-core/setup.php:1268
 msgid "MySQL <code>field collations</code>"
 msgstr "MySQL-<code>Feldkollationen</code> "
 
-#: zTRANSLATE/zp-core/setup.php:1252
+#: zTRANSLATE/zp-core/setup.php:1268
 #, php-format
 msgid "%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>"
 msgid_plural "%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>"
 msgstr[0] "%s ist nicht UTF-8. Sie sollten erwägen, Ihre Daten in UTF-8 zu übertragen und die Kollation der Datenbankfelder auf  <code>utf8_unicode_ci</code> zu setzen."
 msgstr[1] "%s sind nicht UTF-8. Sie sollten erwägen, Ihre Daten in UTF-8 zu übertragen und die Kollation der Datenbankfelder auf  <code>utf8_unicode_ci</code> zu setzen."
 
-#: zTRANSLATE/zp-core/setup.php:1254
+#: zTRANSLATE/zp-core/setup.php:1270
 msgid "MySQL <code>$conf[\"UTF-8\"]</code> [is not set <em>true</em>]"
 msgstr "MySQL <code>$conf[\"UTF-8\"]</code> [ist nicht auf <em>true</em> gestellt]"
 
-#: zTRANSLATE/zp-core/setup.php:1254
+#: zTRANSLATE/zp-core/setup.php:1270
 msgid "You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings."
 msgstr "Sie sollten erwägen, Ihre Daten in UTF-8 zu übertragen und die Kollation der Datenbankfelder auf  <code>utf8_unicode_ci</code> zu setzen und dies auf <em>true</em> zu stellen. Zenphoto arbeitet am besten mit reinen UTF-8-Kodierungen."
 
-#: zTRANSLATE/zp-core/setup.php:1351
+#: zTRANSLATE/zp-core/setup.php:1378
 msgid "Zenphoto core files [This is not an official build. Some files are missing or seem out of variance]"
 msgstr "Zenphoto-Hauptdateien [Dies ist keine offizielle Version. Einige Dateien scheinen außerhalb des Rahmens zu sein]"
 
-#: zTRANSLATE/zp-core/setup.php:1353
+#: zTRANSLATE/zp-core/setup.php:1380
 msgid "Zenphoto core files [Some files are missing or seem out of variance]"
 msgstr "Zenphoto-Hauptdateien [Einige <em>filemtimes</em> scheinen außerhalb des Rahmens zu sein]"
 
-#: zTRANSLATE/zp-core/setup.php:1355
+#: zTRANSLATE/zp-core/setup.php:1382
 msgid "Perhaps there was a problem with the upload. You should check the following files: "
 msgstr "Vielleicht ist ein Problem mit dem Upload aufgetreten. Sie sollten die folgenden Dateien überprüfen:"
 
-#: zTRANSLATE/zp-core/setup.php:1360
+#: zTRANSLATE/zp-core/setup.php:1387
 msgid "Zenphoto core files [This is not an official build]"
 msgstr "Zenphoto-Hauptdateien [Dies ist keine offizielle Version]"
 
-#: zTRANSLATE/zp-core/setup.php:1367
+#: zTRANSLATE/zp-core/setup.php:1394
 msgid "Zenphoto core files"
 msgstr "Zenphoto-Hauptdateien"
 
-#: zTRANSLATE/zp-core/setup.php:1380
+#: zTRANSLATE/zp-core/setup.php:1407
 msgid "Zenphoto core file permissions"
 msgstr "Zenphoto-Hauptdateien-Zugriffsrechte"
 
-#: zTRANSLATE/zp-core/setup.php:1380
+#: zTRANSLATE/zp-core/setup.php:1407
 msgid "Zenphoto core file permissions [not correct]"
 msgstr "Zenphoto-Hauptdateien-Dateiberechtigungen [nicht korrekt]"
 
-#: zTRANSLATE/zp-core/setup.php:1380
+#: zTRANSLATE/zp-core/setup.php:1407
 msgid "Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> for details on Zenphoto permissions requirements."
 msgstr "Setup konnte die die gewünschten Dateizugriffsrechte nicht setzen. Sie müssen diese manuell einstellen. Bitte lesen Sie <a href=\"//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29\">Troubleshooting guide</a> zu Details über die erforderlichen Dateizugriffsrechte."
 
-#: zTRANSLATE/zp-core/setup.php:1381
+#: zTRANSLATE/zp-core/setup.php:1408
 msgid "<em>.htaccess</em> file"
 msgstr "<em>.htaccess</em>-Datei"
 
-#: zTRANSLATE/zp-core/setup.php:1392
+#: zTRANSLATE/zp-core/setup.php:1419
 msgid "<em>.htaccess</em> file [is empty or does not exist]"
 msgstr "<em>.htaccess</em>-Datei [ist leer oder existiert nicht]"
 
-#: zTRANSLATE/zp-core/setup.php:1395
+#: zTRANSLATE/zp-core/setup.php:1422
 msgid "If you have the mod_rewrite module enabled an <em>.htaccess</em> file is required the root zenphoto folder to create cruft-free URLs."
 msgstr "Wenn Ihr Apache-Server über mod_rewrite-Funktionalität verfügt, muß eine <em>.htaccess</em>-Datei im Zenphoto-Hauptverzeichnis vorhanden sein, wenn Sie suchmaschinenfreundliche, klare URLs verwenden möchten."
 
-#: zTRANSLATE/zp-core/setup.php:1396
+#: zTRANSLATE/zp-core/setup.php:1423
 msgid "You can ignore this warning if you do not intend to set the <code>mod_rewrite</code> option."
 msgstr "Sie können dies ignorieren, wenn Sie nicht vorhaben <code>mod_rewrite</code> zu verwenden."
 
-#: zTRANSLATE/zp-core/setup.php:1397
+#: zTRANSLATE/zp-core/setup.php:1424
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup create the file."
 msgstr "Klicken Sie <a href=\"?copyhtaccess\" >hier</a>, um die Installation die Datei erstellen zu lassen."
 
-#: zTRANSLATE/zp-core/setup.php:1399
-#: zTRANSLATE/zp-core/setup.php:1417
+#: zTRANSLATE/zp-core/setup.php:1426
+#: zTRANSLATE/zp-core/setup.php:1444
 msgid "Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."
 msgstr "Der Server scheint kein Apache-Server oder nicht Apache kompatibel zu sein, daher wird der<code>.htaccess</code> nicht benötigt."
 
-#: zTRANSLATE/zp-core/setup.php:1420
+#: zTRANSLATE/zp-core/setup.php:1447
 #, php-format
 msgid "The <em>.htaccess</em> file in your root folder is not the same version as the one distributed with this version of Zenphoto. If you have made changes to <em>.htaccess</em>, merge those changes with the <em>%s/htaccess</em> file to produce a new <em>.htaccess</em> file."
 msgstr "Die <em>.htaccess</em>-Datei in Ihren Zenphoto-Hauptverzeichnis ist nicht die selbe Version wie die in dieser Zenphoto-Version enthaltene. Wenn Sie Änderungen an <em>.htaccess</em> vorgenommen haben, fügen Sie diese Änderungen in die <em>%s/htaccess</em>-Datei ein, um eine neue <em>.htaccess</em>-Datei zu erstellen."
 
-#: zTRANSLATE/zp-core/setup.php:1422
+#: zTRANSLATE/zp-core/setup.php:1449
 msgid "Click <a href=\"?copyhtaccess\" >here</a> to have setup replace your <em>.htaccess</em> file with the current version."
 msgstr "Klicken Sie  <a href=\"?copyhtaccess\" >hier</a> damit das Installationsskript Ihre <em>.htaccess</em>-Datei mit der aktuellen Version ersetzt."
 
-#: zTRANSLATE/zp-core/setup.php:1425
+#: zTRANSLATE/zp-core/setup.php:1452
 msgid "<em>.htaccess</em> file [wrong version]"
 msgstr "<em>.htaccess</em>-Datei [falsche Version]"
 
-#: zTRANSLATE/zp-core/setup.php:1440
+#: zTRANSLATE/zp-core/setup.php:1467
 #, php-format
 msgid "<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"
 msgstr "<em>.htaccess</em>-Datei (<em>RewriteEngine</em> ist <strong>%s</strong>)"
 
-#: zTRANSLATE/zp-core/setup.php:1454
+#: zTRANSLATE/zp-core/setup.php:1481
 msgid "<em>.htaccess</em> RewriteBase [is <em>missing</em>]"
 msgstr "<em>.htaccess</em> RewriteBase [<em>fehlt</em>]"
 
-#: zTRANSLATE/zp-core/setup.php:1460
+#: zTRANSLATE/zp-core/setup.php:1487
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code>"
 msgstr "<em>.htaccess</em> RewriteBase ist <code>%s</code>"
 
-#: zTRANSLATE/zp-core/setup.php:1461
+#: zTRANSLATE/zp-core/setup.php:1488
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> [Does not match install folder]"
 msgstr "<em>.htaccess</em> RewriteBase ist <code>%s</code> [Stimmt nicht mit dem Installationsordner überein]"
 
-#: zTRANSLATE/zp-core/setup.php:1471
+#: zTRANSLATE/zp-core/setup.php:1498
 #, php-format
 msgid "<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"
 msgstr "<em>.htaccess</em> RewriteBase ist <code>%s</code> (behoben)"
 
-#: zTRANSLATE/zp-core/setup.php:1479
+#: zTRANSLATE/zp-core/setup.php:1506
 msgid "Setup was not able to write to the file change RewriteBase match the install folder."
 msgstr "Setup konnte die Dateiänderung nicht schreiben. Ändern Sie die RewriteBase passend zum Installationsordner."
 
-#: zTRANSLATE/zp-core/setup.php:1480
+#: zTRANSLATE/zp-core/setup.php:1507
 #, php-format
 msgid "Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."
 msgstr "Entweder Sie machen die Datei beschreibbar oder Sie setzen die<code>RewriteBase</code> in Ihrer <code>.htaccess</code>-Datei auf <code>%s</code>."
 
-#: zTRANSLATE/zp-core/setup.php:1485
-#: zTRANSLATE/zp-core/setup.php:1488
-#: zTRANSLATE/zp-core/setup.php:1500
+#: zTRANSLATE/zp-core/setup.php:1512
+#: zTRANSLATE/zp-core/setup.php:1515
+#: zTRANSLATE/zp-core/setup.php:1527
 msgid "<em>robots.txt</em> file"
 msgstr "<em>robots.txt</em>-Datei"
 
-#: zTRANSLATE/zp-core/setup.php:1485
-#: zTRANSLATE/zp-core/setup.php:1488
-#: zTRANSLATE/zp-core/setup.php:1500
+#: zTRANSLATE/zp-core/setup.php:1512
+#: zTRANSLATE/zp-core/setup.php:1515
+#: zTRANSLATE/zp-core/setup.php:1527
 msgid "<em>robots.txt</em> file [Not created]"
 msgstr "<em>robots.txt</em>-Dateu [nicht erstellt]"
 
-#: zTRANSLATE/zp-core/setup.php:1485
+#: zTRANSLATE/zp-core/setup.php:1512
 msgid "Setup could not find the  <em>example_robots.txt</em> file."
 msgstr "Setup konnte keine<em>example_robots.txt</em>-Datei finden."
 
-#: zTRANSLATE/zp-core/setup.php:1488
+#: zTRANSLATE/zp-core/setup.php:1515
 msgid "Setup did not create a <em>robots.txt</em> file because one already exists."
 msgstr "Setup konnte keine<em>robots.txt</em>-Datei erstellen, da die Datei bereits existiert."
 
-#: zTRANSLATE/zp-core/setup.php:1500
+#: zTRANSLATE/zp-core/setup.php:1527
 msgid "Setup could not create a <em>robots.txt</em> file."
 msgstr "Setup konnte keine<em>robots.txt</em>-Datei erstellen."
 
-#: zTRANSLATE/zp-core/setup.php:1505
+#: zTRANSLATE/zp-core/setup.php:1532
 msgid "albums [<code>$conf['external_album_folder']</code> is deprecated]"
 msgstr "Alben [<code>$conf['external_album_folder']</code> ist veraltet]"
 
-#: zTRANSLATE/zp-core/setup.php:1505
-#: zTRANSLATE/zp-core/setup.php:1528
+#: zTRANSLATE/zp-core/setup.php:1532
+#: zTRANSLATE/zp-core/setup.php:1555
 msgid "You should update your zp-config.php file to conform to the current zp-config.php.example file."
 msgstr "Sie sollten Ihre zp-config.php-Datein aktualisieren, damit sie der aktuellen zp-config.php.example-Datei entspricht."
 
-#: zTRANSLATE/zp-core/setup.php:1528
+#: zTRANSLATE/zp-core/setup.php:1555
 msgid "<em>albums</em> folder"
 msgstr "<em>albums</em>-Ordner"
 
-#: zTRANSLATE/zp-core/setup.php:1528
+#: zTRANSLATE/zp-core/setup.php:1555
 msgid "<em>albums</em> folder [The line <code>$conf['album_folder']</code> is missing from your zp-config.php file]"
 msgstr "<em>albums</em>-Ordner [Die Zeile <code>$conf['album_folder']</code> fehlt in Ihrer zp-config.php-Datei]"
 
-#: zTRANSLATE/zp-core/setup.php:1532
+#: zTRANSLATE/zp-core/setup.php:1559
 msgid "<em>locale</em> folders"
 msgstr "<em>locale</em>-Ordner"
 
-#: zTRANSLATE/zp-core/setup.php:1532
+#: zTRANSLATE/zp-core/setup.php:1559
 msgid "<em>locale</em> folders [Are not complete]"
 msgstr "<em>locale</em>-Ordner [sind nicht vollständig]"
 
-#: zTRANSLATE/zp-core/setup.php:1532
+#: zTRANSLATE/zp-core/setup.php:1559
 msgid "Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder."
 msgstr "Stellen Sie sicher, dass sie das komplette Zenphoto-Paket heruntergeladen haben. Sie müssen wenigstens den <em>en_US</em>-Ordner haben."
 
-#: zTRANSLATE/zp-core/setup.php:1533
+#: zTRANSLATE/zp-core/setup.php:1560
 msgid "uploaded"
 msgstr "uploaded"
 
-#: zTRANSLATE/zp-core/setup.php:1535
+#: zTRANSLATE/zp-core/setup.php:1562
 msgid "HTML cache"
 msgstr "HTML-Cache"
 
-#: zTRANSLATE/zp-core/setup.php:1536
+#: zTRANSLATE/zp-core/setup.php:1563
 msgid "Third party plugins"
 msgstr "Drittherstellerplugins"
 
-#: zTRANSLATE/zp-core/setup.php:1549
+#: zTRANSLATE/zp-core/setup.php:1576
 msgid "You need to address the problems indicated above then run <code>setup.php</code> again."
 msgstr "Sie müssen die oben aufgeführten Problem beheben und dann <code>setup.php</code> erneut ausführen."
 
-#: zTRANSLATE/zp-core/setup.php:1552
+#: zTRANSLATE/zp-core/setup.php:1579
 msgid "Setup failed."
 msgstr "Installation fehlgeschlagen."
 
-#: zTRANSLATE/zp-core/setup.php:1553
+#: zTRANSLATE/zp-core/setup.php:1580
 msgid "Stop"
 msgstr "Stopp"
 
-#: zTRANSLATE/zp-core/setup.php:1563
-#: zTRANSLATE/zp-core/setup.php:1634
+#: zTRANSLATE/zp-core/setup.php:1590
+#: zTRANSLATE/zp-core/setup.php:1661
 msgid "You need <em>USER ADMIN</em> rights to run setup."
 msgstr "Sie müssen über<em>Benutzerverwaltungsrechte</em> verfügen, um setup ausführen zu können."
 
-#: zTRANSLATE/zp-core/setup.php:1565
+#: zTRANSLATE/zp-core/setup.php:1592
 msgid "You must be logged in to run setup."
 msgstr "Sie müssen angemeldet sein, um die Installation durchführen zu können."
 
-#: zTRANSLATE/zp-core/setup.php:2162
+#: zTRANSLATE/zp-core/setup.php:2188
 msgid "About to create tables"
 msgstr "Bereit, die Tabellen zu erstellen"
 
-#: zTRANSLATE/zp-core/setup.php:2164
+#: zTRANSLATE/zp-core/setup.php:2190
 msgid "About to update tables"
 msgstr "Bereit, die Tabellen zu aktualisieren"
 
-#: zTRANSLATE/zp-core/setup.php:2166
+#: zTRANSLATE/zp-core/setup.php:2192
 msgid "Begin table creation"
 msgstr "Tabellenerstellung begonnen."
 
-#: zTRANSLATE/zp-core/setup.php:2171
-#: zTRANSLATE/zp-core/setup.php:2184
+#: zTRANSLATE/zp-core/setup.php:2197
+#: zTRANSLATE/zp-core/setup.php:2210
 #, php-format
 msgid "MySQL Query %1$s Failed. Error: %2$s"
 msgstr "MySQL-Abfrage %1$s fehlgeschlagen. Fehler: %2$s"
 
-#: zTRANSLATE/zp-core/setup.php:2173
+#: zTRANSLATE/zp-core/setup.php:2199
 #, php-format
 msgid "Table creation failure: %s"
 msgstr "Tabellenerstellung fehlgeschlagen: %s"
 
-#: zTRANSLATE/zp-core/setup.php:2176
-#: zTRANSLATE/zp-core/setup.php:2186
+#: zTRANSLATE/zp-core/setup.php:2202
+#: zTRANSLATE/zp-core/setup.php:2212
 #, php-format
 msgid "MySQL Query ( %s ) Success."
 msgstr "MySQL-Abfrage ( %s ) erfolgreich."
 
-#: zTRANSLATE/zp-core/setup.php:2180
+#: zTRANSLATE/zp-core/setup.php:2206
 msgid "Begin table updates"
 msgstr "Die Tabellenaktualisierung wird gestartet."
 
-#: zTRANSLATE/zp-core/setup.php:2191
+#: zTRANSLATE/zp-core/setup.php:2217
 msgid "Done with database creation and update"
 msgstr "Tabellenaktualisierung abgeschlossen!"
 
-#: zTRANSLATE/zp-core/setup.php:2195
+#: zTRANSLATE/zp-core/setup.php:2221
 #, php-format
 msgid "Previous Release was %s"
 msgstr "Die vorige Veröffentlichung war %s"
 
-#: zTRANSLATE/zp-core/setup.php:2320
+#: zTRANSLATE/zp-core/setup.php:2337
 msgid "Done with table create!"
 msgstr "Tabellenerstellung abgeschlossen!"
 
-#: zTRANSLATE/zp-core/setup.php:2322
+#: zTRANSLATE/zp-core/setup.php:2339
 msgid "Done with table create with errors!"
 msgstr "Tabellenerstellung mit Fehlern abgeschlossen!"
 
-#: zTRANSLATE/zp-core/setup.php:2326
+#: zTRANSLATE/zp-core/setup.php:2343
 msgid "Done with table update"
 msgstr "Tabellenaktualisierung abgeschlossen!"
 
-#: zTRANSLATE/zp-core/setup.php:2328
+#: zTRANSLATE/zp-core/setup.php:2345
 msgid "Done with table update with errors"
 msgstr "Tabellenaktualisierung mit Fehlern abgeschlossen"
 
-#: zTRANSLATE/zp-core/setup.php:2348
+#: zTRANSLATE/zp-core/setup.php:2365
 msgid "Deleting files failed!"
 msgstr "Dateilöschen fehlgeschlagen!"
 
-#: zTRANSLATE/zp-core/setup.php:2353
+#: zTRANSLATE/zp-core/setup.php:2370
 msgid "<strong>NOTE:</strong> We strongly recommend you remove the <em>setup*.php</em> scripts from your zp-core folder at this time. You can always re-upload them should you find you need them again in the future."
 msgstr "<strong>HINWEIS:</strong> Wir empfehlen dringend, das Sie die <em>setup*.php</em>-Datei aus Ihrem zp-core-Ordner jetzt entfernen. Sie können es jederzeit wieder erneut hochladen, sollten Sie es zukünftig wieder benötigen."
 
-#: zTRANSLATE/zp-core/setup.php:2356
+#: zTRANSLATE/zp-core/setup.php:2373
 msgid "Delete setup files"
 msgstr "Installationsdateien löschen"
 
-#: zTRANSLATE/zp-core/setup.php:2363
+#: zTRANSLATE/zp-core/setup.php:2380
 #, php-format
 msgid "You may <a href=\"admin-users.php?page=users\">set your admin user and password</a> or <a href=\"%s/backup_restore.php\">run backup-restore</a>"
 msgstr "Sie können entweder Ihren <a href=\"admin-users.php?page=users\">Benutzernamen und Ihr Passwort definieren</a> oder die <a href=\"%s/backup_restore.php\">Backup-Wiederherstellung</a> ausführen"
 
-#: zTRANSLATE/zp-core/setup.php:2365
+#: zTRANSLATE/zp-core/setup.php:2382
 msgid "You need to <a href=\"admin-users.php\">set your admin user and password</a>"
 msgstr "Sie müssen Ihren <a href=\"admin-options.php\">Benutzernamen und Ihr Passwort setzen</a>"
 
-#: zTRANSLATE/zp-core/setup.php:2369
+#: zTRANSLATE/zp-core/setup.php:2386
 msgid "You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>"
 msgstr "Sie können nun <a href=\"../\">Ihre Galerie ansehen</a> oder <a href=\"admin.php\">verwalten</a>."
 
-#: zTRANSLATE/zp-core/setup.php:2396
+#: zTRANSLATE/zp-core/setup.php:2413
 #, php-format
 msgid "Database tables to create: %s"
 msgstr "Datenbanktabelle zu erstellen: %s"
 
-#: zTRANSLATE/zp-core/setup.php:2414
+#: zTRANSLATE/zp-core/setup.php:2431
 #, php-format
 msgid "Database tables to update: %s"
 msgstr "Datenbanktabelle zu aktualisieren:  %s"
 
-#: zTRANSLATE/zp-core/setup.php:2447
+#: zTRANSLATE/zp-core/setup.php:2464
 msgid "create and or update the database tables."
 msgstr "erstellen oder aktualisieren die Datenbanktabellen."
 
-#: zTRANSLATE/zp-core/setup.php:2449
+#: zTRANSLATE/zp-core/setup.php:2466
 msgid "Go"
 msgstr "Los"
 
-#: zTRANSLATE/zp-core/setup.php:2456
+#: zTRANSLATE/zp-core/setup.php:2473
 msgid "database did not connect"
 msgstr "Die Datenbank konnte keine Verbindung herstellen"
 
-#: zTRANSLATE/zp-core/setup.php:2458
+#: zTRANSLATE/zp-core/setup.php:2475
 msgid "If you haven't created the database yet, now would be a good time."
 msgstr "Wenn Sie die Datenbank noch nicht erstellt haben, wäre jetzt der richtige Zeitpunkt."
 
-#: zTRANSLATE/zp-core/setup.php:2467
+#: zTRANSLATE/zp-core/setup.php:2484
 msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
 msgstr "Die zp-config.php-Datei existiert nicht. Sie sollten setup.php ausführen, um Ihre Konfiguration zu überprüfen und diese Datei zu erstellen. "
 
@@ -9383,7 +9383,7 @@ msgstr "auslassen"
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:63
 #, php-format
 msgid "Set if the <code>%s</code> field should be required, just shown or omitted"
-msgstr "Stellen Sie ein, wenn das <code>%s</code>-Feld Pflicht, nur angezeigt oder weggelassen werden soll."
+msgstr "Stellen Sie ein, ob das <code>%s</code>-Feld Pflicht, nur angezeigt oder weggelassen werden soll."
 
 #: zTRANSLATE/zp-core/zp-extensions/contact_form.php:64
 msgid "Intro text"
@@ -9666,11 +9666,11 @@ msgstr "Ein Bildbeschneidungswerkzeug. Platziert einen Bildbeschneidungs-Buton i
 msgid "Crop image"
 msgstr "Bild beschneiden"
 
-#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:232
+#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:233
 msgid "Image cropping"
 msgstr "Bildbeschnitt"
 
-#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:233
+#: zTRANSLATE/zp-core/zp-extensions/filter-crop_image.php:234
 msgid "You can crop your image by dragging the crop handles on the image.<br /><br /><strong>Note:</strong> If you save these changes they are permanent!"
 msgstr "Sie können Bilder beschneiden, indem Sie den Rahmen verschieben.<br /><br /><strong>ANMERKUNG:</strong> Diese Änderungen sind permanet, wenn Sie sie abspeichern!"
 
