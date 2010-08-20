@@ -9,9 +9,12 @@
  *
  * @package core
  *
- * @todo Perhaps add option for user to choose Imagick::FILTER_*?
+ * @todo Perhaps add option for user to choose Imagick::FILTER_* and Imagick::COMPOSITE_*?
  *		Support interlaced image output
- *		Find equivalents to Imagick::getImageProfiles, Imagick::getImageProperty, and Imagick::setImageProperty
+ *		Watermarking animations needs to keep the watermark at the same position in each frame, regardless of frame size
+ *		The default ZP image is erroneously watermarked
+ *		Perhaps change luminosity of watermark depending on colors used?
+ *		Add ability to use text watermarks inherently from Imagick
  */
 
 // force UTF-8 Ø
@@ -181,14 +184,23 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 				$im->setCompression(Imagick::COMPRESSION_JPEG);
 				$im->setCompressionQuality($qual);
 				break;
+			case 'gif':
+				try {
+					$im->optimizeImageLayers();
+				} catch (ImagickException $e) {
+					if (DEBUG_IMAGE) {
+						debugLog('Caught ImagickException in zp_imageOutput(): ' . $e->getMessage());
+					}
+				}
+				break;
 		}
 
 		if ($filename == NULL) {
 			header('Content-Type: image/' . $type);
-			return print $im;
+			return print $im->getImagesBlob();
 		}
 
-		return $im->writeImage($filename);
+		return $im->writeImages($filename, true);
 	}
 
 	/**
@@ -262,7 +274,14 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 */
 	function zp_copyCanvas($imgCanvas, $img, $dest_x, $dest_y, $src_x, $src_y, $w, $h) {
 		$img->cropImage($w, $h, $src_x, $src_y);
-		return $imgCanvas->compositeImage($img, Imagick::COMPOSITE_COPY, $dest_x, $dest_y);
+		$result = true;
+
+		for ($x = 0; $result && $x <= $imgCanvas->getNumberImages(); $x++) {
+			$result = $imgCanvas->compositeImage($img, Imagick::COMPOSITE_OVER, $dest_x, $dest_y);
+			$imgCanvas->previousImage();
+		}
+
+		return $result;
 	}
 
 	/**
@@ -445,7 +464,7 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 			$src_im->setImageOpacity($pct / 100);
 		}
 
-		return $dst_im->compositeImage($src_im, Imagick::COMPOSITE_ATOP, $dest_x, $dest_y);
+		return $dst_im->compositeImage($src_im, Imagick::COMPOSITE_OVER, $dest_x, $dest_y);
 	}
 
 	/**
@@ -458,6 +477,8 @@ if ($_zp_imagick_present && (getOption('use_Imagick') || !extension_loaded('gd')
 	 * @return Imagick
 	 */
 	function zp_imageGray($image) {
+		global $_use_corrected_colorspace;
+
 		$image->setImageType(Imagick::IMGTYPE_GRAYSCALE);
 
 		// assumes that exif:ColorSpace is not set to an undefined colorspace

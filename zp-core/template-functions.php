@@ -89,7 +89,7 @@ function zenJavascript() {
 		var deleteAlbum2 = "<?php echo gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"); ?>";
 		var deleteImage = "<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>";
 		var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
-		var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+		var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";
 		// ]]> -->
 		</script>
 		<?php
@@ -232,7 +232,7 @@ function printAdminToolbox($id='admin') {
 						<a href="javascript:confirmDeleteAlbum('<?php echo $zf; ?>/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=<?php echo urlencode(urlencode($albumname)) ?>&amp;XSRFToken=<?php echo getXSRFToken('delete'); ?>');"
 								title="<?php echo gettext('Delete the album'); ?>"><?php echo gettext('Delete album'); ?></a>
 					</li>
-					<?php 
+					<?php
 				}
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
@@ -241,7 +241,7 @@ function printAdminToolbox($id='admin') {
 				<li>
 					<?php echo printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL); ?>
 				</li>
-				<?php 
+				<?php
 				if (getOption('album_session')) { // XSRF defense requires sessions
 					?>
 					<li>
@@ -3111,6 +3111,9 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
 
 /**
  * Creates an URL for to download of a zipped copy of the current album
+ *
+ * NOTE: This operation will include ALL files within the album without regard for published status
+ *
  */
 function printAlbumZip(){
 	global $_zp_current_album;
@@ -4107,7 +4110,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $butt
 				if (count($query_fields)==0) {
 					$query_fields = array_flip($engine->allowedSearchFields());
 				}
-		
+
 				?>
 				<ul style="display:none;" id="searchextrashow">
 				<?php
@@ -4650,7 +4653,7 @@ function getCodeblock($number=0,$titlelink='') {
 		if(getOption('zp_plugin_zenpage')) {
 			$page = new ZenpagePage($titlelink);
 			$getcodeblock = $page->getCodeblock();
-		} 
+		}
 	}
 	if (empty($getcodeblock)) return '';
 	$codeblock = unserialize($getcodeblock);
