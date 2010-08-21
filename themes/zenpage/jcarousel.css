@@ -28,6 +28,11 @@
     
 }
 
+.jcarousel-list li .activecarouselimage {
+	border: 2px solid orange !important;
+	padding: 1px;
+}
+
 
 .jcarousel-item-placeholder {
     background: #fff url(images/jcarousel_loading.gif) 50% 50% no-repeat;
@@ -52,7 +57,7 @@
 
 .jcarousel-next-horizontal:active {
     background-position: -64px 0;
-}
+  }
 
 .jcarousel-next-disabled-horizontal,
 .jcarousel-next-disabled-horizontal:hover,

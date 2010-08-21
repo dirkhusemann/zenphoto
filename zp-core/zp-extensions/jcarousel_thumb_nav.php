@@ -154,7 +154,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 				$active = '';
 			}
 			$imageurl = $imgobj->getCustomImage(NULL, $width, $height, $cropw, $croph, NULL, NULL,true);
-			$items .= ' {url: "'.$imageurl.'", title: "'.$imgobj->getTitle().'", link: "'.$link.'", active: "'.$active.'"},';
+			$items .= ' {url: "'.$imageurl.'", title: "'.html_encode($imgobj->getTitle()).'", link: "'.$link.'", active: "'.$active.'"},';
 			$items .= "\n";
 		}
 	}
