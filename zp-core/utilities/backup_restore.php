@@ -1,10 +1,10 @@
 <?php
 /**
  * Backup and restore of the ZenPhoto database tables
- * 
+ *
  * This plugin provides a means to make backups of your ZenPhoto database and
  * at a later time restore the database to the contents of one of these backups.
- * 
+ *
  * @package admin
  */
 
@@ -125,7 +125,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 	} else {
 		$compression_handler = 'no';
 	}
-	$prefix = substr(prefix(''), 1, -1);
+	$prefix = prefix();
 	$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$prefix."%';";
 	$result = query_full_array($sql);
 	if (is_array($result)) {
@@ -144,7 +144,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 			if ($writeresult === false) {
 				$msg = gettext('failed writing to backup!');
 			}
-			
+
 			$counter = 0;
 			$writeresult = true;
 			foreach ($result as $row) {
@@ -185,7 +185,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		?>
 		<div class="messagebox" id="fade-message">
 		<h2>
-		<?php 
+		<?php
 		if ($compression_level > 0) {
 			printf(gettext('backup completed using <em>%1$s(%2$s)</em> compression'),$compression_handler, $compression_level);
 		} else {
@@ -286,7 +286,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 							if ($table!='options' || strpos($values,'zenphoto_release')===false) {
 								$items = substr($items,0,-1);
 								$values = substr($values,0,-1);
-	
+
 								$sql = 'INSERT INTO '.prefix($table).' ('.$items.') VALUES ('.$values.')';
 								if (!query($sql, true)) {
 									$success = 2;
@@ -351,7 +351,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 			}
 			?>
 		</div>
-		<?php	
+		<?php
 	} else if ($success) {
 		?>
 		<div class="errorbox">
@@ -380,7 +380,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 			} else {
 				printf(gettext('Restore completed using %s compression'), $compression_handler);
 			}
-	
+
 			?>
 			</h2>
 		</div>

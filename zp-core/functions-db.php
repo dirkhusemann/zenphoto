@@ -123,9 +123,13 @@ function query_full_array($sql, $noerrmsg = false, $key=NULL) {
  *@return prefixed table name
  *@since 0.6
 	*/
-function prefix($tablename) {
+function prefix($tablename=NULL) {
 	global $_zp_conf_vars;
-	return '`' . $_zp_conf_vars['mysql_prefix'] . $tablename . '`';
+	if (empty($tablename)) {
+		return $_zp_conf_vars['mysql_prefix'];
+	} else {
+		return '`' . $_zp_conf_vars['mysql_prefix'] . $tablename . '`';
+	}
 }
 
 /**
