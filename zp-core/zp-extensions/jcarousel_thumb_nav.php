@@ -79,7 +79,7 @@ if (isset($_zp_current_album) && is_object($_zp_current_album) && is_object($_zp
  * @param bool $vertical Set to TRUE if you want the thumbs vertical orientated instead of horizontal (false). Set to NULL if you want to use the backend plugin options.
  */
 function printjCarouselThumbNav($thumbscroll=NULL, $width=NULL, $height=NULL,$cropw=NULL,$croph=NULL,$fullimagelink=NULL,$vertical=NULL) {
-global $_zp_current_album, $_zp_current_image, $_zp_current_search;
+global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_search;
 $items = "";
 if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_current_album->getNumImages() >= 2) {
 	if(is_null($thumbscroll)) {
