@@ -5,7 +5,7 @@
  * to run. Inacative sites may not get backed up as frequently as the interval specifies.
  * Of course, if the site is inactive, there probably is little need to do the backup
  * in the first place.
- * 
+ *
  * Backups are run under the master administrator authority.
  *
  * @author Stephen Billard (sbillard)
@@ -64,7 +64,11 @@ class auto_backup {
 function auto_backup_timer_handler($side) {
 	setOption('last_backup_run',time());
 	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . BACKUPFOLDER);
+	$folder = SERVERPATH . "/" . BACKUPFOLDER;
+	if (!is_dir($folder)) {
+		mkdir ($folder, CHMOD_VALUE);
+	}
+	chdir($folder);
 	$filelist = safe_glob('*'.'.zdb');
 	$list = array();
 	foreach($filelist as $file) {
