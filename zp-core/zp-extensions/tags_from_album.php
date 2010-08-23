@@ -13,16 +13,26 @@ $plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---tags_from_album.php.html";
 
 /**
- * Prints a tag cloud list of the tags in one album and optionally its subalbums.
+ * Prints a tag cloud list of the tags in one album and optionally its subalbums. Returns FALSE if no value.
  * 
- * @param string $albumname folder name of the album to get the tags from ($subalbums = true this is the base albums)
+ * @param string $albumname folder name of the album to get the tags from ($subalbums = true this is the base albums)- This value is mandatory.
  * @param bool $subalbums TRUE if the tags of subalbum should be. FALSE is default
- * @param string $mode "images" for image tags, "albums" for album tags
+ * @param string $mode "images" for image tags, "albums" for album tags."images" is default.
  * @return array
  */
-function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
+function getAllTagsFromAlbum($albumname,$subalbums=false,$mode='images') {
+	global $_zp_gallery;
 	$passwordcheck = '';
+	$imageWhere = '';
+	$tagWhere = "";
 	$albumname = sanitize($albumname);
+	if(empty($albumname)) {
+		return FALSE;
+	}
+	$albumobj = new Album($_zp_gallery,$albumname);
+	if(!$albumobj->exists) {
+		return FALSE;
+	}
 	if (zp_loggedin()) {
 		$albumWhere = "WHERE `dynamic`=0";
 	} else {
@@ -35,6 +45,7 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
 		}
 		$albumWhere = "WHERE `dynamic`=0 AND `show`=1".$passwordcheck;
 	}
+
 	if($subalbums) {
 		$albumWhere .= " AND `folder` LIKE '".zp_escape_string($albumname)."%'";
 	} else {
@@ -43,45 +54,57 @@ function getAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images') {
 	//echo "albumWhere: ".$albumWhere."<br />";
 	$albumids = query_full_array("SELECT id, folder FROM " . prefix('albums'). $albumWhere);
 	//echo "albumids: <pre>"; print_r($albumids); echo "</pre><br />";
-	$imageWhere = '';
 	switch($mode) {
 		case "images":
-			if(count($albumids) != 0) $imageWhere = " WHERE ";
-			$count = "";
-			foreach($albumids as $albumid) {
-				$count++;
-				$imageWhere .= 'albumid='. $albumid['id'];
-				if($count != count($albumids)) $imageWhere .= " OR ";
+			if(count($albumids) == 0) {
+				return FALSE;
+			} else {
+				$imageWhere = " WHERE ";
+				$count = "";
+				foreach($albumids as $albumid) {
+					$count++;
+					$imageWhere .= 'albumid='. $albumid['id'];
+					if($count != count($albumids)) $imageWhere .= " OR ";
+				}
 			}
 			//echo "imageWhere: ".$imageWhere."<br />";
 			$imageids = query_full_array("SELECT id, albumid FROM " . prefix('images').$imageWhere);
 			// if the album has no direct images and $subalbums is set to false
-			if(count($imageids) == 0) return false; 
-			//echo "imageids: <pre>"; print_r($imageids); echo "</pre><br />";
-			$count = "";
-			$tagWhere = "";
-			if(count($imageids) != 0) $tagWhere = " WHERE ";
-			foreach($imageids as $imageid) {
-				$count++;
-				$tagWhere .= '(o.objectid ='. $imageid['id']." AND o.tagid = t.id AND o.type = 'images')";
-				if($count != count($imageids)) $tagWhere .= " OR ";
+			if(count($imageids) == 0) {
+				return FALSE;
+			} else {
+				$count = "";
+				$tagWhere = " WHERE ";
+				foreach($imageids as $imageid) {
+					$count++;
+					$tagWhere .= '(o.objectid ='. $imageid['id']." AND o.tagid = t.id AND o.type = 'images')";
+					if($count != count($imageids)) $tagWhere .= " OR ";
+				}
 			}
-			$tags = query_full_array("SELECT DISTINCT t.name, t.id, (SELECT DISTINCT COUNT(*) FROM ". prefix('obj_to_tag'). " WHERE tagid = t.id AND type = 'images') AS count FROM  ". prefix('obj_to_tag'). " AS o,". prefix('tags'). "as t".$tagWhere." ORDER by t.name");
+			if(empty($tagWhere)) {
+				return FALSE;
+			} else {
+				$tags = query_full_array("SELECT DISTINCT t.name, t.id, (SELECT DISTINCT COUNT(*) FROM ". prefix('obj_to_tag'). " WHERE tagid = t.id AND type = 'images') AS count FROM  ". prefix('obj_to_tag'). " AS o,". prefix('tags'). " AS t".$tagWhere." ORDER BY t.name");
+			}
 			break;
 		case "albums":
 			$count = "";
-			$tagWhere = "";
-			if(count($albumids) != 0) $tagWhere = " WHERE ";
-			foreach($albumids as $albumid) {
-				$count++;
-				$tagWhere .= '(o.objectid ='. $albumid['id']." AND o.tagid = t.id AND o.type = 'albums')";
-				if($count != count($albumids)) $tagWhere .= " OR ";
+			if(count($albumids) == 0) {
+				return FALSE;
+			} else {
+				$tagWhere = " WHERE ";
+				foreach($albumids as $albumid) {
+					$count++;
+					$tagWhere .= '(o.objectid ='. $albumid['id']." AND o.tagid = t.id AND o.type = 'albums')";
+					if($count != count($albumids)) $tagWhere .= " OR ";
+				}
 			}
-			$tags = query_full_array("SELECT DISTINCT t.name, t.id, (SELECT DISTINCT COUNT(*) FROM ". prefix('obj_to_tag'). " WHERE tagid = t.id AND o.type = 'albums') AS count FROM ". prefix('obj_to_tag'). " AS o,". prefix('tags'). "as t".$tagWhere." ORDER by t.name");
+			if(empty($tagWhere)) {
+				return FALSE;
+			} else {
+				$tags = query_full_array("SELECT DISTINCT t.name, t.id, (SELECT DISTINCT COUNT(*) FROM ". prefix('obj_to_tag'). " WHERE tagid = t.id AND o.type = 'albums') AS count FROM ". prefix('obj_to_tag'). " AS o,". prefix('tags'). " AS t".$tagWhere." ORDER BY t.name");
+			}
 			break;
-	}
-	if (!is_array($tags)) {
-		return;
 	}
 	return $tags;
 }
@@ -111,13 +134,13 @@ function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$se
 			$tags = array_merge($tags1,$tags2);
 			$tags = getAllTagsFromAlbum_multi_unique($tags);
 		} else {
-			return false;
+			return FALSE;
 		}
 	} else {
 		if(getAllTagsFromAlbum($albumname,$subalbums,$mode)) {
 			$tags = getAllTagsFromAlbum($albumname,$subalbums,$mode);
 		} else {
-			return false;
+			return FALSE;
 		}
 	}
 	$size_min = sanitize_numeric($size_min); 
