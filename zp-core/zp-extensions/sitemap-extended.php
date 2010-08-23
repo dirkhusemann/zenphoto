@@ -392,6 +392,7 @@ function printSitemapAlbumsAndImages($albumsperpage='',$imagesperpage ='',$album
 					}
 				}
 			}
+			// print images linksif avaiable
 			$images = $albumobj->getImages();
 			if($images) {
 				foreach($images as $image) {
@@ -399,11 +400,11 @@ function printSitemapAlbumsAndImages($albumsperpage='',$imagesperpage ='',$album
 					$date = sitemap_getDateformat($imageob,$imagelastmod);
 					if(sitemap_multilingual()) {
 						foreach($sitemap_locales as $locale) {
-							$path = FULLWEBPATH.'/'.rewrite_path($locale.'/'.pathurlencode($albumobj->name).'/'.urlencode($imageob->filename),'?album='.pathurlencode($albumobj->name).'&amp;image='.urlencode($imageob->filename),false);
+							$path = FULLWEBPATH.'/'.rewrite_path($locale.'/'.pathurlencode($albumobj->name).'/'.urlencode($imageob->filename).im_suffix(),'?album='.pathurlencode($albumobj->name).'&amp;image='.urlencode($imageob->filename),false);
 							sitemap_echonl("\t<url>\n\t\t<loc>".$path."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$imagechangefreq."</changefreq>\n\t\t<priority>0.6</priority>\n\t</url>");
 						}
 					} else {
-						$path = FULLWEBPATH.'/'.rewrite_path(pathurlencode($albumobj->name).'/'.urlencode($imageob->filename),'?album='.pathurlencode($albumobj->name).'&amp;image='.urlencode($imageob->filename),false);
+						$path = FULLWEBPATH.'/'.rewrite_path(pathurlencode($albumobj->name).'/'.urlencode($imageob->filename).im_suffix(),'?album='.pathurlencode($albumobj->name).'&amp;image='.urlencode($imageob->filename),false);
 						sitemap_echonl("\t<url>\n\t\t<loc>".$path."</loc>\n\t\t<lastmod>".$date."</lastmod>\n\t\t<changefreq>".$imagechangefreq."</changefreq>\n\t\t<priority>0.6</priority>\n\t</url>");
 					}
 				}
