@@ -18,7 +18,7 @@ $button_icon = 'images/cache1.png';
 $button_rights = ADMIN_RIGHTS;
 $button_XSRFTag = 'cache_images';
 
-admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 XSRFdefender('cache_images');
 
@@ -72,11 +72,6 @@ function loadAlbum($album) {
 	return $count + $tcount;
 }
 
-if (!zp_loggedin(ADMIN_RIGHTS)) {
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__));
-	exit();
-}
-
 if (isset($_GET['album'])) {
 	$alb = $_GET['album'];
 } else if (isset($_POST['album'])) {
@@ -88,6 +83,12 @@ if ($alb) {
 	$folder = sanitize_path($alb);
 	$object = $folder;
 	$tab = 'edit';
+	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+		if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
+			exit();
+		}
+	}
 } else {
 	$object = '<em>'.gettext('Gallery').'</em>';
 	$tab = 'home';

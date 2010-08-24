@@ -317,7 +317,7 @@ function getSubtabs($tab, $default) {
 	$tabs = $zenphoto_tabs[$tab]['subtabs'];
 	if (!is_array($tabs)) return $default;
 	$current = '';
-	if (isset($_GET['tab'])) {		
+	if (isset($_GET['tab'])) {
 		$test = sanitize($_GET['tab']);
 		foreach ($tabs as $link) {
 			$i = strrpos($link, 'tab=');
@@ -577,7 +577,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $showhide=false,
 							} else {
 								if ($type == OPTION_TYPE_TEXTAREA) {
 									?>
-									<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" cols="<?php echo TEXTAREA_COLUMNS; ?>"	style="width: 320px" rows="6"><?php  echo htmlentities($v,ENT_QUOTES,getOption("charset")); ?></textarea>							
+									<textarea id="<?php echo $key; ?>" name="<?php echo $key; ?>" cols="<?php echo TEXTAREA_COLUMNS; ?>"	style="width: 320px" rows="6"><?php  echo htmlentities($v,ENT_QUOTES,getOption("charset")); ?></textarea>
 									<?php
 								} else {
 									?>
@@ -1184,7 +1184,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 									<?php echo gettext('custom fields:') ?>
 									<input id="customalbumsort<? echo $suffix; ?>" class="customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
 									</span>
-								
+
 									<script type="text/javascript">
 										// <!-- <![CDATA[
 										// ]]> -->
@@ -1248,12 +1248,12 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 									<?php echo gettext('custom fields:') ?>
 									<input id="customimagesort<? echo $suffix; ?>" class="customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
 									</span>
-								
+
 									<script type="text/javascript">
 										// <!-- <![CDATA[
 										// ]]> -->
 									</script>
-								
+
 									</td>
 								</tr>
 							</table>
@@ -1447,9 +1447,9 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						</select>
 						</td>
 					</tr>
-		<?php 
+		<?php
 	}
-	?>					
+	?>
 					<tr valign="top">
 		<td class="topalign-nopadding"><br /><?php echo gettext("Codeblocks:"); ?></td>
 		<td>
@@ -1738,7 +1738,7 @@ function printAlbumButtons($album) {
 	if ($imagcount || (!$album->isDynamic() && $album->getNumAlbums()>0)) {
 	?>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album=<?php echo urlencode($album->name); ?>" method="post">
-			<?php XSRFToken('refresh_metadata');?>
+			<?php XSRFToken('refresh');?>
 			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name);?>" />
 			<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
 			<div class="buttons">
@@ -2012,7 +2012,7 @@ function processAlbumEdit($index, $album, &$redirectto) {
 	$codeblock3 = sanitize($_POST[$prefix.'codeblock3'], 0);
 	$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 	$album->set('codeblock',$codeblock);
-	
+
 	$custom = process_language_string_save($prefix.'album_custom_data', 1);
 	$album->setCustomData(zp_apply_filter('save_album_custom_data', $custom, $prefix));
 	zp_apply_filter('save_album_utilities_data', $album, $prefix);
@@ -2630,7 +2630,7 @@ function deleteThemeDirectory($source) {
 			} else {
 				if (file_exists($fullname)) {
 					$result = $result && unlink($fullname);
-				} 
+				}
 			}
 
 		}

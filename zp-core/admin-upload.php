@@ -12,7 +12,7 @@ define('UPLOAD_ERR_QUOTA', -1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-admin_securityChecks(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
+admin_securityChecks(UPLOAD_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 $uploadtype = zp_getcookie('uploadtype');
 if (isset($_GET['uploadtype'])) {
@@ -41,25 +41,24 @@ if (isset($_GET['action'])) {
 				}
 			}
 			$files_empty = count($_FILES['files']) == 0;
-				
+
 			$newAlbum = ((isset($_POST['existingfolder']) && $_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
 			// Make sure the folder exists. If not, create it.
 			if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 				$folder = trim(sanitize_path($_POST['folder']));
 				// see if he has rights to the album.
-				if (!isMyAlbum($folder, UPLOAD_RIGHTS)) {
+				if (!$modified_rights = isMyAlbum($folder, UPLOAD_RIGHTS)) {
 					if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
 						$error = UPLOAD_ERR_CANT_WRITE;
 					}
 				}
 				if (!$error) {
-	
 					$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
 					if (!is_dir($uploaddir)) {
 						mkdir_recursive($uploaddir, CHMOD_VALUE);
 					}
 					@chmod($uploaddir, CHMOD_VALUE);
-	
+
 					$album = new Album($gallery, $folder);
 					if ($album->exists) {
 						if (!isset($_POST['publishalbum'])) {
@@ -75,7 +74,7 @@ if (isset($_GET['action'])) {
 						zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . '/'.CACHEFOLDER.'/' ."</code>, "
 						. gettext("or use your FTP program to give everyone write permissions to those folders."));
 					}
-	
+
 					foreach ($_FILES['files']['error'] as $key => $error) {
 						if ($error == UPLOAD_ERR_OK) {
 							$tmp_name = $_FILES['files']['tmp_name'][$key];
@@ -107,7 +106,7 @@ if (isset($_GET['action'])) {
 						}
 					}
 					if ($error == UPLOAD_ERR_OK) {
-						if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
+						if ($modified_rights & (ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
 						} else {
 							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded=1');
@@ -142,7 +141,7 @@ if (isset($_GET['action'])) {
 					$errormsg = gettext('You have exceeded your upload quota');
 					break;
 				default:
-					$errormsg = sprintf(gettext("The error %s was reported when submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!"),$error);					
+					$errormsg = sprintf(gettext("The error %s was reported when submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!"),$error);
 					break;
 			}
 		}
@@ -196,7 +195,7 @@ printLogoAndLinks();
 					?> );
 				// ]]> -->
 			</script>
-			
+
 <div class="tabbox">
 
 <h1><?php echo gettext("Upload Photos"); ?></h1>
@@ -227,7 +226,7 @@ if (count($types)>1) {
 		echo gettext('ZIP files must contain only Zenphoto supported <em>image</em> types.');
 	}
 	$maxupload = ini_get('upload_max_filesize');
-	echo ' '.sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload); 
+	echo ' '.sprintf(gettext("The maximum size for any one file is <strong>%sB</strong> which is set by your PHP configuration <code>upload_max_filesize</code>."), $maxupload);
 	$maxupload = parse_size($maxupload);
 	$uploadlimit = zp_apply_filter('get_upload_limit', $maxupload);
 	$maxupload = min($maxupload, $uploadlimit);
@@ -319,7 +318,7 @@ if (ini_get('safe_mode')) { ?>
 				$passedalbum = sanitize($_GET['album']);
 			} else {
 				if ($rootrights) {
-				$passedalbum = NULL;
+					$passedalbum = NULL;
 				} else {
 					$alist = $albumlist;
 					$passedalbum = array_shift($alist);
@@ -472,7 +471,7 @@ if (ini_get('safe_mode')) { ?>
 																		<?php
 																		if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 																			?>
-																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val())]);
+																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val()),'multifile=1']);
 																			<?php
 																		} else {
 																			?>

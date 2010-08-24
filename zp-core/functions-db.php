@@ -6,8 +6,6 @@
 
 // force UTF-8 Ø
 
-// functions-db.php - HEADERS NOT SENT YET!
-
 /**
  * Connect to the database server and select the database.
  *@return true if successful connection
@@ -171,4 +169,92 @@ function getSetClause($new_unique_set) {
 	return $set;
 }
 
+
+/**
+ * mysql_real_escape_string standin that insures the DB connection is passed.
+ *
+ * @param string $string
+ * @return string
+ */
+function zp_escape_string($string) {
+	global $mysql_connection;
+	return mysql_real_escape_string($string,$mysql_connection);
+}
+
+/*
+ * returns the insert id of the last database insert
+ */
+function db_insert_id() {
+	return mysql_insert_id();
+}
+
+/*
+ * get result data
+ */
+function db_result($result, $row, $field=0) {
+	return mysql_result($result, $row, $field);
+}
+
+/*
+ * Fetch a result row as an associative array
+ */
+function db_fetch_assoc($resource) {
+	return mysql_fetch_assoc($resource);
+}
+
+/*
+ * returns the connected database name
+ */
+function db_name() {
+	global $_zp_conf_vars;
+	return $_zp_conf_vars['mysql_database'];
+}
+
+/*
+ * Returns the text of the error message from previous operation
+ */
+function db_error($resource=NULL) {
+	if (is_null($resource)) {
+		return mysql_error();
+	} else {
+		return mysql_error($resource);
+	}
+}
+
+/*
+ * Get number of affected rows in previous operation
+ */
+function db_affected_rows($link=NULL) {
+	if (empty($link)) {
+		return mysql_affected_rows();
+	} else {
+		return mysql_affected_rows($link);
+	}
+}
+
+/*
+ * Get a result row as an enumerated array
+ */
+function db_fetch_row($result) {
+	return mysql_fetch_row($result);
+}
+
+/*
+ * Get number of rows in result
+ */
+function db_num_rows($result) {
+	return mysql_num_rows($result);
+}
+
+/*
+ * report the software of the database
+ */
+function db_software() {
+	$mysqlv = trim(@mysql_get_server_info());
+	$i = strpos($mysqlv, "-");
+	if ($i !== false) {
+		$mysqlv = substr($mysqlv, 0, $i);
+	}
+	return array('application'=>'MySQL','required'=>'4.1','desired'=>'5.0','version'=>$mysqlv);
+}
 ?>

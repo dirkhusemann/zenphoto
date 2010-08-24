@@ -1,7 +1,7 @@
 <?php
 /**
  * Use this utility to reset your album thumbnails to either "random" or from an ordered field query
- * 
+ *
  * @package admin
  */
 
@@ -18,7 +18,7 @@ $button_hint = sprintf(gettext('Reset album thumbnails to either random or %s'),
 $button_icon = 'images/reset1.png';
 $button_rights = MANAGE_ALL_ALBUM_RIGHTS;
 
-admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 if (isset($_REQUEST['thumbtype']) || isset($_REQUEST['thumbselector'])) {
 	XSRFdefender('reset_thumbs');
@@ -121,7 +121,7 @@ if (db_connect()) {
 	<br clear="all" />
 	<br clear="all" />
 	<p>
-	<?php printf(gettext('These buttons allow you to set all of your album thumbs to either a <em>random</em> image or to the <em>%s</em> image. This will override any album thumb selections you have made on individual albums.'),$current); ?> 
+	<?php printf(gettext('These buttons allow you to set all of your album thumbs to either a <em>random</em> image or to the <em>%s</em> image. This will override any album thumb selections you have made on individual albums.'),$current); ?>
 	</p>
 	<?php
 } else {
@@ -130,7 +130,7 @@ if (db_connect()) {
 }
 
 ?>
-	
+
 
 </div>
 <!-- content --></div>

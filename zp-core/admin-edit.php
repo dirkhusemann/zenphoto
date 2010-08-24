@@ -29,8 +29,11 @@ processEditSelection($subtab);
 //check for security incursions
 if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
-
 	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+		if (isset($_GET['multifile'])) {	// it was an upload to an album which we cannot edit->return to sender
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-upload.php?uploaded=1');
+			exit();
+		}
 		if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
 			exit();
@@ -53,7 +56,7 @@ if (isset($_GET['action'])) {
 			setOption('gallery_sorttype','manual');
 			setOption('gallery_sortdirection',0);
 			$notify = postAlbumSort(NULL);
-			if (isset($_POST['ids'])) { 
+			if (isset($_POST['ids'])) {
 				$action = processAlbumBulkActions();
 				if(!empty($action)) $action = '&bulkmessage='.$action;
 			}
@@ -67,7 +70,7 @@ if (isset($_GET['action'])) {
 			$album->setSortDirection('album', 0);
 			$album->save();
 			$notify = postAlbumSort($album->get('id'));
-			if (isset($_POST['ids'])) { 
+			if (isset($_POST['ids'])) {
 				$action = processAlbumBulkActions();
 				if(!empty($action)) $action = '&bulkmessage='.$action;
 			}
@@ -163,7 +166,7 @@ if (isset($_GET['action'])) {
 		case "save":
 			$returntab = '';
 			XSRFdefender('albumedit');
-			
+
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if (isset($_POST['album'])) {
 				$folder = sanitize_path($_POST['album']);
@@ -273,7 +276,7 @@ if (isset($_GET['action'])) {
 									$codeblock3 = sanitize($_POST['codeblock3-'.$i], 0);
 									$codeblock = serialize(array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3));
 									$image->set('codeblock',$codeblock);
-									
+
 									$custom = process_language_string_save("$i-custom_data", 1);
 									$image->setCustomData(zp_apply_filter('save_image_custom_data', $custom, $i));
 									zp_apply_filter('save_image_utilities_data', $image, $i);
@@ -443,16 +446,16 @@ if ((!isset($_GET['massedit']) && !isset($_GET['album'])) || $subtab=='subalbumi
 	printSortableHead();
 }
 if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo') || isset($_GET['massedit'])) {
-	$result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
+	$result = query('SHOW COLUMNS FROM '.prefix('albums'));
 	$dbfields = array();
-	while ($row = mysql_fetch_row($result)) {
+	while ($row = db_fetch_row($result)) {
 		$dbfields[] = "'".$row[0]."'";
 	}
 	sort($dbfields);
 	$albumdbfields = implode(',', $dbfields);
-	$result = mysql_query('SHOW COLUMNS FROM '.prefix('images'));
+	$result = query('SHOW COLUMNS FROM '.prefix('images'));
 	$dbfields = array();
-	while ($row = mysql_fetch_row($result)) {
+	while ($row = db_fetch_row($result)) {
 		$dbfields[] = "'".$row[0]."'";
 	}
 	sort($dbfields);
@@ -498,7 +501,7 @@ if (isset($_GET['album']) && (empty($subtab) || $subtab=='albuminfo') || isset($
 	}
 	// ]]> -->
 </script>
- 
+
 <?php
 zp_apply_filter('texteditor_config', '','zenphoto');
 
@@ -1033,7 +1036,7 @@ $alb = removeParentAlbumNames($album);
 						<label class="checkboxlabel">
 								<input type="radio" id="rename-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
 									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');"  /> <?php echo gettext("Rename File");?>
-							
+
 						</label>
 						<label class="checkboxlabel">
 								<input type="radio" id="Delete-<?php echo $currentimage; ?>" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
@@ -1607,7 +1610,7 @@ if (isset($_GET['bulkmessage'])) {
 		});
 		// ]]> -->
 	</script>
-	
+
 	<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
 	<input name="update" type="hidden" value="Save Order" />
 	<p class="buttons">

@@ -4,7 +4,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/functions-image.php');
 
-admin_securityChecks(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
@@ -45,7 +45,7 @@ if (isImagePhoto($imageobj)) {
 if (getOption('thumb_crop')) {
 	$thumbcropwidth = $cropwidth;
 	$thumbcropheight = $cropheight;
-} else {	
+} else {
 	if (isImagePhoto($imageobj)) {
 		$thumbcropwidth = $imageobj->getWidth();
 		$thumbcropheight = $imageobj->getHeight();
@@ -64,7 +64,7 @@ if (getOption('thumb_crop')) {
 	$thumbcropwidth = $thumbcropwidth * ($tsize/$max);
 	$thumbcropheight = $thumbcropheight * ($tsize/$max);
 }
-	
+
 // get appropriate $sizedwidth and $sizedheight
 switch ($use_side) {
 	case 'longest':
@@ -149,7 +149,7 @@ if (isset($_REQUEST['crop'])) {
 	$imageobj->set('thumbW', $cw);
 	$imageobj->set('thumbH', $ch);
 	$imageobj->save();
-	
+
 	$return = '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&saved&subpage='.sanitize($_REQUEST['subpage']).'&tagsort='.sanitize($_REQUEST['tagsort']).'&tab=imageinfo';
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . $return);
 	exit();
@@ -167,7 +167,7 @@ printAdminHeader();
 		jQuery('#cropbox').Jcrop({
 			onchange: showPreview,
 			onSelect: showPreview,
-			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
+			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],
 			bgOpacity:   .4,
 			bgColor:     'black',
 			aspectRatio: <?php echo $cropwidth; ?> / <?php echo $cropheight; ?>
@@ -192,7 +192,7 @@ printAdminHeader();
 		jQuery('#x2').val(coords.x2);
 		jQuery('#y2').val(coords.y2);
 		jQuery('#w').val(coords.w);
-		jQuery('#h').val(coords.h);		
+		jQuery('#h').val(coords.h);
 	}
 	function checkCoords() {
 		return true;
@@ -202,7 +202,7 @@ printAdminHeader();
 </head>
 <body>
 	<?php printLogoAndLinks(); ?>
-	 	
+
 	<div id="main">
 		<?php printTabs('edit'); ?>
 		<div id="content">
@@ -213,14 +213,14 @@ printAdminHeader();
 						<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $thumbcropwidth; ?>px;height:<?php echo $thumbcropheight; ?>px; border: 4px solid gray; float: left"/>
 		 				<?php echo gettext("current thumbnail"); ?>
 		 			</div>
-		 			
+
 					<div style="text-align:left; float: left;">
-					
+
 						<div style="width: <?php echo $sizedwidth; ?>px; height: <?php echo $sizedheight; ?>px; margin-bottom: 10px; border: 4px solid gray;">
 							<!-- This is the image we're attaching Jcrop to -->
 							<img src="<?php echo $imageurl; ?>" id="cropbox" />
 						</div>
-						
+
 						<!-- This is the form that our event handler fills -->
 						<form name="crop" id="crop" action="?crop" onsubmit="return checkCoords();">
 							<?php XSRFToken('thumb_crop');?>
@@ -237,11 +237,11 @@ printAdminHeader();
 							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
 							<input type="hidden" id="subpage" name="subpage" value="<?php echo htmlspecialchars($subpage,ENT_QUOTES); ?>" />
 							<input type="hidden" id="crop" name="crop" value="crop" />
-							<?php 
+							<?php
 							if (getOption('thumb_crop')) {
 							?>
 								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br />
-								<br />	
+								<br />
 								<p class="buttons">
 								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>">
 								<img src="images/pass.png" alt="" />
@@ -252,28 +252,28 @@ printAdminHeader();
 								<strong><?php echo gettext("Reset"); ?></strong>
 								</button>
 								</p><br />
-								
+
 								<?php
 							} else {
 								echo gettext('Thumbnail cropping is disabled. Enable this option for the theme if you wish cropped thumbnails.');
 							}
-							?>			
+							?>
 						</form>
 
 					</div>
-			
+
 		  		<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin-left: 10px; margin-bottom: 10px;">
 						<div style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; overflow:hidden; border: 4px solid green; float: left">
 							<img src="<?php echo $imageurl; ?>" id="preview" />
 						</div>
 						<?php echo gettext("thumbnail preview"); ?>
 					</div>
-		
+
 					<!-- set the initial view for the preview -->
 					<script language="Javascript" type="text/javascript" >
 						// <!-- <![CDATA[
 						jQuery('#preview').css({
-							width: '<?php echo round($cropwidth / $iW * $sizedwidth); ?>px', 
+							width: '<?php echo round($cropwidth / $iW * $sizedwidth); ?>px',
 							height: '<?php echo round($cropheight / $iH  * $sizedheight); ?>px',
 							marginLeft: '-<?php echo round($cropwidth / $iW * $iX); ?>px',
 							marginTop: '-<?php echo round($cropheight / $iH * $iY); ?>px'
@@ -282,9 +282,9 @@ printAdminHeader();
 					</script>
 				<br style="clear: both" />
 				</div><!-- block -->
-	
+
 		</div><!-- content -->
-		
+
 	<?php printAdminFooter(); ?>
 	</div><!-- main -->
 </body>
