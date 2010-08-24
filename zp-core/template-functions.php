@@ -4589,11 +4589,11 @@ function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $fil
 				echo $plugin.' ';
 			}
 		} else {
-			echo 'none';
+			echo 'none ';
 		}
+		echo 'FILTERS: ';
 		if (count($filters) > 0) {
 			ksort($filters);
-			echo 'FILTERS: ';
 			foreach ($filters as $filter=>$array_of_priority) {
 				foreach ($array_of_priority as $priority=>$array_of_filters) {
 					echo "$filter [";
@@ -4604,7 +4604,7 @@ function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $fil
 				}
 			}
 		} else {
-			echo 'none';
+			echo 'none ';
 		}
 		echo " -->";
 	}

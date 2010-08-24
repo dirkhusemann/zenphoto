@@ -53,7 +53,7 @@ if (isset($_GET['p'])) {
 	handleSearchParms('image', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($_zp_obj = THEMEFOLDER."/$theme/image.php");
-	
+
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if ($_zp_current_album->isDynamic()) {
@@ -76,6 +76,7 @@ if (!isset($theme)) {
 	$theme = setupTheme();
 }
 if (DEBUG_PLUGINS) debugLog('Loading the "theme" plugins.');
+$_zp_loaded_plugins = array();
 foreach (getEnabledPlugins() as $extension=>$loadtype) {
 	if ($loadtype <= 1) {
 		if (DEBUG_PLUGINS) debugLog('    '.$extension.' ('.$loadtype.')');
@@ -124,7 +125,7 @@ if ($zp_request && file_exists(SERVERPATH . "/" . internalToFilesystem($_zp_obj)
 } else {
 	// If the requested object does not exist, issue a 404 and redirect to the theme's
 	// 404.php page, or a 404.php in the zp-core folder.
-	
+
 	list($album, $image) = rewrite_get_album_image('album','image');
 	debug404($album, $image, $theme);
 	$_zp_gallery_page = '404.php';
