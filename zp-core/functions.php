@@ -457,19 +457,23 @@ function sortByMultilingual($dbresult, $field, $descending) {
  * Returns true if access is allowed.
  * There is no password dialog--you must have already had authorization via a cookie.
  *
- * @param string $albumname the album
+ * @param string $album album object or name of the album
  * @param string &$hint becomes populated with the password hint.
  * @return bool
  */
-function checkAlbumPassword($albumname, &$hint) {
+function checkAlbumPassword($album, &$hint) {
 	global $_zp_pre_authorization, $_zp_gallery;
+	if (is_object($album)) {
+		$albumname = $album->name;
+	} else {
+		if (!is_object($_zp_gallery)) $_zp_gallery = new Gallery();
+		$album = new Album($_zp_gallery, $albumname=$album);
+	}
 	if (zp_loggedin(ADMIN_RIGHTS | LIST_ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) return 'zp_master_admin';
 	if (isMyAlbum($albumname, LIST_ALBUM_RIGHTS)) return 'zp_album_admin';  // he is allowed to see it.
 	if (isset($_zp_pre_authorization[$albumname])) {
 		return $_zp_pre_authorization[$albumname];
 	}
-	if (!is_object($_zp_gallery)) $_zp_gallery = new Gallery();
-	$album = new Album($_zp_gallery, $albumname);
 	$hash = $album->getPassword();
 	if (empty($hash)) {
 		$album = $album->getParent();
@@ -493,7 +497,9 @@ function checkAlbumPassword($albumname, &$hint) {
 		$hash = getOption('gallery_password');
 		$authType = 'zp_gallery_auth';
 		$saved_auth = zp_getCookie($authType);
-		if (!empty($hash)) {
+		if (empty($hash)) {
+			$authType = 'zp_public_access';
+		} else {
 			if ($saved_auth != $hash) {
 				$hint = get_language_string(getOption('gallery_hint'));
 				return false;

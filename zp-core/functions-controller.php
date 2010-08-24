@@ -138,7 +138,7 @@ function zp_handle_comment() {
 				if ($activeImage !== false) {
 					$commentadded = $activeImage->addComment($p_name, $p_email,	$p_website, $p_comment,
 																							$code1, $code2,	$p_server, $p_private, $p_anon);
-	 				$redirectTo = $activeImage->getImageLink();
+					$redirectTo = $activeImage->getImageLink();
 					}
 			} else {
 				if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
@@ -283,10 +283,10 @@ function zp_load_page($pagenum=NULL) {
  */
 function zp_load_gallery() {
 	global $_zp_gallery;
-	if ($_zp_gallery == NULL)
-	$_zp_gallery = new Gallery();
+	if (is_null($_zp_gallery)) {
+		$_zp_gallery = new Gallery();
+	}
 	set_context(ZP_INDEX);
-	return $_zp_gallery;
 }
 
 /**
@@ -340,7 +340,9 @@ function zp_load_image($folder, $filename) {
 	}
 	if (!is_object($album) || !$album->exists) return false;
 	$_zp_current_image = newImage($album, $filename, true);
-	if (is_null($_zp_current_image) || !$_zp_current_image->exists) return false;
+	if (is_null($_zp_current_image) || !$_zp_current_image->exists) {
+		return false;
+	}
 	add_context(ZP_IMAGE | ZP_ALBUM);
 	return $_zp_current_image;
 }
