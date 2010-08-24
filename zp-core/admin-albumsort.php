@@ -11,7 +11,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 // Create our gallery
 $gallery = new Gallery();
@@ -36,13 +36,13 @@ if (isset($_GET['album'])) {
 			}
 
 		}
-		
+
 		$album->setSortType("manual");
 		$album->setSortDirection('image', 0);
 		$album->save();
 	}
 }
-	
+
 // Print the admin header
 printAdminHeader();
 
@@ -74,8 +74,8 @@ if (!isset($_GET['album'])) {
 
 <div id="main">
 	<?php printTabs('edit'); ?>
-	
-	
+
+
 	<div id="content">
 		<?php
 		if($album->getParent()) {
@@ -95,7 +95,7 @@ if (!isset($_GET['album'])) {
 		$images = $album->getImages();
 		setAlbumSubtabs($album);
 		$subtab = printSubtabs('edit', 'sort');
-		
+
 		$parent = dirname($album->name);
 		if ($parent == '/' || $parent == '.' || empty($parent)) {
 			$parent = '';
@@ -103,7 +103,7 @@ if (!isset($_GET['album'])) {
 			$parent = '&amp;album='.$parent.'&amp;tab=subalbuminfo';
 		}
 		?>
-		
+
 		<div class="tabbox">
 			<form action="?page=edit&amp;album=<?php echo $album->getFolder(); ?>&amp;saved&amp;tab=sort" method="post" name="sortableListForm" id="sortableListForm">
 				<?php XSRFToken('save_sort');?>
@@ -115,7 +115,7 @@ if (!isset($_GET['album'])) {
 					}
 					// ]]> -->
 				</script>
-			
+
 				<p class="buttons">
 					<a href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>" title="<?php echo gettext('Back to the album list'); ?>" ><img	src="images/arrow_left_blue_round.png" alt="" /><strong><?php echo gettext("Back"); ?></strong></a>
 					<button type="button" title="<?php echo gettext("Save order"); ?>" onclick="postSort(this.form);" >
@@ -129,7 +129,7 @@ if (!isset($_GET['album'])) {
 				</p>
 				<br clear="all"/><br />
 				<p><?php echo gettext("Set the image order by dragging them to the positions you desire."); ?></p>
-			
+
 				<div id="images">
 					<?php
 					$images = $album->getImages();
@@ -139,7 +139,7 @@ if (!isset($_GET['album'])) {
 					?>
 				</div>
 				<br />
-			
+
 				<div>
 					<input type="hidden" id="sortableList" name="sortableList" value="" />
 					<p class="buttons">
@@ -159,13 +159,13 @@ if (!isset($_GET['album'])) {
 					</div>
 			</form>
 			<br clear="all"/>
-		
+
 		</div>
-		
+
 		</div>
-	
+
 	</div>
-	
+
 	<?php
 	printAdminFooter();
 }
