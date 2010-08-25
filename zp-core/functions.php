@@ -1106,16 +1106,6 @@ function setupTheme() {
 }
 
 /**
- * Allows plugins to add to the scripts output by zenJavascript()
- *
- * @param string $script the text to be added.
- */
-function addPluginScript($script) {
-	global $_zp_plugin_scripts;
-	$_zp_plugin_scripts[] = $script;
-}
-
-/**
  * Registers a plugin as handler for a file extension
  *
  * @param string $suffix the file extension
