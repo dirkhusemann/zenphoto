@@ -18,7 +18,7 @@ $button_hint = sprintf(gettext('Reset album thumbnails to either random or %s'),
 $button_icon = 'images/reset1.png';
 $button_rights = MANAGE_ALL_ALBUM_RIGHTS;
 
-admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
+admin_securityChecks(MANAGE_ALL_ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 if (isset($_REQUEST['thumbtype']) || isset($_REQUEST['thumbselector'])) {
 	XSRFdefender('reset_thumbs');

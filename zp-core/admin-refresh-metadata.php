@@ -12,7 +12,12 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/template-functions.php');
 
-admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
+if (isset($_REQUEST['album'])) {
+	$localrights = ALBUM_RIGHTS;
+} else {
+	$localrights = NULL;
+}
+admin_securityChecks($localrights, $return = currentRelativeURL(__FILE__));
 
 XSRFdefender('refresh');
 
@@ -46,6 +51,7 @@ if (isset($_REQUEST['album'])) {
 } else {
 	$tab = 'home';
 }
+$albumparm = $folder = $albumwhere = $imagewhere = $id = $r = '';
 if (isset($_REQUEST['return'])) {
 	$ret = sanitize_path($_REQUEST['return']);
 	if (substr($ret, 0, 1) == '*') {
@@ -59,40 +65,49 @@ if (isset($_REQUEST['return'])) {
 	}
 	$backurl = 'admin-edit.php'.$r;
 } else {
-	$ret = $r = '';
+	$ret = '';
 	$backurl = 'admin.php';
 }
 
 if (db_connect()) {
+	if (isset($_REQUEST['album'])) {
+		if (isset($_POST['album'])) {
+			$alb = urldecode($_POST['album']);
+		} else {
+			$alb = $_GET['album'];
+		}
+		$folder = sanitize_path($alb);
+		if (!empty($folder)) {
+			if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+				if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+					header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
+					exit();
+				}
+			}
+		}
+		$albumparm = '&amp;album='.pathurlencode($folder);
+	}
 	if (isset($_GET['refresh'])) {
 		if (empty($imageid)) {
 			$metaURL = $backurl;
 		} else {
 			if (!empty($ret)) $ret = '&amp;return='.$ret;
-			$metaURL = $redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret.'&XSRFToken='.getXSRFToken('refresh');
+			$metaURL = $redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$albumparm.$ret.'&XSRFToken='.getXSRFToken('refresh');
 		}
 	} else {
-		$folder = $albumwhere = $imagewhere = $id = $r = '';
 		if ($type !== 'prune&amp;') {
-			if (isset($_REQUEST['album'])) {
-				if (isset($_POST['album'])) {
-					$alb = urldecode($_POST['album']);
-				} else {
-					$alb = $_GET['album'];
-				}
-				$folder = sanitize_path($alb);
-				if (!empty($folder)) {
-					if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
-						if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
-							header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
-							exit();
-						}
+			if (!empty($folder)) {
+				if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+					if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+						header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
+						exit();
 					}
-					$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".zp_escape_string($folder)."\";";
-					$row = query_single_row($sql);
-					$id = $row['id'];
 				}
+				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".zp_escape_string($folder)."\";";
+				$row = query_single_row($sql);
+				$id = $row['id'];
 			}
+
 			if (!empty($id)) {
 				$imagewhere = "WHERE `albumid`=$id";
 				$r = " $folder";
@@ -100,13 +115,8 @@ if (db_connect()) {
 			}
 		}
 		if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
-		if (empty($folder)) {
-			$album = '';
-		} else {
-			$album = '&amp;album='.$folder;
-		}
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
-		$metaURL = $starturl = '?'.$type.'refresh=start&XSRFToken='.getXSRFToken('refresh').$album.$ret;
+		$metaURL = $starturl = '?'.$type.'refresh=start'.$albumparm.'&amp;XSRFToken='.getXSRFToken('refresh').$ret;
 	}
 }
 

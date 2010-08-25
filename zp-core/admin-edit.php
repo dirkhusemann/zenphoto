@@ -803,7 +803,9 @@ $alb = removeParentAlbumNames($album);
 				<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset hitcounters"); ?></li>
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
-					<div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
+					<div id='left-to-right-ser'>
+					<input type="hidden" name="order" size="30" maxlength="1000" />
+					</div>
 					<input name="update" type="hidden" value="Save Order" />
 					<p class="buttons">
 					<a title="<?php echo gettext('Back to the album list'); ?>" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit'.$parent; ?>">

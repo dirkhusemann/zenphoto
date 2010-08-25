@@ -18,7 +18,12 @@ $button_icon = 'images/cache1.png';
 $button_rights = ADMIN_RIGHTS;
 $button_XSRFTag = 'cache_images';
 
-admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
+if (isset($_REQUEST['album'])) {
+	$localrights = ALBUM_RIGHTS;
+} else {
+	$localrights = NULL;
+}
+admin_securityChecks($localrights, $return = currentRelativeURL(__FILE__));
 
 XSRFdefender('cache_images');
 

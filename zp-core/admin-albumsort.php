@@ -11,7 +11,12 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
-admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
+if (isset($_REQUEST['album'])) {
+	$localrights = ALBUM_RIGHTS;
+} else {
+	$localrights = NULL;
+}
+admin_securityChecks($localrights, $return = currentRelativeURL(__FILE__));
 
 // Create our gallery
 $gallery = new Gallery();
