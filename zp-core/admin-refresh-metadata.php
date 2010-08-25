@@ -12,7 +12,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 require_once(dirname(__FILE__).'/template-functions.php');
 
-admin_securityChecks(NULL, currentRelativeURL(__FILE__));
+admin_securityChecks(ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 XSRFdefender('refresh');
 
@@ -41,8 +41,6 @@ if (isset($_GET['prune'])) {
 	$continue = gettext('Continue refreshing the metadata.');
 }
 
-printAdminHeader();
-
 if (isset($_REQUEST['album'])) {
 	$tab = 'edit';
 } else {
@@ -64,50 +62,58 @@ if (isset($_REQUEST['return'])) {
 	$ret = $r = '';
 	$backurl = 'admin.php';
 }
-if (isset($_GET['refresh']) && db_connect()) {
-	if (empty($imageid)) {
-		?>
-		<meta http-equiv="refresh" content="1; url=<?php echo $backurl; ?>" />
-		<?php
+
+if (db_connect()) {
+	if (isset($_GET['refresh'])) {
+		if (empty($imageid)) {
+			$metaURL = $backurl;
+		} else {
+			if (!empty($ret)) $ret = '&amp;return='.$ret;
+			$metaURL = $redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret.'&XSRFToken='.getXSRFToken('refresh');
+		}
 	} else {
+		$folder = $albumwhere = $imagewhere = $id = $r = '';
+		if ($type !== 'prune&amp;') {
+			if (isset($_REQUEST['album'])) {
+				if (isset($_POST['album'])) {
+					$alb = urldecode($_POST['album']);
+				} else {
+					$alb = $_GET['album'];
+				}
+				$folder = sanitize_path($alb);
+				if (!empty($folder)) {
+					if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
+						if (!zp_apply_filter('admin_managed_albums_access',false, $return)) {
+							header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php');
+							exit();
+						}
+					}
+					$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".zp_escape_string($folder)."\";";
+					$row = query_single_row($sql);
+					$id = $row['id'];
+				}
+			}
+			if (!empty($id)) {
+				$imagewhere = "WHERE `albumid`=$id";
+				$r = " $folder";
+				$albumwhere = "WHERE `parentid`=$id";
+			}
+		}
+		if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
+		if (empty($folder)) {
+			$album = '';
+		} else {
+			$album = '&amp;album='.$folder;
+		}
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
-		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.$ret.'&XSRFToken='.getXSRFToken('refresh'); 
-		?>
-		<meta http-equiv="refresh" content="1; url=<?php echo $redirecturl; ?>" />
-		<?php
+		$metaURL = $starturl = '?'.$type.'refresh=start&XSRFToken='.getXSRFToken('refresh').$album.$ret;
 	}
-} else if (db_connect()) {
-	$folder = $albumwhere = $imagewhere = $id = $r = '';
-	if ($type !== 'prune&amp;') {
-		if (isset($_REQUEST['album'])) {
-			if (isset($_POST['album'])) {
-				$alb = urldecode($_POST['album']);
-			} else {
-				$alb = $_GET['album'];
-			}
-			$folder = sanitize_path($alb);
-			if (!empty($folder)) {
-				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".zp_escape_string($folder)."\";";
-				$row = query_single_row($sql);
-				$id = $row['id'];
-			}
-		}
-		if (!empty($id)) {
-			$imagewhere = "WHERE `albumid`=$id";
-			$r = " $folder";
-			$albumwhere = "WHERE `parentid`=$id";
-		}
-	}
-	if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
-	if (empty($folder)) {
-		$album = '';
-	} else {
-		$album = '&amp;album='.$folder;
-	}
-	if (!empty($ret)) $ret = '&amp;return='.$ret;
-	$starturl = '?'.$type.'refresh=start&XSRFToken='.getXSRFToken('refresh').$album.$ret;
+}
+
+printAdminHeader();
+if (!empty($metaURL)) {
 	?>
-	<meta http-equiv="refresh" content="1; url=<?php  echo$starturl; ?>" />
+	<meta http-equiv="refresh" content="1; url=<?php  echo $metaURL; ?>" />
 	<?php
 }
 echo "\n</head>";
@@ -128,10 +134,12 @@ if (isset($_GET['refresh']) && db_connect()) {
 		?>
 		<h3><?php echo $incomplete; ?></h3>
 		<p><?php echo gettext('This process should continue automatically. If not press: '); ?></p>
-		<p><a href="<?php echo $redirecturl; ?>" title="<?php echo $continue; ?>" style="font-size: 15pt; font-weight: bold;"><?php echo gettext("Continue!"); ?></a></p>
-		<?php 
+		<p><a href="<?php echo $redirecturl; ?>" title="<?php echo $continue; ?>" style="font-size: 15pt; font-weight: bold;">
+			<?php echo gettext("Continue!"); ?></a>
+		</p>
+		<?php
 	}
-		
+
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
 	if ($type !== 'prune&amp;') {
@@ -154,8 +162,9 @@ if (isset($_GET['refresh']) && db_connect()) {
 		}
 		echo '<p>'.gettext('This process should start automatically. If not press: ').'</p>';
 		?>
-		<p>
-		<a href="<?php echo $starturl.'&amp;XSRFToken='.getXSRFToken('refresh'); ?>" title="<?php echo gettext("Refresh image metadata."); ?>" style="font-size: 15pt; font-weight: bold;"><?php echo gettext("Go!"); ?></a>
+		<p><a href="<?php echo $starturl.'&amp;XSRFToken='.getXSRFToken('refresh'); ?>"
+					title="<?php echo gettext("Refresh image metadata."); ?>" style="font-size: 15pt; font-weight: bold;">
+			<?php echo gettext("Go!"); ?></a>
 		</p>
 		<?php
 	}

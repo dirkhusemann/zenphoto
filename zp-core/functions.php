@@ -272,7 +272,7 @@ function zpFormattedDate($format, $dt) {
 }
 
 /**
- * Simple mySQL timestamp formatting function.
+ * Simple SQL timestamp formatting function.
  *
  * @param string $format formatting template
  * @param int $mytimestamp timestamp
@@ -1106,6 +1106,17 @@ function setupTheme() {
 }
 
 /**
+ * Allows plugins to add to the scripts output by zenJavascript()
+ *
+ * @param string $script the text to be added.
+ */
+function addPluginScript($script) {
+	global $_zp_plugin_scripts;
+	$_zp_plugin_scripts[] = $script;
+}
+
+
+/**
  * Registers a plugin as handler for a file extension
  *
  * @param string $suffix the file extension
@@ -1230,7 +1241,7 @@ function storeTags($tags, $id, $tbl) {
 		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".zp_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
 			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . zp_escape_string($tag) . "')",true);
-			$dbtag = array('id' => mysql_insert_id());
+			$dbtag = array('id' => db_insert_id());
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
 	}
@@ -1391,12 +1402,12 @@ function getNotViewableAlbums() {
 		if (is_array($result)) {
 			$_zp_not_viewable_album_list = array();
 			foreach ($result as $row) {
-				if (!checkAlbumPassword($row['folder'], $hint)) {
-					$_zp_not_viewable_album_list[] = $row['id'];
-				} else {
+				if (checkAlbumPassword($row['folder'], $hint)) {
 					if (!($row['show'] || isMyAlbum($row['folder'], LIST_ALBUM_RIGHTS))) {
 						$_zp_not_viewable_album_list[] = $row['id'];
 					}
+				} else {
+					$_zp_not_viewable_album_list[] = $row['id'];
 				}
 			}
 		}

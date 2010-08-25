@@ -824,6 +824,14 @@ function getAlbumFolder($root=SERVERPATH) {
 	}
 }
 
+function get_caller_method() {
+	$traces = @debug_backtrace();
+	if (isset($traces[2]))     {
+		return $traces[2]['function'];
+	}
+	return null;
+}
+
 
 /**
  * Write output to the debug log
@@ -1189,12 +1197,12 @@ function loadLocalOptions($albumid, $theme) {
  * 						access will be allowed.
  */
 function isMyAlbum($albumfolder, $action) {
-	global $_zp_admin_album_list;
+	global $_zp_admin_album_list, $_zp_loggedin;
 	if (zp_loggedin(MANAGE_ALL_ALBUM_RIGHTS)) {
 		if (zp_loggedin($action)) return true;
 	}
 	if (zp_loggedin(VIEW_ALL_RIGHTS) && ($action == LIST_ALBUM_RIGHTS)) {	// sees all
-		return true;
+		return $_zp_loggedin;
 	}
 	if (zp_apply_filter('check_album_credentials', false)) return true;
 	if (empty($albumfolder) || $albumfolder == '/') {
@@ -1208,7 +1216,7 @@ function isMyAlbum($albumfolder, $action) {
 		$desired_folders = explode('/', $albumfolder);
 		foreach ($_zp_admin_album_list as $adminalbum=>$rights) { // see if it is one of the managed folders or a subfolder there of
 			$admin_folders = explode('/', $adminalbum);
-			$found = true;
+			$found = $_zp_loggedin;
 			$level = 0;
 			foreach ($admin_folders as $folder) {
 				if ($level >= count($desired_folders) || $folder != $desired_folders[$level]) {
@@ -1219,12 +1227,16 @@ function isMyAlbum($albumfolder, $action) {
 			}
 			if ($found) {
 				if ($action == LIST_ALBUM_RIGHTS) {
-					return true;
+					return $_zp_loggedin;
 				} else {
 					$albumrights = 0;
 					if ($rights & MANAGED_OBJECT_RIGHTS_EDIT) $albumrights = $albumrights | ALBUM_RIGHTS;
 					if ($rights & MANAGED_OBJECT_RIGHTS_UPLOAD) $albumrights = $albumrights | UPLOAD_RIGHTS;
-					return $action & $albumrights;
+					if ($action & $albumrights) {
+						return ($_zp_loggedin ^ (ALBUM_RIGHTS | UPLOAD_RIGHTS)) | $albumrights;
+					} else {
+						return false;
+					}
 				}
 			}
 		}
@@ -1244,17 +1256,6 @@ function getWatermarkPath($wm) {
 		$path = SERVERPATH . '/' . USER_PLUGIN_FOLDER . '/watermarks/' . internalToFilesystem($wm).'.png';
 	}
 	return $path;
-}
-
-/**
- * mysql_real_escape_string standin that insures the DB connection is passed.
- *
- * @param string $string
- * @return string
- */
-function zp_escape_string($string) {
-	global $mysql_connection;
-	return mysql_real_escape_string($string,$mysql_connection);
 }
 
 /**
