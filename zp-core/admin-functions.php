@@ -2838,7 +2838,7 @@ function populateManagedObjectsList($type,$id,$rights=false) {
  * @param string $alterrights are the items changable
  * @param int $adminid ID of the admin
  * @param int $prefix the admin row
- * @param bit $rights the priviledges of the user
+ * @param bit $rights the privileges  of the user
  */
 function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, $rights) {
 	$ledgend = '';

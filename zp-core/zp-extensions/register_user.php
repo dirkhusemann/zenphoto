@@ -34,7 +34,6 @@ require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 class register_user_options {
 
 	function register_user_options() {
-		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
 		gettext($str = 'You have received this email because you registered on the site. To complete your registration visit %s.');
 		setOptionDefault('register_user_text', getAllTranslations($str));
@@ -64,25 +63,35 @@ class register_user_options {
 		$ordered = array();
 		$groups = array();
 		$adminordered = array();
-		$nullselection = '';
-		foreach ($admins as $key=>$admin) {
-			if (!$admin['valid']) {
-				$ordered[$admin['user']] = $admin['user'];
-				if ($admin['rights'] == NO_RIGHTS) {
-					$nullselection = $admin['user'];
+		asort($ordered);
+		if (function_exists('user_groups_admin_tabs')) {
+			$nullselection = '';
+			$defaultrights = ALL_RIGHTS;
+			foreach ($admins as $key=>$admin) {
+				if (!$admin['valid']) {
+					$ordered[$admin['user']] = $admin['user'];
+					if ($admin['rights'] < $defaultrights && $admin['rights'] >= NO_RIGHTS) {
+						$nullselection = $admin['user'];
+						$defaultrights = $admin['rights'];
+					}
 				}
 			}
-		}
-		asort($ordered);
-		if (function_exists('user_groups_admin_tabs') && !empty($ordered)) {
-			$default =  array('key' => 'register_user_rights', 'type' => OPTION_TYPE_SELECTOR,
+			if (!empty($nullselection)) {
+				if (is_numeric(getOption('register_user_rights'))) {
+					setOption('register_user_rights', $nullselection);
+				} else {
+					setOptionDefault('register_user_rights', $nullselection);
+				}
+			}
+			$options[gettext('Default user group')] =  array('key' => 'register_user_rights', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => $ordered,
 										'desc' => gettext("Initial group assignment for the new user."));
-			if (!empty($nullselection)) {
-				$default['null_selection'] = $nullselection;
-			}
-			$options[gettext('Default user group')] = $default;
 		} else {
+				if (is_numeric(getOption('register_user_rights'))) {
+					setOptionDefault('register_user_rights', NO_RIGHTS);
+				} else {
+					setOption('register_user_rights', NO_RIGHTS);
+				}
 			$options[gettext('Default user rights')] = array('key' => 'register_user_rights', 'type' => OPTION_TYPE_RADIO,
 										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEW_ALL_RIGHTS | NO_RIGHTS),
 										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified."));

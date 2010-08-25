@@ -47,8 +47,8 @@ if (isset($_GET['mod_rewrite'])) {
 		?>
 		<script type="text/javascript">
 			// <!-- <![CDATA[
-			$.ajax({   
-				type: 'POST',   
+			$.ajax({
+				type: 'POST',
 				url: '<?php echo WEBPATH; ?>/page/setup_set-mod_rewrite?z'
 			});
 			// ]]> -->
@@ -267,7 +267,7 @@ if (!in_array('administrators',$groupsdefined)) {
 	$groupobj->setRights(ALL_RIGHTS);
 	$groupobj->setCustomData(gettext('Users with full privileges'));
 	$groupobj->setValid(0);
-	$groupobj->save();	
+	$groupobj->save();
 	$groupsdefined[] = 'administrators';
 }
 if (!in_array('viewers',$groupsdefined)) {
@@ -280,7 +280,7 @@ if (!in_array('viewers',$groupsdefined)) {
 	$groupsdefined[] = 'viewers';
 }
 if (!in_array('bozos',$groupsdefined)) {
-	$groupobj = $_zp_authority->newAdministrator('bozos,0');
+	$groupobj = $_zp_authority->newAdministrator('bozos',0);
 	$groupobj->setName('group');
 	$groupobj->setRights(0);
 	$groupobj->setCustomData(gettext('Banned users'));
@@ -294,7 +294,7 @@ if (!in_array('album managers',$groupsdefined)) {
 	$groupobj->setRights(NO_RIGHTS | OVERVIEW_RIGHTS | POST_COMMENT_RIGHTS | VIEW_ALL_RIGHTS | UPLOAD_RIGHTS | COMMENT_RIGHTS | ALBUM_RIGHTS | THEMES_RIGHTS);
 	$groupobj->setCustomData(gettext('Managers of one or more albums'));
 	$groupobj->setValid(0);
-	$groupobj->save();	
+	$groupobj->save();
 	$groupsdefined[] = 'album managers';
 }
 if (!in_array('default',$groupsdefined)) {
@@ -303,7 +303,7 @@ if (!in_array('default',$groupsdefined)) {
 	$groupobj->setRights(DEFAULT_RIGHTS);
 	$groupobj->setCustomData(gettext('Default user settings'));
 	$groupobj->setValid(0);
-	$groupobj->save();	
+	$groupobj->save();
 	$groupsdefined[] = 'default';
 }
 if (!in_array('newuser',$groupsdefined)) {
@@ -312,7 +312,7 @@ if (!in_array('newuser',$groupsdefined)) {
 	$groupobj->setRights(NO_RIGHTS);
 	$groupobj->setCustomData(gettext('Newly registered and verified users'));
 	$groupobj->setValid(0);
-	$groupobj->save();	
+	$groupobj->save();
 	$groupsdefined[] = 'newuser';
 }
 setOption('defined_groups',serialize($groupsdefined)); // record that these have been set once (and never again)
