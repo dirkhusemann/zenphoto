@@ -82,15 +82,17 @@ class SpamFilter  {
 		$this->patternsToDieOn = explode(' ', $list);
 		$this->excessiveURLCount = getOption('Excessive_URL_count');
 		$die = 2;  // good comment until proven bad
-		if ($body) {
-			if (($num = substr_count($body, 'http://')) >= $this->excessiveURLCount) { // too many links
-				$die = $forgive;
-			} else {
-				if ($pattern = $this->hasSpamPattern($body)) {
+		foreach (array($author, $email, $website, $body) as $check) {
+			if ($check) {
+				if (($num = substr_count($check, 'http://')) >= $this->excessiveURLCount) { // too many links
 					$die = $forgive;
 				} else {
-					if ($spamWords = $this->hasSpamWords($body)) {
+					if ($pattern = $this->hasSpamPattern($check)) {
 						$die = $forgive;
+					} else {
+						if ($spamWords = $this->hasSpamWords($check)) {
+							$die = $forgive;
+						}
 					}
 				}
 			}
