@@ -14,7 +14,7 @@ if (isset($_POST['auth'])) {
 	}
 }
 
-admin_securityChecks(UPLOAD_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS, $return = currentRelativeURL(__FILE__));
+admin_securityChecks(UPLOAD_RIGHTS, $return = currentRelativeURL(__FILE__));
 
 if (!empty($_FILES)) {
 	$name = trim(basename(sanitize($_FILES['Filedata']['name'],3)));
