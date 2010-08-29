@@ -4412,7 +4412,7 @@ function getPageRedirect() {
 			$action = '/index.php?userlog=1&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
 			break;
 		case ZENPAGE_PAGES.'.php':
-			$action = '/index.php?userlog=1&p='.ZENPAGE_PAGES.'&amp;title='.urlencode(getPageTitlelink());
+			$action = '/index.php?userlog=1&p='.ZENPAGE_PAGES.'&title='.urlencode(getPageTitlelink());
 			break;
 		case ZENPAGE_NEWS.'.php':
 			$action = '/index.php?userlog=1&p='.ZENPAGE_NEWS;
