@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: zenphoto 1.3\n"
+"Project-Id-Version: zenphoto 1.3.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-24 19:52-0300\n"
-"PO-Revision-Date: 2010-05-26 23:23-0300\n"
+"PO-Revision-Date: 2010-08-27 17:21-0300\n"
 "Last-Translator: Michael Kay <mikeque@peep.org>\n"
 "Language-Team: Michael Kay, Marte Fabián Baquerizo Sánchez, Carlos Varela, Fernando Sánchez <mikeque@peep.org>\n"
 "MIME-Version: 1.0\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _;__e;_e\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Poedit-Basepath: /Applications/MAMP/htdocs/\n"
-"X-Poedit-SearchPath-0: pg\n"
+"X-Poedit-Basepath: /websites/\n"
+"X-Poedit-SearchPath-0: pablogarber\n"
 
 #: pg/rss-comments.php:28
 #: pg/-hide/rss-comments.php:28
@@ -13004,29 +13004,28 @@ msgstr "Deshabilitar la creación de albumes nuevos"
 
 #: pg/zp-core/zp-extensions/image_upload_limiter.php:47
 msgid "If checked users cannot create new albums."
-msgstr ""
+msgstr "Cuando marcado, usuarios no pueden crear álbumes nuevos."
 
 #: pg/zp-core/zp-extensions/image_upload_limiter.php:71
 msgid "There is a plugin conflict with <em>image_upload_limiter</em>"
-msgstr ""
+msgstr "Hay un conflicto de plugin con <em>image_upload_limiter</em>"
 
 #: pg/zp-core/zp-extensions/image_upload_limiter.php:114
 msgid "The album exceeded the image number limit. You cannot upload more images!"
-msgstr ""
+msgstr "Se superó el limite de imagenes para el álbum. No se puede subir más imagenes?"
 
 #: pg/zp-core/zp-extensions/image_upload_limiter.php:119
 msgid "Maximum number of images left for this album: "
-msgstr ""
+msgstr "Número máximum de images que quedan para este álbum:"
 
 #: pg/zp-core/zp-extensions/image_upload_limiter.php:180
-#, fuzzy
 msgid "HTTP single file uploading is disabled because upload limitations are in effect. Please use the <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >multi file upload</a>"
-msgstr "Intenta con la <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >carga múltiple de archivos</a>"
+msgstr "No está habilitado cargar HTTP de archivos singulares por el limite de cargas. Intenta con la <a href=\"javascript:switchUploader('admin-upload.php?uploadtype=multifile');\" >carga múltiple de archivos</a>"
 
 #: pg/zp-core/zp-extensions/image_upload_limiter.php:183
 #, php-format
 msgid "<strong>Note:</strong> You can upload a maximum of %s images to each album."
-msgstr ""
+msgstr "<strong>Advertencia:</strong> Se puede subir hasta un máximum de %s para cada álbum"
 
 #: pg/zp-core/zp-extensions/jcarousel_thumb_nav.php:12
 msgid "jQuery jCarousel thumb nav plugin with dynamic loading of thumbs on request via JavaScript. Place printjCarousel() on your theme's image.php where you want it to appear. Supports theme based css files (place jcarousel.css and needed images in your theme's folder)."
@@ -13188,18 +13187,17 @@ msgid "Your available upload quota is <span %1$s>%2$s</span> kb."
 msgstr ""
 
 #: pg/zp-core/zp-extensions/register_user.php:54
-#, fuzzy, php-format
+#, php-format
 msgid "Text for the body of the email sent to the user. <strong>Note:</strong> You must include <code>%s</code> in your message where you wish the registration completion link to appear."
-msgstr "Texto para el cuerpo del email enviado al usuario. <strong>ADVERTENCIA</strong>: Tienes que incluir <code>%s</code> en tu mensaje y cuando deseas que aprezca el enlace de registración."
+msgstr "Texto para el cuerpo del email enviado al usuario. <strong>Advertencia</strong>: Tienes que incluir <code>%s</code> en tu mensaje y cuando deseas que aprezca el enlace de registración."
 
 #: pg/zp-core/zp-extensions/register_user.php:57
 msgid "Use CAPTCHA"
 msgstr "Usar CAPTCHA"
 
 #: pg/zp-core/zp-extensions/register_user.php:58
-#, fuzzy
 msgid "If checked, CAPTCHA validation will be required for user registration."
-msgstr "Si marcas esta opción, verificación por captcha será obligatorio para que registre un usuario."
+msgstr "Si marcas esta opción, verificación por CAPTCHA será obligatorio para que registre un usuario."
 
 #: pg/zp-core/zp-extensions/register_user.php:301
 msgid "The CAPTCHA you entered was not correct."
@@ -13529,23 +13527,23 @@ msgstr "elementos ocultos"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:442
 msgid "Menu items for all Zenphoto objects added."
-msgstr ""
+msgstr "Se agregado elementos de menú para todos los objectos de Zenphoto."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:446
 msgid "Menu items for all albums added."
-msgstr ""
+msgstr "Elementos de menú agregados para todos los álbumes."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:450
 msgid "Menu items for all Zenpage pages added."
-msgstr ""
+msgstr "Se agregado los elementos de menú de todas las páginas Zenpage."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:454
 msgid "Menu items for all Zenpage categories added."
-msgstr ""
+msgstr "Se agregado los elementos de menú de todas las categorias Zenpage."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:459
 msgid "You forgot to select an album."
-msgstr ""
+msgstr "Hay que seleccionar un álbum."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:462
 #, php-format
@@ -13605,9 +13603,8 @@ msgid "You forgot to provide a <strong>function</strong>!"
 msgstr "Te olvidaste de asignar tu categoría un <strong>título o titlelink</strong>!"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:529
-#, fuzzy
 msgid "Custom label added"
-msgstr "Datos personalizados"
+msgstr "Etiquete personalizado agredado"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_manager-admin-functions.php:542
 #, fuzzy, php-format
@@ -13640,7 +13637,7 @@ msgstr "Artículo borrado exitosamente!"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:53
 msgid "Menu item deleted failed"
-msgstr ""
+msgstr "Falló borrar elemento de menú."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:57
 #, fuzzy
@@ -13650,7 +13647,7 @@ msgstr "Autoseleccionado"
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:64
 #, php-format
 msgid "Menu set '%s' deleted"
-msgstr ""
+msgstr "Menú '%s' borrado"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:78
 #, fuzzy
@@ -13660,11 +13657,11 @@ msgstr "Campo mensaje"
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:84
 #, php-format
 msgid "Ok to delete menu set %s? This cannot be undone!"
-msgstr ""
+msgstr "Seguro que deseas borrar el menú %s? No se puede deshacer!"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:95
 msgid "Menu Manager"
-msgstr ""
+msgstr "Administrar Menú"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab.php:95
 #, fuzzy, php-format
@@ -13732,7 +13729,7 @@ msgstr ""
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:80
 msgid "Creates a link to a Zenphoto Album."
-msgstr ""
+msgstr "Estabelecer un enlace a un álbum Zenphoto."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:90
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:236
@@ -13752,7 +13749,7 @@ msgstr "Página Zenpage"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:96
 msgid "Creates a link to a Zenpage Page."
-msgstr ""
+msgstr "Estabelecer un enlace a una pagina Zenpage."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:106
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:238
@@ -13761,7 +13758,7 @@ msgstr "Indicio de noticias Zenpage"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:107
 msgid "Creates a link to the Zenpage News Index."
-msgstr ""
+msgstr "Estabelecer un enlace al indice de noticias de Zenpage."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:114
 msgid "All Zenpage categories"
@@ -13780,7 +13777,7 @@ msgstr "Guardar Categoría Nueva"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:120
 msgid "Creates a link to a Zenpage News article category."
-msgstr ""
+msgstr "Estabelecer un enlace a una categoria de noticias de Zenpage."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:131
 msgid "Custom page"
@@ -13788,7 +13785,7 @@ msgstr "Página personalizada"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:132
 msgid "Creates a link to a custom theme page as described in the theming tutorial."
-msgstr ""
+msgstr "Estabelecer un enlace a una pagina de tema personalizada como se describe en el tutorial de temas."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:133
 #, fuzzy
@@ -13797,7 +13794,7 @@ msgstr "Página siguiente"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:139
 msgid "Creates a link outside the Zenphoto structure. Use of a full URL is recommended (e.g. http://www.domain.com)."
-msgstr ""
+msgstr "Estabelecer un enlace a las afueras de Zenphoto. Ingresar un URL completo (por ejemplo, http://www.dominio.com)."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:146
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:246
@@ -13806,7 +13803,7 @@ msgstr "Etiqueta"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:147
 msgid "Creates a <em>label</em> to use in menu structures)."
-msgstr ""
+msgstr "Estabelecer una <em>etiqueta</em> que se usa en la estructura de menú)."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:152
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:154
@@ -13826,23 +13823,23 @@ msgstr "HTML"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:162
 msgid "Inserts custom HTML."
-msgstr ""
+msgstr "Inserta HTML personalizado."
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:202
 msgid "Menu Manager: Edit Menu Item"
-msgstr ""
+msgstr "Administrar Menú: Editar elemento de menú"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:204
 msgid "Menu Manager: Edit Menu Item or add new Menu Item"
-msgstr ""
+msgstr "Administrar Menú: Editar elemento de menú o agregar un elemento nuevo"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:207
 msgid "Menu Manager: Add Menu Item"
-msgstr ""
+msgstr "Administrar Menú: Agregar un elemento nuevo de menú"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:228
 msgid "*Select the type of the menus item you wish to add*"
-msgstr ""
+msgstr "*Seleccionar el tipo de menú que deseas agregar*"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:239
 #, fuzzy
@@ -13869,7 +13866,7 @@ msgstr "visible"
 
 #: pg/zp-core/zp-extensions/menu_manager/menu_tab_edit.php:306
 msgid "Include <em>&lt;LI&gt;</em> element"
-msgstr ""
+msgstr "Incluir <em>&lt;LI&gt;</em> elemento"
 
 #: pg/zp-core/zp-extensions/tiny_mce/plugins/tinyzenpage/tinyzenpage.php:85
 msgid "Custom size (un-cropped)"
