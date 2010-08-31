@@ -135,7 +135,7 @@ function setupLanguageArray() {
 		'vi_VN' => gettext('Vietnamese'),
 		'cy' => gettext('Welsh')
 	);
-	
+
 }
 
 /**
@@ -243,12 +243,12 @@ function generateLanguageOptionList($HTTPAccept) {
  * The plugin translation files must be located within
  * zp-core/plugins/<plugin name>/locale/<language locale>/LC_MESSAGES/ and must
  * have the name of the plugin (<plugin name>.po  <plugin name>.mo)
- * 
+ *
  * Return value is the success of the setlocale() call
- * 
+ *
  * @param string $plugindomain The name of the plugin
- * @return bool 
- * 
+ * @return bool
+ *
  */
 function setPluginDomain($plugindomain) {
 	return setupCurrentLocale(NULL,$plugindomain,"plugin");
@@ -271,7 +271,7 @@ function setMainDomain() {
  * have the name of the theme (<theme name>.po  <theme name>.mo)
  *
  * Return value is the success of the setlocale() call
- * 
+ *
  * @param string $plugindomain The name of the theme
  * @return bool
  */
@@ -282,25 +282,25 @@ function setThemeDomain($themedomain) {
 /**
  * Setup code for gettext translation
  * Returns the result of the setlocale call
- * 
+ *
  * @param string $override force locale to this
  * @param string $plugindomain domain
  * @param string $type case for settign domain
  * @return mixed
  */
 function setupCurrentLocale($override=NULL, $plugindomain='', $type='') {
-	$encoding = getOption('charset');
-	if (empty($encoding)) $encoding = 'UTF-8';
 	if(empty($plugindomain) && empty($type)) {
 		if (is_null($override)) {
 			$locale = getOption("locale");
 		} else {
 			$locale = $override;
 		}
-		@putenv("LANG=$locale");
 		// gettext setup
-		$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale, NULL);
-		if (!$result) { // failed to set the locale
+		$result = setlocale(LC_ALL, $locale.'.UTF8', $locale.'.UTF-8', $locale.'@euro', $locale, NULL);
+		if ($result) {
+			@putenv('LANG='.$result);
+			@putenv('LANGUAGE='.$result);
+		} else {// failed to set the locale
 			if (isset($_REQUEST['locale']) || is_null($override)) { // and it was chosen via locale
 				if (isset($_REQUEST['oldlocale'])) {
 					$locale = sanitize($_REQUEST['oldlocale'], 3);
@@ -333,7 +333,7 @@ function setupCurrentLocale($override=NULL, $plugindomain='', $type='') {
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
 	if(function_exists('bind_textdomain_codeset')) {
-		bind_textdomain_codeset($domain, $encoding);
+		bind_textdomain_codeset($domain, 'UTF-8');
 	}
 	textdomain($domain);
 	return $result;
@@ -383,7 +383,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 }
 
 /**
- * checks a "supplied" locale against the valid locales. 
+ * checks a "supplied" locale against the valid locales.
  * Returns a valid locale if one exists else returns NULL
  * @param string $userlocale
  */
@@ -466,6 +466,9 @@ function get_language_string($dbstring, $locale=NULL) {
 		return $dbstring;
 	}
 	$strings = unserialize($dbstring);
+	if (!is_array($strings)) { //??????
+		return $strings;
+	}
 	$actual_local = getOption('locale');
 	if (is_null($locale)) $locale = $actual_local;
 	if (isset($strings[$locale])) {
