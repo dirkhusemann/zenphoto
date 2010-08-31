@@ -388,12 +388,13 @@ if (isset($_GET['action'])) {
 			XSRFdefender('newalbum');
 			$name = sanitize($_GET['name']);
 			$soename = seoFriendly($name);
-			if ($folder != '/' && $folder != '.') {
-				$albumdir = "&album=" . urlencode($folder);
-			} else {
+			if (empty($folder) || $folder == '/' || $folder == '.') {
 				$albumdir = '';
+				$folder = $soename;
+			} else {
+				$albumdir = "&album=" . urlencode($folder);
+				$folder = $folder.'/'.$soename;
 			}
-			$folder = $folder.'/'.$soename;
 			$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
 			if (is_dir($uploaddir)) {
 				if ($name != $soename) $name .= ' ('.$soename.')';
@@ -760,19 +761,19 @@ $alb = removeParentAlbumNames($album);
 			<tr>
 			<th style="text-align: left;"><?php echo gettext("Edit this album"); ?>
 			<?php
-	  	$checkarray = array(
-			  	gettext('*Bulk actions*') => 'noaction',
-			  	gettext('Delete') => 'deleteall',
-			  	gettext('Set to published') => 'showall',
-			  	gettext('Set to unpublished') => 'hideall',
-			  	gettext('Disable comments') => 'commentsoff',
-			  	gettext('Enable comments') => 'commentson',
-			  	gettext('Reset hitcounter') => 'resethitcounter',
-	  	);
-	  	?>
-	  	<span style="float:right">
-	  	<select name="checkallaction" id="checkallaction" size="1">
-	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			$checkarray = array(
+					gettext('*Bulk actions*') => 'noaction',
+					gettext('Delete') => 'deleteall',
+					gettext('Set to published') => 'showall',
+					gettext('Set to unpublished') => 'hideall',
+					gettext('Disable comments') => 'commentsoff',
+					gettext('Enable comments') => 'commentson',
+					gettext('Reset hitcounter') => 'resethitcounter',
+			);
+			?>
+			<span style="float:right">
+			<select name="checkallaction" id="checkallaction" size="1">
+			<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
 			</select>
 			</span>
 			</th>
@@ -1549,19 +1550,19 @@ if (isset($_GET['bulkmessage'])) {
 		<tr>
 			<th style="text-align: left;"><?php echo gettext("Edit this album"); ?>
 			<?php
-	  	$checkarray = array(
-			  	gettext('*Bulk actions*') => 'noaction',
-			  	gettext('Delete') => 'deleteall',
-			  	gettext('Set to published') => 'showall',
-			  	gettext('Set to unpublished') => 'hideall',
-			  	gettext('Disable comments') => 'commentsoff',
-			  	gettext('Enable comments') => 'commentson',
-			  	gettext('Reset hitcounter') => 'resethitcounter',
-	  	);
-	  	?>
-	  	<span style="float:right">
-	  	<select name="checkallaction" id="checkallaction" size="1">
-	  	<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
+			$checkarray = array(
+					gettext('*Bulk actions*') => 'noaction',
+					gettext('Delete') => 'deleteall',
+					gettext('Set to published') => 'showall',
+					gettext('Set to unpublished') => 'hideall',
+					gettext('Disable comments') => 'commentsoff',
+					gettext('Enable comments') => 'commentson',
+					gettext('Reset hitcounter') => 'resethitcounter',
+			);
+			?>
+			<span style="float:right">
+			<select name="checkallaction" id="checkallaction" size="1">
+			<?php generateListFromArray(array('noaction'), $checkarray,false,true); ?>
 			</select>
 			</span>
 			</th>
