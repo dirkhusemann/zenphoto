@@ -279,6 +279,10 @@ function setThemeDomain($themedomain) {
 	return setupCurrentLocale(NULL,$themedomain,"theme");
 }
 
+function i18nSetLocale($locale) {
+	return setlocale(LC_ALL, $locale.'.UTF8', $locale.'.UTF-8', $locale.'@euro', $locale, NULL);
+}
+
 /**
  * Setup code for gettext translation
  * Returns the result of the setlocale call
@@ -296,7 +300,7 @@ function setupCurrentLocale($override=NULL, $plugindomain='', $type='') {
 			$locale = $override;
 		}
 		// gettext setup
-		$result = setlocale(LC_ALL, $locale.'.UTF8', $locale.'.UTF-8', $locale.'@euro', $locale, NULL);
+		$result = i18nSetLocale($locale);
 		if ($result) {
 			@putenv('LANG='.$result);
 			@putenv('LANGUAGE='.$result);
