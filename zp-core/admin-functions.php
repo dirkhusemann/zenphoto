@@ -203,7 +203,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	?>
 	<form name="login" action="#" method="post">
 	<input type="hidden" name="login" value="1" />
-	<input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect,ENT_QUOTES); ?>" />
+	<input type="hidden" name="redirect" value="<?php echo html_encode($redirect,ENT_QUOTES); ?>" />
 
 <table>
 	<tr>
