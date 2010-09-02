@@ -23,7 +23,7 @@ if ($plugin_disable) {
 	$option_interface = new flowplayer3();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
 	// register the scripts needed
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.2.0.min.js"></script>
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.2.3.min.js"></script>
 	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist-3.0.8.min.js"></script>');
 }
 
@@ -169,13 +169,13 @@ class flowplayer3 {
 			</span>
 			<script type="text/javascript">
 			// <!-- <![CDATA[
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.2.0.swf", {
+			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.2.3.swf", {
 			plugins: { 
 				audio: {
-					url: "flowplayer.audio-3.2.0.swf"
+					url: "flowplayer.audio-3.2.1.swf"
 				},
         controls: {
-        	url: "flowplayer.controls-3.2.0.swf",
+        	url: "flowplayer.controls-3.2.2.swf",
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
         	autoHide: "'.getOption('flow_player3_controlsautohide').'",
