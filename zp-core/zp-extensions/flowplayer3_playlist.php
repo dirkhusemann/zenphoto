@@ -1,22 +1,22 @@
 <?php
-/** 
+/**
  * flowplayer3 playlist - Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with Flowplayer 3
  * IMPORTANT: The Flowplayer 3 plugin needs to be activated to use this plugin.
- * 
+ *
  * Note that this does not work with pure image albums and is not meant to!
- * 
+ *
  * See usage details below
- * 
+ *
  * NOTE: Flash players do not support external albums!
- * 
+ *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @package plugins 
+ * @package plugins
  */
 
 
 $plugin_description =  gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3.")."<p class='notebox'>".gettext("<strong>IMPORTANT:</strong> The Flowplayer 3 plugin needs to be activated to use this plugin and your theme needs to be modified.")."</p>";
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flowplayer3_playlist.php.html";
 $plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>.'):false;
 
@@ -26,18 +26,25 @@ if ($plugin_disable) {
 	$option_interface = new flowplayer3_playlist();
 	// register the scripts needed - only playlist additions, all others incl. the playlist plugin are loaded by the flowplayer3 plugin!
 	if (in_context(ZP_ALBUM) && !OFFSET_PATH) {
-		$theme = getCurrentTheme();
-		$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/flowplayer3_playlist.css';
-		if (file_exists($css)) {
-			$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/flowplayer3_playlist.css';
-		} else {
-			$css = WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3_playlist/flowplayer3_playlist.css';
-		}
-		addPluginScript('
-			<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3_playlist/jquery.tools.min.js"></script>
-			<link rel="stylesheet" type="text/css" href="' . $css . '" />
-			');
+		ob_start();
+		flowplayer3_playlistJS();
+		$str = ob_get_contents();
+		ob_end_clean();
+		addPluginScript($str);
 	}
+}
+function flowplayer3_playlistJS() {
+	$theme = getCurrentTheme();
+	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/flowplayer3_playlist.css';
+	if (file_exists($css)) {
+		$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/flowplayer3_playlist.css';
+	} else {
+		$css = WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3_playlist/flowplayer3_playlist.css';
+	}
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3_playlist/jquery.tools.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo pathurlencode($css); ?>" />
+	<?php
 }
 
 /**
@@ -71,22 +78,22 @@ class flowplayer3_playlist {
 /**
  * Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with Flowplayer 3
  * Important: The Flowplayer 3 plugin needs to be activated to use this plugin. This plugin shares all settings with this plugin, too.
- * 
+ *
  * You can either show a 'one player window' playlist or show all items as separate players paginated. See the examples below.
  * (set in the settings for thumbs per page) on one page (like on a audio or podcast blog).
- * 
+ *
  * There are two usage modes:
- * 
+ *
  * a) 'playlist'
  * The playlist is meant to replace the 'next_image()' loop on a theme's album.php.
  * It can be used with a special 'album theme' that can be assigned to media albums with with .flv/.mp4/.mp3s, although Flowplayer 3 also supports images
  * Replace the entire 'next_image()' loop on album.php with this:
  * <?php flowplayerPlaylist("playlist"); ?>
- * 
+ *
  * This produces the following html:
  * <div class="wrapper">
  * <a class="up" title="Up"></a>
- * <div class="playlist">		
+ * <div class="playlist">
  * <div class="clips">
  * <!-- single playlist entry as an "template" -->
  * <a href="${url}">${title}</a>
@@ -97,25 +104,35 @@ class flowplayer3_playlist {
  * </div>
  * This is styled by the css file 'playlist.css" that is located within the 'zp-core/plugins/flowplayer3_playlist/flowplayer3_playlist.css' by default.
  * Alternatively you can style it specifically for your theme. Just place a css file named "flowplayer3_playlist.css" in your theme's folder.
- * 
+ *
  * b) 'players'
- * This displays each audio/movie file as a separate player on album.php. 
+ * This displays each audio/movie file as a separate player on album.php.
  * If there is no videothumb image for an mp3 file existing only the player control bar is shown.
  * Modify the 'next_image()' loop on album.php like this:
- * <?php	
- * while (next_image(false,$firstPageImages)):
+ * <?php
+ * while (next_image()):
  * flowplayerPlaylist("players");
  * endwhile;
  * ?>
- * Of course you can add further functions to b) like printImageTitle() etc., too. 
- * 
+ * Of course you can add further functions to b) like printImageTitle() etc., too.
+ *
  * @param string $option The mode to use "playlist" or "players"
  * @param string $albumfolder For "playlist" mode only: To show a playlist of an specific album directly on another page (for example on index.php). Note: Currently it is not possible to have several playlists on one page
  */
 function flowplayerPlaylist($option="playlist",$albumfolder="") {
 	global $_zp_current_image,$_zp_current_album,$_zp_flash_player;
+		$curdir = getcwd();
+		chdir(SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/flowplayer3');
+		$filelist = safe_glob('flowplayer-*.swf');
+		$swf = array_shift($filelist);
+		$filelist = safe_glob('flowplayer.audio-*.swf');
+		$audio = array_shift($filelist);
+		$filelist = safe_glob('flowplayer.controls-*.swf');
+		$controls = array_shift($filelist);
+		chdir($curdir);
+
 	switch($option) {
-		case "playlist":	
+		case "playlist":
 				if(empty($albumfolder)) {
 					$albumname = $_zp_current_album->name;
 				} else {
@@ -128,8 +145,8 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 					$autoplay = "false";
 				}
 				$playlist = $album->getImages();
-				
-				// slash image fetching 
+
+				// slash image fetching
 				$videoobj = new Video($_zp_current_album,$playlist[0]);
 				$albumfolder = $album->name;
 				$videoThumb = $videoobj->objectsThumb;
@@ -144,7 +161,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 			<script type="text/javascript">
 			// <!-- <![CDATA[
 			$(function() {
-		
+
 			$("div.playlist").scrollable({
 				items:"div.clips",
 				vertical:true,
@@ -152,32 +169,32 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				prev:"a.up"
 			});
 			$("div.playlist").mousewheel();
-			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.2.3.swf", {
-			plugins: { 
+			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/'.$swf.'", {
+			plugins: {
 				audio: {
-					url: "flowplayer.audio-3.2.1.swf"
+					url: "'.$audio.'"
 				},
 				controls: {
-					url: "flowplayer.controls-3.2.2.swf",
-        	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	autoHide: "'.getOption('flow_player3_playlistautohide').'",
-        	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
-        	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
-        	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
-        	progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
-        	bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
-        	bufferGradient:	 "'.getOption('fflow_player3_controlsbuffergradient').'",
-        	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
-        	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
-        	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
-        	scaling: "'.getOption('flow_player3_scaling').'",
-        	playlist: true
-        }
-    	},
-    	canvas: {
-    		backgroundColor: "'.getOption('flow_player3_backgroundcolor').'"
-    	},';
+					url: "'.$controls.'",
+					backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
+					autoHide: "'.getOption('flow_player3_playlistautohide').'",
+					timeColor:"'.getOption('flow_player3_controlstimecolor').'",
+					durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
+					progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
+					progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
+					bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
+					bufferGradient:	 "'.getOption('fflow_player3_controlsbuffergradient').'",
+					sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",
+					sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
+					buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
+					buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+					scaling: "'.getOption('flow_player3_scaling').'",
+					playlist: true
+				}
+			},
+			canvas: {
+				backgroundColor: "'.getOption('flow_player3_backgroundcolor').'"
+			},';
 			$list = '';
 			foreach($playlist as $item) {
 				$image = newImage($album, $item);
@@ -192,7 +209,7 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				} // if ext end
 			} // foreach end
 			echo 'playlist: ['.substr($list,0,-1).']
-			}); 
+			});
 			flowplayer("player").playlist("div.clips:first", {loop:true});
 			});
 			// ]]> -->
@@ -200,13 +217,13 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 		?>
 		<div class="wrapper">
 					<a class="up" title="Up"></a>
-			<div class="playlist">		
+			<div class="playlist">
 				<div class="clips">
 					<!-- single playlist entry as an "template" -->
 					<a href="${url}">${title}</a>
 				</div>
 			</div>
-		<a class="down" title="Down"></a>	
+		<a class="down" title="Down"></a>
 </div>
 </div><!-- flowplayer3_playlist wrapper end -->
 <?php } // check if there are images end

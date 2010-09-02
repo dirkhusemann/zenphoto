@@ -604,10 +604,10 @@ zp-core/zp-extensions/filter-crop_image.php
 zp-core/zp-extensions/filter-zenphoto_seo.php
 zp-core/zp-extensions/flowplayer3
 zp-core/zp-extensions/flowplayer3/controls.css
-zp-core/zp-extensions/flowplayer3/flowplayer-3.2.0.min.js
-zp-core/zp-extensions/flowplayer3/flowplayer-3.2.0.swf
-zp-core/zp-extensions/flowplayer3/flowplayer.audio-3.2.0.swf
-zp-core/zp-extensions/flowplayer3/flowplayer.controls-3.2.0.swf
+zp-core/zp-extensions/flowplayer3/flowplayer-3.2.3.min.js
+zp-core/zp-extensions/flowplayer3/flowplayer-3.2.3.swf
+zp-core/zp-extensions/flowplayer3/flowplayer.audio-3.2.1.swf
+zp-core/zp-extensions/flowplayer3/flowplayer.controls-3.2.2.swf
 zp-core/zp-extensions/flowplayer3/flowplayer.playlist-3.0.8.min.js
 zp-core/zp-extensions/flowplayer3/LICENSE.txt
 zp-core/zp-extensions/flowplayer3.php

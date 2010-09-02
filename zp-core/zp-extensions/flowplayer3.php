@@ -1,18 +1,18 @@
 <?php
-/** 
+/**
  * flowplayer -- plugin support for the flowplayer 3.x.x flash video player.
  * NOTE: Flash players do not support external albums!
- * 
+ *
  * Note on splash images: Flowplayer will try to use the first frame of a movie as a splash image or a videothumb if existing.
- * 
+ *
  * @author Malte Müller (acrylian)
- * @package plugins 
+ * @package plugins
  */
 
 
 $plugin_description = gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files.").'<p class="notebox">'.gettext("<strong>IMPORTANT</strong>: Only one multimedia player plugin can be enabled at the time and the class-video plugin must be enabled, too.").'</p>'.gettext("Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its license.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---flowplayer3.php.html";
 $plugin_disable = (getOption('album_folder_class') === 'external')?gettext('Flash players do not support <em>External Albums</em>.'):false;
 
@@ -22,11 +22,25 @@ if ($plugin_disable) {
 	global $_zp_flash_player;
 	$option_interface = new flowplayer3();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
-	// register the scripts needed
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer-3.2.3.min.js"></script>
-	<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER .'/flowplayer3/flowplayer.playlist-3.0.8.min.js"></script>');
+	ob_start();
+	flowplayer2JS();
+	$str = ob_get_contents();
+	ob_end_clean();
+	addPluginScript($str);
 }
-
+function flowplayer2JS() {
+	$curdir = getcwd();
+	chdir(SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/flowplayer3');
+	$filelist = safe_glob('flowplayer-*.min.js');
+	$player = array_shift($filelist);
+	$filelist = safe_glob('flowplayer.playlist-*.min.js');
+	$playlist = array_shift($filelist);
+	chdir($curdir);
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3/<?php echo $player; ?>"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/flowplayer3/<?php echo $playlist; ?>"></script>
+	<?php
+}
 
 if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 26);
 /**
@@ -49,10 +63,10 @@ class flowplayer3 {
 		setOptionDefault('flow_player3_controlsdurationcolor', '#ffffff');
 		setOptionDefault('flow_player3_controlsprogresscolor', '#ffffff');
 		setOptionDefault('flow_player3_controlsprogressgradient', 'low');
-		setOptionDefault('flow_player3_controlsbuffercolor', '#275577');	
-		setOptionDefault('flow_player3_controlsbuffergradient', 'low');	
-		setOptionDefault('flow_player3_controlsslidercolor', '#ffffff');	
-		setOptionDefault('flow_player3_controlsslidergradient', 'low');	
+		setOptionDefault('flow_player3_controlsbuffercolor', '#275577');
+		setOptionDefault('flow_player3_controlsbuffergradient', 'low');
+		setOptionDefault('flow_player3_controlsslidercolor', '#ffffff');
+		setOptionDefault('flow_player3_controlsslidergradient', 'low');
 		setOptionDefault('flow_player3_controlsbuttoncolor', '#567890');
 		setOptionDefault('flow_player3_controlsbuttonovercolor', '#999999');
 		setOptionDefault('flow_player3_splashimagescale', 'fit');
@@ -99,12 +113,12 @@ class flowplayer3 {
 										'selections' => array(gettext('none')=>"none",gettext('low')=>"low", gettext('medium')=>"medium", gettext('high')=>"high"),
 										'desc' => gettext("Gradient setting for the buffer.")),
 		gettext('Controls slider color') => array('key' => 'flow_player3_controlsslidercolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-										'desc' => gettext("Background color for the timeline before the buffer bar fills it. The same background color is also used in the volume slider.")),		
+										'desc' => gettext("Background color for the timeline before the buffer bar fills it. The same background color is also used in the volume slider.")),
 		gettext('Controls slider gradient') => array('key' => 'flow_player3_controlsslidergradient', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array(gettext('none')=>"none",gettext('low')=>"low", gettext('medium')=>"medium", gettext('high')=>"high"),
 										'desc' => gettext("Gradient setting for the sliders.")),
 		gettext('Controls button color') => array('key' => 'flow_player3_controlsbuttoncolor', 'type' => OPTION_TYPE_COLOR_PICKER,
-										'desc' => gettext("Color of the player buttons: stop, play, pause and full screen.")),		
+										'desc' => gettext("Color of the player buttons: stop, play, pause and full screen.")),
 		gettext('Controls hover button color') => array('key' => 'flow_player3_controlsbuttonovercolor', 'type' => OPTION_TYPE_COLOR_PICKER,
 										'desc' => gettext("Button color when the mouse is positioned over them.")),
 		gettext('Splash image scale') => array('key' => 'flow_player3_splashimagescale', 'type' => OPTION_TYPE_SELECTOR,
@@ -121,7 +135,7 @@ class flowplayer3 {
 	 *
 	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums)
 	 * the zenphoto function getUnprotectedImageURL() is used
-	 * 
+	 *
 	 * @param string $imagetitle the title of the movie
 	 * 	 */
 	function getPlayerConfig($moviepath='', $imagetitle,$count='') {
@@ -164,40 +178,49 @@ class flowplayer3 {
 			}
 			$width = getOption('flow_player3_width');
 				// inline css is kind of ugly but since we need to style dynamically there is no other way
+			$curdir = getcwd();
+			chdir(SERVERPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/flowplayer3');
+			$filelist = safe_glob('flowplayer-*.swf');
+			$swf = array_shift($filelist);
+			$filelist = safe_glob('flowplayer.audio-*.swf');
+			$audio = array_shift($filelist);
+			$filelist = safe_glob('flowplayer.controls-*.swf');
+			$controls = array_shift($filelist);
+			chdir($curdir);
 			$playerconfig = '
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.$width.'px; height: '.$height.'px;">
 			</span>
 			<script type="text/javascript">
 			// <!-- <![CDATA[
-			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/flowplayer-3.2.3.swf", {
-			plugins: { 
+			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/'.$swf.'", {
+			plugins: {
 				audio: {
-					url: "flowplayer.audio-3.2.1.swf"
+					url: "'.$audio.'"
 				},
-        controls: {
-        	url: "flowplayer.controls-3.2.2.swf",
-        	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
-        	autoHide: "'.getOption('flow_player3_controlsautohide').'",
-        	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
-        	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
-        	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
-        	progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
-        	bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
-        	bufferGradient:	 "'.getOption('flow_player3_controlsbuffergradient').'",
-        	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
-        	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
-        	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
-        	fullscreen : '.$allowfullscreen.'
-        }
-    	},
-    	canvas: {
-    		backgroundColor: "'.getOption('flow_player3_backgroundcolor').'",
-    		backgroundGradient: "'.getOption('flow_player3_backgroundcolorgradient').'"
-    	},';
+				controls: {
+					url: "'.$controls.'",
+					backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
+					backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
+					autoHide: "'.getOption('flow_player3_controlsautohide').'",
+					timeColor:"'.getOption('flow_player3_controlstimecolor').'",
+					durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
+					progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
+					progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
+					bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
+					bufferGradient:	 "'.getOption('flow_player3_controlsbuffergradient').'",
+					sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",
+					sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
+					buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
+					buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+					fullscreen : '.$allowfullscreen.'
+				}
+			},
+			canvas: {
+				backgroundColor: "'.getOption('flow_player3_backgroundcolor').'",
+				backgroundGradient: "'.getOption('flow_player3_backgroundcolorgradient').'"
+			},';
 			if(empty($videoThumb)) { // use first frame as slash image
-				$playerconfigadd = 'clip:  
+				$playerconfigadd = 'clip:
 				{
 					url:"' . $moviepath . '",
 					autoPlay: '.$autoplay.',
@@ -208,7 +231,7 @@ class flowplayer3 {
 			// ]]> -->
 			</script>';
 			} else { // use existing videothumb as splash image
-				$playerconfigadd = 'playlist: [ 
+				$playerconfigadd = 'playlist: [
 				{
 					url:"'.$videoThumb.'",
 					scaling: "'.getOption('flow_player3_splashimagescale').'"
@@ -227,8 +250,8 @@ class flowplayer3 {
 			$playerconfig = $playerconfig.$playerconfigadd;
 			return $playerconfig;
 		}
-	
-	
+
+
 	/**
 	 * outputs the player configuration HTML
 	 *
@@ -249,7 +272,7 @@ class flowplayer3 {
 	function getVideoWidth($image=NULL) {
 		return getOption('flow_player3_width');
 	}
-	
+
 	/**
 	 * Returns the width of the player
 	 * @param object $image the image for which the height is requested
@@ -262,6 +285,6 @@ class flowplayer3 {
 		}
 		return getOption('flow_player3_height');
 	}
-	
+
 }
 ?>
