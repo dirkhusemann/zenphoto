@@ -279,8 +279,17 @@ function setThemeDomain($themedomain) {
 	return setupCurrentLocale(NULL,$themedomain,"theme");
 }
 
+/**
+ * Wrapper function for setLocale() so that all the proper permutations are used
+ * Returns the result from the setLocale call
+ * @param $locale the local desired
+ * @return string
+ */
 function i18nSetLocale($locale) {
-	return setlocale(LC_ALL, $locale.'.UTF8', $locale.'.UTF-8', $locale.'@euro', $locale, NULL);
+	$en1 = getOption('charset');
+	$en2 = str_replace('ISO-','ISO',$en1);
+	$simple = explode('-',$locale);
+	return setlocale(LC_ALL, $locale.'.UTF8', $locale.'.UTF-8', $locale.'@euro', $locale.'.'.$en2, $locale.'.'.$en1, $locale, $simple[0], NULL);
 }
 
 /**

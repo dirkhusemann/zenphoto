@@ -18,7 +18,9 @@ $_current_tab = sanitize($_GET['page'],3);
 
 /* handle posts */
 if (isset($_GET['action'])) {
-	$action = $_GET['action'];
+	if (($action = $_GET['action']) != 'saveoptions') {
+		admin_securityChecks(ADMIN_RIGHTS, currentRelativeURL(__FILE__));
+	}
 	$themeswitch = false;
 	if ($action == 'deleteadmin') {
 		XSRFdefender('deleteadmin');
@@ -34,6 +36,12 @@ if (isset($_GET['action'])) {
 
 		/*** admin options ***/
 		if (isset($_POST['saveadminoptions'])) {
+			if ($_zp_null_account || (isset($_POST['alter_enabled'])) || ($_POST['totaladmins'] > 1) ||
+						(trim(sanitize($_POST['0-adminuser'],0))) != $_zp_current_admin_obj->getUser() ||
+						isset($_POST['0-newuser'])) {
+				admin_securityChecks(ADMIN_RIGHTS, currentRelativeURL(__FILE__));
+			}
+			$alter = isset($_POST['alter_enabled']);
 			$nouser = true;
 			$newuser = false;
 			for ($i = 0; $i < $_POST['totaladmins']; $i++) {
@@ -50,12 +58,6 @@ if (isset($_GET['action'])) {
 					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 						$admin_n = trim($_POST[$i.'-admin_name']);
 						$admin_e = trim($_POST[$i.'-admin_email']);
-						$rights = processRights($i);
-						if (isset($_POST['alter_enabled'])) {
-							$objects = processManagedObjects($i);
-						} else {
-							$objects = $rights = NULL;
-						}
 						if (isset($_POST[$i.'-newuser'])) {
 							$newuser = $user;
 							$what = 'new';
@@ -66,6 +68,20 @@ if (isset($_GET['action'])) {
 							$what = 'update';
 							$userobj = $_zp_authority->newAdministrator($user);
 						}
+						if ($alter) {
+							$objects = processManagedObjects($i);
+							$rights = processRights($i);
+							if (is_array($objects)) {
+								$updated = true;
+								$userobj->setObjects($objects);
+							}
+							if ($rights != $userobj->getRights()) {
+								$updated = true;
+								$userobj->setRights($rights);
+							}
+						} else {
+							$userobj->setObjects(NULL);	// indicates no change
+						}
 						if ($admin_n != $userobj->getName()) {
 							$updated = true;
 							$userobj->setName($admin_n);
@@ -73,14 +89,6 @@ if (isset($_GET['action'])) {
 						if ($admin_e != $userobj->getEmail()) {
 							$updated = true;
 							$userobj->setEmail($admin_e);
-						}
-						if ($rights != $userobj->getRights()) {
-							$updated = true;
-							$userobj->setRights($rights);
-						}
-						if (is_array($objects)) {
-							$updated = true;
-							$userobj->setObjects($objects);
 						}
 						if (empty($pass)) {
 							if ($newuser) {
@@ -119,9 +127,6 @@ if (isset($_GET['action'])) {
 			}
 		}
 
-		/*** custom options ***/
-		$returntab = processCustomOptionSave($returntab);
-
 		if (empty($notify)) $notify = '?saved';
 		header("Location: " . $notify . $returntab);
 		exit();
@@ -145,7 +150,7 @@ $subtab = getSubtabs($_current_tab, 'users');
 <div id="main">
 <?php printTabs($_current_tab); ?>
 <div id="content">
-<?php 
+<?php
 if ($_zp_null_account) {
 	echo "<div class=\"errorbox space\">";
 	echo "<h2>".gettext("Password reset request.<br />You may now set admin usernames and passwords.")."</h2>";
@@ -187,8 +192,8 @@ printSubtabs($_current_tab, 'users');
 		}
 	} else {
 		$alterrights = ' disabled="disabled"';
-		$admins = array($_zp_current_admin_obj->getUser() => 
-													array('id' => $_zp_current_admin_obj->getID(), 
+		$admins = array($_zp_current_admin_obj->getUser() =>
+													array('id' => $_zp_current_admin_obj->getID(),
 																'user' => $_zp_current_admin_obj->getUser(),
 																'pass' => $_zp_current_admin_obj->getPass(),
 																'name' => $_zp_current_admin_obj->getName(),
@@ -241,18 +246,18 @@ printSubtabs($_current_tab, 'users');
 		echo  "<h2>".gettext("Your Website URL is not valid")."</h2>";
 		echo '</div>';
 	}
-	
-	
-	
-?> 
+
+
+
+?>
 <form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&amp;ticket='.$_zp_ticket.'&amp;user='.$post_user; ?>" method="post" autocomplete="off" onsubmit="return checkNewuser();" >
 	<?php XSRFToken('saveadmin');?>
 <input type="hidden" name="saveadminoptions" value="yes" />
-<?php			
+<?php
 if (empty($alterrights)) {
 	?>
 	<input type="hidden" name="alter_enabled" value="1" />
-	<?php 
+	<?php
 }
 ?>
 <p class="buttons">
@@ -266,7 +271,7 @@ if (empty($alterrights)) {
 		<th>
 			<span style="font-weight: normal">
 			<a href="javascript:setShow(1);toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
-			| 
+			|
 			<a href="javascript:setShow(0);toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a>
 			</span>
 		</th>
@@ -328,7 +333,7 @@ if (empty($alterrights)) {
 			} else {
 				$background = "background-color:#ECF1F2;";
 			}
-			
+
 			?>
 			<!-- apply alterrights filter -->
 			<?php $local_alterrights = zp_apply_filter('admin_alterrights', $local_alterrights, $userobj); ?>
@@ -338,7 +343,7 @@ if (empty($alterrights)) {
 			<tr>
 				<td colspan="2" style="margin: 0pt; padding: 0pt;">
 				<!-- individual admin table -->
-				<input type="hidden" name="show-<?php echo $userid; ?>" id="show-<?php echo $userid; ?>" value="<?php echo ($current);?>" /> 
+				<input type="hidden" name="show-<?php echo $userid; ?>" id="show-<?php echo $userid; ?>" value="<?php echo ($current);?>" />
 				<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
 				<tr>
 					<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top">
@@ -347,8 +352,8 @@ if (empty($alterrights)) {
 						$displaytitle = gettext("Show details");
 						$hidetitle = gettext("Hide details");
 					} else {
-						$displaytitle = sprintf(gettext('Show details for user %s'),$userid); 
-						$hidetitle = sprintf(gettext('Hide details for user %s'),$userid); 
+						$displaytitle = sprintf(gettext('Show details for user %s'),$userid);
+						$hidetitle = sprintf(gettext('Hide details for user %s'),$userid);
 					}
 					?>
 						<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
@@ -363,14 +368,14 @@ if (empty($alterrights)) {
 									?>
 									<input type="hidden" id="adminuser-<?php echo $id; ?>" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 									<?php
-									echo '<strong>'.$userid.'</strong>'; 
+									echo '<strong>'.$userid.'</strong>';
 								}
 								?>
 							</a>
 						</span>
 						<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
 							<a href="javascript:$('#show-<?php echo $userid; ?>').val(0);toggleExtraInfo('<?php echo $id;?>','user',false);" title="<?php echo $hidetitle; ?>">
-								<?php 
+								<?php
 								if (empty($userid)) {
 									echo '<em>'.gettext("Add New User").'</em>';
 								} else {
@@ -384,7 +389,7 @@ if (empty($alterrights)) {
 					if (!$alterrights) {
 						?>
 						<td width="345" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
-						<?php 
+						<?php
 						if (empty($userid)) {
 								?>
 								<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" id="adminuser-<?php echo $id; ?>" name="<?php echo $id; ?>-adminuser" value=""
@@ -401,13 +406,13 @@ if (empty($alterrights)) {
 							} else {
 								?>
 								<input type = "hidden" name="<?php echo $id ?>-confirmed"	value="<?php echo NO_RIGHTS; ?>" />
-								<?php 
+								<?php
 							}
-				 			?>
-			 			</td>
+							?>
+						</td>
 						<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" valign="top" >
-							<?php 
-							if(!empty($userid) && count($admins) > 2) { 
+							<?php
+							if(!empty($userid) && count($admins) > 2) {
 								$msg = gettext('Are you sure you want to delete this user?');
 								if ($id == 0) {
 									$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
@@ -415,7 +420,7 @@ if (empty($alterrights)) {
 							?>
 							<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo addslashes($user['user']); ?>&amp;XSRFToken=<?php echo getXSRFToken('deleteadmin')?>'; }"
 								title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
-								src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
+								src="images/fail.png" style="border: 0px;" alt="Delete" /></a>
 							<?php
 							}
 							?>
@@ -448,12 +453,12 @@ if (empty($alterrights)) {
 					<?php
 					$msg = $_zp_authority->passwordNote();
 					if (!empty($msg)) {
-						echo $msg; 
+						echo $msg;
 					}
 					?>
 				</td>
 				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
-					<?php printAdminRightsTable($id, $background, $local_alterrights, $userobj->getRights()); ?>	
+					<?php printAdminRightsTable($id, $background, $local_alterrights, $userobj->getRights()); ?>
 				</td>
 			</tr>
 			<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
@@ -469,7 +474,7 @@ if (empty($alterrights)) {
 					<br />
 					<input type="text"  valign="top" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
 						value="<?php echo htmlspecialchars($userobj->getEmail(),ENT_QUOTES); ?>" />
-						
+
 				</td>
 				<td <?php if (!empty($background)) echo " style=\"$background\""; ?>>
 					<?php
@@ -516,9 +521,9 @@ if (empty($alterrights)) {
 						?>
 				</td>
 			</tr>
-			<?php echo $custom_row; ?>	
-			
-		
+			<?php echo $custom_row; ?>
+
+
 		</table> <!-- end individual admin table -->
 		</td>
 		</tr>
@@ -551,7 +556,7 @@ if (empty($alterrights)) {
 				alert(sprintf('<?php echo gettext('The user "%s" already exists.'); ?>',newuser));
 				return false;
 			}
-		} 
+		}
 		return true;
 	}
 	function setShow(v) {
