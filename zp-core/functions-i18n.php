@@ -309,6 +309,8 @@ function setupCurrentLocale($override=NULL, $plugindomain='', $type='') {
 			$locale = $override;
 		}
 		// gettext setup
+		@putenv("LANG=$locale");
+		@putenv("LANGUAGE=$locale");
 		$result = i18nSetLocale($locale);
 		if ($result) {
 			@putenv('LANG='.$result);
