@@ -166,9 +166,9 @@ function flowplayerPlaylist($option="playlist",$albumfolder="") {
 				items:"div.clips",
 				vertical:true,
 				next:"a.down",
-				prev:"a.up"
+				prev:"a.up",
+				mousewheel: true
 			});
-			$("div.playlist").mousewheel();
 			flowplayer("player","'.WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/flowplayer3/'.$swf.'", {
 			plugins: {
 				audio: {
