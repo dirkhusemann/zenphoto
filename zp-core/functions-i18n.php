@@ -309,13 +309,10 @@ function setupCurrentLocale($override=NULL, $plugindomain='', $type='') {
 			$locale = $override;
 		}
 		// gettext setup
-		@putenv("LANG=$locale");
-		@putenv("LANGUAGE=$locale");
+		@putenv("LANG=$locale");			// Windows ???
+		@putenv("LANGUAGE=$locale");	// Windows ???
 		$result = i18nSetLocale($locale);
-		if ($result) {
-			@putenv('LANG='.$result);
-			@putenv('LANGUAGE='.$result);
-		} else {// failed to set the locale
+		if (!$result) {
 			if (isset($_REQUEST['locale']) || is_null($override)) { // and it was chosen via locale
 				if (isset($_REQUEST['oldlocale'])) {
 					$locale = sanitize($_REQUEST['oldlocale'], 3);
