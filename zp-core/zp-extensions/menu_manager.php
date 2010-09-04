@@ -188,7 +188,7 @@ function getItemTitleAndURL($item) {
 			}
 			$array = array("title" => $title,"url" => $url,"name" => $item['link'],'protected'=>isProtectedNewsCategory($item['link']));
 			break;
-		case "custompage":	
+		case "custompage":
 			$themename = $gallery->getCurrentTheme();
 			$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
 			if (file_exists($root.$item['link'].'.php')) {
@@ -233,9 +233,9 @@ function getMenuVisibility() {
 /**
  * "invents" a menu item for the current page (for when one does not exist)
  * Adds the item to the current menuset and modifies its "parent" as needed
- * 
+ *
  * returns a contrived sort_order for the item.
- * 
+ *
  * @param string $menuset
  * @param string $visibility
  * return string
@@ -341,7 +341,7 @@ function getCurrentMenuItem($menuset) {
 	$currentpageURL = htmlentities(urldecode($_SERVER["REQUEST_URI"]), ENT_QUOTES, 'UTF-8');
 	$currentpageURL = str_replace('\\','/',$currentpageURL);
 	if (substr($currentpageURL,-1) == '/') $currentpageURL = substr($currentpageURL, 0, -1);
-	
+
 	if (isset($_GET['page'])) {	// must strip out page numbers, all "pages" are equal
 		if (getOption('mod_rewrite')) {
 			if (isset($_GET['album'])) {
@@ -423,7 +423,7 @@ function printMenumanagerPrevLink($text, $menuset='default', $title=NULL, $class
 		if (is_null($title)) $title = $itemarray['title'];
 		printLink($itemarray['url'], $text, $title, $class, $id);
 	} else {
-		echo '<span class="disabledlink">'.htmlspecialchars($text).'</span>';
+		echo '<span class="disabledlink">'.html_encode($text).'</span>';
 	}
 }
 
@@ -470,7 +470,7 @@ function printMenumanagerNextLink($text, $menuset='default', $title=NULL, $class
 		if (is_null($title)) $title = $itemarray['title'];
 		printLink($itemarray['url'], $text, $title, $class, $id);
 	} else {
-		echo '<span class="disabledlink">'.htmlspecialchars($text).'</span>';
+		echo '<span class="disabledlink">'.html_encode($text).'</span>';
 	}
 }
 
@@ -586,17 +586,17 @@ echo "<br />printMenuemanagerPageList($menuset, $class', $id, $firstlast, $navle
 
 /**
  * Prints the breadcrumbs of the current page
- * 
+ *
  * NOTE: this function is entirely dependedn on the menu tree you have
- * generated. It will work only with static menu trees. That is, if the page 
+ * generated. It will work only with static menu trees. That is, if the page
  * upon which you call this function is not present in your menu tree it will
  * not have any parent pages. Thus, menu items generated for instance by function
  * calls cannot have parents in the printMenumanagerBreadcrumb sense.
- * 
+ *
  * Likewise if you have non exclusive menu links to a page the parentage of that
  * page with respect to breadcrumbs may not reflect on the menu transitions that
  * the user used to arrive on the page.
- * 
+ *
  * @param string $menuset current menu set
  * @param string $before before text
  * @param string $between between text
@@ -626,7 +626,7 @@ function printMenumanagerBreadcrumb($menuset='default', $before='', $between=' |
 				if ($i > 0) echo $between;
 				$itemarray = getItemTitleAndURL($item);
 				if ($item['type']=='menulabel') {
-					echo htmlspecialchars($itemarray['title']);
+					echo html_encode($itemarray['title']);
 				} else {
 					printLink($itemarray['url'], $itemarray['title'], $itemarray['title']);
 				}
@@ -691,7 +691,7 @@ function submenuOf($link, $menuset='default') {
 function createMenuIfNotExists($menuitems, $menuset='default') {
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$result = query($sql);
-	if (mysql_result($result, 0)==0) {	// there was not an existing menu set
+	if (db_result($result, 0)==0) {	// there was not an existing menu set
 		require_once(dirname(__FILE__).'/menu_manager/menu_manager-admin-functions.php');
 		$success = 1;
 		$orders = array();
@@ -827,7 +827,7 @@ function createMenuIfNotExists($menuitems, $menuset='default') {
 									"','".zp_escape_string($menuset)."','$sort_order',$includeli)";
 				if (!query($sql, true)) {
 					$success = -2;
-					debugLog(sprintf(gettext('createMenuIfNotExists item %1$s MySQL query (%2$s) failed: %3$s.'),$key, $sql, mysql_error()));
+					debugLog(sprintf(gettext('createMenuIfNotExists item %1$s query (%2$s) failed: %3$s.'),$key, $sql, db_error()));
 				}
 			}
 		}
@@ -863,7 +863,6 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 	global $_zp_gallery_page, $_zp_current_zenpage_page, $_zp_current_category;
 	$itemcounter = '';
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
-	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($showsubs === true) $showsubs = 9999999999;
 
 	$sortorder = getCurrentMenuItem($menuset);
@@ -904,7 +903,7 @@ function printCustomMenu($menuset='default', $option='list',$css_id='',$css_clas
 								);
 		if ($process) {
 			if ($level > $indent) {
-				echo "\n".str_pad("\t",$indent,"\t")."<ul$css_class>\n";
+				echo "\n".str_pad("\t",$indent,"\t")."<ul class=\"$css_class menu_{$item['type']}\">\n";
 				$indent++;
 				$parents[$indent] = NULL;
 				$open[$indent] = 0;

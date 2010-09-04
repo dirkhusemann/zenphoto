@@ -1,83 +1,93 @@
 <?php
+/*
+ * This is the handler script for album zip downloads
+ */
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 2);
 require_once(dirname(__FILE__).'/functions.php');
 if(isset($_GET['album']) && is_dir(realpath(getAlbumFolder() . internalToFilesystem($_GET['album'])))){
 	createAlbumZip(sanitize_path($_GET['album']));
 }
 
-/**
- * Adds a subalbum to the zipfile being created
+/*
+ * adds an album into the zip file
+ * recurses into the albums subalbums
  *
- * @param string $base the directory of the base album
- * @param string $offset the from $base to the subalbum
- * @param string $subalbum the subalbum file name
- * @param object $zip zipfile object to store the albums
+ * @param object $album album object to add
+ * @param int $base the length of the base album name
+ * @param object $zip container zipfile object
  */
-function zipAddSubalbum($base, $offset, $subalbum, $zip) {
-	global $_zp_zip_list;
-	$leadin = str_replace(getAlbumFolder(), '', $base);
-	if (checkAlbumPassword($leadin.$offset.$subalbum, $hint)) {
-		$new_offset = $offset.$subalbum.'/';
-		$rp = $base.$new_offset;
-		$cwd = getcwd();
-		chdir($rp);
-		if ($dh = opendir($rp)) {
-			$_zp_zip_list[] = "./".$new_offset.'*.*';
-			while (($file = readdir($dh)) !== false) {
-				if($file != '.' && $file != '..'){
-					if (is_dir($rp.$file)) {
-						zipAddSubalbum($base, $new_offset, $file, $zip);
-					}
-				}
-			}
-			closedir($dh);
+function zipAddAlbum($album, $base, $zip) {
+	global $_zp_zip_list, $zip_gallery;
+	$albumbase = '.'.substr($album->name,$base).'/';
+	foreach ($album->sidecars as $suffix) {
+		$f = $albumbase.$album->name.'.'.$suffix;
+		if (file_exists($f)) {
+			$_zp_zip_list[] = $f;
 		}
-		chdir($cwd);
+	}
+	$images = $album->getImages();
+	foreach ($images as $imagename) {
+		$image = newImage($album, $imagename);
+		$_zp_zip_list[] = $albumbase.$image->filename;
+		$imagebase = stripSuffix($image->filename);
+		foreach ($image->sidecars as $suffix) {
+			$f = $albumbase.$imagebase.'.'.$suffix;
+			if (file_exists($f)) {
+				$_zp_zip_list[] = $f;
+			}
+		}
+	}
+	$albums = $album->getAlbums();
+	foreach ($albums as $albumname) {
+		$subalbum = new Album($zip_gallery,$albumname);
+		if ($subalbum->exists && !$album->isDynamic()) {
+			zipAddAlbum($subalbum, $base, $zip);
+		}
 	}
 }
 
 /**
  * Creates a zip file of the album
  *
- * @param string $album album folder
+ * @param string $albumname album folder
  */
-function createAlbumZip($album){
-	global $_zp_zip_list;
-	if (!checkAlbumPassword($album, $hint)) {
+function createAlbumZip($albumname){
+	global $_zp_zip_list, $zip_gallery;
+	if (!checkAlbumPassword($albumname, $hint)) {
 		pageError(403, gettext("Forbidden"));
 		exit();
 	}
-	$album = internalToFilesystem($album);
-	$rp = realpath(getAlbumFolder() . $album) . '/';
-	$p = $album . '/';
-	include_once('archive.php');
-	$dest = realpath(getAlbumFolder()) . '/' . $album . ".zip";
+	$zip_gallery = new Gallery();
+	$album = new Album($zip_gallery, $albumname);
+	if (!$album->exists) {
+		pageError(404, gettext('Album not found'));
+		exit();
+	}
 	$persist = getOption('persistent_archive');
+	$dest = $album->localpath.'.zip';
 	if (!$persist  || !file_exists($dest)) {
-		if (file_exists($dest)) unlink($dest);
+		include_once('archive.php');
+		$curdir = getcwd();
+		chdir($album->localpath);
+		$_zp_zip_list = array();
 		$z = new zip_file($dest);
-		$z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
-		if ($dh = opendir($rp)) {
-			$_zp_zip_list[] = '*.*';
-
-			while (($subalbum = readdir($dh)) !== false) {
-				if($subalbum != '.' && $subalbum != '..'){
-					if (is_dir($rp.$subalbum)) {
-						$offset = dirname($album);
-						if ($offset=='/' || $offset=='.') $offset = '';
-						zipAddSubalbum($rp, $offset, $subalbum, $z);
-					}
-				}
-			}
-			closedir($dh);
-		}
+		$z->set_options(array('basedir' => realpath($album->localpath.'/'), 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
+		zipAddAlbum($album, strlen($albumname), $z);
 		$z->add_files($_zp_zip_list);
 		$z->create_archive();
+		unset($_zp_zip_list);
+		chdir($curdir);
 	}
 	header('Content-Type: application/zip');
-	header('Content-Disposition: attachment; filename="' . urlencode($album) . '.zip"');
+	header('Content-Disposition: attachment; filename="' . pathurlencode($albumname) . '.zip"');
 	header("Content-Length: " . filesize($dest));
 	printLargeFileContents($dest);
-	if (!$persist) { unlink($dest); }
+	if (!$persist) {
+		unlink($dest);
+	}
+	unset($zip_gallery);
+	unset($album);
+	unset($persist);
+	unset($dest);
 }
 ?>

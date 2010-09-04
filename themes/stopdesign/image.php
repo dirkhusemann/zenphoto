@@ -4,7 +4,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
@@ -40,7 +40,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 </head>
 
 <body class="photosolo">
-		<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
+	<?php zp_apply_filter('theme_body_open'); ?>
+	<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
 
 		<div id="content" class="v">
 
@@ -83,7 +84,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 					$fullimage = getFullImageURL();
 					if (!empty($fullimage)) {
 						?>
-						<a href="<?php echo htmlspecialchars($fullimage);?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+						<a href="<?php echo html_encode($fullimage);?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
 						<?php
 					}
 					?>
@@ -119,7 +120,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 						}
 					 	?>
 						<div id="prev"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')">
+							<em style="background-image:url('<?php echo html_encode($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')">
 							<a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;">
 							<strong style="width:<?php echo round(($w+20)/2); ?>px; height:<?php echo $h+20; ?>px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a>
 							</em></span></span></div>
@@ -139,7 +140,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 							$cw = 67;
 						}?>
 						<div id="next"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')">
+						<em style="background-image:url('<?php echo html_encode($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')">
 						<a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;">
 						<strong style="width:<?php echo round(($w+20)/2); ?>px; height:<?php echo $h+20; ?>px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a>
 						</em></span></span></div>
@@ -150,8 +151,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 
 		<p id="path">
 			<?php printHomeLink('', ' > '); ?>
-			<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
-			<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?>
+			<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+			<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?>
 		</p>
 
 		<div id="footer">
@@ -162,6 +163,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT'); ?>
 				<?php printZenphotoLink(); ?>
 			</p>
 		</div>
-		<?php printAdminToolbox(); ?>
+		<?php
+		printAdminToolbox();
+		zp_apply_filter('theme_body_close');
+		?>
 </body>
 </html>

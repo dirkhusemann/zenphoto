@@ -34,19 +34,19 @@ class user_logout_options {
 }
 
 
-$__redirect = '';
+$__redirect = array();
 if (in_context(ZP_ALBUM)) {
-	$__redirect .= "&album=" . $_zp_current_album->name;
+	$__redirect['album'] = $_zp_current_album->name;
 }
 if (in_context(ZP_IMAGE)) {
-	 $__redirect .= "&image=" . $_zp_current_image->filename;
+	 $__redirect['image'] = $_zp_current_image->filename;
 }
-if (isset($_GET['p'])) { $__redirect .= "&p=" . sanitize($_GET['p']); }
-if (isset($_GET['searchfields'])) { $__redirect .= "&searchfields=" . sanitize($_GET['searchfields']); }
-if (isset($_GET['words'])) { $__redirect .= "&words=" . sanitize($_GET['words']); }
-if (isset($_GET['date'])) { $__redirect .= "&date=" . sanitize($_GET['date']); }
-if (isset($_GET['title'])) { $__redirect .= "&title=" . sanitize($_GET['title']); }
-if (isset($_GET['page'])) { $__redirect .= "&page=" . sanitize($_GET['page']); }
+if (isset($_GET['p'])) { $__redirect['p'] = sanitize($_GET['p']); }
+if (isset($_GET['searchfields'])) { $__redirect['searchfields'] = sanitize($_GET['searchfields']); }
+if (isset($_GET['words'])) { $__redirect['words'] = sanitize($_GET['words']); }
+if (isset($_GET['date'])) { $__redirect['date'] = sanitize($_GET['date']); }
+if (isset($_GET['title'])) { $__redirect['title'] = "title=" . sanitize($_GET['title']); }
+if (isset($_GET['page'])) { $__redirect['page'] = sanitize($_GET['page']); }
 
 if (in_context(ZP_INDEX)) {
 	$cookies = array();
@@ -72,8 +72,16 @@ if (in_context(ZP_INDEX)) {
 			$saved_auth = NULL;
 			$cookies = array();
 			$_zp_pre_authorization = array();
-			if (!empty($__redirect)) $__redirect = '?'.substr($__redirect, 1);
-			header("Location: " . FULLWEBPATH . '/index.php'. $__redirect);
+			if (empty($__redirect)) {
+				$params = '';
+			} else {
+				$params = '?';
+				foreach ($__redirect as $param=>$value) {
+					$params .= $param.'='.$value.'&';
+				}
+				$params = substr($params,0,-1);
+			}
+			header("Location: " . FULLWEBPATH . '/index.php'.$params);
 			exit();
 		}
 	}
@@ -103,7 +111,16 @@ function printUserLogin_out($before='', $after='', $showLoginForm=false, $logout
 			<?php
 		}
 	} else {
-		echo $before.'<a href="'.WEBPATH.'/index.php?userlog=0'.htmlspecialchars($__redirect).'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
+		if (empty($__redirect)) {
+			$params = '';
+		} else {
+			$encodedparams = array();
+				$params = '?';
+				foreach ($__redirect as $param=>$value) {
+					$params .= '&amp;'.$param.'='.urlencode($value);
+				}
+		}
+		echo $before.'<a href="'.WEBPATH.'/index.php?userlog=0'.$params.'" title="'.$logouttext.'" >'.$logouttext.'</a>'.$after;
 	}
 }
 

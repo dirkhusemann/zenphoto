@@ -1,10 +1,10 @@
-<?php if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');
+<?php if (!defined('WEBPATH')) die();
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareImageTitle();?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareGalleryTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
@@ -22,6 +22,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 </head>
 <body>
+<?php zp_apply_filter('theme_body_open'); ?>
 
 <div style="margin-top: 16px;"><!-- somehow the thickbox.css kills the top margin here that all other pages have... -->
 </div>
@@ -30,9 +31,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<h1><?php echo getGalleryTitle();?></h1>
 	<div class="imgnav">
 			<?php if (hasPrevImage()) { ?>
-			<div class="imgprevious"><a href="<?php echo htmlspecialchars(getPrevImageURL());?>" title="<?php echo gettext("Previous Image"); ?>">&laquo; <?php echo gettext("prev"); ?></a></div>
+			<div class="imgprevious"><a href="<?php echo html_encode(getPrevImageURL());?>" title="<?php echo gettext("Previous Image"); ?>">&laquo; <?php echo gettext("prev"); ?></a></div>
 			<?php } if (hasNextImage()) { ?>
-			<div class="imgnext"><a href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext("Next Image"); ?>"><?php echo gettext("next"); ?> &raquo;</a></div>
+			<div class="imgnext"><a href="<?php echo html_encode(getNextImageURL());?>" title="<?php echo gettext("Next Image"); ?>"><?php echo gettext("next"); ?> &raquo;</a></div>
 			<?php } ?>
 		</div>
 	</div>
@@ -70,7 +71,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		}
 		if (!empty($tburl)) {
 			?>
-			<a href="<?php echo htmlspecialchars($tburl); ?>"<?php echo $boxclass; ?> title="<?php echo getBareImageTitle();?>">
+			<a href="<?php echo html_encode($tburl); ?>"<?php echo $boxclass; ?> title="<?php echo getBareImageTitle();?>">
 			<?php
 		}
 		printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
@@ -123,6 +124,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	</div><!-- content -->
 
 </div><!-- main -->
-<?php printAdminToolbox(); ?>
+<?php
+printAdminToolbox();
+zp_apply_filter('theme_body_close');
+?>
 </body>
 </html>

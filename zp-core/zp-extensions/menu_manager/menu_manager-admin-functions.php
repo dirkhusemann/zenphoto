@@ -13,7 +13,7 @@ function updateItemsSortorder(&$reports) {
 		$parents = array('NULL');
 		foreach($orderarray as $order) {
 			$id = str_replace('id_','',substr(strstr($order,"="),1));
-			
+
 			// clear out unnecessary info from the submitted data string
 			$sortstring = strtr($order, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
 			$sortlevelex = explode("-",$sortstring);
@@ -55,15 +55,15 @@ function printItemsListTable($item, $flag) {
 			<img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width: 14px; height: 14px" alt="" />
 			<?php
 			$array = getItemTitleAndURL($item);
-			printItemEditLink($item); 
+			printItemEditLink($item);
 			?>
 		</td>
-		<td class="icons3"><?php echo htmlspecialchars($array['name']); ?></td>
+		<td class="icons3"><?php echo html_encode($array['name']); ?></td>
 		<td class="icons3"><em><?php echo $item['type']; ?></em></td>
 		<td  class="icons">
 			<?php
 			if ($array['protected']) {
-				?> 
+				?>
 				<img src="../../images/lock_2.png" alt="<?php echo gettext("The object of this menu is under password protection"); ?>" title="<?php echo gettext("The object of this menu is under password protection"); ?>" />
 				<?php
 			} else {
@@ -93,8 +93,8 @@ function printItemsListTable($item, $flag) {
 					if (!empty($array['url'])) {
 						?>
 						<a href="<?php echo $array['url']; ?>">
-						<img src="../../images/view.png" alt="<?php echo gettext('view'); ?>" title="<?php echo gettext('view'); ?>" /></a>	
-						<?php 
+						<img src="../../images/view.png" alt="<?php echo gettext('view'); ?>" title="<?php echo gettext('view'); ?>" /></a>
+						<?php
 						break;
 					}
 				case 'menulabel':
@@ -105,14 +105,14 @@ function printItemsListTable($item, $flag) {
 					<?php
 					break;
 			}
-			?>					
+			?>
 		</td>
 		<td class="icons">
-			<a href="javascript:deleteMenuItem('menu_tab.php?delete&amp;id=<?php echo $item['id']; ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('delete_menu')?>','<?php printf(gettext('Ok to delete %s? This cannot be undone.'),htmlspecialchars($array['name'])); ?>');" >
-			<img src="../../images/fail.png" alt="<?php echo gettext('delete'); ?>" title="<?php echo gettext('delete'); ?>" /></a>		
+			<a href="javascript:deleteMenuItem('menu_tab.php?delete&amp;id=<?php echo $item['id']; ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('delete_menu')?>','<?php printf(gettext('Ok to delete %s? This cannot be undone.'),html_encode($array['name'])); ?>');" >
+			<img src="../../images/fail.png" alt="<?php echo gettext('delete'); ?>" title="<?php echo gettext('delete'); ?>" /></a>
 		</td>
 		<td class="icons">
-		<input type="checkbox" name="ids[]" value="<?php echo htmlspecialchars($item['id'],ENT_QUOTES); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
+		<input type="checkbox" name="ids[]" value="<?php echo html_encode($item['id']); ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" />
 	</td>
 	</tr>
 </table>
@@ -191,8 +191,8 @@ function printItemEditLink($item) {
 	if (is_null($array['title'])) {
 		$title = '<span class="notebox">'.gettext('The target for this menu element no longer exists').'</span>';
 	} else {
-		$title = htmlspecialchars($array['title'],ENT_QUOTES);
-	}				
+		$title = html_encode($array['title']);
+	}
 	switch($item['type']) {
 		case "album":
 			$link = '<a href="../../admin-edit.php?page=edit&amp;album='.$item['link'].'">'.$title.'</a>';
@@ -205,8 +205,8 @@ function printItemEditLink($item) {
 			$link = '<a href="../zenpage/admin-categories.php?edit&amp;id='.$catid.'&amp;tab=categories">'.$title.'</a>';
 			break;
 		default:
-			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".htmlspecialchars(checkChosenMenuset(),ENT_QUOTES).'">'.$title.'</a>';
-			break;		
+			$link = '<a href="menu_tab_edit.php?edit&amp;id='.$item['id']."&amp;type=".$item['type']."&amp;menuset=".html_encode(checkChosenMenuset()).'">'.$title.'</a>';
+			break;
 	}
 	echo $link;
 }
@@ -256,7 +256,7 @@ function getMenuSetSelector($active) {
 		$menusets[$set['menuset']] = $set['menuset'];
 	}
 	natcasesort($menusets);
-	
+
 	if($active) {
 		$selector = '<select name="menuset" id="menuset" size="1" onchange="window.location=\'?menuset=\'+encodeURIComponent($(\'#menuset\').val())">'."\n";
 	} else {
@@ -268,7 +268,7 @@ function getMenuSetSelector($active) {
   	} else {
   		$selected = '';
   	}
- 		$selector .= '<option '.$selected.' value="'.htmlspecialchars($set,ENT_QUOTES).'">'.htmlspecialchars($set,ENT_QUOTES)."</option>\n";
+ 		$selector .= '<option '.$selected.' value="'.html_encode($set).'">'.html_encode($set)."</option>\n";
   }
   $selector .= "</select>\n";
   return $selector;
@@ -300,12 +300,12 @@ function addSubalbumMenus($menuset, $gallery, $id, $link, $sort) {
 	$title = $album->getTitle();
 	$sql = "INSERT INTO ".prefix('menu')." (`link`,`type`,`title`,`show`,`menuset`,`sort_order`, `parentid`) ".
 																				'VALUES ("'.zp_escape_string($link).'", "album", "'.zp_escape_string($album->name).'", "'.$show.'","'.zp_escape_string($menuset).'", "'.$sort.'",'.$id.')';
-	$result = query($sql, true);													
+	$result = query($sql, true);
 	if ($result) {
-		$id = mysql_insert_id();
+		$id = db_insert_id();
 	} else {
 		$result = query_single_row('SELECT `id` FROM'.prefix('menu').' WHERE `type`="album" AND `link`="'.zp_escape_string($link).'"');
-		$id = $result['id'];																		
+		$id = $result['id'];
 	}
 	if (!$album->isDynamic()) {
 		$albums = $album->getAlbums();
@@ -325,7 +325,7 @@ function addalbumsToDatabase($menuset, $base=NULL) {
 	if (is_null($base)) {
 		$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 		$result = query($sql);
-		$albumbase = mysql_result($result, 0);
+		$albumbase = db_result($result, 0);
 		$sortbase = '';
 	} else {
 		$albumbase = array_pop($base);
@@ -344,7 +344,7 @@ function addalbumsToDatabase($menuset, $base=NULL) {
 }
 
 /**
- * Adds Zenpage pages to the menu set 
+ * Adds Zenpage pages to the menu set
  * @param string $menuset current menu set
  * @param int $pagebase starting "sort order"
  * @return int
@@ -353,7 +353,7 @@ function addPagesToDatabase($menuset, $base=NULL) {
 	if (is_null($base)) {
 		$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 		$result = query($sql);
-		$pagebase = mysql_result($result, 0);
+		$pagebase = db_result($result, 0);
 		$sortbase = '';
 	} else {
 		$pagebase = array_pop($base);
@@ -376,24 +376,24 @@ function addPagesToDatabase($menuset, $base=NULL) {
 		$sql = "INSERT INTO ".prefix('menu')." (`link`, `type`, `show`,`menuset`,`sort_order`, `parentid`) ".
 				'VALUES ("'.zp_escape_string($link).'","zenpagepage",'.$show.',"'.zp_escape_string($menuset).'", "'.$order.'",'.$parent.')';
 		if (query($sql, true)) {
-			$id = mysql_insert_id();
+			$id = db_insert_id();
 		} else {
 			$rslt = query_single_row('SELECT `id` FROM'.prefix('menu').' WHERE `type`="zenpagepage" AND `link`="'.$link.'"');
-			$id = $rslt['id'];																		
+			$id = $rslt['id'];
 		}
 		$parents[$level] =$id;
 	}
 	return $result;
 }
 /**
- * Adds Zenpage news categories to the menu set 
+ * Adds Zenpage news categories to the menu set
  * @param string $menuset chosen menu set
  */
 function addCategoriesToDatabase($menuset, $base=NULL) {
 	if (is_null($base)) {
 		$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 		$result = query($sql);
-		$categorybase = mysql_result($result, 0);
+		$categorybase = db_result($result, 0);
 		$sortbase = '';
 	} else {
 		$categorybase = array_pop($base);
@@ -559,20 +559,20 @@ function addItem(&$reports) {
 			break;
 		default:
 			break;
-			
+
 	}
 	$sql = "SELECT COUNT(id) FROM ". prefix('menu') .' WHERE menuset="'.zp_escape_string($menuset).'"';
 	$rslt = query($sql);
-	$order = sprintf('%03u',mysql_result($rslt, 0));
+	$order = sprintf('%03u',db_result($rslt, 0));
 	$sql = "INSERT INTO ".prefix('menu')." (`title`,`link`,`type`,`show`,`menuset`,`sort_order`,`include_li`) ".
 						"VALUES ('".zp_escape_string($result['title']).
 						"', '".zp_escape_string($result['link']).
 						"','".zp_escape_string($result['type'])."','".$result['show'].
 						"','".zp_escape_string($menuset)."','".$order."',".$result['include_li'].")";
 	if (query($sql, true)) {
-		$reports[] =  "<p class='messagebox' id='fade-message'>".$successmsg."</p>"; 
+		$reports[] =  "<p class='messagebox' id='fade-message'>".$successmsg."</p>";
 		//echo "<pre>"; print_r($result); echo "</pre>";
-		$result['id'] =  mysql_insert_id();
+		$result['id'] =  db_insert_id();
 		return $result;
 	} else {
 		if (empty($result['link'])) {
@@ -604,10 +604,10 @@ function updateItem(&$reports) {
 	if(query("UPDATE ".prefix('menu')." SET title = '".	zp_escape_string($result['title']).
 						"',link='".zp_escape_string($result['link']).
 						"',type='".zp_escape_string($result['type'])."', `show`= '".zp_escape_string($result['show']).
-						"',menuset='".zp_escape_string($menuset).						
-						"',include_li='".$result['include_li'].						
+						"',menuset='".zp_escape_string($menuset).
+						"',include_li='".$result['include_li'].
 	"' WHERE `id`=".zp_escape_string($result['id']))) {
-		
+
 		if(isset($_POST['title']) && empty($result['title'])) {
 			$reports[] = "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your menu item a <strong>title</strong>!")."</p>";
 		} else if(isset($_POST['link']) && empty($result['link'])) {
@@ -633,7 +633,7 @@ function deleteItem(&$reports) {
 
 /**
  * Prints all albums of the Zenphoto gallery as a partial drop down menu (<option></option> parts).
- * 
+ *
  * @return string
  */
 
@@ -652,7 +652,7 @@ function printAlbumsSelector() {
 		for($count = 1; $count <= $level; $count++) {
 			$arrow .= "&raquo; ";
 		}
-		echo "<option value='".htmlspecialchars($albumobj->name)."'>";
+		echo "<option value='".html_encode($albumobj->name)."'>";
 		echo $arrow.$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj)."</option>";
 	}
 	?>
@@ -662,7 +662,7 @@ function printAlbumsSelector() {
 
 /**
  	* Prints all available pages in Zenpage
- 	* 
+ 	*
   * @return string
  	*/
 function printZenpagePagesSelector() {
@@ -678,7 +678,7 @@ function printZenpagePagesSelector() {
 		for($count = 1; $count <= $level; $count++) {
 			$arrow .= "&raquo; ";
 		}
-		echo "<option value='".htmlspecialchars($pageobj->getTitlelink())."'>";
+		echo "<option value='".html_encode($pageobj->getTitlelink())."'>";
 		echo $arrow.$pageobj->getTitle().unpublishedZenphotoItemCheck($pageobj)."</option>";
 	}
 	?>
@@ -699,7 +699,7 @@ function printZenpageNewsCategorySelector() {
 <?php
 	$cats = getAllCategories();
 	foreach($cats  as $cat) {
-		echo "<option value='".htmlspecialchars($cat['cat_link'])."'>";
+		echo "<option value='".html_encode($cat['cat_link'])."'>";
 		echo get_language_string($cat['cat_name'])."</option>";
 	}
 ?>

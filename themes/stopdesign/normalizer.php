@@ -1,14 +1,13 @@
 <?php
-		$firstPageImages = normalizeColumns(3, 6);
+		global $_firstPageImages;
 		$np = getOption('images_per_page');
-		if ($firstPageImages > 0)  {
-			$firstPageImages = $firstPageImages - 1;
+		if ($_firstPageImages > 0)  {
+			$_firstPageImages = $_firstPageImages - 1;
 			$myimagepagestart = 1;
 		} else {
-			$firstPageImages = $np - 1;
+			$_firstPageImages = $np - 1;
 			$myimagepagestart = 0;
 		}
-		$_zp_conf_vars['images_first_page'] = $firstPageImages;
 		$myimagepage = $myimagepagestart + getCurrentPage() - getTotalPages(true);
 		if ($myimagepage > 1 ) {
 			$link_slides = 2;
@@ -16,6 +15,6 @@
 			$link_slides = 1;
 		}
 		setOption('images_per_page', $np - $link_slides, false);
-		$_zp_conf_vars['images_first_page'] = NULL;
+		$_firstPageImages = NULL;
 		setOption('custom_index_page', 'gallery', false);
 ?>

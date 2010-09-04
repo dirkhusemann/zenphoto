@@ -18,9 +18,9 @@ define('MAX_SIZE', 3000);
  * to the given error message image and exits; designed for a production gallery.
  * @param $errormessage string the error message to print if $_GET['debug'] is set.
  * @param $errorimg string the filename of the error image to display for production. Defaults
- *   to 'err-imagegeneral.gif'. Images should be located in /zen/images .
+ *   to 'err-imagegeneral.png'. Images should be located in /zen/images .
  */
-function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
+function imageError($errormessage, $errorimg='err-imagegeneral.png') {
 	global $newfilename, $album, $image;
 	$debug = isset($_GET['debug']);
 	if ($debug) {
@@ -145,7 +145,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=".(is_null($cx)?'NULL':$cx).", \$cy=".(is_null($cy)?'NULL':$cy).", \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");
 	// Check for the source image.
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
-		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
+		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.png');
 	}
 	$rotate = false;
 	if (zp_imageCanRotate() && getOption('auto_rotate'))  {
@@ -189,7 +189,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$size = $width = false;
 		} else {
 			// There's a problem up there somewhere...
-			imageError(gettext("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>"), 'err-imagegeneral.gif');
+			imageError(gettext("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>"), 'err-imagegeneral.png');
 		}
 
 		$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);

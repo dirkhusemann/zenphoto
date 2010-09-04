@@ -103,7 +103,7 @@ function printAdminHeader() {
 		// ]]> -->
 	</script>
 	<?php
-	zp_apply_filter('output_started','back-end');
+	zp_apply_filter('admin_head',NULL);
 }
 
 function printSortableHead() {
@@ -169,7 +169,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	}
 	while (count($admins)>0) {
 		$user = array_shift($admins);
-		if ($user['valid'] && $user['email']) {
+		if ($user['email']) {
 			$star = '*';
 		}
 	}
@@ -211,7 +211,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		<h2><?php echo gettext("Login"); ?>&nbsp;</h2>
 		</td>
 		<td><input class="textfield" name="user" type="text" size="20"
-			value="<?php echo htmlspecialchars($requestor,ENT_QUOTES); ?>" /></td>
+			value="<?php echo html_encode($requestor,ENT_QUOTES); ?>" /></td>
 	</tr>
 	<tr>
 		<td align="left">
@@ -966,7 +966,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	}
  ?>
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value="<?php echo $album->name; ?>" />
-	<input type="hidden" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
+	<input type="hidden" name="tagsort" value="<?php echo html_encode($tagsort); ?>" />
 	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="password_enabled<?php echo $suffix; ?>" value="0" />
 	<p class="buttons">
 		<?php
@@ -1026,7 +1026,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 						<?php	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor'); ?>
 						</td>
 					</tr>
-					<tr class="password<?php echo $suffix; ?>extrashow">
+					<tr class="password<?php echo $suffix; ?>extrashow" <?php if (getOption('gallery_security') == 'private') echo 'style="display:none"'; ?> >
 						<td align="left" valign="top">
 							<p>
 								<a href="javascript:toggle_passwords('<?php echo $suffix; ?>',true);">
@@ -1182,7 +1182,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 								<td colspan="2">
 									<span id="album_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customalbumsort<? echo $suffix; ?>" class="customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
+									<input id="customalbumsort<? echo $suffix; ?>" class="customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo html_encode($cvt); ?>"></input>
 									</span>
 
 									<script type="text/javascript">
@@ -1246,7 +1246,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 									<td align="left" colspan="2">
 									<span id="image_custom_div<? echo $suffix; ?>" class="customText" style="display:<?php echo $dsp; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customimagesort<? echo $suffix; ?>" class="customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
+									<input id="customimagesort<? echo $suffix; ?>" class="customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo html_encode($cvt); ?>"></input>
 									</span>
 
 									<script type="text/javascript">
@@ -1471,13 +1471,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 							}
 							?>
 				<div id="first">
-					<textarea name="<?php echo $prefix; ?>codeblock1" id="codeblock1<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES); ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock1" id="codeblock1<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES,getOption('charset')); ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="<?php echo $prefix; ?>codeblock2" id="codeblock2<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES); ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock2" id="codeblock2<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES,getOption('charset')); ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="<?php echo $prefix; ?>codeblock3" id="codeblock3<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES); ?></textarea>
+					<textarea name="<?php echo $prefix; ?>codeblock3" id="codeblock3<?php echo $suffix; ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES,getOption('charset')); ?></textarea>
 				</div>
 			</div>
 		</td>
@@ -1642,7 +1642,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 				<td>
 					<table class="noinput">
 						<tr>
-							<td><?php echo htmlspecialchars(urldecode($album->getSearchParams(true)),ENT_QUOTES); ?></td>
+							<td><?php echo html_encode(urldecode($album->getSearchParams(true))); ?></td>
 						</tr>
 					</table>
 				</td>
@@ -1697,7 +1697,7 @@ function printAlbumButtons($album) {
 		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
 			<?php XSRFToken('clear_cache');?>
 			<input type="hidden" name="action" value="clear_cache" />
-			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
+			<input type="hidden" name="album" value="<?php echo html_encode($album->name); ?>" />
 			<div class="buttons">
 			<button type="submit" class="tooltip" id="edit_hitcounter_album" title="<?php echo gettext("Clears the album's cached images.");?>">
 				<img src="images/edit-delete.png" style="border: 0px;" alt="delete" />
@@ -1711,8 +1711,8 @@ function printAlbumButtons($album) {
 		?>
 			<form name="cache_images" action="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER; ?>/cache_images.php" method="post">
 				<?php XSRFToken('cache_images');?>
-				<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
-				<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
+				<input type="hidden" name="album" value="<?php echo html_encode($album->name); ?>" />
+				<input type="hidden" name="return" value="<?php echo html_encode($album->name); ?>" />
 				<div class="buttons">
 				<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>">
 				<img src="images/cache1.png" style="border: 0px;" alt="cache" />
@@ -1726,7 +1726,7 @@ function printAlbumButtons($album) {
 			<?php XSRFToken('hitcounters');?>
 			<input type="hidden" name="action" value="reset_hitcounters" />
 			<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>" />
-			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name); ?>" />
+			<input type="hidden" name="album" value="<?php echo html_encode($album->name); ?>" />
 			<div class="buttons">
 			<button type="submit" class="tooltip" id="edit_hitcounter_all" title="<?php echo gettext("Resets all hitcounters in the album."); ?>">
 			<img src="images/reset1.png" style="border: 0px;" alt="reset" /> <?php echo gettext("Reset hitcounters"); ?>
@@ -1739,8 +1739,8 @@ function printAlbumButtons($album) {
 	?>
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album=<?php echo urlencode($album->name); ?>" method="post">
 			<?php XSRFToken('refresh');?>
-			<input type="hidden" name="album" value="<?php echo htmlspecialchars($album->name);?>" />
-			<input type="hidden" name="return" value="<?php echo htmlspecialchars($album->name); ?>" />
+			<input type="hidden" name="album" value="<?php echo html_encode($album->name);?>" />
+			<input type="hidden" name="return" value="<?php echo html_encode($album->name); ?>" />
 			<div class="buttons">
 			<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>">
 			<img src="images/refresh.png" style="border: 0px;" alt="refresh" /> <?php echo gettext("Refresh Metadata"); ?></button>
@@ -1776,7 +1776,7 @@ function printAlbumEditRow($album) {
 		}
 		?>
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>">
-		<img src="<?php echo htmlspecialchars($thumb); ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" alt="album thumb" /></a>
+		<img src="<?php echo html_encode($thumb); ?>" width="<?php echo $w; ?>" height="<?php echo $h; ?>" alt="album thumb" /></a>
 		</td>
 	<td class="albumtitle">
 		<a href="?page=edit&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Edit this album: %s'), $album->name); ?>"><?php echo $album->getTitle(); ?></a>
@@ -2744,7 +2744,7 @@ function printAdminRightsTable($id, $background, $alterrights, $rights) {
 				?>
 					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 						<span style="white-space:nowrap">
-							<label><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $rightselement.'-'.$id; ?>"
+							<label  title="<?php echo html_encode(get_language_string($right['hint'])); ?>" ><input type="checkbox" name="<?php echo $id.'-'.$rightselement; ?>" id="<?php echo $rightselement.'-'.$id; ?>"
 									value="<?php echo $right['value']; ?>"<?php if ($rights & $right['value']) echo ' checked="checked"';
 									echo $alterrights; ?> /> <?php echo $name; ?></label>
 						</span>
@@ -2834,13 +2834,13 @@ function populateManagedObjectsList($type,$id,$rights=false) {
  * Creates the managed album table for Admin
  *
  * @param string $type the kind of list
- * @param array $albumlist list of admin
+ * @param array $objlist list of objects
  * @param string $alterrights are the items changable
  * @param int $adminid ID of the admin
  * @param int $prefix the admin row
  * @param bit $rights the privileges  of the user
  */
-function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, $rights) {
+function printManagedObjects($type,$objlist, $alterrights, $adminid, $prefix, $rights) {
 	$ledgend = '';
 	switch ($type) {
 		case 'albums':
@@ -2861,20 +2861,20 @@ function printManagedObjects($type,$albumlist, $alterrights, $adminid, $prefix, 
 					}
 				}
 			}
-			$rest = array_diff($albumlist, $cv);
+			$rest = array_diff($objlist, $cv);
 			$text = gettext("Managed albums:");
 			$prefix = 'managed_albums_'.$prefix.'_';
 			break;
 		case 'news':
 			$cv = populateManagedObjectsList('news',$adminid);
-			$rest = array_diff($albumlist, $cv);
+			$rest = array_diff($objlist, $cv);
 			$text = gettext("Managed news categories:");
 			$prefix = 'managed_news_'.$prefix.'_';
 			$extra = array();
 			break;
 		case 'pages':
 			$cv = populateManagedObjectsList('pages',$adminid);
-			$rest = array_diff($albumlist, $cv);
+			$rest = array_diff($objlist, $cv);
 			$text = gettext("Managed pages:");
 			$prefix = 'managed_pages_'.$prefix.'_';
 			$extra = array();
@@ -3462,7 +3462,7 @@ function admin_securityChecks($rights, $return) {
 
 	if (!is_null(getOption('admin_reset_date'))) {
 		if (!zp_loggedin($rights)) { // prevent nefarious access to this page.
-			if (!zp_apply_filter('admin_allow_access',false, $return)) {
+			if (!zp_apply_filter('admin_allow_access',false, urldecode($return))) {
 				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . $return);
 				exit();
 			}

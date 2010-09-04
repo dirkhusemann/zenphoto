@@ -362,7 +362,7 @@ if (isset($_GET['themelist'])) {
 	setOption('Zenphoto_theme_list',$list);
 	$gallery = new Gallery();
 	$themes = array_diff(array_keys($gallery->getThemes()), unserialize($list));
-	if (count($themes)>0) setOption('zp_plugin_deprecated-functions',1);
+	if (count($themes)>0) setOption('zp_plugin_deprecated-functions',9);
 }
 setOptionDefault('zp_plugin_zenphoto_news', (version_compare(PHP_VERSION, '5.0.0') == 1)?5:0);
 setOptionDefault('zp_plugin_hitcounter',1);
@@ -377,5 +377,7 @@ query('DELETE FROM '.prefix('options').' WHERE `name`="search_space_is_OR"',true
 if (!file_exists(SERVERPATH.'/'.WEBPATH.'/'.ZENFOLDER.'/favicon.ico')) {
 	@copy(SERVERPATH.'/'.ZENFOLDER.'/images/favicon.ico',SERVERPATH.'/favicon.ico');
 }
+
+setOptionDefault('gallery_security', 'public');
 
 ?>

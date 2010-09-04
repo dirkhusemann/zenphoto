@@ -16,7 +16,10 @@ class ThemeOptions {
 		setThemeOptionDefault('zenpage_homepage', 'none');
 		setThemeOptionDefault('zenpage_contactpage', true);
 		setThemeOptionDefault('zenpage_custommenu', false);
-
+		setThemeOptionDefault('albums_per_row', 2);
+		setThemeOptionDefault('images_per_row', 5);
+		setThemeOptionDefault('thumb_transition', 1);
+		
 		if (function_exists('createMenuIfNotExists')) {
 			$menuitems = array(
 			array('type'=>'menulabel','title'=>gettext('News Articles'),'link'=>'','show'=>1,'nesting'=>0),

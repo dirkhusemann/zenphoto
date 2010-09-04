@@ -55,11 +55,16 @@ if (getOption('rating_image_individual_control')) {
 	zp_register_filter('save_image_utilities_data', 'optionVoteStatusSave');
 }
 
-$ME = substr(basename(__FILE__),0,-4);
 // register the scripts needed
 if (in_context(ZP_INDEX)) {
-	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.MetaData.js"></script>');
-	addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME.'/jquery.rating.js"></script>');
+	zp_register_filter('theme_head','ratingJS');
+}
+function ratingJS() {
+	$ME = substr(basename(__FILE__),0,-4);
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME; ?>/jquery.MetaData.js"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.$ME; ?>/jquery.rating.js"></script>
+	<?php
 	$theme = getCurrentTheme();
 	$css = SERVERPATH.'/'.THEMEFOLDER. '/'.internalToFilesystem($theme).'/jquery.rating.css';
 	if (file_exists($css)) {
@@ -67,17 +72,17 @@ if (in_context(ZP_INDEX)) {
 	} else {
 		$css = WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/'.substr(basename(__FILE__),0,-4).'/jquery.rating.css';
 	}
-	addPluginScript('<link rel="stylesheet" href="'.$css.'" type="text/css" />');
-	addPluginScript('<script type="text/javascript">'.
-										"// <!-- <![CDATA[
-										$.fn.rating.options = { 
-											cancel: '".gettext('retract')."'   // advisory title for the 'cancel' link
-									 	}; 
-									 	// ]]> -->
-						 			</script>");
+	?>
+	<link rel="stylesheet" href="<?php echo pathurlencode($css); ?>" type="text/css" />
+	<script type="text/javascript">
+		// <!-- <![CDATA[
+		$.fn.rating.options = { cancel: '<?php echo gettext('retract'); ?>'	}; 
+		// ]]> -->
+	</script>
+	<?php
 }
 
-require_once($ME.'/functions-rating.php');
+require_once(substr(basename(__FILE__),0,-4).'/functions-rating.php');
 
 /**
  * Option handler class

@@ -16,15 +16,15 @@
 				<tr valign="top" align="left" id="row-name">
 					<th><?php echo gettext('Name:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['name']) {
 							?>
-							<input tabindex="1" id="name" name="name" class="text" type="hidden" value="<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>" />
-							<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>
+							<input tabindex="1" id="name" name="name" class="text" type="hidden" value="<?php echo html_encode($stored['name']);?>" />
+							<?php echo html_encode($stored['name']);?>
 							<?php
 						} else {
 							?>
-							<input tabindex="1" id="name" name="name" class="text" value="<?php echo htmlspecialchars($stored['name'],ENT_QUOTES);?>" />
+							<input tabindex="1" id="name" name="name" class="text" value="<?php echo html_encode($stored['name']);?>" />
 							<?php
 						}
 						?>
@@ -36,15 +36,15 @@
 				<tr valign="top" align="left" id="row-email">
 					<th><?php echo gettext('Email:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['email']) {
 							?>
-							<input tabindex="2" id="email" name="email" class="text" type="hidden" value="<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>" />
-							<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>
+							<input tabindex="2" id="email" name="email" class="text" type="hidden" value="<?php echo html_encode($stored['email']);?>" />
+							<?php echo html_encode($stored['email']);?>
 							<?php
 						} else {
 							?>
-							<input tabindex="2" id="email" name="email" class="text" value="<?php echo htmlspecialchars($stored['email'],ENT_QUOTES);?>" />
+							<input tabindex="2" id="email" name="email" class="text" value="<?php echo html_encode($stored['email']);?>" />
 							<?php
 						}
 						?>
@@ -54,21 +54,21 @@
 				<tr valign="top" align="left">
 					<th><?php echo gettext('URL:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['website']) {
 							?>
-							<input tabindex="3" name="website" id="website" class="text" type="hidden" value="<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>" />
-							<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>
+							<input tabindex="3" name="website" id="website" class="text" type="hidden" value="<?php echo html_encode($stored['website']);?>" />
+							<?php echo html_encode($stored['website']);?>
 							<?php
 						} else {
 							?>
-							<input tabindex="3" name="website" id="website" class="text" value="<?php echo htmlspecialchars($stored['website'],ENT_QUOTES);?>" />
+							<input tabindex="3" name="website" id="website" class="text" value="<?php echo html_encode($stored['website']);?>" />
 							<?php
 						}
 						?>
 					</td>
 				</tr>
-				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label>" .gettext('Enter CAPTCHA').' ', ":</label></th><td>", "</td></tr>\n", 8); ?>
+				<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th>" .gettext('Enter CAPTCHA').' ', ":</th><td>", "</td></tr>\n", 8); ?>
 				<tr valign="top" align="left">
 					<th><?php echo gettext('Private comment:'); ?></th>
 					<td>
@@ -83,15 +83,15 @@
 				<tr>
 					<th><?php echo gettext('street:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['street']) {
 							?>
-							<input name="0-comment_form_street" id="comment_form_street" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['street'],ENT_QUOTES); ?>" />
-							<?php echo htmlspecialchars($address['street'],ENT_QUOTES); ?>
+							<input name="0-comment_form_street" id="comment_form_street" class="text" type="hidden" size="22" value="<?php echo html_encode($address['street']); ?>" />
+							<?php echo html_encode($address['street']); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_street" id="comment_form_street" class="text" size="22" value="<?php echo htmlspecialchars($address['street'],ENT_QUOTES); ?>" />
+							<input name="0-comment_form_street" id="comment_form_street" class="text" size="22" value="<?php echo html_encode($address['street']); ?>" />
 							<?php
 						}
 						?>
@@ -100,15 +100,15 @@
 				<tr>
 					<th><?php echo gettext('city:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['city']) {
 							?>
-							<input name="0-comment_form_city" id="comment_form_city" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['city'],ENT_QUOTES); ?>" />
-							<?php echo htmlspecialchars($address['city'],ENT_QUOTES); ?>
+							<input name="0-comment_form_city" id="comment_form_city" class="text" type="hidden" size="22" value="<?php echo html_encode($address['city']); ?>" />
+							<?php echo html_encode($address['city']); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_city" id="comment_form_city" class="text" size="22" value="<?php echo htmlspecialchars($address['city'],ENT_QUOTES); ?>" />
+							<input name="0-comment_form_city" id="comment_form_city" class="text" size="22" value="<?php echo html_encode($address['city']); ?>" />
 							<?php
 						}
 						?>
@@ -117,15 +117,15 @@
 				<tr>
 					<th><?php echo gettext('state:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['state']) {
 							?>
-							<input name="0-comment_form_state" id="comment_form_state" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['state'],ENT_QUOTES); ?>" />
-							<?php echo htmlspecialchars($address['state'],ENT_QUOTES); ?>
+							<input name="0-comment_form_state" id="comment_form_state" class="text" type="hidden" size="22" value="<?php echo html_encode($address['state']); ?>" />
+							<?php echo html_encode($address['state']); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_state" id="comment_form_state" class="text" size="22" value="<?php echo htmlspecialchars($address['state'],ENT_QUOTES); ?>" />
+							<input name="0-comment_form_state" id="comment_form_state" class="text" size="22" value="<?php echo html_encode($address['state']); ?>" />
 							<?php
 						}
 						?>
@@ -134,15 +134,15 @@
 				<tr>
 					<th><?php echo gettext('country:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['country']) {
 							?>
-							<input name="comment_form_country" id="comment_form_country" class="text" type="hidden" size="22" value="<?php echo htmlspecialchars($address['country'],ENT_QUOTES); ?>" />
-							<?php echo htmlspecialchars($address['country'],ENT_QUOTES); ?>
+							<input name="comment_form_country" id="comment_form_country" class="text" type="hidden" size="22" value="<?php echo html_encode($address['country']); ?>" />
+							<?php echo html_encode($address['country']); ?>
 							<?php
 						} else {
 							?>
-							<input name="comment_form_country" id="comment_form_country" class="text" size="22" value="<?php echo htmlspecialchars($address['country'],ENT_QUOTES); ?>" />
+							<input name="comment_form_country" id="comment_form_country" class="text" size="22" value="<?php echo html_encode($address['country']); ?>" />
 							<?php
 						}
 						?>
@@ -151,15 +151,15 @@
 				<tr>
 					<th><?php echo gettext('postal code:'); ?></th>
 					<td>
-						<?php 
+						<?php
 						if ($disabled['postal']) {
 							?>
-							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" type="hidden" value="<?php echo htmlspecialchars($address['postal'],ENT_QUOTES); ?>" />
-							<?php echo htmlspecialchars($address['postal'],ENT_QUOTES); ?>
+							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" type="hidden" value="<?php echo html_encode($address['postal']); ?>" />
+							<?php echo html_encode($address['postal']); ?>
 							<?php
 						} else {
 							?>
-							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" value="<?php echo htmlspecialchars($address['postal'],ENT_QUOTES); ?>" />
+							<input name="0-comment_form_postal" id="comment_form_postal" class="text" size="22" value="<?php echo html_encode($address['postal']); ?>" />
 							<?php
 						}
 						?>

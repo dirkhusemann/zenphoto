@@ -2,12 +2,12 @@
 /**
  * Contact form
  *
- * Prints an e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL. 
- * Name, e-mail address, subject and message are required fields by default. 
- * You need to enter a custom mail address that should be used for the messages. 
- * 
+ * Prints an e-mail contact form that uses Zenphoto's internal validation functions for e-mail and URL.
+ * Name, e-mail address, subject and message are required fields by default.
+ * You need to enter a custom mail address that should be used for the messages.
+ *
  * Supports Zenphoto's CAPTCHA and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.
- * 
+ *
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
@@ -16,7 +16,7 @@
 
 $plugin_description = gettext("Prints an e-mail contact so that visitors may e-mail the site administrator.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---contact_form.php.html";
 $option_interface = new contactformOptions();
 
@@ -25,7 +25,7 @@ $option_interface = new contactformOptions();
  *
  */
 class contactformOptions {
-	
+
 	function contactformOptions() {
 		global $_zp_authority;
 		gettext($str = '<p>Fields with <strong>*</strong> are required. HTML or any other code is not allowed. A copy of your e-mail will automatically be sent to the address you provided for your own records.</p>');
@@ -155,7 +155,7 @@ function printContactForm() {
 		$mailcontent['phone'] = getField('phone');
 		$mailcontent['subject'] = getField('subject');
 		$mailcontent['message'] = getField('message',1);
-		
+
 		// if you want other required fields or less add/modify their checks here
 		if (getOption('contactform_title') == "required" && empty($mailcontent['title'])) { $error[1] = gettext("a <strong>title</strong>"); }
 		if (getOption('contactform_name') == "required" && empty($mailcontent['name'])) { $error[2] = gettext("a <strong>name</strong>"); }
@@ -176,15 +176,15 @@ function printContactForm() {
 		if (getOption("contactform_phone") == "required" && empty($mailcontent['phone'])) { $error[9] = gettext("a <strong>phone number</strong>"); }
 		if (getOption("contactform_subject") == "required" && empty($mailcontent['subject'])) { $error[10] = gettext("a <strong>subject</strong>"); }
 		if (getOption("contactform_message") == "required" && empty($mailcontent['message'])) { $error[11] = gettext("a <strong>message</strong>"); }
-				
+
 		// CAPTCHA start
 		if(getOption("contactform_captcha")) {
 			$code_ok = trim($_POST['code_h']);
 			$code = trim($_POST['code']);
 			if (!$_zp_captcha->checkCaptcha($code, $code_ok)) { $error[5] = gettext("<strong>the correct CAPTCHA verification code</strong>"); } // no ticket
-		} 
+		}
 		// CAPTCHA end
-		
+
 		// If required fields are empty or not valide print note
 		if(count($error) != 0) {
 			echo gettext("<p style='color:red'>Please enter ");
@@ -216,7 +216,7 @@ function printContactForm() {
 			if(!empty($mailcontent['phone'])) { $message .= $mailcontent['phone']."\n"; }
 			if(!empty($mailcontent['website'])) { $message .= $mailcontent['website']."\n"; }
 			$message .= "\n\n";
-			
+
 			if (getOption('contactform_confirm')) {
 				echo get_language_string(getOption("contactform_confirmtext"));
 				?>
@@ -227,10 +227,10 @@ function printContactForm() {
 					?>
 					<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
 						<input type="hidden" id="confirm" name="confirm" value="confirm" />
-						<input type="hidden" id="name" name="name"	value="<?php echo htmlspecialchars($name,ENT_QUOTES); ?>" />
-						<input type="hidden" id="subject" name="subject"	value="<?php echo htmlspecialchars($subject,ENT_QUOTES); ?>" />
-						<input type="hidden" id="message"	name="message" value="<?php echo htmlspecialchars($message,ENT_QUOTES); ?>" />
-						<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo htmlspecialchars($mailaddress,ENT_QUOTES); ?>" />
+						<input type="hidden" id="name" name="name"	value="<?php echo html_encode($name); ?>" />
+						<input type="hidden" id="subject" name="subject"	value="<?php echo html_encode($subject); ?>" />
+						<input type="hidden" id="message"	name="message" value="<?php echo html_encode($message); ?>" />
+						<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo html_encode($mailaddress); ?>" />
 						<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
 					</form>
 					<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
@@ -301,7 +301,7 @@ function showOrNotShowField($option) {
 }
 
 /**
- * Helper function that checks if the field is a required one. If it returns '*" to be appended to the field name as an indicator. 
+ * Helper function that checks if the field is a required one. If it returns '*" to be appended to the field name as an indicator.
  * Not for the CAPTCHA field that is always required if shown...
  *
  * @param string $option the option value

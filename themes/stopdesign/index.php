@@ -6,7 +6,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
@@ -14,11 +14,12 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	printRSSHeaderLink('Gallery','Gallery RSS');
 	setOption('thumb_crop_width', 85, false);
 	setOption('thumb_crop_height', 85, false);
-	$archivepageURL = htmlspecialchars(getGalleryIndexURL());
+	$archivepageURL = html_encode(getGalleryIndexURL());
 	?>
 </head>
 
 <body class="index">
+	<?php zp_apply_filter('theme_body_open'); ?>
 	<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(''); } ?>
 
 	<div id="content">
@@ -34,8 +35,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					while (next_album() and $counter < 6):
 					?>
 						<li class="gal">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"),getAnnotatedAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
+							<h3><a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"),getAnnotatedAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
+							<a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
 							<p>
 					<?php
 						$anumber = getNumAlbums();
@@ -101,7 +102,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 									if (is_valid_image($image->filename)) {
 										if ($c++ < 6) {
 											echo "<li><table><tr><td>\n";
-											$imageURL = htmlspecialchars(getURL($image));
+											$imageURL = html_encode(getURL($image));
 											if ($image->getWidth() >= $image->getHeight()) {
 												$iw = 44;
 												$ih = NULL;
@@ -115,7 +116,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 											}
 											echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
 											html_encode($image->getTitle()) . '"><img src="' .
-											htmlspecialchars($image->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) .
+											html_encode($image->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) .
 																		'" alt="' . html_encode($image->getTitle()) . "\"/></a>\n";
 											echo "</td></tr></table></li>\n";
 										}
@@ -129,7 +130,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 								echo "<li><table><tr><td>\n";
 								$randomImage = getRandomImages();
 								if (is_object($randomImage)) {
-									$randomImageURL = htmlspecialchars(getURL($randomImage));
+									$randomImageURL = html_encode(getURL($randomImage));
 									if ($randomImage->getWidth() >= $randomImage->getHeight()) {
 										$iw = 44;
 										$ih = NULL;
@@ -142,7 +143,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 										$cw = 33;
 									}
 									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . html_encode($randomImage->getTitle()) . '">' .
- 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) .
+ 												'<img src="' . html_encode($randomImage->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) .
 												'" alt="'.html_encode($randomImage->getTitle()).'"';
 									echo "/></a></td></tr></table></li>\n";
 								}
@@ -208,6 +209,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 	<?php
 	printAdminToolbox();
+	zp_apply_filter('theme_body_close');
 	?>
 
 </body>

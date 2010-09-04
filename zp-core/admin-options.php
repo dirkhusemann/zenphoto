@@ -42,18 +42,14 @@ if (isset($_GET['action'])) {
 		/*** General options ***/
 		if (isset($_POST['savegeneraloptions'])) {
 
-			if (isset($_POST['allowed_tags_reset'])) {
-				setOption('allowed_tags', getOption('allowed_tags_default'));
+			$tags = $_POST['allowed_tags'];
+			$test = "(".$tags.")";
+			$a = parseAllowedTags($test);
+			if ($a !== false) {
+				setOption('allowed_tags', $tags);
+				$notify = '';
 			} else {
-				$tags = $_POST['allowed_tags'];
-				$test = "(".$tags.")";
-				$a = parseAllowedTags($test);
-				if ($a !== false) {
-					setOption('allowed_tags', $tags);
-					$notify = '';
-				} else {
-					$notify = '?tag_parse_error';
-				}
+				$notify = '?tag_parse_error';
 			}
 			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
 			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix'],3));
@@ -98,7 +94,6 @@ if (isset($_GET['action'])) {
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
-			setOption('login_user_field', isset($_POST['login_user_field']));
 			setOption('gallery_title', process_language_string_save('gallery_title', 2));
 			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
 			setOption('website_title', process_language_string_save('website_title', 2));
@@ -123,6 +118,12 @@ if (isset($_GET['action'])) {
 					}
 					setOption($item, $v);
 				}
+			}
+			setOption('gallery_security',$sec = sanitize($_POST['gallery_security'],3));
+			if ($sec = 'private') {
+				setOption('login_user_field', 1);
+			} else {
+				setOption('login_user_field', isset($_POST['login_user_field']));
 			}
 			$olduser = getOption('gallery_user');
 			$newuser = sanitize($_POST['gallery_user'],3);
@@ -332,15 +333,18 @@ if (isset($_GET['action'])) {
 			} else {
 				$cw = getThemeOption('thumb_crop_width', $table, $themename);
 				$ch = getThemeOption('thumb_crop_height', $table, $themename);
-				if (isset($_POST['image_size'])) setThemeOption('image_size', sanitize($_POST['image_size'],3), $table, $themename);
-				if (isset($_POST['image_use_side'])) setThemeOption('image_use_side', sanitize($_POST['image_use_side']), $table, $themename);
-				if (isset($_POST['thumb_size'])) setThemeOption('thumb_size', sanitize($_POST['thumb_size'],3), $table, $themename);
+				setThemeOption('image_size', sanitize_numeric($_POST['image_size']), $table, $themename);
+				setThemeOption('image_use_side', sanitize($_POST['image_use_side']), $table, $themename);
+				setThemeOption('thumb_size', sanitize_numeric($_POST['thumb_size']), $table, $themename);
 				setBoolThemeOption('thumb_crop', isset($_POST['thumb_crop']), $table, $themename);
-				if (isset($_POST['thumb_crop_width'])) setThemeOption('thumb_crop_width', $ncw = sanitize($_POST['thumb_crop_width'],3), $table, $themename);
-				if (isset($_POST['thumb_crop_height'])) setThemeOption('thumb_crop_height', $nch = sanitize($_POST['thumb_crop_height'],3), $table, $themename);
-				if (isset($_POST['albums_per_page'])) setThemeOption('albums_per_page', sanitize($_POST['albums_per_page'],3), $table, $themename);
-				if (isset($_POST['images_per_page'])) setThemeOption('images_per_page', sanitize($_POST['images_per_page'],3), $table, $themename);
-				if (isset($_POST['custom_index_page'])) setThemeOption('custom_index_page', sanitize($_POST['custom_index_page'], 3), $table, $themename);
+				setThemeOption('thumb_crop_width', $ncw = sanitize_numeric($_POST['thumb_crop_width']), $table, $themename);
+				setThemeOption('thumb_crop_height', $nch = sanitize_numeric($_POST['thumb_crop_height']), $table, $themename);
+				setThemeOption('albums_per_page', sanitize_numeric($_POST['albums_per_page']), $table, $themename);
+				setThemeOption('images_per_page', sanitize_numeric($_POST['images_per_page']), $table, $themename);
+				setThemeOption('albums_per_row', sanitize_numeric($_POST['albums_per_row']), $table, $themename);
+				setThemeOption('images_per_row', sanitize_numeric($_POST['images_per_row']), $table, $themename);
+				if (isset($_POST['thumb_transition'])) setBoolThemeOption('thumb_transition', sanitize_numeric($_POST['thumb_transition'])-1, $table, $themename);
+				setThemeOption('custom_index_page', sanitize($_POST['custom_index_page'], 3), $table, $themename);
 				$otg = getThemeOption('thumb_gray', $table, $themename);
 				setBoolThemeOption('thumb_gray', isset($_POST['thumb_gray']), $table, $themename);
 				if ($otg = getThemeOption('thumb_gray', $table, $themename)) $wmo = 99; // force cache clear
@@ -395,9 +399,9 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 		$sql .= prefix('albums');
 		$targetid = 'customalbumsort';
 	}
-	$result = mysql_query($sql);
+	$result = query($sql);
 	$dbfields = array();
-	while ($row = mysql_fetch_row($result)) {
+	while ($row = db_fetch_row($result)) {
 		$dbfields[] = "'".$row[0]."'";
 	}
 	sort($dbfields);
@@ -506,7 +510,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						?>
 						<td><?php echo gettext("Time offset (hours):"); ?></td>
 						<td>
-							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset,ENT_QUOTES);?>" />
+							<input type="text" size="3" name="time_offset" value="<?php echo html_encode($offset);?>" />
 						</td>
 						<td>
 						<p><?php echo gettext("If you're in a different time zone from your server, set the offset in hours of your time zone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
@@ -541,7 +545,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 								<?php echo gettext('UTF8 image URIs'); ?>
 							</label>
 						</p>
-						<p><?php echo gettext("mod_rewrite suffix:"); ?> <input type="text" size="10" name="mod_rewrite_image_suffix" value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></p>
+						<p><?php echo gettext("mod_rewrite suffix:"); ?> <input type="text" size="10" name="mod_rewrite_image_suffix" value="<?php echo html_encode(getOption('mod_rewrite_image_suffix'));?>" /></p>
 					</td>
 					<td>
 						<p>
@@ -562,7 +566,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<?php
 					 //todo: add note about versions
 					 ?>
-					<p class="notebox"><?php echo gettext('Please check the <a href="http://www.zenphoto.org/trac/report/9?asc=0&sort=version">translation tickets</a> for new and updated language translations.');?></p>
+					<p class="notebox"><?php echo gettext('Please check the <a href="http://www.zenphoto.org/trac/report/9?sort=summary">translation tickets</a> for new and updated language translations.');?></p>
 					<label style="white-space:nowrap"><input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
 					<?php echo gettext('Multi-lingual'); ?></label>
 					</td>
@@ -631,7 +635,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
 						<br />
 						<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="date_format"
-						value="<?php echo htmlspecialchars(getOption('date_format'),ENT_QUOTES);?>" />
+						value="<?php echo html_encode(getOption('date_format'));?>" />
 						</div>
 						</td>
 					<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><span style="white-space:nowrap"><code>strftime()</code></span></a> format string in the text box.'); ?></td>
@@ -677,7 +681,7 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</td>
 				</tr>
 				<?php
-				if (method_exists($_zp_authority,'lib_auth_options')) {
+				if (method_exists($_zp_authority,'getOptionsSupported')) {
 					customOptions($_zp_authority, "");
 				}
 				?>
@@ -697,18 +701,37 @@ if ($subtab == 'general' && zp_loggedin(OPTIONS_RIGHTS)) {
 				<tr>
 					<td><?php echo gettext("Allowed tags:"); ?></td>
 					<td>
-						<p><textarea name="allowed_tags" style="width: 340px" rows="10" cols="35"><?php echo htmlspecialchars(getOption('allowed_tags'),ENT_QUOTES); ?></textarea></p>
-						<p>
-							<label>
-								<input type="checkbox" name="allowed_tags_reset" value="1" />
-								<?php echo gettext('restore default allowed tags'); ?>
-							</label>
-						</p>
+						<p><textarea name="allowed_tags" id="allowed_tags" style="width: 340px" rows="10" cols="35"><?php echo html_encode(getOption('allowed_tags')); ?></textarea></p>
 					</td>
 					<td>
+						<script type="text/javascript">
+							// <!-- <![CDATA[
+							function resetallowedtags() {
+								$('#allowed_tags').val(<?php
+								$t = getOption('allowed_tags_default');
+								$tags = explode("\n",$t);
+								$c = 0;
+								foreach($tags as $t) {
+									if (!empty($t)) {
+										if ($c>0) {
+											echo '+';
+											echo "\n";
+											?>
+											<?php
+										}
+										$c++;
+										echo "'".$t.'\'+"\n"';
+									}
+								}
+								?>);
+							}
+							// ]]> -->
+						</script>
 						<p><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?></p>
 						<p><?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></p>
-						<p><?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?></p>
+						<p class="buttons">
+							<a href="javascript:resetallowedtags()" ><?php echo gettext('reset to default'); ?></a>
+						</p>
 					</td>
 				</tr>
 				<tr>
@@ -763,7 +786,17 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 					</td>
 					<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
 				</tr>
-				<tr class="passwordextrashow">
+				<tr>
+					<td><?php echo gettext('Gallery security')?></td>
+					<td>
+						<label><input type="radio" name="gallery_security" value="public" alt="<?php echo gettext('public'); ?>"<?php if (getOption('gallery_security') == 'public') echo ' checked="checked"' ?> onclick="javascript:$('.public_gallery').show();" /><?php echo gettext('public'); ?></label>
+						<label><input type="radio" name="gallery_security" value="private" alt="<?php echo gettext('private'); ?>"<?php if (getOption('gallery_security') == 'private') echo  'checked="checked"'?> onclick="javascript:$('.public_gallery').hide();" /><?php echo gettext('private'); ?></label>
+					</td>
+					<td>
+						<?php echo gettext('Private galleries are viewable only by registered users.'); ?>
+					</td>
+				</tr>
+				<tr class="passwordextrashow public_gallery" <?php if (getOption('gallery_security') == 'private') echo 'style="display:none"'; ?> >
 					<td style="background-color: #ECF1F2;">
 						<p>
 							<a href="javascript:toggle_passwords('',true);">
@@ -804,7 +837,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext("Gallery password hint:"); ?></p>
 					</td>
 					<td>
-						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" /></p>
+						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo html_encode(getOption('gallery_user')); ?>" /></p>
 						<p>
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass" value="<?php echo $x; ?>" />
 							<br />
@@ -859,7 +892,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 				<tr>
 					<td><?php echo gettext("Website url:"); ?></td>
 					<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="website_url"
-						value="<?php echo htmlspecialchars(getOption('website_url'),ENT_QUOTES);?>" /></td>
+						value="<?php echo html_encode(getOption('website_url'));?>" /></td>
 					<td><?php echo gettext("This is used to link back to your main site, but your theme must support it."); ?></td>
 				</tr>
 				<tr>
@@ -911,7 +944,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 								<td colspan="2">
 									<span id="customTextBox2" class="customText" style="display:<?php echo $dspc; ?>">
 									<?php echo gettext('custom fields:') ?>
-									<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo htmlspecialchars($cvt,ENT_QUOTES); ?>"></input>
+									<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo html_encode($cvt); ?>"></input>
 									</span>
 								</td>
 							</tr>
@@ -935,7 +968,7 @@ if ($subtab == 'gallery' && zp_loggedin(OPTIONS_RIGHTS)) {
 								</label>
 							</span>
 						</p>
-						<p>
+						<p class="public_gallery"<?php if (getOption('gallery_security') == 'private') echo ' style="display:none"'; ?>>
 							<span style="white-space:nowrap">
 								<label>
 									<input type="checkbox" name="login_user_field" id="login_user_field"
@@ -1071,7 +1104,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 						<p><?php echo gettext("Search password hint:"); ?></p>
 					</td>
 					<td>
-						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user'),ENT_QUOTES); ?>" /></p>
+						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo html_encode(getOption('search_user')); ?>" /></p>
 						<p>
 							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass" value="<?php echo $x; ?>" />
 							<br />
@@ -1112,6 +1145,7 @@ if ($subtab == 'search' && zp_loggedin(OPTIONS_RIGHTS)) {
 						</ul>
 						<br />
 						<p>
+						<?php echo gettext('Treat spaces as')?>
 						<?php generateRadiobuttonsFromArray(getOption('search_space_is'),array(gettext('<em>space</em>')=>'',gettext('<em>OR</em>')=>'OR',gettext('<em>AND</em>')=>'AND'),'search_space_is'); ?>
 						</p>
 						<p>
@@ -1215,8 +1249,8 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 		<tr>
 			<td width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
 			<td width="350">
-			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo htmlspecialchars(getOption('feed_items'),ENT_QUOTES);?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
-			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo htmlspecialchars(getOption('feed_items_albums'),ENT_QUOTES);?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
+			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo html_encode(getOption('feed_items'));?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
+			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo html_encode(getOption('feed_items_albums'));?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
 			</td>
 			<td><?php echo gettext("The number of new items you want to appear in your site's RSS feed. The images and comments RSS share the value."); ?></td>
 		</tr>
@@ -1224,9 +1258,9 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td><?php echo gettext("Size of RSS feed images:"); ?></td>
 			<td>
 			<input type="text" size="15" id="feed_imagesize" name="feed_imagesize"
-				value="<?php echo htmlspecialchars(getOption('feed_imagesize'),ENT_QUOTES);?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br />
+				value="<?php echo html_encode(getOption('feed_imagesize'));?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br />
 				<input type="text" size="15" id="feed_imagesize_albums" name="feed_imagesize_albums"
-				value="<?php echo htmlspecialchars(getOption('feed_imagesize_albums'),ENT_QUOTES);?>" /> <label for="feed_imagesize_albums"><?php echo gettext("Albums RSS"); ?></label>
+				value="<?php echo html_encode(getOption('feed_imagesize_albums'));?>" /> <label for="feed_imagesize_albums"><?php echo gettext("Albums RSS"); ?></label>
 				</td>
 			<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 		</tr>
@@ -1267,7 +1301,7 @@ if ($subtab == 'rss' && zp_loggedin(OPTIONS_RIGHTS)) {
 			<td>
 				<label><input type="checkbox" name="feed_cache" value="1" <?php echo checked('1', getOption('feed_cache')); ?> /> <?php echo gettext("Enabled"); ?></label><br /><br />
 				<input type="text" size="15" id="feed_cache_expire" name="feed_cache_expire"
-				value="<?php echo htmlspecialchars(getOption('feed_cache_expire'),ENT_QUOTES);?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br />
+				value="<?php echo html_encode(getOption('feed_cache_expire'));?>" /> <label for="feed_cache_expire"><?php echo gettext("RSS cache expire"); ?></label><br />
 				</td>
 			<td><?php echo gettext("Check if you want to enable static RSS feed caching. The cached file will be placed within the <em>cache_html</em> folder.<br /> Cache expire default is 86400 seconds (1 day  = 24 hrs * 60 min * 60 sec)."); ?></td>
 		</tr>
@@ -1562,7 +1596,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<br />
 					<?php echo gettext('cover').' '; ?>
 					<input type="text" size="2" name="watermark_scale"
-							value="<?php echo htmlspecialchars(getOption('watermark_scale'),ENT_QUOTES);?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
+							value="<?php echo html_encode(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
 					<span style="white-space:nowrap">
 						<label>
 							<input type="checkbox" name="watermark_allow_upscale" value="1"
@@ -1573,9 +1607,9 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<br />
 					<?php echo gettext("offset h"); ?>
 					<input type="text" size="2" name="watermark_h_offset"
-							value="<?php echo htmlspecialchars(getOption('watermark_h_offset'),ENT_QUOTES);?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
+							value="<?php echo html_encode(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
 					<input type="text" size="2" name="watermark_w_offset"
-						value="<?php echo htmlspecialchars(getOption('watermark_w_offset'),ENT_QUOTES);?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
+						value="<?php echo html_encode(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 				</td>
 				<td>
 					<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the image."); ?></p>
@@ -1638,7 +1672,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 									<?php echo gettext("user:"); ?>
 								</a>
 							</td>
-							<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user'),ENT_QUOTES); ?>" />		</td>
+							<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo html_encode(getOption('protected_image_user')); ?>" />		</td>
 						</tr>
 						<tr class="passwordextrahide" style="display:none">
 							<td style="margin:0; padding:0">
@@ -1677,7 +1711,7 @@ if ($subtab == 'image' && zp_loggedin(OPTIONS_RIGHTS)) {
 					<input type="checkbox" name="use_lock_image" value="1"
 					<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 				</td>
-				<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?></td>
+				<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.png</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("EXIF display"); ?></td>
@@ -1887,7 +1921,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 	<form action="?action=saveoptions" method="post" autocomplete="off">
 		<?php XSRFToken('saveoptions');?>
 		<input type="hidden" name="savethemeoptions" value="yes" />
-		<input type="hidden" name="optiontheme" value="<?php echo htmlspecialchars($optiontheme,ENT_QUOTES); ?>" />
+		<input type="hidden" name="optiontheme" value="<?php echo html_encode($optiontheme); ?>" />
 		<input type="hidden" name="old_themealbum" value="<?php echo urlencode($alb); ?>" />
 		<table class='bordered'>
 
@@ -1946,16 +1980,55 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 				<td colspan="2" ><?php echo gettext('<em>These image and album presentation options provided by the Zenphoto core for all themes.</em>').'<p class="notebox">'.gettext('<strong>Note:</strong> These are <em>recommendations</em> as themes may choose to override them for design reasons'); ?></p></td>
 			</tr>
 			<tr>
-				<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
-				<td><input type="text" size="3" name="albums_per_page"
-					value="<?php echo getThemeOption('albums_per_page',$album,$themename);?>" /></td>
-				<td><?php echo gettext("Recommended number of albums on a page. You might need to adjust this for a better page layout."); ?></td>
+				<td style='width: 175px'><?php echo gettext("Albums:"); ?></td>
+				<td>
+					<input type="text" size="3" name="albums_per_row" value="<?php echo getThemeOption('albums_per_row',$album,$themename);?>" /> <?php echo gettext('thumbnails per row'); ?>
+					<br />
+					<input type="text" size="3" name="albums_per_page" value="<?php echo getThemeOption('albums_per_page',$album,$themename);?>" /> <?php echo gettext('thumbnails per page'); ?>
+				</td>
+				<td>
+					<?php echo gettext('These specify the Theme CSS determined number of album thumbnails that will fit in a "row" and the number of albums thumbnails you wish per page.'); ?>
+					<p class="notebox">
+						<?php echo gettext('<strong>Note:</strong> If <em>thumbnails per row</em> is reater than 1, The actual number of thumbnails that are displayed on a page will be rounded up to  the next multiple of it.'); ?>
+					</p>
+				</td>
 			</tr>
 			<tr>
-				<td><?php echo gettext("Thumbnails per page:"); ?></td>
-				<td><input type="text" size="3" name="images_per_page"
-					value="<?php echo getThemeOption('images_per_page',$album,$themename);?>" /></td>
-				<td><?php echo gettext("Recommended number of thumbnails on an album page.")."<p class='notebox'>".gettext("<strong>Note:</strong> You might need to adjust this for a better page layout."); ?></p></td>
+				<td><?php echo gettext("Images:"); ?></td>
+				<td>
+					<input type="text" size="3" name="images_per_row" value="<?php echo getThemeOption('images_per_row',$album,$themename);?>" /> <?php echo gettext('thumbnails per row'); ?>
+					<br />
+					<input type="text" size="3" name="images_per_page" value="<?php echo getThemeOption('images_per_page',$album,$themename);?>" /> <?php echo gettext('thumbnails per page'); ?>
+				</td>
+				<td>
+					<?php echo gettext('These specify the Theme CSS determined number of image thumbnails that will fit in a "row" and the number of image thumbnails you wish per page.'); ?>
+					<p class="notebox">
+						<?php echo gettext('<strong>Note:</strong> If <em>thumbnails per row</em> is greater than 1, The actual number of thumbnailsthat are displayed on a page will be rounded up to  the next multiple of it.'); ?>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo gettext('Transition:'); ?></td>
+				<td>
+					<span style="display:inline;white-space:nowrap">
+						<?php
+						if ((getThemeOption('albums_per_row',$album,$themename)>1) && (getThemeOption('images_per_row',$album,$themename)>1)) {
+							if (getThemeOption('thumb_transition',$album,$themename)) {
+								$separate = '';
+								$combined = ' checked="checked"';
+							} else {
+								$separate = ' checked="checked"';
+								$combined = '';
+							}
+						} else {
+							$combined = $separate = ' disabled="disabled"';
+						}
+						?>
+						<label><input type="radio" name="thumb_transition" value="1"<?php echo $separate; ?>><?php echo gettext('separate'); ?></input></label>
+						<label><input type="radio" name="thumb_transition" value="2"<?php echo $combined; ?>><?php echo gettext('combined'); ?></input></label>
+					</span>
+				</td>
+				<td><?php echo gettext('if both album and image <em>thumbnails per row</em> are greater than 1 you can choose if album thumbnails and image thumbnails are placed together on the page that transitions from only album thumbnails to only image thumbnails.'); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Thumb size:"); ?></td>
@@ -1982,7 +2055,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 				<td>
 					<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
 					<br />
-					<p class='notebox'><?php echo gettext('<strong>Note:</strong> changing crop height or width will invalidate existing crops.'); ?></p>
+					<p class='notebox'><?php echo gettext('<strong>Note:</strong> changing crop height or width will invalidate existing custom crops.'); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -2070,7 +2143,7 @@ if ($subtab=='theme' && zp_loggedin(THEMES_RIGHTS)) {
 						?>
 					</select>
 				</td>
-				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This frees up the <code>index.php</code> script so that you can create a customized <em>Home</em> page script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
+				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This frees up the <code>index.php</code> script so that you can create a customized <em>Home page</em> script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
 			</tr>
 			<?php
 			}

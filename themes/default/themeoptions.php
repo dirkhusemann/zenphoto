@@ -12,6 +12,9 @@ class ThemeOptions {
 	function ThemeOptions() {
 		setThemeOptionDefault('Allow_search', true);
 		setThemeOptionDefault('Theme_colors', 'light');
+		setThemeOptionDefault('albums_per_row', 2);
+		setThemeOptionDefault('images_per_row', 6);
+		setThemeOptionDefault('thumb_transition', 1);
 	}
 	
 	function getOptionsSupported() {

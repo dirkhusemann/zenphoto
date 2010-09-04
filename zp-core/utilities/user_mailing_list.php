@@ -1,9 +1,9 @@
 <?php
 /**
  * User mailing list
- * 
+ *
  * A tool to send e-mails to all registered users who have provided an e-mail address.
- * 
+ *
  * @package admin
  */
 
@@ -20,7 +20,7 @@ if(getOption('zp_plugin_zenphoto_sendmail')) {
 }
 $button_text = gettext('User mailing list');
 $button_hint = gettext('A tool to send e-mails to all registered users who have provided an e-mail address.');
-$button_icon = 'images/icon_mail.gif';
+$button_icon = 'images/icon_mail.png';
 $button_rights = ADMIN_RIGHTS;
 
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
@@ -48,7 +48,7 @@ if (!zp_has_filter('sendmail')) {
 	?>
 	<p class="notebox">
 	<?php
-	echo gettext("<strong>Note: </strong>No <em>sendmail</em> filter is registered. You must activate and configure a mailer plugin."); 	
+	echo gettext("<strong>Note: </strong>No <em>sendmail</em> filter is registered. You must activate and configure a mailer plugin.");
 	?>
 	</p>
 	<?php
@@ -76,8 +76,8 @@ if(isset($_GET['sendmail'])) {
 	$currentadminmail = $_zp_current_admin_obj->getEmail();
 	if(!empty($currentadminmail)) {
 		$cc_addresses[] = $currentadminmail;
-	} 
-	$err_msg = zp_mail($subject, $message, array(), array(), $cc_addresses);	
+	}
+	$err_msg = zp_mail($subject, $message, array(), array(), $cc_addresses);
 	if($err_msg) {
 		echo '<p class="errorbox">'.$err_msg.'</p>';
 	} else {
@@ -105,14 +105,14 @@ if(isset($_GET['sendmail'])) {
 				<td valign="top" align="left">
 				<?php echo gettext('Select users:'); ?>
 				<ul class="customchecklist" style="height: 205px; width: 30em;">
-				<?php 
+				<?php
 				$currentadminuser = $_zp_current_admin_obj->getUser();
 				foreach($admins as $admin) {
 					if(!empty($admin['email']) && $currentadminuser != $admin['user']) {
 						?>
 						<li>
 							<label for="admin_<?php echo $admin['id']; ?>">
-								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo htmlspecialchars($admin['email'],ENT_QUOTES); ?>" checked="checked"  <?php echo $disabled; ?>/>
+								<input name="admin_<?php echo $admin['id']; ?>" id="admin_<?php echo $admin['id']; ?>" type="checkbox" value="<?php  echo html_encode($admin['email']); ?>" checked="checked"  <?php echo $disabled; ?>/>
 								<?php
 								echo $admin['user']." (";
 								if (!empty($admin['name'])) {

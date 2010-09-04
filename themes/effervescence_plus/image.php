@@ -1,17 +1,14 @@
 <?php
-define('ALBUMCOLUMNS', 3);
-define('IMAGECOLUMNS', 5);
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?> | <?php echo getBareImageTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
-	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<?php require_once(SERVERPATH.'/'.ZENFOLDER.'/js/colorbox/colorbox_ie.css.php');?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/colorbox/jquery.colorbox-min.js" type="text/javascript"></script>
@@ -25,6 +22,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </head>
 
 <body onload="blurAnchors()">
+<?php zp_apply_filter('theme_body_open'); ?>
 
 	<!-- Wrap Everything -->
 	<div id="main4">
@@ -41,7 +39,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 								global $_zp_current_image;
 								if (hasPrevImage()) {
 									$image = $_zp_current_image->getPrevImage();
-									echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . html_encode($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
+									echo '<a href="' . html_encode(getPrevImageURL()) . '" title="' . html_encode($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
 								} else {
 									echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>';
 								}
@@ -51,7 +49,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							<?php
 								if (hasNextImage()) {
 									$image = $_zp_current_image->getNextImage();
-									echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . html_encode($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
+									echo '<a href="' . html_encode(getNextImageURL()) . '" title="' . html_encode($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
 								} else {
 									echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
 								}
@@ -73,11 +71,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							<?php
 							if (getOption('custom_index_page') === 'gallery') {
 							?>
-							<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+							<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
 							<?php	
 							}					
 							?>
-							<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
+							<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
 							<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?>
 						</span>
 						<?php printImageTitle(true); ?>
@@ -99,7 +97,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						$fullimage = getFullImageURL();
 						if (!empty($fullimage)) {
 							?>
-							<a href="<?php echo htmlspecialchars($fullimage);?>" title="<?php echo getBareImageTitle();?>">
+							<a href="<?php echo html_encode($fullimage);?>" title="<?php echo getBareImageTitle();?>">
 							<?php
 						} 
 						printDefaultSizedImage(getImageTitle());
@@ -146,6 +144,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		<?php
 	}
 	printFooter();
+	zp_apply_filter('theme_body_close');
 	?>
 
 </body>

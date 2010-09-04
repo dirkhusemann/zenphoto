@@ -37,8 +37,8 @@ class Album extends PersistentObject {
 	function Album(&$gallery, $folder8, $cache=true, $quiet=false) {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
 			$msg = sprintf(gettext('Bad gallery in instantiation of album %s.'),$folder8);
-			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
 			debugLogBacktrace($msg);
+			trigger_error(html_encode($msg), E_USER_NOTICE);
 			$gallery = new Gallery();
 		}
 		$folder8 = sanitize_path($folder8);
@@ -52,8 +52,8 @@ class Album extends PersistentObject {
 		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
 			$this->exists = false;
 			$msg = sprintf(gettext('Zenphoto encountered an album name spoof attempt: %s.'),$folder8);
-			trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
 			debugLogBacktrace($msg);
+			trigger_error(html_encode($msg), E_USER_NOTICE);
 			return;
 		}
 		if ($dynamic = hasDynamicAlbumSuffix($folder8)) {
@@ -65,8 +65,8 @@ class Album extends PersistentObject {
 			$this->exists = false;
 			if (!$quiet) {
 				$msg = sprintf(gettext('class-album detected an invalid folder name: %s.'),$folder8);
-				trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
 				debugLogBacktrace($msg);
+				trigger_error(html_encode($msg), E_USER_NOTICE);
 			}
 			return;
 		}
@@ -593,7 +593,7 @@ class Album extends PersistentObject {
 
 		$result = query($sql = "SELECT * FROM " . prefix("images") . " WHERE `albumid`= " . $this->id);
 		$results = array();
-		while ($row = mysql_fetch_assoc($result)) {
+		while ($row = db_fetch_assoc($result)) {
 			$results[] = $row;
 		}
 		foreach ($results as $rowkey=>$row) {
@@ -796,10 +796,9 @@ class Album extends PersistentObject {
 	 */
 	function getAlbumLink() {
 		global $_zp_page;
-
 		$rewrite = pathurlencode($this->name) . '/';
 		$plain = '/index.php?album=' . urlencode($this->name). '/';
-		if ($_zp_page) {
+		if ($_zp_page > 1) {
 			$rewrite .= "page/$_zp_page";
 			$plain .= "&page=$_zp_page";
 		}
@@ -1108,7 +1107,7 @@ class Album extends PersistentObject {
 				$success = $success && $this->replicateDBRow($subrow, $oldfolder, $newfolder, true);
 				if (!$success) return 1;
 				$num = dircopy($this->localpath, $dest);
-				
+
 				// Get the subalbums.
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf/%'";
 				$result = query_full_array($sql);
@@ -1118,7 +1117,7 @@ class Album extends PersistentObject {
 
 					if ($success) {
 						$oldID = $subrow['id'];
-						$newID = mysql_insert_id();
+						$newID = db_insert_id();
 						$sql = 'SELECT * FROM '.prefix('images').' WHERE `albumid`='.$oldID;
 						$imageresult = query_full_array($sql);
 						foreach ($imageresult as $imagerow) {
@@ -1131,7 +1130,7 @@ class Album extends PersistentObject {
 						}
 					}
 
-					if (!($success == true && mysql_affected_rows() == 1)) {
+					if (!($success == true && db_affected_rows() == 1)) {
 						$allsuccess = false;
 					}
 				}
@@ -1171,7 +1170,7 @@ class Album extends PersistentObject {
 		$files = $this->loadFileNames();
 
 		// Does the filename from the db row match any in the files on disk?
-		while($row = mysql_fetch_assoc($result)) {
+		while($row = db_fetch_assoc($result)) {
 			if (!in_array($row['filename'], $files)) {
 				// In the database but not on disk. Kill it.
 				$dead[] = $row['id'];
@@ -1200,7 +1199,7 @@ class Album extends PersistentObject {
 		$dead = array();
 		$live = array();
 		// Does the dirname from the db row exist on disk?
-		while($row = mysql_fetch_assoc($result)) {
+		while($row = db_fetch_assoc($result)) {
 			if (!is_dir(getAlbumFolder() . internalToFilesystem($row['folder'])) || in_array($row['folder'], $live)
 			|| substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
 				$dead[] = $row['id'];
@@ -1448,7 +1447,7 @@ class Album extends PersistentObject {
 	function setAlbumTheme($theme) {
 		$this->set('album_theme', $theme);
 	}
-	
+
 	/**
 	 * Returns the codeblocks of the album as an serialized array
 	 *
@@ -1457,14 +1456,14 @@ class Album extends PersistentObject {
 	function getCodeblock() {
 		return $this->get("codeblock");
 	}
-	
+
 	function getWatermark() {
 		return $this->get('watermark');
 	}
-	
+
 	function setWatermark($wm) {
 		$this->set('watermark',$wm);
 	}
-	
+
 }
 ?>

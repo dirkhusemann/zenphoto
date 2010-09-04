@@ -1,8 +1,8 @@
 <?php
 /**
  * Form for registering users
- * 
- * @package plugins 
+ *
+ * @package plugins
  */
 
 ?>
@@ -11,11 +11,11 @@
 		<table class="register_user">
 		<tr>
 			<td><?php echo gettext("Name:"); ?></td>
-			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo htmlspecialchars($admin_n,ENT_QUOTES); ?>" size="22" /></td>
+			<td><input type="text" id="admin_name" name="admin_name" value="<?php echo html_encode($admin_n); ?>" size="22" /></td>
 		</tr>
 		<tr>
 			<td><?php if (getOption('register_user_email_is_id')) echo gettext("Email:"); else echo gettext("User ID:"); ?></td>
-			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo htmlspecialchars($user,ENT_QUOTES); ?>" size="22" /></td>
+			<td><input type="text" id="adminuser" name="adminuser" value="<?php echo html_encode($user); ?>" size="22" /></td>
 		</tr>
 		<tr>
 			<td valign="top"><?php echo gettext("Password:"); ?></td>
@@ -35,7 +35,7 @@
 					?>
 					<br />
 					<?php
-					echo  htmlspecialchars($msg,ENT_QUOTES);
+					echo  html_encode($msg);
 				}
 				?>
 			</td>
@@ -45,7 +45,7 @@
 			?>
 			<tr>
 				<td><?php echo gettext("Email:"); ?></td>
-				<td><input type="text" id="admin_email" name="admin_email" value="<?php echo htmlspecialchars($admin_e,ENT_QUOTES); ?>" size="22" /></td>
+				<td><input type="text" id="admin_email" name="admin_email" value="<?php echo html_encode($admin_e); ?>" size="22" /></td>
 			</tr>
 			<?php
 		}
@@ -57,7 +57,7 @@
 				<td>
 					<?php
 					$captchaCode = generateCaptcha($img);
-					$html = "<label><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
+					$html = "<img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/>";
 					?>
 					<input type="hidden" name="code_h" value="<?php echo $captchaCode; ?>" size="22" />
 					<?php

@@ -171,7 +171,7 @@ function printAllTagsFromAlbum($albumname="",$subalbums=false,$mode='images',$se
 			$counter = ' ('.$count.')';
 		}
 		if($loopcount == $tagcount) $separator = '';
-		echo "<li><a class=\"tagLink\" href=\"".htmlspecialchars(getSearchURL($tname, '', 'tags',''))."\"".$style." rel=\"nofollow\">".$tname.$counter."</a>".$separator."</li>\n";
+		echo "<li><a class=\"tagLink\" href=\"".html_encode(getSearchURL($tname, '', 'tags',''))."\"".$style." rel=\"nofollow\">".$tname.$counter."</a>".$separator."</li>\n";
 	}
 	echo "</ul>\n";
 }

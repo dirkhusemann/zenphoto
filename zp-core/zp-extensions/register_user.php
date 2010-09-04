@@ -59,21 +59,14 @@ class register_user_options {
 											gettext('CAPTCHA') => array('key' => 'register_user_captcha', 'type' => OPTION_TYPE_CHECKBOX,
 												'desc' => gettext('If checked, CAPTCHA validation will be required for user registration.'))
 											);
-		$admins = $_zp_authority->getAdministrators();
-		$ordered = array();
-		$groups = array();
-		$adminordered = array();
-		asort($ordered);
 		if (function_exists('user_groups_admin_tabs')) {
-			$nullselection = '';
+			$admins = $_zp_authority->getAdministrators('groups');
 			$defaultrights = ALL_RIGHTS;
 			foreach ($admins as $key=>$admin) {
-				if (!$admin['valid']) {
-					$ordered[$admin['user']] = $admin['user'];
-					if ($admin['rights'] < $defaultrights && $admin['rights'] >= NO_RIGHTS) {
-						$nullselection = $admin['user'];
-						$defaultrights = $admin['rights'];
-					}
+				$ordered[$admin['user']] = $admin['user'];
+				if ($admin['rights'] < $defaultrights && $admin['rights'] >= NO_RIGHTS) {
+					$nullselection = $admin['user'];
+					$defaultrights = $admin['rights'];
 				}
 			}
 			if (!empty($nullselection)) {
@@ -98,6 +91,7 @@ class register_user_options {
 		}
 		return $options;
 	}
+
 	function handleOption($option, $currentValue) {
 		global $gallery;
 		?>
@@ -170,7 +164,7 @@ if (!OFFSET_PATH) { // handle form post
 			$userobj->setGroup($group);
 			if (!empty($group)) {
 				$membergroup = $_zp_authority->newAdministrator($group, 0);
-				$userobj->setObjects(populateManagedObjectsList(NULL,$membergroup->getID()));
+				$userobj->setObjects($membergroup->getObjects());
 			}
 			zp_apply_filter('register_user_verified', $userobj);
 			$userobj->save();

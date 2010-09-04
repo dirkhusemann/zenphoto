@@ -68,7 +68,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 				$filechangedate = filectime(getAlbumFolder().internalToFilesystem($albumitem->name));
 				$latestimage = query_single_row("SELECT mtime FROM " . prefix('images'). " WHERE albumid = ".$albumitem->getAlbumID() . " AND `show` = 1 ORDER BY id DESC");
 				$lastuploaded = query("SELECT COUNT(*) FROM ".prefix('images')." WHERE albumid = ".$albumitem->getAlbumID() . " AND mtime = ". $latestimage['mtime']);
-				$row = mysql_fetch_row($lastuploaded);
+				$row = db_fetch_row($lastuploaded);
 				$count = $row[0];
 				if($count == 1) {
 					$imagenumber = sprintf(gettext('(%s: 1 new image)'),$title);

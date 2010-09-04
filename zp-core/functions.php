@@ -752,6 +752,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$name = trim($name);
 	$email = trim($email);
 	$website = trim($website);
+
+//todo: what is this key used for?
+
 	$admins = $_zp_authority->getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
@@ -1106,17 +1109,6 @@ function setupTheme() {
 }
 
 /**
- * Allows plugins to add to the scripts output by zenJavascript()
- *
- * @param string $script the text to be added.
- */
-function addPluginScript($script) {
-	global $_zp_plugin_scripts;
-	$_zp_plugin_scripts[] = $script;
-}
-
-
-/**
  * Registers a plugin as handler for a file extension
  *
  * @param string $suffix the file extension
@@ -1331,7 +1323,7 @@ function generateListFromFiles($currentValue, $root, $suffix, $descending=false)
  * @param string $id optional id
  */
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-	echo "<a href=\"" . htmlspecialchars($url,ENT_QUOTES) . "\"" .
+	echo "<a href=\"" . html_encode($url) . "\"" .
 	(($title) ? " title=\"" . html_encode($title) . "\"" : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . ">" .
@@ -1956,7 +1948,7 @@ function setBoolThemeOption($key, $bool, $album=NULL, $theme=false) {
  * @param string $theme default theme name
  * @return mixed
  */
-function getThemeOption($option, $album=NULL, $theme=false) {
+function getThemeOption($option, $album, $theme) {
 	global $gallery;
 	if (is_null($album)) {
 		$id = 0;
@@ -2096,9 +2088,6 @@ function cron_starter($script, $params, $inline=false) {
 	global $_zp_authority, $_zp_loggedin, $_zp_current_admin_obj, $_zp_null_account;
 	$admins = $_zp_authority->getAdministrators();
 	$admin = array_shift($admins);
-	while (!$admin['valid']) {
-		$admin = array_shift($admins);
-	}
 
 	if ($inline) {
 		$_zp_null_account = NULL;

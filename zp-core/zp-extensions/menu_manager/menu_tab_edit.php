@@ -26,11 +26,11 @@ if(isset($_GET['del'])) {
 	XSRFdefender('delete_menu');
 	deleteItem($reports);
 }
- 
+
 printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/', false); // no tinyMCE
 ?>
 <link rel="stylesheet" href="../zenpage/zenpage.css" type="text/css" />
-<?php 
+<?php
 $_zp_gallery = new Gallery();
 $menuset = checkChosenMenuset();
 ?>
@@ -109,7 +109,7 @@ function handleSelectorChange(type) {
 			$('#link').attr('disabled',true);
 			$('#titleinput').show();
 			$('#link').val('<?php echo rewrite_path(ZENPAGE_NEWS,'?p='.ZENPAGE_NEWS); ?>');
-			break;	
+			break;
 		case 'all_zenpagecategorys':
 			$('#albumselector,#pageselector,#categoryselector,#custompageselector,#titleinput,#titlelabel,#link_row,#visible_row').hide();
 			$('#selector').html('<?php echo js_encode(gettext("All Zenpage categories")); ?>');
@@ -248,21 +248,21 @@ if (isset($_GET['add'])) {
 		<option value="menufunction"><?php echo gettext("Function"); ?></option>
 		<option value="html"><?php echo gettext("HTML"); ?></option>
 	</select>
-	<?php 
+	<?php
 } else {
 	$add = '&amp;update';
 }
 ?>
 	<form method="post" id="add" name="add" action="menu_tab_edit.php?save<?php echo $add; if ($menuset) echo '&amp;menuset='.$menuset; ?>" style="display: none">
 		<?php XSRFToken('update_menu'); ?>
-		<input type="hidden" name="update" id="update" value="<?php echo htmlspecialchars($action,ENT_QUOTES); ?>" />
+		<input type="hidden" name="update" id="update" value="<?php echo html_encode($action); ?>" />
 		<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
-		<input type="hidden" name="link-old" id="link-old" value="<?php echo htmlspecialchars($link,ENT_QUOTES); ?>" />
+		<input type="hidden" name="link-old" id="link-old" value="<?php echo html_encode($link); ?>" />
 		<input type="hidden" name="type" id="type" value="<?php echo $type; ?>" />
 		<table style="width: 80%">
 		<?php
 		if(is_array($result)) {
-			$selector = htmlspecialchars($menuset,ENT_QUOTES);
+			$selector = html_encode($menuset);
 		} else {
 			$result = array('id'=>NULL, 'title'=>'', 'link'=>'', 'show'=>1,'type'=>NULL);
 			$selector = getMenuSetSelector(false);
@@ -270,7 +270,7 @@ if (isset($_GET['add'])) {
 			?>
 			<tr>
 				<td colspan="2"><?php printf(gettext("Menu set <em>%s</em>"), $selector); ?></td>
-			</tr>     
+			</tr>
 			<tr style="vertical-align: top">
 				<td style="width: 13%"><?php echo gettext("Type:"); ?></td>
 				<td id="selector"></td>
@@ -279,7 +279,7 @@ if (isset($_GET['add'])) {
 				<td><?php echo gettext("Description:"); ?></td>
 				<td id="description"></td>
 			</tr>
-			<tr> 
+			<tr>
 		    <td><span id="titlelabel"><?php echo gettext("Title:"); ?></span></td>
 				<td>
 				<span id="titleinput"><?php print_language_string_list($result['title'],"title",false,NULL,'',100); ?></span>
@@ -292,7 +292,7 @@ if (isset($_GET['add'])) {
 				<td><span id="link_label"></span></td>
 				<td>
 					<?php printCustomPageSelector($result['link']); ?>
-					<input name="link" type="text" size="100" id="link" value="<?php echo htmlspecialchars($result['link'],ENT_QUOTES); ?>" />
+					<input name="link" type="text" size="100" id="link" value="<?php echo html_encode($result['link']); ?>" />
 				</td>
 			</tr>
 			<tr id="visible_row">
@@ -302,7 +302,7 @@ if (isset($_GET['add'])) {
 						<?php echo gettext("visible"); ?>
 					</label>
 				</td>
-				<td>	
+				<td>
 					<label id="include_li_label" style="display: inline">
 						<input name="include_li" type="checkbox" id="include_li" value="1" <?php if ($result['show'] == 1) { echo "checked='checked'"; } ?> style="display: inline" />
 						<?php echo gettext("Include <em>&lt;LI&gt;</em> element"); ?>

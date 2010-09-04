@@ -22,7 +22,8 @@ $option_interface = new auto_backup();
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
 if (getOption('last_backup_run')+getOption('backup_interval')*5184000 < time()) {	// register if it is time for a backup
-	zp_register_filter('output_started','auto_backup_timer_handler');
+	zp_register_filter('admin_head','auto_backup_timer_handler');
+	zp_register_filter('theme_head','auto_backup_timer_handler');
 }
 
 /**
@@ -59,9 +60,9 @@ class auto_backup {
 
 /**
  * Handles the periodic start of the backup/restore utility to backup the database
- * @param string $side set to either "front-end" or "back-end", but we do not care.
+ * @param string $discard
  */
-function auto_backup_timer_handler($side) {
+function auto_backup_timer_handler($discard) {
 	setOption('last_backup_run',time());
 	$curdir = getcwd();
 	$folder = SERVERPATH . "/" . BACKUPFOLDER;
@@ -86,7 +87,7 @@ function auto_backup_timer_handler($side) {
 	cron_starter(	SERVERPATH.'/'.ZENFOLDER.'/'.UTILITIES_FOLDER.'/backup_restore.php',
 								array('backup'=>1, 'compress'=>sprintf('%u',getOption('backup_compression')),'XSRFTag'=>'backup')
 							);
-	return $side;
+	return $discard;
 }
 
 ?>

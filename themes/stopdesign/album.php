@@ -6,7 +6,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> &gt; <?php echo getBareAlbumTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
@@ -27,6 +27,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </head>
 
 <body class="gallery">
+	<?php zp_apply_filter('theme_body_open'); ?>
 		<?php
 		echo getGalleryTitle();
 			if (getOption('Allow_search')) {  printSearchForm(); }
@@ -49,8 +50,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					}
 				?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, null, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, null, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
+					<h3><a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 					<?php
 						$anumber = getNumAlbums();
@@ -89,17 +90,17 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			if (!$first) { echo "\n</ul>\n</div>\n"; }
 		?>
 
-		<ul class="slideset">
+		<ul class="slideset" style="width:<?php echo getOption('images_per_row')*133; ?>px;">
 		<?php
 
 			$firstImage = null;
 			$lastImage = null;
 			if ($myimagepage > 1) {
 			?>
-			<li class="thumb"><span class="backward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/images/moreslide_prev.gif');"><a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
+			<li class="thumb"><span class="backward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/images/moreslide_prev.gif');"><a href="<?php echo html_encode(getPrevPageURL()); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 			<?php
 			}
-			while (next_image(false, $firstPageImages)) {
+			while (next_image()) {
 				if (is_null($firstImage)) {
 					$lastImage = imageNumber();
 					$firstImage = $lastImage;
@@ -117,13 +118,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				$ch = 89;
 				$cw = 67;
 			}
-			echo '<li class="thumb"><span><em style="background-image:url(' . htmlspecialchars($_zp_current_image->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) . '); "><a href="' . htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
+			echo '<li class="thumb"><span><em style="background-image:url(' . html_encode($_zp_current_image->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) . '); "><a href="' . html_encode(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
 			}
 			if (!is_null($lastImage)  && $lastImage < getNumImages()) {
 				$np = getCurrentPage()+1;
 			?>
 			<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/images/moreslide_next.gif');">
-			<a href="<?php echo htmlspecialchars(getPageURL($np, $np)); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
+			<a href="<?php echo html_encode(getPageURL($np, $np)); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 		<?php
 			}
 		?>
@@ -143,10 +144,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				?>
 				<?php if (function_exists('printSlideShowLink') && isImagePage()) printSlideShowLink(gettext('View Slideshow')); ?>
 				<?php if (hasPrevPage()) { ?>
-						<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
+						<a href="<?php echo html_encode(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } ?>
 				<?php if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } ?>
-						<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
+						<a href="<?php echo html_encode(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 				<?php } ?>
 				</p>
 				<?php if (function_exists('printUserLogin_out')) { printUserLogin_out(""); } ?>
@@ -155,8 +156,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 		<p id="path">
 			<?php printHomeLink('', ' > '); ?>
-			<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt; 
-			<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?>
+			<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt; 
+			<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?>
 		</p>
 
 		<div class="main">
@@ -172,6 +173,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php printZenphotoLink(); ?>
 			</p>
 		</div>
-		<?php printAdminToolbox(); ?>
+		<?php
+		printAdminToolbox();
+		zp_apply_filter('theme_body_close');
+		?>
 </body>
 </html>

@@ -48,14 +48,27 @@ require_once(dirname(__FILE__).'/classes.php');
 class Zenphoto_Authority {
 
 	var $admin_users = NULL;
+	var $admin_groups = NULL;
+	var $admin_all = NULL;
 	var $rightsset = NULL;
 	var $version = 2;
 
-
 	/**
-	 * class instantiator
+	 * class instantiation function
+	 *
+	 * @return lib_auth_options
 	 */
 	function Zenphoto_Authority() {
+		$lib_auth_extratext = "";
+		$salt = 'abcdefghijklmnopqursuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+-={}[]|\:;<>,.?/';
+		$list = range(0, strlen($salt));
+		shuffle($list);
+		for ($i=0; $i < 30; $i++) {
+			$lib_auth_extratext = $lib_auth_extratext . substr($salt, $list[$i], 1);
+		}
+		setOptionDefault('extra_auth_hash_text', $lib_auth_extratext);
+		setOptionDefault('min_password_lenght', 6);
+		setOptionDefault('password_pattern', 'A-Za-z0-9   |   ~!@#$%&*_+`-(),.\^\'"/[]{}=:;?\|');
 	}
 
 	/**
@@ -130,7 +143,7 @@ class Zenphoto_Authority {
 				$pat = trim(str_replace("\t", '|', $pat));
 				if (!empty($pat)) {
 					$c++;
-					$text .= ', <span style="white-space:nowrap;"><strong>{</strong><em>'.htmlspecialchars($pat,ENT_QUOTES).'</em><strong>}</strong></span>';
+					$text .= ', <span style="white-space:nowrap;"><strong>{</strong><em>'.html_encode($pat).'</em><strong>}</strong></span>';
 				}
 			}
 			$text = substr($text, 2);
@@ -158,27 +171,33 @@ class Zenphoto_Authority {
 	 *
 	 * The array contains the id, hashed password, user's name, email, and admin privileges
 	 *
+	 * @param string $what: 'all' for everything, 'users' for just users 'groups' for groups and templates
 	 * @return array
 	 */
-	function getAdministrators() {
+	function getAdministrators($what='users') {
 		if (is_null($this->admin_users)) {
-			$this->admin_users = array();
+			$this->admin_all = $this->admin_groups = $this->admin_users = array();
 			$sql = 'SELECT * FROM '.prefix('administrators').' ORDER BY `rights` DESC, `id`';
 			$admins = query_full_array($sql, true);
 			if ($admins !== false) {
 				foreach($admins as $user) {
-					if (array_key_exists('password', $user)) { // transition code!
-						$user['pass'] = $user['password'];
-						unset($user['password']);
+					$this->admin_all[$user['id']] = $user;
+					if ($user['valid']) {
+						$this->admin_users[$user['id']] = $user;
+					} else {
+						$this->admin_groups[$user['id']] = $user;
 					}
-					if (!array_key_exists('valid', $user)) { // transition code!
-						$user['valid'] = 1;
-					}
-					$this->admin_users[$user['id']] = $user;
 				}
 			}
 		}
-		return $this->admin_users;
+		switch ($what) {
+			case 'users':
+				return $this->admin_users;
+			case 'groups':
+				return $this->admin_groups;
+			default:
+				return $this->admin_all;
+		}
 	}
 
 	/**
@@ -200,11 +219,6 @@ class Zenphoto_Authority {
 		 return $user['rights'] | ADMIN_RIGHTS;
 		 */
 
-		foreach ($admins as $key=>$user) {
-			if (!$user['valid']) {	// no groups!
-				unset($admins[$key]);
-			}
-		}
 		if (DEBUG_LOGIN) { debugLogArray("checkAuthorization: admins",$admins);	}
 		$reset_date = getOption('admin_reset_date');
 		if ((count($admins) == 0) || empty($reset_date)) {
@@ -330,15 +344,6 @@ class Zenphoto_Authority {
 				$sql = 'UPDATE '.prefix('administrators').' SET `rights`='.$newrights.' WHERE `id`='.$user['id'];
 				query($sql);
 			} // end loop
-		} else {
-			$lib_auth_extratext = "";
-			$salt = 'abcdefghijklmnopqursuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+-={}[]|\:;<>,.?/';
-			$list = range(0, strlen($salt));
-			shuffle($list);
-			for ($i=0; $i < 30; $i++) {
-				$lib_auth_extratext = $lib_auth_extratext . substr($salt, $list[$i], 1);
-			}
-			setOption('extra_auth_hash_text', $lib_auth_extratext);
 		}
 	}
 
@@ -377,7 +382,7 @@ class Zenphoto_Authority {
 
 	/**
 	 * Returns an array of the rights definitions for $version (default returns current version rights)
-	 * 
+	 *
 	 * @param $version
 	 */
 	function getRights($version=NULL) {
@@ -390,38 +395,38 @@ class Zenphoto_Authority {
 			}
 			switch ($v) {
 				case 1:
-					$rightsset = array(	'NO_RIGHTS' => array('value'=>2,'name'=>gettext('No rights'),'display'=>false),
-															'OVERVIEW_RIGHTS' => array('value'=>4,'name'=>gettext('Overview'),'display'=>true),
-															'VIEW_ALL_RIGHTS' => array('value'=>8,'name'=>gettext('View all'),'display'=>true),
-															'UPLOAD_RIGHTS' => array('value'=>16,'name'=>gettext('Upload'),'display'=>true),
-															'POST_COMMENT_RIGHTS'=> array('value'=>32,'name'=>gettext('Post comments'),'display'=>true),
-															'COMMENT_RIGHTS' => array('value'=>64,'name'=>gettext('Comments'),'display'=>true),
-															'ALBUM_RIGHTS' => array('value'=>256,'name'=>gettext('Album'),'display'=>true),
-															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>512,'name'=>gettext('Manage all albums'),'display'=>true),
-															'THEMES_RIGHTS' => array('value'=>1024,'name'=>gettext('Themes'),'display'=>true),
-															'ZENPAGE_RIGHTS' => array('value'=>2049,'name'=>gettext('Zenpage'),'display'=>true),
-															'TAGS_RIGHTS' => array('value'=>4096,'name'=>gettext('Tags'),'display'=>true),
-															'OPTIONS_RIGHTS' => array('value'=>8192,'name'=>gettext('Options'),'display'=>true),
-															'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true));
+					$rightsset = array(	'NO_RIGHTS' => array('value'=>2,'name'=>gettext('No rights'),'display'=>false,'hint'=>''),
+															'OVERVIEW_RIGHTS' => array('value'=>4,'name'=>gettext('Overview'),'display'=>true,'hint'=>''),
+															'VIEW_ALL_RIGHTS' => array('value'=>8,'name'=>gettext('View all'),'display'=>true,'hint'=>''),
+															'UPLOAD_RIGHTS' => array('value'=>16,'name'=>gettext('Upload'),'display'=>true,'hint'=>''),
+															'POST_COMMENT_RIGHTS'=> array('value'=>32,'name'=>gettext('Post comments'),'display'=>true,'hint'=>''),
+															'COMMENT_RIGHTS' => array('value'=>64,'name'=>gettext('Comments'),'display'=>true,'hint'=>''),
+															'ALBUM_RIGHTS' => array('value'=>256,'name'=>gettext('Album'),'display'=>true,'hint'=>''),
+															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>512,'name'=>gettext('Manage all albums'),'display'=>true,'hint'=>''),
+															'THEMES_RIGHTS' => array('value'=>1024,'name'=>gettext('Themes'),'display'=>true,'hint'=>''),
+															'ZENPAGE_RIGHTS' => array('value'=>2049,'name'=>gettext('Zenpage'),'display'=>true,'hint'=>''),
+															'TAGS_RIGHTS' => array('value'=>4096,'name'=>gettext('Tags'),'display'=>true,'hint'=>''),
+															'OPTIONS_RIGHTS' => array('value'=>8192,'name'=>gettext('Options'),'display'=>true,'hint'=>''),
+															'ADMIN_RIGHTS' => array('value'=>65536,'name'=>gettext('Admin'),'display'=>true,'hint'=>''));
 					break;
 				case 2:
-					$rightsset = array(	'NO_RIGHTS' => array('value'=>1,'name'=>gettext('No rights'),'display'=>false),
-															'OVERVIEW_RIGHTS' => array('value'=>pow(2,2),'name'=>gettext('Overview'),'display'=>true),
-															'VIEW_ALL_RIGHTS' => array('value'=>pow(2,4),'name'=>gettext('View all'),'display'=>true),
-															'UPLOAD_RIGHTS' => array('value'=>pow(2,6),'name'=>gettext('Upload'),'display'=>true),
-															'POST_COMMENT_RIGHTS'=> array('value'=>pow(2,8),'name'=>gettext('Post comments'),'display'=>true),
-															'COMMENT_RIGHTS' => array('value'=>pow(2,10),'name'=>gettext('Comments'),'display'=>true),
-															'ALBUM_RIGHTS' => array('value'=>pow(2,12),'name'=>gettext('Albums'),'display'=>true),
-															'ZENPAGE_PAGES_RIGHTS' => array('value'=>pow(2,14),'name'=>gettext('Pages'),'display'=>true),
-															'ZENPAGE_NEWS_RIGHTS' => array('value'=>pow(2,16),'name'=>gettext('News'),'display'=>true),
-															'FILES_RIGHTS' => array('value'=>pow(2,18),'name'=>gettext('Files'),'display'=>true),
-															'MANAGE_ALL_PAGES_RIGHTS' => array('value'=>pow(2,20),'name'=>gettext('Manage all pages'),'display'=>true),
-															'MANAGE_ALL_NEWS_RIGHTS' => array('value'=>pow(2,22),'name'=>gettext('Manage all news'),'display'=>true),
-															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>pow(2,24),'name'=>gettext('Manage all albums'),'display'=>true),
-															'THEMES_RIGHTS' => array('value'=>pow(2,26),'name'=>gettext('Themes'),'display'=>true),
-															'TAGS_RIGHTS' => array('value'=>pow(2,28),'name'=>gettext('Tags'),'display'=>true),
-															'OPTIONS_RIGHTS' => array('value'=>pow(2,29),'name'=>gettext('Options'),'display'=>true),
-															'ADMIN_RIGHTS' => array('value'=>pow(2,30),'name'=>gettext('Admin'),'display'=>true));
+					$rightsset = array(	'NO_RIGHTS' => array('value'=>1,'name'=>gettext('No rights'),'display'=>false,'hint'=>''),
+															'OVERVIEW_RIGHTS' => array('value'=>pow(2,2),'name'=>gettext('Overview'),'display'=>true,'hint'=>gettext('Users with this right may view the admin overview page.')),
+															'VIEW_ALL_RIGHTS' => array('value'=>pow(2,4),'name'=>gettext('View all'),'display'=>true,'hint'=>gettext('Users with this right may view all albums, pages, and news articles. Without this right, the user can view only public ones and those checked in his managed object lists.')),
+															'UPLOAD_RIGHTS' => array('value'=>pow(2,6),'name'=>gettext('Upload'),'display'=>true,'hint'=>gettext('Users with this right may upload to the albums for which they have management rights.')),
+															'POST_COMMENT_RIGHTS'=> array('value'=>pow(2,8),'name'=>gettext('Post comments'),'display'=>true,'hint'=>gettext('When the comment_form plugin is used for comments and its "Only members can comment" option is set, only users with this right may post comments.')),
+															'COMMENT_RIGHTS' => array('value'=>pow(2,10),'name'=>gettext('Comments'),'display'=>true,'hint'=>gettext('Users with this right may make comments tab changes.')),
+															'ALBUM_RIGHTS' => array('value'=>pow(2,12),'name'=>gettext('Albums'),'display'=>true,'hint'=>gettext('Users with this right may access the "albums" tab to make changes.')),
+															'ZENPAGE_PAGES_RIGHTS' => array('value'=>pow(2,14),'name'=>gettext('Pages'),'display'=>true,'hint'=>gettext('Users with this right may edit and manage Zenpage pages.')),
+															'ZENPAGE_NEWS_RIGHTS' => array('value'=>pow(2,16),'name'=>gettext('News'),'display'=>true,'hint'=>gettext('Users with this right may edit and manage Zenpage articles and categories.')),
+															'FILES_RIGHTS' => array('value'=>pow(2,18),'name'=>gettext('Files'),'display'=>true,'hint'=>gettext('Allows the user access to the "filemanager" located on the upload: files sub-tab.')),
+															'MANAGE_ALL_PAGES_RIGHTS' => array('value'=>pow(2,20),'name'=>gettext('Manage all pages'),'display'=>true,'hint'=>gettext('Users who do not have "Admin" rights normally are restricted to manage only objects to which they have been assigned. This right allows them to manage any Zenpage page.')),
+															'MANAGE_ALL_NEWS_RIGHTS' => array('value'=>pow(2,22),'name'=>gettext('Manage all news'),'display'=>true,'hint'=>gettext('Users who do not have "Admin" rights normally are restricted to manage only objects to which they have been assigned. This right allows them to manage any Zenpage news article or category.')),
+															'MANAGE_ALL_ALBUM_RIGHTS' => array('value'=>pow(2,24),'name'=>gettext('Manage all albums'),'display'=>true,'hint'=>gettext('Users who do not have "Admin" rights normally are restricted to manage only objects to which they have been assigned. This right allows them to manage any album in the gallery.')),
+															'THEMES_RIGHTS' => array('value'=>pow(2,26),'name'=>gettext('Themes'),'display'=>true,'hint'=>gettext('Users with this right may make themes related changes. These are limited to the themes associated with albums checked in their managed albums list.')),
+															'TAGS_RIGHTS' => array('value'=>pow(2,28),'name'=>gettext('Tags'),'display'=>true,'hint'=>gettext('Users with this right may make additions and changes to the set of tags.')),
+															'OPTIONS_RIGHTS' => array('value'=>pow(2,29),'name'=>gettext('Options'),'display'=>true,'hint'=>gettext('Users with this right may make changes on the options tabs.')),
+															'ADMIN_RIGHTS' => array('value'=>pow(2,30),'name'=>gettext('Admin'),'display'=>true,'hint'=>gettext('The master privilege. A user with "Admin" can do anything. (No matter what his other rights might indicate!)')));
 					break;
 			}
 			$allrights = 0;
@@ -441,17 +446,6 @@ class Zenphoto_Authority {
 
 	function getVersion() {
 		return $this->version;
-	}
-
-	/**
-	 * class instantiatio function
-	 *
-	 * @return lib_auth_options
-	 */
-	function lib_auth_options() {
-		setOptionDefault('extra_auth_hash_text', '');
-		setOptionDefault('min_password_lenght', 6);
-		setOptionDefault('password_pattern', 'A-Za-z0-9   |   ~!@#$%&*_+`-(),.\^\'"/[]{}=:;?\|');
 	}
 
 	/**
@@ -476,7 +470,7 @@ class Zenphoto_Administrator extends PersistentObject {
 	 * This is a simple class so that we have a convienient "handle" for manipulating Administrators.
 	 *
 	 */
-	var $objects = array();
+	var $objects = NULL;
 
 	/**
 	 * Constructor for an Administrator
@@ -528,8 +522,23 @@ class Zenphoto_Administrator extends PersistentObject {
 	function setObjects($objects) {
 		$this->objects = $objects;
 	}
-	function getObjects() {
-		return $this->objects;
+	function getObjects($what=NULL) {
+		if (is_null($this->objects)) {
+			$this->objects = array();
+			if (!$this->transient) {
+				$this->objects = populateManagedObjectsList(NULL,$this->getID());
+			}
+		}
+		if (empty($what)) {
+			return $this->objects;
+		}
+		$result = array();
+		foreach ($this->objects as $object) {
+			if ($object['type'] == $what) {
+				$result[] = $object['data'];
+			}
+		}
+		return $result;
 	}
 
 	function setCustomData($custom_data) {
@@ -559,14 +568,14 @@ class Zenphoto_Administrator extends PersistentObject {
 	function getUser() {
 		return $this->get('user');
 	}
-	
+
 	function setQuota($v) {
 		$this->set('quota',$v);
 	}
 	function getQuota() {
 		return $this->get('quota');
 	}
-	
+
 	function save() {
 		if (DEBUG_LOGIN) { debugLogVar("Zenphoto_Adminministratir->save()", $this); }
 		$objects = $this->getObjects();
@@ -611,7 +620,7 @@ class Zenphoto_Administrator extends PersistentObject {
 			}
 		}
 	}
-	
+
 	function delete() {
 		$id = $this->getID();
 		$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=".$id;

@@ -18,13 +18,13 @@ zp_register_filter('load_theme_script', 'hitcounter_load_script');
  *
  */
 class hitcounter_options {
-	
+
 	var $defaultbots = 'Teoma,alexa, froogle, Gigabot,inktomi, looksmart, URL_Spider_SQL,Firefly, NationalDirectory,
 											Ask Jeeves,TECNOSEEK, InfoSeek, WebFindBot, girafabot, crawler,www.galaxy.com, Googlebot,
 											Scooter, Slurp, msnbot, appie, FAST, WebBug, Spade, ZyBorg, rabaz ,Baiduspider, Feedfetcher-Google,
 											TechnoratiSnoop, Rankivabot, Mediapartners-Google, Sogou web spider, WebAlta Crawler';
-	
-	
+
+
 	function hitcounter_options() {
 		$this->defaultbots = str_replace("\n"," ",$this->defaultbots);
 		$this->defaultbots = str_replace("\t",'',$this->defaultbots);
@@ -85,7 +85,7 @@ class hitcounter_options {
 			case 'hitcounter_ignoreIPList':
 				?>
 				<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX; ?>'text-hitcounter_ignoreIPList" value="0" />
-				<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue,ENT_QUOTES); ?>" />
+				<input type="text" size="30" id="hitcounter_ignoreIPList" name="hitcounter_ignoreIPList" value="<?php echo htmlentities($currentValue,ENT_QUOTES,getOption('charset')); ?>" />
 				<script language="javascript" type="text/javascript">
 				// <!-- <![CDATA[
 				function hitcounter_insertIP() {

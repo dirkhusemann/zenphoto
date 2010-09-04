@@ -80,7 +80,7 @@ if (ini_get('memory_limit') && parse_size(ini_get('memory_limit')) < 100663296) 
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
 $_zp_imagick_present = false;
-require_once(dirname(__FILE__).'/functions-db.php');
+require_once(dirname(__FILE__).'/functions-db-'.(isset($_zp_conf_vars['db_software'])?$_zp_conf_vars['db_software']:'MySQL').'.php');
 
 // load graphics libraries in priority order
 // once a library has concented to load, all others will
@@ -152,8 +152,8 @@ $_zp_conf_vars['version'] = ZENPHOTO_VERSION;
  * @param string $quote_style
  * @return string
  */
-if (!function_exists("htmlspecialchars_decode")) {
-	function htmlspecialchars_decode($string, $quote_style = ENT_QUOTES) {
+if (!function_exists("html_encode_decode")) {
+	function html_encode_decode($string, $quote_style = ENT_QUOTES) {
 		$translation_table = get_html_translation_table(HTML_SPECIALCHARS, $quote_style);
 		$translation_table["'"] = '&#039;';
 		return (strtr($string, array_flip($translation_table)));
@@ -166,9 +166,8 @@ if (!function_exists("htmlspecialchars_decode")) {
  * @param string $this_string
  * @return string
  */
-function html_encode($this_string, $striptags=true) {
-	if ($striptags) {$this_string = strip_tags($this_string);}
-	$this_string = htmlspecialchars_decode($this_string, ENT_QUOTES);
+function html_encode($this_string) {
+	$this_string = html_encode_decode($this_string, ENT_QUOTES);
 	return htmlspecialchars($this_string, ENT_QUOTES, getOption('charset'));
 }
 
@@ -687,8 +686,9 @@ function zp_error($message, $fatal=true) {
 						. (isset($b['class']) ? $b['class'] : '')
 						. (isset($b['type']) ? $b['type'] : '')
 						. $b['function']
-						. ' (' . basename($b['file'])
-						. ' [' . $b['line'] . "])\n";
+						. (isset($b['file']) ? ' (' . basename($b['file']) : '')
+						. (isset($b['line']) ? ' [' . $b['line'] . "])" : '')
+						. "\n";
 						$prefix .= '  ';
 					}
 					?>

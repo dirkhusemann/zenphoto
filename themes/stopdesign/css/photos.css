@@ -665,7 +665,6 @@ Normal group of slide-like thumbnails
 .slideset {
   float:right;
   position:relative;
-  width:75%;
   margin:0 0 15px;
   padding:0;
   list-style:none;

@@ -232,10 +232,10 @@ printAdminHeader();
 							<input type="hidden" size="4" id="h" name="h" value="<?php echo $iH ?>"  />
 							<input type="hidden" id="cropw" name="cropw" value="<?php echo $cropwidth; ?>" />
 							<input type="hidden" id="croph" name="croph" value="<?php echo $cropheight; ?>" />
-							<input type="hidden" id="a" name="a" value="<?php echo htmlspecialchars($albumname,ENT_QUOTES); ?>" />
-							<input type="hidden" id="i" name="i" value="<?php echo htmlspecialchars($imagename,ENT_QUOTES); ?>" />
-							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
-							<input type="hidden" id="subpage" name="subpage" value="<?php echo htmlspecialchars($subpage,ENT_QUOTES); ?>" />
+							<input type="hidden" id="a" name="a" value="<?php echo html_encode($albumname); ?>" />
+							<input type="hidden" id="i" name="i" value="<?php echo html_encode($imagename); ?>" />
+							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo html_encode($tagsort); ?>" />
+							<input type="hidden" id="subpage" name="subpage" value="<?php echo html_encode($subpage); ?>" />
 							<input type="hidden" id="crop" name="crop" value="crop" />
 							<?php
 							if (getOption('thumb_crop')) {

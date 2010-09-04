@@ -18,11 +18,16 @@ $option_interface = new google_mapsOptions();
 
 $mapkey = getOption('gmaps_apikey');
 if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php' && !empty($mapkey)) {
+	zp_register_filter('theme_head','gmaps_js');
+}
+function gmaps_js() {
 	// NOTE: This is copied from the printGoogleJS function in the phoogle class.
 	//       If you update the phoogle class be sure this has not changed.
-	addPluginScript('<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$mapkey.'" type="text/javascript"></script>');
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER . '/google_maps/gmaps.js"></script>');
-	addPluginScript('<script type="text/javascript">var map;</script>');
+	?>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo getOption('gmaps_apikey'); ?>" type="text/javascript"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH . '/' . ZENFOLDER . '/'.PLUGIN_FOLDER; ?>/google_maps/gmaps.js"></script>
+	<script type="text/javascript">var map;</script>
+	<?php
 }
 
 /**
@@ -240,7 +245,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
  * @param string $text text for the pop-up link
  * @param bool $toggle set to true to hide initially
  * @param string $id DIV id
- * @param int $firstPageImages the number of images on transition pages.
+ * @param int $firstPageImages the number of images on transition pages. [deprecated]
  * @param array $mapselections array of the maps to be used.
  * @param bool $addphysical Adds physical map.
  * @param bool $addwiki Adds wikipedia georeferenced data on your maps
@@ -249,7 +254,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
  * @param string $maptypecontrol values Buttons | List
  * @param string $customJS the extra javascript needed by the theme
  */
-function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap', $firstPageImages=0, $mapselections=NULL, $addwiki=NULL, $background=NULL, $mapcontrol=NULL, $maptypecontrol=NULL, $customJS=NULL){
+function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap', $firstPageImages=NULL, $mapselections=NULL, $addwiki=NULL, $background=NULL, $mapcontrol=NULL, $maptypecontrol=NULL, $customJS=NULL){
 	global $_zp_phoogle, $_zp_images, $_zp_current_album, $_zp_current_image;
 	if(getOption('gmaps_apikey') != ''){
 		$foundLocation = false;
@@ -286,7 +291,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			$_zp_phoogle->customJS=$customJS;
 		}
 		resetCurrentAlbum(); // start from scratch
-		while (next_image(getOption('gmaps_show_all_album_points'), $firstPageImages)) {
+		while (next_image(getOption('gmaps_show_all_album_points'))) {
 			$exif = getImageMetaData();
 			if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 				$foundLocation = true;
@@ -294,8 +299,8 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 				$long = $exif['EXIFGPSLongitude'];
 				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-				$infoHTML = '<a href="' . htmlspecialchars(getImageLinkURL()) . '"><img src="' .
-					htmlspecialchars(getImageThumb()) . '" alt="' . getImageDesc() . '" ' .
+				$infoHTML = '<a href="' . html_encode(getImageLinkURL()) . '"><img src="' .
+					html_encode(getImageThumb()) . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; " /></a><p align=center >' . getImageDesc()."</p>";
 				addPoint($lat, $long, js_encode($infoHTML));
 			}

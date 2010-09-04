@@ -22,7 +22,7 @@
 		color:#333;
 		padding-left:10px;
 		height:30px;
-		background: #efefef url('../images/togglerc.gif') center right no-repeat;
+		background: #efefef url('../images/togglerc.png') center right no-repeat;
 		border: 1px solid #BAC9CF;
 		display: block;
 	}
@@ -30,7 +30,7 @@
 		color: #000;
 		padding-left:10px;
 		height:30px;
-		background: #fff url('../images/togglerch.gif') center right no-repeat;
+		background: #fff url('../images/togglerch.png') center right no-repeat;
 		border: 1px solid #BAC9CF;
 	}
 	.toggler-opened {
@@ -38,14 +38,14 @@
 		color:#333;
 		padding-left:10px;
 		height:30px;
-		background: #efefef url('../images/togglero.gif') center right no-repeat;
+		background: #efefef url('../images/togglero.png') center right no-repeat;
 		border: 1px solid #BAC9CF;
 	}
 	.toggler-opened:hover {
 		color: #000;
 		padding-left:10px;
 		height:30px;
-		background: #fff url('../images/toggleroh.gif') center right no-repeat;
+		background: #fff url('../images/toggleroh.png') center right no-repeat;
 		border: 1px solid #BAC9CF;
 	}
 

@@ -45,7 +45,7 @@ if (isset($_GET['deletemenuset'])) {
 	$sql = 'DELETE FROM '.prefix('menu').' WHERE `menuset`="'.zp_escape_string(sanitize($_GET['deletemenuset'])).'"';
 	query($sql);
 	$_menu_manager_items = array();
-	$delmsg =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),htmlspecialchars($_GET['deletemenuset'],ENT_QUOTES))."</p>";
+	$delmsg =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Menu set '%s' deleted"),html_encode($_GET['deletemenuset']))."</p>";
 }
 // publish or un-publish page by click
 if(isset($_GET['publish'])) {
@@ -72,7 +72,7 @@ foreach ($reports as $report) {
 
 $sql = 'SELECT COUNT(DISTINCT `menuset`) FROM '.prefix('menu');
 $result = query($sql);
-$count = mysql_result($result, 0);
+$count = db_result($result, 0);
 ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
@@ -83,8 +83,8 @@ $count = mysql_result($result, 0);
 		}
 	};
 	function deleteMenuSet() {
-		if (confirm('<?php printf(gettext('Ok to delete menu set %s? This cannot be undone!'),htmlspecialchars($menuset,ENT_QUOTES)); ?>')) {
-			window.location = '?deletemenuset=<?php echo htmlspecialchars($menuset,ENT_QUOTES); ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('delete_menu')?>';
+		if (confirm('<?php printf(gettext('Ok to delete menu set %s? This cannot be undone!'),html_encode($menuset)); ?>')) {
+			window.location = '?deletemenuset=<?php echo html_encode($menuset); ?>&amp;add&amp;XSRFToken=<?php echo getXSRFToken('delete_menu')?>';
 		}
 	};
 	function deleteMenuItem(location,warn) {
@@ -101,7 +101,7 @@ $count = mysql_result($result, 0);
 	}
 	// ]]> -->
 </script>
-<h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), htmlspecialchars($menuset,ENT_QUOTES)); echo "</small>"; ?></h1>
+<h1><?php echo gettext("Menu Manager")."<small>"; printf(gettext(" (Menu set: %s)"), html_encode($menuset)); echo "</small>"; ?></h1>
 
 <form action="menu_tab.php?menuset=<?php echo $menuset; ?>" method="post" name="update" onsubmit="return confirmAction();">
 	<?php XSRFToken('update_menu'); ?>
@@ -139,7 +139,7 @@ $count = mysql_result($result, 0);
 			</span>
 			<span class="buttons" style="float: right"><?php
 if ($count > 0) {
-	$buttontext = sprintf(gettext("Delete menu set '%s'"),htmlspecialchars($menuset,ENT_QUOTES));
+	$buttontext = sprintf(gettext("Delete menu set '%s'"),html_encode($menuset));
 	?>
 	<strong><a href="javascript:deleteMenuSet();" title="<?php echo $buttontext; ?>"><img src="../../images/fail.png" alt="" /><?php echo $buttontext; ?></a></strong>
 	<?php

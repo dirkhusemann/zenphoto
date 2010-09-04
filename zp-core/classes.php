@@ -72,12 +72,12 @@ class PersistentObject {
 
 
 	/**
- 	* Caches the current set of objects defined by a variable key $cache_by.
- 	* Uses a global array to store the results of a single database query,
- 	* where subsequent requests for the object look for data.
- 	* @return a reference to the array location where this class' cache is stored
- 	*   indexed by the field $cache_by.
- 	*/
+	* Caches the current set of objects defined by a variable key $cache_by.
+	* Uses a global array to store the results of a single database query,
+	* where subsequent requests for the object look for data.
+	* @return a reference to the array location where this class' cache is stored
+	*   indexed by the field $cache_by.
+	*/
 	function cache($entry=NULL) {
 		global $_zp_object_cache;
 		if (is_null($this->cache_by)) return false;
@@ -106,9 +106,9 @@ class PersistentObject {
 		} else {
 			$sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
 			$result = query($sql);
-			if (mysql_num_rows($result) == 0) return false;
+			if (db_num_rows($result) == 0) return false;
 
-			while ($row = mysql_fetch_assoc($result)) {
+			while ($row = db_fetch_assoc($result)) {
 				$key = $row[$this->cache_by];
 				$cache_location[$key] = $row;
 			}
@@ -118,11 +118,11 @@ class PersistentObject {
 
 
 	/**
- 	* Set a variable in this object. Does not persist to the database until
- 	* save() is called. So, IMPORTANT: Call save() after set() to persist.
- 	* If the requested variable is not in the database, sets it in temp storage,
- 	* which won't be persisted to the database.
- 	*/
+	* Set a variable in this object. Does not persist to the database until
+	* save() is called. So, IMPORTANT: Call save() after set() to persist.
+	* If the requested variable is not in the database, sets it in temp storage,
+	* which won't be persisted to the database.
+	*/
 	function set($var, $value) {
 		if (empty($var)) return false;
 		if ($this->loaded && !array_key_exists($var, $this->data)) {
@@ -135,29 +135,29 @@ class PersistentObject {
 
 
 	/**
- 	* Sets default values for new objects using the set() method.
- 	* Should do nothing in the base class; subclasses should override.
- 	*/
+	* Sets default values for new objects using the set() method.
+	* Should do nothing in the base class; subclasses should override.
+	*/
 	function setDefaults() {
 		return;
 	}
 
 	/**
- 	* Change one or more values of the unique set assigned to this record.
- 	* Checks if the record already exists first, if so returns false.
- 	* If successful returns true and changes $this->unique_set
- 	* A call to move is instant, it does not require a save() following it.
- 	*/
+	* Change one or more values of the unique set assigned to this record.
+	* Checks if the record already exists first, if so returns false.
+	* If successful returns true and changes $this->unique_set
+	* A call to move is instant, it does not require a save() following it.
+	*/
 	function move($new_unique_set) {
 		// Check if we have a row
 		$result = query('SELECT * FROM ' . prefix($this->table) .
 			getWhereClause($new_unique_set) . ' LIMIT 1;');
-		if (mysql_num_rows($result) == 0) {
+		if (db_num_rows($result) == 0) {
 			$sql = 'UPDATE ' . prefix($this->table)
 				. getSetClause($new_unique_set) . ' '
 				. getWhereClause($this->unique_set);
 			$result = query($sql);
-			if (mysql_affected_rows() == 1) {
+			if (db_affected_rows() == 1) {
 				$this->unique_set = $new_unique_set;
 				return true;
 			}
@@ -175,7 +175,7 @@ class PersistentObject {
 		// Check if we have a row
 		$result = query('SELECT * FROM ' . prefix($this->table) .
 			getWhereClause($new_unique_set) . ' LIMIT 1;');
-		if (mysql_num_rows($result) == 0) {
+		if (db_num_rows($result) == 0) {
 			// Note: It's important for $new_unique_set to come last, as its values should override.
 			$insert_data = array_merge($this->data, $this->updates, $this->tempdata, $new_unique_set);
 			unset($insert_data['id']);
@@ -200,7 +200,7 @@ class PersistentObject {
 			}
 			$sql .= ');';
 			$success = query($sql);
-			if ($success == true && mysql_affected_rows() == 1) {
+			if ($success == true && db_affected_rows() == 1) {
 				return true;
 			}
 		}
@@ -209,7 +209,7 @@ class PersistentObject {
 
 /**
  * Deletes object from the database
- * 
+ *
  * @return bool
  */
 	function remove() {
@@ -219,9 +219,9 @@ class PersistentObject {
 	}
 
 	/**
- 	* Get the value of a variable. If $current is false, return the value
- 	* as of the last save of this object.
- 	*/
+	* Get the value of a variable. If $current is false, return the value
+	* as of the last save of this object.
+	*/
 	function get($var, $current=true) {
 		if ($current && isset($this->updates[$var])) {
 			return $this->updates[$var];
@@ -235,9 +235,9 @@ class PersistentObject {
 	}
 
 	/**
- 	* Load the data array from the database, using the unique id set to get the unique record.
- 	* @return false if the record already exists, true if a new record was created.
- 	*/
+	* Load the data array from the database, using the unique id set to get the unique record.
+	* @return false if the record already exists, true if a new record was created.
+	*/
 	function load() {
 		$new = false;
 		$entry = null;
@@ -277,12 +277,12 @@ class PersistentObject {
 	}
 
 	/**
- 	* Save the updates made to this object since the last update. Returns
- 	* true if successful, false if not.
- 	*/
+	* Save the updates made to this object since the last update. Returns
+	* true if successful, false if not.
+	*/
 	function save() {
 		if (!$this->unique_set) { // If we don't have a unique set, then this is incorrect. Don't attempt to save.
-			zp_error('empty $this->unique set is empty');		
+			zp_error('empty $this->unique set is empty');
 			return;
 		}
 		if ($this->transient) return; // If this object isn't supposed to be persisted, don't save it.
@@ -311,11 +311,11 @@ class PersistentObject {
 			}
 			$sql .= ');';
 			$success = query($sql);
-			if ($success == false || mysql_affected_rows() != 1) { return false; }
+			if ($success == false || db_affected_rows() != 1) { return false; }
 			foreach ($insert_data as $key=>$value) { // copy over any changes
 				$this->data[$key] = $value;
 			}
-			$this->id = mysql_insert_id();
+			$this->id = db_insert_id();
 			$this->data['id'] = $this->id; // so 'get' will retrieve it!
 			$this->loaded = true;
 			$this->updates = array();
@@ -340,7 +340,7 @@ class PersistentObject {
 				}
 				$sql .= ' WHERE id=' . $this->id . ';';
 				$success = query($sql);
-				if ($success == false || mysql_affected_rows() != 1) { return false; }
+				if ($success == false || db_affected_rows() != 1) { return false; }
 				foreach ($this->updates as $key=>$value) {
 					$this->data[$key] = $value;
 				}

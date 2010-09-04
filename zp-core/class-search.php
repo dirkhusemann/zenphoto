@@ -159,7 +159,7 @@ class SearchEngine
 			if (!empty($this->album_list)) {
 				$r .= '&inalbums='.implode(',', $this->album_list);
 			}
-			if ($_zp_page != 1) {
+			if ($_zp_page > 1) {
 				$this->page = $_zp_page;
 				$r .= '&page=' . $_zp_page;
 			}
@@ -314,7 +314,7 @@ class SearchEngine
 						case 'AND':
 							if ($j < strlen($searchstring)) {
 								$c3 = substr($searchstring,$j,1);
-								if (array_key_exists($c3,$opChars) && $opChars[$c3] == 1) {	
+								if (array_key_exists($c3,$opChars) && $opChars[$c3] == 1) {
 									$nextop = true;
 								} else if (substr($searchstring.' ', $j, 4)=='AND ') {
 									$nextop = true;
@@ -458,7 +458,7 @@ class SearchEngine
 			}
 			$lasttoken = $token;
 		}
-		if (array_key_exists($lasttoken,$opChars) && $opChars[$lasttoken] == 1) {	
+		if (array_key_exists($lasttoken,$opChars) && $opChars[$lasttoken] == 1) {
 			array_pop($result);
 		}
 		return $result;
@@ -1217,7 +1217,7 @@ class SearchEngine
 
 	/**
 	 * Returns a list of News IDs found in the search
-	 * 
+	 *
 	 * @param string $sortorder "date" for sorting by date (default)
 	 * 													"title" for sorting by title
 	 * @param string $sortdirection "desc" (default) for descending sort order

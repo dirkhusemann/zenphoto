@@ -57,12 +57,20 @@ function setupLog($message, $anyway=false, $reset=false) {
 	}
 }
 
+/*
+ * updates database config parameters
+ */
 function updateItem($item, $value) {
 	global $zp_cfg;
 	$i = strpos($zp_cfg, $item);
-	$i = strpos($zp_cfg, '=', $i);
-	$j = strpos($zp_cfg, "\n", $i);
-	$zp_cfg = substr($zp_cfg, 0, $i) . '= \'' . str_replace('\'', '\\\'',$value) . '\';' . substr($zp_cfg, $j);
+	if ($i == false) {
+		$i = strpos($zp_cfg, '$conf[');
+		$zp_cfg = substr($zp_cfg, 0, $i)."\$conf['".$item."'] = '".$value."'; // added by setup.php\n".substr($zp_cfg,$i);
+	} else {
+		$i = strpos($zp_cfg, '=', $i);
+		$j = strpos($zp_cfg, "\n", $i);
+		$zp_cfg = substr($zp_cfg, 0, $i) . '= \'' . str_replace('\'', '\\\'',$value) . '\';' . substr($zp_cfg, $j);
+	}
 }
 
 function checkAlbumParentid($albumname, $id) {
@@ -83,14 +91,6 @@ function checkAlbumParentid($albumname, $id) {
 			checkAlbumParentid($albumname, $id);
 		}
 	}
-}
-
-function getOptionTableName($albumname) {
-	$pfxlen = strlen(prefix(''));
-	if (strlen($albumname) > 54-$pfxlen) { // table names are limited to 62 characters
-		return substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options';
-	}
-	return $albumname.'_options';
 }
 
 if (!file_exists(CONFIGFILE)) {
@@ -125,23 +125,26 @@ if ($i !== false) {
 	$zp_cfg = substr($zp_cfg, 0, $i) . substr($zp_cfg, $j); // remove this so it won't be defined twice
 }
 
-if (isset($_POST['mysql'])) { //try to update the zp-config file
-	setupLog(gettext("MySQL POST handling"));
+if (isset($_POST['db'])) { //try to update the zp-config file
+	setupLog(gettext("db POST handling"));
 	$updatezp_config = true;
-	if (isset($_POST['mysql_user'])) {
-		updateItem('mysql_user', $_POST['mysql_user']);
+	if (isset($_POST['db_software'])) {
+		updateItem('db_software', $_POST['db_software']);
 	}
-	if (isset($_POST['mysql_pass'])) {
-		updateItem('mysql_pass', $_POST['mysql_pass']);
+	if (isset($_POST['db_user'])) {
+		updateItem('mysql_user', $_POST['db_user']);
 	}
-	if (isset($_POST['mysql_host'])) {
-		updateItem('mysql_host', $_POST['mysql_host']);
+	if (isset($_POST['db_pass'])) {
+		updateItem('mysql_pass', $_POST['db_pass']);
 	}
-	if (isset($_POST['mysql_database'])) {
-		updateItem('mysql_database', $_POST['mysql_database']);
+	if (isset($_POST['db_host'])) {
+		updateItem('mysql_host', $_POST['db_host']);
 	}
-	if (isset($_POST['mysql_prefix'])) {
-		updateItem('mysql_prefix', $_POST['mysql_prefix']);
+	if (isset($_POST['db_database'])) {
+		updateItem('mysql_database', $_POST['db_database']);
+	}
+	if (isset($_POST['db_prefix'])) {
+		updateItem('mysql_prefix', $_POST['db_prefix']);
 	}
 }
 
@@ -205,6 +208,9 @@ $oktocreate = false;
 $connectDBErr = '';
 if (file_exists(CONFIGFILE)) {
 	require(CONFIGFILE);
+	$connectDBErr = '';
+
+	//begin MySQL connection code
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
 			$collation = ' CHARACTER SET utf8 COLLATE utf8_unicode_ci';
@@ -216,8 +222,12 @@ if (file_exists(CONFIGFILE)) {
 			if ($result) {
 				if (@mysql_num_rows($result) > 0) {
 					$upgrade = true;
-					@mysql_query("ALTER TABLE " . $_zp_conf_vars['mysql_prefix'].'administrators' . " ADD COLUMN `valid` int(1) default 1", $connection);
+					// apply some critical updates to the database for migration issues
+					@mysql_query('ALTER TABLE ' . $_zp_conf_vars['mysql_prefix'].'administrators' . ' ADD COLUMN `valid` int(1) default 1', $connection);
+					@mysql_query('ALTER TABLE ' . $_zp_conf_vars['mysql_prefix'].'administrators' . ' CHANGE `password` `pass` varchar(64)', $connection);
 				}
+			} else {
+				$connectDBErr = mysql_error();
 			}
 			$environ = true;
 			require_once(dirname(__FILE__).'/admin-functions.php');
@@ -244,6 +254,8 @@ if (file_exists(CONFIGFILE)) {
 	} else {
 		$connectDBErr = mysql_error();
 	}
+	// end MySQL connection code
+
 }
 if (defined('CHMOD_VALUE')) {
 	$chmod = CHMOD_VALUE;
@@ -278,8 +290,8 @@ if ($setup_checked) {
 		setupLog(gettext('Setup cookie test unsuccessful'), true);
 	}
 } else {
-	if (isset($_POST['mysql'])) {
-		setupLog(gettext("Post of MySQL credentials"), true);
+	if (isset($_POST['db'])) {
+		setupLog(gettext("Post of Database credentials"), true);
 	} else {
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.'] '.date('r'), true, true);  // initialize the log file
 	}
@@ -287,8 +299,8 @@ if ($setup_checked) {
 		setupLog(gettext("Full environment"));
 	} else {
 		setupLog(gettext("Primitive environment"));
-		if ($result) {
-			setupLog(sprintf(gettext("Query error: %s"),mysql_error()), true);
+		if ($connectDBErr) {
+			setupLog(sprintf(gettext("Query error: %s"),$connectDBErr), true);
 		}
 	}
 	setcookie('setup_test_cookie', ZENPHOTO_RELEASE, time()+3600, '/');
@@ -413,6 +425,18 @@ cite {
 
 .warn {
 	background: url(images/warn.png) top left no-repeat;
+	padding-left: 20px;
+	line-height: normal;
+}
+
+.note_ok {
+	background: url(images/comments-on.png) top left no-repeat;
+	padding-left: 20px;
+	line-height: normal;
+}
+
+.note_exception {
+	background: url(images/comments-off.png) top left no-repeat;
 	padding-left: 20px;
 	line-height: normal;
 }
@@ -571,14 +595,7 @@ $warn = false;
 if (!$setup_checked) {
 	?>
 	<p>
-		<?php
-		// Some descriptions about setup/upgrade.
-		if ($upgrade) {
-			echo gettext("Zenphoto has detected that you're upgrading to a new version.");
-		} else {
-			echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server.");
-		}
-	?>
+		<?php	echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server."); ?>
 	</p>
 	<h2><?php echo gettext("Systems Check:"); ?></h2>
 	<?php
@@ -667,7 +684,7 @@ if (!$setup_checked) {
 			<?php
 		} else {
 			?>
-			<li class="<?php echo $dsp; ?>"><?php echo  $text; ?></li>
+			<li class="<?php echo $dsp; ?>"><?php echo $text; ?></li>
 			<?php
 			$dsp .= ': '.trim($text);
 		}
@@ -819,10 +836,37 @@ if (!$setup_checked) {
 	$good = true;
 
 	?>
-	<ul>
-	<?php
+<ul>
+<?php
+if ($environ) {
+	//TODO: add each release as it happens
+	$zp_versions = array(	'1.2'=>'2213','1.2.1'=>'2635','1.2.2'=>'2983','1.2.3'=>'3427','1.2.4'=>'3716','1.2.5'=>'4022',
+												'1.2.6'=>'4335', '1.2.7'=>'4741','1.2.8'=>'4881','1.2.9'=>'5088',
+												'1.3.0'=>'5088','1.3.1'=>'5736');
+	$c = 0;
+	$prev = getOption('zenphoto_release');
+	$release = gettext('Upgrade from before Zenphoto v1.2');
+	foreach ($zp_versions as $rel=>$build) {
+		if ($build > $prev) {
+			break;
+		} else {
+			$c++;
+			$release = sprintf(gettext('Upgrade from Zenphoto v%s'),$rel);
+		}
+	}
+	if ($c == count($zp_versions)) {
+		$check = 1;
+		if ($build != $prev) {
+			$release = gettext('Updating current Zenphoto relase');
+		}
+	} else {
+		$check = -1;
+		$c = count($zp_versions)-$c;
+	}
+	checkmark($check,$release,$release.' '.sprintf(ngettext('[%u release skipped]','[%u releases skipped]',$c),$c),gettext('We do not test upgrades that skip releases. We recommend you upgrade in sequence.'));
+}
 
-	$required = '4.4.8';
+$required = '4.4.8';
 	$desired = '5.2';
 	$err = versionCheck($required, $desired, PHP_VERSION);
 	if ($err < 0) {
@@ -915,19 +959,48 @@ if (!$setup_checked) {
 		}
 	}
 
-	$sql = extension_loaded('mysql');
-	$good = checkMark($sql, gettext("PHP <code>MySQL support</code>"), gettext("PHP <code>MySQL support</code> [is not installed]"), gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists(CONFIGFILE)) {
 		require(CONFIGFILE);
 		$cfg = true;
 	} else {
 		$cfg = false;
 	}
+
+	$curdir = getcwd();
+	chdir(dirname(__FILE__));
+	$engines = array();
+	foreach (setup_glob('functions-db-*.php') as $engine) {
+		$engine = substr($engine,13,-4);
+		$engines[$engine] = extension_loaded(strtolower($engine));;
+	}
+	chdir($curdir);
+
+	if (!isset($_zp_conf_vars['db_software'])) {
+		$_zp_conf_vars['db_software'] = 'MySQL';
+	}
+
+	foreach ($engines as $engine=>$enabled) {
+		if ($engine == $_zp_conf_vars['db_software']) {
+			$good = checkMark($enabled, sprintf(gettext('PHP <code>%s support</code> for configured Database'),$engine), sprintf(gettext('PHP <code>%s support</code> for configured Database [is not installed]'),$engine), sprintf(gettext('Choose a different database engine or install %s support in your PHP to clear this condition.'),$engine)) && $good;
+		} else {
+			if ($enabled) {
+			?>
+	<li class="note_ok"><?php echo sprintf(gettext('PHP <code>%s support</code>'),$engine); ?></li>
+	<?php
+			} else {
+				?>
+	<li class="note_exception"><?php echo sprintf(gettext('PHP <code>%s support</code>  [is not installed]'),$engine); ?></li>
+	<?php
+			}
+		}
+	}
+
 	$good = checkMark($cfg, gettext('<em>zp-config.php</em> file'), gettext('<em>zp-config.php</em> file [does not exist]'),
 							sprintf(gettext('Setup was not able to create this file. You will need to edit the <code>zp-config.php.source</code> file as indicated in the file\'s comments and rename it to <code>zp-config.php</code>.'.
 							' Place the file in the %s folder.'),DATA_FOLDER).
 							sprintf(gettext('<br /><br />You can find the file in the "%s" directory.'),ZENFOLDER)) && $good;
 	if ($cfg) {
+
 		if (zp_loggedin(ADMIN_RIGHTS)) {
 			$selector =	'<select id="chmod_permissions" name="chmod_permissions" onchange="this.form.submit()">';
 			$c = 0;
@@ -974,108 +1047,129 @@ if (!$setup_checked) {
 			$filesetopt = '<form action="#">'.
 										sprintf(gettext('Change the filesystem character set define to %s'),$selector).
 										'</form><br />';
-		} else {
-			$filesetopt = '<p>'.gettext('You must be logged in to change the filesystem character set.');
+			$file = dirname(__FILE__).internalToFilesystem('/charset.tést');
+			$f = @fopen($file, 'r');
+			if ($f) {
+				$notice = -2;
+				$msg1 = sprintf(gettext('The filesystem character set is defined as %1$s.'),FILESYSTEM_CHARSET);
+				$msg2 = '<p>'.gettext('If your server filesystem character set different from this value file and folder names with characters with diacritical marks will cause problems.').'</p>'.
+								$filesetopt;
+				fclose($f);
+			} else {
+				$notice = -1;
+				$msg1 = sprintf(gettext('The filesystem character set is defined as %1$s [which may be incorrect].'),FILESYSTEM_CHARSET);
+				$msg2 = '<p>'.gettext('The <em>Setup</em> filesystem character set test failed. Your server filesystem character set may be set different from the defined value. File and folder names with characters with diacritical marks may cause problems.').'</p>'.
+								$filesetopt;
+			}
+			checkMark($notice, '', $msg1, $msg2);
 		}
-		$msg = sprintf(gettext('The filesystem character set is defined as %s.'),FILESYSTEM_CHARSET);
-		checkMark(-2, $msg, $msg,
-								'<p>'.gettext('If your server filesystem character set different from this value file and folder names with characters with diacritical marks will cause problems.').'</p>'.
-								$filesetopt);
 
 	}
-	if ($sql) {
+	if ($engines[$_zp_conf_vars['db_software']]) {
+
+		//begin MySQL specific code
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
 			$db = $_zp_conf_vars['mysql_database'];
 			$db = @mysql_select_db($db);
 		} else {
-			if (empty($connectDBErr)) $connectDBErr = mysql_error();
+			if (empty($connectDBErr)) $connectDBErr = mysql__error();
 		}
+		//end MySQL specific code
 	}
 	if ($connection) {
-		$mysqlv = trim(@mysql_get_server_info());
-		$i = strpos($mysqlv, "-");
-		if ($i !== false) {
-			$mysqlv = substr($mysqlv, 0, $i);
-		}
-		$required = '4.1';
-		$desired = '5.0';
+		$dbsoftware = db_software();
+		$dbapp = $dbsoftware['application'];
+		$mysqlv = $dbsoftware['version'];
+		$required = $dbsoftware['required'];
+		$desired = $dbsoftware['desired'];
 		$sqlv = versionCheck($required, $desired, $mysqlv);;
 	}
 	if ($cfg) {
 		@chmod(CONFIGFILE, 0666 & $chmod);
-		if (($adminstuff = !$sql || !$connection  || !$db) && is_writable(CONFIGFILE)) {
-			$good = checkMark(false, '', gettext("MySQL setup in <em>zp-config.php</em>"), $connectDBErr) && $good;
+		if (($adminstuff = !$engines[$_zp_conf_vars['db_software']] || !$connection  || !$db) && is_writable(CONFIGFILE)) {
+			$good = checkMark(false, '', gettext("Database setup in <em>zp-config.php</em>"), $connectDBErr) && $good;
 			// input form for the information
 			?>
-<li>
-<div class="sqlform">
-<p>
-<?php echo gettext("Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
-</p>
-<form action="setup.php" method="post">
-<input type="hidden" name="mysql"	value="yes" />
-<?php
+	<li>
+	<div class="sqlform">
+	<p><?php echo gettext("Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
+	</p>
+	<form action="setup.php" method="post"><input type="hidden" name="db"
+		value="yes" /> <?php
 if ($debug) {
 	echo '<input type="hidden" name="debug" />';
 }
 ?>
-<table class="inputform">
-	<tr>
-		<td><?php echo gettext("MySQL admin user") ?></td>
-		<td>
-			<input type="text" size="40" name="mysql_user" value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*
-		</td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("MySQL admin password") ?></td>
-		<td>
-			<input type="password" size="40" name="mysql_pass" value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*
-		</td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("MySQL host") ?></td>
-		<td>
-			<input type="text" size="40" name="mysql_host" value="<?php echo $_zp_conf_vars['mysql_host']?>" />
-		</td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("MySQL database") ?></td>
-		<td>
-			<input type="text" size="40" name="mysql_database" value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*
-		</td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Database table prefix") ?></td>
-		<td>
-			<input type="text" size="40" name="mysql_prefix" value="<?php echo $_zp_conf_vars['mysql_prefix']?>" />
-		</td>
-	</tr>
-	<tr>
-		<td></td>
-		<td align="right">* <?php echo gettext("required") ?></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>
-			<input type="submit" value="<?php echo gettext('save'); ?>" />
-		</td>
-	</tr>
-</table>
-</form>
-</div>
-</li>
-<?php
+	<table class="inputform">
+		<tr>
+			<td><?php echo gettext("Database engine") ?></td>
+			<td><select name="db_software">
+				<?php
+				foreach ($engines as $engine=>$enabled) {
+					$modifiers = '';
+					if ($enabled) {
+						if ($engine == $_zp_conf_vars['db_software']) {
+							$modifiers = ' selected="selected"';
+						}
+					} else {
+						$modifiers = ' disabled="disabled"';
+					}
+					?>
+				<option value="<?php echo $engine; ?>" <?php echo $modifiers; ?>><?php echo $engine; ?></option>
+				<?php
+				}
+			?>
+			</select></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("Database admin user") ?></td>
+			<td><input type="text" size="40" name="db_user"
+				value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("Database admin password") ?></td>
+			<td><input type="password" size="40" name="db_pass"
+				value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("Database host") ?></td>
+			<td><input type="text" size="40" name="db_host"
+				value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("Database name") ?></td>
+			<td><input type="text" size="40" name="db_database"
+				value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("Database table prefix") ?></td>
+			<td><input type="text" size="40" name="db_prefix"
+				value="<?php echo $_zp_conf_vars['mysql_prefix']?>" /></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="right">* <?php echo gettext("required") ?></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+		</tr>
+	</table>
+	</form>
+	</div>
+	</li>
+	<?php
 		} else {
 			if ($connectDBErr) {
 				$msg = $connectDBErr;
 			} else {
-				$msg = gettext("You have not correctly set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.");
+				$msg = gettext("You have not correctly set your <strong>Database</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.");
 			}
-			$good = checkMark(!$adminstuff, gettext("MySQL setup in <em>zp-config.php</em>"), '',$msg) && $good;
+			$good = checkMark(!$adminstuff, gettext("Database setup in <em>zp-config.php</em>"), '',$msg) && $good;
 		}
 	} else {
-		$good = checkMark($connection, gettext("Connect to MySQL"), gettext("Connect to MySQL [<code>CONNECT</code> query failed]"), $connectDBErr) && $good;
+		$good = checkMark($connection, gettext("Connect to MySQL"), gettext("Connect to Database [<code>CONNECT</code> query failed]"), $connectDBErr) && $good;
 	}
 	if (!$newconfig && !$connection) {
 		if (empty($_zp_conf_vars['mysql_host']) || empty($_zp_conf_vars['mysql_user']) || empty($_zp_conf_vars['mysql_pass'])) {
@@ -1083,7 +1177,7 @@ if ($debug) {
 		}
 	}
 	if ($connection) {
-		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is preferred.'),$required,$desired)) && $good;
+		$good = checkMark($sqlv, sprintf(gettext('%1$s version %2$s'),$dbapp,$mysqlv), "", sprintf(gettext('Version %1$s or greater is required. Use a lower version at your own risk.<br />Version %2$s or greater is preferred.'),$required,$desired)) && $good;
 		if ($DBcreated || !empty($connectDBErr)) {
 			if (empty($connectDBErr)) {
 				$severity = 1;
@@ -1101,53 +1195,62 @@ if ($debug) {
 		}
 		if ($environ) {
 			if ($sqlv == 0) $sqlv = -1; // make it non-fatal
-			$good = checkMark($db, gettext("Connect to the database"), '',
+			$good = checkMark($sqlv, gettext("Connect to the database"), '',
 								sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.
-								gettext("Check the <code>user</code>, <code>password</code>, <code>database name</code>, and <code>MySQL host</code>.").'<br />' .
+								gettext("Check the <code>user</code>, <code>password</code>, <code>database name</code>, and <code>Database host</code>.").'<br />' .
 								sprintf(gettext("Make sure the database has been created and that <code>%s</code> has access to it."),$_zp_conf_vars['mysql_user'])) && $good;
 
-			$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+
+			//begin MySQL specific?
+			$result = query('SELECT @@SESSION.sql_mode;', true);
 			if ($result) {
-				$row = @mysql_fetch_row($result);
+				$row = db_fetch_row($result);
 				$oldmode = $row[0];
 			}
-			$result = @mysql_query('SET SESSION sql_mode="";', $mysql_connection);
-			$msg = gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.');
+			$result = query('SET SESSION sql_mode="";', true);
+			$msg = gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your Database configuration.');
 			if ($result) {
-				$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+				$result = query('SELECT @@SESSION.sql_mode;', true);
 				if ($result) {
-					$row = @mysql_fetch_row($result);
+					$row = db_fetch_row($result);
 					$mode = $row[0];
 					if ($oldmode != $mode) {
-						checkMark(-1, sprintf(gettext('MySQL <code>SQL mode</code> [<em>%s</em> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
+						checkMark(-1, sprintf(gettext('<code>SQL mode</code> [<em>%s</em> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your Dataabase configuration.'));
 					} else {
 						if (!empty($mode)) {
 							$err = -1;
 						} else {
 							$err = 1;
 						}
-						checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySQL errors.'));
+						checkMark($err, gettext('<code>SQL mode</code>'), sprintf(gettext('<code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get Database errors.'));
 					}
 				} else {
-					checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), $msg);
+					checkMark(-1, '', sprintf(gettext('<code>SQL mode</code> [query failed]'), $oldmode), $msg);
 				}
 			} else {
-				checkMark(-1, '', gettext('MySQL <code>SQL mode</code> [SET SESSION failed]'), $msg);
+				checkMark(-1, '', gettext('<code>SQL mode</code> [SET SESSION failed]'), $msg);
 			}
+			//end MySQL specific?
+
 			$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
+
+			//begin MySql specific code.
 			if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
 				$sql = "SHOW GRANTS FOR CURRENT_USER;";
 			} else {
 				$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";
 			}
-			$result = @mysql_query($sql, $mysql_connection);
+			$result = query($sql, true);
 			if (!$result) {
-				$result = @mysql_query("SHOW GRANTS;", $mysql_connection);
+				$result = query("SHOW GRANTS;", true);
 			}
-			$MySQL_results = array();
-			while ($onerow = @mysql_fetch_row($result)) {
-				$MySQL_results[] = $onerow[0];
+			//end MySQL specific code
+
+			$db_results = array();
+			while ($onerow = db_fetch_row($result)) {
+				$db_results[] = $onerow[0];
 			}
+
 			$access = -1;
 			$rightsfound = 'unknown';
 			$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
@@ -1162,7 +1265,7 @@ if ($debug) {
 			$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
 			if ($result) {
 				$report = "<br /><br /><em>".gettext("Grants found:")."</em> ";
-				foreach ($MySQL_results as $row) {
+				foreach ($db_results as $row) {
 					$row_report = "<br /><br />".$row;
 					$r = str_replace(',', '', $row);
 					$i = strpos($r, "ON");
@@ -1191,28 +1294,28 @@ if ($debug) {
 			} else {
 				$report = "<br /><br />".gettext("The <em>SHOW GRANTS</em> query failed.");
 			}
-			checkMark($access, gettext("MySQL <code>access rights</code>"), sprintf(gettext("MySQL <code>access rights</code> [%s]"),$rightsfound),
-			sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
+			checkMark($access, gettext("Database <code>access rights</code>"), sprintf(gettext("Database <code>access rights</code> [%s]"),$rightsfound),
+			sprintf(gettext("Your Database user must have %s rights."),$neededlist) . $report);
 
 
 			$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
-			$result = @mysql_query($sql, $mysql_connection);
+			$result = query($sql, true);
 			$tableslist = '';
 			if ($result) {
-				while ($row = @mysql_fetch_row($result)) {
+				while ($row = @db_fetch_row($result)) {
 					$tableslist .= "<code>" . $row[0] . "</code>, ";
 				}
 			}
 			if (empty($tableslist)) {
-				$msg = gettext('MySQL <em>show tables</em> [found no tables]');
+				$msg = gettext('<em>SHOW TABLES</em> [found no tables]');
 				$msg2 = '';
 			} else {
-				$msg = sprintf(gettext("MySQL <em>show tables</em> found: %s"),substr($tableslist, 0, -2));
+				$msg = sprintf(gettext("<em>SHOW TABLES</em> found: %s"),substr($tableslist, 0, -2));
 				$msg2 = '';
 			}
 			if (!$result) { $result = -1; }
 			$dbn = $_zp_conf_vars['mysql_database'];
-			checkMark($result, $msg, gettext("MySQL <em>show tables</em> [Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
+			checkMark($result, $msg, gettext("<em>SHOW TABLES</em> [Failed]"), sprintf(gettext("The database did not return a list of the database tables for <code>%s</code>."),$dbn) .
 											"<br />".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 			if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
@@ -1220,9 +1323,9 @@ if ($debug) {
 				$fieldlist = array();
 				if (strpos($tableslist,$_zp_conf_vars['mysql_prefix'].'images') !== false) {
 					$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'images`';
-					$result1 = @mysql_query($sql, $mysql_connection);
+					$result1 = query($sql, true);
 					if ($result1) {
-						while ($row = @mysql_fetch_row($result1)) {
+						while ($row = @db_fetch_row($result1)) {
 							if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
 								$fields = $fields | 1;
 								$fieldlist[] = '<code>images->'.$row[0].'</code>';
@@ -1234,9 +1337,9 @@ if ($debug) {
 				}
 				if (strpos($tableslist,$_zp_conf_vars['mysql_prefix'].'albums') !== false) {
 					$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
-					$result2 = @mysql_query($sql, $mysql_connection);
+					$result2 = query($sql, true);
 					if ($result2) {
-						while ($row = @mysql_fetch_row($result2)) {
+						while ($row = @db_fetch_row($result2)) {
 							if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
 								$fields = $fields | 2;
 								$fieldlist[] = '<code>albums->'.$row[0].'</code>';
@@ -1253,21 +1356,21 @@ if ($debug) {
 						$err = 1;
 						break;
 					case 1:
-						$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
+						$msg2 = gettext('Database <code>field collations</code> [Image table]');
 						break;
 					case 2:
-						$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
+						$msg2 = gettext('Database <code>field collations</code> [Album table]');
 						break;
 					case 3:
-						$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
+						$msg2 = gettext('Database <code>field collations</code> [Image and Album tables]');
 						break;
 					default:
-						$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
+						$msg2 = gettext('Database <code>field collations</code> [SHOW COLUMNS query failed]');
 						break;
 				}
-				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
+				checkmark($err, gettext('Database <code>field collations</code>'), $msg2, sprintf(ngettext('%s is not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>','%s are not UTF-8. You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code>',count($fieldlist)),implode(', ',$fieldlist)));
 			} else {
-				checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
+				checkmark(-1, '', gettext('Database <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
 			}
 		}
 	}
@@ -1356,10 +1459,10 @@ if ($debug) {
 		$folders = explode('/',$component);
 		$folder = array_shift($folders);
 		switch ($folder) {
-			case 'albums':
-			case 'cache':
-			case 'zp-data':
-			case 'uploaded':
+			case ALBUMFOLDER:
+			case CACHEFOLDER:
+			case DATA_FOLDER:
+			case UPLOAD_FOLDER:
 				unset($installed_files[$key]);
 				break;
 			case 'plugins':
@@ -1372,14 +1475,17 @@ if ($debug) {
 				break;
 		}
 	}
-	$filelist = implode("<br />", $installed_files);
+	$filelist = '';
+	foreach ($installed_files as $extra) {
+		$filelist .= filesystemToInternal(str_replace($base,'',$extra).'<br />');
+	}
 	if (count($installed_files) > 0) {
 		if (!defined("RELEASE")) {
 			$msg1 = gettext("Zenphoto core files [This is not an official build. Some files are missing or seem out of variance]");
 		} else {
 			$msg1 = gettext("Zenphoto core files [Some files are missing or seem out of variance]");
 		}
-		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').'<br /><code>'.$filelist.'</code>';
+		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').'<br /><code>'.substr($filelist,0,-6).'</code>';
 		$mark = -1;
 	} else {
 		if (!defined("RELEASE")) {
@@ -1395,14 +1501,11 @@ if ($debug) {
 
 	$filelist = '';
 	foreach ($_zp_resident_files as $extra) {
-		$filelist .= str_replace($base,'',$extra).'<br />';
+		$filelist .= filesystemToInternal(str_replace($base,'',$extra).'<br />');
 	}
-//TODO enable
-/*
 	if (!empty($filelist)) {
 		checkMark(-1, '', gettext('Zenphoto core folders [Some unknown files were found]'), gettext('You should remove the following files: ').'<br /><code>'.substr($filelist,0,-6).'</code>');
 	}
-*/
 
 	if (zp_loggedin(ADMIN_RIGHTS)) checkMark($permissions, gettext("Zenphoto core file permissions"), gettext("Zenphoto core file permissions [not correct]"), gettext('Setup could not set the one or more components to the selected permissions level. You will have to set the permissions manually. See the <a href="//www.zenphoto.org/2009/03/troubleshooting-zenphoto/#29">Troubleshooting guide</a> for details on Zenphoto permissions requirements.'));
 	$msg = gettext("<em>.htaccess</em> file");
@@ -1563,10 +1666,9 @@ if ($debug) {
 	$good = folderCheck(gettext('Third party plugins'), dirname(dirname(__FILE__)) . '/'.USER_PLUGIN_FOLDER.'/', 'std', false, $plugin_subfolders) && $good;
 
 	?>
-	</ul>
-	<?php
+</ul>
+<?php
 
-	if ($connection) { @mysql_close($connection); }
 	if ($good) {
 		$dbmsg = "";
 	} else {
@@ -1576,8 +1678,8 @@ if ($debug) {
 				<?php echo gettext("You need to address the problems indicated above then run <code>setup.php</code> again."); ?>
 			</div>
 			<p class='buttons'>
-				<a href="#" title="<?php echo gettext("Setup failed."); ?>" style="font-size: 15pt; font-weight: bold;" disabled="disabled">
-					<img src="images/fail.png" alt=""/> <?php echo gettext("Stop"); ?>
+				<a href="?refresh" title="<?php echo gettext("Setup failed."); ?>" style="font-size: 15pt; font-weight: bold;">
+					<img src="images/fail.png" alt=""/> <?php echo gettext("Refresh"); ?>
 				</a>
 			</p>
 			<br clear="all" /><br clear="all" />
@@ -1632,10 +1734,10 @@ if (file_exists(CONFIGFILE)) {
 	if (db_connect() && empty($task)) {
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
-		$result = mysql_query($sql, $mysql_connection);
+		$result = query($sql, true);
 		$tables = array();
 		if ($result) {
-			while ($row = mysql_fetch_row($result)) {
+			while ($row = db_fetch_row($result)) {
 				$tables[$row[0]] = 'update';
 			}
 		}
@@ -1645,7 +1747,9 @@ if (file_exists(CONFIGFILE)) {
 			$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
 			$_zp_conf_vars['mysql_prefix'].'captcha',$_zp_conf_vars['mysql_prefix'].'zenpage_pages',
 			$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
-			$_zp_conf_vars['mysql_prefix'].'zenpage_news',$_zp_conf_vars['mysql_prefix'].'menu');
+			$_zp_conf_vars['mysql_prefix'].'zenpage_news',$_zp_conf_vars['mysql_prefix'].'menu',
+			$_zp_conf_vars['mysql_prefix'].'failed_access'
+			);
 
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {
@@ -1689,6 +1793,8 @@ if (file_exists(CONFIGFILE)) {
 	$tbl_zenpage_news_categories = prefix('zenpage_news_categories');
 	$tbl_zenpage_news2cat = prefix('zenpage_news2cat');
 	$tbl_menu_manager = prefix('menu');
+	$tbl_failed_access = prefix('failed_access');
+
 	// Prefix the constraint names:
 	$cst_images = prefix('images_ibfk1');
 
@@ -1924,6 +2030,14 @@ if (file_exists(CONFIGFILE)) {
 		PRIMARY KEY  (`id`)
 		) $collation;";
 	}
+	// v 1.3.2
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'failed_access'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('failed_access')." (
+		`ip` VARCHAR( 63 ) NOT NULL ,
+		`accesstime` INT NOT NULL
+		) $collation;";
+	}
+
 
 	/****************************************************************************************
 	 ******                             UPGRADE SECTION                                ******
@@ -1951,8 +2065,8 @@ if (file_exists(CONFIGFILE)) {
 	//v. 1.1
 	$sql_statements[] = "ALTER TABLE $tbl_options DROP `bool`, DROP `description`;";
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `value` `value` text;";
-	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`;";
-	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE (`name`);";
+//v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`;";
+//v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE (`name`);";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `commentson` int(1) UNSIGNED NOT NULL default '1';";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `subalbum_sort_type` varchar(20) default NULL;";
 //v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `tags` text;";
@@ -1993,10 +2107,10 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
 	//	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
 	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."comments`";
-	$result = mysql_query($sql, $mysql_connection);
+	$result = query($sql, true);
 	$hasownerid = false;
 	if ($result) {
-		while ($row = mysql_fetch_row($result)) {
+		while ($row = db_fetch_row($result)) {
 			if ($row[2] == 'ownerid') {
 				$hasownerid = true;
 			} else {
@@ -2026,7 +2140,7 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_administrators CHANGE `name` `name` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
 	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`";
-	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`)";
+//v1.2.7 omits	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`)";
 
 	//v1.2
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `ownerid` `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
@@ -2034,9 +2148,9 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$hastagidindex = false;
 	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."obj_to_tag`";
-	$result = mysql_query($sql, $mysql_connection);
+	$result = query($sql, true);
 	if ($result) {
-		while ($row = mysql_fetch_row($result)) {
+		while ($row = db_fetch_row($result)) {
 			if ($row[2] == 'tagid') {
 				$hastagidindex = true;
 			}
@@ -2110,9 +2224,9 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `valid` int(1) default 1';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' ADD COLUMN `group` varchar(64)';
 	$sql = 'SHOW INDEX FROM '.$tbl_administrators;
-	$result = mysql_query($sql, $mysql_connection);
+	$result = query($sql, true);
 	if ($result) {
-		while ($row = mysql_fetch_row($result)) {
+		while ($row = db_fetch_row($result)) {
 			if ($row[2] == 'user') {
 				$sql_statements[] = "ALTER TABLE $tbl_administrators DROP INDEX `user`";
 				$sql_statements[] = "ALTER TABLE $tbl_administrators ADD UNIQUE (`valid`, `user`)";
@@ -2153,12 +2267,13 @@ if (file_exists(CONFIGFILE)) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' ADD COLUMN `type` varchar(32) DEFAULT "album";';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_admin_to_object.' CHANGE `albumid` `objectid` int(11) UNSIGNED NOT NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_administrators.' CHANGE `albums` `objects` varchar(64)';
-
-	//v1.3.1
 	$sql_statements[] = "ALTER TABLE $tbl_zenpage_news ADD COLUMN `sticky` int(1) default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `codeblock` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `codeblock` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_admin_to_object ADD COLUMN `edit` int default 32767";
+
+	//v1.3.2
+	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `value` `value` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 
 
 	// do this last incase there are any field changes of like names!
@@ -2191,33 +2306,31 @@ if (file_exists(CONFIGFILE)) {
 			}
 			setupLog(gettext("Begin table creation"));
 			foreach($db_schema as $sql) {
-				$result = mysql_query($sql);
+				$result = query($sql);
 				if (!$result) {
 					$createTables = false;
-					setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
+					setupLog(sprintf(gettext('Query %1$s Failed. Error: %2$s'),$sql,db_error()));
 					echo '<div class="error">';
-					echo sprintf(gettext('Table creation failure: %s'),mysql_error());
+					echo sprintf(gettext('Table creation failure: %s'),db_error());
 					echo '</div>';
 				} else {
-					setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
+					setupLog(sprintf(gettext('Query ( %s ) Success.'),$sql));
 				}
 			}
 			// always run the update queries to insure the tables are up to current level
 			setupLog(gettext("Begin table updates"));
 			foreach($sql_statements as $sql) {
-				$result = mysql_query($sql);
+				$result = query($sql,true);
 				if (!$result) {
-					setupLog(sprintf(gettext('MySQL Query %1$s Failed. Error: %2$s'),$sql,mysql_error()));
+					setupLog(sprintf(gettext('Query %1$s Failed. Error: %2$s'),$sql,db_error()));
 				} else {
-					setupLog(sprintf(gettext('MySQL Query ( %s ) Success.'),$sql));
+					setupLog(sprintf(gettext('Query ( %s ) Success.'),$sql));
 				}
 			}
 
 			// set defaults on any options that need it
 			setupLog(gettext("Done with database creation and update"));
-
 			$prevRel = getOption('zenphoto_release');
-
 			setupLog(sprintf(gettext("Previous Release was %s"),$prevRel));
 
 			$_zp_gallery = new Gallery();
@@ -2228,24 +2341,6 @@ if (file_exists(CONFIGFILE)) {
 			foreach ($badplugs as $plug) {
 				$path = SERVERPATH . '/' . ZENFOLDER .'/'.PLUGIN_FOLDER.'/' . $plug;
 				@unlink($path);
-			}
-
-			// 1.1.7 conversion to the theme option tables
-			$albums = $_zp_gallery->getAlbums();
-			foreach ($albums as $albumname) {
-				$album = new Album($_zp_gallery, $albumname);
-				$theme = $album->getAlbumTheme();
-				if (!empty($theme)) {
-					$tbl = prefix(getOptionTableName($album->name));
-					$sql = "SELECT `name`,`value` FROM " . $tbl;
-					$result = query_full_array($sql, true);
-					if (is_array($result)) {
-						foreach ($result as $row) {
-							setThemeOption($row['name'], $row['value'], $album);
-						}
-					}
-					query('DROP TABLE '.$tbl, true);
-				}
 			}
 
 			// 1.2 force up-convert to tag tables

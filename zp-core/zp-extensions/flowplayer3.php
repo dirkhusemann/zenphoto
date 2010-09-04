@@ -22,11 +22,7 @@ if ($plugin_disable) {
 	global $_zp_flash_player;
 	$option_interface = new flowplayer3();
 	$_zp_flash_player = $option_interface; // claim to be the flash player.
-	ob_start();
-	flowplayer2JS();
-	$str = ob_get_contents();
-	ob_end_clean();
-	addPluginScript($str);
+	zp_register_filter('theme_head','flowplayer2JS');
 }
 function flowplayer2JS() {
 	$curdir = getcwd();

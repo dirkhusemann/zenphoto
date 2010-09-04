@@ -7,12 +7,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <head>
 	<title><?php echo getBareGalleryTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
-	<?php zenJavascript(); ?>
-	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+	<?php zp_apply_filter('theme_head'); ?>
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/slideshow.css" type="text/css" />
 	<?php printSlideShowJS(); ?>
 </head>
 <body>
+<?php zp_apply_filter('theme_body_open'); ?>
 	<!-- Wrap Everything -->
 	<div id="main4">
 		<div id="main2">
@@ -31,11 +32,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<?php
 						if (getOption('custom_index_page') === 'gallery') {
 						?>
-						<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> |
+						<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> |
 						<?php
 						}
 						?>
-						<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
+						<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
 						<?php echo getGalleryTitle();?></a> |
 						<?php
 						if (is_null($_zp_current_album)) {
@@ -48,7 +49,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							$searchfields = $search->getSearchFields(true);
 							$page = $search->page;
 							$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
-							echo '<a href='.htmlspecialchars($returnpath,ENT_QUOTES).'><em>'.gettext('Search').'</em></a> | ';
+							echo '<a href='.html_encode($returnpath).'><em>'.gettext('Search').'</em></a> | ';
 						} else {
 							printParentBreadcrumb();
 							printAlbumBreadcrumb("", " | ");
@@ -75,6 +76,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		?>
 		<?php printZenphotoLink(); ?>
 	</div> <!-- footlinks -->
-	<?php printAdminToolbox(); ?>
+	<?php
+	printFooter();
+	zp_apply_filter('theme_body_close');
+	?>
 </body>
 </html>

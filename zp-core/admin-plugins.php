@@ -66,7 +66,7 @@ echo sprintf(gettext("Third party plugins are placed in the <code>%s</code> fold
 echo gettext("If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
 ?>
 </p>
-<p class='notebox'><?php echo gettext("<strong>Note:</strong> Not all themes are setup with support for all plugins! You may need to add the plugin theme functions of some of them yourself."); ?>
+<p class='notebox'><?php echo gettext("<strong>Note:</strong> Support for a particular plugin may be theme dependent! You may need to add the plugin theme functions if the theme does not currently provide support."); ?>
 </p>
 <form action="?action=saveplugins" method="post">
 	<?php XSRFToken('saveplugins');?>

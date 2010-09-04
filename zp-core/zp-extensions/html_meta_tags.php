@@ -1,23 +1,23 @@
 <?php
-/** 
+/**
  * A plugin to print the most common html meta tags to the head of your site's pages using
  * general existing Zenphoto info like gallery description, tags or Zenpage news categories.
- *  
- * Just enable the plugin and the meta data will be inserted into your <head> section. 
+ *
+ * Just enable the plugin and the meta data will be inserted into your <head> section.
  * You can choose on the plugin's admin option what tags you want to be printed.
- *   
+ *
  * @author Malte Müller (acrylian)
- * @package plugins 
+ * @package plugins
  */
 
-$plugin_description = gettext("A plugin to print the most common HTML meta tags to the head of your site's pages. Tags are selected from existing Zenphoto info such as gallery description, tags, or Zenpage news categories."); 
+$plugin_description = gettext("A plugin to print the most common HTML meta tags to the head of your site's pages. Tags are selected from existing Zenphoto info such as gallery description, tags, or Zenpage news categories.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---html_meta_tags.php.html";
 $option_interface = new htmlmetatags();
 
 if (in_context(ZP_INDEX)) {
-	addPluginScript(getHTMLMetaData()); // insert the meta tags into the <head></head> if on a theme page.
+	zp_register_filter('theme_head','getHTMLMetaData'); // insert the meta tags into the <head></head> if on a theme page.
 }
 
 class htmlmetatags {
@@ -29,7 +29,7 @@ class htmlmetatags {
 		setOptionDefault('htmlmeta_revisit_after', '10 Days');
 		setOptionDefault('htmlmeta_expires', '43200');
 		setOptionDefault('htmlmeta_tags', '');
-		
+
 		// the html meta tag selector prechecked ones
 		setOptionDefault('htmlmeta_http-equiv-language', '1');
 		setOptionDefault('htmlmeta_name-language', '1');
@@ -63,9 +63,9 @@ class htmlmetatags {
 		gettext('Robots') => array('key' => 'htmlmeta_robots', 'type' => OPTION_TYPE_SELECTOR,
 										'selections' => array('noindex' => "noindex", 'index' => "index",	'nofollow' => "nofollow", 'noindex,nofollow' => "noindex,nofollow",'noindex,follow' => "noindex,follow", 'index,nofollow' => "index,nofollow",	'none' => "none"),
 										'desc' => gettext("If and how robots are allowed to visit the site. Default is 'index'. Note that you also should use a robot.txt file.")),
-		gettext('Revisit after') => array('key' => 'htmlmeta_revisit_after', 'type' => OPTION_TYPE_TEXTBOX, 
+		gettext('Revisit after') => array('key' => 'htmlmeta_revisit_after', 'type' => OPTION_TYPE_TEXTBOX,
 									'desc' => gettext("Request the crawler to revisit the page after x days.")),
-		gettext('Expires') => array('key' => 'htmlmeta_expires', 'type' => OPTION_TYPE_TEXTBOX, 
+		gettext('Expires') => array('key' => 'htmlmeta_expires', 'type' => OPTION_TYPE_TEXTBOX,
 									'desc' => gettext("When the page should be loaded directly from the server and not from any cache. You can either set a date/time in international date format <em>Sat, 15 Dec 2001 12:00:00 GMT (example)</em> or a number. A number then means seconds, the default value <em>43200</em> means 12 hours.")),
 		gettext('HTML meta tags') => array('key' => 'htmlmeta_tags', 'type' => OPTION_TYPE_CHECKBOX_UL,
 										"checkboxes" => array(
@@ -107,7 +107,7 @@ class htmlmetatags {
 												"name='DC.Date.created'" => "htmlmeta_name-DC.Date.created"
 												),
 										"desc" => gettext("Which of the HTML meta tags should be used. For info about these in detail please refer to the net."))
-		
+
 		);
 	}
 }
@@ -116,7 +116,7 @@ class htmlmetatags {
  * Prints html meta data to be used in the <head> section of a page
  *
  */
-function getHTMLMetaData() {	
+function getHTMLMetaData() {
 	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news,
 					$_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category, $_zp_authority;
 	$url = sanitize("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
@@ -152,7 +152,7 @@ function getHTMLMetaData() {
 				$pagetitle = getBarePageTitle()." - ";
 				$date = getPageDate();
 				$desc = strip_tags(getPageContent());
-			} 
+			}
 		}
 		// shorten desc to the allowed 200 characters if necesssary.
 		if(strlen($desc) > 200) {
@@ -161,15 +161,11 @@ function getHTMLMetaData() {
 
 		$pagetitle = $pagetitle.getBareGalleryTitle();
 
-		// get master admin
-		$admins = $_zp_authority->getAdministrators();
-		$admincount = 0;
-		foreach($admins as $admin) {
-			$admincount++;
-			$author = $admin['name'];
-			if($admincount === 1 ) break;
-		}
-	$meta = ''; 
+	// get master admin
+	$admins = $_zp_authority->getAdministrators();
+	$admin = array_shift($admins);
+	$author = $admin['name'];
+	$meta = '';
 	if(getOption('htmlmeta_http-equiv-language')) { $meta .= '<meta http-equiv="language" content="'.$locale.'" />'."\n"; }
 	if(getOption('htmlmeta_name-language')) { $meta .= '<meta name="language" content="'.$locale.'" />'."\n"; }
 	if(getOption('htmlmeta_name-content-language')) { $meta .= '<meta name="content-language" content="'.$locale.'" />'."\n"; }
@@ -207,11 +203,11 @@ function getHTMLMetaData() {
 	if(getOption('htmlmeta_name-DC.relation')) { $meta .= '<meta name="DC.relation" content="'.FULLWEBPATH.'" />'."\n"; }
 	if(getOption('htmlmeta_name-DC.Date.created')) { $meta .= '<meta name="DC.Date.created" content="'.$date.'" />'."\n"; }
 
-	return $meta;
+	echo $meta;
 }
 
 /**
- * Helper function to list tags/categories as keywords separated by comma. 
+ * Helper function to list tags/categories as keywords separated by comma.
  *
  * @param array $array the array of the tags or categories to list
  */
@@ -260,10 +256,10 @@ function getMetaAlbumAndImageTags($tags,$mode="") {
 			if($count >= count($tags)) $separator = "";
 			switch($mode) {
 				case "gallery":
-					$alltags .= htmlspecialchars($keyword).$separator;
+					$alltags .= html_encode($keyword).$separator;
 					break;
 				case "zenpage":
-					$alltags .= htmlspecialchars($keyword["cat_name"]).$separator;
+					$alltags .= html_encode($keyword["cat_name"]).$separator;
 					break;
 			}
 		}

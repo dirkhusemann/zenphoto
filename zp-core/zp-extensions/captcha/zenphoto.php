@@ -102,7 +102,7 @@ class captcha {
 		if ($code_cypher != $code_ok || strlen($code) != $captcha_len) { return false; }
 		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600)); // expired tickets
 		$result = query('DELETE FROM '.prefix('captcha').' WHERE `hash`="'.$code_cypher.'"');
-		$count = mysql_affected_rows();
+		$count = db_affected_rows();
 		if ($count == 1) {
 			$len = rand(0, strlen($key)-1);
 			$key = md5(substr($key, 0, $len).$code.substr($key, $len));

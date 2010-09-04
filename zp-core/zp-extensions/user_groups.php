@@ -1,13 +1,13 @@
 <?php
 /**
  * Provides rudimentary user groups
- * 
+ *
  * @package plugins
  */
 $plugin_is_filter = 5;
 $plugin_description = gettext("Provides rudimentary user groups.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---user_groups.php.html";
 
 zp_register_filter('admin_tabs', 'user_groups_admin_tabs');
@@ -26,7 +26,7 @@ zp_register_filter('edit_admin_custom_data', 'user_groups_edit_admin');
  */
 function user_groups_save_admin($updated, $userobj, $i) {
 	global $_zp_authority;
-	$administrators = $_zp_authority->getAdministrators();
+	$administrators = $_zp_authority->getAdministrators('all');
 	if (isset($_POST[$i.'group'])) {
 		$groupname = sanitize($_POST[$i.'group']);
 		$oldgroup = $userobj->getGroup();
@@ -35,12 +35,12 @@ function user_groups_save_admin($updated, $userobj, $i) {
 				$updated = $groupname != $oldgroup;
 				$group = $_zp_authority->newAdministrator($oldgroup, 0);
 				$userobj->setRights($group->getRights());
-				$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
+				$userobj->setObjects($group->getObjects());
 			}
 		} else {
 			$group = $_zp_authority->newAdministrator($groupname, 0);
 			$userobj->setRights($group->getRights());
-			$userobj->setObjects(populateManagedObjectsList(NULL,$group->getID()));
+			$userobj->setObjects($group->getObjects());
 			if ($group->getName() == 'template') $groupname = '';
 			$updated = true;
 		}
@@ -62,7 +62,7 @@ function user_groups_save_admin($updated, $userobj, $i) {
 function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	global $gallery, $_zp_authority;
 	$group = $userobj->getGroup();
-	$admins = $_zp_authority->getAdministrators();
+	$admins = $_zp_authority->getAdministrators('all');
 	$ordered = array();
 	$groups = array();
 	$hisgroup = NULL;
@@ -81,7 +81,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	if (empty($groups)) return ''; // no groups setup yet
 	if (zp_loggedin(ADMIN_RIGHTS)) {
 		$albumlist = array();
-		$allo = array();
+		$allalb = array();
 		foreach ($gallery->getAlbums() as $folder) {
 			if (hasDynamicAlbumSuffix($folder)) {
 				$name = substr($folder, 0, -4); // Strip the .'.alb' suffix
@@ -89,7 +89,23 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 				$name = $folder;
 			}
 			$albumlist[$name] = $folder;
-			$allo[] = "'#managed_albums_".$i.'_'.postIndexEncode($folder)."'";
+			$allalb[] = "'#managed_albums_".$i.'_'.postIndexEncode($folder)."'";
+		}
+		$pageslist = array();
+		$allpag = array();
+		$pages = getPages(false);
+		foreach ($pages as $page) {
+			if (!$page['parentid']) {
+				$pagelist[get_language_string($page['title'])] = $page['titlelink'];
+				$allpag[] = "'#managed_pages_".$i.'_'.postIndexEncode($page['titlelink'])."'";
+			}
+		}
+		$newslist = array();
+		$allnew = array();
+		$categories = getAllCategories();
+		foreach ($categories as $category) {
+			$newslist[get_language_string($category['cat_name'])] = $category['cat_link'];
+			$allnew[] = "'#managed_news_".$i.'_'.postIndexEncode($page['titlelink'])."'";
 		}
 		$rights = array();
 		foreach ($_zp_authority->getRights() as $rightselement=>$right) {
@@ -107,29 +123,61 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 					var checked = 0;
 					var uncheckedalbums = [];
 					var unchecked = 0;
-					var allalbums = ['.implode(',', $allo).'];
-					var allc = '.count($allo).';
+					var allalbums = ['.implode(',', $allalb).'];
+					var allalbumsc = '.count($allalb).';
+					var allpages = ['.implode(',', $allpag).'];
+					var allpagesc = '.count($allpag).';
+					var allnews = ['.implode(',', $allnew).'];
+					var allnewsc = '.count($allnew).';
 					var rights = ['.implode(',',$rights).'];
 					var rightsc = '.count($rights).';
 					for (i=0;i<rightsc;i++) {
 						$(rights[i]).attr(\'disabled\',disable);
 					}
-					for (i=0;i<allc;i++) {
+					for (i=0;i<allalbumsc;i++) {
 						$(allalbums[i]).attr(\'disabled\',disable);
+					}
+					for (i=0;i<allpagesc;i++) {
+						$(allpages[i]).attr(\'disabled\',disable);
+					}
+					for (i=0;i<allnewsc;i++) {
+						$(allnews[i]).attr(\'disabled\',disable);
 					}
 					$(\'#hint'.$i.'\').html(obj.options[obj.selectedIndex].title);
 					if (disable) {
 						switch (obj.value) {';
 		foreach ($groups as $user) {
-			$cv = populateManagedObjectsList('album',$user['id']);
-			$xv = array_diff($albumlist, $cv);
-			$cvo = array();
-			foreach ($cv as $albumid) {
-				$cvo[] = "'#managed_albums_".$i.'_'.postIndexEncode($albumid)."'";
-			}
-			$xvo = array();
-			foreach ($xv as $albumid) {
-				$xvo[] = "'#managed_albums_".$i.'_'.postIndexEncode($albumid)."'";
+			$grouppart .= '
+							case \''.$user['user'].'\':
+								target = '.$user['rights'].';';
+
+			foreach (array('album','pages','news') as $mo) {
+				$cv = populateManagedObjectsList($mo,$user['id']);
+				switch ($mo) {
+					case 'album':
+						$xv = array_diff($albumlist, $cv);
+						break;
+					case 'pages':
+						$xv = array_diff($pagelist, $cv);
+						break;
+					case 'news':
+						$xv = array_diff($newslist, $cv);
+						break;
+				}
+
+				$cvo = array();
+				foreach ($cv as $moid) {
+					$cvo[] = "'#managed_".$mo."_".$i.'_'.postIndexEncode($moid)."'";
+				}
+				$xvo = array();
+				foreach ($xv as $moid) {
+					$xvo[] = "'#managed_".$mo."_".$i.'_'.postIndexEncode($moid)."'";
+				}
+				$grouppart .= '
+									checked'.$mo.' = ['.implode(',',$cvo).'];
+									checked'.$mo.'c = '.count($cvo).';
+									unchecked'.$mo.' = ['.implode(',',$xvo).'];
+									unchecked'.$mo.'c = '.count($xvo).';';
 			}
 			if ($user['name']=='template') {
 				$albdisable = 'false';
@@ -137,48 +185,67 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 				$albdisable = 'true';
 			}
 			$grouppart .= '
-							case \''.$user['user'].'\':
-								target = '.$user['rights'].';
-								checkedalbums = ['.implode(',',$cvo).'];
-								checked = '.count($cvo).';
-								uncheckedalbums = ['.implode(',',$xvo).'];
-								unchecked = '.count($xvo).';
 								break;';
 		}
 		$grouppart .= '
 							}
-						for (i=0;i<checked;i++) {
-							$(checkedalbums[i]).attr(\'checked\',\'checked\');
+						for (i=0;i<checkedalbumc;i++) {
+							$(checkedalbum[i]).attr(\'checked\',\'checked\');
 						}
-						for (i=0;i<unchecked;i++) {
-							$(uncheckedalbums[i]).attr(\'checked\',\'\');
+						for (i=0;i<uncheckedalbumc;i++) {
+							$(uncheckedalbum[i]).attr(\'checked\',\'\');
+						}
+						for (i=0;i<checkedpagesc;i++) {
+							$(checkedpages[i]).attr(\'checked\',\'checked\');
+						}
+						for (i=0;i<uncheckedpagesc;i++) {
+							$(uncheckedpages[i]).attr(\'checked\',\'\');
+						}
+						for (i=0;i<checkednewsc;i++) {
+							$(checkednews[i]).attr(\'checked\',\'checked\');
+						}
+						for (i=0;i<uncheckednewsc;i++) {
+							$(uncheckednews[i]).attr(\'checked\',\'\');
 						}
 						for (i=0;i<rightsc;i++) {
 							if ($(rights[i]).val()&target) {
 								$(rights[i]).attr(\'checked\',\'checked\');
 							} else {
 								$(rights[i]).attr(\'checked\',\'\');
-							}		
+							}
 						}
 					}
 				}';
 		if (is_array($hisgroup)) {
 			$grouppart .= '
 				window.onload = function() {';
-			$cv = populateManagedObjectsList('album',$hisgroup['id']);
-			foreach ($albumlist as $albumid) {
-				if (in_array($albumid,$cv)) {
-					$grouppart .= '
-					$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'checked\');';
-				} else {
-					$grouppart .= '
-					$(\'#managed_albums_'.$i.'_'.postIndexEncode($albumid).'\').attr(\'checked\',\'\');';
+			foreach (array('album','pages','news') as $mo) {
+				$cv = populateManagedObjectsList($mo,$user['id']);
+				switch ($mo) {
+					case 'album':
+						$list = $albumlist;
+						break;
+					case 'pages':
+						$list = $pagelist;
+						break;
+					case 'news':
+						$list = $newslist;
+						break;
+				}
+				foreach ($list as $moid) {
+					if (in_array($moid,$cv)) {
+						$grouppart .= '
+						$(\'#managed_'.$mo.'_'.$i.'_'.postIndexEncode($moid).'\').attr(\'checked\',\'checked\');';
+					} else {
+						$grouppart .= '
+						$(\'#managed_'.$mo.'_'.$i.'_'.postIndexEncode($moid).'\').attr(\'checked\',\'\');';
+					}
 				}
 			}
 			$grouppart .= '
 				}';
 		}
-		
+
 		$grouppart .= '
 				//]]> -->
 			</script>';
@@ -205,7 +272,7 @@ function user_groups_edit_admin($html, $userobj, $i, $background, $current) {
 	} else {
 		$grouppart = $group.'<input type="hidden" name="'.$i.'group" value="'.$group.'" />'."\n";
 	}
-	$result = 
+	$result =
 		'<tr'.((!$current)? ' style="display:none;"':'').' class="userextrainfo">
 			<td width="20%"'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Group:").'</td>
 			<td'.((!empty($background)) ? ' style="'.$background.'"':'').' valign="top" width="345">'.
@@ -232,12 +299,10 @@ function user_groups_admin_tabs($tabs, $current) {
 function user_groups_admin_alterrights($alterrights, $userobj) {
 	global $_zp_authority;
 	$group = $userobj->getGroup();
-	$admins = $_zp_authority->getAdministrators();
+	$admins = $_zp_authority->getAdministrators('groups');
 	foreach ($admins as $admin) {
-		if (!$admin['valid']) {	// is a group or template
-			if ($group == $admin['user']) {
-				return ' disabled="disabled"';				
-			}
+		if ($group == $admin['user']) {
+			return ' disabled="disabled"';
 		}
 	}
 	return $alterrights;

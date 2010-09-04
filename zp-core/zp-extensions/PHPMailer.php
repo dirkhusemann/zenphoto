@@ -1,15 +1,15 @@
 <?php
 /**
  * Mailing using PHPMailer classes
- * 
+ *
  * Configure the plugin options as necessary.
- * 
+ *
  * @package plugins
  */
 $plugin_is_filter = 5;
 $plugin_description = gettext("Zenphoto outgoing mail handler based on the <em>PHPMailer</em> class mailing facility.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---PHPMailer.html";
 $plugin_disable = (version_compare(PHP_VERSION, '5.0.0') != 1) ? gettext('PHP version 5 or greater is required.') : false;
 if ($plugin_disable) {
@@ -25,8 +25,8 @@ if ($plugin_disable) {
  *
  */
 class zp_PHPMailer {
-	
-	
+
+
 	/**
 	 * class instantiation function
 	 *
@@ -41,7 +41,7 @@ class zp_PHPMailer {
 		setOptionDefault('PHPMailer_password','');
 		setOptionDefault('PHPMailer_secure',0);
 	}
-	
+
 	/**
 	 * Reports the supported options
 	 *
@@ -75,7 +75,7 @@ class zp_PHPMailer {
 	function handleOption($option, $currentValue) {
 		if($option=="PHPMailer_password") {
 			?>
-			<input type="password" size="40" name="<?php echo $option; ?>" style="width: 338px" value="<?php echo htmlspecialchars($currentValue,ENT_QUOTES); ?>">
+			<input type="password" size="40" name="<?php echo $option; ?>" style="width: 338px" value="<?php echo html_encode($currentValue); ?>">
 			<?php
 		}
 	}
@@ -90,7 +90,7 @@ function zenphoto_PHPMailer($msg, $email_list, $subject, $message, $from_mail, $
 			$authorized = $pop->Authorise(getOption('PHPMailer_server'), getOption('PHPMailer_pop_port'), 30, getOption('PHPMailer_user'), getOption('PHPMailer_password'), 1);
 			$mail = new PHPMailer();
 			$mail->IsSMTP();
-			$mail->Port = getOption('PHPMailer_smtp_port'); 
+			$mail->Port = getOption('PHPMailer_smtp_port');
 			$mail->Host  = getOption('PHPMailer_server');
 			break;
 		case 'smtp':
@@ -117,7 +117,7 @@ function zenphoto_PHPMailer($msg, $email_list, $subject, $message, $from_mail, $
 	$mail->Body = $message;
 	$mail->AltBody = '';
 	$mail->IsHTML(false);
-	
+
 	foreach ($email_list as $to_name=>$to_mail) {
 		if (is_numeric($to_name)) {
 			$mail->AddAddress($to_mail);

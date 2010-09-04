@@ -107,7 +107,7 @@ if (isset($_GET['action'])) {
 					}
 					if ($error == UPLOAD_ERR_OK) {
 						if ($modified_rights & (ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
-							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
+							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo&albumimagesort=id_desc');
 						} else {
 							header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-upload.php?uploaded=1');
 						}
@@ -395,7 +395,7 @@ if (ini_get('safe_mode')) { ?>
 				<br />
 			</div>
 
-			<input id="folderslot" type="hidden" name="folder" value="<?php echo htmlspecialchars($passedalbum,ENT_QUOTES); ?>" />
+			<input id="folderslot" type="hidden" name="folder" value="<?php echo html_encode($passedalbum); ?>" />
 		</div>
 
 		<hr />
@@ -471,7 +471,7 @@ if (ini_get('safe_mode')) { ?>
 																		<?php
 																		if (zp_loggedin(ALBUM_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS)) {
 																			?>
-																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val()),'multifile=1']);
+																			launchScript('admin-edit.php',['page=edit','subpage=1','tab=imageinfo','album='+encodeURIComponent($('#folderdisplay').val()),'uploaded=1','albumimagesort=id_desc']);
 																			<?php
 																		} else {
 																			?>

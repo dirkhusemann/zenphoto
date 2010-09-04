@@ -5,7 +5,7 @@ function get_subalbum_count() {
 	$sql = "SELECT COUNT(id) FROM ". prefix("albums") ." WHERE parentid IS NOT NULL";
 	if (!zp_loggedin()) {$sql .= " AND `show` = 1"; }  /* exclude the un-published albums */
 	$result = query($sql);
-	$count = mysql_result($result, 0);
+	$count = db_result($result, 0);
 	return $count;
 }
 
@@ -29,7 +29,7 @@ function printHeadingImage($randomImage) {
 				$randomAlbum = $randomAlbum->getParent();
 			}
 		}
-		$randomImageURL = htmlspecialchars(getURL($randomImage));
+		$randomImageURL = html_encode(getURL($randomImage));
 		if (getOption('allow_upscale')) {
 			$wide = 620;
 			$high = 180;
@@ -38,10 +38,10 @@ function printHeadingImage($randomImage) {
 			$high = min(180, $randomImage->getHeight());
 	}
 		echo "<a href='".$randomImageURL."' title='".gettext('Random picture...')."'><img src='".
-					htmlspecialchars($randomImage->getCustomImage(NULL, $wide, $high, $wide, $high, NULL, NULL, !getOption('Watermark_head_image'))).
+					html_encode($randomImage->getCustomImage(NULL, $wide, $high, $wide, $high, NULL, NULL, !getOption('Watermark_head_image'))).
 					"' width='$wide' height='$high' alt=".'"'.
-					htmlspecialchars($randomAlt1, ENT_QUOTES).
-					":\n".htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).
+					html_encode($randomAlt1).
+					":\n".html_encode($randomImage->getTitle()).
 					'" /></a>';
 	}
 	echo '</div>';
@@ -149,7 +149,11 @@ function printLinkWithQuery($url, $query, $text) {
 function printLogo() {
 	global $_zp_themeroot;
 	if ($img = getOption('Graphic_logo')) {
-		echo '<img src="'.$_zp_themeroot.'/images/'.$img.'.png" alt="Logo"/>';
+		if ($img == '*') {
+			echo '<img src="'.$_zp_themeroot.'/images/effervescence.png" alt="Logo"/>';
+		} else {
+			echo '<img src="'.WEBPATH.'/'.UPLOAD_FOLDER.'/images/'.$img.'.png" alt="Logo"/>';
+		}
 	} else {
 		$name = getOption('Theme_logo');
 		if (empty($name)) {
@@ -237,18 +241,18 @@ function commonNewsLoop($paged) {
 		if (stickyNews()) {
 			$newstypedisplay .= ' <small><em>'.gettext('sticky').'</em></small>';
 		}
-	?> 
- 		<div class="newsarticle<?php if (stickyNews()) echo ' sticky'; ?>"> 
+	?>
+ 		<div class="newsarticle<?php if (stickyNews()) echo ' sticky'; ?>">
     	<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".$newstypedisplay."]</span>"; ?></h3>
 			<div class="newsarticlecredit">
 				<span class="newsarticlecredit-left">
-					<?php 
+					<?php
 					$count = getCommentCount();
 					$cat = getNewsCategories();
 					printNewsDate();
 					if ($count > 0) {
 						echo ' | ';
-				 		printf(gettext("Comments: %d"),  $count);  
+				 		printf(gettext("Comments: %d"),  $count);
 					}
 					?>
 				</span>
@@ -259,7 +263,7 @@ function commonNewsLoop($paged) {
 				} else {
 					if (!empty($cat)) {
 						echo ' | ';
-						printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
+						printNewsCategories(", ",gettext("Categories: "),"newscategories");
 					}
 				}
 				?>
@@ -268,9 +272,9 @@ function commonNewsLoop($paged) {
     	<?php printNewsContent(); ?>
     	<?php printCodeblock(2); ?>
     	<p><?php printNewsReadMoreLink(); ?></p>
-    	</div>	
+    	</div>
 	<?php
-	} 
+	}
 	if ($paged) {
   	printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 	}

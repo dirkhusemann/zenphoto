@@ -1,6 +1,4 @@
 <?php
-define('ALBUMCOLUMNS', 3);
-define('IMAGECOLUMNS', 5);
 if (!defined('WEBPATH')) die();
 $_noFlash = true;  /* don't know how to deal with the variable folder depth file names
 if ((getOption('Use_Simpleviewer')==0) || !getOption('mod_rewrite')) { $_noFlash = true; }
@@ -16,7 +14,6 @@ if (isset($_GET['noflash'])) {
 // Change the configuration here
 
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-$firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 if ($_noFlash) {
 	$backgroundColor = "#0";  /* who cares, we won't use it */
 } else {
@@ -46,15 +43,16 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext("Register"); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
-	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
 </head>
 
 <body onload="blurAnchors()">
+<?php zp_apply_filter('theme_body_open'); ?>
 
 <!-- Wrap Header -->
 <div id="header">
@@ -76,11 +74,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php
 			if (getOption('custom_index_page') === 'gallery') {
 			?>
-			<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+			<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
 			<?php	
 			}					
 			?>
-		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
+		<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
 		<?php echo getGalleryTitle();	?></a></span> |
 		<?php
 		  echo "<em>".gettext('Register')."</em>";
@@ -109,7 +107,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </div> <!-- footerlinks -->
 
 
-<?php printAdminToolbox(); ?>
+<?php
+printAdminToolbox();
+zp_apply_filter('theme_body_close');
+?>
 
 </body>
 </html>

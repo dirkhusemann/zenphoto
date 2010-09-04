@@ -11,7 +11,8 @@ require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 admin_securityChecks(NULL, currentRelativeURL(__FILE__));
 
 
-$admins = $_zp_authority->getAdministrators();
+$admins = $_zp_authority->getAdministrators('all');
+
 $ordered = array();
 foreach ($admins as $key=>$admin) {
 	$ordered[$key] = $admin['user'];
@@ -19,7 +20,7 @@ foreach ($admins as $key=>$admin) {
 asort($ordered);
 $adminordered = array();
 foreach ($ordered as $key=>$user) $adminordered[] = $admins[$key];
-						
+
 if (isset($_GET['action'])) {
 	$action = $_GET['action'];
 	XSRFdefender($action);
@@ -162,7 +163,7 @@ echo '</head>'."\n";
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 							</p>
 							<br clear="all" /><br /><br />
-							<input type="hidden" name="savegroups" value="yes" /> 
+							<input type="hidden" name="savegroups" value="yes" />
 							<table class="bordered">
 								<?php
 								$id = 0;
@@ -191,8 +192,8 @@ echo '</head>'."\n";
 												<em><?php if ($grouptype == 'group') echo gettext('group'); else echo gettext('template'); ?></em>
 												<br />
 												<strong><?php echo $groupname; ?></strong>
-												<input type="hidden" id="group-<?php echo $id ?>" name="<?php echo $id ?>-group" value="<?php echo htmlspecialchars($groupname); ?>" />
-												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo htmlspecialchars($grouptype); ?>" />
+												<input type="hidden" id="group-<?php echo $id ?>" name="<?php echo $id ?>-group" value="<?php echo html_encode($groupname); ?>" />
+												<input type="hidden" name="<?php echo $id ?>-type" value="<?php echo html_encode($grouptype); ?>" />
 												<?php
 											}
 											?>
@@ -229,7 +230,7 @@ echo '</head>'."\n";
 										</td>
 										<td style="border-top: 4px solid #D1DBDF;?>" valign="top">
 											<input type="hidden" name="<?php echo $id ?>-confirmed" value="1" />
-											<?php				
+											<?php
 											printAdminRightsTable($id, '', '', $rights);
 											printManagedObjects('albums',$albumlist, '', $groupid, $id, $rights);
 											if (getOption('zp_plugin_zenpage')) {
@@ -254,7 +255,7 @@ echo '</head>'."\n";
 											<div id="users<?php echo $id; ?>" <?php if ($grouptype=='template') echo ' style="display:none"' ?>>
 												<h2 class="h2_bordered_edit"><?php echo gettext("Assign users"); ?></h2>
 												<div class="box-tags-unpadded">
-													<?php											
+													<?php
 													$members = array();
 													if (!empty($groupname)) {
 														foreach ($adminlist as $user) {
@@ -278,10 +279,10 @@ echo '</head>'."\n";
 											<a href="javascript:if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deletegroup&group=<?php echo addslashes($groupname); ?>'; }"
 																title="<?php echo gettext('Delete this group.'); ?>" style="color: #c33;">
 												<img src="../../images/fail.png" style="border: 0px;" alt="Delete" />
-											</a> 
+											</a>
 											<?php
 										}
-										?>	
+										?>
 										</td>
 									</tr>
 									<?php
@@ -311,7 +312,7 @@ echo '</head>'."\n";
 										alert(sprintf('<?php echo gettext('The group "%s" already exists.'); ?>',newgroup));
 										return false;
 									}
-								} 
+								}
 								return true;
 							}
 							// ]]> -->
@@ -339,7 +340,7 @@ echo '</head>'."\n";
 							<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 							</p>
 							<br clear="all" /><br /><br />
-							<input type="hidden" name="saveauserassignments" value="yes" /> 
+							<input type="hidden" name="saveauserassignments" value="yes" />
 							<table class="bordered">
 								<?php
 								$id = 0;
@@ -391,9 +392,9 @@ echo '</head>'."\n";
 						<?php
 						break;
 				}
-				?>				
+				?>
 			</div>
-		
+
 		</div>
 	</div>
 </body>

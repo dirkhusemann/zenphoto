@@ -30,7 +30,7 @@ processEditSelection($subtab);
 if (isset($_GET['album'])) {
 	$folder = sanitize_path($_GET['album']);
 	if (!isMyAlbum($folder, ALBUM_RIGHTS)) {
-		if (isset($_GET['multifile'])) {	// it was an upload to an album which we cannot edit->return to sender
+		if (isset($_GET['uploaded'])) {	// it was an upload to an album which we cannot edit->return to sender
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-upload.php?uploaded=1');
 			exit();
 		}
@@ -427,6 +427,17 @@ if (isset($_GET['action'])) {
 			}
 			break;
 	} // end of switch
+} else {
+	if (isset($_GET['albumimagesort'])) {
+		$newsort = sanitize($_GET['albumimagesort'],3);
+		if (strpos($newsort, '_desc')) {
+			setOption('albumimagesort', substr($newsort, 0, -5), false);
+			setOption('albumimagedirection', 'DESC', false);
+		} else {
+			setOption('albumimagesort', $newsort, false);
+			setOption('albumimagedirection', '', false);
+		}
+	}
 }
 
 
@@ -642,10 +653,14 @@ $alb = removeParentAlbumNames($album);
 	<?php
 	}
 
+
 	if (isset($_GET['uploaded'])) {
-		echo '<div class="messagebox" id="fade-message">';
-		echo  "<h2>".gettext("Images uploaded")."</h2>";
-		echo '</div>';
+		?>
+		<div class="messagebox" id="fade-message">
+			<h2><?php echo gettext("Upload complete"); ?></h2>
+			<?php echo zp_apply_filter('get_upload_header_text',gettext('Your files have been uploaded.')); ?>
+		</div>
+		<?php
 	}
 	if (isset($_GET['cleared'])) {
 		echo '<div class="messagebox" id="fade-message">';
@@ -853,7 +868,7 @@ $alb = removeParentAlbumNames($album);
 		<!-- Images List -->
 		<div id="tab_imageinfo" class="tabbox">
 		<?php
-			$numsteps = ceil(max($allimagecount,$imagesTab_imageCount)/10);
+		$numsteps = ceil(max($allimagecount,$imagesTab_imageCount)/10);
 		if ($numsteps) {
 			$steps = array();
 			for ($i=1;$i<=$numsteps;$i++) {
@@ -872,9 +887,9 @@ $alb = removeParentAlbumNames($album);
 			<?php XSRFToken('albumedit'); ?>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
-			<input type="hidden" name="subpage" value="<?php echo htmlspecialchars($pagenum,ENT_QUOTES); ?>" />
-			<input type="hidden" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
-			<input type="hidden" name="oldalbumimagesort" value="<?php echo htmlspecialchars($oldalbumimagesort,ENT_QUOTES); ?>" />
+			<input type="hidden" name="subpage" value="<?php echo html_encode($pagenum); ?>" />
+			<input type="hidden" name="tagsort" value="<?php echo html_encode($tagsort); ?>" />
+			<input type="hidden" name="oldalbumimagesort" value="<?php echo html_encode($oldalbumimagesort); ?>" />
 
 		<?php	$totalpages = ceil(($allimagecount / $imagesTab_imageCount));	?>
 		<table class="bordered">
@@ -1284,13 +1299,13 @@ $alb = removeParentAlbumNames($album);
 									}
 									?>
 									<div id="first-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock1-<?php echo $currentimage;?>" id="codeblock1-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES); ?></textarea>
+										<textarea name="codeblock1-<?php echo $currentimage;?>" id="codeblock1-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES,getOption('charset')); ?></textarea>
 									</div>
 									<div id="second-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock2-<?php echo $currentimage;?>" id="codeblock2-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES); ?></textarea>
+										<textarea name="codeblock2-<?php echo $currentimage;?>" id="codeblock2-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES,getOption('charset')); ?></textarea>
 									</div>
 									<div id="third-<?php echo $image->get('id'); ?>">
-										<textarea name="codeblock3-<?php echo $currentimage;?>" id="codeblock3-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES); ?></textarea>
+										<textarea name="codeblock3-<?php echo $currentimage;?>" id="codeblock3-<?php echo $image->get('id'); ?>" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES,getOption('charset')); ?></textarea>
 									</div>
 								</div>
 							</td>

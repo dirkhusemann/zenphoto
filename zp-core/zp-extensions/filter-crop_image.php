@@ -10,7 +10,7 @@
 $plugin_is_filter = 5;
 $plugin_description = gettext("An image crop tool. Places an image crop button in the image utilities box of the images tab.");
 $plugin_author = "Stephen Billard (sbillard)";
-$plugin_version = '1.3.1'; 
+$plugin_version = '1.3.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---filter-crop_image.php.html";
 
 if (isset($_REQUEST['performcrop'])) {
@@ -44,7 +44,7 @@ function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
 	$albumname = $album->name;
 	$imagename = $image->filename;
 	if (isImagePhoto($image)) {
-		$output .= 
+		$output .=
 			'<p class="buttons" >'."\n".
 					'<a href="'.WEBPATH."/".ZENFOLDER . '/'.PLUGIN_FOLDER.'/filter-crop_image.php?a='.pathurlencode($albumname)."\n".
 							'&amp;i='.urlencode($imagename).'&amp;performcrop=backend&amp;subpage='.$subpage.'&amp;tagsort='.$tagsort.'">'."\n".
@@ -82,7 +82,7 @@ if (isImagePhoto($imageobj)) {
 } else {
 	die(gettest('attempt to crop an object which is not an image.'));
 }
-	
+
 // get appropriate $sizedwidth and $sizedheight
 switch ($use_side) {
 	case 'longest':
@@ -142,7 +142,7 @@ if (isset($_REQUEST['crop'])) {
 	$ch = round($ch*$rh);
 	$cx = round($cx*$rw);
 	$cy = round($cy*$rh);
-	
+
 	//create a new image with the set cropping
 	$quality = getOption('full_image_quality');
 	$rotate = false;
@@ -150,11 +150,11 @@ if (isset($_REQUEST['crop'])) {
 		$rotate = getImageRotation($imgpath);
 	}
 	if (DEBUG_IMAGE) debugLog("image_crop: crop ".basename($imgpath).":\$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy \$rotate=$rotate");
-	
+
 	if ($rotate) {
 		$timg = zp_rotateImage($timg, $rotate);
 	}
-	
+
 	$newim = zp_createImage($cw, $ch);
 	zp_resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch, getSuffix($imagename));
 	@unlink($imgpath);
@@ -175,7 +175,7 @@ if (isset($_REQUEST['crop'])) {
 	$imageobj->set('thumbW', NULL);
 	$imageobj->set('thumbH', NULL);
 	$imageobj->save();
-	
+
 	if ($_REQUEST['performcrop']=='backend') {
 		$return = FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&album=' . pathurlencode($albumname).'&saved&subpage='.sanitize($_REQUEST['subpage']).'&tagsort='.sanitize($_REQUEST['tagsort']).'&tab=imageinfo';
 	} else {
@@ -204,7 +204,7 @@ printAdminHeader();
 			onSelect: showCoords,
 			bgOpacity:   .4,
 			bgColor:     'black',
-			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ]					
+			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ]
 			});
 	});
 
@@ -226,21 +226,21 @@ printAdminHeader();
 </head>
 <body>
 	<?php printLogoAndLinks(); ?>
-	 	
+
 	<div id="main">
 		<?php printTabs('edit'); ?>
 		<div id="content">
 				<h1><?php echo gettext("Image cropping").": <em>".$albumobj->name." (".$albumobj->getTitle().") /".$imageobj->filename." (".$imageobj->getTitle().")</em>"; ?></h1>
 				<p><?php echo gettext("You can crop your image by dragging the crop handles on the image.<br /><br /><strong>Note:</strong> If you save these changes they are permanent!"); ?></p>
 				<div style="display:block">
-		 			
+
 					<div style="text-align:left; float: left;">
-					
+
 						<div style="width: <?php echo $sizedwidth; ?>px; height: <?php echo $sizedheight; ?>px; margin-bottom: 10px; border: 4px solid gray;">
 							<!-- This is the image we're attaching Jcrop to -->
 							<img src="<?php echo $imageurl; ?>" id="cropbox" />
 						</div>
-						
+
 						<!-- This is the form that our event handler fills -->
 						<form name="crop" id="crop" action="?crop" onsubmit="return checkCoords();">
 							<?php XSRFToken('crop');?>
@@ -250,13 +250,13 @@ printAdminHeader();
 							<input type="hidden" size="4" id="y2" name="y2" value="<?php echo $iY+$iH ?>" />
 							<input type="hidden" size="4" id="w" name="w" value="<?php echo $iW ?>" />
 							<input type="hidden" size="4" id="h" name="h" value="<?php echo $iH ?>"  />
-							<input type="hidden" id="a" name="a" value="<?php echo htmlspecialchars($albumname,ENT_QUOTES); ?>" />
-							<input type="hidden" id="i" name="i" value="<?php echo htmlspecialchars($imagename,ENT_QUOTES); ?>" />
-							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo htmlspecialchars($tagsort,ENT_QUOTES); ?>" />
-							<input type="hidden" id="subpage" name="subpage" value="<?php echo htmlspecialchars($subpage,ENT_QUOTES); ?>" />
+							<input type="hidden" id="a" name="a" value="<?php echo html_encode($albumname); ?>" />
+							<input type="hidden" id="i" name="i" value="<?php echo html_encode($imagename); ?>" />
+							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo html_encode($tagsort); ?>" />
+							<input type="hidden" id="subpage" name="subpage" value="<?php echo html_encode($subpage); ?>" />
 							<input type="hidden" id="crop" name="crop" value="crop" />
-							<input type="hidden" id="performcrop" name="performcrop" value="<?php echo htmlspecialchars(sanitize($_REQUEST['performcrop']),ENT_QUOTES); ?>" />
-							<br />	
+							<input type="hidden" id="performcrop" name="performcrop" value="<?php echo html_encode(sanitize($_REQUEST['performcrop'])); ?>" />
+							<br />
 							<p class="buttons">
 								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>">
 								<img src="../images/pass.png" alt="" />
@@ -277,18 +277,18 @@ printAdminHeader();
 									</button>
 									<?php
 								}
-								?>			
+								?>
 							</p>
 							<br />
 						</form>
 
 					</div>
-					
+
 				<br style="clear: both" />
 				</div><!-- block -->
-	
+
 		</div><!-- content -->
-		
+
 	<?php printAdminFooter(); ?>
 	</div><!-- main -->
 </body>

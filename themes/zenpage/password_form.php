@@ -1,9 +1,9 @@
-<form id="passwordform" name="password" action="<?php echo htmlspecialchars($_password_redirect,ENT_QUOTES); ?>" method="post">
+<form id="password" name="password" action="<?php echo html_encode($_password_redirect); ?>" method="post">
 	<input type="hidden" name="password" value="1" />
-	<input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_password_redirect,ENT_QUOTES); ?>" />
+	<input type="hidden" name="redirect" value="<?php echo html_encode($_password_redirect); ?>" />
 
 	<table class="password">
-	<?php 
+	<?php
 		if ($_password_showuser) {
 			?>
 			<tr>
@@ -21,7 +21,7 @@
 		<td></td>
 		<td class="submit" ><input class="button" type="submit" value="<?php echo gettext("Submit"); ?>" /></td>
 		</tr>
-		<?php 
+		<?php
 		if (!empty($_password_hint)) {
 			?>
 			<tr>

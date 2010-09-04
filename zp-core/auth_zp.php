@@ -108,7 +108,7 @@ if (!isset($_POST['login'])) {
 				$mails = array();
 				$user = NULL;
 				foreach ($admins as $key=>$tuser) {
-					if ($tuser['valid'] && !empty($tuser['email'])) {
+					if (!empty($tuser['email'])) {
 						if (!empty($post_user) && ($tuser['user'] == $post_user || $tuser['email'] == $post_user)) {
 							$name = $tuser['name'];
 							if (empty($name)) {

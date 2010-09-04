@@ -455,7 +455,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL, $addheader=t
 			$data = zp_apply_filter('comment_form_data',array('data'=>$stored, 'disabled'=>$disabled));
 			$disabled = $data['disabled'];
 			$stored = $data['data'];
-			
+
 			$theme = getCurrentTheme();
 			$form = SERVERPATH.'/'.THEMEFOLDER.'/'.internalToFilesystem($theme).$formname;
 			if (file_exists($form)) {
@@ -473,8 +473,7 @@ function printCommentForm($showcomments=true, $addcommenttext=NULL, $addheader=t
 				}
 				?>
 				<div id="commententry">
-				
-				<?php require_once($form); ?>
+				<?php require($form); ?>
 				</div>
 				<?php
 			}

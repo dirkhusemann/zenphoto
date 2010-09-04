@@ -19,7 +19,7 @@ if (isset($obj)) {
 }
 ?>
 <br />
-<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>"
+<a href="<?php echo html_encode(getGalleryIndexURL());?>"
 	title="<?php echo gettext('Albums Index'); ?>"><?php echo sprintf(gettext("Return to %s"),getGalleryTitle());?></a>
 </body>
 </html>

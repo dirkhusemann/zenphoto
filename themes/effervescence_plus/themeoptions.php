@@ -14,11 +14,14 @@ class ThemeOptions {
 		setThemeOptionDefault('Allow_search', true);
 		setThemeOptionDefault('enable_album_zipfile', false);
 		setThemeOptionDefault('Slideshow', true);
-		setThemeOptionDefault('Graphic_logo', 'logo');
+		setThemeOptionDefault('Graphic_logo', '*');
 		setThemeOptionDefault('Watermark_head_image', true);
 		setThemeOptionDefault('Theme_personality', 'Image page');
 		setThemeOptionDefault('Theme_colors', 'effervescence');
 		setThemeOptionDefault('effervescence_menu', 'effervescence');
+		setThemeOptionDefault('albums_per_row', 3);
+		setThemeOptionDefault('images_per_row', 5);
+		setThemeOptionDefault('thumb_transition', 1);
 
 		if (function_exists('createMenuIfNotExists')) {
 			$menuitems = array(
@@ -50,7 +53,7 @@ class ThemeOptions {
 									gettext('ZIP file download') => array('key' => 'enable_album_zipfile', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable album ZIP file download link.')),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable search form.')),
 									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => OPTION_TYPE_CHECKBOX, 'desc' => gettext('Check to enable slideshow for the <em>Smoothgallery</em> personality.')),
-									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),
+									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => OPTION_TYPE_CUSTOM, 'desc' => sprintf(gettext('Select a logo (PNG files in the <em>%s/images</em> folder) or leave empty for text logo.'),UPLOAD_FOLDER)),
 									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => OPTION_TYPE_SELECTOR, 'selections' => array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'),
 													'desc' => gettext('Select the theme personality')),
 									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => OPTION_TYPE_CUSTOM, 'desc' => gettext('Select the colors of the theme')),
@@ -85,13 +88,15 @@ class ThemeOptions {
 				echo "</select>\n";
 				break;
 			case 'Graphic_logo':
-				$gallery = new Gallery();
-				$theme = $gallery->getCurrentTheme();
-				$themeroot = SERVERPATH . "/themes/$theme/images";
-				echo '<select id="EF_themeselect_logo" name="' . $option . '"' . ">\n";
-				echo '<option value="" style="background-color:LightGray">'.gettext('*no logo selected').'</option>';
-				generateListFromFiles($currentValue, $themeroot , '.png');
-				echo "</select>\n";
+				?>
+				<select id="EF_themeselect_logo" name="Graphic_logo">
+					<option value="" style="background-color:LightGray"><?php echo gettext('*no logo selected'); ?></option>';
+					<option value="*"<?php if ($currentValue == '*') echo ' selected="selected"'; ?>><?php echo gettext('Effervescence'); ?></option>';
+					<?php
+					generateListFromFiles($currentValue, SERVERPATH.'/'.UPLOAD_FOLDER.'/images' , '.png');
+					?>
+				</select>
+				<?php
 				break;
 		}
 	}

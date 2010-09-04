@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-globals.php');
 
 admin_securityChecks(COMMENT_RIGHTS, currentRelativeURL(__FILE__));
-	
+
 $gallery = new Gallery();
 if (isset($_GET['page'])) {
 	$page = sanitize($_GET['page']);
@@ -60,7 +60,7 @@ if (isset($_GET['action'])) {
  		query($sql);
  		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=1");
 		exit();
- 	
+
 	case 'savecomment':
 		if (!isset($_POST['id'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
@@ -126,30 +126,30 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 	<tr>
 		<td width="100"><?php echo gettext("Author:"); ?></td>
-		<td><input type="text" size="40" name="name" value="<?php echo htmlspecialchars($name,ENT_QUOTES); ?>" /></td>
+		<td><input type="text" size="40" name="name" value="<?php echo html_encode($name); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Web Site:"); ?></td>
-		<td><input type="text" size="40" name="website" value="<?php echo htmlspecialchars($website,ENT_QUOTES); ?>" /></td>
+		<td><input type="text" size="40" name="website" value="<?php echo html_encode($website); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("E-Mail:"); ?></td>
-		<td><input type="text" size="40" name="email" value="<?php echo htmlspecialchars($email,ENT_QUOTES); ?>" /></td>
+		<td><input type="text" size="40" name="email" value="<?php echo html_encode($email); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Date/Time:"); ?></td>
-		<td><input type="text" size="18" name="date" value="<?php echo htmlspecialchars($date,ENT_QUOTES); ?>" /></td>
+		<td><input type="text" size="18" name="date" value="<?php echo html_encode($date); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("IP:"); ?></td>
-		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo htmlspecialchars($IP,ENT_QUOTES); ?>" /></td>
+		<td><input type="text" disabled="disabled" size="18" name="date" value="<?php echo html_encode($IP); ?>" /></td>
 	</tr>
 	<?php
 	echo zp_apply_filter('edit_comment_custom_data', '', $custom_data);
 	?>
 	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
-		<td><textarea rows="8" cols="60" name="comment" /><?php echo htmlspecialchars($comment,ENT_QUOTES); ?></textarea></td>
+		<td><textarea rows="8" cols="60" name="comment" /><?php echo html_encode($comment); ?></textarea></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -266,7 +266,7 @@ if(isset($_GET['bulk'])) {
 	}
 	?>
 <div class="messagebox fade-message"><?php echo $message; ?></div>
-<?php	
+<?php
 }
 if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
 <div class="messagebox" id="fade-message"><?php if (isset($_GET['ndeleted'])) { ?>
@@ -286,7 +286,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 
 <form name="comments" action="?action=deletecomments" method="post"	onsubmit="return confirmAction();">
 	<?php XSRFToken('deletecomment');?>
-<input type="hidden" name="subpage" value="<?php echo htmlspecialchars($pagenum,ENT_QUOTES) ?>" />
+<input type="hidden" name="subpage" value="<?php echo html_encode($pagenum) ?>" />
 <p class="buttons"><button type="submit" title="<?php echo gettext("Apply"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Apply"); ?></strong></button></p>
 <p class="buttons">
 <?php if(!$fulltext) { ?>
@@ -313,13 +313,13 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 			</select>
 			</span>
 		</th>
-		
+
 	</tr>
 	<tr>
 		<td colspan="11" class="subhead">
 			<label style="float: right"><?php echo gettext("Check All"); ?>
 				<input type="checkbox" name="allbox" id="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" />
-				
+
 			</label>
 		</td>
 	</tr>
@@ -415,7 +415,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 		?>
 		</td>
 		<td><?php echo $link; ?></td>
-		
+
 		<td><?php echo $comment['IP']; ?></td>
 		<td class="icons">
 			<?php
@@ -429,7 +429,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 			?>
 			<a href="?action=notspam&amp;id=<?php echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('comment_update')?>" title="<?php echo gettext('Approve this message (not SPAM)'); ?>">
 				<img src="images/warn.png" style="border: 0px;" alt="<?php echo gettext("Approve this message (not SPAM"); ?>" /></a>
-			<?php 
+			<?php
 		} else {
 			?>
 			<a href="?action=spam&amp;id=<?php  echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('comment_update')?>" title="<?php  echo gettext('Mark this message as SPAM'); ?>">
@@ -441,7 +441,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
 		<td class="icons">
 		<a href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply:').' '.$email; ?>">
-		<img src="images/icon_mail.gif" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a>
+		<img src="images/icon_mail.png" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a>
 		</td>
 		<td class="icons">
 			<a href="javascript:if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomment&id=<?php echo $id; ?>&amp;XSRFToken=<?php echo getXSRFToken('deletecomment')?>'; }"
@@ -451,7 +451,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 			onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 	</tr>
 	<?php } ?>
-	
+
 
 
 </table>
@@ -461,7 +461,7 @@ if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])
 				<li><img src="images/warn.png" alt="Marked as spam" /><img src="images/pass.png" alt="Approved" /><?php echo gettext("Marked as spam/approved"); ?></li>
 				<li><img src="images/action.png" alt="Cache the album" /><?php echo gettext("Anonymous posting"); ?></li>
 				<li><img src="images/pencil.png" alt="Edit comment" /><?php echo gettext("Edit comment"); ?></li>
-				<li><img src="images/icon_mail.gif" alt="E-mail comment author" /><?php echo gettext("E-mail comment author"); ?></li>
+				<li><img src="images/icon_mail.png" alt="E-mail comment author" /><?php echo gettext("E-mail comment author"); ?></li>
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 		</ul>
 

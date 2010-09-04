@@ -30,7 +30,7 @@ if (isset($_REQUEST['backup']) || isset($_REQUEST['restore'])) {
 	XSRFDefender('backup');
 }
 
-global $_zp_conf_vars, $handle, $buffer, $counter, $file_version, $compression_handler; // so this script can run from a function
+global $handle, $buffer, $counter, $file_version, $compression_handler; // so this script can run from a function
 $buffer = '';
 
 function fillbuffer($handle) {
@@ -126,7 +126,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		$compression_handler = 'no';
 	}
 	$prefix = prefix();
-	$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$prefix."%';";
+	$sql = "SHOW TABLES FROM `".db_name()."` LIKE '".$prefix."%';";
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		$folder = SERVERPATH . "/" . BACKUPFOLDER;
@@ -153,7 +153,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 				$sql = 'SELECT * from `'.$table.'` ORDER BY ID';
 				$result = query($sql);
 				if ($result) {
-					while ($tablerow = mysql_fetch_assoc($result)) {
+					while ($tablerow = db_fetch_assoc($result)) {
 						foreach ($tablerow as $key=>$element) {
 							if (!empty($element)) {
 								$tablerow[$key] = compress($element, $compression_level);
@@ -178,7 +178,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 			fclose($handle);
 		}
 	} else {
-		$msg = gettext('MySQL SHOW TABLES failed!');
+		$msg = gettext('SHOW TABLES failed!');
 		$writeresult = false;
 	}
 	if ($writeresult) {
@@ -214,8 +214,8 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		if (file_exists($filename)) {
 			$handle = fopen($filename, 'r');
 			if ($handle !== false) {
-				$prefix = $_zp_conf_vars['mysql_prefix'];
-				$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$prefix."%';";
+				$prefix = prefix();
+				$sql = "SHOW TABLES FROM `".db_name()."` LIKE '".$prefix."%';";
 				$result = query_full_array($sql);
 				$tables = array();
 				$table_cleared = array();
@@ -363,7 +363,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 					break;
 				case 2:
 					echo '<p';
-					printf(gettext('MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,mysql_error());
+					printf(gettext('Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,db_error());
 					echo '</p>';
 					break;
 			}
@@ -395,8 +395,8 @@ if (db_connect()) {
 	$compression_level = getOption('backup_compression');
 	?>
 	<h3><?php gettext("database connected"); ?></h3>
-	<p><?php printf(gettext("Your database is <strong>%s</strong>"),getOption('mysql_database')); ?><br />
-	<?php printf(gettext("Tables are prefixed by <strong>%s</strong>"), getOption('mysql_prefix')); ?>
+	<p><?php printf(gettext("Your database is <strong>%s</strong>"),db_name()); ?><br />
+	<?php printf(gettext("Tables are prefixed by <strong>%s</strong>"), prefix()); ?>
 	</p>
 	<br />
 	<br />

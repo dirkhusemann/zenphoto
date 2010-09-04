@@ -1,11 +1,11 @@
 <?php
-if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '5');
+if (!defined('WEBPATH')) die();
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
@@ -13,6 +13,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	<?php printZDRoundedCornerJS(); ?>
 </head>
 <body>
+<?php zp_apply_filter('theme_body_open'); ?>
 
 <div id="main">
 
@@ -36,10 +37,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php while (next_album()): ?>
 					<div class="album">
 							<div class="thumb">
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printCustomAlbumThumbImage(getBareAlbumTitle(), NULL, 95, 95, 95, 95); ?></a>
+							<a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printCustomAlbumThumbImage(getBareAlbumTitle(), NULL, 95, 95, 95, 95); ?></a>
  							 </div>
 								<div class="albumdesc">
-									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+									<h3><a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
  									<?php printAlbumDate(""); ?>
 									<p><?php echo truncate_string(getAlbumDesc(), 45); ?></p>
 								</div>
@@ -95,6 +96,9 @@ if(is_GalleryNewsType()) {
 </div><!-- content -->
 
 </div><!-- main -->
-<?php printAdminToolbox(); ?>
+<?php
+printAdminToolbox();
+zp_apply_filter('theme_body_close');
+?>
 </body>
 </html>

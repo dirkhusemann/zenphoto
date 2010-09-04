@@ -31,82 +31,11 @@ $button_rights = ALBUM_RIGHTS;
 admin_securityChecks(ALBUM_RIGHTS, currentRelativeURL(__FILE__));
 
 $gallery = new Gallery();
-$webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
 printAdminHeader();
 datepickerJS();
 ?>
-<style type="text/css">
-.schedulealbumchecklist li {
-	background: none;
-	padding-left: 0;
-	text-align: left;
-
-}
-
-.schedulealbumchecklist {
-	border: 1px solid #ccc;
-	list-style: none;
-	height: 8em;
-	overflow: auto;
-	width: 50em;
-	background-color: white;
-}
-
-.schedulealbumchecklist,.schedulealbumchecklist li {
-	margin: 0;
-	padding: 0;
-	border-bottom: 1px dotted #C6D880;
-}
-
-.schedulealbumchecklist label {
-	display: block;
-	padding: 0 0.2em 0 25px;
-	text-indent: -25px;
-}
-
-* html .schedulealbumchecklist label {
-	height: 1%;
-}
-.schedulealbumchecklist li {
-	background: none;
-	padding-left: 0;
-	text-align: left;
-
-}
-
-.scheduleimagechecklist {
-	border: 1px solid #ccc;
-	list-style: none;
-	height: 40em;
-	overflow: auto;
-	width: 50em;
-	background-color: white;
-}
-
-.scheduleimagechecklist,.scheduleimagechecklist li {
-	margin: 0;
-	padding: 0;
-	border-bottom: 1px dotted #C6D880;
-}
-
-.scheduleimagechecklist label {
-	display: block;
-	padding: 0 0.2em 0 25px;
-	text-indent: -25px;
-}
-
-.scheduleimagechecklist li p {
-	margin-top: 5px;
-	text-align:center;
-	background: #777;
-	color: #fff;
-}
-
-* html .scheduleimagechecklist label {
-	height: 1%;
-}
-</style>
+<link rel="stylesheet" href="schedule_content.css" type="text/css" media="screen" />
 <?php
 function unpublishSubalbums($album) {
 	global $gallery;
@@ -264,62 +193,98 @@ if (db_connect()) {
 			$publish_albums_list[$row['folder']] = $row['id'];
 		}
 	}
-	$sql = 'SELECT `filename`, '.prefix('images').'.id as id, folder FROM '.prefix('images').','.prefix('albums').' WHERE '.prefix('images').'.show="0" AND '.
-					prefix('images').'.mtime < "'.$mtime.'" AND '.prefix('albums').'.id='.prefix('images').'.albumid'.$albumidlist;
+	$sql = 'SELECT `filename`, '.prefix('images').'.id as id, folder FROM '.prefix('images').','.prefix('albums').' WHERE '.
+					prefix('images').'.show="0" AND '.prefix('images').'.mtime < "'.$mtime.'" AND '.prefix('albums').'.id='.
+					prefix('images').'.albumid'.$albumidlist;
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		foreach ($result as $row) {
 			$publish_images_list[$row['folder']][$row['filename']] = $row['id'];
 		}
+		ksort($publish_images_list);
 	}
 	?>
-<?php if (zp_loggedin(ADMIN_RIGHTS)) { ?>
-<form name="set_publication" action="" method="post">
-	<?php XSRFToken('schedule_content');?>
-	<input type="hidden" name="set_defaults" value="true" />
-	<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Publish albums by default"); ?>
-	<br />
-	<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Make images visible by default"); ?>
-	<br />
-<div class="buttons pad_button" id="setdefaults">
-<button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">
-	<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Set defaults"); ?>
-</button>
-</div>
-<br clear="all" />
-<br clear="all" />
-</form>
 <?php
-}
-if (count($publish_albums_list) > 0) {
-?>
-	<form name="publish" action="" method="post"><?php echo gettext('Un-published albums:'); ?>
-	<?php XSRFToken('schedule_content');?>
-	<input type="hidden" name="publish_albums" value="true" />
-	<ul class="schedulealbumchecklist">
-	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, 'sched_', false, true, true); ?>
-	</ul>
-	<div class="buttons pad_button" id="publishalbums">
-	<button class="tooltip" type="submit" title="<?php echo gettext("Publish waiting albums."); ?>">
-		<img src="<?php echo $webpath; ?>images/cache1.png" alt="" /> <?php echo gettext("Publish albums"); ?>
-	</button>
+if (zp_loggedin(ADMIN_RIGHTS)) {
+	echo gettext('Publishing options');
+	?>
+	<div class="smallbox">
+		<form name="set_publication" action="" method="post">
+			<?php XSRFToken('schedule_content');?>
+			<input type="hidden" name="set_defaults" value="true" />
+			<input type="checkbox" name="album_default"	value="1"<?php if ($albpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Publish albums by default"); ?>
+			<br clear="all" />
+			<br clear="all" />
+			<input type="checkbox" name="image_default"	value="1"<?php if ($imgpublish) echo ' checked="checked"'; ?> /> <?php echo gettext("Make images visible by default"); ?>
+			<br clear="all" />
+			<br clear="all" />
+			<div class="buttons pad_button" id="setdefaults">
+				<button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">
+					<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/burst1.png" alt="" /> <?php echo gettext("Apply"); ?>
+				</button>
+			</div>	
+		</form>
+		<br clear="all" />
 	</div>
 	<br clear="all" />
 	<br clear="all" />
-	</form>
-	<p class="buttons">
-		<a href="?propagate_unpublished" title="<?php echo gettext('Set all subalbums of an un-published album to un-published.'); ?>">
-		<img src="<?php echo $webpath; ?>images/redo.png" alt="" />
-			<?php echo gettext('Propagate un-published state'); ?>
-		</a>
-	</p>
-	<br clear="all" />
-	<br clear="all" />
 	<?php
-	} else {
-		echo '<p>'.gettext('No albums are un-published.').'</p>';
 	}
-?>
+	echo gettext('Un-published albums');
+	?>
+	<div class="smallbox">
+	<?php
+	if (count($publish_albums_list) > 0) {
+		?>
+		<form name="publish" action="" method="post"><?php echo gettext('Albums:'); ?>
+		<label id="autocheck">
+			<input type="checkbox" name="checkAllAuto" id="checkAllAuto" />
+			<span id="autotext"><?php echo gettext('all');?></span>
+		</label>
+		<script type="text/javascript">
+			// <!-- <![CDATA[
+			var checked = false;
+			$('#autocheck').click(
+			   function() {
+			      if (checked) {
+				      checked = false;
+			      } else {
+				      checked = 'checked';
+			      }
+			      $('.albumcheck').attr('checked', checked);
+			   }
+			)			
+			// ]]> -->
+		</script>	
+		<?php XSRFToken('schedule_content');?>
+		<input type="hidden" name="publish_albums" value="true" />
+		<ul class="schedulealbumchecklist">
+		<?php	generateUnorderedListFromArray(array(), $publish_albums_list, 'sched_', false, true, true, 'albumcheck'); ?>
+		</ul>
+		<br clear="all" />
+						
+		<div class="buttons pad_button" id="publishalbums">
+		<button class="tooltip" type="submit" title="<?php echo gettext("Publish waiting albums."); ?>">
+			<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/cache1.png" alt="" /> <?php echo gettext("Publish albums"); ?>
+		</button>
+		</div>
+		<br clear="all" />
+		</form>
+		<p class="buttons">
+			<a href="?propagate_unpublished" title="<?php echo gettext('Set all subalbums of an un-published album to un-published.'); ?>">
+			<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/redo.png" alt="" />
+				<?php echo gettext('Propagate un-published state'); ?>
+			</a>
+		</p>
+		<br clear="all" />
+		<?php
+		} else {
+			echo '<p>'.gettext('No albums are un-published.').'</p>';
+		}
+	?>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
 
 <script type="text/javascript">
 	//<!-- <![CDATA[
@@ -333,105 +298,128 @@ if (count($publish_albums_list) > 0) {
 	});
 	// ]]> -->
 </script>
-<form name="review" action="" method="post">
-	<?php XSRFToken('schedule_content');?>
-<?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" id="publish_date" name="publish_date" value="'.$requestdate.'" />'); ?>
-<input type="hidden" name="review" value="true" />
-
-<div class="buttons pad_button" id="reviewobjects">
-<button class="tooltip" type="submit" title="<?php echo gettext("Review not visible images."); ?>">
-	<img src="<?php echo $webpath; ?>images/quest.png" alt="" /> <?php echo gettext("Review images"); ?>
-</button>
-</div>
-<br clear="all" />
-<br clear="all" />
-</form>
-
-<?php
-if (count($publish_images_list) > 0) {
-	?>
-	<script type="text/javascript">
-		// <!-- <![CDATA[
-		function confirmdel(obj, id, msg) {
-			if (msg) {
-				if (confirm('<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')) {
-					jQuery('#'+id).css({color:'red'});
+<?php echo gettext('Images which are not visible')?>
+<div class="smallbox">
+	<form name="review" action="" method="post">
+		<?php XSRFToken('schedule_content');?>
+		<?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" id="publish_date" name="publish_date" value="'.$requestdate.'" />'); ?>
+		<br clear="all" />
+		<br clear="all" />
+		<input type="hidden" name="review" value="true" />
+		<div class="buttons pad_button" id="reviewobjects">
+			<button class="tooltip" type="submit" title="<?php echo gettext("Review not visible images."); ?>">
+				<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/quest.png" alt="" /> <?php echo gettext("Review images"); ?>
+			</button>
+		</div>
+	</form>
+	<br clear="all" />
+	<br clear="all" />
+	
+	<?php
+	if (count($publish_images_list) > 0) {
+		?>
+		<script type="text/javascript">
+			// <!-- <![CDATA[
+			function confirmdel(obj, id, msg) {
+				if (msg) {
+					if (confirm('<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')) {
+						jQuery('#'+id).css({color:'red'});
+						obj.checked = true;
+					}
+				} else {
+					jQuery('#'+id).css({color:'black'});
 					obj.checked = true;
 				}
-			} else {
-				jQuery('#'+id).css({color:'black'});
-				obj.checked = true;
 			}
-		}
-		// ]]> -->
-	</script>
-	<form name="publish" action="" method="post"><?php echo gettext('Not visible images:'); ?>
-	<?php XSRFToken('schedule_content');?>
-	<input type="hidden" name="publish_images" value="true" />
-	<ul class="scheduleimagechecklist">
-	<?php
-	foreach ($publish_images_list as $key=>$imagelist) {
-		$album = new Album($gallery,$key);
-		$imagelist = array_flip($imagelist);
-		natcasesort($imagelist);
-		$imagelist = array_flip($imagelist);
-		?>
-		<li><p><strong><?php echo $key; ?></strong></p></li>
+			function publishAll(id,what) {
+				$('.album_'+id+'_'+what).attr('checked','checked');
+			}
+			// ]]> -->
+		</script>
+		<form name="publish" action="" method="post"><?php echo gettext('Images:'); ?>
+		<?php XSRFToken('schedule_content');?>
+		<input type="hidden" name="publish_images" value="true" />
+		<ul class="scheduleimagechecklist">
 		<?php
-		foreach ($imagelist as $display=>$item) {
-			$listitem = postIndexEncode($item);
+		foreach ($publish_images_list as $key=>$imagelist) {
+			$album = new Album($gallery,$key);
+			$albumid = $album->get('id');
+			$imagelist = array_flip($imagelist);
+			natcasesort($imagelist);
+			$imagelist = array_flip($imagelist);
 			?>
 			<li>
-				<table>
-					<tr>
-						<td>
-							<span style="white-space:nowrap">
-								<label>
-									<input id="pub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio" value="pub_<?php echo $item; ?>" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',false)" />
-									<?php echo gettext('Publish'); ?>
-								</label>
-							</span>
-							<span style="white-space:nowrap">
-								<label>
-									<input id="notpub_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="notpub_<?php echo $item; ?>"	checked="checked" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',false)" />
-									<?php echo gettext('Do not publish'); ?>
-								</label>
-							</span>
-							<span style="white-space:nowrap">
-								<label id="label_del_<?php echo $item; ?>">
-									<input id="del_<?php echo $item; ?>" name="r_<?php echo $item; ?>" type="radio"	value="del_<?php echo $item; ?>" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',true)" />
-									<?php echo gettext('Delete'); ?>
-								</label>
-							</span>
-						</td>
-						<td>
-							<?php $image = newImage($album,$display); ?>
-							<img src="<?php echo $image->getThumb();?>" alt="<?php echo $image->filename; ?>"/>
-						</td>
-						<td>
-							<?php printf(gettext('<strong>%s</strong>'),$key); ?><br />
-							<?php printf(gettext('%s'),$display); ?>
-						</td>
-					</tr>
-				</table>
+				<p class="scheduleimagechecklisthead">
+					<a href="javascript:publishAll(<?php echo $albumid; ?>,'p');" title="<?php echo gettext('Set all to be published'); ?>">
+						<img src="../images/pass.png" style="border: 0px;" alt="publish all" />
+					</a>
+					<a href="javascript:publishAll(<?php echo $albumid; ?>,'u');" title="<?php echo gettext('Set all to be un-published'); ?>">
+						<img src="../images/reset.png" style="border: 0px;" alt="unpublish all" />
+					</a>	
+					<a href="javascript:publishAll(<?php echo $albumid; ?>,'d');" title="<?php echo gettext('Set all to be deleted'); ?>">
+						<img src="../images/fail.png" style="border: 0px;" alt="delete all" />
+					</a>	
+					&nbsp;&nbsp;&nbsp;&nbsp;<strong><?php echo $key; ?></strong>
+				</p>
+				<ul class="scheduleimagelist">
+				<?php
+				foreach ($imagelist as $display=>$item) {
+					?>
+					<li>
+						<table>
+							<tr>
+								<td>
+									<label style="white-space:nowrap">
+										<img src="../images/pass.png" style="border: 0px;" alt="publish" />
+										<input id="pub_<?php echo $item; ?>" class="album_<?php echo $albumid; ?>_p" name="r_<?php echo $item; ?>" type="radio" value="pub_<?php echo $item; ?>" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',false)" />
+										<?php echo gettext('Publish'); ?>
+									</label>
+									<label style="white-space:nowrap">
+										<img src="../images/reset.png" style="border: 0px;" alt="unpublish" />
+										<input id="notpub_<?php echo $item; ?>" class="album_<?php echo $albumid; ?>_u" name="r_<?php echo $item; ?>" type="radio"	value="notpub_<?php echo $item; ?>"	checked="checked" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',false)" />
+										<?php echo gettext('Do not publish'); ?>
+									</label>
+									<label id="label_del_<?php echo $titem; ?>" style="white-space:nowrap">
+										<img src="../images/fail.png" style="border: 0px;" alt="delete" />
+										<input id="del_<?php echo $item; ?>" class="album_<?php echo $albumid; ?>_d" name="r_<?php echo $item; ?>" type="radio"	value="del_<?php echo $item; ?>" onclick="confirmdel(this, 'label_del_<?php echo $item; ?>',true)" />
+										<?php echo gettext('Delete'); ?>
+									</label>
+								</td>
+								<td>
+									<?php $image = newImage($album,$display); ?>
+									<img src="<?php echo $image->getThumb();?>" alt="<?php echo $image->filename; ?>"/>
+								</td>
+								<td>
+									<?php printf(gettext('%s'),$display); ?>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<?php
+				}
+				?>
+				</ul>
 			</li>
 			<?php
 		}
-	}
-	?>
-	</ul>
-	<div class="buttons pad_button" id="process">
-	<button class="tooltip" type="submit" title="<?php echo gettext("Process the above changes."); ?>">
-		<img src="<?php echo $webpath; ?>images/cache1.png" alt="" /> <?php echo gettext("Process changes"); ?>
-	</button>
+		?>
+		</ul>
+		<br clear="all" />
+
+		<div class="buttons pad_button" id="process">
+		<button class="tooltip" type="submit" title="<?php echo gettext("Process the above changes."); ?>">
+			<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/cache1.png" alt="" /> <?php echo gettext("Process changes"); ?>
+		</button>
+		</div>
+		<br clear="all" />
+		</form>
+		<?php
+		} else {
+			echo '<p>'.gettext('No images meet the criteria.').'</p>';
+		}
+		?>
 	</div>
-	<br clear="all" />
-	<br clear="all" />
-	</form>
-<?php
-	} else {
-		echo '<p>'.gettext('No images meet the criteria.').'</p>';
-	}
+	<?php
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");

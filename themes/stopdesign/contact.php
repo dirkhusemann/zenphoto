@@ -6,7 +6,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> <?php echo gettext("Contact form"); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
@@ -18,6 +18,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </head>
 
 <body class="archive">
+	<?php zp_apply_filter('theme_body_open'); ?>
 	<?php echo getGalleryTitle(); ?>
 	<div id="content">
 		<h1><?php printGalleryTitle(); ?> <em><?php echo gettext('Contact'); ?></em></h1>
@@ -29,7 +30,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 <p id="path">
 	<?php printHomeLink('', ' &gt; '); ?>
-	<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+	<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
 	<?php echo getGalleryTitle();?> 
 	&gt; <em><?php echo gettext('Contact'); ?></em>
 </p>
@@ -41,7 +42,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	</p>
 </div>
 
-<?php printAdminToolbox(); ?>
+<?php
+printAdminToolbox();
+zp_apply_filter('theme_body_close');
+?>
 
 </body>
 </html>

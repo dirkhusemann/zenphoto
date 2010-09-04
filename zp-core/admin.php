@@ -6,12 +6,12 @@
 
 // force UTF-8 Ø
 
-/* Don't put anything before this line! */	
+/* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 
 // The login will always occur in this file thanks to printLoginForm() function.
 // to implement 'server_protocol' == 'https_admin' we need to redirect to https
-// very soon in that file (before auth_zp.php is processed as it might clear 
+// very soon in that file (before auth_zp.php is processed as it might clear
 // the cookies)
 // When already logged in, auth_zp.php take care of the redirection.
 // To retrive getOption function:
@@ -35,10 +35,10 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 }
 $msg = '';
 if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php'); 
+	require_once(dirname(__FILE__).'/'.PLUGIN_FOLDER.'/zenpage/zenpage-admin-functions.php');
 }
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
-	
+
 	$gallery = new Gallery();
 	$gallery->garbageCollect();
 	if (isset($_GET['action'])) {
@@ -122,14 +122,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	} else {
 		if (isset($_GET['from'])) {
 			$class = 'errorbox';
-			$msg = sprintf(gettext('You do not have proper rights to access %s.'),htmlspecialchars(sanitize($_GET['from']),ENT_QUOTES));
+			$msg = sprintf(gettext('You do not have proper rights to access %s.'),html_encode(sanitize($_GET['from'])));
 		}
 	}
 
 /************************************************************************************/
 /** End Action Handling *************************************************************/
-/************************************************************************************/	
-	
+/************************************************************************************/
+
 }
 
 if ($_zp_null_account || empty($msg) && zp_loggedin() && !zp_loggedin(OVERVIEW_RIGHTS)) {	// admin access without overview rights, redirect to first tab
@@ -186,7 +186,7 @@ if (!empty($msg)) {
 }
 ?>
 <div id="overview-leftcolumn">
-<?php 
+<?php
 if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	?>
 	<div class="boxouter">
@@ -216,7 +216,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	?>
 	</li>
 	<li>
-	<?php 
+	<?php
 	$t = $gallery->getNumComments(true);
 	$c = $t - $gallery->getNumComments(false);
 	if ($c > 0) {
@@ -226,7 +226,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	}
 	?>
 	</li>
-	<?php 
+	<?php
 	if(getOption('zp_plugin_zenpage')) { ?>
 		<li>
 			<?php
@@ -260,12 +260,12 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	</ul>
 	</div>
 	</div>
-	
+
 	<div class="box" id="overview-info">
-	<h2 class="h2_bordered"><?php echo gettext("Installation information"); ?></h2> 
+	<h2 class="h2_bordered"><?php echo gettext("Installation information"); ?></h2>
 	<ul>
 	<?php
-	
+
 	if (defined('RELEASE')) {
 			$official = gettext('Official Build');
 		} else {
@@ -274,6 +274,13 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		$graphics_lib = zp_graphicsLibInfo();
 		?>
 		<li><?php printf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
+		<li><?php if ($_zp_setupCurrentLocale_result) {
+								printf(gettext('Current locale setting: <strong>%1$s</strong>'),$_zp_setupCurrentLocale_result);
+							} else {
+								echo getext('<strong>Locale setting has failed</strong>');
+							}
+		 ?>
+		</li>
 		<li>
 			<?php
 			$themes = $gallery->getThemes();
@@ -283,25 +290,23 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 			}
 			printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$currenttheme);
 			?>
-		</li> 
+		</li>
 		<li><?php printf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
 		<li><?php printf(gettext("Graphics support: <strong>%s</strong>"),$graphics_lib['Library']); ?></li>
 		<li><?php printf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
 		<li>
 			<?php
-			$mysqlv = trim(@mysql_get_server_info());
-			$i = strpos($mysqlv, "-");
-			if ($i !== false) {
-				$mysqlv = substr($mysqlv, 0, $i);
-			}
-			printf(gettext('MySQL version: <strong>%1$s</strong>'),$mysqlv);
+			$dbsoftware = db_software();
+			printf(gettext('%1$s version: <strong>%2$s</strong>'),$dbsoftware['application'],$dbsoftware['version']);
 			?>
+
 		</li>
-		<li><?php printf(gettext('Database name: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_database']); ?></li>
+		<li><?php printf(gettext('Database name: <strong>%1$s</strong>'),db_name()); ?></li>
 		<li>
 		<?php
-		if(!empty($_zp_conf_vars['mysql_prefix'])) { 
-			echo sprintf(gettext('Table prefix: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_prefix']); 
+		$prefix = prefix();
+		if(!empty($prefix)) {
+			echo sprintf(gettext('Table prefix: <strong>%1$s</strong>'),prefix());
 		}
 		?>
 		</li>
@@ -315,7 +320,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		}
 		?>
 		</ul>
-	
+
 		<?php
 		$plugins = array_keys(getEnabledPlugins());
 		$c = count($plugins);
@@ -392,7 +397,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 			<br />
 		</div>
 	</div>
-	
+
 	<?php
 	zp_apply_filter('admin_overview_left', '');
 }
@@ -419,7 +424,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		$button_rights = false;
 		$button_enable = true;
 		$button_XSRFTag = '';
-	
+
 		$utilityStream = file_get_contents($utility);
 		eval(isolate('$button_text', $utilityStream));
 		eval(isolate('$button_hint', $utilityStream));
@@ -430,20 +435,20 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		eval(isolate('$button_action', $utilityStream));
 		eval(isolate('$button_enable', $utilityStream));
 		eval(isolate('$button_XSRFTag', $utilityStream));
-		
+
 		$buttonlist[] = array(
 								'XSRFTag'=>$button_XSRFTag,
 								'enable'=>$button_enable,
 								'button_text'=>$button_text,
 								'formname'=>$utility,
 								'action'=>$button_action,
-								'icon'=>$button_icon, 
+								'icon'=>$button_icon,
 								'title'=>$button_hint,
 								'alt'=>$button_alt,
 								'hidden'=>$button_hidden,
 								'rights'=> $button_rights  | ADMIN_RIGHTS
 		);
-	
+
 	}
 	$buttonlist = zp_apply_filter('admin_utilities_buttons', $buttonlist);
 	$buttonlist = sortMultiArray($buttonlist, 'button_text', false);
@@ -475,7 +480,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 					<img src="<?php echo $button_icon; ?>" alt="<?php echo $button['alt']; ?>" />
 					<?php
 				}
-				echo htmlspecialchars($button['button_text'],ENT_QUOTES);
+				echo html_encode($button['button_text']);
 				?>
 				</button>
 				</div>
@@ -504,7 +509,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 		$author = $comment['name'];
 		$email = $comment['email'];
 		$link = gettext('<strong>database error</strong> '); // incase of such
-		
+
 		// ZENPAGE: switch added for zenpage comment support
 		switch ($comment['type']) {
 			case "albums":
@@ -574,7 +579,7 @@ if (zp_loggedin(OVERVIEW_RIGHTS)) {
 	?>
 	</ul>
 	</div>
-	
+
 	<?php
 	zp_apply_filter('admin_overview_right', '');
 }

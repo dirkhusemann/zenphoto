@@ -151,7 +151,7 @@ function quota_admin_list($owner) {
 	$adminlist = '';
 	$admins = $_zp_authority->getAdministrators();
 	foreach ($admins as $user) {
-		if ($user['valid'] && ($user['rights'] & (UPLOAD_RIGHTS)) && !($user['rights'] & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) {
+		if (($user['rights'] & (UPLOAD_RIGHTS)) && !($user['rights'] & (ADMIN_RIGHTS | MANAGE_ALL_ALBUM_RIGHTS))) {
 			$adminlist .= '<option value="'.$user['user'].'"';
 			if ($owner == $user['user']) $adminlist .= ' SELECTED="SELECTED"';
 			$adminlist .= '>'.$user['user']."</option>\n";

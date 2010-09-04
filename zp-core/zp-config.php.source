@@ -25,10 +25,12 @@ SERVER path. For these cases you will need to implement the path overrides below
 ////////////////////////////////////////////////////////////////////////////////
 // Database Information 
 ////////////////////////////////////////////////////////////////////////////////
-
-$conf['mysql_user'] = '';           // Supply your MySQL user id.
-$conf['mysql_pass'] = '';           // Supply your MySQL password.
-$conf['mysql_host'] = 'localhost';  // Supply the name of your MySQL server.
+$conf['db_software'] = 'MySQL';			// someday we may support other databases
+/** for historical reasons these fields reference mysql even though the database **
+ ** might be a different software                                                **/
+$conf['mysql_user'] = '';           // Supply your Database user id.
+$conf['mysql_pass'] = '';           // Supply your Database password.
+$conf['mysql_host'] = 'localhost';  // Supply the name of your Database server.
 $conf['mysql_database'] = '';       // Supply the name of Zenphoto's database 
 
 // If you are having problems with displaying some characters you may have to change

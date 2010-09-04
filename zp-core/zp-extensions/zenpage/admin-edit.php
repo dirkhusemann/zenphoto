@@ -6,7 +6,7 @@
  * @package plugins
  * @subpackage zenpage
  */
-define("OFFSET_PATH",4); 
+define("OFFSET_PATH",4);
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-functions.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/admin-globals.php');
 require_once("zenpage-admin-functions.php");
@@ -58,7 +58,7 @@ if(is_AdminEditPage('page')) {
 	}
 }
 printAdminHeader();
-zp_apply_filter('texteditor_config', '','zenpage'); 
+zp_apply_filter('texteditor_config', '','zenpage');
 zenpageJSCSS();
 datepickerJS();
 codeblocktabsJS();
@@ -66,7 +66,7 @@ codeblocktabsJS();
 <script type="text/javascript">
 	//<!-- <![CDATA[
 	var deleteArticle = "<?php echo gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"); ?>";
-	var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";			
+	var deletePage = "<?php echo gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"); ?>";
 	<?php if(!isset($_GET['add'])) { // prevent showing the message when adding page or article ?>
 	$(document).ready(function() {
 		$('#date').change(function() {
@@ -182,7 +182,7 @@ codeblocktabsJS();
 				}
 				if(isProtectedPage($result)) {
 					echo '<p class="notebox">'.gettext('<strong>Note:</strong> This page is either password protected itself or subpage of a passport protected page.').'</p>';
-				} 
+				}
 			}
 		}
 	} else {
@@ -196,7 +196,7 @@ codeblocktabsJS();
 } ?>
 
 <p class="buttons">
-<?php 
+<?php
 if(is_AdminEditPage("newsarticle")) {
 	$backurl = 'admin-news-articles.php?'.$page;
 } else {
@@ -318,7 +318,7 @@ if(is_object($result)) {
 					$hint = $user = $x = '';
 				}
 				if(is_AdminEditPage('page')) { ?>
-  				<p class="passwordextrashow">
+  				<p class="passwordextrashow" <?php if (getOption('gallery_security') == 'private') echo 'style="display:none"'; ?>>
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<a href="javascript:toggle_passwords('',true);">
 						<?php echo gettext("Page password:"); ?>
@@ -332,15 +332,15 @@ if(is_object($result)) {
 						$x = '          ';
 						?>
 						<img src="../../images/lock.png" alt="" class="icon-position-top8" />
-						<?php 
-					} 
+						<?php
+					}
 					?>
 				</p>
 				<div class="passwordextrahide" style="display:none">
 					<a href="javascript:toggle_passwords('',false);">
 					<?php echo gettext("Page guest user:"); ?>
 					</a>
-					<input type="text" size="27" name="page_user" value="<?php echo htmlspecialchars($user); ?>" />
+					<input type="text" size="27" name="page_user" value="<?php echo html_encode($user); ?>" />
 					<?php echo gettext("Page password:"); ?>
 					<br />
 					<input type="password" size="27" name="pagepass" value="<?php echo $x; ?>" />
@@ -352,7 +352,7 @@ if(is_object($result)) {
 					<br />
 					<?php print_language_string_list($hint, 'page_hint', false, NULL, '', 27); ?>
 				</div>
-				<?php 
+				<?php
 				}
 				if(is_AdminEditPage("newsarticle")) {
 					echo zp_apply_filter('publish_article_utilities', '');
@@ -500,13 +500,13 @@ if(is_object($result)) {
 							}
 							?>
 				<div id="first">
-					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES); ?></textarea>
+					<textarea name="codeblock1" id="codeblock1" rows="40" cols="60"><?php echo htmlentities($codeblock[1],ENT_QUOTES,getOption('charset')); ?></textarea>
 				</div>
 				<div id="second">
-					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES); ?></textarea>
+					<textarea name="codeblock2" id="codeblock2" rows="40" cols="60"><?php echo htmlentities($codeblock[2],ENT_QUOTES,getOption('charset')); ?></textarea>
 				</div>
 				<div id="third">
-					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES); ?></textarea>
+					<textarea name="codeblock3" id="codeblock3" rows="40" cols="60"><?php echo htmlentities($codeblock[3],ENT_QUOTES,getOption('charset')); ?></textarea>
 				</div>
 			</div>
 		</td>

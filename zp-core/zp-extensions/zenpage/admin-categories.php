@@ -127,7 +127,7 @@ printLogoAndLinks();
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
 					<?php XSRFToken($action);?>
-					<input	type="hidden" name="action" id="action" value="<?php echo htmlspecialchars($action,ENT_QUOTES); ?>" />
+					<input	type="hidden" name="action" id="action" value="<?php echo html_encode($action); ?>" />
 					<input	type="hidden" name="password_enabled" id="password_enabled" value="0" />
 					<input	type="hidden" name="olduser" id="olduser" value="<?php if (isset($result)) echo $result['user']; ?>" />
 					<?php
@@ -166,7 +166,7 @@ printLogoAndLinks();
 							$result['user'] = $result['password'] = $result['password_hint'] = '';
 						}
 						?>
-						<tr class="passwordextrashow">
+						<tr class="passwordextrashow" <?php if (getOption('gallery_security') == 'private') echo 'style="display:none"'; ?>>
 							<td>
 								<a href="javascript:toggle_passwords('',true);">
 									<?php echo gettext("Category password:"); ?>
@@ -195,7 +195,7 @@ printLogoAndLinks();
 								</a>
 							</td>
 							<td colspan="2">
-								<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="category_user" value="<?php echo htmlspecialchars($result['user']); ?>" />
+								<input type="text" size="<?php echo TEXT_INPUT_SIZE_SHORT; ?>" name="category_user" value="<?php echo html_encode($result['user']); ?>" />
 							</td>
 						</tr>
 						<tr class="passwordextrahide" style="display:none">

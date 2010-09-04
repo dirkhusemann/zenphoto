@@ -112,7 +112,7 @@ while ($old != $albumname) {
 	<tr>
 		<td><?php echo gettext("Album name:"); ?></td>
 		<td><input type="text" size="40" name="album"
-			value="<?php echo htmlspecialchars($albumname,ENT_QUOTES) ?>" /></td>
+			value="<?php echo html_encode($albumname) ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Create in:"); ?></td>
@@ -178,12 +178,12 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<tr>
 		<td><?php echo gettext("Search criteria:"); ?></td>
 		<td><input type="text" size="60" name="words"
-			value="<?php echo htmlspecialchars($words,ENT_QUOTES); ?>" /></td>
+			value="<?php echo html_encode($words); ?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search fields:"); ?></td>
 		<td>
-		<?php 
+		<?php
 		echo '<ul class="searchchecklist">'."\n";
 		$selected_fields = array();
 		$engine = new SearchEngine(true);
@@ -197,10 +197,10 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 				}
 			}
 		}
-		
+
 		generateUnorderedListFromArray($selected_fields, $available_fields, 'SEARCH_', false, true, true);
 		echo '</ul>';
-		?>		
+		?>
 		</td>
 	</tr>
 

@@ -40,18 +40,18 @@ $items = getOption("zenpage_rss_items"); // # of Items displayed on the feed
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Zenpage - A CMS plugin for ZenPhoto</generator>
-<?php 
+<?php
 switch ($option) {
 	case "category":
-		$latest = getLatestNews($items,"none",$catlink); 	
+		$latest = getLatestNews($items,"none",$catlink);
 		break;
 	case "news":
-		$latest = getLatestNews($items,"none"); 	
+		$latest = getLatestNews($items,"none");
 		break;
 	case "withimages":
 		$latest = getLatestNews($items,"with_latest_images_date");
 		break;
-} 
+}
 $count = "";
 foreach($latest as $item) {
 	$count++;
@@ -61,7 +61,7 @@ foreach($latest as $item) {
 	switch($item['type']) {
 		case 'news':
 			$obj = new ZenpageNews($item['titlelink']);
-			$title = htmlspecialchars(get_language_string($obj->get('title'),$locale), ENT_QUOTES);
+			$title = html_encode(get_language_string($obj->get('title'),$locale));
 			$link = getNewsURL($obj->getTitlelink());
 			$count2 = 0;
 			$category = $obj->getCategories();
@@ -86,7 +86,7 @@ foreach($latest as $item) {
 			$albumobj = new Album($_zp_gallery,$item['albumname']);
 			$obj = newImage($albumobj,$item['titlelink']);
 			$categories = get_language_string($albumobj->get('title'),$locale);
-			$title = strip_tags(htmlspecialchars(get_language_string($obj->get('title'),$locale), ENT_QUOTES));
+			$title = strip_tags(html_encode(get_language_string($obj->get('title'),$locale)));
 			$link = $obj->getImageLink();
 			$type = "image";
 			$filename = $obj->getFilename();
@@ -101,15 +101,15 @@ foreach($latest as $item) {
 			if(isImagePhoto($obj)) {
 				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img border="0" src="'.$serverprotocol.'://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$album.'&i='.$filename.'&s='.$s.'" alt="'. $title .'"></a>' . $content . ']]>';
 			} else {
-				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.htmlspecialchars($title,ENT_QUOTES).'" /></a>'.$content.']]>';
+				$content = '<![CDATA[<a title="'.$title.' in '.$categories.'" href="'.$serverprotocol.'://'.$host.$link.'"><img src="'.$obj->getThumb().'" alt="'.html_encode($title).'" /></a>'.$content.']]>';
 			}
-			//$thumb = "<a href=\"".$link."\" title=\"".htmlspecialchars($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".htmlspecialchars($title,ENT_QUOTES)."\" /></a>\n";
-			
+			//$thumb = "<a href=\"".$link."\" title=\"".html_encode($title, ENT_QUOTES)."\"><img src=\"".$obj->getThumb()."\" alt=\"".html_encode($title)."\" /></a>\n";
+
 			break;
 		case 'albums':
 			break;
 	}
-	$categories = htmlspecialchars($categories,ENT_QUOTES);			
+	$categories = html_encode($categories);
 ?>
 <item>
 	<title><?php echo $title." (".$categories.")"; ?></title>
@@ -123,7 +123,7 @@ foreach($latest as $item) {
     <category><?php echo $categories; ?>
     </category>
 	<guid><?php echo '<![CDATA['.$serverprotocol.'://'.$host.$link.']]>';?></guid>
-	<pubDate><?php echo date("r",strtotime($item['date'])); ?></pubDate> 
+	<pubDate><?php echo date("r",strtotime($item['date'])); ?></pubDate>
 </item>
 <?php
 if($count === $items) {

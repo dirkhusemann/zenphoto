@@ -17,7 +17,7 @@
  * @author Ozh
  * @since 1.3
  */
- 
+
 // force UTF-8 Ø
 
 global $_zp_filters;
@@ -29,9 +29,9 @@ $_zp_filters = array();
 /**
  * Registers a filtering function
  * Filtering functions are used to post process zenphoto elements or to trigger functions when a filter occur
- * 
+ *
  * Typical use:
- * 
+ *
  *		zp_register_filter('some_hook', 'function_handler_for_hook');
  *
  * @global array $_zp_filters Storage for all of the filters
@@ -50,9 +50,9 @@ function zp_register_filter($hook, $function_name, $priority = 5, $accepted_args
 		$base = 'unknown';
 	}
 	// At this point, we cannot check if the function exists, as it may well be defined later (which is OK)
-	
+
 	$id = zp_filter_unique_id($hook, $function_name, $priority);
-	
+
 	$_zp_filters[$hook][$priority][$id] = array(
 		'function' => $function_name,
 		'accepted_args' => $accepted_args,
@@ -104,7 +104,7 @@ function zp_filter_unique_id($hook, $function, $priority) {
  * This function is called for each zenphoto element which supports
  * plugin filtering. It is called after any zenphoto specific actions are
  * completed and before the element is used.
- * 
+ *
  * Typical use:
  *
  * 		1) Modify a variable if a function is attached to hook 'zp_hook'
@@ -113,7 +113,7 @@ function zp_filter_unique_id($hook, $function, $priority) {
  *
  *		2) Trigger functions is attached to event 'zp_event'
  *		zp_apply_filter( 'zp_event' );
- * 
+ *
  * Returns an element which may have been filtered by a filter.
  *
  * @global array $_zp_filters storage for all of the filters
@@ -125,12 +125,12 @@ function zp_apply_filter($hook, $value = '') {
 	global $_zp_filters;
 	if ( !isset($_zp_filters[$hook]) )
 		return $value;
-	
+
 	$args = func_get_args();
 
 	// Sort filters by priority
 	ksort($_zp_filters[$hook]);
-	
+
 	// Loops through each filter
 	reset( $_zp_filters[$hook] );
 	do {
@@ -146,7 +146,7 @@ function zp_apply_filter($hook, $value = '') {
 			}
 
 	} while ( next($_zp_filters[$hook]) !== false );
-	
+
 	return $value;
 }
 
@@ -170,7 +170,7 @@ function zp_apply_filter($hook, $value = '') {
  */
 function zp_remove_filter($hook, $function_to_remove, $priority = 10, $accepted_args = 1) {
 	global $_zp_filters;
-	
+
 	$function_to_remove = zp_filter_unique_id($hook, $function_to_remove, $priority);
 
 	$remove = isset ($_zp_filters[$hook][$priority][$function_to_remove]);

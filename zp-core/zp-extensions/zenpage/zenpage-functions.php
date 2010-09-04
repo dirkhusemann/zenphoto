@@ -297,7 +297,7 @@ function isProtectedPage($pageobj=NULL) {
 				$datesearch = "";
 			}
 			$result = query("SELECT COUNT(*) FROM ".prefix('zenpage_news').$show.$datesearch);
-			$row = mysql_fetch_row($result);
+			$row = db_fetch_row($result);
 			$count = $row[0];
 			return $count;
 		} else {
@@ -324,7 +324,7 @@ function isProtectedPage($pageobj=NULL) {
 	}
 
 /**
-	 * Gets the LIMIT and OFFSET for the MySQL query that gets the news articles
+	 * Gets the LIMIT and OFFSET for the query that gets the news articles
 	 *
 	 * @param int $articles_per_page The number of articles to get
 	 * @param bool $ignorepagination If pagination should be ingored so always with the first is started (false is default)
@@ -654,7 +654,7 @@ function isProtectedPage($pageobj=NULL) {
 					case "latestimagesbyalbum-sizedimage":
 						($published) ? $show = "WHERE `show`= 1" : $show = "";
 						$result = query("SELECT COUNT(DISTINCT Date(date),albumid) FROM " . prefix('images'). " ".$show);
-						$countGalleryitems = mysql_result($result, 0);
+						$countGalleryitems = db_result($result, 0);
 						break;
 				}
 			} else {
@@ -693,7 +693,7 @@ function isProtectedPage($pageobj=NULL) {
 	function getCategoryTitle($catlink) {
 		foreach(getAllCategories() as $cat) {
 			if($cat['cat_link'] == $catlink) {
-				return htmlspecialchars(get_language_string($cat['cat_name']));
+				return html_encode(get_language_string($cat['cat_name']));
 			}
 		}
 	}

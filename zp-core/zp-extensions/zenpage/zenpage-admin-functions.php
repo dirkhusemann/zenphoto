@@ -242,12 +242,12 @@ function deletePage($id=NULL,$sortorder=NULL) {
 	if(is_null($id)) {
 		$id = sanitize_numeric($_GET['del']);
 	} else {
-		$id = sanitize_numeric($id); 
+		$id = sanitize_numeric($id);
 	}
 	if(is_null($sortorder)) {
 		$sortorder = sanitize($_GET['sortorder']);
 	} else {
-		$sortorder = sanitize($sortorder); 
+		$sortorder = sanitize($sortorder);
 	}
 	query("DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='zenpage_pages' AND `objectid`=" . $id);
 	$result = query_full_array('SELECT `id` FROM '.prefix('zenpage_pages')." WHERE `sort_order` like '".$sortorder."-%'");
@@ -316,7 +316,7 @@ function printPagesListTable($page, $flag) {
 			?>
 		</td>
 		<td class="icons3" style="text-align: left">
-			<?php echo htmlspecialchars($page->getAuthor()) ;?>
+			<?php echo html_encode($page->getAuthor()) ;?>
 		</td>
 	<td class="icons">
 	<?php
@@ -989,7 +989,7 @@ function addCategory(&$reports) {
 		if (query($sql, true)) {
 			$reports[] =  "<p class='messagebox' id='fade-message'>".sprintf(gettext("Category <em>%s</em> added"),$catlink)."</p>";
 		} else {
-			$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($catlink))."</p>";
+			$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),html_encode($catlink))."</p>";
 		}
 	}
 }
@@ -1038,7 +1038,7 @@ function updateCategory(&$reports) {
 			$reports[] =  "<p class='messagebox' id='fade-message'>".gettext("Category updated!")."</p>";
 		}
 	} else {
-		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),htmlspecialchars($result['cat_link']))."</p>";
+		$reports[] =  "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),html_encode($result['cat_link']))."</p>";
 	}
 	$result = getCategory($result['id']);
 	return $result;
@@ -1336,7 +1336,7 @@ function authorSelector($author=NULL) {
 	if (zp_loggedin(MANAGE_ALL_PAGES_RIGHTS)) {
 		$admins = $_zp_authority->getAdministrators();
 		foreach($admins as $admin) {
-			if($admin['valid'] && $admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_PAGES_RIGHTS)) {
+			if($admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_PAGES_RIGHTS)) {
 				if($author == $admin['user']) {
 					echo "<option selected='selected' value='".$admin['user']."'>".$admin['user']."</option>";
 				} else {
@@ -1697,7 +1697,7 @@ function processZenpageBulkActions($type,&$reports) {
 				}
 				if(($type != 'news' || $type != 'pages') && $action != 'deleteall') {
 					query($sql);
-				} 
+				}
 				if(!is_null($message)) $reports[] = "<p class='messagebox fade-message'>".$message."</p>";
 			}
 		}

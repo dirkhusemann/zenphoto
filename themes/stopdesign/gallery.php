@@ -6,7 +6,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> <?php echo gettext("Archive"); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
@@ -18,6 +18,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </head>
 
 <body class="archive">
+	<?php zp_apply_filter('theme_body_open'); ?>
 	<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
 
 <div id="content">
@@ -32,9 +33,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			while (next_album()):
 			?>
 	<li class="gal">
-	<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>"
+	<h3><a href="<?php echo html_encode(getAlbumLinkURL());?>"
 		title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-	<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>"
+	<a href="<?php echo html_encode(getAlbumLinkURL());?>"
 		title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"
 		class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, getOption('Gallery_image_crop_width'), getOption('Gallery_image_crop_height')); ?></a>
 		<p>
@@ -83,10 +84,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<br />
 				<p>
 				<?php if (hasPrevPage()) { ?>
-						<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
+						<a href="<?php echo html_encode(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } ?>
 				<?php if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } ?>
-						<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
+						<a href="<?php echo html_encode(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 				<?php } ?>
 				</p>
 			</div>
@@ -95,8 +96,8 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <div id="feeds">
 	<h2><?php echo gettext('Gallery Feeds'); ?></h2>
 	<ul>
-		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss.php" class="i"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/rss.gif" /> <?php echo gettext('Photos'); ?></a></li>
-		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss-comments.php" class="i"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/rss.gif" /> <?php echo gettext('Comments'); ?></a></li>
+		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss.php" class="i"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/rss.png" /> <?php echo gettext('Photos'); ?></a></li>
+		<li><a href="http://<?php echo sanitize($_SERVER['HTTP_HOST']).WEBPATH; ?>/rss-comments.php" class="i"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/rss.png" /> <?php echo gettext('Comments'); ?></a></li>
 	</ul>
 </div>
 
@@ -104,7 +105,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 <p id="path">
 	<?php printHomeLink('', ' > '); ?>
-	<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+	<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
 	<?php echo getGalleryTitle();?> 
 	<?php echo gettext('Gallery Archive'); ?>
 </p>
@@ -118,7 +119,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	</p>
 </div>
 
-<?php printAdminToolbox(); ?>
+<?php
+printAdminToolbox();
+zp_apply_filter('theme_body_close');
+?>
 
 </body>
 </html>

@@ -123,7 +123,7 @@ function printAlbumMenuList($option,$showcount=NULL,$css_id='',$css_class_topact
 	/**** Top level start with Index link  ****/
 	if($option === "list" OR $option === "list-top") {
 		if(!empty($indexname)) {
-			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
+			echo "<li><a href='".html_encode(getGalleryIndexURL())."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
 		}
 	}
 
@@ -209,7 +209,7 @@ function printAlbumMenuListAlbum($albums, $path, $folder, $option, $showcount, $
 				$imgurl = getFirstImageOfAlbum($topalbum);
 				$link = "<li><a ".$current."href='".$imgurl."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
 			} else {
-				$link = "<li><a ".$current."href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+				$link = "<li><a ".$current."href='".html_encode($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
 			}
 			echo $link;
 		}
@@ -263,7 +263,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index",$firstim
 			if(!empty($indexname)) {
 				$selected = checkSelectedAlbum("", "index");
 				 ?>
-			<option <?php echo $selected; ?> value="<?php echo htmlspecialchars(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
+			<option <?php echo $selected; ?> value="<?php echo html_encode(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
 			<?php 
 			}
 			$albums = $_zp_gallery->getAlbums();
@@ -302,7 +302,7 @@ function printAlbumMenuJumpAlbum($albums,$option,$albumpath,$firstimagelink,$lev
 			$imgurl = getFirstImageOfAlbum($subalbum);
 			$link = "<option $selected value='".$imgurl."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
 		} else {
-			$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($subalbum->name))."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
+			$link = "<option $selected value='".html_encode($albumpath.pathurlencode($subalbum->name))."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
 		}
 		echo $link;
 		$subalbums = $subalbum->getAlbums();

@@ -24,7 +24,7 @@ if (count($_POST) > 0) {
 		XSRFdefender('new_tags');	
 		foreach ($_POST as $value) {
 			if (!empty($value)) {
-				$value = zp_escape_string(htmlspecialchars_decode(sanitize($value, 3),ENT_QUOTES));
+				$value = zp_escape_string(html_encode_decode(sanitize($value, 3),ENT_QUOTES));
 				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
 				if (!is_array($result)) { // it really is a new tag
 					query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . $value . '")');

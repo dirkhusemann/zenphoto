@@ -193,7 +193,7 @@ function getRSSAlbumnameAndCollection($arrayfield) {
 			$collection = FALSE;
 		}
 		$array = array(
-	"albumfolder" => $albumfolder, 
+	"albumfolder" => $albumfolder,
 	"collection" => $collection
 		);
 		return $array[$arrayfield];
@@ -211,7 +211,7 @@ function getRSSNewsCatOptions($arrayfield) {
 	if(!empty($arrayfield)) {
 		if(isset($_GET['category'])) {
 			$catlink = sanitize($_GET['category']);
-			$cattitle = htmlspecialchars(getCategoryTitle($catlink),ENT_QUOTES);
+			$cattitle = html_encode(getCategoryTitle($catlink));
 			$option = "category";
 		} else {
 			$catlink = "";
@@ -286,8 +286,8 @@ function getRSSCacheFilename() {
 	"category=" => "_",
 	"id=" => "_",
 	"lang=" => "_",
-	"&amp;" => "_", 
-	"&" => "_", 
+	"&amp;" => "_",
+	"&" => "_",
 	".php" => "",
 	"/"=>"-",
 	"?"=> ""

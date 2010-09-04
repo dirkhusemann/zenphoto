@@ -43,10 +43,10 @@ if (isset($_GET['action'])) {
 			break;
 		case 'deletetheme':
 			if (isset($_GET['theme'])) {
-				if (deleteThemeDirectory(SERVERPATH . '/themes/'.internalToFilesystem(sanitize($_GET['theme'],3)))) {
-					$message = gettext("Theme removed.");
+				if (deleteThemeDirectory(SERVERPATH . '/themes/'.internalToFilesystem($theme = sanitize($_GET['theme'],3)))) {
+					$message = sprintf(gettext("Theme <em>%s</em> removed."),html_encode($theme));
 				} else {
-					$message = gettext('Error removing theme');
+					$message = sprintf(gettext('Error removing theme <em>%s</em>'),html_encode($theme));
 				}
 				break;
 			}

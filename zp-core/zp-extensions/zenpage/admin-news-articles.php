@@ -181,7 +181,7 @@ printLogoAndLinks();
 								<?php printArticleCategories($article) ?><br />
 								</td>
 								<td>
-								<?php echo htmlspecialchars($article->getAuthor()); ?>
+								<?php echo html_encode($article->getAuthor()); ?>
 								</td>
 								<td class="icons">
 								<?php

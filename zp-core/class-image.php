@@ -30,8 +30,8 @@ function newImage(&$album, $filename, $quiet=false) {
 	}
 	if (!is_object($xalbum) || strtoLower(get_class($xalbum)) != 'album' || !$xalbum->exists) {
 		$msg = sprintf(gettext('Bad album object parameter to newImage(%s)'),$filename);
-		trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
-		debugLogBacktrace($msg);			
+		debugLogBacktrace($msg);
+		trigger_error(html_encode($msg), E_USER_NOTICE);
 		return NULL;
 	}
 	if ($ext = is_valid_other_type($filename)) {
@@ -44,8 +44,8 @@ function newImage(&$album, $filename, $quiet=false) {
 	}
 	if (!$quiet) {
 		$msg = sprintf(gettext('Bad filename suffix in newImage(%s)'),$filename);
-		trigger_error(htmlspecialchars($msg,ENT_QUOTES), E_USER_NOTICE);
-		debugLogBacktrace($msg);			
+		debugLogBacktrace($msg);
+		trigger_error(html_encode($msg), E_USER_NOTICE);
 	}
 	return NULL;
 }
@@ -86,17 +86,17 @@ class _Image extends PersistentObject {
 	var $sortorder;     			// The position that this image should be shown in the album
 	var $filemtime;     			// Last modified time of this image
 	var $sidecars = array();	// keeps the list of suffixes associated with this image
-	
-	
+
+
 	// Plugin handler support
 	var $objectsThumb = NULL; // Thumbnail image for the object
-	
+
 
 	/**
 	 * Constructor for class-image
-	 * 
+	 *
 	 * Do not call this constructor directly unless you really know what you are doing!
-	 * Use instead the function newImage() which will instantiate an object of the 
+	 * Use instead the function newImage() which will instantiate an object of the
 	 * correct class for the file type.
 	 *
 	 * @param object &$album the owning album
@@ -129,7 +129,7 @@ class _Image extends PersistentObject {
 			if ($new) zp_apply_filter('new_image', $this);
 		}
 	}
-	
+
 	/**
 	 * generic "image" class setup code
 	 * Returns true if valid image.
@@ -137,7 +137,7 @@ class _Image extends PersistentObject {
 	 * @param object $album the images' album
 	 * @param string $filename of the image
 	 * @return bool
-	 * 
+	 *
 	 */
 	function classSetup(&$album, $filename) {
 		global $_zp_current_admin_obj;
@@ -155,7 +155,7 @@ class _Image extends PersistentObject {
 			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
 			$this->localpath = $album->localpath . $fileFS;
 		}
-		$this->filename = $filename;		
+		$this->filename = $filename;
 		$this->displayname = substr($this->filename, 0, strrpos($this->filename, '.'));
 		if (empty($this->displayname)) $this->displayname = $this->filename;
 		$this->comments = null;
@@ -166,7 +166,7 @@ class _Image extends PersistentObject {
 		zp_apply_filter('image_instantiate', $this);
 		return true;
 	}
-	
+
 	function getDefaultTitle() {
 		return $this->displayname;
 	}
@@ -208,60 +208,60 @@ class _Image extends PersistentObject {
 
 	/**
 	 * Parses Exif/IPTC data
-	 * 
+	 *
 	 */
 	function updateMetaData() {
 		require_once(dirname(__FILE__).'/exif/exif.php');
 		global $_zp_exifvars;
 		$IPTCtags = array(
-											'SKIP'								=>	'2#000',	//	Record Version										Size:64		
-											'ObjectType'					=>	'2#003',	//	Object Type	Ref										Size:67	
-											'ObjectAttr'					=>	'2#004',	//	Object Attribute Ref							Size:67	
-											'ObjectName'					=>	'2#005',	//	Object name												Size:64		
-											'EditStatus'					=>	'2#007',	//	Edit Status												Size:64		
-											'EditorialUpdate'			=>	'2#008',	//	Editorial Update									Size:2		
-											'Urgency'							=>	'2#010',	//	Urgency														Size:1			
-											'SubRef'							=>	'2#012',	//	Subject	Reference									Size:236		
-											'Category'						=>	'2#015',	//	Category 													Size:3			
-											'SuppCategory'				=>	'2#020',	//	Supplemental category							Size:32		
-											'FixtureID'						=>	'2#022',	//	Fixture	ID 												Size:32		
-											'Keywords'						=>	'2#025',	//	Keywords 													Size:64			
+											'SKIP'								=>	'2#000',	//	Record Version										Size:64
+											'ObjectType'					=>	'2#003',	//	Object Type	Ref										Size:67
+											'ObjectAttr'					=>	'2#004',	//	Object Attribute Ref							Size:67
+											'ObjectName'					=>	'2#005',	//	Object name												Size:64
+											'EditStatus'					=>	'2#007',	//	Edit Status												Size:64
+											'EditorialUpdate'			=>	'2#008',	//	Editorial Update									Size:2
+											'Urgency'							=>	'2#010',	//	Urgency														Size:1
+											'SubRef'							=>	'2#012',	//	Subject	Reference									Size:236
+											'Category'						=>	'2#015',	//	Category 													Size:3
+											'SuppCategory'				=>	'2#020',	//	Supplemental category							Size:32
+											'FixtureID'						=>	'2#022',	//	Fixture	ID 												Size:32
+											'Keywords'						=>	'2#025',	//	Keywords 													Size:64
 											'ContentLocCode'			=>	'2#026',	//	Content	Location Code							Size:3
 											'ContentLocName'			=>	'2#027',	//	Content	Location Name							Size:64
-											'ReleaseDate'					=>	'2#030',	//	Release	Date 											Size:8		
-											'ReleaseTime'					=>	'2#035',	//	Release	Time											Size:11		
-											'ExpireDate'					=>	'2#037',	//	Expiration Date										Size:8	
-											'ExpireTime'					=>	'2#038',	//	Expiration Time										Size:11	
-											'SpecialInstru'				=>	'2#040',	//	Special Instructions							Size:256	
-											'ActionAdvised'				=>	'2#042',	//	Action Advised										Size:2	
-											'RefService'					=>	'2#045',	//	Reference Service									Size:10	
-											'RefDate'							=>	'2#047',	//	Reference Date										Size:8	
-											'RefNumber'						=>	'2#050',	//	Reference Number									Size:8	
-											'DateCreated'					=>	'2#055',	//	Date created											Size:8	
-											'TimeCreated'					=>	'2#060',	//	Time created											Size:11	
+											'ReleaseDate'					=>	'2#030',	//	Release	Date 											Size:8
+											'ReleaseTime'					=>	'2#035',	//	Release	Time											Size:11
+											'ExpireDate'					=>	'2#037',	//	Expiration Date										Size:8
+											'ExpireTime'					=>	'2#038',	//	Expiration Time										Size:11
+											'SpecialInstru'				=>	'2#040',	//	Special Instructions							Size:256
+											'ActionAdvised'				=>	'2#042',	//	Action Advised										Size:2
+											'RefService'					=>	'2#045',	//	Reference Service									Size:10
+											'RefDate'							=>	'2#047',	//	Reference Date										Size:8
+											'RefNumber'						=>	'2#050',	//	Reference Number									Size:8
+											'DateCreated'					=>	'2#055',	//	Date created											Size:8
+											'TimeCreated'					=>	'2#060',	//	Time created											Size:11
 											'DigitizeDate'				=>	'2#062',	//	Digital Creation Date							Size:8
 											'DigitizeTime'				=>	'2#063',	//	Digital Creation Time							Size:11
 											'OriginatingProgram'	=>	'2#065',	//	Originating Program								Size:32
 											'ProgramVersion'			=>	'2#070',	//	Program version										Size:10
-											'ObjectCycle'					=>	'2#075',	//	Object Cycle											Size:1	
-											'ByLine'							=>	'2#080',	//	ByLine 														Size:32		
-											'ByLineTitle'					=>	'2#085',	//	ByLine Title											Size:32	
-											'City'								=>	'2#090',	//	City															Size:32			
-											'SubLocation'					=>	'2#092',	//	Sublocation												Size:32			
-											'State'								=>	'2#095',	//	Province/State										Size:32			
+											'ObjectCycle'					=>	'2#075',	//	Object Cycle											Size:1
+											'ByLine'							=>	'2#080',	//	ByLine 														Size:32
+											'ByLineTitle'					=>	'2#085',	//	ByLine Title											Size:32
+											'City'								=>	'2#090',	//	City															Size:32
+											'SubLocation'					=>	'2#092',	//	Sublocation												Size:32
+											'State'								=>	'2#095',	//	Province/State										Size:32
 											'LocationCode'				=>	'2#100',	//	Country/Primary	Location Code			Size:3
 											'LocationName'				=>	'2#101',	//	Country/Primary	Location Name			Size:64
 											'TransmissionRef'			=>	'2#103',	//	Original Transmission Reference		Size:32
-											'ImageHeadline'				=>	'2#105',	//	Image headline										Size:256		
-											'ImageCredit'					=>	'2#110',	//	Image credit											Size:32		
-											'Source'							=>	'2#115',	//	Source														Size:32			
-											'Copyright'						=>	'2#116',	//	Copyright Notice									Size:128		
-											'Contact'							=>	'2#118',	//	Contact														Size:128			
-											'ImageCaption'				=>	'2#120',	//	Image caption											Size:2000		
-											'ImageCaptionWriter'	=>	'2#122',	//	Image caption writer							Size:32	
-											'ImageType'						=>	'2#130',	//	Image type												Size:2		
-											'Orientation'					=>	'2#131',	//	Image	 rientation									Size:1		
-											'LangID'							=>	'2#135',	//	Language ID												Size:3		
+											'ImageHeadline'				=>	'2#105',	//	Image headline										Size:256
+											'ImageCredit'					=>	'2#110',	//	Image credit											Size:32
+											'Source'							=>	'2#115',	//	Source														Size:32
+											'Copyright'						=>	'2#116',	//	Copyright Notice									Size:128
+											'Contact'							=>	'2#118',	//	Contact														Size:128
+											'ImageCaption'				=>	'2#120',	//	Image caption											Size:2000
+											'ImageCaptionWriter'	=>	'2#122',	//	Image caption writer							Size:32
+											'ImageType'						=>	'2#130',	//	Image type												Size:2
+											'Orientation'					=>	'2#131',	//	Image	 rientation									Size:1
+											'LangID'							=>	'2#135',	//	Language ID												Size:3
 											'Subfile'							=>	'8#010'		//	Subfile														Size:2
 		);
 		$this->set('hasMetadata',0);
@@ -272,7 +272,7 @@ class _Image extends PersistentObject {
 			$localpath = $this->getThumbImageFile();
 		}
 		$xdate = $this->getDateTime();
-		
+
 		if (!empty($localpath)) { // there is some kind of image to get metadata from
 			$exifraw = read_exif_data_protected($localpath);
 			if (isset($exifraw['ValidEXIFData'])) {
@@ -313,7 +313,7 @@ class _Image extends PersistentObject {
 							$this->set($field, $this->prepIPTCString($datum, $characterset));
 						}
 					}
-						
+
 					/* iptc keywords (tags) */
 					$datum = $this->getIPTCTagArray('2#025', $iptc);
 					if (is_array($datum)) {
@@ -446,7 +446,7 @@ class _Image extends PersistentObject {
 		}
 		return '';
 	}
-	
+
 	/**
 	 * For internal use--fetches the IPTC array for a single tag.
 	 *
@@ -459,7 +459,7 @@ class _Image extends PersistentObject {
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Returns the IPTC data converted into UTF8
 	 *
@@ -488,7 +488,7 @@ class _Image extends PersistentObject {
 		$width = $size['width'];
 		$height = $size['height'];
 		if (zp_imageCanRotate() && getOption('auto_rotate'))  {
-			// Swap the width and height values if the image should be rotated			
+			// Swap the width and height values if the image should be rotated
 			$splits = preg_split('/!([(0-9)])/', $this->get('EXIFOrientation'));
 			$rotation = $splits[0];
 			switch ($rotation) {
@@ -802,7 +802,7 @@ class _Image extends PersistentObject {
 				if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
 					$result = $result && @rename($file, $newalbum->localpath . basename($file));
 				}
-			}			
+			}
 		}
 		if ($result) {
 			if ($this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id))) {
@@ -848,9 +848,9 @@ class _Image extends PersistentObject {
 				if(in_array(strtolower(getSuffix($file)), $this->sidecars)) {
 					$result = $result && @copy($file, $newalbum->localpath . basename($file));
 				}
-			}			
+			}
 		}
-		
+
 		if ($result) {
 			if ($this->copy(array('filename'=>$filename, 'albumid'=>$newalbum->id))) {
 				query('UPDATE '.prefix('images').' SET `mtime`='.filemtime($newpath).' WHERE `filename`="'.$filename.'" AND `albumid`='.$newalbum->id);
@@ -1023,8 +1023,8 @@ class _Image extends PersistentObject {
 
 	/**
 	 * Returns the image file name for the thumbnail image.
-	 * 
-	 * @param string $path override path 
+	 *
+	 * @param string $path override path
 	 *
 	 * @return s
 	 */
@@ -1075,7 +1075,7 @@ class _Image extends PersistentObject {
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . '/'.CACHEFOLDER . pathurlencode(imgSrcURI($cachefilename));
 		} else {
-			return getImageProcessorURI($args, $this->album->name, $this->filename); 
+			return getImageProcessorURI($args, $this->album->name, $this->filename);
 		}
 	}
 
@@ -1162,28 +1162,28 @@ class _Image extends PersistentObject {
 	 * @param string $val the value to be put in custom_data
 	 */
 	function setCustomData($val) { $this->set('custom_data', $val); }
-	
+
 	/**
 	 * Returns the disk size of the image
 	 *
 	 * @return string
 	 */
 	function getImageFootprint() {
-		return filesize($this->localpath); 
+		return filesize($this->localpath);
 	}
-	
+
 	/**
 	 * Returns the custom watermark name
-	 * 
+	 *
 	 * @return string
 	 */
 	function getWatermark() {
 		return $this->get('watermark');
 	}
-	
+
 	/**
 	 * Set custom watermark
-	 * 
+	 *
 	 * @param string $wm
 	 */
 	function setWatermark($wm) {
@@ -1192,23 +1192,23 @@ class _Image extends PersistentObject {
 
 	/**
 	 * Returns the custom watermark usage
-	 * 
+	 *
 	 * @return bool
 	 */
 	function getWMUse() {
 		return $this->get('watermark_use');
 	}
-	
+
 	/**
 	 * Sets the custom watermark usage
-	 * 
+	 *
 	 * @param $use
 	 */
 	function setWMUse($use) {
 		$this->set('watermark_use', $use);
-		
+
 	}
-	
+
 	/**
 	 * Owner functions
 	 */
@@ -1218,7 +1218,7 @@ class _Image extends PersistentObject {
 	function setOwner($owner) {
 		$this->set('owner',$owner);
 	}
-	
+
 		/**
 	 * Returns the codeblocks of the image as an serialized array
 	 *
@@ -1227,7 +1227,7 @@ class _Image extends PersistentObject {
 	function getCodeblock() {
 		return $this->get("codeblock");
 	}
-	
+
 
 }
 

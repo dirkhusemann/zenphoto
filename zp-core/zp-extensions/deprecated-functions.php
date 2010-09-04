@@ -1,29 +1,74 @@
 <?php
 /**
  * These functions have been removed from mainstream Zenphoto as they have been
- * supplanted. 
- * 
+ * supplanted.
+ *
  * They are not maintained and they are not guarentted to function correctly with the
  * current version of Zenphoto.
- * 
+ *
  * @package plugins
  */
 $plugin_description = gettext("Deprecated Zenphoto functions. These functions have been removed from mainstream Zenphoto as they have been supplanted. They are not maintained and they are not guaranteed to function correctly with the current version of Zenphoto.");
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---deprecated-functions.php.html";
+$option_interface = new deprecated_functions();
+$plugin_is_filter = 9;
 
-/**
- * THIS FUNCTION IS DEPRECATED! Use getHitcounter()!
- * Gets the hitcount of a page, news article or news category
- * 
- * @param string $mode Pass "news", "page" or "category" to get the hitcounter of the current page, article or category if one is set
- * @param mixed $obj If you want to get the hitcount of a specific page or article you additionally can to pass its object.
- * 									 If you want to get the hitcount of a specific category you need to pass its cat_link. 
- * 									 In any case $mode must be set!
- * @return int
+class deprecated_functions {
+
+	var $listed_functions = array();
+
+	function deprecated_functions() {
+		$deprecated = file_get_contents(__FILE__);
+		preg_match_all('/function (.*)\(/',$deprecated,$functions);
+		$this->listed_functions = $functions[1];
+		// remove the items from this class and notify function, leaving only the deprecated functions
+		unset($this->listed_functions[0]);	// class instantiation
+		unset($this->listed_functions[1]);	// text from the preg match
+		unset($this->listed_functions[2]);	// getOptionsSupported()
+		unset($this->listed_functions[3]);	// deprecated_function_notify()
+		foreach ($this->listed_functions as $key=>$funct) {
+			if ($funct == '_emitPluginScripts') {	// special case!!!!
+				unset($this->listed_functions[$key]);
+			} else {
+				setOptionDefault('deprecated_'.$funct,1);
+				/* enable to test new deprecated function messages
+				if ((OFFSET_PATH == 0) && getOption('deprecated_'.$funct)) {
+					echo "<br/>$funct::";
+					call_user_func_array($funct,array(0,0,0,0));
+				}
+				*/
+			}
+		}
+	}
+
+	function getOptionsSupported() {
+		$list = array();
+		foreach ($this->listed_functions as $funct) {
+			$list[$funct] = 'deprecated_'.$funct;
+		}
+		return array(gettext('Functions')=>array('key' => 'deprecated_Function_list', 'type' => OPTION_TYPE_CHECKBOX_UL,
+												'checkboxes' => $list,
+												'desc' => gettext('Send a <em>deprecated</em> notification message if the function name is checked.')));
+	}
+}
+
+/*
+ * used to provided deprecated function notification.
  */
+function deprecated_function_notify($use) {
+	$fcn = get_caller_method();
+	if (empty($fcn) || getOption('deprecated_'.$fcn)) {
+		if (empty($fcn)) $fcn = gettext('function');
+		if (!empty($use)) $use = ' '.$use;
+		trigger_error(sprintf(gettext('%s is deprecated'),$fcn).$use, E_USER_NOTICE);
+	}
+}
+
+// IMPORTANT:: place all deprecated functions below this line!!!
+
 function getZenpageHitcounter($mode="",$obj=NULL) {
+	deprecated_function_notify(gettext('Use getHitcounter().'));
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category;
-	trigger_error(gettext('getZenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
 	switch($mode) {
 		case "news":
 			if((is_NewsArticle() OR is_News()) AND !is_object($obj)) {
@@ -48,60 +93,36 @@ function getZenpageHitcounter($mode="",$obj=NULL) {
 				$catname = $_zp_current_category;
 				$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
 				return $hc["hitcounter"];
-			} 
+			}
 			break;
 	}
 }
 
-/**
- * Prints the image rating information for the current image
- * Deprecated:
- * Included for forward compatibility--use printRating() directly
- *
- */
 function printImageRating($object=NULL) {
+	deprecated_function_notify(gettext('Use printRating().'));
 	global $_zp_current_image;
 	if (is_null($object)) $object = $_zp_current_image;
 	printRating(3, $object);
 }
 
-/**
- * Prints the album rating information for the current image
- * Deprecated:
- * Included for forward compatibility--use printRating() directly
- *
- */
 function printAlbumRating($object=NULL) {
+	deprecated_function_notify(gettext('Use printRating().'));
 	global $_zp_current_album;
 	if (is_null($object)) $object = $_zp_current_album;
 	printRating(3, $object);
 }
 
-/**
- * Prints image data. 
- * 
- * Deprecated, use printImageMetadata
- *
- */
 function printImageEXIFData() {
-	trigger_error(gettext('printImageEXIFData is deprecated. Use printImageMetadata().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use printImageMetadata().'));
 	if (isImageVideo()) {
 	} else {
-		printImageMetadata(); 
-	} 
+		printImageMetadata();
+	}
 }
 
 
-/**
- * This function is considered deprecated. 
- * Please use the new replacement get/printCustomSizedImageMaxSpace(). 
- * 
- * Prints out a sized image up to $maxheight tall (as width the value set in the admin option is taken)
- *
- * @param int $maxheight how bif the picture should be
- */
 function printCustomSizedImageMaxHeight($maxheight) {
-	trigger_error(gettext('printCustomSizedImageMaxHeight is deprecated. Use printCustomSizedImageMaxSpace().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use printCustomSizedImageMaxSpace().'));
 	if (getFullWidth() === getFullHeight() OR getDefaultHeight() > $maxheight) {
 		printCustomSizedImage(getImageTitle(), null, null, $maxheight, null, null, null, null, null, null);
 	} else {
@@ -109,18 +130,8 @@ function printCustomSizedImageMaxHeight($maxheight) {
 	}
 }
 
-/**
- * Retrieves the date of the current comment.
- * 
- * Deprecated--use getCommentDateTime()
- * 
- * Returns a formatted date
- *
- * @param string $format how to format the result
- * @return string
- */
 function getCommentDate($format = NULL) {
-	trigger_error(gettext('getCommentDate is deprecated. Use getCommentDateTime().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getCommentDateTime().'));
 	if (is_null($format)) {
 		$format = getOption('date_format');
 		$time_tags = array('%H', '%I', '%R', '%T', '%r');
@@ -135,34 +146,14 @@ function getCommentDate($format = NULL) {
 	return myts_date($format, $_zp_current_comment['date']);
 }
 
-/**
- * Retrieves the time of the current comment.
- * 
- * Deprecated--use getCommentDateTime()
- * 
- * Returns a formatted time
-
- * @param string $format how to format the result
- * @return string
- */
 function getCommentTime($format = '%I:%M %p') {
-	trigger_error(gettext('getCommentTime is deprecated. Use getCommentDateTime().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getCommentDateTime().'));
 	global $_zp_current_comment;
 	return myts_date($format, $_zp_current_comment['date']);
 }
 
-/**
- * Returns the hitcounter for the page viewed (image.php and album.php only).
- * Deprecated, use getHitcounter()
- *
- * @param string $option "image" for image hit counter (default), "album" for album hit counter
- * @param bool $viewonly set to true if you don't want to increment the counter.
- * @param int $id Optional record id of the object if not the current image or album
- * @return string
- * @since 1.1.3
- */
 function hitcounter($option='image', $viewonly=false, $id=NULL) {
-	trigger_error(gettext('hitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getHitcounter().'));
 	switch($option) {
 		case "image":
 			if (is_null($id)) {
@@ -183,17 +174,8 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
 	return $resultupdate;
 }
 
-/**
- * Shortens a string to $length
- * 
- * Deprecated: use truncate_string
- *
- * @param string $string the string to be shortened
- * @param int $length the desired length for the string
- * @return string
- */
 function my_truncate_string($string, $length) {
-	trigger_error(gettext('my_truncate_string is deprecated. Use truncate_string().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use truncate_string().'));
 	if (strlen($string) > $length) {
 		$short = substr($string, 0, $length);
 		return $short. '...';
@@ -202,39 +184,21 @@ function my_truncate_string($string, $length) {
 	}
 }
 
-/**
- * Returns the EXIF infromation from the current image
- *
- * @return array
- */
 function getImageEXIFData() {
-	trigger_error(gettext('getImageEXIFData is deprecated. Use getImageMetaData().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getImageMetaData().'));
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getMetaData();
 }
 
-/**
- * Returns the Location of the album.
- *
- * @return string
- */
 function getAlbumPlace() {
-	trigger_error(gettext('getAlbumPlace is deprecated. Use getAlbumLocation().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getAlbumLocation().'));
 	global $_zp_current_album;
 	return $_zp_current_album->getLocation();
 }
 
-/**
- * Prints the location of the album and make it editable
- *
- * @param bool $editable when true, enables AJAX editing in place
- * @param string $editclass CSS class applied to element if editable
- * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
- * @author Ozh
- */
 function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true) {
-	trigger_error(gettext('printAlbumPlace is deprecated. Use printAlbumLocation().'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use printAlbumLocation().'));
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No place...)');
 	}
@@ -246,21 +210,9 @@ function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true)
  * ZENPAGE PLUGIN FUNCTIONS
  ***************************/
 
-/**
- * THIS FUNCTION IS DEPRECATED! Use getHitcounter()!
- * 
- * Increments (optionally) and returns the hitcounter for a news category (page 1), a single news article or a page
- * Does not increment the hitcounter if the viewer is logged in as the gallery admin.
- * Also does currently not work if the static cache is enabled
- *
- * @param string $option "pages" for a page, "news" for a news article, "category" for a news category (page 1 only)
- * @param bool $viewonly set to true if you don't want to increment the counter.
- * @param int $id Optional record id of the object if not the current image or album
- * @return string
- */
 function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
+	deprecated_function_notify(gettext('Use getHitcounter().'));
 	global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
-	trigger_error(gettext('zenpageHitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
 	switch($option) {
 		case "pages":
 			if (is_null($id)) {
@@ -300,16 +252,8 @@ function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
 	}
 }
 
-/**
- * Same as zenphoto's rewrite_path() except it's without WEBPATH, needed for some partial urls
- * 
- * @param $rewrite The path with mod_rewrite
- * @param $plain The path without
- * 
- * @return string
- */
 function rewrite_path_zenpage($rewrite='',$plain='') {
-	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use rewrite_path().'));
 	if (getOption('mod_rewrite')) {
 		return $rewrite;
 	} else {
@@ -317,13 +261,8 @@ function rewrite_path_zenpage($rewrite='',$plain='') {
 	}
 }
 
-/**
- * CombiNews feature: Returns a list of tags of an image.
- *
- * @return array
- */
 function getNewsImageTags() {
-	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use object->getTags() method.'));
 	global $_zp_current_zenpage_news;
 	if(is_GalleryNewsType()) {
 		return $_zp_current_zenpage_news->getTags();
@@ -332,19 +271,8 @@ function getNewsImageTags() {
 	}
 }
 
-/**
- * CombiNews feature: Prints a list of tags of an image. These tags are not editable.
- *
- * @param string $option links by default, if anything else the
- *               tags will not link to all other photos with the same tag
- * @param string $preText text to go before the printed tags
- * @param string $class css class to apply to the UL list
- * @param string $separator what charactor shall separate the tags
- * @param bool $editable true to allow admin to edit the tags
- * @return string
- */
 function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
-	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	deprecated_function_notify(gettext(''));
 	global $_zp_current_zenpage_news;
 	if(is_GalleryNewsType()) {
 		$singletag = getNewsImageTags();
@@ -359,10 +287,10 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
 			foreach ($singletag as $atag) {
 				if ($x++ == $ct) { $separator = ""; }
 				if ($option == "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($atag, '', 'tags', 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".html_encode(getSearchURL($atag, '', 'tags', 0, 0))."\" title=\"".$atag."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
-				echo "\t<li>".$links1.htmlspecialchars($atag, ENT_QUOTES).$links2.$separator."</li>\n";
+				echo "\t<li>".$links1.html_encode($atag).$links2.$separator."</li>\n";
 			}
 
 			echo "</ul>";
@@ -373,14 +301,45 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
 }
 
 function getNumSubalbums() {
-	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getNumAlbums().'));
 	return getNumAlbums();
 }
 
 function getAllSubalbums($param=NULL) {
-	trigger_error(gettext('function is deprecated.'), E_USER_NOTICE);
+	deprecated_function_notify(gettext('Use getAllAlbums().'));
 	return getAllAlbums($param);
 }
 
+function addPluginScript($script) {
+	deprecated_function_notify(gettext('Register a "theme_head" filter.'));
+	global $_zp_plugin_scripts;
+	$_zp_plugin_scripts[] = $script;
+
+	if (!function_exists('_emitPluginScripts')) {
+		function _emitPluginScripts() {
+			global $_zp_plugin_scripts;
+			if (is_array($_zp_plugin_scripts)) {
+				foreach ($_zp_plugin_scripts as $script) {
+					echo $script."\n";
+				}
+			}
+		}
+		zp_register_filter('theme_head','_emitPluginScripts');
+	}
+}
+
+function zenJavascript() {
+	deprecated_function_notify(gettext('Use zp_appl_filter("theme_head").'));
+	zp_apply_filter('theme_head');
+}
+
+function normalizeColumns($albumColumns=NULL, $imageColumns=NULL) {
+	deprecated_function_notify(gettext('Use instead the theme options for images and albums per row.'), E_USER_NOTICE);
+	global $_firstPageImages;
+	setOption('albums_per_row',$albumColumns);
+	setOption('images_per_row',$imageColumns);
+	setThemeColumns();
+	return $_firstPageImages;
+}
 
 ?>

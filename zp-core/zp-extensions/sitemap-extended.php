@@ -25,9 +25,9 @@ if (isset($_GET['action']) && $_GET['action']=='clear_sitemap_cache') { //button
 	require_once(dirname(dirname(__FILE__)).'/folder-definitions.php');
 	require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 	require_once(dirname(dirname(__FILE__)).'/admin-globals.php');
-	
+
 	admin_securityChecks(NULL, currentRelativeURL(__FILE__));
-	
+
 	clearSitemapCache();
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?action=external&msg='.gettext('sitemap cache cleared.'));
 	exit();

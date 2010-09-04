@@ -26,11 +26,7 @@ if ($plugin_disable) {
 	$option_interface = new flowplayer3_playlist();
 	// register the scripts needed - only playlist additions, all others incl. the playlist plugin are loaded by the flowplayer3 plugin!
 	if (in_context(ZP_ALBUM) && !OFFSET_PATH) {
-		ob_start();
-		flowplayer3_playlistJS();
-		$str = ob_get_contents();
-		ob_end_clean();
-		addPluginScript($str);
+		zp_register_filter('theme_head','flowplayer3_playlistJS');
 	}
 }
 function flowplayer3_playlistJS() {

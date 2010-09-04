@@ -198,7 +198,7 @@ class Gallery {
 				$sql .= ' WHERE `show`=1';
 			}
 			$result = query($sql);
-			$count = mysql_result($result, 0);
+			$count = db_result($result, 0);
 		}
 		return $count;
 	}
@@ -341,7 +341,7 @@ class Gallery {
 			$deadalbumthemes = array();
 			// Load the albums from disk
 			$albumfolder = getAlbumFolder();
-			while($row = mysql_fetch_assoc($result)) {
+			while($row = db_fetch_assoc($result)) {
 				$valid = file_exists($albumpath = $albumfolder.internalToFilesystem($row['folder'])) && (hasDynamicAlbumSuffix($albumpath) || (is_dir($albumpath) && strpos($albumpath,'/./') === false && strpos($albumpath,'/../') === false));
 				if (!$valid || in_array($row['folder'], $live)) {
 					$dead[] = $row['id'];
@@ -664,7 +664,7 @@ class Gallery {
 		$sql = 'SELECT * FROM ' .	prefix("albums") . ' WHERE `parentid`'.$albumid;
 		$result = query($sql);
 		$results = array();
-		while ($row = mysql_fetch_assoc($result)) {
+		while ($row = db_fetch_assoc($result)) {
 			$results[$row['folder']] = $row;
 		}
 		//	check database aganist file system

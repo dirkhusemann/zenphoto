@@ -1,6 +1,4 @@
 <?php
-define('ALBUMCOLUMNS', 3);
-define('IMAGECOLUMNS', 5);
 if (!defined('WEBPATH')) die();
 $_noFlash = false;
 if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOption('mod_rewrite')) {
@@ -36,7 +34,6 @@ if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOpt
 
 if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 	$themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-	$firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	if ($_noFlash) {
 		$backgroundColor = "#0";  // who cares, we won't use it
 	} else {
@@ -47,10 +44,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
-	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
 <?php
 	$oneImagePage = false;
 	$show = false;
@@ -80,6 +77,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </head>
 
 <body onload="blurAnchors()">
+<?php zp_apply_filter('theme_body_open'); ?>
 <?php if ($personality == 'Smoothgallery') { ?>
 <script type="text/javascript">
 	//<!-- <![CDATA[
@@ -138,11 +136,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php
 			if (getOption('custom_index_page') === 'gallery') {
 				?>
-				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
-				<?php	
-				}					
+				<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> |
+				<?php
+				}
 				?>
-				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
+				<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
 				<?php printParentBreadcrumb(); ?></span>
 				<?php printAlbumTitle(true);?>
 			</div>
@@ -162,7 +160,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			</div>
 
 			<!-- SubAlbum List -->
-			
+
 					<?php
 					$firstAlbum = null;
 					$lastAlbum = null;
@@ -180,11 +178,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<li>
 							<?php $annotate = annotateAlbum(); ?>
 							<div class="imagethumb">
-								<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
+								<a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
 								<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
 							</div>
 							<h4>
-								<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
+								<a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
 									<?php printAlbumTitle(); ?>
 								</a>
 							</h4>
@@ -197,11 +195,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<?php
 					}
 					?>
-			
+
 			<div class="clearage"></div>
 			<?php
 			if (function_exists('printAlbumMap')) {
-				printAlbumMap(NULL, NULL, NULL, NULL, gettext('Google Map'), true, 'googlemap', $firstPageImages);
+				printAlbumMap(NULL, NULL, NULL, NULL, gettext('Google Map'), true, 'googlemap');
 			}
 			printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums());
 			?>
@@ -228,7 +226,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							<div class="imageElement">
 								<h3><?php echo getImageTitle();?></h3>
 								<p><?php echo getImageDesc();?></p>
-								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getBareImageTitle();?>" class="open"></a>
+								<a href="<?php echo html_encode(getImageLinkURL());?>" title="<?php echo getBareImageTitle();?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 							</div>
@@ -241,9 +239,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<?php
 							if (!$show) {
 								if ($imagePage) {
-									$url = htmlspecialchars(getPageURL(getTotalPages(true)));
+									$url = html_encode(getPageURL(getTotalPages(true)));
 								} else {
-									$url = htmlspecialchars(getPageURL(getCurrentPage()));
+									$url = html_encode(getPageURL(getCurrentPage()));
 								}
 								echo '<p align=center>';
 								printLinkWithQuery($url, 'slideshow', gettext('View Slideshow'));
@@ -253,7 +251,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						} else {
 							$firstImage = null;
  							$lastImage = null;
- 							while (next_image(false, $firstPageImages)){
+ 							while (next_image()){
 								if (!(($personality == 'Slimbox') && !isImagePhoto())) { // Slimbox does not do video
  									if (is_null($firstImage)) {
  										$lastImage = imageNumber();
@@ -268,10 +266,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		 									<?php
 		 									$annotate = annotateImage();
 		 									if ($personality == 'Slimbox') {
-		 										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\"";
+		 										echo "<a href=\"".html_encode(getCustomImageURL(550, null))."\"";
 		 										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n";
 		 									} else {
-		 										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
+		 										echo '<a href="' . html_encode(getImageLinkURL()) . '"';
 		 									}
 		 									echo " title=\"".$annotate."\">\n";
 		 									printImageThumb($annotate);
@@ -285,23 +283,20 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 	 							echo '<div class="clearage"></div>';
  								if (function_exists('printSlideShowLink') && ($personality != 'Smoothgallery')) {
 									printSlideShowLink(gettext('View Slideshow'),'text-align:center;');
-								}	
- 								if (getOption('enable_album_zipfile')) {
-									echo "<p align=\"center\">";
- 									printAlbumZip();
- 									echo "</p>";
- 								}
-								if (function_exists('printRating')) {
-									?>
-									<?php
-									printRating();
-									?>
-								<?php
 								}
-								
 						}
 						?>
  					</div> <!-- images -->
+ 					<?php
+ 					if (getOption('enable_album_zipfile')) {
+						echo "<p align=\"center\">";
+ 						printAlbumZip();
+ 						echo "</p>";
+ 					}
+					if (function_exists('printRating')) {
+						printRating();
+					}
+ 					?>
  					</div> <!-- main -->
 	 			<div class="clearage"></div>
  				<?php if (isset($firstImage)) printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>
@@ -318,13 +313,13 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 						<p align="center">
  						<?php
  						if ($imagePage) {
- 							$url = htmlspecialchars(getPageURL(getTotalPages(true)));
+ 							$url = html_encode(getPageURL(getTotalPages(true)));
  						} else {
- 							$url = htmlspecialchars(getPageURL(getCurrentPage()));
+ 							$url = html_encode(getPageURL(getCurrentPage()));
  						}
 			 printLinkWithQuery($url, 'noflash', gettext('View Gallery Without Flash'));
 			 echo "</p>";
- 						$flash_url = htmlspecialchars(getAlbumLinkURL());
+ 						$flash_url = html_encode(getAlbumLinkURL());
  						if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
  						$flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&amp;") . "format=xml";
  						?>
@@ -353,8 +348,23 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 					</div>
 				</div> <!-- main3 -->
 				<?php
+	 		} else {
+	 			?>
+				<div id="main">
+ 					<?php
+ 					if (getOption('enable_album_zipfile')) {
+						echo "<p align=\"center\">";
+ 						printAlbumZip();
+ 						echo "</p>";
+ 					}
+					if (function_exists('printRating')) {
+						printRating();
+					}
+ 					?>
+				</div>
+				<?php
 	 		}
-	 	} 
+	 	}
 	 	?>
 
 <!-- Page Numbers -->
@@ -381,6 +391,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 <?php
 printFooter();
+zp_apply_filter('theme_body_close');
 ?>
 
 </body>
@@ -401,12 +412,12 @@ printFooter();
 		$navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
 		'" imagePath="'.$path.'" thumbPath="'.$path.'">';
 
-	while (next_image(true, 0)){
+	while (next_image(true)){
 		if (isImagePhoto()) {  // simpleviewer does not do videos
 ?>
 			<image><filename><?php echo getDefaultSizedImage();?></filename>
 				<caption>
-				<![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open In New Window'); ?>">
+				<![CDATA[<a href="<?php echo html_encode(getImageLinkURL());?>" title="<?php echo gettext('Open In New Window'); ?>">
 					<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 					<br /></font><?php echo getImageDesc(); ?>]]>
 			</caption>

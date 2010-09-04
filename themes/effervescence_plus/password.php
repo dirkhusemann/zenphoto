@@ -5,13 +5,14 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext('Password required'); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
-	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
 </head>
 
 <body>
+<?php zp_apply_filter('theme_body_open'); ?>
 
 	<!-- Wrap Header -->
 	<div id="header">
@@ -30,11 +31,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 				<?php
 			if (getOption('custom_index_page') === 'gallery') {
 				?>
-				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+				<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
 				<?php	
 				}					
 				?>
-				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | 
+				<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | 
 				<?php echo gettext('A password is required for the page you requested'); ?>
 			</div>
 		</div>
@@ -49,7 +50,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		</div>
 	</div>
 
-<?php printFooter(); ?>
+<?php
+printFooter();
+zp_apply_filter('theme_body_close');
+?>
 
 </body>
 </html>

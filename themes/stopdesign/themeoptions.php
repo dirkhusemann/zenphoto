@@ -8,6 +8,9 @@ class ThemeOptions {
 		setThemeOptionDefault('Mini_slide_selector', 'Recent images');
 		setThemeOptionDefault('Gallery_image_crop_width', '210');
 		setThemeOptionDefault('Gallery_image_crop_height', '60');
+		setThemeOptionDefault('albums_per_row', 3);
+		setThemeOptionDefault('images_per_row', 6);
+		setThemeOptionDefault('thumb_transition', 1);
 	}
 	
 	function getOptionsSupported() {

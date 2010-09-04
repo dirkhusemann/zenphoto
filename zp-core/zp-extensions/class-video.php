@@ -240,7 +240,7 @@ class Video extends _Image {
 			case '.mp3':
 			case '.mp4':
 				if (is_null($_zp_flash_player)) {
-					return  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+					return  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.png' alt='No flash player installed.' />";
 				} else {
 					return $_zp_flash_player->getPlayerConfig('',$this->getTitle());
 				}

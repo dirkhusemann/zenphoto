@@ -1,6 +1,4 @@
 <?php
-define('ALBUMCOLUMNS', 3);
-define('IMAGECOLUMNS', 5);
 if (!defined('WEBPATH')) die();
 $_noFlash = true;  /* don't know how to deal with the variable folder depth file names
 if ((getOption('Use_Simpleviewer')==0) || !getOption('mod_rewrite')) { $_noFlash = true; }
@@ -16,7 +14,6 @@ if (isset($_GET['noflash'])) {
 // Change the configuration here
 
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-$firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 if ($_noFlash) {
 	$backgroundColor = "#0";  /* who cares, we won't use it */
 } else {
@@ -46,10 +43,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php zenJavascript(); ?>
+	<?php zp_apply_filter('theme_head'); ?>
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />	
-	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
 	<script type="text/javascript">
@@ -70,6 +67,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 </head>
 
 <body onload="blurAnchors()">
+<?php zp_apply_filter('theme_body_open'); ?>
 
 <!-- Wrap Header -->
 <div id="header">
@@ -92,11 +90,11 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<?php
 			if (getOption('custom_index_page') === 'gallery') {
 			?>
-			<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+			<a href="<?php echo html_encode(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
 			<?php	
 			}					
 			?>
-		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
+		<a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
 		<?php echo getGalleryTitle();	?></a></span> |
 		<?php
 		  echo "<em>".gettext('Search')."</em>";
@@ -255,10 +253,10 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 			<li>
 			<?php $annotate = annotateAlbum();?>
 			<div class="imagethumb">
-				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
+				<a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
 					<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
 			</div>
-			<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate;	?>"><?php printAlbumTitle(); ?></a></h4></li>
+			<h4><a href="<?php echo html_encode(getAlbumLinkURL());?>" title="<?php echo $annotate;	?>"><?php printAlbumTitle(); ?></a></h4></li>
 			<?php
 			}
 			if (!is_null($firstAlbum)) {
@@ -283,7 +281,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 
 			$firstImage = null;
 			$lastImage = null;
-			while (next_image(false, $firstPageImages)){
+			while (next_image()){
 							if (is_null($firstImage)) {
 								$lastImage = imageNumber();
 								$firstImage = $lastImage;
@@ -292,7 +290,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 							}
  						echo '<div class="image">' . "\n";
  						echo '<div class="imagethumb">' . "\n";
- 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . GetBareImageTitle() . '">' . "\n";
+ 						echo '<a href="' . html_encode(getImageLinkURL()) .'" title="' . GetBareImageTitle() . '">' . "\n";
  						echo printImageThumb(annotateImage()) . "</a>\n";
  						echo "</div>\n";
  						echo "</div>\n";
@@ -316,9 +314,9 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  					<p align="center"><a href="
  					<?php
  					if ($imagePage) {
- 						$url = htmlspecialchars(getPageURL(getTotalPages(true)));
+ 						$url = html_encode(getPageURL(getTotalPages(true)));
  					} else {
- 						$url = htmlspecialchars(getPageURL(getCurrentPage()));
+ 						$url = html_encode(getPageURL(getCurrentPage()));
  					}
  					if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
  					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&amp;") . 'noflash';
@@ -326,7 +324,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
  					View gallery without Flash</a>.</p>
  					</div> <!-- flash -->
  					<?php
- 					$flash_url = "index.php?p=search" . htmlspecialchars(getSearchParams()) . "&amp;format=xml";
+ 					$flash_url = "index.php?p=search" . html_encode(getSearchParams()) . "&amp;format=xml";
  					?>
  					<script type="text/javascript">
  						// <!-- <![CDATA[
@@ -396,7 +394,10 @@ if (function_exists('printUserLogin_out')) {
 </div> <!-- footerlinks -->
 
 
-<?php printAdminToolbox(); ?>
+<?php
+printFooter();
+zp_apply_filter('theme_body_close');
+?>
 
 </body>
 </html>

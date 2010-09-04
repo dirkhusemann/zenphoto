@@ -52,19 +52,26 @@ class jcarouselOptions {
 }
 
 if (isset($_zp_current_album) && is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_current_album->getNumImages() >= 2) {
-	// register the scripts needed
+	zp_register_filter('theme_head','jcaroselThemeJS');
+}
+
+function jcaroselThemeJS() {
+	$theme = getCurrentTheme();
 	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/jcarousel.css';
 	if (file_exists($css)) {
 		$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/jcarousel.css';
 	} else {
 		$css = WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/jcarousel_thumb_nav/jcarousel.css';
 	}
-	addPluginScript('
-<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/jcarousel_thumb_nav/jquery.jcarousel.pack.js"></script>
-<link rel="stylesheet" type="text/css" href="'.WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER.'/jcarousel_thumb_nav/jquery.jcarousel.css" />
-<link rel="stylesheet" type="text/css" href="' . $css.'" />
-');
-}
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER;?>/jcarousel_thumb_nav/jquery.jcarousel.pack.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo WEBPATH.'/'.ZENFOLDER.'/'.PLUGIN_FOLDER;?>/jcarousel_thumb_nav/jquery.jcarousel.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo pathurlencode($css); ?>" />
+	<?php
+};
+
+
+
 
 
 /** Prints the jQuery jCarousel HTML setup to be replaced by JS
@@ -86,7 +93,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 		$thumbscroll = getOption('jcarousel_scroll');
 	} else {
 		$thumbscroll = sanitize_numeric($thumbscroll);
-	}	
+	}
 	if(is_null($width)) {
 		$width = getOption('jcarousel_width');
 	} else {
@@ -126,10 +133,10 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 			if($_zp_current_search->getNumImages() === 0) {
 				$searchimages = false;
 			}	else {
-				$searchimages = true; 
+				$searchimages = true;
 			}
 		} else {
-			$searchimages = false; 
+			$searchimages = false;
 		}
 		if(in_context(ZP_SEARCH_LINKED) && $searchimages) {
 			$jcarousel_items = $_zp_current_search->getImages();
@@ -171,7 +178,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 		var mycarousel_itemList = [
 			<?php echo $items; ?>
 		];
-		
+
 		function mycarousel_itemLoadCallback(carousel, state) {
 				for (var i = carousel.first; i <= carousel.last; i++) {
 						if (carousel.has(i)) {
@@ -183,7 +190,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 						carousel.add(i, mycarousel_getItemHTML(mycarousel_itemList[i-1]));
 				}
 		};
-		
+
 		function mycarousel_getItemHTML(item) {
 			if(item.active === "") {
 				return '<a href="' + item.link + '" title="' + item.title + '"><img src="' + item.url + '" width="<?php  echo $width; ?>" height="<?php echo $height; ?>" alt="' + item.url + '" /></a>';
@@ -191,7 +198,7 @@ if(is_object($_zp_current_album) && is_object($_zp_current_image) && $_zp_curren
 				return '<a href="' + item.link + '" title="' + item.title + '"><img class="activecarouselimage" src="' + item.url + '" width="<?php  echo $width; ?>" height="<?php echo $height; ?>" alt="' + item.url + '" /></a>';
 			}
 		};
-		
+
 		jQuery(document).ready(function() {
 				jQuery("#mycarousel").jcarousel({
 						vertical: <?php echo $vertical; ?>,

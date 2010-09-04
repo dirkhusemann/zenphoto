@@ -12,29 +12,40 @@ $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard) — ".get
 $plugin_version = '1.3.1'; 
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_".PLUGIN_FOLDER."---tag_suggest.php.html";
 
-// register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/js/encoder.js"></script>');
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/js/tag.js"></script>');
-$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem(getCurrentTheme()) . '/tag.css';
-if (file_exists($css)) {
-	$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/tag.css';
-} else {
-	$css = WEBPATH . '/' . ZENFOLDER . '/' . PLUGIN_FOLDER . '/tag_suggest/tag.css';
+zp_register_filter('theme_head','tagSuggestJS');
+
+function tagSuggestJS() {
+	// the scripts needed
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH . '/' . ZENFOLDER; ?>/js/encoder.js"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH . '/' . ZENFOLDER; ?>/js/tag.js"></script>
+	<?php
+	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem(getCurrentTheme()) . '/tag.css';
+	if (file_exists($css)) {
+		$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/tag.css';
+	} else {
+		$css = WEBPATH . '/' . ZENFOLDER . '/' . PLUGIN_FOLDER . '/tag_suggest/tag.css';
+	}
+	?>
+	<link type="text/css" rel="stylesheet" href="<?php echo pathurlencode($css); ?>" />
+	<?php
+	$taglist = getAllTagsUnique();
+	$c = 0;
+	$list = '';
+	foreach ($taglist AS $tag) {
+		if ($c>0) $list .= ',';
+		$c++;
+		$list .= '"'.addslashes(sanitize($tag,3)).'"';
+	}
+	?>
+	<script type="text/javascript">
+		// <!-- <![CDATA[
+		var _tagList = [<?php  echo $list; ?>]
+		$(function () {
+			$('#search_input, #edit-editable_4').tagSuggest({ separator:'<?php  echo (getOption('search_space_is_or')?' ':','); ?>', tags: _tagList })
+			})
+		// ]]> -->
+	</script>
+	<?php
 }
-addPluginScript('<link type="text/css" rel="stylesheet" href="' . $css . '" />');
-$taglist = getAllTagsUnique();
-$c = 0;
-$list = '';
-foreach ($taglist AS $tag) {
-	if ($c>0) $list .= ',';
-	$c++;
-	$list .= '"'.addslashes(sanitize($tag,3)).'"';
-}
-$js = '<script type="text/javascript">'."\n// <!-- <![CDATA[\n".
-			'var _tagList = ['.$list."];\n".
-			"$(function () {\n".
-				"$('#search_input, #edit-editable_4').tagSuggest({ separator:'".(getOption('search_space_is_or')?' ':',')."', tags: _tagList });\n".
-			"});\n// ]]> -->".
-		'</script>';
-addPluginScript($js);
 ?>
