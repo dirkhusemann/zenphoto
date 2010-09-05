@@ -2846,19 +2846,17 @@ function printManagedObjects($type,$objlist, $alterrights, $adminid, $prefix, $r
 		case 'albums':
 			$full = populateManagedObjectsList('album',$adminid, true);
 			$cv = $extra = array();
-			if (($rights & (UPLOAD_RIGHTS | ALBUM_RIGHTS)) && !($rights & ADMIN_RIGHTS)) {
-				$icon_edit = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/pencil.png" class="icon-position-top3" />';
-				$icon_upload = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/arrow_up.png" class="icon-position-top3" />';
-				$ledgend = $icon_edit.' '.gettext('edit').' '.$icon_upload.' '.gettext('upload');
-				foreach ($full as $item) {
-					$cv[$item['name']] = $item['data'];
-					$extra[$item['data']][] = array('name'=>'rights','value'=>0,'display'=>'','checked'=>1);
-					if ($rights & ALBUM_RIGHTS) {
-						$extra[$item['data']][] = array('name'=>'edit','value'=>MANAGED_OBJECT_RIGHTS_EDIT,'display'=>$icon_edit,'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_EDIT);
-					}
-					if ($rights & UPLOAD_RIGHTS) {
-						$extra[$item['data']][] = array('name'=>'upload','value'=>MANAGED_OBJECT_RIGHTS_UPLOAD,'display'=>$icon_upload,'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_UPLOAD);
-					}
+			$icon_edit = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/pencil.png" class="icon-position-top3" />';
+			$icon_upload = '<img src="'.WEBPATH.'/'.ZENFOLDER.'/images/arrow_up.png" class="icon-position-top3" />';
+			$ledgend = $icon_edit.' '.gettext('edit').' '.$icon_upload.' '.gettext('upload');
+			foreach ($full as $item) {
+				$cv[$item['name']] = $item['data'];
+				$extra[$item['data']][] = array('name'=>'rights','value'=>0,'display'=>'','checked'=>1);
+				if ($rights & ALBUM_RIGHTS) {
+					$extra[$item['data']][] = array('name'=>'edit','value'=>MANAGED_OBJECT_RIGHTS_EDIT,'display'=>$icon_edit,'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_EDIT);
+				}
+				if ($rights & UPLOAD_RIGHTS) {
+					$extra[$item['data']][] = array('name'=>'upload','value'=>MANAGED_OBJECT_RIGHTS_UPLOAD,'display'=>$icon_upload,'checked'=>$item['rights']&MANAGED_OBJECT_RIGHTS_UPLOAD);
 				}
 			}
 			$rest = array_diff($objlist, $cv);
